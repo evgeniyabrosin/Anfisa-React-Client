@@ -1,8 +1,13 @@
 import logo from './logo.svg'
 import './App.css'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
+import dirinfoStore from './store/dirinfo'
 
-function App(): ReactElement {
+export const App = (): ReactElement => {
+	useEffect(() => {
+		dirinfoStore.fetchDirInfo()
+	}, [])
+	
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -23,4 +28,3 @@ function App(): ReactElement {
 	)
 }
 
-export default App
