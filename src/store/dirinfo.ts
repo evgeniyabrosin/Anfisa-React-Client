@@ -1,21 +1,19 @@
 import { makeAutoObservable } from 'mobx'
-import axios from 'axios'
+import { getApiUrl } from '../core/get-api-url'
 
 class DirInfoStore {
-dirinfo = {}
+	dirinfo = {}
 
-constructor() {
-	makeAutoObservable(this)
-}
+	constructor() {
+		makeAutoObservable(this)
+	}
 
-async fetchDirInfo() {
-	const result = await axios.get('/dirinfo', {
-		baseURL: 'http://localhost:9010/anfisa/app',
-	})
-	console.log(result)
+	async fetchDirInfo() {
+		const response = await fetch(getApiUrl('dirinfo'))
+		const res = await response.json()
 
-	this.dirinfo = result
-}
+		this.dirinfo = res
+	}
 }
 
 export default new DirInfoStore()
