@@ -1,3 +1,9 @@
 export const en = {
-	hello: 'hello from i18n'
+	general: {
+		anfisa: 'Anfisa'
+	},
+	home: {
+		title: 'Home',
+		version: 'System version: {0}'
+	}
 }
