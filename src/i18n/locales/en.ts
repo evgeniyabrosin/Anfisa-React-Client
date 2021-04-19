@@ -4,6 +4,8 @@ export const en = {
 	},
 	home: {
 		title: 'Home',
-		version: 'System version: {0}'
+		version: 'System version: {0}',
+		datasets: 'Datasets',
+		searchForADataset: 'Search for a dataset'
 	}
 }

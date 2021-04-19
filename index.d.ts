@@ -1,5 +1,5 @@
 
-export interface PGP3140HLGENES {
+export interface DsDistItem {
         name: string;
         'upd-time': Date;
         kind: string;
@@ -14,7 +14,7 @@ export interface PGP3140HLGENES {
     }
 
 export interface DsDict {
-        PGP3140_HL_GENES: PGP3140HLGENES;
+        [key: string]: DsDistItem;
     }
 
 export interface Documentation {
@@ -26,7 +26,7 @@ export interface Documentation {
 export interface DirInfoI {
         version: string;
         'ds-list': string[];
-        'ds-dict': DsDict;
+        'ds-dict': DsDist;
         documentation: Documentation[];
     }
 

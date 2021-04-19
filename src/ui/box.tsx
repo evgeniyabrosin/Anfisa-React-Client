@@ -6,6 +6,6 @@ interface Props {
     style?: CSSProperties
 }
 
-export const Box = ({children, style, className}: Props): ReactElement => {
-	return <div style={style} className={className}>{children}</div>
+export const Box = ({children, style, className, ...rest}: Props): ReactElement => {
+	return <div style={style} className={className} {...rest}>{children}</div>
 }
