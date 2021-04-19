@@ -16,4 +16,5 @@ export const AppTheme = {
 	colors,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const theme = (path: string): any => get(AppTheme, path, null)
