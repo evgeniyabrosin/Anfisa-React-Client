@@ -1,8 +1,9 @@
 import { makeAutoObservable } from 'mobx'
+import { DirInfoType } from '../..'
 import { getApiUrl } from '../core/get-api-url'
 
 class DirInfoStore {
-	dirinfo = {}
+	dirinfo: DirInfoType = {}
 
 	constructor() {
 		makeAutoObservable(this)

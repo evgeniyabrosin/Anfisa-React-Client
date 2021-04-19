@@ -1,8 +1,22 @@
-import { ReactElement } from 'react'
-import {t } from '../i18n/i18n'
+import { ReactElement, useEffect } from 'react'
+import styled from 'styled-components'
+import { HeaderPage } from './ui/header.page'
+import dirinfoStore from '../store/dirinfo'
+
+
+const Root = styled('div')`
+	padding: 32px;
+`
 
 export const MainPage = (): ReactElement => {
+	useEffect(() => {
+		dirinfoStore.fetchDirInfo()
+	}, [])
+	
 	return (
-		<h2>{t('hello')}</h2>
+		<Root>
+			<HeaderPage />
+		</Root>
 	)
 }
+
