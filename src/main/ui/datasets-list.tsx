@@ -10,7 +10,7 @@ export const DatasetsList = observer((): ReactElement => {
 	const keys = Object.keys(get(dirinfoStore.dirinfo, 'ds-dict', {}))
 
 	return (
-		<Box style={{paddingRight: 10}}>
+		<Box>
 			{keys.map((key) => {
 				const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
 

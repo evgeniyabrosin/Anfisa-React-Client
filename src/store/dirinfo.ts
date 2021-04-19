@@ -4,6 +4,7 @@ import { getApiUrl } from '../core/get-api-url'
 
 class DirInfoStore {
 	dirinfo: DirInfoType = {}
+	selectedDirinfoName = ''
 
 	constructor() {
 		makeAutoObservable(this)
@@ -14,6 +15,10 @@ class DirInfoStore {
 		const res = await response.json()
 
 		this.dirinfo = res
+	}
+
+	setSelectedDirinfoName(name: string) {
+		this.selectedDirinfoName = name
 	}
 }
 

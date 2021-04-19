@@ -31,3 +31,4 @@ export interface DirInfoI {
     }
 
 export type DirInfoType = DirInfoI | Record<string, unknown>
+export type DsDistItemType = DsDistItem | Record<string, unknown>

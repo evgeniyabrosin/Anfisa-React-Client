@@ -8,14 +8,17 @@ import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import dirinfoStore from '../../store/dirinfo'
 import { DatasetType } from './dataset-type'
+import { observer } from 'mobx-react-lite'
 
 interface Props {
     item: DsDistItem
+	isSubItems?: boolean
 }
 
 interface RootProps {
     onClick?: () => void
     isActive?: boolean
+	isSubItems?: boolean
 }
 
 const Root = styled(Box)<RootProps>`
@@ -23,9 +26,16 @@ const Root = styled(Box)<RootProps>`
 	align-items: center;
 	cursor: pointer;
 	flex-wrap: wrap;
-
+	width: 100%;
+	padding-right: 32px;
+	
     ${ifProp('isActive', css`
 		background-color: #DEF1FD;
+	`)}
+
+	${ifProp('isSubItems', css`
+		padding-left: 20px;
+		max-width: 420px;
 	`)}
 `
 
@@ -53,51 +63,55 @@ const StyledDate = styled(Text)`
 	color: ${theme('colors.grey.7')};
 `
 
-const SubRoot = styled(Box)`
-	display: flex;
-	align-items: center;
-	margin-left: 16px;
-`
-
 const DropdownFolder = styled(Box)`
-	margin-left: 10px;
+	position: relative;
 `
 
+const Dropline = styled(Box)`
+	background-color:#F0F0F0;
+	width: 1px;
+	height: 100%;
+	position: absolute;
+	left: 12px;
+	top: 0px;
+`
 
-export const DatasetsListItem = ({item}: Props): ReactElement => {
-	const [isActive, setIsActive] = useState(false)
+export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactElement => {
 	const [isOpenFolder, setIsOpenFolder] = useState(false)
 	const isXl = item.kind === 'xl'
 	const secondaryKeys: string[] = get(item, 'secondary', [])
-    
+	const isActive = item.name === dirinfoStore.selectedDirinfoName || (isXl && isOpenFolder)
+	
 	const handleClick = () => {
 		if (isXl) {
 			setIsOpenFolder((prev) => !prev)
-		} 
-		setIsActive(true)
+		} else {
+			dirinfoStore.setSelectedDirinfoName(item.name)
+		}
 	}
 
 	return (
-		<Root key={item.name} onClick={handleClick} isActive={isActive}>
-			<DatasetType kind={item.kind} isActive={isActive}/>
-			<StyledName isActive={isActive}>{item.name}</StyledName>
-			<StyledDate >{item['upd-time'] || 'Dec.01, 2020, 06:01'}</StyledDate>
+		<>
+			<Root key={item.name} onClick={handleClick} isActive={isActive && !isXl} isSubItems={isSubItems}>
+				<DatasetType kind={item.kind} isActive={isActive}/>
+				<StyledName isActive={isActive}>{item.name}</StyledName>
+				<StyledDate >{item['upd-time'] || 'Dec.01, 2020, 06:01'}</StyledDate>
+			</Root>
 
 			{isOpenFolder && isXl && (
-				<DropdownFolder style={{borderLeft: '1px solid #F0F0F0'}}>
-					{secondaryKeys.map((secondaryKey: string) => {
-						const secondaryItem: DsDistItem = dirinfoStore.dirinfo['ds-dict'][secondaryKey]
+				<DropdownFolder>
+					<Dropline />
+					<Box>
+						{secondaryKeys.map((secondaryKey: string) => {
+							const secondaryItem: DsDistItem = dirinfoStore.dirinfo['ds-dict'][secondaryKey]
 
-						return (
-							<SubRoot key={secondaryItem.name}>
-								<DatasetType kind={secondaryItem.kind} />
-								<StyledName>{secondaryItem.name}</StyledName>
-								<StyledDate>{secondaryItem['upd-time'] || 'Dec.01, 2020, 06:01'}</StyledDate>
-							</SubRoot>
-						)
-					})}
+							return (
+								<DatasetsListItem item={secondaryItem} key={secondaryItem.name} isSubItems />
+							)
+						})}
+					</Box>
 				</DropdownFolder>
 			)}
-		</Root>
+		</>
 	)
-}
+})

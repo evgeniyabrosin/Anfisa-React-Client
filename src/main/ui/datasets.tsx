@@ -11,7 +11,7 @@ const Root = styled(Box)`
     padding: 16px;
     display: flex;
     flex-direction: column;
-	max-width: 420px; 
+	max-width: 440px; 
 `
 
 const Title = styled(Text)`
