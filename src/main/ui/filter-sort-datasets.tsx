@@ -1,5 +1,6 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
+import { SortDirection } from '../../core/sort-direction.enum'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
@@ -25,8 +26,8 @@ export const FilterSortDatasets = (): ReactElement => {
 			<Input placeholder={t('home.searchForADataset')}/>
 
 			<SortButtons>
-				<SortItem text="Name" direction="desc" />
-				<SortItem text="Created at" direction="desc" />
+				<SortItem text={t('home.name')} direction={SortDirection.DESC} />
+				<SortItem text={t('home.createdAt')} direction={SortDirection.ASC} />
 			</SortButtons>
 		</Root>
 	)

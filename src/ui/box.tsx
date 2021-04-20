@@ -4,8 +4,9 @@ interface Props {
     children?: ReactNode
     className?: string
     style?: CSSProperties
+    onClick?: () => void
 }
 
-export const Box = ({children, style, className, ...rest}: Props): ReactElement => {
-	return <div style={style} className={className} {...rest}>{children}</div>
+export const Box = ({children, style, className, onClick}: Props): ReactElement => {
+	return <div style={style} className={className} onClick={onClick}>{children}</div>
 }

@@ -4,10 +4,11 @@ import { Text } from '../../ui/text'
 import { SortSvg } from '../../ui/icons/sort'
 import styled from 'styled-components'
 import { theme } from '../../theme/theme'
+import { SortDirection } from '../../core/sort-direction.enum'
 
 interface Props {
     text: string
-    direction: 'asc' | 'desc'
+    direction: SortDirection
 }
 
 const Root = styled(Box)`
@@ -28,7 +29,7 @@ const StyledText = styled(Text)`
 `
 
 export const SortItem = ({text, direction}: Props): ReactElement => {
-	const sortIconTransform = direction === 'asc' ? 'rotate(180deg) scaleX(-1)' : 'none'
+	const sortIconTransform = direction === SortDirection.ASC ? 'rotate(180deg) scaleX(-1)' : 'none'
 
 	return (
 		<Root>

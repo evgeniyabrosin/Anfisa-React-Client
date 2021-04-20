@@ -6,6 +6,8 @@ export const en = {
 		title: 'Home',
 		version: 'System version: {0}',
 		datasets: 'Datasets',
-		searchForADataset: 'Search for a dataset'
+		searchForADataset: 'Search for a dataset',
+		name: 'Name',
+		createdAt: 'Created at'
 	}
 }

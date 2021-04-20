@@ -87,6 +87,7 @@ export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactEleme
 			setIsOpenFolder((prev) => !prev)
 		} else {
 			dirinfoStore.setSelectedDirinfoName(item.name)
+			dirinfoStore.fetchDsinfo(item.name)
 		}
 	}
 
