@@ -109,4 +109,51 @@ export interface DsinfoI {
         'unit-groups': any[][];
     }
 
+
+
+export interface StatList {
+        kind: string;
+        name: string;
+        vgroup: string;
+        'sub-kind': string;
+        detailed: boolean;
+        variants: any[][];
+        title: string;
+        family: string[];
+        affected: string[];
+        available: string[];
+        tooltip: string;
+        min: any;
+        max: any;
+        counts: number[];
+        'trio-variants': string[];
+        'approx-modes': string[][];
+        labels: any[];
+        render: string;
+    }
+
+export interface FilterList {
+        name: string;
+        standard: boolean;
+        'upd-time'?: any;
+        'upd-from'?: any;
+        'eval-status': string;
+        'sol-version': number;
+    }
+
+export interface DsStatI {
+        kind: string;
+        'total-counts': number[];
+        'filtered-counts': number[];
+        'stat-list': StatList[];
+        'filter-list': FilterList[];
+        'cur-filter'?: any;
+        'rq-id': string;
+        conditions: any[];
+        'cond-seq': any[];
+        'eval-status': string;
+        hash: string;
+    }
+
+export type DsStatType = DsStatI | Record<string, any>
 export type DsInfoType = DsinfoI | Record<string, unknown>
