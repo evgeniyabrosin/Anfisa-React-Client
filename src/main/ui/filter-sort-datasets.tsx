@@ -1,11 +1,11 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
-import { SortDirection } from '../../core/sort-direction.enum'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
 import { Input } from '../../ui/input'
 import { SortItem } from '../ui/sort-item'
+import { SortDatasets } from '../../core/enum/sort-datasets.enum'
 
 const Root = styled(Box)`
     display: flex;
@@ -17,7 +17,6 @@ const SortButtons = styled(Box)`
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid ${theme('colors.grey.6')};
-
 `
 
 export const FilterSortDatasets = (): ReactElement => {
@@ -26,8 +25,8 @@ export const FilterSortDatasets = (): ReactElement => {
 			<Input placeholder={t('home.searchForADataset')}/>
 
 			<SortButtons>
-				<SortItem text={t('home.name')} direction={SortDirection.DESC} />
-				<SortItem text={t('home.createdAt')} direction={SortDirection.ASC} />
+				<SortItem text={t('home.name')} sortType={SortDatasets.Name} />
+				<SortItem text={t('home.createdAt')} sortType={SortDatasets.CreatedAt} />
 			</SortButtons>
 		</Root>
 	)

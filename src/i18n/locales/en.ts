@@ -8,6 +8,7 @@ export const en = {
 		datasets: 'Datasets',
 		searchForADataset: 'Search for a dataset',
 		name: 'Name',
-		createdAt: 'Created at'
+		createdAt: 'Created at',
+		openInViewer: 'Open in viewer'
 	}
 }

@@ -1,4 +1,4 @@
-import { get } from 'lodash'
+import get from 'lodash/get'
 import { ReactElement, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
@@ -35,7 +35,7 @@ const Root = styled(Box)<RootProps>`
 
 	${ifProp('isSubItems', css`
 		padding-left: 20px;
-		max-width: 420px;
+		width: 420px;
 	`)}
 `
 
@@ -96,7 +96,7 @@ export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactEleme
 			<Root key={item.name} onClick={handleClick} isActive={isActive && !isXl} isSubItems={isSubItems}>
 				<DatasetType kind={item.kind} isActive={isActive}/>
 				<StyledName isActive={isActive}>{item.name}</StyledName>
-				<StyledDate >{item['upd-time'] || 'Dec.01, 2020, 06:01'}</StyledDate>
+				<StyledDate >{item['upd-time']}</StyledDate>
 			</Root>
 
 			{isOpenFolder && isXl && (
