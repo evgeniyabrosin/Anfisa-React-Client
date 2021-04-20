@@ -13,6 +13,7 @@ class DirInfoStore {
 	selectedDirinfoName = ''
 	dsinfo: DsInfoType = {}
 	sortType: SortDatasets | undefined
+	filterValue = ''
 	sortDirections: SortDirectionsType = {
 		[SortDatasets.Name]: SortDirection.ASC,
 		[SortDatasets.CreatedAt]: SortDirection.ASC
@@ -28,7 +29,10 @@ class DirInfoStore {
 
 	setSortType(sortType?: SortDatasets) {
 		this.sortType = sortType
-
+	}
+	
+	setFilterValue (value: string) {
+		this.filterValue = value
 	}
 
 	setSortDirection() {
@@ -44,11 +48,17 @@ class DirInfoStore {
 	}
 
 	get dsDistKeys() {
-		if (this.sortType) {
-			return orderBy(Object.keys(get(this.dirinfo, 'ds-dict', {})), (i) => i, this.sortDirections[this.sortType].toLocaleLowerCase() as 'asc' | 'desc')
+		let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
+
+		if (this.filterValue) {
+			keys = keys.filter((key) => key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()))
 		}
 
-		return Object.keys(get(this.dirinfo, 'ds-dict', {}))
+		if (this.sortType) {
+			return orderBy(keys, (i) => i, this.sortDirections[this.sortType].toLocaleLowerCase() as 'asc' | 'desc')
+		}
+
+		return keys
 	}
 
 

@@ -1,10 +1,12 @@
-import { ReactElement } from 'react'
+import { ChangeEvent, ReactElement } from 'react'
 import styled from 'styled-components'
 import { Box } from './box'
 import { LoupeSvg } from '../ui/icons/loupe'
 
 interface Props {
     placeholder?: string
+    value: string
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const Root = styled(Box)`

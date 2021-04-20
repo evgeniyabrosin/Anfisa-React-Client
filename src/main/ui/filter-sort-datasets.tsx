@@ -6,6 +6,8 @@ import { Box } from '../../ui/box'
 import { Input } from '../../ui/input'
 import { SortItem } from '../ui/sort-item'
 import { SortDatasets } from '../../core/enum/sort-datasets.enum'
+import dirinfoStore from '../../store/dirinfo'
+import { observer } from 'mobx-react-lite'
 
 const Root = styled(Box)`
     display: flex;
@@ -19,15 +21,16 @@ const SortButtons = styled(Box)`
 	border-bottom: 1px solid ${theme('colors.grey.6')};
 `
 
-export const FilterSortDatasets = (): ReactElement => {
-	return (
-		<Root>
-			<Input placeholder={t('home.searchForADataset')}/>
+export const FilterSortDatasets = observer((): ReactElement => (
+	<Root>
+		<Input placeholder={t('home.searchForADataset')} value={dirinfoStore.filterValue} onChange={(e) => {
+			dirinfoStore.setFilterValue(e.target.value)
+		}} />
 
-			<SortButtons>
-				<SortItem text={t('home.name')} sortType={SortDatasets.Name} />
-				<SortItem text={t('home.createdAt')} sortType={SortDatasets.CreatedAt} />
-			</SortButtons>
-		</Root>
-	)
-}
+		<SortButtons>
+			<SortItem text={t('home.name')} sortType={SortDatasets.Name} />
+			<SortItem text={t('home.createdAt')} sortType={SortDatasets.CreatedAt} />
+		</SortButtons>
+	</Root>
+)
+)
