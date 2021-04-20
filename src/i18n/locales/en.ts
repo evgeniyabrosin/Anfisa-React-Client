@@ -10,5 +10,8 @@ export const en = {
 		name: 'Name',
 		createdAt: 'Created at',
 		openInViewer: 'Open in viewer'
+	},
+	ds: {
+		variants: 'Variants: '
 	}
 }
