@@ -1,9 +1,10 @@
-import { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { Box } from '../ui/box'
 import dsStore from '../store/dataset'
 import { WsHeader } from './ws.header'
 import styled from 'styled-components'
 import { useParams } from '../core/hooks/use-params'
+import { TableVariants } from './ui/table-variants'
 
 const Root = styled(Box)`
 	padding: 38px 20px 0px 30px;
@@ -19,6 +20,8 @@ export const WSPage = (): ReactElement => {
 	return (
 		<Root>
 			<WsHeader />
+
+			<TableVariants />
 		</Root>
 	)
 }
