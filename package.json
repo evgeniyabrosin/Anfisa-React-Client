@@ -45,6 +45,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "https://demo.forome.org/anfisa/app/",
   "browserslist": {
     "production": [
       ">0.2%",
