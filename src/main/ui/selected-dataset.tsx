@@ -6,9 +6,10 @@ import { Text } from '../../ui/text'
 import dirinfoStore  from '../../store/dirinfo'
 import { Button } from '../../ui/button'
 import { NextArrowSvg } from '../../ui/icons/next-arrow'
-import { DatasetsFieldsList } from './dataset-fileds-list'
+import { DatasetInfo } from './dataset-info'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
+import { DatasetGeneral } from './dataset-general'
 
 const Root = styled(Box)`
     padding: 16px;
@@ -49,7 +50,8 @@ export const SelectedDataset = observer((): ReactElement => {
 			<StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
 			<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
 
-			<DatasetsFieldsList />
+			<DatasetGeneral />
+			{/* <DatasetInfo /> */}
 		</Root>
 	)
 })
