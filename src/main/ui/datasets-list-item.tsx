@@ -83,10 +83,14 @@ export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactEleme
 	const isActive = item.name === dirinfoStore.selectedDirinfoName || (isXl && isOpenFolder)
 	
 	const handleClick = () => {
+		console.log(isXl)
 		if (isXl) {
 			setIsOpenFolder((prev) => !prev)
-		} else {
-			dirinfoStore.setSelectedDirinfoName(item.name)
+		}
+
+		dirinfoStore.setSelectedDirinfoName(item.name)
+		
+		if (!isXl) {
 			dirinfoStore.fetchDsinfo(item.name)
 		}
 	}

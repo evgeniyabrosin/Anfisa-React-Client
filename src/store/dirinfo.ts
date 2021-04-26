@@ -77,7 +77,7 @@ class DirInfoStore {
 			method: 'POST'
 		})
 		const result = await response.json()
-
+	
 		runInAction(() => {
 			this.dsinfo = result
 		})
