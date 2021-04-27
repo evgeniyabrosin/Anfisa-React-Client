@@ -10,11 +10,15 @@ import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
 import { DatasetGeneral } from './dataset-general'
 import { useHistory } from 'react-router'
+import { DatasetsFieldsList } from './dataset-fileds-list'
 
 const Root = styled(Box)`
     padding: 16px;
-    width: 420px;
     margin-left: 24px;
+    display: flex;
+`
+const Wrapper = styled(Box)`
+	width: 420px;
 `
 
 const StyledName = styled(Text)`
@@ -48,10 +52,14 @@ export const SelectedDataset = observer((): ReactElement => {
     
 	return (
 		<Root>
-			<StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
-			<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
+			<Wrapper>
+				<StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
+				<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
 
-			<DatasetGeneral />
+				<DatasetGeneral />
+			</Wrapper>
+
+			<DatasetsFieldsList />
 		</Root>
 	)
 })
