@@ -6,10 +6,10 @@ import { Text } from '../../ui/text'
 import dirinfoStore  from '../../store/dirinfo'
 import { Button } from '../../ui/button'
 import { NextArrowSvg } from '../../ui/icons/next-arrow'
-import { DatasetInfo } from './dataset-info'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
 import { DatasetGeneral } from './dataset-general'
+import { useHistory } from 'react-router'
 
 const Root = styled(Box)`
     padding: 16px;
@@ -36,13 +36,14 @@ const StyledButton = styled(Button)`
 `
 
 export const SelectedDataset = observer((): ReactElement => {
+	const history = useHistory()
+
 	if (!dirinfoStore.selectedDirinfoName) {
 		return <></>
 	}
 
 	const handleNavigate = (): void => {
-		window.open(`/ws?ds=${dirinfoStore.selectedDirinfoName}`, '_blank')
-		window.focus()
+		history.push(`/ws?ds=${dirinfoStore.selectedDirinfoName}`)
 	}
     
 	return (
@@ -51,7 +52,6 @@ export const SelectedDataset = observer((): ReactElement => {
 			<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
 
 			<DatasetGeneral />
-			{/* <DatasetInfo /> */}
 		</Root>
 	)
 })

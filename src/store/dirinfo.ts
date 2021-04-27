@@ -1,10 +1,11 @@
 import orderBy from 'lodash/orderBy'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { DirInfoType, DsInfoType } from '../..'
+import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '../..'
 import { SortDatasets } from '../core/enum/sort-datasets.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { SortDirection } from '../core/sort-direction.enum'
+import { cloneDeep } from 'lodash'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
@@ -18,13 +19,23 @@ class DirInfoStore {
 		[SortDatasets.Name]: SortDirection.ASC,
 		[SortDatasets.CreatedAt]: SortDirection.ASC
 	}
+	infoFrameLink = ''
+	activeInfoName = ''
 
 	constructor() {
 		makeAutoObservable(this)
 	}
 
+	setActiveInfoName (name: string) {
+		this.activeInfoName = name
+	}
+	
 	setSelectedDirinfoName(name: string) {
 		this.selectedDirinfoName = name
+	}
+
+	setInfoFrameLink(link: string) {
+		this.infoFrameLink = link
 	}
 
 	setSortType(sortType?: SortDatasets) {
@@ -47,6 +58,10 @@ class DirInfoStore {
 		})
 	}
 
+	setDsInfo(dsinfo: DsDistItem) {
+		this.dsinfo = dsinfo as ANYType
+	}
+
 	get dsDistKeys() {
 		let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
 
@@ -59,6 +74,28 @@ class DirInfoStore {
 		}
 
 		return keys
+	}
+
+	get ancestorsDsInfo () {
+		const ancestors: ANYType[] = get(this, 'dsinfo.ancestors', [])
+		const clonedAncestors = cloneDeep(ancestors)
+
+		if (clonedAncestors[0] && clonedAncestors[0][1] && clonedAncestors[0][1][1]) {
+			const formatedData = clonedAncestors[0][1][1].map((item: ANYType) => {
+				if (item[0] === 'Info') {
+					item[0] = 'Base Info'
+				}
+	
+				return item
+			})
+	
+			clonedAncestors[0][1][1] = formatedData
+
+			console.log('clonedAncestors', clonedAncestors)
+			return clonedAncestors
+		}
+
+		return [[]]
 	}
 
 

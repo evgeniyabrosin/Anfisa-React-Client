@@ -5,6 +5,7 @@ import dirinfoStore from '../store/dirinfo'
 import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 import { Box } from '../ui/box'
+import { IframeInfo } from './ui/ifame-info'
 
 const Root = styled(Box)`
 	padding: 32px;
@@ -27,6 +28,8 @@ export const MainPage = (): ReactElement => {
 				<Datasets />
 
 				<SelectedDataset />
+
+				<IframeInfo />
 			</Container>
 		</Root>
 	)

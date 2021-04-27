@@ -11,7 +11,8 @@ export const en = {
 		createdAt: 'Created at',
 		openInViewer: 'Open in viewer',
 		info: 'Info',
-		general: 'General'
+		general: 'General',
+		base: 'Base {name}'
 	},
 	ds: {
 		variants: 'Variants: '
