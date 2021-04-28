@@ -6,14 +6,19 @@ import { Text } from '../../ui/text'
 import dirinfoStore  from '../../store/dirinfo'
 import { Button } from '../../ui/button'
 import { NextArrowSvg } from '../../ui/icons/next-arrow'
-import { DatasetsFieldsList } from './dataset-fileds-list'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
+import { DatasetGeneral } from './dataset-general'
+import { useHistory } from 'react-router'
+import { DatasetsFieldsList } from './dataset-fileds-list'
 
 const Root = styled(Box)`
     padding: 16px;
-    width: 420px;
     margin-left: 24px;
+    display: flex;
+`
+const Wrapper = styled(Box)`
+	width: 420px;
 `
 
 const StyledName = styled(Text)`
@@ -35,19 +40,24 @@ const StyledButton = styled(Button)`
 `
 
 export const SelectedDataset = observer((): ReactElement => {
+	const history = useHistory()
+
 	if (!dirinfoStore.selectedDirinfoName) {
 		return <></>
 	}
 
 	const handleNavigate = (): void => {
-		window.open(`/ws?ds=${dirinfoStore.selectedDirinfoName}`, '_blank')
-		window.focus()
+		history.push(`/ws?ds=${dirinfoStore.selectedDirinfoName}`)
 	}
     
 	return (
 		<Root>
-			<StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
-			<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
+			<Wrapper>
+				<StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
+				<StyledButton text={t('home.openInViewer')} icon={<NextArrowSvg />} onClick={handleNavigate} />
+
+				<DatasetGeneral />
+			</Wrapper>
 
 			<DatasetsFieldsList />
 		</Root>

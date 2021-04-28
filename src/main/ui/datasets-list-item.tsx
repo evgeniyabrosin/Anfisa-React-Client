@@ -9,6 +9,7 @@ import { Text } from '../../ui/text'
 import dirinfoStore from '../../store/dirinfo'
 import { DatasetType } from './dataset-type'
 import { observer } from 'mobx-react-lite'
+import { formatDate } from '../../core/format-date'
 
 interface Props {
     item: DsDistItem
@@ -76,17 +77,26 @@ const Dropline = styled(Box)`
 	top: 0px;
 `
 
+
+
 export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactElement => {
 	const [isOpenFolder, setIsOpenFolder] = useState(false)
 	const isXl = item.kind === 'xl'
 	const secondaryKeys: string[] = get(item, 'secondary', [])
-	const isActive = item.name === dirinfoStore.selectedDirinfoName || (isXl && isOpenFolder)
+	const isActive = item.name === dirinfoStore.selectedDirinfoName
+	const isActiveXl = isXl && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
 	
 	const handleClick = () => {
 		if (isXl) {
 			setIsOpenFolder((prev) => !prev)
-		} else {
-			dirinfoStore.setSelectedDirinfoName(item.name)
+			dirinfoStore.setDsInfo(item as DsDistItem)
+		}
+
+		dirinfoStore.setInfoFrameLink('')
+		dirinfoStore.setSelectedDirinfoName(item.name)
+		dirinfoStore.setActiveInfoName('')
+
+		if (!isXl) {
 			dirinfoStore.fetchDsinfo(item.name)
 		}
 	}
@@ -94,9 +104,9 @@ export const DatasetsListItem = observer(({item, isSubItems}: Props): ReactEleme
 	return (
 		<>
 			<Root key={item.name} onClick={handleClick} isActive={isActive && !isXl} isSubItems={isSubItems}>
-				<DatasetType kind={item.kind} isActive={isActive}/>
-				<StyledName isActive={isActive}>{item.name}</StyledName>
-				<StyledDate >{item['upd-time']}</StyledDate>
+				<DatasetType kind={item.kind} isActive={isActive || isActiveXl}/>
+				<StyledName isActive={isActive || isActiveXl}>{item.name}</StyledName>
+				<StyledDate >{formatDate(item['upd-time'])}</StyledDate>
 			</Root>
 
 			{isOpenFolder && isXl && (
