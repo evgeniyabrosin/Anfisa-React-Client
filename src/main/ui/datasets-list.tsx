@@ -11,7 +11,7 @@ export const DatasetsList = observer((): ReactElement => {
 			{dirinfoStore.dsDistKeys.map((key) => {
 				const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
 
-				if (item.ancestors.length !== 0) {
+				if (!item || item.ancestors.length !== 0) {
 					return
 				}
 

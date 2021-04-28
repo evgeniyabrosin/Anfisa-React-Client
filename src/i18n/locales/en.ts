@@ -9,7 +9,10 @@ export const en = {
 		searchForADataset: 'Search for a dataset',
 		name: 'Name',
 		createdAt: 'Created at',
-		openInViewer: 'Open in viewer'
+		openInViewer: 'Open in viewer',
+		info: 'Info',
+		general: 'General',
+		base: 'Base {name}'
 	},
 	ds: {
 		variants: 'Variants: '
