@@ -5,10 +5,10 @@ import dirinfoStore from '../../store/dirinfo'
 import styled from 'styled-components'
 
 const Root = styled(Box)`
-	height: 80vh;
-	width: 90vw;
-	flex: 1;
-	margin-left: 10px;
+	height: 900px;
+	max-width: 1300px;
+	min-width: 1000px;
+	padding: 10px;
 `
 
 export const IframeInfo = observer((): ReactElement =>  (
