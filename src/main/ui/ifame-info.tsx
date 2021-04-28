@@ -5,14 +5,17 @@ import dirinfoStore from '../../store/dirinfo'
 import styled from 'styled-components'
 
 const Root = styled(Box)`
-	height: 90vh;
-	flex: 1;
-	margin-left: 10px;
+	height: 900px;
+	max-width: 1300px;
+	min-width: 1000px;
+	padding: 10px;
 `
 
 export const IframeInfo = observer((): ReactElement =>  (
 	<Root>
-		<iframe src={dirinfoStore.infoFrameLink} frameBorder="0"
+		<iframe 
+			src={dirinfoStore.infoFrameLink} 
+			frameBorder="0"
 			height="100%"
 			width="100%"
 		/>

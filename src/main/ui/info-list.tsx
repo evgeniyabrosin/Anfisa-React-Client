@@ -2,9 +2,11 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import { Box } from '../../ui/box'
 import dirinfoStore from '../../store/dirinfo'
-import { get } from 'lodash'
+import get from 'lodash/get'
 import { DocsList } from './docs-list'
 import { ANYType } from '../../..'
+import { ModalInfo } from './modal-info'
+import { DS_DOC_API_URL } from '../../config/default'
 
 export const InfoList = observer((): ReactElement => {
 	const docs = get(dirinfoStore, 'dsinfo.doc', [])
@@ -22,11 +24,11 @@ export const InfoList = observer((): ReactElement => {
 		dirinfoStore.setActiveInfoName(doc[0])
 
 		if (isBaseInfo) {
-			dirinfoStore.setInfoFrameLink(`https://anfisa.forome.dev/anfisa/app/dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`)
+			dirinfoStore.setInfoFrameLink(`dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`)
 			return
 		}
 
-		dirinfoStore.setInfoFrameLink(`https://anfisa.forome.dev/anfisa/app/dsdoc/${dirinfoStore.selectedDirinfoName}/${doc[1]}`)
+		dirinfoStore.setInfoFrameLink(`${DS_DOC_API_URL}${dirinfoStore.selectedDirinfoName}/${doc[1]}`)
 	}
 
 	return (
@@ -34,6 +36,8 @@ export const InfoList = observer((): ReactElement => {
 			<DocsList activeName={dirinfoStore.activeInfoName} data={docs} onClick={handleClick} />
 
 			{dirinfoStore.ancestorsDsInfo[0] && dirinfoStore.ancestorsDsInfo[0][1] && <DocsList activeName={dirinfoStore.activeInfoName} baseDatasetName={baseDatasetName} data={dirinfoStore.ancestorsDsInfo[0][1]} onClick={(doc) => handleClick(doc, true)} />}
+
+			<ModalInfo  />
 		</Box>
 	)
 })
