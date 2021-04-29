@@ -91,7 +91,6 @@ class DirInfoStore {
 	
 			clonedAncestors[0][1][1] = formatedData
 
-			console.log('clonedAncestors', clonedAncestors)
 			return clonedAncestors
 		}
 

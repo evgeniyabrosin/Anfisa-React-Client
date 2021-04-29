@@ -32,8 +32,12 @@ const StyledText = styled(Text)`
 `
 
 export const DatasetsFieldsList = observer((): ReactElement => {
-	const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions', {}) 
+	const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions') 
 
+	if (!versions) {
+		return <></>
+	}
+	
 	return (
 		<Root>
 			<StyledText>{t('home.info')}</StyledText>
