@@ -160,3 +160,54 @@ export type DsStatType = DsStatI | Record<string, any>
 export type DsInfoType = DsinfoI | Record<string, unknown>
 
 export type ANYType = any
+
+export interface RecordI {
+    no: number;
+    lb: string;
+    cl: string;
+    dt: string;
+}
+
+export interface WsListI {
+    ds: string;
+    'total-counts': number[];
+    'filtered-counts': number[];
+    records: RecordI[];
+}
+
+export type WsListType = WsListI | Record<string, unknown>
+
+
+export interface Sample {
+    genotype: string;
+    g_quality: number;
+}
+
+export interface TabReportI {
+    _no: number;
+    ClinVar: string[];
+    HGMD: string[];
+    Gene: string[];
+    Coordinate: string;
+    Change: string;
+    MSQ: string[];
+    'Protein Change': string[];
+    Polyphen: string[];
+    SIFT: string[];
+    'MUT TASTER': string[];
+    FATHMM: string[];
+    gnomAD_Overall_AF: number;
+    gnomAD_Overall_AF_Popmax: number;
+    gnomAD_Genomes_AF: number;
+    gnomAD_Exomes_AF: number;
+    gnomAD_Overall_Hom: number;
+    gnomAD_Overall_Hem?: any;
+    QD: number;
+    FT: string[];
+    GTEx: string[][];
+    IGV?: any;
+    gnomAD: string[];
+    Samples: Sample[];
+}
+
+export type TabReportType = TabReportI | Record<string, unknown>

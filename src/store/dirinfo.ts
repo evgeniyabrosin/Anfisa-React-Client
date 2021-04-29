@@ -5,7 +5,7 @@ import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '../..'
 import { SortDatasets } from '../core/enum/sort-datasets.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { SortDirection } from '../core/sort-direction.enum'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
