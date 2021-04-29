@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { Box } from '../ui/box'
 import dsStore from '../store/dataset'
 import { WsHeader } from './ws.header'
@@ -15,6 +15,9 @@ export const WSPage = (): ReactElement => {
 	
 	useEffect(() => {
 		dsStore.fetchDsStat(params.get('ds'))
+		// dsStore.fetchWsList(params.get('ds'))
+		dsStore.fetchReccnt(params.get('ds'))
+		dsStore.fetchTabReport(params.get('ds'))
 	}, [])
 
 	return (

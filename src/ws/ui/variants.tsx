@@ -30,6 +30,10 @@ const AmountVariants = styled(VariantsStyled)`
 `
 
 export const Variants = observer((): ReactElement => {
+	if (dsStore.isLoadingDsStat) {
+		return <></>
+	}
+    
 	return (
 		<Root>
 			<VariantsStyled>{t('ds.variants')}</VariantsStyled>

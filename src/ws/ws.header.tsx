@@ -7,6 +7,8 @@ import { Text } from '../ui/text'
 import { theme } from '../theme/theme'
 import { useParams } from '../core/hooks/use-params'
 import { Variants } from './ui/variants'
+import { useHistory } from 'react-router'
+import { Routes } from '../router/routes.enum'
 
 const Root = styled(Box)`
     display: flex;
@@ -16,6 +18,7 @@ const Root = styled(Box)`
 const AnfisaHomeBox = styled(Box)`
     display: flex;
     align-items: center;
+    cursor: pointer;
 `
 
 const AnfisaHome = styled(Text)`
@@ -35,13 +38,19 @@ const StyledDS = styled(AnfisaHome)`
 
 export const WsHeader = (): ReactElement => {
 	const params = useParams()
+	const history = useHistory()
     
+	const handleMoveHome = () => {
+		history.push(Routes.Root)
+	}
+
 	return (
 		<Root>
-			<AnfisaHomeBox>
+			<AnfisaHomeBox onClick={handleMoveHome}>
 				<HomeSvg />
 				<AnfisaHome>{t('general.anfisa')}</AnfisaHome>
 			</AnfisaHomeBox>
+
 			<StyledDS>{`/ ${params.get('ds')}`}</StyledDS>
 
 			<Variants />

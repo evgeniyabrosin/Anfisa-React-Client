@@ -5,6 +5,10 @@ import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { CellI } from './variant-cell'
 
+const Root = styled(Box)`
+    width: 150px;
+`
+
 const StyledText = styled(Text)`
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -19,9 +23,9 @@ export const HG19Cell = ({cell}: CellI): ReactElement => {
 	const value = get(cell, 'value', '').split(' ')
 
 	return (
-		<Box>
+		<Root>
 			<StyledText>{value[0]}</StyledText>
 			<StyledText>{value[1]}</StyledText>
-		</Box>
+		</Root>
 	)
 }

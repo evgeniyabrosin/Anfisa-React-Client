@@ -29,13 +29,16 @@ const StyledText = styled(Text)`
 `
 
 export const VariantCell = ({cell}: CellI): ReactElement => {
-	const value = get(cell, 'value', '')
-    
+	const value = get(cell, 'value', []) as string[]
+
 	return (
 		<Root>
-			<StyledText>{value}</StyledText>
-			<ShareSvg style={{ marginLeft: 19, cursor: 'pointer' }} />
-			<TableDocSvg style={{ marginLeft: 10, cursor: 'pointer' }}/>
+			<Box style={{flex: 1}}>
+				{value.map((gene) =>  <StyledText key={gene}>{gene}</StyledText>)}
+			</Box>
+		
+			<ShareSvg style={{ marginLeft: 19, cursor: 'pointer', minWidth: '16px' }} />
+			<TableDocSvg style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}/>
 		</Root>
 	)
 }

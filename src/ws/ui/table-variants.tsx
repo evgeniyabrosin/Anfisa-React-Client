@@ -2,10 +2,18 @@
 import { ReactElement, useMemo } from 'react'
 import styled from 'styled-components'
 import { Table } from './table'
-import { fakeTableData } from '../fake.data'
 import { VariantCell } from './variant-cell'
 import { TagsCell } from './tags-cell'
 import { HG19Cell } from './hg19-cell'
+import { observer } from 'mobx-react-lite'
+import datasetStore from '../../store/dataset'
+import { ANYType } from '../../..'
+import { ProteinChangeCell } from './protein-change-cell'
+import { PredicationI, PredictionsCell } from './predictions-cell'
+import { GnomadCell } from './gnomad-cell'
+import { QualityCell } from './quality-cell'
+import { FilterCell } from './filter-cell'
+import { Loader } from '../../ui/loader'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -13,7 +21,8 @@ const Styles = styled.div`
   table {
     border-spacing: 0;
     border-collapse: collapse;
-
+	width: 100%;
+	
     thead {
         padding: 17px 33px;
 
@@ -52,12 +61,12 @@ const Styles = styled.div`
 `
 
 
-export const TableVariants = (): ReactElement => {
+export const TableVariants = observer((): ReactElement => {
 	const columns = useMemo(
 		() => [
 			{
 				Header: 'Variant',
-				accessor: 'variant',
+				accessor: 'Gene',
 				Cell: VariantCell
 			},
 			{
@@ -67,36 +76,46 @@ export const TableVariants = (): ReactElement => {
 			},
 			{
 				Header: 'hg19',
-				accessor: 'hg19',
+				accessor: (item: ANYType) =>  `${item.Coordinate} ${item.Change}`,
 				Cell: HG19Cell
 			},
 			{
 				Header: 'pPos Worst/Canonical',
-				accessor: 'pPos'
+				accessor: 'Protein Change',
+				Cell: ProteinChangeCell
 			},
 			{
 				Header: 'Predictions',
-				accessor: 'predictions'
+				accessor: (item: ANYType): PredicationI[] => ([{name: 'Polyphen', value: item.Polyphen}, {name: 'SIFT', value: item.SIFT}, {name: 'MUT TASTER', value: item['MUT TASTER']}, {name: 'FATHMM', value: item.FATHMM} ]),
+				Cell: PredictionsCell
 			},
 			{
 				Header: 'GNOMAD',
-				accessor: 'GNOMAD'
+				accessor: (item: ANYType): PredicationI[] => ([{name: 'Overall AF', value: item.gnomAD_Overall_AF}, {name: 'Genome AF', value: item.gnomAD_Genomes_AF}, {name: 'Exome AF', value: item.gnomAD_Exomes_AF}]),
+				Cell: GnomadCell
 			},
 			{
 				Header: 'Quality',
-				accessor: 'quality'
+				accessor: 'Samples',
+				Cell: QualityCell
 			},
 			{
 				Header: 'Filter',
-				accessor: 'filter'
+				accessor: 'FT',
+				Cell: FilterCell
 			},
 		],
 		[]
 	)
 
+
+	if (datasetStore.isLoadingTabReport) {
+		return <Loader />
+	}
+
 	return (
 		<Styles>
-			<Table columns={columns} data={fakeTableData} />
+			<Table columns={columns} data={datasetStore.tabReport} />
 		</Styles>
 	)
-}
+})
