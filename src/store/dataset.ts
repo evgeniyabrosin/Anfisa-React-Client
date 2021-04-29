@@ -1,12 +1,12 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { DsStatType, TabReportType, WsListType } from '../..'
+import { ANYType, DsStatType, TabReportType, WsListType } from '../..'
 import { getApiUrl } from '../core/get-api-url'
 
 
 class DatasetStore {
 	dsStat: DsStatType = {}
 	wsList: WsListType = {}
-	reccnt: any = []
+	reccnt: ANYType = []
 	tabReport: TabReportType[] = []
 
 	isLoadingTabReport = false

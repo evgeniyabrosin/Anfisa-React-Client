@@ -13,6 +13,7 @@ export interface QualityI {
 const Root = styled(Box)`
     display: flex;
 	flex-wrap: wrap;
+	padding-top: 5px;
 	width: 210px;
 `
 

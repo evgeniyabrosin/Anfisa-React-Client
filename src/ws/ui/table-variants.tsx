@@ -27,7 +27,6 @@ const Styles = styled.div`
         padding: 17px 33px;
 
         tr {
-            
             th {
                 padding-top: 17px;
                 padding-bottom: 17px;

@@ -1,8 +1,13 @@
 import { ReactElement } from 'react'
 import { useTable } from 'react-table'
+import { ANYType } from '../../..'
 
+interface Props {
+	columns: ANYType[]
+	data: ANYType[]
+}
 
-export const Table = ({ columns, data }: any): ReactElement => {
+export const Table = ({ columns, data }: Props): ReactElement => {
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -27,7 +32,7 @@ export const Table = ({ columns, data }: any): ReactElement => {
 				))}
 			</thead>
 			<tbody {...getTableBodyProps()}>
-				{rows.map((row, i) => {
+				{rows.map((row) => {
 					prepareRow(row)
 					return (
 						<tr {...row.getRowProps()} key={Math.random()}>

@@ -1,6 +1,7 @@
-import { get } from 'lodash'
+import get from 'lodash/get'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
+import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
 import { ShareSvg } from '../../ui/icons/share'
 import { TableDocSvg } from '../../ui/icons/table-doc'
@@ -25,7 +26,8 @@ const StyledText = styled(Text)`
     font-weight: normal;
     font-size: 14px;
     line-height: 16px;
-    color: #000000;
+    color: ${theme('colors.black')};
+    margin: 5px 0px;
 `
 
 export const VariantCell = ({cell}: CellI): ReactElement => {
