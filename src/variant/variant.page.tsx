@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { Box } from '../ui/box'
 import { HeaderBaseInfo } from './ui/header-base-info'
+import { TabContent } from './ui/tab-content'
 import { Tabs } from './ui/tabs'
 import { VariantHeader } from './variant.header'
 
@@ -28,6 +29,8 @@ export const VariantPage = (): ReactElement => {
 			<Separator />
 
 			<Tabs />
+
+			<TabContent />
 		</Root>
 	)
 }
