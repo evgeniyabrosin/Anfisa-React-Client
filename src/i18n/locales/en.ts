@@ -1,6 +1,8 @@
 export const en = {
 	general: {
-		anfisa: 'Anfisa'
+		anfisa: 'Anfisa',
+		exportReport: 'Export report',
+		tags: 'Tag(s)'
 	},
 	home: {
 		title: 'Home',
@@ -16,5 +18,13 @@ export const en = {
 	},
 	ds: {
 		variants: 'Variants: '
+	},
+	variant: {
+		next: 'Next variant',
+		genes: 'Gene(s)',
+		worstAnnotation: 'Worst Annotation',
+		hg19: 'hg19',
+		noteTitle: 'Note:',
+		typeNote: 'Type note...'
 	}
 }
