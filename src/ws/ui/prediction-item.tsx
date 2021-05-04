@@ -36,7 +36,7 @@ const StyledValue = styled(Text)`
 `
 
 export const PredictionItem = ({name, value}: Props): ReactElement => {
-	if (value?.length === 0) {
+	if (!value || value?.length === 0) {
 		return <></>
 	}
 

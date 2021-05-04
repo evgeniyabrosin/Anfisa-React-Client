@@ -31,7 +31,7 @@ const StyledText = styled(Text)`
 `
 
 export const VariantCell = ({cell}: CellI): ReactElement => {
-	const value = get(cell, 'value', []) as string[]
+	const value = get(cell, 'value[0]', []) as string[]
 
 	return (
 		<Root>
