@@ -1,6 +1,8 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
+import { getVariantColor } from '../../core/get-variant-color'
 import { Box } from '../../ui/box'
+import { CircleSvg } from '../../ui/icons/circle'
 import { Text } from '../../ui/text'
 
 interface Props {
@@ -42,8 +44,9 @@ export const PredictionItem = ({name, value}: Props): ReactElement => {
 
 	return (
 		<Root>
+			<CircleSvg fill={getVariantColor(value[0][1])} style={{alignSelf: 'center', marginRight: 3 }} />
 			<StyledName>{`${name}:`}</StyledName>
-			<StyledValue>{value}</StyledValue>
+			<StyledValue>{value[0][0]}</StyledValue>
 		</Root>
 	)
 }

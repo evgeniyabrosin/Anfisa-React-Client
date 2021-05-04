@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
+import { getVariantColor } from '../../core/get-variant-color'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
 import { ShareSvg } from '../../ui/icons/share'
@@ -30,11 +31,21 @@ const StyledText = styled(Text)`
     margin: 5px 0px;
 `
 
+const Circle = styled(Box)`
+    width: 8px;
+    height: 8px;
+    border-radius: 50px;
+    margin-right: 5px;
+`
+
 export const VariantCell = ({cell}: CellI): ReactElement => {
 	const value = get(cell, 'value[0]', []) as string[]
+	const colorNumber = get(cell, 'value[1]', -1)
 
 	return (
 		<Root>
+			<Circle style={{border: `2px solid ${getVariantColor(colorNumber)}`}} />
+
 			<Box style={{flex: 1}}>
 				{value.map((gene) =>  <StyledText key={gene}>{gene}</StyledText>)}
 			</Box>
