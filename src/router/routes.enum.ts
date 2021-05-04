@@ -1,4 +1,5 @@
 export enum Routes {
     Root = '/',
-    WS = '/ws'
+    WS = '/ws',
+    Variant = '/variant'
 }

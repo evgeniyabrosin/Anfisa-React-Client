@@ -6,6 +6,7 @@ interface Props {
     className?: string
     onClick?: () => void
     icon?: ReactElement
+    leftIcon?: ReactElement
 }
 
 const StyledButton = styled('button')`
@@ -27,8 +28,8 @@ const StyledButton = styled('button')`
     cursor: pointer;
 `
 
-export const Button = ({text, onClick, className, icon}: Props): ReactElement => {
+export const Button = ({text, onClick, className, icon, leftIcon}: Props): ReactElement => {
 	return (
-		<StyledButton onClick={onClick} className={className}>{text} {icon}</StyledButton>
+		<StyledButton onClick={onClick} className={className}>{leftIcon} {text} {icon}</StyledButton>
 	)
 }

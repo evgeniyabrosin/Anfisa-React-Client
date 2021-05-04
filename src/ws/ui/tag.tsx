@@ -12,6 +12,8 @@ const Root = styled(Box)`
 	background: #8FD6F8;
 	border-radius: 7px;
 	padding: 1px 11px;
+	height: 24px;
+	margin-right: 8px;
 `
 
 const StyledText = styled(Text)`
@@ -27,7 +29,7 @@ const StyledText = styled(Text)`
 
 export const Tag = ({text, color = '#8FD6F8'}: Props): ReactElement => {
 	return (
-		<Root style={{backgroundColor: color}}>
+		<Root style={{ backgroundColor: color }}>
 			<StyledText>{text}</StyledText>
 		</Root>
 	)
