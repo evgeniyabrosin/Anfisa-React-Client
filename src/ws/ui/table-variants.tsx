@@ -63,7 +63,7 @@ export const TableVariants = observer((): ReactElement => {
 		() => [
 			{
 				Header: 'Variant',
-				accessor: 'Gene',
+				accessor: 'GeneColored',
 				Cell: VariantCell
 			},
 			{

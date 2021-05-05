@@ -43,7 +43,7 @@ export const GnomadItem = ({name, value}: Props): ReactElement => {
 	return (
 		<Root>
 			<StyledName>{`${name}:`}</StyledName>
-			<StyledValue>{value}</StyledValue>
+			<StyledValue>{Number(value).toFixed(5)}</StyledValue>
 		</Root>
 	)
 }

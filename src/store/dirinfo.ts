@@ -69,8 +69,30 @@ class DirInfoStore {
 			keys = keys.filter((key) => key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()))
 		}
 
-		if (this.sortType) {
+		if (this.sortType === SortDatasets.Name) {
 			return orderBy(keys, (i) => i, this.sortDirections[this.sortType].toLocaleLowerCase() as 'asc' | 'desc')
+		}
+
+		if (this.sortType === SortDatasets.CreatedAt) {
+			keys.sort((a: string, b: string) => {
+				if (!this.dirinfo['ds-dict'][a] || !this.dirinfo['ds-dict'][b]) {
+					return 1
+				}
+
+				if (!this.dirinfo['ds-dict'][a]['create-time'] || !this.dirinfo['ds-dict'][b]['create-time']) {
+					return 1
+				}
+
+				const aDate = new Date(this.dirinfo['ds-dict'][a]['create-time'])
+				const bDate = new Date(this.dirinfo['ds-dict'][b]['create-time'])
+
+				if (this.sortDirections.CreatedAt === SortDirection.ASC) {
+					return +aDate - +bDate
+				} else {
+					return +bDate - +aDate
+				}
+				
+			})
 		}
 
 		return keys
