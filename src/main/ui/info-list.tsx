@@ -23,8 +23,13 @@ export const InfoList = observer((): ReactElement => {
 
 		dirinfoStore.setActiveInfoName(doc[0])
 
+		if (doc[2]) {
+			dirinfoStore.setInfoFrameLink(`${DS_DOC_API_URL}${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${doc[2].image}`)
+			return
+		}
+
 		if (isBaseInfo) {
-			dirinfoStore.setInfoFrameLink(`dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`)
+			dirinfoStore.setInfoFrameLink(`${DS_DOC_API_URL}${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`)
 			return
 		}
 

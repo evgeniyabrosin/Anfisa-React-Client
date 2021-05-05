@@ -7,11 +7,13 @@ import { Text } from '../../ui/text'
 type Props = TextProps & {
     children?: ReactNode | string
 	style?: CSSProperties
+	isTitleBaseInfo?: boolean
 }
 
 interface TextProps {
 	isClickable?: boolean
 	isActive?: boolean
+	isTitleBaseInfo?: boolean
 	onClick?: () => void
 }
 
@@ -32,6 +34,12 @@ const StyledText = styled(Text)<TextProps>`
 	${ifProp('isClickable', css`
 		cursor: pointer;
 	`)}
+
+	${ifProp('isTitleBaseInfo', css`
+		color: #777777;
+		border-bottom: 1px solid #F0F0F0;
+	`)}
+
 `
 
 export const InfoTextItem = ({children, ...rest}: Props): ReactElement => (
