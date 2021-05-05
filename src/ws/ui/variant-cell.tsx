@@ -46,7 +46,8 @@ export const VariantCell = ({cell}: CellI): ReactElement => {
 	const history = useHistory()
     
 	const handleOpenVariant = () => {
-		history.push(Routes.Variant)
+		console.log(cell)
+		// history.push(`${Routes.Variant}`)
 	}
     
 	return (

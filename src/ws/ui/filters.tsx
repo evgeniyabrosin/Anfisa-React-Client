@@ -8,6 +8,7 @@ import { FilterList } from './filter-list'
 
 const Root = styled(Box)`
     margin-left: 40px;
+    margin-right: 30px;
 `
 
 const Title = styled(Text)`

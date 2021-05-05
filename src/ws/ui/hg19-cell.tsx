@@ -17,7 +17,10 @@ const StyledText = styled(Text)`
     font-size: 12px;
     line-height: 16px;
     color: ${theme('colors.black')};
-    margin: 0px;    
+    margin: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 export const HG19Cell = ({cell}: CellI): ReactElement => {

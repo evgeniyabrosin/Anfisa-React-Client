@@ -68,7 +68,7 @@ export const TableVariants = observer((): ReactElement => {
 			},
 			{
 				Header: 'Tag(s)',
-				accessor: 'tags',
+				accessor: '_tags',
 				Cell: TagsCell
 			},
 			{

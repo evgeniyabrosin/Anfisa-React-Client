@@ -8,10 +8,12 @@ import { CellI } from './variant-cell'
 const Root = styled(Box)`
     padding-right: 56px;
 	min-width: 75px;
+	display: flex;
+	flex-wrap: wrap;
 `
 
 export const TagsCell = ({cell}: CellI): ReactElement => {
-	const tags = get(cell, 'value', [])
+	const tags = Object.keys(get(cell, 'value', {}))
 
 	if (tags.length === 0) {
 		return <Root>-</Root>
@@ -19,7 +21,7 @@ export const TagsCell = ({cell}: CellI): ReactElement => {
 
 	return (
 		<Root>
-			<Tag text={tags[0]}></Tag>
+			{tags.map((tag) => <Tag key={tag} text={tag} />)}
 		</Root>
 	)
 }
