@@ -5,6 +5,9 @@ import { ExportReportButton } from '../ui/export-report-button'
 import { Text } from '../ui/text'
 import { NextVariantButton } from './ui/next-variant'
 import { CloseSvg } from '../ui/icons/close'
+import { observer } from 'mobx-react-lite'
+import variantStore from '../store/variant'
+import get from 'lodash/get'
 
 const Root = styled(Box)`
     display: flex;
@@ -25,12 +28,21 @@ const StyledNextVariantButton = styled(NextVariantButton)`
     margin-right: 30px;
 `
 
-export const VariantHeader = (): ReactElement => (
-	<Root>
-		<StyledName>{'[CLCNKB] chr1:16378047 G>T'}</StyledName>
-		<StyledNextVariantButton />
-		<ExportReportButton />
+export const VariantHeader = observer((): ReactElement => {
+	const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
+	const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
 
-		<CloseSvg style={{marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }} />
-	</Root>
-)
+	const handleNextVariant = () => {
+		variantStore.nextVariant()
+	}
+
+	return (
+		<Root>
+			<StyledName>{`[${genInfo}] ${hg19}`}</StyledName>
+			<StyledNextVariantButton onClick={handleNextVariant} />
+			<ExportReportButton />
+    
+			<CloseSvg style={{marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }} />
+		</Root>
+	)
+})

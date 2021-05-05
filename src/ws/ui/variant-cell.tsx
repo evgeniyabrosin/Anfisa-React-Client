@@ -9,6 +9,7 @@ import { Box } from '../../ui/box'
 import { ShareSvg } from '../../ui/icons/share'
 import { TableDocSvg } from '../../ui/icons/table-doc'
 import { Text } from '../../ui/text'
+import { useParams } from '../../core/hooks/use-params'
 
 export interface CellI {
     cell: {
@@ -40,14 +41,20 @@ const Circle = styled(Box)`
     margin-right: 5px;
 `
 
-export const VariantCell = ({cell}: CellI): ReactElement => {
+export const VariantCell = ({ cell }: CellI): ReactElement => {
 	const value = get(cell, 'value[0]', []) as string[]
 	const colorNumber = get(cell, 'value[1]', -1)
 	const history = useHistory()
+	const params = useParams()
     
 	const handleOpenVariant = () => {
-		console.log(cell)
-		// history.push(`${Routes.Variant}`)
+		const index = get(cell, 'row.index')
+		const dsName = params.get('ds')
+        
+		history.push(`${Routes.Variant}`, {
+			index,
+			ds: dsName
+		})
 	}
     
 	return (
