@@ -38,7 +38,10 @@ const StyledPresetName = styled(Text)`
     color: #367BF5;
     margin: 0px;
     margin-right: 7px;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
+    width: 120px;
 `
 
 const ResultsFound = styled(Text)`
@@ -59,7 +62,7 @@ export const Preset = (): ReactElement => {
 			<Title>{t('ds.preset')}</Title>
             
 			<PresetSelect>
-				<StyledPresetName>SEQaBOO_Hearing.textt extt exttxt</StyledPresetName>
+				<StyledPresetName>SEQaBOO_Hearing.t ex tt extt exttxt</StyledPresetName>
 				<DownArray />
 			</PresetSelect>
 

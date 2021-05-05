@@ -16,6 +16,7 @@ export const en = {
 	},
 	ds: {
 		variants: 'Variants: ',
-		preset: 'Preset'
+		preset: 'Preset',
+		filters: 'Filters'
 	}
 }
