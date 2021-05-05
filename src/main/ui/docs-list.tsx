@@ -27,10 +27,10 @@ export const DocsList = ({data, activeName, baseDatasetName, onClick}: Props): R
 				if (!doc) {
 					return <></>
 				}
-            
+
 				return (
 					<Box key={doc[0]} >
-						<InfoTextItem style={{paddingLeft: baseDatasetName ? 20 : 10}} onClick={() => onClick(doc)} isActive={activeName === doc[0]} isClickable={!Array.isArray(doc[1])}>{doc[0]}</InfoTextItem>
+						<InfoTextItem style={{paddingLeft: baseDatasetName ? 20 : 10, }} onClick={() => onClick(doc)} isActive={activeName === doc[0]} isTitleBaseInfo={Array.isArray(doc[1])} isClickable={!Array.isArray(doc[1])}>{doc[0]}</InfoTextItem>
                     
 						{Array.isArray(doc[1]) && (
 							<Box>
