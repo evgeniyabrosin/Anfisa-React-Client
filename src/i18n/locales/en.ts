@@ -17,6 +17,8 @@ export const en = {
 		base: 'Base {name}'
 	},
 	ds: {
+		preset: 'Preset',
+		filters: 'Filters',
 		variants: 'Variants: '
 	},
 	variant: {

@@ -5,6 +5,7 @@ import { WsHeader } from './ws.header'
 import styled from 'styled-components'
 import { useParams } from '../core/hooks/use-params'
 import { TableVariants } from './ui/table-variants'
+import { ControlPanel } from './ui/control-panel'
 
 const Root = styled(Box)`
 	padding: 38px 20px 0px 30px;
@@ -23,7 +24,7 @@ export const WSPage = (): ReactElement => {
 	return (
 		<Root>
 			<WsHeader />
-
+			<ControlPanel />
 			<TableVariants />
 		</Root>
 	)

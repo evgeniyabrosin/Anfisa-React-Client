@@ -16,8 +16,6 @@ import { FilterCell } from './filter-cell'
 import { Loader } from '../../ui/loader'
 
 const Styles = styled.div`
-  padding: 1rem;
-
   table {
     border-spacing: 0;
     border-collapse: collapse;

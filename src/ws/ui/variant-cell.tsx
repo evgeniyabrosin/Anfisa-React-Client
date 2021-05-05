@@ -1,7 +1,9 @@
 import get from 'lodash/get'
 import { ReactElement } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { getVariantColor } from '../../core/get-variant-color'
+import { Routes } from '../../router/routes.enum'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
 import { ShareSvg } from '../../ui/icons/share'
@@ -41,7 +43,12 @@ const Circle = styled(Box)`
 export const VariantCell = ({cell}: CellI): ReactElement => {
 	const value = get(cell, 'value[0]', []) as string[]
 	const colorNumber = get(cell, 'value[1]', -1)
-
+	const history = useHistory()
+    
+	const handleOpenVariant = () => {
+		history.push(Routes.Variant)
+	}
+    
 	return (
 		<Root>
 			<Circle style={{border: `2px solid ${getVariantColor(colorNumber)}`}} />
@@ -51,7 +58,7 @@ export const VariantCell = ({cell}: CellI): ReactElement => {
 			</Box>
 		
 			<ShareSvg style={{ marginLeft: 19, cursor: 'pointer', minWidth: '16px' }} />
-			<TableDocSvg style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}/>
+			<TableDocSvg style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }} onClick={handleOpenVariant} />
 		</Root>
 	)
 }
