@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { ANYType, DsStatType, TabReportType, WsListType } from '../..'
+import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
 
 
@@ -65,6 +66,40 @@ class DatasetStore {
 		})
 
 		this.isLoadingTabReport = false
+	}
+
+	async exportReportExcel (dsName: string | null, exportType?: ExportTypeEnum) {
+		if (exportType === ExportTypeEnum.Excel) {
+			const response = await fetch(getApiUrl(`export?ds=${dsName}`), {
+				method: 'POST'
+			})
+	
+			const result = await response.json()
+			const responseFile = await fetch(getApiUrl(result.fname))
+	
+			await responseFile.blob().then(blob => {
+				const url = window.URL.createObjectURL(blob)
+				const a = document.createElement('a')
+				a.href = url
+				a.download = `${dsName}.xlsx`
+				a.click()
+			})
+		}
+
+		if (exportType === ExportTypeEnum.CSV) {
+			const response = await fetch(getApiUrl(`csv_export?ds=${dsName}&schema=xbr`), {
+				method: 'POST'
+			})
+
+			await response.blob().then(blob => {
+				const url = window.URL.createObjectURL(blob)
+				const a = document.createElement('a')
+				a.href = url
+				a.download = `${dsName}.csv`
+				a.click()
+			})
+
+		}
 	}
 }
 

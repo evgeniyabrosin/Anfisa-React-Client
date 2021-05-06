@@ -6,6 +6,7 @@ import { DownloadSvg } from './icons/download'
 
 interface Props {
     className?: string
+    onClick?: () => void
 }
 
 const StyledButton = styled(Button)`
@@ -23,6 +24,6 @@ const StyledButton = styled(Button)`
 
 export const ExportReportButton = ({...rest}: Props): ReactElement => {
 	return (
-		<StyledButton text={t('general.exportReport')} leftIcon={<DownloadSvg style={{ marginRight: 7 }} {...rest} />} />
+		<StyledButton text={t('general.exportReport')} leftIcon={<DownloadSvg style={{ marginRight: 7 }}  {...rest} />} onClick={rest.onClick}/>
 	)
 }
