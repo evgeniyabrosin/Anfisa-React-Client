@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 
-interface Props {
+export interface TabContentItemI {
     name: string
     value: string
 }
@@ -37,7 +37,7 @@ const StyledValue = styled(Text)`
 
 `
 
-export const TabContentItem = ({name, value}: Props): ReactElement => {
+export const TabContentItem = ({name, value}: TabContentItemI): ReactElement => {
 	return (
 		<Root>
 			<StyledName>{name}</StyledName>

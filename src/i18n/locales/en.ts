@@ -27,6 +27,18 @@ export const en = {
 		worstAnnotation: 'Worst Annotation',
 		hg19: 'hg19',
 		noteTitle: 'Note:',
-		typeNote: 'Type note...'
+		typeNote: 'Type note...',
+		generalInfo: 'General info',
+		canonicalAnnotations: 'Canonical Annotations',
+		transcript: 'Transcript',
+		refSeqCanonical: 'RefSeq  (Canonical)',
+		refSeqWorst: 'RefSeq  (Worst)',
+		ensemblCanonical: 'Ensembl  (Canonical)',
+		ensemblWorst: 'Ensembl (Worst)',
+		genotype: 'Genotype',
+		proband: 'Proband',
+		maternal: 'Maternal',
+		paternal: 'Paternal',
+		geneAnnotation: 'Gene annotation'
 	}
 }

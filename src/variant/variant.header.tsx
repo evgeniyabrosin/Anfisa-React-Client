@@ -36,13 +36,17 @@ export const VariantHeader = observer((): ReactElement => {
 		variantStore.nextVariant()
 	}
 
+	const closeVariant = () => {
+		history.back()
+	}
+
 	return (
 		<Root>
 			<StyledName>{`[${genInfo}] ${hg19}`}</StyledName>
 			<StyledNextVariantButton onClick={handleNextVariant} />
 			<ExportReportButton />
     
-			<CloseSvg style={{marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }} />
+			<CloseSvg style={{marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }} onClick={closeVariant} />
 		</Root>
 	)
 })

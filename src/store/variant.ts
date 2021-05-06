@@ -1,10 +1,11 @@
+import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { ReccntType } from '../..'
 import { getApiUrl } from '../core/get-api-url'
 
 class VariantStore {
 	variant: ReccntType[] = []
-	activeTab = 'Overview'
+	activeTab = ''
 	index = 0
 	dsName = ''
 
@@ -35,10 +36,18 @@ class VariantStore {
 		})
 
 		const result = await response.json()
-		console.log(result)
+
 		runInAction(() => {
 			this.variant = result
+			this.activeTab = result[0].title
 		})
+
+	}
+
+	get getTabs() {
+		const tabList = get(this, 'variant', []) as {title: string}[]
+
+		return tabList.map((tab) => tab.title)
 	}
 }
 
