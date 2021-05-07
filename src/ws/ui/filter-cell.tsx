@@ -14,16 +14,16 @@ const Root = styled(Box)`
 
 const StyledText = styled(Text)`
   word-break: break-all;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
   line-height: 16px;
-  color: ${theme("color.black")};
+  color: ${theme('color.black')};
 `
 
 export const FilterCell = (cell: CellI): ReactElement => {
-  const filters = get(cell, "value", []) as string[]
+  const filters = get(cell, 'value', []) as string[]
 
   return (
     <Root>

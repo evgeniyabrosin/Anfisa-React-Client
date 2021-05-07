@@ -1,32 +1,32 @@
 import { ReactElement, useEffect } from 'react'
-import { Box } from '../ui/box'
-import dsStore from '../store/dataset'
-import { WsHeader } from './ws.header'
 import styled from 'styled-components'
+
 import { useParams } from '../core/hooks/use-params'
-import { TableVariants } from './ui/table-variants'
+import dsStore from '../store/dataset'
+import { Box } from '../ui/box'
 import { ControlPanel } from './ui/control-panel'
+import { TableVariants } from './ui/table-variants'
+import { WsHeader } from './ws.header'
 
 const Root = styled(Box)`
-	padding: 38px 20px 0px 30px;
+  padding: 38px 20px 0px 30px;
 `
 
 export const WSPage = (): ReactElement => {
-	const params = useParams()
-	
-	useEffect(() => {
-		dsStore.fetchDsStat(params.get('ds'))
-		// dsStore.fetchWsList(params.get('ds'))
-		dsStore.fetchReccnt(params.get('ds'))
-		dsStore.fetchTabReport(params.get('ds'))
-		dsStore.fetchWsTags(params.get('ds'))
-	}, [])
+  const params = useParams()
 
-	return (
-		<Root>
-			<WsHeader />
-			<ControlPanel />
-			<TableVariants />
-		</Root>
-	)
+  useEffect(() => {
+    dsStore.fetchDsStatAsync(params.get('ds'))
+    // dsStore.fetchWsList(params.get('ds'))
+    dsStore.fetchReccntAsync(params.get('ds'))
+    dsStore.fetchTabReportAsync(params.get('ds'))
+  }, [params])
+
+  return (
+    <Root>
+      <WsHeader />
+      <ControlPanel />
+      <TableVariants />
+    </Root>
+  )
 }

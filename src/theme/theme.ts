@@ -15,12 +15,11 @@ export const GlobalStyle = createGlobalStyle`
     }
 `
 
-
 export const AppTheme = {
-	fontSizes: [10, 12, 14, 16, 18, 20, 24, 32],
-	lineHeights: [16,17,20, 21, 22, 23,24, 28, 30],
+  fontSizes: [10, 12, 14, 16, 18, 20, 24, 32],
+  lineHeights: [16, 17, 20, 21, 22, 23, 24, 28, 30],
 
-	colors,
+  colors,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
