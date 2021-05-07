@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { Box } from '../../ui/box'
@@ -5,6 +6,7 @@ import { Tags } from '../../ui/tags'
 import { Filters } from './filters'
 import { Preset } from './preset'
 import { Settings } from './settings'
+import datasetStore from '../../store/dataset'
 
 const Root = styled(Box)`
 	display: flex;
@@ -12,16 +14,16 @@ const Root = styled(Box)`
 	margin-bottom: 60px;
 `
 
-export const ControlPanel = (): ReactElement => {
+export const ControlPanel = observer((): ReactElement => {
 	return (
 		<Root>
 			<Preset />
 
 			<Filters />
 
-			<Tags tags={['123']}/>
+			<Tags tags={datasetStore.selectedTags}/>
 
 			<Settings />
 		</Root>
 	)
-}
+})

@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { ANYType, DsStatType, TabReportType, WsListType } from '../..'
+import { ANYType, DsStatType, TabReportType, WsListType, WsTagsType } from '../..'
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
 
@@ -9,6 +9,9 @@ class DatasetStore {
 	wsList: WsListType = {}
 	reccnt: ANYType = []
 	tabReport: TabReportType[] = []
+	wsTags: WsTagsType = {}
+	selectedTags: string[] = []
+	activePreset = ''
 
 	isLoadingTabReport = false
 	isLoadingDsStat = false
@@ -66,6 +69,27 @@ class DatasetStore {
 		})
 
 		this.isLoadingTabReport = false
+	}
+
+	async fetchWsTags (dsName: string | null) {
+		const response = await fetch(getApiUrl(`ws_tags?ds=${dsName}&rec=${0}`), {
+			method: 'POST'
+		})
+
+		const result = await response.json()
+
+		runInAction(() => {
+			this.wsTags = result
+			this.selectedTags = result['check-tags']
+		})
+	}
+
+	setActivePreset(value: string) {
+		this.activePreset = value
+	}
+
+	removeTag (tagName: string) {
+		this.selectedTags = this.selectedTags.filter((tag) => tag !== tagName)
 	}
 
 	async exportReportExcel (dsName: string | null, exportType?: ExportTypeEnum) {

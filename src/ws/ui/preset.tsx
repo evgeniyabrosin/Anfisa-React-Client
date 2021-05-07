@@ -5,9 +5,16 @@ import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { DownArray } from '../../ui/icons/down-array'
 import { EditFilter } from './edit-filter'
+import datasetStore from '../../store/dataset'
+import { get } from 'lodash'
+import { observer } from 'mobx-react-lite'
+import { DropDown } from '../../ui/dropdown'
 
-const Root = styled(Box)`
 
+const Root = styled(Box)` 
+    
+
+    
 `
 
 const Title = styled(Text)`
@@ -56,19 +63,24 @@ const ResultsFound = styled(Text)`
 `
 
 
-export const Preset = (): ReactElement => {
-	return (
-		<Root>
-			<Title>{t('ds.preset')}</Title>
-            
-			<PresetSelect>
-				<StyledPresetName>SEQaBOO_Hearing.t ex tt extt exttxt</StyledPresetName>
-				<DownArray />
-			</PresetSelect>
+export const Preset = observer((): ReactElement => {
+    // const presets: string[] = get(datasetStore, 'wsTags.filters', [])
 
-			<EditFilter />
+    return (
+        <Root>
+            <Title>{t('ds.preset')}</Title>
 
-			<ResultsFound>9 results found</ResultsFound>
-		</Root>
-	)
-}
+            <PresetSelect>
+                {/* {presetsName[0] && <StyledPresetName>{presetsName[0].substring(1)}</StyledPresetName>} */}
+                {/* <DownArray /> */}
+                <DropDown />
+            </PresetSelect>
+
+            <EditFilter />
+
+            <ResultsFound>{t('ds.resultsFound', {
+                0: datasetStore.tabReport.length
+            })}</ResultsFound>
+        </Root>
+    )
+})

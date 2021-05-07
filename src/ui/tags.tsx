@@ -4,6 +4,7 @@ import { t } from '../i18n/i18n'
 import { Tag } from '../ws/ui/tag'
 import { Box } from './box'
 import { Text } from './text'
+import datasetStore from '../store/dataset'
 
 interface Props {
     tags: string[]
@@ -32,8 +33,6 @@ export const Tags = ({tags}: Props): ReactElement => (
 	<Root>
 		<Title>{`${t('general.tags')}:`}</Title>
 
-		{tags.map((tag) => {
-			return <Tag text={tag} key={tag} />
-		})}
+		{tags.map((tag) => <Tag text={tag} key={tag} removeTag={() => datasetStore.removeTag(tag)} /> )}
 	</Root>
 )

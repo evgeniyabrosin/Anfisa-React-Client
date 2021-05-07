@@ -19,6 +19,7 @@ export const WSPage = (): ReactElement => {
 		// dsStore.fetchWsList(params.get('ds'))
 		dsStore.fetchReccnt(params.get('ds'))
 		dsStore.fetchTabReport(params.get('ds'))
+		dsStore.fetchWsTags(params.get('ds'))
 	}, [])
 
 	return (

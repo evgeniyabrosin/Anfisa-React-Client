@@ -211,3 +211,19 @@ export interface TabReportI {
 }
 
 export type TabReportType = TabReportI | Record<string, unknown>
+
+export interface RecTags {
+    [key: string]: string;
+}
+
+export interface WsTagsI {
+    'check-tags': string[];
+    'op-tags': string[];
+    'rec-tags': RecTags;
+    'upd-time': Date;
+    'upd-from': string;
+    filters: string[];
+    'tags-state': number;
+}
+
+export type WsTagsType = WsTagsI | Record<string, unknown>

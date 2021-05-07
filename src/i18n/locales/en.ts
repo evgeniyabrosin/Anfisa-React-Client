@@ -19,7 +19,8 @@ export const en = {
 	ds: {
 		preset: 'Preset',
 		filters: 'Filters',
-		variants: 'Variants: '
+		variants: 'Variants: ',
+		resultsFound: '{0} results found'
 	},
 	variant: {
 		next: 'Next variant',

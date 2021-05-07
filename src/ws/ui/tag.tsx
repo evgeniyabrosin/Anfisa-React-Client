@@ -1,11 +1,13 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { Box } from '../../ui/box'
+import { CloseTagSvg } from '../../ui/icons/close-tag'
 import { Text } from '../../ui/text'
 
 interface Props {
     text: string
     color?: string
+	removeTag?: () => void
 }
 
 const Root = styled(Box)`
@@ -13,7 +15,11 @@ const Root = styled(Box)`
 	border-radius: 7px;
 	padding: 1px 11px;
 	height: 24px;
+	margin-top: 8px;
 	margin-right: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 `
 
 const StyledText = styled(Text)`
@@ -25,12 +31,15 @@ const StyledText = styled(Text)`
 	line-height: 24px;
 	letter-spacing: 0.44px;
 	color: #000000;
+	margin-right: 2px;
 `
 
-export const Tag = ({text, color = '#8FD6F8'}: Props): ReactElement => {
+export const Tag = ({text, color = '#8FD6F8', removeTag}: Props): ReactElement => {
 	return (
 		<Root style={{ backgroundColor: color }}>
 			<StyledText>{text}</StyledText>
+
+			<CloseTagSvg onClick={removeTag} />
 		</Root>
 	)
 }
