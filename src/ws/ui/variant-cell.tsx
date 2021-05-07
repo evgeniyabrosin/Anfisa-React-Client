@@ -62,10 +62,10 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
 
       <ShareSvg
         style={{ marginLeft: 19, cursor: 'pointer', minWidth: '16px' }}
+        onClick={handleOpenVariant}
       />
       <TableDocSvg
         style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}
-        onClick={handleOpenVariant}
       />
     </Root>
   )
