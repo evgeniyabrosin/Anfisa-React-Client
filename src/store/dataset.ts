@@ -1,71 +1,125 @@
 import { makeAutoObservable, runInAction } from 'mobx'
+
 import { ANYType, DsStatType, TabReportType, WsListType } from '../..'
+import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
 
-
 class DatasetStore {
-	dsStat: DsStatType = {}
-	wsList: WsListType = {}
-	reccnt: ANYType = []
-	tabReport: TabReportType[] = []
+  dsStat: DsStatType = {}
+  wsList: WsListType = {}
+  reccnt: ANYType = []
+  tabReport: TabReportType[] = []
 
-	isLoadingTabReport = false
-	isLoadingDsStat = false
+  isLoadingTabReport = false
+  isLoadingDsStat = false
 
-	constructor () {
-		makeAutoObservable(this)
-	}
+  constructor() {
+    makeAutoObservable(this)
+  }
 
-	async fetchDsStat(dsName: string | null) {
-		this.isLoadingDsStat = true
+  async fetchDsStatAsync(dsName: string | null) {
+    this.isLoadingDsStat = true
 
-		const response = await fetch(getApiUrl(`ds_stat?ds=${dsName}`), {
-			method: 'POST'
-		})
-		const result = await response.json()
+    const response = await fetch(getApiUrl(`ds_stat?ds=${dsName}`), {
+      method: 'POST',
+    })
 
-		runInAction(() => {
-			this.dsStat = result
-		})
-		this.isLoadingDsStat = false
-	}
+    const result = await response.json()
 
-	async fetchWsList(dsName: string | null) {
-		const response = await fetch(getApiUrl('ws_list'), {
-			method: 'POST',
-			body: JSON.stringify({ds: dsName})
-		})
+    runInAction(() => {
+      this.dsStat = result
+    })
+    this.isLoadingDsStat = false
+  }
 
-		const result = await response.json()
+  async fetchWsListAsync(dsName: string | null) {
+    const response = await fetch(getApiUrl('ws_list'), {
+      method: 'POST',
+      body: JSON.stringify({ ds: dsName }),
+    })
 
-		runInAction(() => {
-			this.wsList = result
-		})
-	}
+    const result = await response.json()
 
-	async fetchReccnt(dsName: string | null) {
-		const response = await fetch(getApiUrl(`reccnt?ds=${dsName}&rec=${11}`))
-		const result = await response.json()
+    runInAction(() => {
+      this.wsList = result
+    })
+  }
 
-		runInAction(() => {
-			this.reccnt = result
-		})
-	}
+  async fetchReccntAsync(dsName: string | null) {
+    const response = await fetch(getApiUrl(`reccnt?ds=${dsName}&rec=${11}`))
+    const result = await response.json()
 
-	async fetchTabReport (dsName: string | null) {
-		this.isLoadingTabReport = true
+    runInAction(() => {
+      this.reccnt = result
+    })
+  }
 
-		const seq = Array.from(Array(10).keys())
+  async fetchTabReportAsync(dsName: string | null) {
+    this.isLoadingTabReport = true
 
-		const response = await fetch(getApiUrl(`tab_report?ds=${dsName}&schema=xbr&seq=${encodeURIComponent(JSON.stringify(seq))}`))
-		const result = await response.json()
+    const seq = Array.from(new Array(10).keys())
 
-		runInAction(() => {
-			this.tabReport = result
-		})
+    const response = await fetch(
+      getApiUrl(
+        `tab_report?ds=${dsName}&schema=xbr&seq=${encodeURIComponent(
+          JSON.stringify(seq),
+        )}`,
+      ),
+    )
 
-		this.isLoadingTabReport = false
-	}
+    const result = await response.json()
+
+    runInAction(() => {
+      this.tabReport = result
+    })
+
+    this.isLoadingTabReport = false
+  }
+
+  async exportReportExcelAsync(
+    dsName: string | null,
+    exportType?: ExportTypeEnum,
+  ) {
+    if (exportType === ExportTypeEnum.Excel) {
+      const response = await fetch(getApiUrl(`export?ds=${dsName}`), {
+        method: 'POST',
+      })
+
+      const result = await response.json()
+      const responseFile = await fetch(getApiUrl(result.fname))
+
+      await responseFile.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+
+        a.href = url
+        a.download = `${dsName}.xlsx`
+        a.click()
+
+        return
+      })
+    }
+
+    if (exportType === ExportTypeEnum.CSV) {
+      const response = await fetch(
+        getApiUrl(`csv_export?ds=${dsName}&schema=xbr`),
+        {
+          method: 'POST',
+        },
+      )
+
+      await response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+
+        a.href = url
+        a.download = `${dsName}.csv`
+        a.click()
+
+        return
+      })
+    }
+  }
 }
 
 export default new DatasetStore()
