@@ -1,145 +1,162 @@
-import orderBy from 'lodash/orderBy'
+import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
+import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, runInAction } from 'mobx'
+
 import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '../..'
 import { SortDatasets } from '../core/enum/sort-datasets.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { SortDirection } from '../core/sort-direction.enum'
-import cloneDeep from 'lodash/cloneDeep'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
 class DirInfoStore {
-	dirinfo: DirInfoType = {}
-	selectedDirinfoName = ''
-	dsinfo: DsInfoType = {}
-	sortType: SortDatasets | undefined
-	filterValue = ''
-	sortDirections: SortDirectionsType = {
-		[SortDatasets.Name]: SortDirection.ASC,
-		[SortDatasets.CreatedAt]: SortDirection.ASC
-	}
-	infoFrameLink = ''
-	activeInfoName = ''
+  dirinfo: DirInfoType = {}
+  selectedDirinfoName = ''
+  dsinfo: DsInfoType = {}
+  sortType: SortDatasets | undefined
+  filterValue = ''
+  sortDirections: SortDirectionsType = {
+    [SortDatasets.Name]: SortDirection.ASC,
+    [SortDatasets.CreatedAt]: SortDirection.ASC,
+  }
+  infoFrameLink = ''
+  activeInfoName = ''
 
-	constructor() {
-		makeAutoObservable(this)
-	}
+  constructor() {
+    makeAutoObservable(this)
+  }
 
-	setActiveInfoName (name: string) {
-		this.activeInfoName = name
-	}
-	
-	setSelectedDirinfoName(name: string) {
-		this.selectedDirinfoName = name
-	}
+  setActiveInfoName(name: string) {
+    this.activeInfoName = name
+  }
 
-	setInfoFrameLink(link: string) {
-		this.infoFrameLink = link
-	}
+  setSelectedDirinfoName(name: string) {
+    this.selectedDirinfoName = name
+  }
 
-	setSortType(sortType?: SortDatasets) {
-		this.sortType = sortType
-	}
-	
-	setFilterValue (value: string) {
-		this.filterValue = value
-	}
+  setInfoFrameLink(link: string) {
+    this.infoFrameLink = link
+  }
 
-	setSortDirection() {
-		const clonedSortDirection: SortDirectionsType = Object.assign(this.sortDirections)
+  setSortType(sortType?: SortDatasets) {
+    this.sortType = sortType
+  }
 
-		if (this.sortType) {
-			clonedSortDirection[this.sortType] = clonedSortDirection[this.sortType] === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC
-		}
+  setFilterValue(value: string) {
+    this.filterValue = value
+  }
 
-		runInAction(() => {
-			this.sortDirections = clonedSortDirection
-		})
-	}
+  setSortDirection() {
+    const clonedSortDirection: SortDirectionsType = Object.assign(
+      this.sortDirections,
+    )
 
-	setDsInfo(dsinfo: DsDistItem) {
-		this.dsinfo = dsinfo as ANYType
-	}
+    if (this.sortType) {
+      clonedSortDirection[this.sortType] =
+        clonedSortDirection[this.sortType] === SortDirection.ASC
+          ? SortDirection.DESC
+          : SortDirection.ASC
+    }
 
-	get dsDistKeys() {
-		let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
+    runInAction(() => {
+      this.sortDirections = clonedSortDirection
+    })
+  }
 
-		if (this.filterValue) {
-			keys = keys.filter((key) => key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()))
-		}
+  setDsInfo(dsinfo: DsDistItem) {
+    this.dsinfo = dsinfo as ANYType
+  }
 
-		if (this.sortType === SortDatasets.Name) {
-			return orderBy(keys, (i) => i, this.sortDirections[this.sortType].toLocaleLowerCase() as 'asc' | 'desc')
-		}
+  get dsDistKeys() {
+    let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
 
-		if (this.sortType === SortDatasets.CreatedAt) {
-			keys.sort((a: string, b: string) => {
-				if (!this.dirinfo['ds-dict'][a] || !this.dirinfo['ds-dict'][b]) {
-					return 1
-				}
+    if (this.filterValue) {
+      keys = keys.filter(key =>
+        key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()),
+      )
+    }
 
-				if (!this.dirinfo['ds-dict'][a]['create-time'] || !this.dirinfo['ds-dict'][b]['create-time']) {
-					return 1
-				}
+    if (this.sortType === SortDatasets.Name) {
+      return orderBy(
+        keys,
+        i => i,
+        this.sortDirections[this.sortType].toLocaleLowerCase() as
+          | 'asc'
+          | 'desc',
+      )
+    }
 
-				const aDate = new Date(this.dirinfo['ds-dict'][a]['create-time'])
-				const bDate = new Date(this.dirinfo['ds-dict'][b]['create-time'])
+    if (this.sortType === SortDatasets.CreatedAt) {
+      keys.sort((a: string, b: string) => {
+        if (!this.dirinfo['ds-dict'][a] || !this.dirinfo['ds-dict'][b]) {
+          return 1
+        }
 
-				if (this.sortDirections.CreatedAt === SortDirection.ASC) {
-					return +aDate - +bDate
-				} else {
-					return +bDate - +aDate
-				}
-				
-			})
-		}
+        if (
+          !this.dirinfo['ds-dict'][a]['create-time'] ||
+          !this.dirinfo['ds-dict'][b]['create-time']
+        ) {
+          return 1
+        }
 
-		return keys
-	}
+        const aDate = new Date(this.dirinfo['ds-dict'][a]['create-time'])
+        const bDate = new Date(this.dirinfo['ds-dict'][b]['create-time'])
 
-	get ancestorsDsInfo () {
-		const ancestors: ANYType[] = get(this, 'dsinfo.ancestors', [])
-		const clonedAncestors = cloneDeep(ancestors)
+        return this.sortDirections.CreatedAt === SortDirection.ASC
+          ? +aDate - +bDate
+          : +bDate - +aDate
+      })
+    }
 
-		if (clonedAncestors[0] && clonedAncestors[0][1] && clonedAncestors[0][1][1]) {
-			const formatedData = clonedAncestors[0][1][1].map((item: ANYType) => {
-				if (item[0] === 'Info') {
-					item[0] = 'Base Info'
-				}
-	
-				return item
-			})
-	
-			clonedAncestors[0][1][1] = formatedData
+    return keys
+  }
 
-			return clonedAncestors
-		}
+  get ancestorsDsInfo() {
+    const ancestors: ANYType[] = get(this, 'dsinfo.ancestors', [])
+    const clonedAncestors = cloneDeep(ancestors)
 
-		return [[]]
-	}
+    if (
+      clonedAncestors[0] &&
+      clonedAncestors[0][1] &&
+      clonedAncestors[0][1][1]
+    ) {
+      const formatedData = clonedAncestors[0][1][1].map((item: ANYType) => {
+        if (item[0] === 'Info') {
+          item[0] = 'Base Info'
+        }
 
+        return item
+      })
 
-	async fetchDirInfo() {
-		const response = await fetch(getApiUrl('dirinfo'))
-		const res = await response.json()
+      clonedAncestors[0][1][1] = formatedData
 
-		
-		runInAction(() => {
-			this.dirinfo = res
-		})
-	}
+      return clonedAncestors
+    }
 
-	async fetchDsinfo(name: string) {
-		const response = await fetch(getApiUrl(`dsinfo?ds=${name}`), {
-			method: 'POST'
-		})
-		const result = await response.json()
-	
-		runInAction(() => {
-			this.dsinfo = result
-		})
-	}
+    return [[]]
+  }
+
+  async fetchDirInfoAsync() {
+    const response = await fetch(getApiUrl('dirinfo'))
+    const res = await response.json()
+
+    runInAction(() => {
+      this.dirinfo = res
+    })
+  }
+
+  async fetchDsinfoAsync(name: string) {
+    const response = await fetch(getApiUrl(`dsinfo?ds=${name}`), {
+      method: 'POST',
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.dsinfo = result
+    })
+  }
 }
 
 export default new DirInfoStore()

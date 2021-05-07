@@ -1,4 +1,4 @@
 export enum SortDatasets {
-    Name = 'Name',
-    CreatedAt = 'CreatedAt'
+  Name = 'Name',
+  CreatedAt = 'CreatedAt',
 }
