@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
 export const useToggle = (
-	initiallyVisible = false,
+  initiallyVisible = false,
 ): [boolean, () => void, () => void] => {
-	const [isVisible, setIsVisible] = useState(initiallyVisible)
+  const [isVisible, setIsVisible] = useState(initiallyVisible)
 
-	const show = (): void => setIsVisible(true)
-	const hide = (): void => setIsVisible(false)
+  const show = (): void => setIsVisible(true)
+  const hide = (): void => setIsVisible(false)
 
-	return [isVisible, show, hide]
+  return [isVisible, show, hide]
 }

@@ -1,16 +1,15 @@
 import { makeAutoObservable } from 'mobx'
 
 class VariantStore {
-	activeTab = 'Overview'
+  activeTab = 'Overview'
 
-	constructor() {
-		makeAutoObservable(this)
-	}
+  constructor() {
+    makeAutoObservable(this)
+  }
 
-	setActiveTab(name: string) {
-		this.activeTab = name
-	}
-
+  setActiveTab(name: string) {
+    this.activeTab = name
+  }
 }
 
 export default new VariantStore()
