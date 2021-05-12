@@ -13,6 +13,11 @@ export const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: 100%;
     }
+
+    .react-switch-handle {
+      width: 12px;
+      height: 12px;
+    }
 `
 
 export const AppTheme = {

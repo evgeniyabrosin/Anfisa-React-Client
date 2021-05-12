@@ -21,6 +21,12 @@ export const en = {
     filters: 'Filters',
     variants: 'Variants: ',
     resultsFound: '{0} results found',
+    tableVisualization: 'Table Visualization',
+    grid: 'Grid',
+    rows: 'Rows',
+    searchColumns: 'Search for a filter',
+    columns: 'Columns',
+    tableProperties: 'Table Properties',
   },
   variant: {
     next: 'Next variant',

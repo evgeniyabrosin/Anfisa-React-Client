@@ -1,12 +1,15 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import { ANYType } from '../..'
+
 interface Props {
   text: string
   className?: string
   onClick?: () => void
   icon?: ReactElement
   leftIcon?: ReactElement
+  refEl?: ANYType
 }
 
 const StyledButton = styled('button')`
@@ -34,10 +37,9 @@ export const Button = ({
   className,
   icon,
   leftIcon,
-}: Props): ReactElement => {
-  return (
-    <StyledButton onClick={onClick} className={className}>
-      {leftIcon} {text} {icon}
-    </StyledButton>
-  )
-}
+  refEl,
+}: Props): ReactElement => (
+  <StyledButton onClick={onClick} className={className} ref={refEl}>
+    {leftIcon} {text} {icon}
+  </StyledButton>
+)

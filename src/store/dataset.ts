@@ -18,12 +18,25 @@ class DatasetStore {
   wsTags: WsTagsType = {}
   selectedTags: string[] = []
   activePreset = ''
+  searchColumnValue = ''
 
   isLoadingTabReport = false
   isLoadingDsStat = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setSearchColumnValue(value: string) {
+    this.searchColumnValue = value
+  }
+
+  setActivePreset(value: string) {
+    this.activePreset = value
+  }
+
+  removeTag(tagName: string) {
+    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
   }
 
   async fetchDsStatAsync(dsName: string | null) {
@@ -96,14 +109,6 @@ class DatasetStore {
       this.wsTags = result
       this.selectedTags = result['check-tags']
     })
-  }
-
-  setActivePreset(value: string) {
-    this.activePreset = value
-  }
-
-  removeTag(tagName: string) {
-    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
   }
 
   async exportReportExcelAsync(

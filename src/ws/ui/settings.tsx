@@ -6,8 +6,9 @@ import { useParams } from '../../core/hooks/use-params'
 import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
 import { ExportReportButton } from '../../ui/export-report-button'
-import { ColumnsControlSvg } from '../../ui/icons/columns-control'
-import { ListView } from '../../ui/icons/list-view'
+import { Popper } from '../../ui/popper'
+import { SettingsPanel } from './settings-panel'
+import { TableProperiesButton } from './table-properties-button'
 
 const Root = styled(Box)`
   display: flex;
@@ -24,9 +25,10 @@ export const Settings = (): ReactElement => {
 
   return (
     <Root>
-      <ColumnsControlSvg />
-
-      <ListView />
+      <Popper
+        ButtonElement={TableProperiesButton}
+        ModalElement={SettingsPanel}
+      />
 
       <ExportReportButton onClick={handleExport} />
     </Root>
