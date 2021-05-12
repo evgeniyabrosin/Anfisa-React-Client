@@ -1,44 +1,47 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
+
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { TabContentItem, TabContentItemI } from './tab-content-item'
 
 interface Props {
-    title: string
-    data: TabContentItemI[]
+  title: string
+  data: TabContentItemI[]
 }
 
 const Root = styled(Box)`
-	flex: 50%;
+  flex: 50%;
 `
 
 const Title = styled(Text)`
-    font-family: 'Lato', sans-serif;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: 0.44px;
-    color: #000000;
-	margin-left: 45px;
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0.44px;
+  color: #000000;
+  margin-left: 45px;
 `
 
 const ContainerInfo = styled(Box)`
-	background: #E5EEF1;
-	border-radius: 10px;
-	max-width: 358px;
-	padding: 10px 36px 10px 36px;
+  background: #e5eef1;
+  border-radius: 10px;
+  max-width: 358px;
+  padding: 10px 36px 10px 36px;
 `
 
-export const OverviewItem = ({title, data}: Props): ReactElement => {
-	return (
-		<Root>
-			<Title>{title}</Title>
+export const OverviewItem = ({ title, data }: Props): ReactElement => {
+  return (
+    <Root>
+      <Title>{title}</Title>
 
-			<ContainerInfo>
-				{data.map((item) => <TabContentItem key={item.name} {...item}/>)}
-			</ContainerInfo>
-		</Root>
-	)
+      <ContainerInfo>
+        {data.map(item => (
+          <TabContentItem key={item.name} {...item} />
+        ))}
+      </ContainerInfo>
+    </Root>
+  )
 }

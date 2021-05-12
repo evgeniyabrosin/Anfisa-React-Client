@@ -22,9 +22,12 @@ export const Settings = (): ReactElement => {
     datasetStore.exportReportExcelAsync(params.get('ds'), ExportTypeEnum.Excel)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const handleChangeColumns = () => {}
+
   return (
     <Root>
-      <ColumnsControlSvg />
+      <ColumnsControlSvg onClick={handleChangeColumns} />
 
       <ListView />
 

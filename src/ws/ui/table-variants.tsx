@@ -5,7 +5,9 @@ import styled from 'styled-components'
 
 import { ANYType } from '../../..'
 import datasetStore from '../../store/dataset'
+import variantStore from '../../store/variant'
 import { Loader } from '../../ui/loader'
+import { variantColumnTable } from '../columns'
 import { FilterCell } from './filter-cell'
 import { GnomadCell } from './gnomad-cell'
 import { HG19Cell } from './hg19-cell'
@@ -60,59 +62,8 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'Variant',
-          accessor: 'GeneColored',
-          Cell: VariantCell,
-        },
-        {
-          Header: 'Tag(s)',
-          accessor: 'tags',
-          Cell: TagsCell,
-        },
-        {
-          Header: 'hg19',
-          accessor: (item: ANYType) => `${item.Coordinate} ${item.Change}`,
-          Cell: HG19Cell,
-        },
-        {
-          Header: 'pPos Worst/Canonical',
-          accessor: 'Protein Change',
-          Cell: ProteinChangeCell,
-        },
-        {
-          Header: 'Predictions',
-          accessor: (item: ANYType): PredicationI[] => [
-            { name: 'Polyphen', value: item.Polyphen },
-            { name: 'SIFT', value: item.SIFT },
-            { name: 'MUT TASTER', value: item['MUT TASTER'] },
-            { name: 'FATHMM', value: item.FATHMM },
-          ],
-          Cell: PredictionsCell,
-        },
-        {
-          Header: 'GNOMAD',
-          accessor: (item: ANYType): PredicationI[] => [
-            { name: 'Overall AF', value: item.gnomAD_Overall_AF },
-            { name: 'Genome AF', value: item.gnomAD_Genomes_AF },
-            { name: 'Exome AF', value: item.gnomAD_Exomes_AF },
-          ],
-          Cell: GnomadCell,
-        },
-        {
-          Header: 'Quality',
-          accessor: 'Samples',
-          Cell: QualityCell,
-        },
-        {
-          Header: 'Filter',
-          accessor: 'FT',
-          Cell: FilterCell,
-        },
-      ],
-      [],
+    const columns = variantColumnTable.filter(item =>
+      variantStore.columns.includes(item.Header),
     )
 
     if (datasetStore.isLoadingTabReport) {
