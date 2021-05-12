@@ -1,10 +1,10 @@
+import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
 import { ColumnNameItem } from './column-name-item'
-
-const columns = ['text1', 'text2', 'text3', 'text4']
 
 const Root = styled(Box)`
   border-bottom: 1px solid #bfbfbf;
@@ -12,10 +12,12 @@ const Root = styled(Box)`
   padding-bottom: 19px;
 `
 
-export const ColumnsList = (): ReactElement => (
-  <Root>
-    {columns.map(item => (
-      <ColumnNameItem name={item} key={item} />
-    ))}
-  </Root>
+export const ColumnsList = observer(
+  (): ReactElement => (
+    <Root>
+      {datasetStore.getColumns.map(item => (
+        <ColumnNameItem name={item} key={item} />
+      ))}
+    </Root>
+  ),
 )

@@ -7,6 +7,7 @@ import { NextArrowSvg } from '../../ui/icons/next-arrow'
 
 interface Props {
   className?: string
+  onClick?: () => void
 }
 
 const StyledButton = styled(Button)`
@@ -21,10 +22,14 @@ const StyledButton = styled(Button)`
   text-transform: uppercase;
 `
 
-export const NextVariantButton = ({ className }: Props): ReactElement => {
+export const NextVariantButton = ({
+  className,
+  onClick,
+}: Props): ReactElement => {
   return (
     <StyledButton
       text={t('variant.next')}
+      onClick={onClick}
       icon={<NextArrowSvg fill="#367BF5" />}
       className={className}
     />

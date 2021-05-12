@@ -1,6 +1,8 @@
+import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
 import { DndSvg } from '../../ui/icons/dnd'
 import { Switch } from '../../ui/switch'
@@ -33,13 +35,30 @@ const StyledText = styled(Text)`
   margin-bottom: 4px;
 `
 
-export const ColumnNameItem = ({ name }: Props): ReactElement => (
-  <Root>
-    <Wrapper>
-      <DndSvg />
-      <StyledText>{name}</StyledText>
-    </Wrapper>
+export const ColumnNameItem = observer(
+  ({ name }: Props): ReactElement => {
+    const handleChange = (checked: boolean) => {
+      if (!checked) {
+        datasetStore.removeColumn(name)
+      }
 
-    <Switch onChange={() => null} isChecked={false} />
-  </Root>
+      if (checked) {
+        datasetStore.addColumn(name)
+      }
+    }
+
+    return (
+      <Root>
+        <Wrapper>
+          <DndSvg />
+          <StyledText>{name}</StyledText>
+        </Wrapper>
+
+        <Switch
+          onChange={handleChange}
+          isChecked={datasetStore.columns.includes(name)}
+        />
+      </Root>
+    )
+  },
 )

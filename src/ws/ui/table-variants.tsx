@@ -1,20 +1,12 @@
 /* eslint-disable react/jsx-key */
 import { observer } from 'mobx-react-lite'
-import { ReactElement, useMemo } from 'react'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '../../..'
 import datasetStore from '../../store/dataset'
 import { Loader } from '../../ui/loader'
-import { FilterCell } from './filter-cell'
-import { GnomadCell } from './gnomad-cell'
-import { HG19Cell } from './hg19-cell'
-import { PredicationI, PredictionsCell } from './predictions-cell'
-import { ProteinChangeCell } from './protein-change-cell'
-import { QualityCell } from './quality-cell'
+import { variantColumnTable } from '../columns'
 import { Table } from './table'
-import { TagsCell } from './tags-cell'
-import { VariantCell } from './variant-cell'
 
 const Styles = styled.div`
   table {
@@ -60,59 +52,8 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'Variant',
-          accessor: 'GeneColored',
-          Cell: VariantCell,
-        },
-        {
-          Header: 'Tag(s)',
-          accessor: 'tags',
-          Cell: TagsCell,
-        },
-        {
-          Header: 'hg19',
-          accessor: (item: ANYType) => `${item.Coordinate} ${item.Change}`,
-          Cell: HG19Cell,
-        },
-        {
-          Header: 'pPos Worst/Canonical',
-          accessor: 'Protein Change',
-          Cell: ProteinChangeCell,
-        },
-        {
-          Header: 'Predictions',
-          accessor: (item: ANYType): PredicationI[] => [
-            { name: 'Polyphen', value: item.Polyphen },
-            { name: 'SIFT', value: item.SIFT },
-            { name: 'MUT TASTER', value: item['MUT TASTER'] },
-            { name: 'FATHMM', value: item.FATHMM },
-          ],
-          Cell: PredictionsCell,
-        },
-        {
-          Header: 'GNOMAD',
-          accessor: (item: ANYType): PredicationI[] => [
-            { name: 'Overall AF', value: item.gnomAD_Overall_AF },
-            { name: 'Genome AF', value: item.gnomAD_Genomes_AF },
-            { name: 'Exome AF', value: item.gnomAD_Exomes_AF },
-          ],
-          Cell: GnomadCell,
-        },
-        {
-          Header: 'Quality',
-          accessor: 'Samples',
-          Cell: QualityCell,
-        },
-        {
-          Header: 'Filter',
-          accessor: 'FT',
-          Cell: FilterCell,
-        },
-      ],
-      [],
+    const columns = variantColumnTable.filter(item =>
+      datasetStore.columns.includes(item.Header),
     )
 
     if (datasetStore.isLoadingTabReport) {

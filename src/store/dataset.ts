@@ -9,6 +9,7 @@ import {
 } from '../..'
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
+import { tableColumnMap } from '../core/table-column-map'
 
 class DatasetStore {
   dsStat: DsStatType = {}
@@ -17,6 +18,8 @@ class DatasetStore {
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
   selectedTags: string[] = []
+  columns: string[] = Object.values(tableColumnMap)
+
   activePreset = ''
   searchColumnValue = ''
 
@@ -25,6 +28,14 @@ class DatasetStore {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  removeColumn(name: string) {
+    this.columns = this.columns.filter(column => column !== name)
+  }
+
+  addColumn(name: string) {
+    this.columns.push(name)
   }
 
   setSearchColumnValue(value: string) {
@@ -37,6 +48,18 @@ class DatasetStore {
 
   removeTag(tagName: string) {
     this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+  }
+
+  get getColumns() {
+    if (this.searchColumnValue) {
+      return Object.values(tableColumnMap).filter(key =>
+        key
+          .toLocaleLowerCase()
+          .includes(this.searchColumnValue.toLocaleLowerCase()),
+      )
+    }
+
+    return Object.values(tableColumnMap)
   }
 
   async fetchDsStatAsync(dsName: string | null) {
