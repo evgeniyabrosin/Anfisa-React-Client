@@ -10,6 +10,7 @@ import {
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { tableColumnMap } from '../core/table-column-map'
+import { tagsColors } from '../core/tags-colors'
 
 class DatasetStore {
   dsStat: DsStatType = {}
@@ -19,6 +20,7 @@ class DatasetStore {
   wsTags: WsTagsType = {}
   selectedTags: string[] = []
   columns: string[] = Object.values(tableColumnMap)
+  tagsColorMap: Record<string, string> = {}
 
   activePreset = ''
   searchColumnValue = ''
@@ -128,7 +130,11 @@ class DatasetStore {
 
     runInAction(() => {
       this.wsTags = result
-      this.selectedTags = result['check-tags']
+      this.selectedTags = [...result['op-tags'], ...result['check-tags']]
+
+      this.selectedTags.forEach((tag, index) => {
+        this.tagsColorMap[tag] = tagsColors[index] || 'red'
+      })
     })
   }
 

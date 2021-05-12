@@ -1,6 +1,8 @@
+import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
 import { CloseTagSvg } from '../../ui/icons/close-tag'
 import { Text } from '../../ui/text'
@@ -30,21 +32,24 @@ const StyledText = styled(Text)`
   font-weight: bold;
   font-size: 12px;
   line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   letter-spacing: 0.44px;
   color: #000000;
   margin-right: 2px;
 `
 
-export const Tag = ({
-  text,
-  color = '#8FD6F8',
-  removeTag,
-}: Props): ReactElement => {
-  return (
-    <Root style={{ backgroundColor: color }}>
-      <StyledText>{text}</StyledText>
+export const Tag = observer(
+  ({ text, color = '#8FD6F8', removeTag }: Props): ReactElement => {
+    return (
+      <Root
+        style={{ backgroundColor: datasetStore.tagsColorMap[text] || color }}
+      >
+        <StyledText>{text}</StyledText>
 
-      <CloseTagSvg onClick={removeTag} />
-    </Root>
-  )
-}
+        <CloseTagSvg onClick={removeTag} />
+      </Root>
+    )
+  },
+)

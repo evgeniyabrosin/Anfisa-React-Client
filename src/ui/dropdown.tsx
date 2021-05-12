@@ -23,6 +23,11 @@ const StyledDropDown = styled(DropdownBase)`
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 0;
+    cursor: pointer;
+
+    :hover {
+      box-shadow: none;
+    }
   }
 
   .placeholderClassName {

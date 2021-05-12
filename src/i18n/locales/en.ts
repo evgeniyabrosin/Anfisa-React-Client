@@ -30,6 +30,7 @@ export const en = {
     columns: 'Columns',
     tableProperties: 'Table Properties',
     copied: 'Copied Successful',
+    editFilters: 'Edit filters',
   },
   variant: {
     next: 'Next variant',
