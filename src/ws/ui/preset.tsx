@@ -41,23 +41,21 @@ const ResultsFound = styled(Text)`
 `
 
 export const Preset = observer(
-  (): ReactElement => {
-    return (
-      <Root>
-        <Title>{t('ds.preset')}</Title>
+  (): ReactElement => (
+    <Root>
+      <Title>{t('ds.preset')}</Title>
 
-        <PresetSelect>
-          <DropDown />
-        </PresetSelect>
+      <PresetSelect>
+        <DropDown />
+      </PresetSelect>
 
-        <EditFilter />
+      <EditFilter />
 
-        <ResultsFound>
-          {t('ds.resultsFound', {
-            0: datasetStore.tabReport.length,
-          })}
-        </ResultsFound>
-      </Root>
-    )
-  },
+      <ResultsFound>
+        {t('ds.resultsFound', {
+          0: datasetStore.tabReport.length,
+        })}
+      </ResultsFound>
+    </Root>
+  ),
 )

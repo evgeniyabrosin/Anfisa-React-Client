@@ -6,6 +6,7 @@ import { ReactElement } from 'react'
 import DropdownBase, { Option } from 'react-dropdown'
 import styled from 'styled-components'
 
+import { FilterList } from '../..'
 import datasetStore from '../store/dataset'
 
 const StyledDropDown = styled(DropdownBase)`
@@ -38,15 +39,60 @@ const StyledDropDown = styled(DropdownBase)`
     align-items: center;
     align-self: center;
   }
+
+  .menuClassName {
+    width: auto;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 8px;
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+
+  .Dropdown-option {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    color: #262626;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    :hover {
+      background-color: #def1fd;
+    }
+  }
+
+  .Dropdown-option.is-selected {
+    color: #367bf5;
+    background-color: white;
+  }
 `
 
 export const DropDown = observer(
   (): ReactElement => {
-    const presets: string[] = get(
-      datasetStore,
-      'wsTags.filters',
-      [],
-    ).map((preset: string) => preset.slice(1))
+    const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
+      (preset: FilterList) => preset.name,
+    )
 
     const defaultOption = presets[0]
 

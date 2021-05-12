@@ -17,7 +17,7 @@ export const WSPage = (): ReactElement => {
 
   useEffect(() => {
     dsStore.fetchDsStatAsync(params.get('ds'))
-    // dsStore.fetchWsList(params.get('ds'))
+    dsStore.fetchWsListAsync(params.get('ds'))
     dsStore.fetchReccntAsync(params.get('ds'))
     dsStore.fetchTabReportAsync(params.get('ds'))
   }, [params])

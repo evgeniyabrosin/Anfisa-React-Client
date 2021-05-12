@@ -78,9 +78,8 @@ class DatasetStore {
   }
 
   async fetchWsListAsync(dsName: string | null) {
-    const response = await fetch(getApiUrl('ws_list'), {
+    const response = await fetch(getApiUrl(`ws_list?ds=${dsName}`), {
       method: 'POST',
-      body: JSON.stringify({ ds: dsName }),
     })
 
     const result = await response.json()
