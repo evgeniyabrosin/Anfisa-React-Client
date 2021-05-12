@@ -1,6 +1,10 @@
-import { ReactElement } from 'react'
+import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
+import { ReactElement, useEffect } from 'react'
+import { useLocation } from 'react-router'
 import styled from 'styled-components'
 
+import variantStore from '../store/variant'
 import { Box } from '../ui/box'
 import { HeaderBaseInfo } from './ui/header-base-info'
 import { TabContent } from './ui/tab-content'
@@ -19,18 +23,30 @@ const Separator = styled(Box)`
   margin-top: 40px;
 `
 
-export const VariantPage = (): ReactElement => {
-  return (
-    <Root>
-      <VariantHeader />
+export const VariantPage = observer(
+  (): ReactElement => {
+    const location = useLocation()
+    const indexVariant = get(location, 'state.index')
+    const dsName = get(location, 'state.ds')
 
-      <HeaderBaseInfo />
+    useEffect(() => {
+      variantStore.setIndex(indexVariant)
+      variantStore.setDsName(dsName)
+      variantStore.fetchVarinatInfoAsync()
+    }, [dsName, indexVariant])
 
-      <Separator />
+    return (
+      <Root>
+        <VariantHeader />
 
-      <Tabs />
+        <HeaderBaseInfo />
 
-      <TabContent />
-    </Root>
-  )
-}
+        <Separator />
+
+        <Tabs />
+
+        <TabContent />
+      </Root>
+    )
+  },
+)

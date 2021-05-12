@@ -206,3 +206,27 @@ export interface TabReportI {
 }
 
 export type TabReportType = TabReportI | Record<string, unknown>
+
+
+export interface Row {
+    name: string;
+    title: string;
+    cells: string[][];
+    tooltip: string;
+}
+
+export interface ReccntI {
+    name: string;
+    title: string;
+    kind: string;
+    type: string;
+    parcontrol: string;
+    colgroup: string[];
+    columns: number;
+    rows: Row[];
+    colhead: any[][];
+    parmodes: any[];
+    content: string;
+}
+
+export type ReccntType = ReccntI | Record<string, unknown>

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { getVariantColor } from '../../core/get-variant-color'
+import { useParams } from '../../core/hooks/use-params'
 import { Routes } from '../../router/routes.enum'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
@@ -45,9 +46,16 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value[0]', []) as string[]
   const colorNumber = get(cell, 'value[1]', -1)
   const history = useHistory()
+  const params = useParams()
 
   const handleOpenVariant = () => {
-    history.push(Routes.Variant)
+    const index = get(cell, 'row.index')
+    const dsName = params.get('ds')
+
+    history.push(`${Routes.Variant}`, {
+      index,
+      ds: dsName,
+    })
   }
 
   return (

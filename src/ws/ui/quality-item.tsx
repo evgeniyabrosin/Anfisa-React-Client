@@ -20,6 +20,10 @@ const StyledText = styled(Text)`
   color: #000000;
   margin: 0;
   margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 210px;
 `
 
 export const QualityItem = ({

@@ -14,7 +14,7 @@ const Root = styled(Box)`
   border-radius: 7px;
   padding: 1px 11px;
   height: 24px;
-  margin-right: 8px;
+  margin: 4px 8px 4px 0px;
 `
 
 const StyledText = styled(Text)`
