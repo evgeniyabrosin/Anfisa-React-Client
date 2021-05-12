@@ -33,7 +33,7 @@ export const Popper = ({
           style={styles.popper}
           {...attributes.popper}
         >
-          <ModalElement />
+          <ModalElement close={close} />
         </div>
       )}
     </Fragment>

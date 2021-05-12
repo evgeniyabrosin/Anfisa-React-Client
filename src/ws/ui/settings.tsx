@@ -1,10 +1,8 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ExportTypeEnum } from '../../core/enum/export-type.enum'
-import { useParams } from '../../core/hooks/use-params'
-import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
+import { ExportPanel } from '../../ui/export-panel'
 import { ExportReportButton } from '../../ui/export-report-button'
 import { Popper } from '../../ui/popper'
 import { SettingsPanel } from './settings-panel'
@@ -16,21 +14,10 @@ const Root = styled(Box)`
   margin-left: auto;
 `
 
-export const Settings = (): ReactElement => {
-  const params = useParams()
+export const Settings = (): ReactElement => (
+  <Root>
+    <Popper ButtonElement={TableProperiesButton} ModalElement={SettingsPanel} />
 
-  const handleExport = () => {
-    datasetStore.exportReportExcelAsync(params.get('ds'), ExportTypeEnum.Excel)
-  }
-
-  return (
-    <Root>
-      <Popper
-        ButtonElement={TableProperiesButton}
-        ModalElement={SettingsPanel}
-      />
-
-      <ExportReportButton onClick={handleExport} />
-    </Root>
-  )
-}
+    <Popper ButtonElement={ExportReportButton} ModalElement={ExportPanel} />
+  </Root>
+)

@@ -3,6 +3,8 @@ export const en = {
     anfisa: 'Anfisa',
     exportReport: 'Export report',
     tags: 'Tag(s)',
+    excel: 'Excel',
+    csv: 'Csv',
   },
   home: {
     title: 'Home',

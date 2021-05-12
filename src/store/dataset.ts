@@ -133,10 +133,7 @@ class DatasetStore {
     })
   }
 
-  async exportReportExcelAsync(
-    dsName: string | null,
-    exportType?: ExportTypeEnum,
-  ) {
+  async exportReportAsync(dsName: string | null, exportType?: ExportTypeEnum) {
     if (exportType === ExportTypeEnum.Excel) {
       const response = await fetch(getApiUrl(`export?ds=${dsName}`), {
         method: 'POST',
