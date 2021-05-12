@@ -3,14 +3,12 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ReccntType } from '../..'
 import { getApiUrl } from '../core/get-api-url'
-import { tableColumnMap } from '../core/table-column-map'
 
 class VariantStore {
   variant: ReccntType[] = []
   activeTab = ''
   index = 0
   dsName = ''
-  columns: string[] = Object.values(tableColumnMap)
 
   constructor() {
     makeAutoObservable(this)

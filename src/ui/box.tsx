@@ -1,9 +1,12 @@
 import { CSSProperties, ReactElement, ReactNode } from 'react'
 
+import { ANYType } from '../..'
+
 interface Props {
   children?: ReactNode
   className?: string
   style?: CSSProperties
+  refEl?: ANYType
   onClick?: () => void
 }
 
@@ -12,10 +15,9 @@ export const Box = ({
   style,
   className,
   onClick,
-}: Props): ReactElement => {
-  return (
-    <div style={style} className={className} onClick={onClick}>
-      {children}
-    </div>
-  )
-}
+  refEl,
+}: Props): ReactElement => (
+  <div style={style} className={className} onClick={onClick} ref={refEl}>
+    {children}
+  </div>
+)

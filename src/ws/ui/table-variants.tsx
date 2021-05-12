@@ -4,7 +4,6 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import datasetStore from '../../store/dataset'
-import variantStore from '../../store/variant'
 import { Loader } from '../../ui/loader'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
@@ -54,7 +53,7 @@ const Styles = styled.div`
 export const TableVariants = observer(
   (): ReactElement => {
     const columns = variantColumnTable.filter(item =>
-      variantStore.columns.includes(item.Header),
+      datasetStore.columns.includes(item.Header),
     )
 
     if (datasetStore.isLoadingTabReport) {

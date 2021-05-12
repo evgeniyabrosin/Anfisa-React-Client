@@ -1,10 +1,13 @@
 import get from 'lodash/get'
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
+import { copyToClipboard } from '../../core/copy-to-clipboard'
 import { getVariantColor } from '../../core/get-variant-color'
 import { useParams } from '../../core/hooks/use-params'
+import { t } from '../../i18n/i18n'
 import { Routes } from '../../router/routes.enum'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
@@ -58,6 +61,20 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
     })
   }
 
+  const copyDetails = () => {
+    copyToClipboard(String(value))
+
+    toast.info(t('ds.copied'), {
+      position: 'bottom-right',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: 0,
+    })
+  }
+
   return (
     <Root>
       <Circle style={{ border: `2px solid ${getVariantColor(colorNumber)}` }} />
@@ -74,6 +91,7 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
       />
       <TableDocSvg
         style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}
+        onClick={copyDetails}
       />
     </Root>
   )

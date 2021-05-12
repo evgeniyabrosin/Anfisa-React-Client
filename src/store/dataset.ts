@@ -1,20 +1,67 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ANYType, DsStatType, TabReportType, WsListType } from '../..'
+import {
+  ANYType,
+  DsStatType,
+  TabReportType,
+  WsListType,
+  WsTagsType,
+} from '../..'
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
+import { tableColumnMap } from '../core/table-column-map'
+import { tagsColors } from '../core/tags-colors'
 
 class DatasetStore {
   dsStat: DsStatType = {}
   wsList: WsListType = {}
   reccnt: ANYType = []
   tabReport: TabReportType[] = []
+  wsTags: WsTagsType = {}
+  selectedTags: string[] = []
+  columns: string[] = Object.values(tableColumnMap)
+  tagsColorMap: Record<string, string> = {}
+
+  activePreset = ''
+  searchColumnValue = ''
 
   isLoadingTabReport = false
   isLoadingDsStat = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  removeColumn(name: string) {
+    this.columns = this.columns.filter(column => column !== name)
+  }
+
+  addColumn(name: string) {
+    this.columns.push(name)
+  }
+
+  setSearchColumnValue(value: string) {
+    this.searchColumnValue = value
+  }
+
+  setActivePreset(value: string) {
+    this.activePreset = value
+  }
+
+  removeTag(tagName: string) {
+    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+  }
+
+  get getColumns() {
+    if (this.searchColumnValue) {
+      return Object.values(tableColumnMap).filter(key =>
+        key
+          .toLocaleLowerCase()
+          .includes(this.searchColumnValue.toLocaleLowerCase()),
+      )
+    }
+
+    return Object.values(tableColumnMap)
   }
 
   async fetchDsStatAsync(dsName: string | null) {
@@ -28,14 +75,13 @@ class DatasetStore {
 
     runInAction(() => {
       this.dsStat = result
+      this.isLoadingDsStat = false
     })
-    this.isLoadingDsStat = false
   }
 
   async fetchWsListAsync(dsName: string | null) {
-    const response = await fetch(getApiUrl('ws_list'), {
+    const response = await fetch(getApiUrl(`ws_list?ds=${dsName}`), {
       method: 'POST',
-      body: JSON.stringify({ ds: dsName }),
     })
 
     const result = await response.json()
@@ -71,15 +117,28 @@ class DatasetStore {
 
     runInAction(() => {
       this.tabReport = result
+      this.isLoadingTabReport = false
     })
-
-    this.isLoadingTabReport = false
   }
 
-  async exportReportExcelAsync(
-    dsName: string | null,
-    exportType?: ExportTypeEnum,
-  ) {
+  async fetchWsTagsAsync(dsName: string | null) {
+    const response = await fetch(getApiUrl(`ws_tags?ds=${dsName}&rec=${0}`), {
+      method: 'POST',
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.wsTags = result
+      this.selectedTags = [...result['op-tags'], ...result['check-tags']]
+
+      this.selectedTags.forEach((tag, index) => {
+        this.tagsColorMap[tag] = tagsColors[index] || 'red'
+      })
+    })
+  }
+
+  async exportReportAsync(dsName: string | null, exportType?: ExportTypeEnum) {
     if (exportType === ExportTypeEnum.Excel) {
       const response = await fetch(getApiUrl(`export?ds=${dsName}`), {
         method: 'POST',

@@ -1,13 +1,17 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
+import { ANYType } from '../..'
 import { t } from '../i18n/i18n'
 import { Button } from './button'
+import { DownArray } from './icons/down-array'
 import { DownloadSvg } from './icons/download'
 
 interface Props {
   className?: string
   onClick?: () => void
+  refEl: ANYType
+  isOpen?: boolean
 }
 
 const StyledButton = styled(Button)`
@@ -23,12 +27,23 @@ const StyledButton = styled(Button)`
   height: 32px;
 `
 
-export const ExportReportButton = ({ ...rest }: Props): ReactElement => {
-  return (
-    <StyledButton
-      text={t('general.exportReport')}
-      leftIcon={<DownloadSvg style={{ marginRight: 7 }} {...rest} />}
-      onClick={rest.onClick}
-    />
-  )
-}
+export const ExportReportButton = ({
+  isOpen,
+  refEl,
+  ...rest
+}: Props): ReactElement => (
+  <StyledButton
+    text={t('general.exportReport')}
+    refEl={refEl}
+    leftIcon={<DownloadSvg style={{ marginRight: 7 }} {...rest} />}
+    onClick={rest.onClick}
+    icon={
+      <DownArray
+        style={{
+          marginLeft: 10,
+          transform: isOpen ? 'rotate(180deg)' : 'none',
+        }}
+      />
+    }
+  />
+)

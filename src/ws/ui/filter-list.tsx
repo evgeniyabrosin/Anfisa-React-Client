@@ -13,8 +13,6 @@ export const FilterList = (): ReactElement => {
     <Root>
       <FilterItem />
       <FilterItem />
-      <FilterItem />
-      <FilterItem />
     </Root>
   )
 }

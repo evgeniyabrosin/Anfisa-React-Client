@@ -17,7 +17,7 @@ export const variantColumnTable = [
   },
   {
     Header: tableColumnMap.tags,
-    accessor: 'tags',
+    accessor: '_tags',
     Cell: TagsCell,
   },
   {

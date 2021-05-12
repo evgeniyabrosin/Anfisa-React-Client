@@ -1,6 +1,9 @@
 import { ReactElement } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
+import { t } from '../../i18n/i18n'
+import { Routes } from '../../router/routes.enum'
 import { Button } from '../../ui/button'
 
 const StyledButton = styled(Button)`
@@ -18,5 +21,11 @@ const StyledButton = styled(Button)`
 `
 
 export const EditFilter = (): ReactElement => {
-  return <StyledButton text="Edit filters" />
+  const histroy = useHistory()
+
+  const handleClick = () => {
+    histroy.push(Routes.Filter)
+  }
+
+  return <StyledButton text={t('ds.editFilters')} onClick={handleClick} />
 }
