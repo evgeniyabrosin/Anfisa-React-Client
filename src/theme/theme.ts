@@ -18,6 +18,33 @@ export const GlobalStyle = createGlobalStyle`
       width: 12px;
       height: 12px;
     }
+
+    .Toastify__toast--info {
+      background-color: #0C65FD;
+      border-radius: 8px;
+      height: 52px;
+    }
+
+    .Toastify__toast {
+      max-height: 52px;
+      min-height: auto;
+      width: 266px;
+    }
+
+    .Toastify__toast-body {
+      font-family: 'Roboto', sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    .Toastify__close-button {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
 `
 
 export const AppTheme = {

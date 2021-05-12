@@ -29,6 +29,7 @@ export const en = {
     searchColumns: 'Search for a filter',
     columns: 'Columns',
     tableProperties: 'Table Properties',
+    copied: 'Copied Successful',
   },
   variant: {
     next: 'Next variant',
