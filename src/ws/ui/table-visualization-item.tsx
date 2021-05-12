@@ -1,3 +1,4 @@
+import { noop } from 'lodash'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
@@ -38,6 +39,6 @@ export const TableVisualizationItem = ({
   <Root>
     <Icon />
     <StyledText>{text}</StyledText>
-    <RadioButton isChecked={isChecked} />
+    <RadioButton isChecked={isChecked} onChange={noop} />
   </Root>
 )

@@ -73,8 +73,8 @@ class DatasetStore {
 
     runInAction(() => {
       this.dsStat = result
+      this.isLoadingDsStat = false
     })
-    this.isLoadingDsStat = false
   }
 
   async fetchWsListAsync(dsName: string | null) {
@@ -116,9 +116,8 @@ class DatasetStore {
 
     runInAction(() => {
       this.tabReport = result
+      this.isLoadingTabReport = false
     })
-
-    this.isLoadingTabReport = false
   }
 
   async fetchWsTagsAsync(dsName: string | null) {
