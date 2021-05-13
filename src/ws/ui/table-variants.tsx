@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
@@ -52,8 +51,8 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
-    const columns = variantColumnTable.filter(item =>
-      datasetStore.columns.includes(item.Header),
+    const columns = datasetStore.columns.map(column =>
+      variantColumnTable.find(item => item.Header === column),
     )
 
     if (datasetStore.isLoadingTabReport) {

@@ -52,6 +52,10 @@ class DatasetStore {
     this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
   }
 
+  setColumns(columns: string[]) {
+    this.columns = columns
+  }
+
   get getColumns() {
     if (this.searchColumnValue) {
       return Object.values(tableColumnMap).filter(key =>
