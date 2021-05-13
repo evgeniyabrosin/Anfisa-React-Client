@@ -14,7 +14,7 @@ const Root = styled(Box)`
 `
 
 export const TagsCell = ({ cell }: CellI): ReactElement => {
-  const tags = Object.keys(get(cell, 'value', {}))
+  const tags = Object.keys(get(cell, 'value', {}) || {}) || []
 
   if (tags.length === 0) {
     return <Root>-</Root>
