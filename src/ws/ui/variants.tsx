@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '../../i18n/i18n'
@@ -31,18 +31,14 @@ const AmountVariants = styled(VariantsStyled)`
 `
 
 export const Variants = observer(
-  (): ReactElement => {
-    if (dsStore.isLoadingDsStat) {
-      return <Fragment />
-    }
-
-    return (
-      <Root>
-        <VariantsStyled>{t('ds.variants')}</VariantsStyled>
-        <AmountVariants>
-          {get(dsStore, 'dsStat.total-counts.0', 0)}
-        </AmountVariants>
-      </Root>
-    )
-  },
+  (): ReactElement => (
+    <Root>
+      <VariantsStyled>{t('ds.variants')}</VariantsStyled>
+      <AmountVariants>
+        {dsStore.isLoadingDsStat
+          ? 'Loading'
+          : get(dsStore, 'dsStat.total-counts.0', 0)}
+      </AmountVariants>
+    </Root>
+  ),
 )
