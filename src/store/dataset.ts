@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import {
@@ -23,7 +24,10 @@ class DatasetStore {
   activePreset = ''
   searchColumnValue = ''
 
+  indexTabReport = 0
+
   isLoadingTabReport = false
+  isFetchingMore = false
   isLoadingDsStat = false
 
   constructor() {
@@ -54,6 +58,18 @@ class DatasetStore {
     this.columns = columns
   }
 
+  resetData() {
+    this.indexTabReport = 0
+    this.tabReport = []
+    this.wsTags = {}
+    this.dsStat = {}
+    this.activePreset = ''
+    this.selectedTags = []
+    this.wsList = {}
+    this.reccnt = []
+    this.searchColumnValue = ''
+  }
+
   get getColumns() {
     if (this.searchColumnValue) {
       return Object.values(tableColumnMap).filter(key =>
@@ -68,6 +84,7 @@ class DatasetStore {
 
   async fetchDsStatAsync(dsName: string | null) {
     this.isLoadingDsStat = true
+    this.isLoadingTabReport = true
 
     const response = await fetch(getApiUrl(`ds_stat?ds=${dsName}`), {
       method: 'POST',
@@ -103,24 +120,45 @@ class DatasetStore {
   }
 
   async fetchTabReportAsync(dsName: string | null) {
-    this.isLoadingTabReport = true
+    const variantsAmount = get(this, 'dsStat.total-counts.0', 0)
 
-    const seq = Array.from(new Array(10).keys())
+    if (this.indexTabReport === 0) {
+      this.isLoadingTabReport = true
+    }
 
-    const response = await fetch(
-      getApiUrl(
-        `tab_report?ds=${dsName}&schema=xbr&seq=${encodeURIComponent(
-          JSON.stringify(seq),
-        )}`,
-      ),
-    )
+    if (this.indexTabReport !== 0 && this.indexTabReport < variantsAmount) {
+      this.isFetchingMore = true
+    }
 
-    const result = await response.json()
+    if (variantsAmount > this.indexTabReport) {
+      const arrayLength = variantsAmount < 50 ? variantsAmount : 50
 
-    runInAction(() => {
-      this.tabReport = result
-      this.isLoadingTabReport = false
-    })
+      const seq = Array.from(
+        { length: arrayLength },
+        (_, i) => i + this.indexTabReport,
+      )
+
+      const response = await fetch(getApiUrl(`tab_report`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          ds: String(dsName),
+          schema: 'xbr',
+          seq: JSON.stringify(seq),
+        }),
+      })
+
+      const result = await response.json()
+
+      runInAction(() => {
+        this.tabReport = [...this.tabReport, ...result]
+        this.isLoadingTabReport = false
+        this.isFetchingMore = false
+        this.indexTabReport += 50
+      })
+    }
   }
 
   async fetchWsTagsAsync(dsName: string | null) {

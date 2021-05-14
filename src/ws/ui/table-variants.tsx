@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import datasetStore from '../../store/dataset'
+import { Box } from '../../ui/box'
 import { Loader } from '../../ui/loader'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
@@ -62,6 +63,10 @@ export const TableVariants = observer(
     return (
       <Styles>
         <Table columns={columns} data={datasetStore.tabReport} />
+
+        <Box style={{ height: 100, width: '100%' }}>
+          {datasetStore.isFetchingMore && <Loader />}
+        </Box>
       </Styles>
     )
   },

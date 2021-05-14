@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce'
 import { ReactElement, useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -16,12 +17,35 @@ export const WSPage = (): ReactElement => {
   const params = useParams()
 
   useEffect(() => {
-    dsStore.fetchDsStatAsync(params.get('ds'))
+    dsStore.resetData()
+
+    const initAsync = async () => {
+      await dsStore.fetchDsStatAsync(params.get('ds'))
+      await dsStore.fetchTabReportAsync(params.get('ds'))
+    }
+
     dsStore.fetchWsListAsync(params.get('ds'))
     dsStore.fetchReccntAsync(params.get('ds'))
-    dsStore.fetchTabReportAsync(params.get('ds'))
     dsStore.fetchWsTagsAsync(params.get('ds'))
+
+    initAsync()
   }, [params])
+
+  const handleScroll = debounce(() => {
+    if (
+      window.innerHeight + window.scrollY >
+      document.body.clientHeight - 100
+    ) {
+      dsStore.fetchTabReportAsync(params.get('ds'))
+    }
+  }, 200)
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+
+    return () => window.removeEventListener('scroll', handleScroll)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Root>
