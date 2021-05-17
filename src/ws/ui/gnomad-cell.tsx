@@ -8,7 +8,7 @@ import { PredicationI } from './predictions-cell'
 import { CellI } from './variant-cell'
 
 const Root = styled(Box)`
-  width: 230px;
+  width: 120px;
 `
 
 export const GnomadCell = ({ cell }: CellI): ReactElement => {

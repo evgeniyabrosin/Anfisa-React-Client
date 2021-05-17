@@ -24,8 +24,9 @@ export interface CellI {
 const Root = styled(Box)`
   display: flex;
   align-items: center;
-  padding-left: 33px;
+  padding-left: 15px;
   padding-right: 20px;
+  width: 150px;
 `
 
 const StyledText = styled(Text)`
@@ -41,8 +42,9 @@ const StyledText = styled(Text)`
 const Circle = styled(Box)`
   width: 8px;
   height: 8px;
+  min-width: 8px;
   border-radius: 50px;
-  margin-right: 5px;
+  margin-right: 10px;
 `
 
 export const VariantCell = ({ cell }: CellI): ReactElement => {
@@ -77,7 +79,11 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
 
   return (
     <Root>
-      <Circle style={{ border: `2px solid ${getVariantColor(colorNumber)}` }} />
+      <Circle
+        style={{
+          border: `2px solid ${getVariantColor(colorNumber)}`,
+        }}
+      />
 
       <Box style={{ flex: 1 }}>
         {value.map(gene => (

@@ -8,7 +8,7 @@ import { Text } from '../../ui/text'
 import { CellI } from './variant-cell'
 
 const Root = styled(Box)`
-  width: 150px;
+  width: 80px;
   padding-right: 15px;
 `
 

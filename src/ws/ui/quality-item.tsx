@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { QualityI } from './quality-cell'
+import { QualityIcon } from './quality-icon'
 
 type Props = QualityI & {
   iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'
@@ -27,19 +28,20 @@ const StyledText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 210px;
+  max-width: 280px;
+  margin-left: 10px;
 `
 
 export const QualityItem = ({
   genotype,
   g_quality,
   iconVariant,
-}: Props): ReactElement => {
-  return (
-    <Root>
-      <Box>{iconVariant}</Box>
+}: Props): ReactElement => (
+  <Root>
+    <Box>
+      <QualityIcon iconVariant={iconVariant} />
       <StyledText>{genotype}</StyledText>
-      <StyledText>{g_quality}</StyledText>
-    </Root>
-  )
-}
+    </Box>
+    <StyledText>{g_quality}</StyledText>
+  </Root>
+)

@@ -12,7 +12,7 @@ export interface PredicationI {
 }
 
 const Root = styled(Box)`
-  width: 175px;
+  width: 150px;
   padding-right: 10px;
 `
 

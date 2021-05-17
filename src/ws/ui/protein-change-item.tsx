@@ -15,6 +15,9 @@ const StyledText = styled(Text)`
   line-height: 16px;
   color: #000000;
   margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const ProteinChangeItem = ({ value }: Props): ReactElement => {
