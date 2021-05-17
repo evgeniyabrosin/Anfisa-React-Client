@@ -5,6 +5,10 @@ import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { QualityI } from './quality-cell'
 
+type Props = QualityI & {
+  iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'
+}
+
 const Root = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -29,9 +33,11 @@ const StyledText = styled(Text)`
 export const QualityItem = ({
   genotype,
   g_quality,
-}: QualityI): ReactElement => {
+  iconVariant,
+}: Props): ReactElement => {
   return (
     <Root>
+      <Box>{iconVariant}</Box>
       <StyledText>{genotype}</StyledText>
       <StyledText>{g_quality}</StyledText>
     </Root>
