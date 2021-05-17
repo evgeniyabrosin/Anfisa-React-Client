@@ -1,7 +1,11 @@
 import get from 'lodash/get'
-import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
+import { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { ANYType } from '../../..'
+import { getIcon } from '../../core/get-quality-icon'
+import dirInfoStore from '../../store/dirinfo'
 import { Box } from '../../ui/box'
 import { QualityItem } from './quality-item'
 import { CellI } from './variant-cell'
@@ -13,19 +17,33 @@ export interface QualityI {
 
 const Root = styled(Box)`
   display: flex;
-  flex-wrap: wrap;
   padding-top: 5px;
-  width: 210px;
+  width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
-export const QualityCell = ({ cell }: CellI): ReactElement => {
-  const qualities = get(cell, 'value', []).slice(0, 3) as QualityI[]
+export const QualityCell = observer(
+  ({ cell }: CellI): ReactElement => {
+    const [metaSamples, setMetaSamples] = useState<ANYType>({})
+    const qualities = get(cell, 'value', {}) as ANYType
+    const qualitiesKeys = Object.keys(qualities).slice(0, 3)
 
-  return (
-    <Root>
-      {qualities.map((quality, index) => (
-        <QualityItem key={index} {...quality} />
-      ))}
-    </Root>
-  )
-}
+    useEffect(() => {
+      setMetaSamples(get(dirInfoStore, 'dsinfo.meta.samples', {}))
+    }, [])
+
+    return (
+      <Root>
+        {qualitiesKeys.map((qualityName, index) => (
+          <QualityItem
+            key={index}
+            {...qualities[qualityName]}
+            iconVariant={getIcon(metaSamples[qualityName])}
+          />
+        ))}
+      </Root>
+    )
+  },
+)

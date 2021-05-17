@@ -8,7 +8,7 @@ import { CellI } from './variant-cell'
 
 const Root = styled(Box)`
   padding-right: 56px;
-  min-width: 75px;
+  max-width: 120px;
   display: flex;
   flex-wrap: wrap;
 `

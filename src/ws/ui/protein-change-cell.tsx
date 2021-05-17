@@ -7,10 +7,9 @@ import { ProteinChangeItem } from './protein-change-item'
 import { CellI } from './variant-cell'
 
 const Root = styled(Box)`
-  padding-right: 56px;
   display: flex;
   flex-direction: column;
-  width: 75px;
+  width: 160px;
 `
 
 export const ProteinChangeCell = ({ cell }: CellI): ReactElement => {

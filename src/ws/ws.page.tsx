@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { useParams } from '../core/hooks/use-params'
 import dsStore from '../store/dataset'
+import dirinfoStore from '../store/dirinfo'
 import { Box } from '../ui/box'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
@@ -19,14 +20,17 @@ export const WSPage = (): ReactElement => {
   useEffect(() => {
     dsStore.resetData()
 
+    const dsName = params.get('ds') || ''
+
     const initAsync = async () => {
-      await dsStore.fetchDsStatAsync(params.get('ds'))
-      await dsStore.fetchTabReportAsync(params.get('ds'))
+      await dsStore.fetchDsStatAsync(dsName)
+      await dsStore.fetchTabReportAsync(dsName)
     }
 
-    dsStore.fetchWsListAsync(params.get('ds'))
-    dsStore.fetchReccntAsync(params.get('ds'))
-    dsStore.fetchWsTagsAsync(params.get('ds'))
+    dsStore.fetchWsListAsync(dsName)
+    dsStore.fetchReccntAsync(dsName)
+    dsStore.fetchWsTagsAsync(dsName)
+    dirinfoStore.fetchDsinfoAsync(dsName)
 
     initAsync()
   }, [params])
