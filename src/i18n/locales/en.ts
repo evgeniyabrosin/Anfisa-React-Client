@@ -52,4 +52,7 @@ export const en = {
     paternal: 'Paternal',
     geneAnnotation: 'Gene annotation',
   },
+  filter: {
+    method: 'Filtering method',
+  },
 }
