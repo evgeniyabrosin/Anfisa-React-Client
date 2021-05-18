@@ -4,22 +4,30 @@ import { ReactElement } from 'react'
 import DropdownBase, { Option } from 'react-dropdown'
 import styled from 'styled-components'
 
-import { FilterMethodEnum } from '../../core/enum/filter-method.enum'
+interface Props {
+  options: string[]
+  onChange: (arg: Option) => void
+  value?: string
+  placeholder?: string
+}
 
 const StyledDropDown = styled(DropdownBase)`
+  margin-left: 17px;
+
   .controlClassName {
-    border: none;
+    width: 142px;
+    border: 1px solid #d9d9d9;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 24px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 22px;
     letter-spacing: 0.44px;
-    color: #367bf5;
+    color: #262626;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-left: 0;
+    padding-left: 8px;
     cursor: pointer;
 
     :hover {
@@ -43,13 +51,10 @@ const StyledDropDown = styled(DropdownBase)`
   }
 
   .menuClassName {
-    width: auto;
-    border: none;
+    background-color: white;
+    width: 142px;
     border-radius: 4px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 8px;
 
     ::-webkit-scrollbar {
       width: 4px;
@@ -73,8 +78,8 @@ const StyledDropDown = styled(DropdownBase)`
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: normal;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 14px;
+    line-height: 22px;
     color: #262626;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -90,24 +95,21 @@ const StyledDropDown = styled(DropdownBase)`
   }
 `
 
-const options = [FilterMethodEnum.Refiner, FilterMethodEnum.Query]
-
-export const FilterDropdown = (): ReactElement => {
-  const onSelect = (arg: Option) => {
-    console.log(arg)
-  }
-
-  return (
-    <StyledDropDown
-      options={options}
-      onChange={onSelect}
-      value={options[0]}
-      placeholder="Select an option"
-      controlClassName="controlClassName"
-      arrowClassName="arrowClassName"
-      className="rootDropDown"
-      placeholderClassName="placeholderClassName"
-      menuClassName="menuClassName"
-    />
-  )
-}
+export const FilterDropdown = ({
+  options,
+  value,
+  placeholder,
+  onChange,
+}: Props): ReactElement => (
+  <StyledDropDown
+    options={options}
+    onChange={onChange}
+    value={value}
+    placeholder={placeholder || 'Select an option'}
+    controlClassName="controlClassName"
+    arrowClassName="arrowClassName"
+    className="rootDropDown"
+    placeholderClassName="placeholderClassName"
+    menuClassName="menuClassName"
+  />
+)

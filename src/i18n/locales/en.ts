@@ -54,5 +54,8 @@ export const en = {
   },
   filter: {
     method: 'Filtering method',
+    selectedVariants: 'Selected variants',
+    show: 'Show {amount} variants',
+    amountOf: '{selected} / {all}',
   },
 }

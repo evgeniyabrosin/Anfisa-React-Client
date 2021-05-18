@@ -129,6 +129,8 @@ export interface StatList {
   render: string
 }
 
+export type StatListType = StatList | Record<string, any>
+
 export interface FilterList {
   name: string
   standard: boolean

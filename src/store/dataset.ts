@@ -4,6 +4,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import {
   ANYType,
   DsStatType,
+  StatList,
   TabReportType,
   WsListType,
   WsTagsType,
@@ -80,6 +81,21 @@ class DatasetStore {
     }
 
     return Object.values(tableColumnMap)
+  }
+
+  get getFilterRefiner() {
+    const groups: Record<string, StatList[]> = {}
+
+    this.dsStat['stat-list'] &&
+      this.dsStat['stat-list'].forEach((item: StatList) => {
+        if (groups[item.vgroup]) {
+          groups[item.vgroup] = [...groups[item.vgroup], item]
+        } else {
+          groups[item.vgroup] = [item]
+        }
+      })
+
+    return groups
   }
 
   async fetchDsStatAsync(dsName: string | null) {
