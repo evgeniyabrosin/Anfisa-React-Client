@@ -26,7 +26,7 @@ const StyledImg = styled('img')`
   max-height: 900px;
 `
 
-const imgRegExp = /(.png)|(.jpg)$/gm
+const imgRegExp = /(.png)|(.jpg)$/m
 
 export const IframeInfo = observer(
   (): ReactElement => {
