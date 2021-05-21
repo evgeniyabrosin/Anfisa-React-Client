@@ -61,7 +61,7 @@ export const SortItem = observer(
           {text}
         </StyledText>
         <SortSvg
-          style={{ transform: sortIconTransform, marginLeft: 9 }}
+          style={{ transform: sortIconTransform, marginLeft: 8 }}
           fill={sortType === dirinfoStore.sortType ? '#0C65FD' : '#CCCCCC'}
         />
       </Root>

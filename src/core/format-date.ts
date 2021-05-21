@@ -8,7 +8,7 @@ export const formatDate = (value: string | Date): string => {
 
   const newDate = new Date(value)
 
-  const date = formatFNS(newDate, 'LLL.dd, Y, H:mm', {
+  const date = formatFNS(newDate, 'LLL.dd, Y, HH:mm', {
     locale: enLocale,
   })
 

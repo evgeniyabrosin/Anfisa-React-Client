@@ -26,6 +26,7 @@ const StyledInput = styled('input')`
   font-size: 14px;
   width: 100%;
   line-height: 22px;
+  height: 32px;
 `
 
 export const Input = ({ ...rest }: Props): ReactElement => {
@@ -33,7 +34,7 @@ export const Input = ({ ...rest }: Props): ReactElement => {
     <Root>
       <StyledInput {...rest} />
 
-      <LoupeSvg style={{ position: 'absolute', top: 10, right: 10 }} />
+      <LoupeSvg style={{ position: 'absolute', top: 8, right: 8 }} />
     </Root>
   )
 }

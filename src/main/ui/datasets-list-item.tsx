@@ -29,7 +29,6 @@ const Root = styled(Box)<RootProps>`
   cursor: pointer;
   flex-wrap: wrap;
   width: 100%;
-  padding-right: 32px;
 
   ${ifProp(
     'isActive',
@@ -72,6 +71,7 @@ const StyledDate = styled(Text)`
   line-height: 16px;
   margin-left: auto;
   color: ${theme('colors.grey.7')};
+  padding-right: 8px;
 `
 
 const DropdownFolder = styled(Box)`

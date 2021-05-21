@@ -6,11 +6,12 @@ import { t } from '../../i18n/i18n'
 import dirinfoStore from '../../store/dirinfo'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
 
-const Root = styled('div')`
+const Root = styled(Box)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 `
 
 const RouteTitle = styled(Box)`
@@ -23,15 +24,16 @@ const RouteTitle = styled(Box)`
   color: ${theme('colors.blue.0')};
 `
 
-const HomeTextStyled = styled(Text)`
+const HomeTextStyled = styled(Box)`
   color: ${theme('colors.black')};
+  margin-left: 5px;
 `
 
-const AnfisaStyledText = styled(Text)`
+const AnfisaStyledText = styled(Box)`
   cursor: pointer;
 `
 
-const SystemVersion = styled(Text)`
+const SystemVersion = styled(Box)`
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -45,9 +47,7 @@ export const HeaderPage = observer(
       <Root>
         <RouteTitle>
           <AnfisaStyledText>{`${t('general.anfisa')} v6 /`}</AnfisaStyledText>
-          <HomeTextStyled style={{ marginLeft: '5px' }}>
-            {t('home.title')}
-          </HomeTextStyled>
+          <HomeTextStyled>{t('home.title')}</HomeTextStyled>
         </RouteTitle>
 
         <SystemVersion>

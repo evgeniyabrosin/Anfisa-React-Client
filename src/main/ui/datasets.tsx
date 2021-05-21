@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { t } from '../../i18n/i18n'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 
@@ -15,12 +14,13 @@ const Root = styled(Box)`
   width: 440px;
 `
 
-const Title = styled(Text)`
+const Title = styled(Box)`
   font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
   line-height: 28px;
+  margin-bottom: 16px;
   color: ${theme('colors.grey.1')};
 `
 

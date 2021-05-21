@@ -8,28 +8,29 @@ import { t } from '../../i18n/i18n'
 import dirinfoStore from '../../store/dirinfo'
 import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
 import { DatasetField } from './dataset-filed'
 
 const Root = styled(Box)`
-  margin-left: 35px;
+  margin-left: 24px;
+  padding-left: 16px;
+  box-sizing: border-box;
 `
 
 const Wrapper = styled(Box)`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 440px;
+  width: 418px;
 `
 
-const StyledText = styled(Text)`
+const StyledText = styled(Box)`
   font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
   line-height: 28px;
   color: ${theme('colors.grey.1')};
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 `
 
 export const DatasetsFieldsList = observer(

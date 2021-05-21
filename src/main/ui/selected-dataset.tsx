@@ -9,7 +9,6 @@ import { theme } from '../../theme/theme'
 import { Box } from '../../ui/box'
 import { Button } from '../../ui/button'
 import { NextArrowSvg } from '../../ui/icons/next-arrow'
-import { Text } from '../../ui/text'
 import { DatasetsFieldsList } from './dataset-fileds-list'
 import { DatasetGeneral } from './dataset-general'
 
@@ -23,9 +22,8 @@ const Wrapper = styled(Box)`
   width: 420px;
 `
 
-const StyledName = styled(Text)`
-  margin-top: 24px;
-  margin-bottom: 24px;
+const StyledName = styled(Box)`
+  margin-bottom: 16px;
   font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;

@@ -15,8 +15,8 @@ const Root = styled(Box)`
   border: 1px solid #e2e2e2;
   border-radius: 8px;
   padding: 12px;
-  margin-top: 16px;
-  width: 177px;
+  margin-bottom: 16px;
+  width: 175px;
 `
 
 const LabelField = styled(Text)`

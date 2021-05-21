@@ -25,8 +25,8 @@ const StyledText = styled(Text)<TextProps>`
   font-size: 14px;
   line-height: 16px;
   color: ${theme('colors.black')};
-  margin: 0px;
-  padding: 5px 10px;
+  margin: 4px 0 0;
+  padding: 4px 10px;
 
   ${ifProp(
     'isActive',
