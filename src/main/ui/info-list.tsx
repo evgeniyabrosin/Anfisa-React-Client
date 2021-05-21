@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 
 import { ANYType } from '../../..'
-import { DS_DOC_API_URL } from '../../config/default'
 import dirinfoStore from '../../store/dirinfo'
 import { Box } from '../../ui/box'
 import { DocsList } from './docs-list'
@@ -27,9 +26,8 @@ export const InfoList = observer(
 
       if (doc[2]) {
         dirinfoStore.setInfoFrameLink(
-          `${DS_DOC_API_URL}${
-            baseDatasetName ?? dirinfoStore.selectedDirinfoName
-          }/${doc[2].image}`,
+          // prettier-ignore
+          `dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${doc[2].image}`,
         )
 
         return
@@ -37,14 +35,14 @@ export const InfoList = observer(
 
       if (isBaseInfo) {
         dirinfoStore.setInfoFrameLink(
-          `${DS_DOC_API_URL}${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`,
+          `dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`,
         )
 
         return
       }
 
       dirinfoStore.setInfoFrameLink(
-        `${DS_DOC_API_URL}${dirinfoStore.selectedDirinfoName}/${doc[1]}`,
+        `dsdoc/${dirinfoStore.selectedDirinfoName}/${doc[1]}`,
       )
     }
 
