@@ -44,3 +44,6 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Local configuration
+At local development we use `src/setupProxy.js` with `http-proxy-middleware` and `auth` setting (basic auth). For fast autoauth you can create `.env.development.local` at root folder with `REACT_APP_PROXY_AUTH=login:password`
