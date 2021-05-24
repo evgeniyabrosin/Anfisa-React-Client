@@ -20,6 +20,7 @@
 *.local.*
 *.code-workspace
 .vscode
+.eslintcache
 
 npm-debug.log*
 yarn-debug.log*
