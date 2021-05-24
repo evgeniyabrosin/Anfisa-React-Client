@@ -10,6 +10,8 @@ module.exports = {
         allowTemplateLiterals: true,
       },
     ],
+    // typescript
+    '@typescript-eslint/no-explicit-any': 'off',
     //react
     'react/jsx-no-literals': 'off',
     'react/react-in-jsx-scope': 'off',
