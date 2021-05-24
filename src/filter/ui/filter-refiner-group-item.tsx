@@ -1,5 +1,5 @@
-import { noop } from 'lodash'
 import get from 'lodash/get'
+import noop from 'lodash/noop'
 import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
