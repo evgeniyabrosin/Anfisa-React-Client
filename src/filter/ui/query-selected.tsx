@@ -1,7 +1,10 @@
 import { ReactElement } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
+import { useParams } from '../../core/hooks/use-params'
 import { t } from '../../i18n/i18n'
+import { Routes } from '../../router/routes.enum'
 import { Box } from '../../ui/box'
 import { Button } from '../../ui/button'
 import { Text } from '../../ui/text'
@@ -48,11 +51,17 @@ const AmountResults = styled(Text)`
 `
 
 export const QuerySelected = (): ReactElement => {
+  const history = useHistory()
+  const params = useParams()
+
   return (
     <Root>
       <HeaderContainer>
         <Title>{t('filter.selectedVariants')}</Title>
-        <StyledButton text={t('filter.show', { amount: '1.24 mil' })} />
+        <StyledButton
+          text={t('filter.show', { amount: '1.24 mil' })}
+          onClick={() => history.push(`${Routes.WS}?ds=${params.get('ds')}`)}
+        />
 
         <AmountResults>
           {t('filter.amountOf', { selected: '1.24', all: '1.25' })}

@@ -1,5 +1,7 @@
+import { noop } from 'lodash'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { ReactElement, useState } from 'react'
+import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
@@ -10,8 +12,10 @@ import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 
 type Props = StatListType & {
-  onChange?: () => void
+  onChange?: (checked: boolean) => void
   className?: string
+  amount?: number
+  group?: string
 }
 
 const Root = styled(Box)<{ isIndeterminate?: boolean }>`
@@ -49,9 +53,48 @@ const StyledCheckbox = styled(Checkbox)`
   height: 16px;
 `
 
+const StyledAmout = styled(Text)`
+  font-family: 'Work Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #a6adaf;
+  margin: 0;
+  margin-left: 8px;
+`
+
+const SelectedAmount = styled('span')`
+  font-family: 'Work Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #0c65fd;
+  margin: 0;
+`
+
 export const FilterRefinerGroupItem = observer(
-  ({ name, onChange, className, ...rest }: Props): ReactElement => {
-    const [checked, setChecked] = useState(false)
+  ({
+    name,
+    onChange,
+    className,
+    amount,
+    group,
+    ...rest
+  }: Props): ReactElement => {
+    const checked = get(
+      filterStore,
+      `selectedFilters[${group}][${name}]`,
+      false,
+    )
+
+    const selectedAmounts: number[] = Object.values(
+      get(filterStore, `selectedFilters[${group}][${name}]`, {}),
+    )
+
+    const selectedSum = selectedAmounts.reduce((prev, cur) => prev + cur, 0)
+
     const isIndeterminate = filterStore.selectedGroupItem.name === name
 
     const handleSelect = () => {
@@ -64,13 +107,24 @@ export const FilterRefinerGroupItem = observer(
           checked={checked}
           style={{ cursor: 'pointer' }}
           indeterminate={isIndeterminate}
-          onChange={event =>
-            onChange ? onChange() : setChecked(event.target.checked)
-          }
+          onChange={event => onChange && onChange(event.target.checked)}
         />
-        <StyledGroupItem key={name} onClick={onChange ?? handleSelect}>
+        <StyledGroupItem
+          key={name}
+          onClick={amount !== 0 ? handleSelect : noop}
+        >
           {name}
         </StyledGroupItem>
+
+        {amount !== 0 && (
+          <StyledAmout>
+            {'('}
+            {selectedSum !== 0 && (
+              <SelectedAmount>{`${selectedSum}/`}</SelectedAmount>
+            )}
+            {`${amount})`}
+          </StyledAmout>
+        )}
       </Root>
     )
   },

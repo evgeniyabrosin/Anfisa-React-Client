@@ -1,4 +1,6 @@
-import { ReactElement, useState } from 'react'
+import { get } from 'lodash'
+import { observer } from 'mobx-react-lite'
+import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import styled from 'styled-components'
 
@@ -8,7 +10,8 @@ import { Text } from '../../ui/text'
 
 interface Props {
   name: string
-  amount: string
+  amount: number
+  handleSelect: (checked: boolean) => void
 }
 
 const Root = styled(Box)`
@@ -39,21 +42,29 @@ const AmoutText = styled(Text)`
   margin-left: 8px;
 `
 
-export const SelectedGroupItem = ({ name, amount }: Props): ReactElement => {
-  const [checked, setChecked] = useState(false)
+export const SelectedGroupItem = observer(
+  ({ name, amount, handleSelect }: Props): ReactElement => {
+    const checked = get(
+      filterStore,
+      `selectedFilters[${filterStore.selectedGroupItem.vgroup}][${filterStore.selectedGroupItem.name}][${name}]`,
+      false,
+    )
 
-  return (
-    <Root>
-      <Checkbox
-        checked={checked}
-        style={{ cursor: 'pointer' }}
-        indeterminate={filterStore.selectedGroupItem.name === name}
-        onChange={event => setChecked(event.target.checked)}
-      />
+    return (
+      <Root>
+        <Checkbox
+          checked={checked}
+          style={{ cursor: 'pointer' }}
+          indeterminate={filterStore.selectedGroupItem.name === name}
+          onChange={event => {
+            handleSelect(event.target.checked)
+          }}
+        />
 
-      <StyledGroupItem key={name}>{name}</StyledGroupItem>
+        <StyledGroupItem key={name}>{name}</StyledGroupItem>
 
-      <AmoutText>{`(${amount})`}</AmoutText>
-    </Root>
-  )
-}
+        {amount !== 0 && <AmoutText>{`(${amount})`}</AmoutText>}
+      </Root>
+    )
+  },
+)

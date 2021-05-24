@@ -5,6 +5,11 @@ import { Box } from '../../ui/box'
 import { EditSvg } from '../../ui/icons/edit'
 import { Text } from '../../ui/text'
 
+interface Props {
+  group: string
+  variants: Record<string, Record<string, number>>
+}
+
 const Root = styled(Box)`
   margin-top: 4px;
   margin-right: 10px;
@@ -28,7 +33,7 @@ const FilterNameContainer = styled(Box)`
 
 const Content = styled(Box)`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   background: #def1fd;
   border-radius: 10px;
   padding: 8px;
@@ -56,17 +61,31 @@ const FilterValueAmount = styled(Text)`
   margin-left: 8px;
 `
 
-export const FilterItem = (): ReactElement => {
+export const FilterItem = ({ group, variants }: Props): ReactElement => {
+  const groupItemkeys = Object.keys(variants)
+
   return (
     <Root>
       <FilterNameContainer>
-        <Title>Inheritance</Title>
+        <Title>{group}</Title>
         <EditSvg />
       </FilterNameContainer>
 
       <Content>
-        <FilterValueName>Inheritance Mode</FilterValueName>
-        <FilterValueAmount>(1029)</FilterValueAmount>
+        {groupItemkeys.map(groupItemKey => {
+          const amountValues: number[] = Object.values(variants[groupItemKey])
+
+          return (
+            <Box key={groupItemKey} style={{ display: 'flex' }}>
+              <FilterValueName>{groupItemKey}</FilterValueName>
+              {amountValues.length > 0 && (
+                <FilterValueAmount>
+                  ({amountValues.reduce((prev, cur) => prev + cur, 0)})
+                </FilterValueAmount>
+              )}
+            </Box>
+          )
+        })}
       </Content>
     </Root>
   )

@@ -4,10 +4,22 @@ import { ANYType, StatListType } from '../..'
 import { FilterMethodEnum } from '../core/enum/filter-method.enum'
 import { getApiUrl } from '../core/get-api-url'
 
+export type SelectedFiltersType = Record<
+  string,
+  Record<string, Record<string, number>>
+>
+
+interface AddSelectedFiltersI {
+  group: string
+  groupItemName: string
+  variant?: [string, number]
+}
+
 class FilterStore {
   method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}
   dtreeSet: ANYType = {}
+  selectedFilters: SelectedFiltersType = {}
 
   constructor() {
     makeAutoObservable(this)
@@ -19,6 +31,54 @@ class FilterStore {
 
   setSelectedGroupItem(item: StatListType) {
     this.selectedGroupItem = item
+  }
+
+  addSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
+    if (!this.selectedFilters[group]) {
+      this.selectedFilters[group] = {}
+    }
+
+    if (!this.selectedFilters[group][groupItemName]) {
+      this.selectedFilters[group][groupItemName] = {}
+    }
+
+    if (variant) {
+      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
+    }
+  }
+
+  removeSelectedFilters({
+    group,
+    groupItemName,
+    variant,
+  }: AddSelectedFiltersI) {
+    if (this.selectedFilters[group][groupItemName] && variant) {
+      delete this.selectedFilters[group][groupItemName][variant[0]]
+    }
+  }
+
+  addSelectedFilterGroup(
+    group: string,
+    groupItemName: string,
+    variants: [string, number][],
+  ) {
+    if (!this.selectedFilters[group]) {
+      this.selectedFilters[group] = {}
+    }
+
+    if (!this.selectedFilters[group][groupItemName]) {
+      this.selectedFilters[group][groupItemName] = {}
+    }
+
+    variants.forEach(variant => {
+      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
+    })
+  }
+
+  removeSelectedFiltersGroup(group: string, groupItemName: string) {
+    if (this.selectedFilters[group]) {
+      delete this.selectedFilters[group][groupItemName]
+    }
   }
 
   async fetchDtreeSetAsync(dsName: string, code: string) {

@@ -1,7 +1,9 @@
-import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '../../i18n/i18n'
+import filterStore from '../../store/filter'
 import { Box } from '../../ui/box'
 import { PlusSvg } from '../../ui/icons/puls'
 import { Text } from '../../ui/text'
@@ -40,16 +42,26 @@ const HeaderConteiner = styled(Box)`
   align-items: center;
 `
 
-export const Filters = (): ReactElement => {
-  return (
-    <Root>
-      <HeaderConteiner>
-        <Title>{t('ds.filters')}</Title>
-        <PlusSvg />
-        <MoreFilters>13 more</MoreFilters>
-      </HeaderConteiner>
+export const Filters = observer(
+  (): ReactElement => {
+    const filtersLength = Object.keys(filterStore.selectedFilters).length
 
-      <FilterList />
-    </Root>
-  )
-}
+    if (filtersLength === 0) {
+      return <Fragment />
+    }
+
+    return (
+      <Root>
+        <HeaderConteiner>
+          <Title>{t('ds.filters')}</Title>
+          <PlusSvg />
+          {filtersLength > 2 && (
+            <MoreFilters>{filtersLength - 2} more</MoreFilters>
+          )}
+        </HeaderConteiner>
+
+        <FilterList filters={filterStore.selectedFilters} />
+      </Root>
+    )
+  },
+)

@@ -38,10 +38,34 @@ export const SelectedGroup = observer(
       return <Fragment />
     }
 
+    const groupVariantSum = selectedGroupItem.variants
+      ? selectedGroupItem.variants.reduce(
+          (prev: number, cur: [string, number]) => prev + cur[1],
+          0,
+        )
+      : 0
+
+    const handleSelect = (variant: [string, number], checked: boolean) => {
+      if (checked) {
+        filterStore.addSelectedFilters({
+          group: selectedGroupItem.vgroup,
+          groupItemName: selectedGroupItem.name,
+          variant,
+        })
+      } else {
+        filterStore.removeSelectedFilters({
+          group: selectedGroupItem.vgroup,
+          groupItemName: selectedGroupItem.name,
+          variant,
+        })
+      }
+    }
+
     return (
       <Root>
         <StyledFilterRefinerGroupItem
           {...selectedGroupItem}
+          amount={groupVariantSum}
           onChange={() => filterStore.setSelectedGroupItem({})}
         />
         <Delimiter />
@@ -53,6 +77,7 @@ export const SelectedGroup = observer(
                 key={variant[0]}
                 name={variant[0]}
                 amount={variant[1]}
+                handleSelect={checked => handleSelect(variant, checked)}
               />
             ))}
         </VariantListContainer>
