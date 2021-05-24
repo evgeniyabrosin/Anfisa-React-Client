@@ -2,7 +2,7 @@ import { CSSProperties, ReactElement, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
-import { theme } from '../../theme/theme'
+import { theme } from '../../theme'
 import { Text } from '../../ui/text'
 
 type Props = TextProps & {

@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '../../i18n/i18n'
-import { theme } from '../../theme/theme'
+import { theme } from '../../theme'
 import { Box } from '../../ui/box'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { t } from '../../i18n/i18n'
 import dsStore from '../../store/dataset'
-import { theme } from '../../theme/theme'
+import { theme } from '../../theme'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 

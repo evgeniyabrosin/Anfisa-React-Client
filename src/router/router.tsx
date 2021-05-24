@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 
 import { FilterPage } from '../filter/filter.page'
 import { MainPage } from '../main/main.page'
-import { GlobalStyle } from '../theme/theme'
+import { GlobalStyle } from '../theme'
 import { VariantPage } from '../variant/variant.page'
 import { WSPage } from '../ws/ws.page'
 import { Routes } from './routes.enum'
