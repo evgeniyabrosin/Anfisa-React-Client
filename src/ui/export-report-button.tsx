@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { ANYType } from '../..'
-import { t } from '../i18n/i18n'
+import { t } from '../i18n'
 import { Button } from './button'
 import { DownArray } from './icons/down-array'
 import { DownloadSvg } from './icons/download'

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { t } from '../../i18n/i18n'
+import { t } from '../../i18n'
 import filterStore from '../../store/filter'
 import { Box } from '../../ui/box'
 import { PlusSvg } from '../../ui/icons/puls'

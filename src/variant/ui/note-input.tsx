@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { t } from '../../i18n/i18n'
+import { t } from '../../i18n'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 

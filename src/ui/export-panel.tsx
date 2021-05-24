@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { useParams } from '../core/hooks/use-params'
-import { t } from '../i18n/i18n'
+import { t } from '../i18n'
 import datasetStore from '../store/dataset'
 import { Box } from './box'
 import { Text } from './text'
