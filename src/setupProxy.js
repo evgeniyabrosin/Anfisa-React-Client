@@ -18,7 +18,7 @@ const filter = function (pathname) {
 module.exports = function (app) {
   app.use(
     createProxyMiddleware(filter, {
-      target: 'https://anfisa.forome.dev/anfisa/app',
+      target: process.env.REACT_APP_URL_BACKEND,
       auth: process.env.REACT_APP_PROXY_AUTH || null,
       changeOrigin: true,
     }),

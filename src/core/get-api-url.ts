@@ -1,5 +1,5 @@
-import path from 'path'
-
 export const getApiUrl = (url: string): string => {
-  return path.join(url)
+  return process.env.NODE_ENV === 'development'
+    ? url
+    : `${process.env.REACT_APP_URL_BACKEND}/${url}`
 }
