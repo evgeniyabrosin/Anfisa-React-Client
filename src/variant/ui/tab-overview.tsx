@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { t } from '../../i18n'
+import { t } from '@i18n'
 import variantStore from '../../store/variant'
 import { Box } from '../../ui/box'
 import { OverviewItem } from './overview-item'

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { t } from '../../i18n'
+import { t } from '@i18n'
 import dsStore from '../../store/dataset'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'

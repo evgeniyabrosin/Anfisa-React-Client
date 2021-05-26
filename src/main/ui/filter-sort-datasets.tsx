@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { SortDatasets } from '../../core/enum/sort-datasets.enum'
-import { t } from '../../i18n'
+import { t } from '@i18n'
 import dirinfoStore from '../../store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'

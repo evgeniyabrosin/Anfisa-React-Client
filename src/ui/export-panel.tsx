@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
-import { t } from '../i18n'
+import { t } from '@i18n'
 import datasetStore from '../store/dataset'
 import { Box } from './box'
 import { Text } from './text'

@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@theme": ["./theme/index.ts"],
+      "@i18n": ["./i18n/index.ts"]
     }
   }
 }

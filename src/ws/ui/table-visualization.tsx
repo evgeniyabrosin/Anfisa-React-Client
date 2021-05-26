@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { t } from '../../i18n'
+import { t } from '@i18n'
 import { Box } from '../../ui/box'
 import { GridSvg } from '../../ui/icons/grid'
 import { RowsSvg } from '../../ui/icons/rows'
