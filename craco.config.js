@@ -1,4 +1,5 @@
 const { config } = require('dotenv-cra')
+const CracoAlias = require('craco-alias')
 
 config()
 
@@ -18,4 +19,14 @@ module.exports = {
       },
     },
   },
+  plugins: [
+    {
+      plugin: CracoAlias,
+      options: {
+        source: 'tsconfig',
+        baseUrl: './src',
+        tsConfigPath: './tsconfig.extend.json',
+      },
+    },
+  ],
 }

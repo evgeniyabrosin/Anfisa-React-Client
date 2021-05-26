@@ -47,6 +47,7 @@
     "@types/styled-components": "5.1.9",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
+    "craco-alias": "3.0.1",
     "dotenv-cra": "2.0.2",
     "eslint": "7.24.0",
     "eslint-config-react-config-r13v": "1.4.0",
