@@ -10,6 +10,7 @@ module.exports = {
         allowTemplateLiterals: true,
       },
     ],
+    curly: ['error', 'multi-line'],
     // typescript
     '@typescript-eslint/no-explicit-any': 'off',
     //react
