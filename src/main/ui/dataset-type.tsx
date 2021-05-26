@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
-import { DocSvg } from '../../ui/icons/doc'
-import { FolderSvg } from '../../ui/icons/folder'
+import { DocSvg } from '@icons/doc'
+import { FolderSvg } from '@icons/folder'
 
 interface Props {
   kind: string

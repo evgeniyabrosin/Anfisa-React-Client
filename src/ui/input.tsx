@@ -1,7 +1,7 @@
 import { ChangeEvent, ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { LoupeSvg } from '../ui/icons/loupe'
+import { LoupeSvg } from '@icons/loupe'
 import { Box } from './box'
 
 interface Props {

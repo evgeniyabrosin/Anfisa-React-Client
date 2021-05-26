@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { Button } from '../../ui/button'
-import { NextArrowSvg } from '../../ui/icons/next-arrow'
+import { NextArrowSvg } from '@icons/next-arrow'
 
 interface Props {
   className?: string

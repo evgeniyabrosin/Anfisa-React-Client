@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Box } from '../../ui/box'
-import { PlusSvg } from '../../ui/icons/puls'
+import { PlusSvg } from '@icons/puls'
 import { Text } from '../../ui/text'
 import { FilterList } from './filter-list'
 

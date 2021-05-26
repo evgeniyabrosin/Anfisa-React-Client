@@ -8,7 +8,7 @@ import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
 import { Button } from '../../ui/button'
-import { NextArrowSvg } from '../../ui/icons/next-arrow'
+import { NextArrowSvg } from '@icons/next-arrow'
 import { DatasetsFieldsList } from './dataset-fileds-list'
 import { DatasetGeneral } from './dataset-general'
 

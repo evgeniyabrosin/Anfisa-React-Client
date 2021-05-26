@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { ANYType } from '../../..'
 import { t } from '@i18n'
 import { Button } from '../../ui/button'
-import { DownArray } from '../../ui/icons/down-array'
-import { SettingsTableSvg } from '../../ui/icons/settings-table'
+import { DownArray } from '@icons/down-array'
+import { SettingsTableSvg } from '@icons/settings-table'
 
 interface Props {
   refEl: ANYType

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import datasetStore from '@store/dataset'
 import { Box } from '../../ui/box'
-import { DndSvg } from '../../ui/icons/dnd'
+import { DndSvg } from '@icons/dnd'
 import { Switch } from '../../ui/switch'
 import { Text } from '../../ui/text'
 

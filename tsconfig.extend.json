@@ -4,6 +4,7 @@
     "paths": {
       "@router/*": ["./router/*"],
       "@store/*": ["./store/*"],
+      "@icons/*": ["./ui/icons/*"],
       "@theme": ["./theme/index.ts"],
       "@i18n": ["./i18n/index.ts"]
     }

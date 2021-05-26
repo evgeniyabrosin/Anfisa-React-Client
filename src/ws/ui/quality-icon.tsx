@@ -1,8 +1,8 @@
 import { ReactElement } from 'react'
 
 import { Box } from '../../ui/box'
-import { QualityCircleSvg } from '../../ui/icons/quality-circle'
-import { RectSvg } from '../../ui/icons/rect'
+import { QualityCircleSvg } from '@icons/quality-circle'
+import { RectSvg } from '@icons/rect'
 
 interface Props {
   iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'

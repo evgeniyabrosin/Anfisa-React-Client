@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { getVariantColor } from '../../core/get-variant-color'
 import { Box } from '../../ui/box'
-import { CircleSvg } from '../../ui/icons/circle'
+import { CircleSvg } from '@icons/circle'
 import { Text } from '../../ui/text'
 
 interface Props {

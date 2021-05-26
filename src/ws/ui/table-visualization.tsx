@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { Box } from '../../ui/box'
-import { GridSvg } from '../../ui/icons/grid'
-import { RowsSvg } from '../../ui/icons/rows'
+import { GridSvg } from '@icons/grid'
+import { RowsSvg } from '@icons/rows'
 import { Text } from '../../ui/text'
 import { TableVisualizationItem } from './table-visualization-item'
 

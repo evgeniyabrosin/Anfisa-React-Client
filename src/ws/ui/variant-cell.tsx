@@ -11,8 +11,8 @@ import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
-import { ShareSvg } from '../../ui/icons/share'
-import { TableDocSvg } from '../../ui/icons/table-doc'
+import { ShareSvg } from '@icons/share'
+import { TableDocSvg } from '@icons/table-doc'
 import { Text } from '../../ui/text'
 
 export interface CellI {

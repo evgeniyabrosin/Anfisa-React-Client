@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { generateTagColor } from '../../core/tags-colors'
 import { Box } from '../../ui/box'
-import { CloseTagSvg } from '../../ui/icons/close-tag'
+import { CloseTagSvg } from '@icons/close-tag'
 import { Text } from '../../ui/text'
 
 interface Props {
