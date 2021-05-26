@@ -55,6 +55,8 @@
   },
   "scripts": {
     "start": "craco start",
+    "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src",
+    "lint:fix": "yarn lint --fix",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
