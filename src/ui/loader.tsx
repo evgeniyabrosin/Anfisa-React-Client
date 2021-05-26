@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { theme } from '../theme'
+import { theme } from '@theme'
 import { Box } from './box'
 
 const Root = styled(Box)`
