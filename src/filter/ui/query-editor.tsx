@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 
 // import { useParams } from '../../core/hooks/use-params'
-// import filterStore from '../../store/filter'
+// import filterStore from '@store/filter'
 import { Box } from '../../ui/box'
 
 export const QueryEditor = observer(

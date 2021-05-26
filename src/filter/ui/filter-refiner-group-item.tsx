@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import { StatListType } from '../../..'
-import filterStore from '../../store/filter'
+import filterStore from '@store/filter'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 

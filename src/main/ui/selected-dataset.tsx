@@ -4,7 +4,7 @@ import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
 import { Button } from '../../ui/button'

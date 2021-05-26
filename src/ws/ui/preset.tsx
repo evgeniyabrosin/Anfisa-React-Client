@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import datasetStore from '../../store/dataset'
+import datasetStore from '@store/dataset'
 import { Box } from '../../ui/box'
 import { DropDown } from '../../ui/dropdown'
 import { Text } from '../../ui/text'

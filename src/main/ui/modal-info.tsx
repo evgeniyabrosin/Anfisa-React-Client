@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { Box } from '../../ui/box'
 import { ModalBase } from '../../ui/modal-base'
 import { Text } from '../../ui/text'

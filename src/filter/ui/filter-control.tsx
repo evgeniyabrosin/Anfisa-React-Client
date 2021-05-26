@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { FilterMethodEnum } from '../../core/enum/filter-method.enum'
 import { t } from '@i18n'
-import filterStore from '../../store/filter'
+import filterStore from '@store/filter'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 import { FilterDropdown } from './filter-dropdown'

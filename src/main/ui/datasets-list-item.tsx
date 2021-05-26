@@ -6,7 +6,7 @@ import { ifProp } from 'styled-tools'
 
 import { DsDistItem } from '../../..'
 import { formatDate } from '../../core/format-date'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'

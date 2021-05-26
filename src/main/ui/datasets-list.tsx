@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 
 import { DsDistItem } from '../../..'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { Box } from '../../ui/box'
 import { DatasetsListItem } from './datasets-list-item'
 

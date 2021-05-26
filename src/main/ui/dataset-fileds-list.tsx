@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { Versions } from '../../..'
 import { t } from '@i18n'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
 import { DatasetField } from './dataset-filed'

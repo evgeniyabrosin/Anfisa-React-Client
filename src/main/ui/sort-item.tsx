@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { SortDatasets } from '../../core/enum/sort-datasets.enum'
 import { SortDirection } from '../../core/sort-direction.enum'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '../../ui/box'
 import { SortSvg } from '../../ui/icons/sort'

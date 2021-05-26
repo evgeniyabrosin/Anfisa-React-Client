@@ -4,7 +4,7 @@ import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import styled from 'styled-components'
 
-import filterStore from '../../store/filter'
+import filterStore from '@store/filter'
 import { Box } from '../../ui/box'
 import { Text } from '../../ui/text'
 

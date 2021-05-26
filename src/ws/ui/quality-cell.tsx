@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ANYType } from '../../..'
 import { getIcon } from '../../core/get-quality-icon'
-import dirInfoStore from '../../store/dirinfo'
+import dirInfoStore from '@store/dirinfo'
 import { Box } from '../../ui/box'
 import { QualityItem } from './quality-item'
 import { CellI } from './variant-cell'

@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@router/*": ["./router/*"],
+      "@store/*": ["./store/*"],
       "@theme": ["./theme/index.ts"],
       "@i18n": ["./i18n/index.ts"]
     }

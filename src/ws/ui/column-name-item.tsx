@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import datasetStore from '../../store/dataset'
+import datasetStore from '@store/dataset'
 import { Box } from '../../ui/box'
 import { DndSvg } from '../../ui/icons/dnd'
 import { Switch } from '../../ui/switch'

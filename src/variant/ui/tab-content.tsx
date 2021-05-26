@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 
-import variantStore from '../../store/variant'
+import variantStore from '@store/variant'
 import { Box } from '../../ui/box'
 import { TabOverview } from './tab-overview'
 

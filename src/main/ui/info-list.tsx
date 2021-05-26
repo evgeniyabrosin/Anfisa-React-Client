@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 
 import { ANYType } from '../../..'
-import dirinfoStore from '../../store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import { Box } from '../../ui/box'
 import { DocsList } from './docs-list'
 import { ModalInfo } from './modal-info'

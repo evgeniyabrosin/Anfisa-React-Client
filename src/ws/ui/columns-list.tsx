@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components'
 
 import { ANYType } from '../../..'
-import datasetStore from '../../store/dataset'
+import datasetStore from '@store/dataset'
 import { Box } from '../../ui/box'
 import { ColumnNameItem } from './column-name-item'
 
