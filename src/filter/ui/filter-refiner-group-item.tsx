@@ -8,8 +8,8 @@ import { ifProp } from 'styled-tools'
 
 import { StatListType } from '../../..'
 import filterStore from '@store/filter'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 
 type Props = StatListType & {
   onChange?: (checked: boolean) => void

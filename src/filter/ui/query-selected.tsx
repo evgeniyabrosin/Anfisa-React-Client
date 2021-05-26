@@ -5,9 +5,9 @@ import styled from 'styled-components'
 import { useParams } from '../../core/hooks/use-params'
 import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
-import { Box } from '../../ui/box'
-import { Button } from '../../ui/button'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Button } from '@ui/button'
+import { Text } from '@ui/text'
 import { QueryResults } from './query-results'
 
 const Root = styled(Box)`

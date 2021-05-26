@@ -1,9 +1,9 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { EditSvg } from '@icons/edit'
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 
 interface Props {
   group: string

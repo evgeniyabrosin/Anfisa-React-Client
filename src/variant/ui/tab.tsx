@@ -4,8 +4,8 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import variantStore from '@store/variant'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 
 interface Props {
   name: string

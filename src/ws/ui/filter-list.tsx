@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { SelectedFiltersType } from '@store/filter'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { FilterItem } from './filter-item'
 
 interface Props {

@@ -2,8 +2,8 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 
 const Root = styled(Box)`
   margin-left: 40px;

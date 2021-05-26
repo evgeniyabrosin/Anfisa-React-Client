@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { QueryEditor } from './query-editor'
 import { QuerySelected } from './query-selected'
 

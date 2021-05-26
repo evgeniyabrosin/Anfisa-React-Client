@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 
 interface Props {
   value: string

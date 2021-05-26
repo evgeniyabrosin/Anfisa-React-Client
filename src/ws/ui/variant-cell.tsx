@@ -10,10 +10,10 @@ import { useParams } from '../../core/hooks/use-params'
 import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { ShareSvg } from '@icons/share'
 import { TableDocSvg } from '@icons/table-doc'
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 
 export interface CellI {
   cell: {

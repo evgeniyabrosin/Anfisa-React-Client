@@ -2,7 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import styled from 'styled-components'
 
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '../ui/box'
+import { Box } from '@ui/box'
 import { Datasets } from './ui/datasets'
 import { HeaderPage } from './ui/header.page'
 import { SelectedDataset } from './ui/selected-dataset'

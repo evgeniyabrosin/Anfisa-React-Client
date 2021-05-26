@@ -3,10 +3,10 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import datasetStore from '@store/dataset'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { DndSvg } from '@icons/dnd'
-import { Switch } from '../../ui/switch'
-import { Text } from '../../ui/text'
+import { Switch } from '@ui/switch'
+import { Text } from '@ui/text'
 
 interface Props {
   name: string

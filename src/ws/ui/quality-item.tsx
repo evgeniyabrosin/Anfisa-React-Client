@@ -1,8 +1,8 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 import { QualityI } from './quality-cell'
 import { QualityIcon } from './quality-icon'
 

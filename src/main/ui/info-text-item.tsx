@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import { theme } from '@theme'
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 
 type Props = TextProps & {
   children?: ReactNode | string

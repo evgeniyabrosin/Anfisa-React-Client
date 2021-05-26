@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import variantStore from '@store/variant'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { Tab } from './tab'
 
 const Root = styled(Box)`

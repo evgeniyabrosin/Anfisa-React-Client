@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import { StatList } from '../../..'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 const GroupName = styled(Text)`

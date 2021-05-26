@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ANYType } from '../../..'
 import filterStore from '@store/filter'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 import { SelectedGroupItem } from './selected-group-item'
 

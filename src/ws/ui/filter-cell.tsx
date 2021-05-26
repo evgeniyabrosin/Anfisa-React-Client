@@ -3,8 +3,8 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 import { CellI } from './variant-cell'
 
 const Root = styled(Box)`

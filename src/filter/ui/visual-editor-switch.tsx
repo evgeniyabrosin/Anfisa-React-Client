@@ -1,9 +1,9 @@
 import { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
-import { Switch } from '../../ui/switch'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Switch } from '@ui/switch'
+import { Text } from '@ui/text'
 
 const Root = styled(Box)`
   display: flex;

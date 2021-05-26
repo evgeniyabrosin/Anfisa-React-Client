@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ANYType } from '../../..'
 import { t } from '@i18n'
-import { Button } from '../../ui/button'
+import { Button } from '@ui/button'
 import { DownArray } from '@icons/down-array'
 import { SettingsTableSvg } from '@icons/settings-table'
 

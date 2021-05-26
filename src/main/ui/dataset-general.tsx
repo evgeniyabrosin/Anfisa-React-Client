@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 import { InfoList } from './info-list'
 
 const Root = styled(Box)`

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import variantStore from '@store/variant'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { BaseInfoItem } from './base-info-item'
 
 const Root = styled(Box)`

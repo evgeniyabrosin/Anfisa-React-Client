@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 
 import { DsDistItem } from '../../..'
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { DatasetsListItem } from './datasets-list-item'
 
 export const DatasetsList = observer(

@@ -2,10 +2,10 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { GridSvg } from '@icons/grid'
 import { RowsSvg } from '@icons/rows'
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 import { TableVisualizationItem } from './table-visualization-item'
 
 const StyledText = styled(Text)`

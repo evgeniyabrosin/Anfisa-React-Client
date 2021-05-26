@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { FilterRefinerGroups } from './filter-refiner-groups'
 import { QuerySelected } from './query-selected'
 import { SelectedGroup } from './selected-group'

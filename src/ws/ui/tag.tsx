@@ -2,9 +2,9 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { generateTagColor } from '../../core/tags-colors'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { CloseTagSvg } from '@icons/close-tag'
-import { Text } from '../../ui/text'
+import { Text } from '@ui/text'
 
 interface Props {
   text: string

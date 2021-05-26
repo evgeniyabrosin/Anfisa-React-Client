@@ -1,8 +1,8 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
-import { Tags } from '../../ui/tags'
+import { Box } from '@ui/box'
+import { Tags } from '@ui/tags'
 import { BaseInfo } from './base-info'
 import { NoteInput } from './note-input'
 

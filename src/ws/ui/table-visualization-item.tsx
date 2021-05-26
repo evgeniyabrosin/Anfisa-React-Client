@@ -3,9 +3,9 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { ANYType } from '../../..'
-import { Box } from '../../ui/box'
-import { RadioButton } from '../../ui/radio-button'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { RadioButton } from '@ui/radio-button'
+import { Text } from '@ui/text'
 
 interface Props {
   isChecked: boolean

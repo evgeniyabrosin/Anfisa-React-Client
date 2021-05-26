@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { ANYType } from '../../..'
 import datasetStore from '@store/dataset'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { ColumnNameItem } from './column-name-item'
 
 const Root = styled(Box)`

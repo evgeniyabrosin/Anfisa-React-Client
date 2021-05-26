@@ -6,9 +6,9 @@ import { useParams } from '../core/hooks/use-params'
 import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'
-import { Box } from '../ui/box'
+import { Box } from '@ui/box'
 import { HomeSvg } from '@icons/home'
-import { Text } from '../ui/text'
+import { Text } from '@ui/text'
 import { Variants } from './ui/variants'
 
 const Root = styled(Box)`

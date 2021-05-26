@@ -5,7 +5,7 @@ import { useLocation } from 'react-router'
 import styled from 'styled-components'
 
 import variantStore from '@store/variant'
-import { Box } from '../ui/box'
+import { Box } from '@ui/box'
 import { HeaderBaseInfo } from './ui/header-base-info'
 import { TabContent } from './ui/tab-content'
 import { Tabs } from './ui/tabs'

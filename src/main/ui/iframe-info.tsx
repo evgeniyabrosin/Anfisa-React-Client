@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 
 const Root = styled(Box)<{ isImg?: boolean }>`
   height: 900px;

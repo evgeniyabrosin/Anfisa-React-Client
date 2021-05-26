@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 
 const Root = styled(Box)`
   display: flex;

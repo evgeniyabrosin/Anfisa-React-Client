@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 

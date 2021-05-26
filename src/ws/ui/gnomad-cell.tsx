@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { GnomadItem } from './gnomad-item'
 import { PredicationI } from './predictions-cell'
 import { CellI } from './variant-cell'

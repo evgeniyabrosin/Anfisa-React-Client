@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import { Box } from '../../ui/box'
-import { DropDown } from '../../ui/dropdown'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { DropDown } from '@ui/dropdown'
+import { Text } from '@ui/text'
 import { EditFilter } from './edit-filter'
 
 const Root = styled(Box)``

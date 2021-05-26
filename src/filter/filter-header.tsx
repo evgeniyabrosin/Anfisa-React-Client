@@ -3,9 +3,9 @@ import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { useParams } from '../core/hooks/use-params'
-import { Box } from '../ui/box'
+import { Box } from '@ui/box'
 import { CloseSvg } from '@icons/close'
-import { Text } from '../ui/text'
+import { Text } from '@ui/text'
 import { FilterControl } from './ui/filter-control'
 
 const Root = styled(Box)`

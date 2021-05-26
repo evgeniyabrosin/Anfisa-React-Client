@@ -4,12 +4,12 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import variantStore from '@store/variant'
-import { Box } from '../ui/box'
-import { ExportPanel } from '../ui/export-panel'
-import { ExportReportButton } from '../ui/export-report-button'
+import { Box } from '@ui/box'
+import { ExportPanel } from '@ui/export-panel'
+import { ExportReportButton } from '@ui/export-report-button'
 import { CloseSvg } from '@icons/close'
-import { Popper } from '../ui/popper'
-import { Text } from '../ui/text'
+import { Popper } from '@ui/popper'
+import { Text } from '@ui/text'
 import { NextVariantButton } from './ui/next-variant'
 
 const Root = styled(Box)`

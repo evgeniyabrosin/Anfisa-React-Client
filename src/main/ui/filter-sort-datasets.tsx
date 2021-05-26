@@ -6,8 +6,8 @@ import { SortDatasets } from '../../core/enum/sort-datasets.enum'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
-import { Input } from '../../ui/input'
+import { Box } from '@ui/box'
+import { Input } from '@ui/input'
 import { SortItem } from '../ui/sort-item'
 
 const Root = styled(Box)`

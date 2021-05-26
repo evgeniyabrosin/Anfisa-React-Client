@@ -2,7 +2,7 @@ import { Fragment, ReactElement } from 'react'
 
 import { ANYType } from '../../..'
 import { t } from '@i18n'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 import { InfoTextItem } from './info-text-item'
 
 interface Props {

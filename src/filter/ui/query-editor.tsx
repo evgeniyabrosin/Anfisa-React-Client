@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 
 // import { useParams } from '../../core/hooks/use-params'
 // import filterStore from '@store/filter'
-import { Box } from '../../ui/box'
+import { Box } from '@ui/box'
 
 export const QueryEditor = observer(
   (): ReactElement => {

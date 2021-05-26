@@ -8,8 +8,8 @@ import { DsDistItem } from '../../..'
 import { formatDate } from '../../core/format-date'
 import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
-import { Box } from '../../ui/box'
-import { Text } from '../../ui/text'
+import { Box } from '@ui/box'
+import { Text } from '@ui/text'
 import { DatasetType } from './dataset-type'
 
 interface Props {
