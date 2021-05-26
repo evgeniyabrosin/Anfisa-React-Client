@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useParams } from '../../core/hooks/use-params'
 import { t } from '@i18n'
-import { Routes } from '../../router/routes.enum'
+import { Routes } from '@router/routes.enum'
 import { Button } from '../../ui/button'
 
 const StyledButton = styled(Button)`

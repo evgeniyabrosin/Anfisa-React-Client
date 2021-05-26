@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
+      "@router/*": ["./router/*"],
       "@theme": ["./theme/index.ts"],
       "@i18n": ["./i18n/index.ts"]
     }

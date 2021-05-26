@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
-import { RouterBase } from './router/router'
+import { RouterBase } from '@router/router'
 
 ReactDOM.render(
   <React.StrictMode>
