@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '../../i18n'
@@ -47,7 +47,7 @@ export const Filters = observer(
     const filtersLength = Object.keys(filterStore.selectedFilters).length
 
     if (filtersLength === 0) {
-      return <Fragment />
+      return <Root />
     }
 
     return (

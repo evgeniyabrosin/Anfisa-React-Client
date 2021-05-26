@@ -51,11 +51,13 @@ export const Preset = observer(
 
       <EditFilter />
 
-      <ResultsFound>
-        {t('ds.resultsFound', {
-          0: datasetStore.tabReport.length,
-        })}
-      </ResultsFound>
+      {(datasetStore.filteredNo.length > 0 || datasetStore.activePreset) && (
+        <ResultsFound>
+          {t('ds.resultsFound', {
+            0: datasetStore.filteredNo.length,
+          })}
+        </ResultsFound>
+      )}
     </Root>
   ),
 )

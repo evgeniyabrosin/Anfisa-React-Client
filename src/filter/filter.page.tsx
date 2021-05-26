@@ -18,7 +18,7 @@ export const FilterPage = observer(
     const params = useParams()
 
     useEffect(() => {
-      datasetStore.fetchDsStatAsync(params.get('ds'))
+      datasetStore.fetchDsStatAsync()
     }, [params])
 
     return (

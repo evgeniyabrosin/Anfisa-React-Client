@@ -1,4 +1,5 @@
 import debounce from 'lodash/debounce'
+import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect } from 'react'
 import styled from 'styled-components'
 
@@ -14,48 +15,49 @@ const Root = styled(Box)`
   padding: 38px 20px 0px 30px;
 `
 
-export const WSPage = (): ReactElement => {
-  const params = useParams()
+export const WSPage = observer(
+  (): ReactElement => {
+    const params = useParams()
 
-  useEffect(() => {
-    dsStore.resetData()
+    useEffect(() => {
+      const dsName = params.get('ds') || ''
 
-    const dsName = params.get('ds') || ''
+      dsStore.initDatasetAsync(dsName)
+      dirinfoStore.fetchDsinfoAsync(dsName)
+    }, [params])
 
-    const initAsync = async () => {
-      await dsStore.fetchDsStatAsync(dsName)
-      await dsStore.fetchTabReportAsync(dsName)
-    }
+    const handleScroll = debounce(() => {
+      if (
+        dsStore.filteredNo.length > 0 &&
+        dsStore.indexFilteredNo < dsStore.filteredNo.length
+      ) {
+        dsStore.fetchFilteredTabReportAsync()
 
-    dsStore.fetchWsListAsync(dsName)
-    dsStore.fetchReccntAsync(dsName)
-    dsStore.fetchWsTagsAsync(dsName)
-    dirinfoStore.fetchDsinfoAsync(dsName)
+        return
+      }
 
-    initAsync()
-  }, [params])
+      if (
+        window.innerHeight + window.scrollY >
+          document.body.clientHeight - 100 &&
+        dsStore.filteredNo.length === 0
+      ) {
+        dsStore.fetchTabReportAsync()
+      }
+    }, 200)
 
-  const handleScroll = debounce(() => {
-    if (
-      window.innerHeight + window.scrollY >
-      document.body.clientHeight - 100
-    ) {
-      dsStore.fetchTabReportAsync(params.get('ds'))
-    }
-  }, 200)
+    useEffect(() => {
+      window.addEventListener('scroll', handleScroll)
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-    return () => window.removeEventListener('scroll', handleScroll)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  return (
-    <Root>
-      <WsHeader />
-      <ControlPanel />
-      <TableVariants />
-    </Root>
-  )
-}
+    return (
+      <Root>
+        <WsHeader />
+        <ControlPanel />
+        <TableVariants />
+      </Root>
+    )
+  },
+)

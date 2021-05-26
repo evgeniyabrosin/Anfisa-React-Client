@@ -19,6 +19,7 @@ const StyledButton = styled(Button)`
   height: 25px;
   align-items: center;
   justify-content: center;
+  width: 100%;
 `
 
 export const EditFilter = (): ReactElement => {

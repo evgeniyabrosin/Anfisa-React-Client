@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import datasetStore from '../../store/dataset'
 import { Box } from '../../ui/box'
 import { Loader } from '../../ui/loader'
+import { NoResultsFound } from '../../ui/no-results-found'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
@@ -58,6 +59,10 @@ export const TableVariants = observer(
 
     if (datasetStore.isLoadingTabReport) {
       return <Loader />
+    }
+
+    if (datasetStore.tabReport.length === 0) {
+      return <NoResultsFound />
     }
 
     return (

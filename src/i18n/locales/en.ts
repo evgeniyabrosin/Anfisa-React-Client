@@ -5,6 +5,7 @@ export const en = {
     tags: 'Tag(s)',
     excel: 'Excel',
     csv: 'Csv',
+    noResultsFound: 'No results found',
   },
   home: {
     title: 'Home',

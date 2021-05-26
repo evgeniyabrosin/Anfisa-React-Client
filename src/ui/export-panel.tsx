@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
-import { useParams } from '../core/hooks/use-params'
 import { t } from '../i18n'
 import datasetStore from '../store/dataset'
 import { Box } from './box'
@@ -37,10 +36,8 @@ const StyledText = styled(Text)`
 `
 
 export const ExportPanel = ({ close }: Props): ReactElement => {
-  const params = useParams()
-
   const handleDownload = (type: ExportTypeEnum) => {
-    datasetStore.exportReportAsync(params.get('ds'), type)
+    datasetStore.exportReportAsync(type)
     close()
   }
 

@@ -99,17 +99,15 @@ export const DropDown = observer(
       (preset: FilterList) => preset.name,
     )
 
-    const defaultOption = presets[0]
-
     const onSelect = (arg: Option) => {
       datasetStore.setActivePreset(arg.value)
+      datasetStore.fetchPresetTaskIdAsync(arg.value)
     }
 
     return (
       <StyledDropDown
         options={presets}
         onChange={onSelect}
-        value={defaultOption}
         placeholder="Select an option"
         controlClassName="controlClassName"
         arrowClassName="arrowClassName"
