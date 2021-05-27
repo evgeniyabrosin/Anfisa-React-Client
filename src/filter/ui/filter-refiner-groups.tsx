@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { StatList } from '../../..'
+import { StatList } from '@declarations'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'

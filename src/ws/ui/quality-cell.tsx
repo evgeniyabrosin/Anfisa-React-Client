@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 import { getIcon } from '../../core/get-quality-icon'
 import dirInfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'

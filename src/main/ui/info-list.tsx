@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { DocsList } from './docs-list'

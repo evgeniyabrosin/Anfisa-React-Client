@@ -1,6 +1,6 @@
 import { CSSProperties, ReactElement, ReactNode } from 'react'
 
-import { ANYType } from '../..'
+import { ANYType } from '@declarations'
 
 interface Props {
   children?: ReactNode

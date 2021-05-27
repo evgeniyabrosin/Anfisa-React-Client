@@ -6,6 +6,7 @@
       "@store/*": ["./store/*"],
       "@ui/*": ["./ui/*"],
       "@icons/*": ["./ui/icons/*"],
+      "@declarations": ["../index.d.ts"],
       "@theme": ["./theme/index.ts"],
       "@i18n": ["./i18n/index.ts"]
     }

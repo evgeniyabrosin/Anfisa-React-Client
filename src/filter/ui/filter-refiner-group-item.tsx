@@ -6,7 +6,7 @@ import Checkbox from 'react-three-state-checkbox'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
-import { StatListType } from '../../..'
+import { StatListType } from '@declarations'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'

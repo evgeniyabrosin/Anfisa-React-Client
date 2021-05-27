@@ -8,7 +8,7 @@ import {
   TabReportType,
   WsListType,
   WsTagsType,
-} from '../..'
+} from '@declarations'
 import { ExportTypeEnum } from '../core/enum/export-type.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { tableColumnMap } from '../core/table-column-map'

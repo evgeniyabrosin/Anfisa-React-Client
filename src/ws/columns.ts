@@ -1,4 +1,4 @@
-import { ANYType } from '../..'
+import { ANYType } from '@declarations'
 import { tableColumnMap } from '../core/table-column-map'
 import { FilterCell } from './ui/filter-cell'
 import { GnomadCell } from './ui/gnomad-cell'

@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ReccntType } from '../..'
+import { ReccntType } from '@declarations'
 import { getApiUrl } from '../core/get-api-url'
 
 class VariantStore {

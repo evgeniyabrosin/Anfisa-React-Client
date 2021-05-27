@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '../..'
+import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '@declarations'
 import { SortDatasets } from '../core/enum/sort-datasets.enum'
 import { getApiUrl } from '../core/get-api-url'
 import { SortDirection } from '../core/sort-direction.enum'

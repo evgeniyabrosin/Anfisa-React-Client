@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '../..'
+import { ANYType } from '@declarations'
 
 interface Props {
   text: string

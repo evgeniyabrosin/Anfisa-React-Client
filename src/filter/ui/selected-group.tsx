@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'

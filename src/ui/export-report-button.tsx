@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '../..'
+import { ANYType } from '@declarations'
 import { t } from '@i18n'
 import { Button } from './button'
 import { DownArray } from '@icons/down-array'

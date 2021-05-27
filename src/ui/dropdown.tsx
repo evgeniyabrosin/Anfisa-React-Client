@@ -6,7 +6,7 @@ import { ReactElement } from 'react'
 import DropdownBase, { Option } from 'react-dropdown'
 import styled from 'styled-components'
 
-import { FilterList } from '../..'
+import { FilterList } from '@declarations'
 import datasetStore from '@store/dataset'
 
 const StyledDropDown = styled(DropdownBase)`

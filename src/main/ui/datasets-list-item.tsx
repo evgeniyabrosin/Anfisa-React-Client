@@ -4,7 +4,7 @@ import { Fragment, ReactElement, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
-import { DsDistItem } from '../../..'
+import { DsDistItem } from '@declarations'
 import { formatDate } from '../../core/format-date'
 import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'

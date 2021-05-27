@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import { useTable } from 'react-table'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 
 interface Props {
   columns: ANYType[]

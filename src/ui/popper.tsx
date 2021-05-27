@@ -1,7 +1,7 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
 
-import { ANYType } from '../..'
+import { ANYType } from '@declarations'
 import { useToggle } from '../core/hooks/use-toggle'
 
 interface Props {

@@ -1,6 +1,6 @@
 import { Fragment, ReactElement } from 'react'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 import { t } from '@i18n'
 import { Box } from '@ui/box'
 import { InfoTextItem } from './info-text-item'

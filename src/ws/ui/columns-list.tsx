@@ -8,7 +8,7 @@ import {
 } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
-import { ANYType } from '../../..'
+import { ANYType } from '@declarations'
 import datasetStore from '@store/dataset'
 import { Box } from '@ui/box'
 import { ColumnNameItem } from './column-name-item'
