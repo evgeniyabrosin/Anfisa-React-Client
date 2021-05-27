@@ -9,7 +9,7 @@ import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
-import { WsHeader } from './ws.header'
+import { WsHeader } from './header'
 
 const Root = styled(Box)`
   padding: 38px 20px 0px 30px;
