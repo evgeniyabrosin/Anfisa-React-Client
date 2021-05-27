@@ -1,12 +1,12 @@
+import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { Versions } from '@declarations'
 import { t } from '@i18n'
-import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
+import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { DatasetField } from './dataset-filed'
 

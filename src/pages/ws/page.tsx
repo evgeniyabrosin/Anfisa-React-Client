@@ -1,15 +1,15 @@
+import { ReactElement, useEffect } from 'react'
 import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
-import { ReactElement, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
 import dsStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
+import { WsHeader } from './header'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
-import { WsHeader } from './header'
 
 const Root = styled(Box)`
   padding: 38px 20px 0px 30px;

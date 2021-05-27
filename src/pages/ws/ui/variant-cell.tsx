@@ -1,18 +1,18 @@
-import get from 'lodash/get'
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
 import { toast } from 'react-toastify'
+import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { getVariantColor } from '@core/get-variant-color'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'
-import { Box } from '@ui/box'
+import { Routes } from '@router/routes.enum'
 import { ShareSvg } from '@icons/share'
 import { TableDocSvg } from '@icons/table-doc'
+import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
 export interface CellI {

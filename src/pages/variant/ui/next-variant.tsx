@@ -2,8 +2,8 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button'
 import { NextArrowSvg } from '@icons/next-arrow'
+import { Button } from '@ui/button'
 
 interface Props {
   className?: string

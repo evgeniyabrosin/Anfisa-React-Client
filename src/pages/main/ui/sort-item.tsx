@@ -1,13 +1,13 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
-import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
-import { Box } from '@ui/box'
+import dirinfoStore from '@store/dirinfo'
 import { SortSvg } from '@icons/sort'
+import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
 interface Props {

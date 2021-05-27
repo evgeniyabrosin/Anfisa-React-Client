@@ -1,15 +1,15 @@
-import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect } from 'react'
 import { useLocation } from 'react-router'
+import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import variantStore from '@store/variant'
 import { Box } from '@ui/box'
+import { VariantHeader } from './header'
 import { HeaderBaseInfo } from './ui/header-base-info'
 import { TabContent } from './ui/tab-content'
 import { Tabs } from './ui/tabs'
-import { VariantHeader } from './header'
 
 const Root = styled(Box)`
   padding-top: 60px;

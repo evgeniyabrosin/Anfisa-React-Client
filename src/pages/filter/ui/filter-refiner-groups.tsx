@@ -1,6 +1,6 @@
+import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { StatList } from '@declarations'

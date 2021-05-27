@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { ANYType } from '@declarations'

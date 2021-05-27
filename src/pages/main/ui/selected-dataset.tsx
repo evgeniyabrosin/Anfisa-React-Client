@@ -1,14 +1,14 @@
-import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
+import dirinfoStore from '@store/dirinfo'
+import { NextArrowSvg } from '@icons/next-arrow'
 import { Box } from '@ui/box'
 import { Button } from '@ui/button'
-import { NextArrowSvg } from '@icons/next-arrow'
 import { DatasetsFieldsList } from './dataset-fileds-list'
 import { DatasetGeneral } from './dataset-general'
 

@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import { DsDistItem } from '@declarations'
 import dirinfoStore from '@store/dirinfo'

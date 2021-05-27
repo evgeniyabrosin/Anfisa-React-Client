@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 
 // import { useParams } from '@core/hooks/use-params'
 // import filterStore from '@store/filter'

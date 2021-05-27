@@ -1,5 +1,5 @@
-import isString from 'lodash/isString'
 import { createIntl, createIntlCache } from 'react-intl'
+import isString from 'lodash/isString'
 
 import { en } from './locales/en'
 

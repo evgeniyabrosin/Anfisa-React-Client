@@ -2,8 +2,8 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { generateTagColor } from '@core/tags-colors'
-import { Box } from '@ui/box'
 import { CloseTagSvg } from '@icons/close-tag'
+import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
 interface Props {

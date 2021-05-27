@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect, useState } from 'react'
 import {
   DragDropContext,
@@ -6,6 +5,7 @@ import {
   Droppable,
   DropResult,
 } from 'react-beautiful-dnd'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { ANYType } from '@declarations'

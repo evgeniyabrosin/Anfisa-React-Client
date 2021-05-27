@@ -1,14 +1,14 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { t } from '@i18n'
-import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
+import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { Input } from '@ui/input'
-import { SortItem } from '../ui/sort-item'
+import { SortItem } from './sort-item'
 
 const Root = styled(Box)`
   display: flex;

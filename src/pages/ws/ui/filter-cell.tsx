@@ -1,5 +1,5 @@
-import get from 'lodash/get'
 import { ReactElement } from 'react'
+import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { theme } from '@theme'

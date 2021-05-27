@@ -1,5 +1,5 @@
-import get from 'lodash/get'
 import { ReactElement, useEffect, useState } from 'react'
+import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { t } from '@i18n'

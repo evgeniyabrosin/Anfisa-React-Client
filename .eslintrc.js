@@ -11,6 +11,31 @@ module.exports = {
       },
     ],
     curly: ['error', 'multi-line'],
+    'simple-import-sort/imports': [
+      'warn',
+      {
+        groups: [
+          // Style imports
+          ['^.+\\.s?css$'],
+          // react related packages, other packages
+          ['^react', '(\\w-/)*'],
+          // Side effect imports, Alias, Relative
+          [
+            '^\\u0000',
+            '^@declarations',
+            '^@core',
+            '^@i18n',
+            '^@theme',
+            '^@store',
+            '^@router',
+            '^@icons',
+            '^@ui',
+            '^@',
+            '^\\.',
+          ],
+        ],
+      },
+    ],
     // typescript
     '@typescript-eslint/no-explicit-any': 'off',
     //react

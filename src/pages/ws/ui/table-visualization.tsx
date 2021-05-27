@@ -2,9 +2,9 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { Box } from '@ui/box'
 import { GridSvg } from '@icons/grid'
 import { RowsSvg } from '@icons/rows'
+import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 import { TableVisualizationItem } from './table-visualization-item'
 

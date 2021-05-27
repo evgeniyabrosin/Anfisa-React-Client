@@ -1,9 +1,9 @@
 import 'react-dropdown/style.css'
 
-import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
 import { ReactElement } from 'react'
 import DropdownBase, { Option } from 'react-dropdown'
+import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { FilterList } from '@declarations'

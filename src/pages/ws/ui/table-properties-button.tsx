@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { ANYType } from '@declarations'
 import { t } from '@i18n'
-import { Button } from '@ui/button'
 import { DownArray } from '@icons/down-array'
 import { SettingsTableSvg } from '@icons/settings-table'
+import { Button } from '@ui/button'
 
 interface Props {
   refEl: ANYType

@@ -1,11 +1,11 @@
+import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import dsStore from '@store/dataset'
 import { theme } from '@theme'
+import dsStore from '@store/dataset'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 

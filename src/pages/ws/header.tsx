@@ -4,10 +4,10 @@ import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'
-import { Box } from '@ui/box'
+import { Routes } from '@router/routes.enum'
 import { HomeSvg } from '@icons/home'
+import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 import { Variants } from './ui/variants'
 

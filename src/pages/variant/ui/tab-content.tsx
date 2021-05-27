@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
 import { Fragment, ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import variantStore from '@store/variant'
 import { Box } from '@ui/box'

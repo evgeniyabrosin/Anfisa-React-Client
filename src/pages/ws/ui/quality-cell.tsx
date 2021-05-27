@@ -1,6 +1,6 @@
+import { ReactElement, useEffect, useState } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ANYType } from '@declarations'

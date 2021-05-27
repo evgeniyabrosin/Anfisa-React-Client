@@ -1,5 +1,5 @@
-import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
