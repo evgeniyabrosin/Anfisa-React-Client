@@ -4,7 +4,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ANYType } from '@declarations'
-import { getIcon } from '../../core/get-quality-icon'
+import { getIcon } from '@core/get-quality-icon'
 import dirInfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { QualityItem } from './quality-item'

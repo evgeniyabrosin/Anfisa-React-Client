@@ -2,7 +2,7 @@ import { Fragment, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
 
 import { ANYType } from '@declarations'
-import { useToggle } from '../core/hooks/use-toggle'
+import { useToggle } from '@core/hooks/use-toggle'
 
 interface Props {
   ButtonElement: ANYType

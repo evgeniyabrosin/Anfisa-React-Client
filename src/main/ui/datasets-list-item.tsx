@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import { DsDistItem } from '@declarations'
-import { formatDate } from '../../core/format-date'
+import { formatDate } from '@core/format-date'
 import dirinfoStore from '@store/dirinfo'
 import { theme } from '@theme'
 import { Box } from '@ui/box'

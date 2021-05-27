@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
-import { useParams } from '../core/hooks/use-params'
+import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
 import { theme } from '@theme'

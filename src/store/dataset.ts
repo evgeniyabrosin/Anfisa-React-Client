@@ -9,9 +9,9 @@ import {
   WsListType,
   WsTagsType,
 } from '@declarations'
-import { ExportTypeEnum } from '../core/enum/export-type.enum'
-import { getApiUrl } from '../core/get-api-url'
-import { tableColumnMap } from '../core/table-column-map'
+import { ExportTypeEnum } from '@core/enum/export-type.enum'
+import { getApiUrl } from '@core/get-api-url'
+import { tableColumnMap } from '@core/table-column-map'
 
 const INCREASE_INDEX = 50
 

@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ANYType, StatListType } from '@declarations'
-import { FilterMethodEnum } from '../core/enum/filter-method.enum'
-import { getApiUrl } from '../core/get-api-url'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
+import { getApiUrl } from '@core/get-api-url'
 
 export type SelectedFiltersType = Record<
   string,

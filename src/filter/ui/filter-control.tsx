@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { FilterMethodEnum } from '../../core/enum/filter-method.enum'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'

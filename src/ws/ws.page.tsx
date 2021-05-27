@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ReactElement, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { useParams } from '../core/hooks/use-params'
+import { useParams } from '@core/hooks/use-params'
 import dsStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
