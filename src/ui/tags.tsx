@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import { Tag } from '../ws/ui/tag'
+import { Tag } from './tag'
 import { Box } from './box'
 import { Text } from './text'
 

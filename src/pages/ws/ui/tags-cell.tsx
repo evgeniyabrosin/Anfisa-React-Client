@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { Box } from '@ui/box'
-import { Tag } from './tag'
+import { Tag } from '@ui/tag'
 import { CellI } from './variant-cell'
 
 const Root = styled(Box)`
