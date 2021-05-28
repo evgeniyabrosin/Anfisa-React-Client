@@ -1,0 +1,35 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: add-githubactions-test CI
+
+on:
+  push:
+    branches: [ add-githubactions-test ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+      env:
+          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/anfisa/app/"
+    - run: npm run build
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
+          SOURCE: "build/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
+          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
+          EXCLUDE: "/node_modules/"
