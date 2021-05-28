@@ -20,10 +20,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
+    - run: yarn install
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/anfisa/app/"
-    - run: npm run build
+    - run: yarn build
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
