@@ -12,7 +12,7 @@ const UserLogoDummy = () => (
   <CircleSvg fill={'white'} style={{ width: '32px', height: '32px' }} />
 )
 
-export const HeaderPage = observer(
+export const Header = observer(
   (): ReactElement => {
     return (
       <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">

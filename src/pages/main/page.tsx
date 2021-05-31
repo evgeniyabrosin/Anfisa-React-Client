@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
+import { Header } from '@ui/header'
 import { Datasets } from './ui/datasets'
-import { HeaderPage } from './ui/header'
 import { SelectedDataset } from './ui/selected-dataset'
 
 const Root = styled(Box)``
@@ -20,7 +20,7 @@ export const MainPage = (): ReactElement => {
 
   return (
     <Root>
-      <HeaderPage />
+      <Header />
 
       <Container>
         <Datasets />
