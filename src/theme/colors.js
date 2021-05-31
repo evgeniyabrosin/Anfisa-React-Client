@@ -9,6 +9,8 @@ module.exports = {
     4: '#DEF1FD',
     5: '#2E3A59',
     dark: '#091b34',
+    bright: '#18a0fb',
+    lighter: '#1f3653',
   },
   green: '#27B724',
   grey: {
@@ -20,5 +22,6 @@ module.exports = {
     5: '#262626',
     6: '#F0F0F0',
     7: '#777777',
+    blue: '#9FB1C0',
   },
 }
