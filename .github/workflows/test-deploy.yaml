@@ -24,6 +24,18 @@ jobs:
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/anfisa/app/"
     - run: yarn build
+    - name: Auth AWS
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+    - name: Open port temporary
+      env:
+        GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
+      run: |
+            export IP=`curl https://ipinfo.io/ip`
+            aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr $IP/32
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
