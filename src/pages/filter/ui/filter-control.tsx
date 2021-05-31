@@ -23,6 +23,8 @@ const StyledText = styled(Text)`
   font-size: 14px;
   line-height: 22px;
   color: #000000;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 export const FilterControl = (): ReactElement => (

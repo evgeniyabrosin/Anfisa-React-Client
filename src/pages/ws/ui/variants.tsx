@@ -23,6 +23,8 @@ const VariantsStyled = styled(Text)`
   font-size: 14px;
   line-height: 20px;
   color: ${theme('colors.grey.0')};
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 const AmountVariants = styled(VariantsStyled)`

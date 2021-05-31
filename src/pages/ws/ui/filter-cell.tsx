@@ -20,6 +20,8 @@ const StyledText = styled(Text)`
   font-size: 12px;
   line-height: 16px;
   color: ${theme('color.black')};
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 export const FilterCell = (cell: CellI): ReactElement => {

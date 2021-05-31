@@ -23,6 +23,8 @@ const Title = styled(Text)`
   letter-spacing: 0.44px;
   color: #000000;
   margin-left: 45px;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 const ContainerInfo = styled(Box)`

@@ -24,6 +24,8 @@ const StyledName = styled(Text)`
   font-size: 30px;
   line-height: 36px;
   color: #000000;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 const StyledNextVariantButton = styled(NextVariantButton)`

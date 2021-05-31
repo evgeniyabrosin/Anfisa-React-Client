@@ -17,6 +17,8 @@ const Title = styled(Text)`
   line-height: 24px;
   letter-spacing: 0.44px;
   color: #000000;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 const StyledTextarea = styled('textarea')`

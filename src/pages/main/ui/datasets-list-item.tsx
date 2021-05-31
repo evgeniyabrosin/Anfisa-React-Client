@@ -29,6 +29,8 @@ const Root = styled(Box)<RootProps>`
   cursor: pointer;
   flex-wrap: wrap;
   width: 100%;
+  margin-top: 8px;
+  margin-bottom: 8px;
 
   ${ifProp(
     'isActive',

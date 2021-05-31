@@ -18,6 +18,8 @@ const NoResultsText = styled(Text)`
   color: #6c6c6c;
   margin-left: auto;
   margin-right: auto;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
 `
 
 export const QueryResults = (): ReactElement => {

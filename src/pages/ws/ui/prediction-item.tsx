@@ -23,7 +23,6 @@ const StyledName = styled(Text)`
   font-size: 10px;
   line-height: 16px;
   color: #767272;
-
   margin: 0px 5px 0px 0px;
 `
 

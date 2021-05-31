@@ -62,9 +62,7 @@ export const SelectedDataset = observer(
           </Wrapper>
         </Card>
 
-        <Card>
-          <DatasetsFieldsList />
-        </Card>
+        <DatasetsFieldsList />
       </React.Fragment>
     )
   },

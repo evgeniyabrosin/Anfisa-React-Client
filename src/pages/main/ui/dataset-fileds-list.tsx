@@ -8,13 +8,8 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
+import { Card } from '@ui/card'
 import { DatasetField } from './dataset-filed'
-
-const Root = styled(Box)`
-  margin-left: 24px;
-  padding-left: 16px;
-  box-sizing: border-box;
-`
 
 const Wrapper = styled(Box)`
   display: flex;
@@ -42,7 +37,7 @@ export const DatasetsFieldsList = observer(
     }
 
     return (
-      <Root>
+      <Card>
         <StyledText>{t('home.info')}</StyledText>
 
         <Wrapper>
@@ -68,7 +63,7 @@ export const DatasetsFieldsList = observer(
           />
           <DatasetField label="Pipeline" value={versions.pipeline} />
         </Wrapper>
-      </Root>
+      </Card>
     )
   },
 )
