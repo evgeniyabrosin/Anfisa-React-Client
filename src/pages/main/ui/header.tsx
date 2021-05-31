@@ -1,61 +1,46 @@
 import { ReactElement } from 'react'
+import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '@ui/box'
+import { Routes } from '@router/routes.enum'
+import { CircleSvg } from '@icons/circle'
+import { Logo } from '@icons/logo'
 
-const Root = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-`
-
-const RouteTitle = styled(Box)`
-  display: flex;
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 23px;
-  color: ${theme('colors.blue.0')};
-`
-
-const HomeTextStyled = styled(Box)`
-  color: ${theme('colors.black')};
-  margin-left: 5px;
-`
-
-const AnfisaStyledText = styled(Box)`
-  cursor: pointer;
-`
-
-const SystemVersion = styled(Box)`
-  font-family: 'Lato', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-`
+const UserLogoDummy = () => (
+  <CircleSvg fill={'white'} style={{ width: '32px', height: '32px' }} />
+)
 
 export const HeaderPage = observer(
   (): ReactElement => {
     return (
-      <Root>
-        <RouteTitle>
-          <AnfisaStyledText>{`${t('general.anfisa')} v6 /`}</AnfisaStyledText>
-          <HomeTextStyled>{t('home.title')}</HomeTextStyled>
-        </RouteTitle>
+      <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
+        <Link to={Routes.Root}>
+          <div className="flex items-center text-white">
+            <Logo mode="white" className="mr-4" />
 
-        <SystemVersion>
-          {t('home.version', {
-            0: dirinfoStore.dirinfo.version,
-          })}
-        </SystemVersion>
-      </Root>
+            <span className="text-grey-blue">
+              {dirinfoStore.dirinfo.version as string}
+            </span>
+
+            <div
+              className="mx-4 bg-blue-lighter"
+              style={{ width: '2px', height: '16px' }}
+            />
+
+            <span className="text-blue-bright font-bold uppercase text-xs">
+              {t('home.title')}
+            </span>
+          </div>
+        </Link>
+
+        <div className="text-white flex flex-row items-center">
+          <div className="mr-2">Username</div>
+
+          <UserLogoDummy />
+        </div>
+      </div>
     )
   },
 )
