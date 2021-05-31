@@ -1,4 +1,3 @@
-import { ANYType } from '@declarations'
 import { tableColumnMap } from '@core/table-column-map'
 import { FilterCell } from './ui/filter-cell'
 import { GnomadCell } from './ui/gnomad-cell'
@@ -22,7 +21,7 @@ export const variantColumnTable = [
   },
   {
     Header: 'hg19',
-    accessor: (item: ANYType) => `${item.Coordinate} ${item.Change}`,
+    accessor: (item: any) => `${item.Coordinate} ${item.Change}`,
     Cell: HG19Cell,
   },
   {
@@ -32,7 +31,7 @@ export const variantColumnTable = [
   },
   {
     Header: tableColumnMap.predictions,
-    accessor: (item: ANYType): PredicationI[] => [
+    accessor: (item: any): PredicationI[] => [
       { name: 'Polyphen', value: item.Polyphen },
       { name: 'SIFT', value: item.SIFT },
       { name: 'MUT TASTER', value: item['MUT TASTER'] },
@@ -42,7 +41,7 @@ export const variantColumnTable = [
   },
   {
     Header: tableColumnMap.gnomad,
-    accessor: (item: ANYType): PredicationI[] => [
+    accessor: (item: any): PredicationI[] => [
       { name: 'Overall AF', value: item.gnomAD_Overall_AF },
       { name: 'Genome AF', value: item.gnomAD_Genomes_AF },
       { name: 'Exome AF', value: item.gnomAD_Exomes_AF },

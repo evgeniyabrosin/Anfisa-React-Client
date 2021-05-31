@@ -2,7 +2,6 @@ import { Fragment, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
@@ -26,7 +25,7 @@ const VariantListContainer = styled(Box)`
   margin-top: 16px;
 `
 
-const StyledFilterRefinerGroupItem = styled(FilterRefinerGroupItem)<ANYType>`
+const StyledFilterRefinerGroupItem = styled(FilterRefinerGroupItem)<any>`
   padding-left: 0;
 `
 
@@ -72,7 +71,7 @@ export const SelectedGroup = observer(
 
         <VariantListContainer>
           {selectedGroupItem.variants &&
-            selectedGroupItem.variants.map((variant: ANYType) => (
+            selectedGroupItem.variants.map((variant: any) => (
               <SelectedGroupItem
                 key={variant[0]}
                 name={variant[0]}

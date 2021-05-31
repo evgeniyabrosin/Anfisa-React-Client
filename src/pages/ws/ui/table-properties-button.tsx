@@ -1,14 +1,13 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
 import { t } from '@i18n'
 import { DownArray } from '@icons/down-array'
 import { SettingsTableSvg } from '@icons/settings-table'
 import { Button } from '@ui/button'
 
 interface Props {
-  refEl: ANYType
+  refEl: any
   isOpen?: boolean
   onClick?: () => void
 }

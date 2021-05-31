@@ -1,12 +1,11 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
 
-import { ANYType } from '@declarations'
 import { useToggle } from '@core/hooks/use-toggle'
 
 interface Props {
-  ButtonElement: ANYType
-  ModalElement: ANYType
+  ButtonElement: any
+  ModalElement: any
 }
 
 export const Popper = ({
@@ -15,7 +14,7 @@ export const Popper = ({
 }: Props): ReactElement => {
   const [isOpen, open, close] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
-  const [popperElement, setPopperElement] = useState<ANYType>(null)
+  const [popperElement, setPopperElement] = useState<any>(null)
 
   const { styles, attributes } = usePopper(referenceElement, popperElement)
 

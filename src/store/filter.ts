@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ANYType, StatListType } from '@declarations'
+import { StatListType } from '@declarations'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
 
@@ -18,7 +18,7 @@ interface AddSelectedFiltersI {
 class FilterStore {
   method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}
-  dtreeSet: ANYType = {}
+  dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
 
   constructor() {

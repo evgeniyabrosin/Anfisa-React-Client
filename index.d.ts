@@ -157,8 +157,6 @@ export interface DsStatI {
 export type DsStatType = DsStatI | Record<string, any>
 export type DsInfoType = DsinfoI | Record<string, unknown>
 
-export type ANYType = any
-
 export interface RecordI {
   no: number
   lb: string

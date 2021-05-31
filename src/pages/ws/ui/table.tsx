@@ -1,11 +1,9 @@
 import { ReactElement } from 'react'
 import { useTable } from 'react-table'
 
-import { ANYType } from '@declarations'
-
 interface Props {
-  columns: ANYType[]
-  data: ANYType[]
+  columns: any[]
+  data: any[]
 }
 
 export const Table = ({ columns, data }: Props): ReactElement => {

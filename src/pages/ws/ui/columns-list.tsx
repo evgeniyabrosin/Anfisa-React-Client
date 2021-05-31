@@ -8,7 +8,6 @@ import {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
 import datasetStore from '@store/dataset'
 import { Box } from '@ui/box'
 import { ColumnNameItem } from './column-name-item'
@@ -19,7 +18,7 @@ const Root = styled(Box)`
   padding-bottom: 19px;
 `
 
-const getItemStyle = (isDragging: boolean, draggableStyle: ANYType) => ({
+const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   // border: isDragging ? '1px solid grey' : 'none',
   userSelect: 'none',
   ...draggableStyle,

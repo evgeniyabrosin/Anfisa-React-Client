@@ -2,7 +2,6 @@ import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { ANYType } from '@declarations'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { DocsList } from './docs-list'
@@ -17,7 +16,7 @@ export const InfoList = observer(
       return <Fragment />
     }
 
-    const handleClickAsync = async (doc: ANYType, isBaseInfo?: boolean) => {
+    const handleClickAsync = async (doc: any, isBaseInfo?: boolean) => {
       if (Array.isArray(doc[1])) {
         return
       }

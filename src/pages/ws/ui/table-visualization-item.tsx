@@ -2,14 +2,13 @@ import { ReactElement } from 'react'
 import noop from 'lodash/noop'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
 import { Box } from '@ui/box'
 import { RadioButton } from '@ui/radio-button'
 import { Text } from '@ui/text'
 
 interface Props {
   isChecked: boolean
-  Icon: ANYType
+  Icon: any
   text: string
 }
 

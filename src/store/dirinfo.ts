@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ANYType, DirInfoType, DsDistItem, DsInfoType } from '@declarations'
+import { DirInfoType, DsDistItem, DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
@@ -65,7 +65,7 @@ class DirInfoStore {
   }
 
   setDsInfo(dsinfo: DsDistItem) {
-    this.dsinfo = dsinfo as ANYType
+    this.dsinfo = dsinfo as any
   }
 
   get dsDistKeys() {
@@ -113,7 +113,7 @@ class DirInfoStore {
   }
 
   get ancestorsDsInfo() {
-    const ancestors: ANYType[] = get(this, 'dsinfo.ancestors', [])
+    const ancestors: any[] = get(this, 'dsinfo.ancestors', [])
     const clonedAncestors = cloneDeep(ancestors)
 
     if (
@@ -121,7 +121,7 @@ class DirInfoStore {
       clonedAncestors[0][1] &&
       clonedAncestors[0][1][1]
     ) {
-      const formatedData = clonedAncestors[0][1][1].map((item: ANYType) => {
+      const formatedData = clonedAncestors[0][1][1].map((item: any) => {
         if (item[0] === 'Info') {
           item[0] = 'Base Info'
         }

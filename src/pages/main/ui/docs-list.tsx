@@ -1,15 +1,14 @@
 import { Fragment, ReactElement } from 'react'
 
-import { ANYType } from '@declarations'
 import { t } from '@i18n'
 import { Box } from '@ui/box'
 import { InfoTextItem } from './info-text-item'
 
 interface Props {
-  data: ANYType[]
+  data: any[]
   activeName: string
   baseDatasetName?: string
-  onClick: (doc: ANYType) => void
+  onClick: (doc: any) => void
 }
 
 export const DocsList = ({

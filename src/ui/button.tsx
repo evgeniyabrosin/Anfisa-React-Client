@@ -1,15 +1,13 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
-
 interface Props {
   text: string
   className?: string
   onClick?: () => void
   icon?: ReactElement
   leftIcon?: ReactElement
-  refEl?: ANYType
+  refEl?: any
 }
 
 const StyledButton = styled('button')`

@@ -3,7 +3,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { ANYType } from '@declarations'
 import { getIcon } from '@core/get-quality-icon'
 import dirInfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
@@ -26,8 +25,8 @@ const Root = styled(Box)`
 
 export const QualityCell = observer(
   ({ cell }: CellI): ReactElement => {
-    const [metaSamples, setMetaSamples] = useState<ANYType>({})
-    const qualities = get(cell, 'value', {}) as ANYType
+    const [metaSamples, setMetaSamples] = useState<any>({})
+    const qualities = get(cell, 'value', {}) as any
     const qualitiesKeys = Object.keys(qualities).slice(0, 3)
 
     useEffect(() => {

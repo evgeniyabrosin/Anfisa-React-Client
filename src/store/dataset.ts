@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import {
-  ANYType,
   DsStatType,
   StatList,
   TabReportType,
@@ -18,7 +17,7 @@ const INCREASE_INDEX = 50
 class DatasetStore {
   dsStat: DsStatType = {}
   wsList: WsListType = {}
-  reccnt: ANYType = []
+  reccnt: any = []
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
   selectedTags: string[] = []
