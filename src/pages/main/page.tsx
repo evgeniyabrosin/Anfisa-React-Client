@@ -4,12 +4,10 @@ import styled from 'styled-components'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { Datasets } from './ui/datasets'
-import { HeaderPage } from './ui/header.page'
+import { HeaderPage } from './ui/header'
 import { SelectedDataset } from './ui/selected-dataset'
 
-const Root = styled(Box)`
-  padding: 32px;
-`
+const Root = styled(Box)``
 
 const Container = styled(Box)`
   display: flex;
