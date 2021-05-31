@@ -3,7 +3,6 @@ import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
-import { t } from '@i18n'
 import { theme } from '@theme'
 import { Routes } from '@router/routes.enum'
 import { HomeSvg } from '@icons/home'
@@ -49,7 +48,6 @@ export const WsHeader = (): ReactElement => {
     <Root>
       <AnfisaHomeBox onClick={handleMoveHome}>
         <HomeSvg />
-        <AnfisaHome>{t('general.anfisa')}</AnfisaHome>
       </AnfisaHomeBox>
 
       <StyledDS>{`/ ${params.get('ds')}`}</StyledDS>
