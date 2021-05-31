@@ -1,7 +1,6 @@
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { Header } from '@ui/header'
 import { Datasets } from './ui/datasets'
@@ -14,10 +13,6 @@ const Container = styled(Box)`
 `
 
 export const MainPage = (): ReactElement => {
-  useEffect(() => {
-    dirinfoStore.fetchDirInfoAsync()
-  }, [])
-
   return (
     <Root>
       <Header />

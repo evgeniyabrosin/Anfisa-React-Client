@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -14,6 +14,10 @@ const UserLogoDummy = () => (
 
 export const Header = observer(
   (): ReactElement => {
+    useEffect(() => {
+      dirinfoStore.fetchDirInfoAsync()
+    }, [])
+
     return (
       <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
         <Link to={Routes.Root}>
