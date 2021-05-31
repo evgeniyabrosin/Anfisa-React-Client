@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import React, { Fragment, ReactElement } from 'react'
 import { useHistory } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -9,14 +9,9 @@ import dirinfoStore from '@store/dirinfo'
 import { NextArrowSvg } from '@icons/next-arrow'
 import { Box } from '@ui/box'
 import { Button } from '@ui/button'
+import { Card } from '@ui/card'
 import { DatasetsFieldsList } from './dataset-fileds-list'
 import { DatasetGeneral } from './dataset-general'
-
-const Root = styled(Box)`
-  padding: 16px;
-  margin-left: 24px;
-  display: flex;
-`
 
 const Wrapper = styled(Box)`
   width: 420px;
@@ -52,20 +47,25 @@ export const SelectedDataset = observer(
     }
 
     return (
-      <Root>
-        <Wrapper>
-          <StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
-          <StyledButton
-            text={t('home.openInViewer')}
-            icon={<NextArrowSvg />}
-            onClick={handleNavigate}
-          />
+      <React.Fragment>
+        <Card>
+          <Wrapper>
+            <StyledName>{dirinfoStore.selectedDirinfoName}</StyledName>
 
-          <DatasetGeneral />
-        </Wrapper>
+            <StyledButton
+              text={t('home.openInViewer')}
+              icon={<NextArrowSvg />}
+              onClick={handleNavigate}
+            />
 
-        <DatasetsFieldsList />
-      </Root>
+            <DatasetGeneral />
+          </Wrapper>
+        </Card>
+
+        <Card>
+          <DatasetsFieldsList />
+        </Card>
+      </React.Fragment>
     )
   },
 )
