@@ -6,7 +6,6 @@ import { useParams } from '@core/hooks/use-params'
 import dsStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Header } from '@ui/header'
-import { WsHeader } from './header'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
 
@@ -50,7 +49,6 @@ export const WSPage = observer(
     return (
       <div>
         <Header />
-        <WsHeader />
         <ControlPanel />
         <TableVariants />
       </div>
