@@ -12,9 +12,14 @@ module.exports = {
       blue: { ...themeColors.blue },
       grey: { ...themeColors.grey },
     },
+    fontFamily: {
+      sans: ['"Roboto"', 'sans-serif'],
+    },
   },
   variants: {
-    extend: {},
+    appearance: [],
   },
-  plugins: [],
+  corePlugins: {
+    corePlugins: ['margin', 'padding'],
+  },
 }
