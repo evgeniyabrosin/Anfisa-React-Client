@@ -43,19 +43,16 @@ const Root = styled(Box)<RootProps>`
     'isSubItems',
     css`
       padding-left: 20px;
-      width: 420px;
     `,
   )}
 `
 
 const StyledName = styled(Text)<{ isActive?: boolean }>`
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: normal;
   font-size: 14px;
   line-height: 16px;
   color: ${theme('colors.black')};
   margin-left: 10px;
+  padding-right: 28px;
 
   ${ifProp(
     'isActive',
@@ -66,9 +63,6 @@ const StyledName = styled(Text)<{ isActive?: boolean }>`
 `
 
 const StyledDate = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: normal;
   font-size: 14px;
   line-height: 16px;
   margin-left: auto;

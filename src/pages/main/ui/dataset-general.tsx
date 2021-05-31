@@ -3,13 +3,8 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { theme } from '@theme'
-import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 import { InfoList } from './info-list'
-
-const Root = styled(Box)`
-  margin-top: 16px;
-`
 
 const StyledTitle = styled(Text)`
   font-family: 'Work Sans', sans-serif;
@@ -26,10 +21,10 @@ const StyledTitle = styled(Text)`
 
 export const DatasetGeneral = (): ReactElement => {
   return (
-    <Root>
+    <div>
       <StyledTitle>{t('home.general')}</StyledTitle>
 
       <InfoList />
-    </Root>
+    </div>
   )
 }

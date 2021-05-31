@@ -15,7 +15,7 @@ const cardStyle = {
 }
 
 export const Card = ({ children, className }: CardProps): ReactElement => (
-  <div style={cardStyle} className={`p-4 rounded-lg my-4 mx-2 ${className}`}>
+  <div style={cardStyle} className={`p-4 rounded-lg m-2 ${className}`}>
     {children}
   </div>
 )
