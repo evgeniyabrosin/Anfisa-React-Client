@@ -14,8 +14,8 @@ export const Text = ({
   onClick,
 }: Props): ReactElement => {
   return (
-    <p style={style} className={className} onClick={onClick}>
+    <span style={style} className={className} onClick={onClick}>
       {children}
-    </p>
+    </span>
   )
 }
