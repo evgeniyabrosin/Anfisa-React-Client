@@ -32,8 +32,8 @@ export const TableProperiesButton = ({
     refEl={refEl}
     onClick={onClick}
     text={t('ds.tableProperties')}
-    leftIcon={<SettingsTableSvg style={{ marginRight: 6 }} />}
-    icon={
+    prepend={<SettingsTableSvg style={{ marginRight: 6 }} />}
+    append={
       <DownArray
         style={{
           marginLeft: 10,

@@ -1,43 +1,29 @@
 import { ReactElement } from 'react'
-import styled from 'styled-components'
 
 interface Props {
   text: string
   className?: string
   onClick?: () => void
-  icon?: ReactElement
-  leftIcon?: ReactElement
+  append?: ReactElement
+  prepend?: ReactElement
   refEl?: any
 }
-
-const StyledButton = styled('button')`
-  background-color: #0c65fd;
-  border-radius: 4px;
-  border: none;
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  padding: 8px;
-  outline: none;
-  cursor: pointer;
-`
 
 export const Button = ({
   text,
   onClick,
   className,
-  icon,
-  leftIcon,
+  append,
+  prepend,
   refEl,
 }: Props): ReactElement => (
-  <StyledButton onClick={onClick} className={className} ref={refEl}>
-    {leftIcon} {text} {icon}
-  </StyledButton>
+  <button
+    onClick={onClick}
+    className={`flex items-center text-sm leading-4 rounded-full p-2 text-white bg-blue-bright ${className}`}
+    ref={refEl}
+  >
+    {prepend}
+    <span className="mx-2">{text}</span>
+    {append}
+  </button>
 )

@@ -30,7 +30,7 @@ export const NextVariantButton = ({
     <StyledButton
       text={t('variant.next')}
       onClick={onClick}
-      icon={<NextArrowSvg fill="#367BF5" />}
+      append={<NextArrowSvg fill="#367BF5" />}
       className={className}
     />
   )

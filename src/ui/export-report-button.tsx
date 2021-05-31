@@ -34,9 +34,9 @@ export const ExportReportButton = ({
   <StyledButton
     text={t('general.exportReport')}
     refEl={refEl}
-    leftIcon={<DownloadSvg style={{ marginRight: 7 }} {...rest} />}
+    prepend={<DownloadSvg style={{ marginRight: 7 }} {...rest} />}
     onClick={rest.onClick}
-    icon={
+    append={
       <DownArray
         style={{
           marginLeft: 10,
