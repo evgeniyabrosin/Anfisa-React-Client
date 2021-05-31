@@ -1,8 +1,8 @@
-export const colors = {
+module.exports = {
   white: '#ffffff',
   black: '#000000',
   blue: ['#0C65FD', '#2183DF', '#367BF5', '#8FD6F8', '#DEF1FD', '#2E3A59'],
-  green: ['#27B724'],
+  green: '#27B724',
   grey: [
     '#A6ADAF',
     '#3E4345',
