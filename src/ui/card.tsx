@@ -1,21 +1,18 @@
 import { ReactElement, ReactNode } from 'react'
+import cn, { Argument } from 'classnames'
 
 interface CardProps {
   children?: ReactElement | ReactNode
-  className?: string
+  className?: Argument
 }
 
 interface CardTitleProps {
   text: string
-  className?: string
-}
-
-const cardStyle = {
-  boxShadow: '0px 2px 8px rgba(167, 167, 167, 0.25)',
+  className?: Argument
 }
 
 export const Card = ({ children, className }: CardProps): ReactElement => (
-  <div style={cardStyle} className={`p-4 rounded-lg m-2 ${className}`}>
+  <div className={cn('shadow-card p-4 rounded-lg m-2', className)}>
     {children}
   </div>
 )
