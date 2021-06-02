@@ -7,23 +7,23 @@ interface Props {
 export const FolderSvg = ({ fill }: Props): ReactElement => {
   return (
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M15.2065 3.44615L13.7513 7.09391C13.6935 7.24298 13.5418 7.34798 13.3874 7.34611H2.18757V20.5516H20.9482V3.46195L15.2065 3.44615Z"
-        fill={fill || '#CCCCC'}
+        d="M13.5556 13H2.46154C2.33924 12.9996 2.22205 12.9509 2.13558 12.8644C2.0491 12.7779 2.00036 12.6608 2 12.5385V5H13.5C13.6326 5 13.7598 5.05268 13.8536 5.14645C13.9473 5.24021 14 5.36739 14 5.5V12.5556C14 12.6734 13.9532 12.7865 13.8698 12.8698C13.7865 12.9532 13.6734 13 13.5556 13V13Z"
+        stroke={fill}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M2.16309 4.59837L2.17934 6.53993H13.1282L13.8965 4.61525L2.16309 4.59837Z"
-        fill={fill || '#CCCCC'}
+        d="M2 5V3.5C2 3.36739 2.05268 3.24021 2.14645 3.14645C2.24021 3.05268 2.36739 3 2.5 3H5.79289C5.85855 3 5.92357 3.01293 5.98424 3.03806C6.0449 3.06319 6.10002 3.10002 6.14645 3.14645L8 5"
+        stroke={fill}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

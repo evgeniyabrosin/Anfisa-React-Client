@@ -5,7 +5,7 @@ interface Props {
   onClick?: () => void
 }
 
-export const TableDocSvg = ({ style, onClick }: Props): ReactElement => {
+export const TableFileSvg = ({ style, onClick }: Props): ReactElement => {
   return (
     <svg
       width="16"
