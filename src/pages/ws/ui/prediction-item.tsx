@@ -17,7 +17,6 @@ const Root = styled(Box)`
 `
 
 const StyledName = styled(Text)`
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;
@@ -27,7 +26,6 @@ const StyledName = styled(Text)`
 `
 
 const StyledValue = styled(Text)`
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 10px;

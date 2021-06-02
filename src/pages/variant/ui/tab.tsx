@@ -29,7 +29,6 @@ const Root = styled(Box)<ActiveTabI>`
 `
 
 const TabName = styled(Text)<ActiveTabI>`
-  font-family: 'Quicksand', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;

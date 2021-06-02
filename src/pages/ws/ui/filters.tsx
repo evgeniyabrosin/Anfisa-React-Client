@@ -15,7 +15,6 @@ const Root = styled(Box)`
 `
 
 const Title = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -27,7 +26,6 @@ const Title = styled(Text)`
 `
 
 const MoreFilters = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;

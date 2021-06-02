@@ -21,7 +21,6 @@ const Root = styled(Box)`
 `
 
 const StyledGroupItem = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -32,7 +31,6 @@ const StyledGroupItem = styled(Text)`
 `
 
 const AmoutText = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

@@ -24,7 +24,6 @@ const HeaderContainer = styled(Box)`
 `
 
 const Title = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 24px;
@@ -38,7 +37,6 @@ const StyledButton = styled(Button)`
 `
 
 const AmountResults = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

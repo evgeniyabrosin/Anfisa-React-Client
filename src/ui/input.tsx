@@ -20,7 +20,6 @@ const StyledInput = styled('input')`
   box-sizing: border-box;
   border-radius: 4px;
   padding: 5px 8px;
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

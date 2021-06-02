@@ -17,7 +17,6 @@ const StyledDropDown = styled(DropdownBase)`
   .controlClassName {
     width: 142px;
     border: 1px solid #d9d9d9;
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -75,7 +74,6 @@ const StyledDropDown = styled(DropdownBase)`
   }
 
   .Dropdown-option {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

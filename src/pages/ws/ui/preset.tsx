@@ -12,7 +12,6 @@ import { EditFilter } from './edit-filter'
 const Root = styled(Box)``
 
 const Title = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -30,7 +29,6 @@ const PresetSelect = styled(Box)`
 `
 
 const ResultsFound = styled(Text)`
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 14px;

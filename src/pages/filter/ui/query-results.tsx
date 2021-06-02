@@ -10,7 +10,6 @@ const Root = styled(Box)`
 `
 
 const NoResultsText = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;

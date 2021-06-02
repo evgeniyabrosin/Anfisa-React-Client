@@ -23,7 +23,6 @@ const Styles = styled.div`
           padding-top: 17px;
           padding-bottom: 17px;
           text-align: left;
-          font-family: 'Roboto', sans-serif;
           font-style: normal;
           font-weight: bold;
           font-size: 12px;

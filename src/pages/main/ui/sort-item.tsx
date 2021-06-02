@@ -23,7 +23,6 @@ const Root = styled(Box)`
 `
 
 const StyledText = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

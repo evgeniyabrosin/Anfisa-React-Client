@@ -16,7 +16,6 @@ const Root = styled(Box)`
 `
 
 const Title = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -41,7 +40,6 @@ const Content = styled(Box)`
 `
 
 const FilterValueName = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -51,7 +49,6 @@ const FilterValueName = styled(Text)`
 `
 
 const FilterValueAmount = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

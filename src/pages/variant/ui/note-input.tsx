@@ -10,7 +10,6 @@ const Root = styled(Box)`
 `
 
 const Title = styled(Text)`
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
@@ -26,7 +25,6 @@ const StyledTextarea = styled('textarea')`
   border-radius: 8px;
   border: none;
   outline: none;
-  font-family: 'Source Sans Pro', sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;

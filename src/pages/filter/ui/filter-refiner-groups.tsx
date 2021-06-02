@@ -11,7 +11,6 @@ import { Text } from '@ui/text'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 const GroupName = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

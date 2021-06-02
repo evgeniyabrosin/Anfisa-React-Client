@@ -19,7 +19,6 @@ interface TextProps {
 }
 
 const StyledText = styled(Text)<TextProps>`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

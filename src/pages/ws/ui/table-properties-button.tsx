@@ -16,7 +16,6 @@ const StyledButton = styled(Button)`
   background: #e6efff;
   border-radius: 20px;
   color: #0c65fd;
-  font-family: 'Roboto', sans-serif;
   font-weight: bold;
   line-height: 22px;
   padding: 5px 16px;

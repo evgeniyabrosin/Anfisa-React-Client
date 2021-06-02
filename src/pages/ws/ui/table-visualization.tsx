@@ -9,7 +9,6 @@ import { Text } from '@ui/text'
 import { TableVisualizationItem } from './table-visualization-item'
 
 const StyledText = styled(Text)`
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 12px;

@@ -26,7 +26,6 @@ const Root = styled(Box)`
 
 const StyledText = styled(Text)`
   margin: 0;
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 12px;

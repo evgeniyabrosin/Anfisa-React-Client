@@ -9,7 +9,6 @@ import { Button } from '@ui/button'
 
 const StyledButton = styled(Button)`
   background-color: #2183df;
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 12px;

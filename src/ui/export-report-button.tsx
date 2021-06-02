@@ -15,7 +15,6 @@ interface Props {
 
 const StyledButton = styled(Button)`
   background-color: white;
-  font-family: 'Source Sans Pro', sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;

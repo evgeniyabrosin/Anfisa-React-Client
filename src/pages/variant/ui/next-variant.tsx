@@ -13,7 +13,6 @@ interface Props {
 const StyledButton = styled(Button)`
   background-color: white;
   color: #367bf5;
-  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

@@ -15,7 +15,6 @@ const Root = styled(Box)`
 `
 
 const StyledFieldName = styled(Text)`
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
@@ -26,7 +25,6 @@ const StyledFieldName = styled(Text)`
 `
 
 const StyledFieldValue = styled(Text)`
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;

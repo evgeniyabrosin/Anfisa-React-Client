@@ -34,7 +34,6 @@ const Root = styled(Box)<{ isIndeterminate?: boolean }>`
 `
 
 const StyledGroupItem = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -54,7 +53,6 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const StyledAmout = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -65,7 +63,6 @@ const StyledAmout = styled(Text)`
 `
 
 const SelectedAmount = styled('span')`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

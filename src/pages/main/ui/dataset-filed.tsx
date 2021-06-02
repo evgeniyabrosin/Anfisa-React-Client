@@ -20,7 +20,6 @@ const Root = styled(Box)`
 `
 
 const LabelField = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -30,7 +29,6 @@ const LabelField = styled(Text)`
 `
 
 const ValueField = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;

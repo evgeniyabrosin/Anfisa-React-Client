@@ -15,7 +15,6 @@ const Root = styled(Box)`
 `
 
 const StyledName = styled(Text)`
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
@@ -26,7 +25,6 @@ const StyledName = styled(Text)`
 `
 
 const StyledValue = styled(Text)`
-  font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;

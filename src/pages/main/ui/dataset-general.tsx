@@ -7,7 +7,6 @@ import { Text } from '@ui/text'
 import { InfoList } from './info-list'
 
 const StyledTitle = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;

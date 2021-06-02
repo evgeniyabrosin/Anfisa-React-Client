@@ -29,7 +29,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .Toastify__toast-body {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;

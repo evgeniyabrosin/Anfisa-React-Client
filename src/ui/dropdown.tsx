@@ -12,7 +12,6 @@ import datasetStore from '@store/dataset'
 const StyledDropDown = styled(DropdownBase)`
   .controlClassName {
     border: none;
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -73,7 +72,6 @@ const StyledDropDown = styled(DropdownBase)`
   }
 
   .Dropdown-option {
-    font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
