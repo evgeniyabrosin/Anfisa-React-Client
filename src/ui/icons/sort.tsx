@@ -1,6 +1,8 @@
 import { ReactElement } from 'react'
 import { CSSProperties } from 'styled-components'
 
+import { theme } from '@theme'
+
 interface Props {
   style?: CSSProperties
   fill?: string
@@ -17,10 +19,22 @@ export const SortSvg = ({ style, fill }: Props): ReactElement => {
       style={style}
     >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M14.5 4H1.5V2H14.5V4ZM10.5 9H1.5V7H10.5V9ZM6.5 14H1.5V12H6.5V14Z"
-        fill={fill || '#CCCCCC'}
+        d="M4 8H12"
+        stroke={fill || theme('colors.grey.blue')}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M1.5 5H14.5"
+        stroke={fill || theme('colors.grey.blue')}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6.5 11H9.5"
+        stroke={fill || theme('colors.grey.blue')}
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )

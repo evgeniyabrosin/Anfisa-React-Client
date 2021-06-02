@@ -22,7 +22,7 @@ export const CardTitle = ({
   className,
 }: CardTitleProps): ReactElement => (
   <div
-    className={`font-bold text-xl text-blue-dark leading-tight ${className}`}
+    className={cn('font-bold text-xl text-blue-dark leading-tight', className)}
   >
     {text}
   </div>
