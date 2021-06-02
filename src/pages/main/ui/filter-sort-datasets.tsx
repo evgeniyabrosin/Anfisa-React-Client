@@ -9,7 +9,7 @@ import { SortItem } from './sort-item'
 
 export const FilterSortDatasets = observer(
   (): ReactElement => (
-    <div className="border-b border-blue-secondary">
+    <div className="border-b border-blue-secondary mb-2">
       {/* TODO tailwind refactor */}
       <InputSearch
         placeholder={t('home.searchForADataset')}

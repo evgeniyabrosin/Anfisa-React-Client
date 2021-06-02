@@ -6,7 +6,6 @@ import { ifProp } from 'styled-tools'
 
 import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
-import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
@@ -29,20 +28,19 @@ const Root = styled(Box)<RootProps>`
   cursor: pointer;
   flex-wrap: wrap;
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 8px;
 
   ${ifProp(
     'isActive',
     css`
-      background-color: #def1fd;
+      background-color: #18a0fb;
+      opacity: 0.1;
     `,
   )}
 
   ${ifProp(
     'isSubItems',
     css`
-      padding-left: 20px;
+      padding-left: 24px;
     `,
   )}
 `
@@ -50,7 +48,6 @@ const Root = styled(Box)<RootProps>`
 const StyledName = styled(Text)<{ isActive?: boolean }>`
   font-size: 14px;
   line-height: 16px;
-  color: ${theme('colors.black')};
   margin-left: 10px;
   padding-right: 28px;
 
@@ -60,27 +57,6 @@ const StyledName = styled(Text)<{ isActive?: boolean }>`
       font-weight: bold;
     `,
   )}
-`
-
-const StyledDate = styled(Text)`
-  font-size: 14px;
-  line-height: 16px;
-  margin-left: auto;
-  color: ${theme('colors.grey.7')};
-  padding-right: 8px;
-`
-
-const DropdownFolder = styled(Box)`
-  position: relative;
-`
-
-const Dropline = styled(Box)`
-  background-color: #f0f0f0;
-  width: 1px;
-  height: 100%;
-  position: absolute;
-  left: 12px;
-  top: 0px;
 `
 
 export const DatasetsListItem = observer(
@@ -115,30 +91,28 @@ export const DatasetsListItem = observer(
           onClick={handleClick}
           isActive={isActive && !isXl}
           isSubItems={isSubItems}
+          className="text-white text-sm leading-tight py-2"
         >
           <DatasetType kind={item.kind} isActive={isActive || isActiveXl} />
           <StyledName isActive={isActive || isActiveXl}>{item.name}</StyledName>
-          <StyledDate>{formatDate(item['create-time'])}</StyledDate>
+          <div className="ml-auto pr-2">{formatDate(item['create-time'])}</div>
         </Root>
 
         {isOpenFolder && isXl && (
-          <DropdownFolder>
-            <Dropline />
-            <Box>
-              {secondaryKeys.map((secondaryKey: string) => {
-                const secondaryItem: DsDistItem =
-                  dirinfoStore.dirinfo['ds-dict'][secondaryKey]
+          <div>
+            {secondaryKeys.map((secondaryKey: string) => {
+              const secondaryItem: DsDistItem =
+                dirinfoStore.dirinfo['ds-dict'][secondaryKey]
 
-                return (
-                  <DatasetsListItem
-                    item={secondaryItem}
-                    key={secondaryItem.name}
-                    isSubItems
-                  />
-                )
-              })}
-            </Box>
-          </DropdownFolder>
+              return (
+                <DatasetsListItem
+                  item={secondaryItem}
+                  key={secondaryItem.name}
+                  isSubItems
+                />
+              )
+            })}
+          </div>
         )}
       </Fragment>
     )

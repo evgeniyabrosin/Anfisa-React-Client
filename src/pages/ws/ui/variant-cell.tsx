@@ -11,7 +11,7 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import { Routes } from '@router/routes.enum'
 import { ShareSvg } from '@icons/share'
-import { TableDocSvg } from '@icons/table-doc'
+import { TableFileSvg } from '@icons/table-doc'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
@@ -94,7 +94,7 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
         style={{ marginLeft: 19, cursor: 'pointer', minWidth: '16px' }}
         onClick={handleOpenVariant}
       />
-      <TableDocSvg
+      <TableFileSvg
         style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}
         onClick={copyDetails}
       />

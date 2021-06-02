@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 
-import { DocSvg } from '@icons/doc'
+import { theme } from '@theme'
+import { FileSvg } from '@icons/file'
 import { FolderSvg } from '@icons/folder'
 
 interface Props {
@@ -9,10 +10,12 @@ interface Props {
 }
 
 export const DatasetType = ({ kind, isActive }: Props): ReactElement => {
-  const fillColor = isActive ? '#0C65FD' : '#CCCCCC'
+  const fillColor = isActive
+    ? theme('colors.blue.bright')
+    : theme('colors.grey.blue')
 
   return kind === 'ws' ? (
-    <DocSvg fill={fillColor} />
+    <FileSvg fill={fillColor} />
   ) : (
     <FolderSvg fill={fillColor} />
   )
