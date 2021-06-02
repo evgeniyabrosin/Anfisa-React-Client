@@ -6,6 +6,10 @@
     min-width: 1024px;
   }
 
+  html, body, #root {
+    height: 100%;
+  }
+
   button:focus {
     outline: none;
   }

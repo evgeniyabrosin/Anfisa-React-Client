@@ -1,21 +1,20 @@
 import { ReactElement } from 'react'
 
-import { Card } from '@ui/card'
 import { Header } from '@ui/header'
 import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 
 export const MainPage = (): ReactElement => {
   return (
-    <div>
+    <div className="min-h-full flex flex-col">
       <Header />
 
-      <div className="flex flex-row flex-wrap p-2">
-        <Card>
-          <Datasets />
-        </Card>
+      <div className="flex flex-row flex-grow">
+        <Datasets />
 
-        <SelectedDataset />
+        <div>
+          <SelectedDataset />
+        </div>
       </div>
     </div>
   )

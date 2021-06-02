@@ -1,4 +1,5 @@
 const themeColors = require('./src/theme/colors.js')
+const { fontSize } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -14,6 +15,10 @@ module.exports = {
     },
     fontFamily: {
       sans: ['"Roboto"', 'sans-serif'],
+    },
+    fontSize: {
+      ...fontSize,
+      20: '20px',
     },
     screens: {
       xl2: { max: '1535px' }, // => @media (max-width: 1535px) { ... }
@@ -60,18 +65,18 @@ module.exports = {
     // 'backgroundSize', // The background-size utilities like bg-cover
     // 'blur', // The blur utilities like blur-md
     // 'borderCollapse', // The border-collapse utilities like border-collapse
-    // 'borderColor', // The border-color utilities like border-green-700
+    'borderColor', // The border-color utilities like border-green-700
     // 'borderOpacity', // The border-color opacity utilities like border-opacity-25
     'borderRadius', // The border-radius utilities like rounded-l-3xl
     // 'borderStyle', // The border-style utilities like border-dotted
-    // 'borderWidth', // The border-width utilities like border-l-2
+    'borderWidth', // The border-width utilities like border-l-2
     // 'boxDecorationBreak', // The box-decoration-break utilities like decoration-slice
     'boxShadow', // The box-shadow utilities like shadow-lg
     // 'boxSizing', // The box-sizing utilities like box-border
     // 'brightness', // The brightness utilities like brightness-100
     // 'clear', // The clear utilities like clear-right
     // 'contrast', // The contrast utilities like contrast-100
-    // 'cursor', // The cursor utilities like cursor-wait
+    'cursor', // The cursor utilities like cursor-wait
     'display', // The display utilities like table-column-group
     // 'divideColor', // The between elements border-color utilities like divide-gray-500
     // 'divideOpacity', // The divide-opacity utilities like divide-opacity-50
@@ -82,8 +87,8 @@ module.exports = {
     // 'filter', // The filter utilities like filter
     // 'flex', // The flex utilities like flex-auto
     'flexDirection', // The flex-direction utilities like flex-row-reverse
-    // 'flexGrow', // The flex-grow utilities like flex-grow-0
-    // 'flexShrink', // The flex-shrink utilities like flex-shrink-0
+    'flexGrow', // The flex-grow utilities like flex-grow-0
+    'flexShrink', // The flex-shrink utilities like flex-shrink-0
     'flexWrap', // The flex-wrap utilities like flex-wrap-reverse
     // 'float', // The float utilities like float-left
     // 'fontFamily', // The font-family utilities like font-serif
@@ -121,7 +126,7 @@ module.exports = {
     'margin', // The margin utilities like ml-8
     // 'maxHeight', // The max-height utilities like max-h-32
     // 'maxWidth', // The max-width utilities like max-w-5xl
-    // 'minHeight', // The min-height utilities like min-h-full
+    'minHeight', // The min-height utilities like min-h-full
     // 'minWidth', // The min-width utilities like min-w-full
     // 'mixBlendMode', // The mix-blend-mode utilities like mix-blend-color-burn
     // 'objectFit', // The object-fit utilities like object-fill
@@ -138,7 +143,7 @@ module.exports = {
     // 'placeItems', // The place-items utilities like place-items-end
     // 'placeSelf', // The place-self utilities like place-self-end
     // 'pointerEvents', // The pointer-events utilities like pointer-events-none
-    // 'position', // The position utilities like absolute
+    'position', // The position utilities like absolute
     // 'resize', // The resize utilities like resize-y
     // 'ringColor', // The ring-color utilities like ring-green-700
     // 'ringOffsetColor', // The ring-offset-color utilities like ring-offset-green-700
@@ -171,7 +176,7 @@ module.exports = {
     // 'verticalAlign', // The vertical-align utilities like align-middle
     // 'visibility', // The visibility utilities like visible
     // 'whitespace', // The whitespace utilities like whitespace-pre
-    // 'width', // The width utilities like w-0.5
+    'width', // The width utilities like w-0.5
     // 'wordBreak', // The word-break utilities like break-words
     // 'zIndex', // The z-index utilities like z-30
   ],
