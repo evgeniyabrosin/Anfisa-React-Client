@@ -27,7 +27,7 @@ export const InfoList = observer(
       if (doc[2]) {
         dirinfoStore.setInfoFrameLink(
           // prettier-ignore
-          `dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${doc[2].image}`,
+          `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${doc[2].image}`,
         )
 
         return
@@ -35,14 +35,14 @@ export const InfoList = observer(
 
       if (isBaseInfo) {
         dirinfoStore.setInfoFrameLink(
-          `dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`,
+          `app/dsdoc/${dirinfoStore.ancestorsDsInfo[0][0]}/${doc[1]}`,
         )
 
         return
       }
 
       dirinfoStore.setInfoFrameLink(
-        `dsdoc/${dirinfoStore.selectedDirinfoName}/${doc[1]}`,
+        `app/dsdoc/${dirinfoStore.selectedDirinfoName}/${doc[1]}`,
       )
     }
 

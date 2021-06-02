@@ -5,7 +5,7 @@ name: add-githubactions-test CI
 
 on:
   push:
-    branches: [ add-githubactions-test ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -22,8 +22,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: yarn install
       env:
-          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/anfisa/app/"
+          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
     - run: yarn build
+      env:
+          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
       with:
