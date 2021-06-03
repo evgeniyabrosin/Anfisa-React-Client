@@ -12,9 +12,7 @@ interface CardTitleProps {
 }
 
 export const Card = ({ children, className }: CardProps): ReactElement => (
-  <div className={cn('shadow-card p-4 rounded-lg m-2', className)}>
-    {children}
-  </div>
+  <div className={cn('shadow-card p-4 rounded-lg', className)}>{children}</div>
 )
 
 export const CardTitle = ({
@@ -22,7 +20,7 @@ export const CardTitle = ({
   className,
 }: CardTitleProps): ReactElement => (
   <div
-    className={cn('font-bold text-xl text-blue-dark leading-tight', className)}
+    className={cn('font-bold text-xl text-blue-dark leading-24px', className)}
   >
     {text}
   </div>

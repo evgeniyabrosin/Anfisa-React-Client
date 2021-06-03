@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -16,8 +16,8 @@ export const SelectedDataset = observer(
     }
 
     return (
-      <React.Fragment>
-        <Card>
+      <div className="flex-grow grid gap-4 grid-cols-3 p-4">
+        <Card className="col-span-1 xl:col-span-3">
           <div className="mb-3 flex items-center justify-between">
             <CardTitle
               text={dirinfoStore.selectedDirinfoName}
@@ -25,15 +25,15 @@ export const SelectedDataset = observer(
             />
 
             <Link to={`/ws?ds=${dirinfoStore.selectedDirinfoName}`}>
-              <Button text={t('home.openInViewer')} />
+              <Button size="md" text={t('home.openInViewer')} />
             </Link>
           </div>
 
           <DatasetGeneral />
         </Card>
 
-        <DatasetsFieldsList />
-      </React.Fragment>
+        <DatasetsFieldsList className="col-span-2 xl:col-span-3" />
+      </div>
     )
   },
 )

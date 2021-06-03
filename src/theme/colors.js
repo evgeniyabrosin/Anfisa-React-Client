@@ -1,6 +1,6 @@
 module.exports = {
   white: '#ffffff',
-  black: '#000000',
+  black: '#333333',
   blue: {
     0: '#0C65FD',
     1: '#2183DF',

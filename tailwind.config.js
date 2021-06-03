@@ -1,11 +1,20 @@
 const themeColors = require('./src/theme/colors.js')
-const { fontSize } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      lineHeight: {
+        '14px': '14px',
+        '16px': '16px',
+        '18px': '18px',
+        '24px': '24px',
+      },
+      fontSize: {
+        20: '20px',
+      },
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -15,16 +24,13 @@ module.exports = {
     },
     fontFamily: {
       sans: ['"Roboto"', 'sans-serif'],
-    },
-    fontSize: {
-      ...fontSize,
-      20: '20px',
+      mono: ['"IBM Plex Mono"', 'monospace'],
     },
     screens: {
       xl2: { max: '1535px' }, // => @media (max-width: 1535px) { ... }
       xl: { max: '1279px' }, // => @media (max-width: 1279px) { ... }
-      lg: { max: '1023px' }, // => @media (max-width: 1023px) { ... }
       // Excluded
+      // lg: { max: '1023px' }, // => @media (max-width: 1023px) { ... }
       // 'md': { max: '767px' }, // => @media (max-width: 767px) { ... }
       // 'sm': { max: '639px' }, // => @media (max-width: 639px) { ... }
     },
@@ -91,25 +97,25 @@ module.exports = {
     'flexShrink', // The flex-shrink utilities like flex-shrink-0
     'flexWrap', // The flex-wrap utilities like flex-wrap-reverse
     // 'float', // The float utilities like float-left
-    // 'fontFamily', // The font-family utilities like font-serif
+    'fontFamily', // The font-family utilities like font-serif
     'fontSize', // The font-size utilities like text-3xl
     // 'fontSmoothing', // The font-smoothing utilities like antialiased
     // 'fontStyle', // The font-style utilities like italic
     // 'fontVariantNumeric', // The font-variant-numeric utilities like lining-nums
     'fontWeight', // The font-weight utilities like font-medium
-    // 'gap', // The gap utilities like gap-x-28
+    'gap', // The gap utilities like gap-x-28
     // 'gradientColorStops', // The gradient-color-stops utilities like via-green-700
     // 'grayscale', // The grayscale utilities like grayscale-0
     // 'gridAutoColumns', // The grid-auto-columns utilities like auto-cols-min
     // 'gridAutoFlow', // The grid-auto-flow utilities like grid-flow-col
     // 'gridAutoRows', // The grid-auto-rows utilities like auto-rows-min
-    // 'gridColumn', // The grid-column utilities like col-span-6
+    'gridColumn', // The grid-column utilities like col-span-6
     // 'gridColumnEnd', // The grid-column-end utilities like col-end-7
     // 'gridColumnStart', // The grid-column-start utilities like col-start-7
     // 'gridRow', // The grid-row utilities like row-span-3
     // 'gridRowEnd', // The grid-row-end utilities like row-end-4
     // 'gridRowStart', // The grid-row-start utilities like row-start-4
-    // 'gridTemplateColumns', // The grid-template-columns utilities like grid-cols-7
+    'gridTemplateColumns', // The grid-template-columns utilities like grid-cols-7
     // 'gridTemplateRows', // The grid-template-rows utilities like grid-rows-4
     // 'height', // The height utilities like h-64
     // 'hueRotate', // The hue-rotate utilities like hue-rotate-180

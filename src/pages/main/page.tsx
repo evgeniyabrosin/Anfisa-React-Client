@@ -12,9 +12,7 @@ export const MainPage = (): ReactElement => {
       <div className="flex flex-row flex-grow">
         <Datasets />
 
-        <div>
-          <SelectedDataset />
-        </div>
+        <SelectedDataset />
       </div>
     </div>
   )

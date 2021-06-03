@@ -25,7 +25,9 @@ export const Button = ({
   let padding = ''
   const rounding = icon ? 'rounded' : 'rounded-full'
   const classNameString: string = cn(className)
-  const isDefaultBackground: boolean = /bg-[\w-]*/.test(classNameString)
+
+  const isDefaultBackground: boolean =
+    /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
 
   switch (size) {
     case 'sm':
@@ -50,7 +52,7 @@ export const Button = ({
   return (
     <button onClick={onClick} className={cnButton} ref={refEl}>
       {prepend}
-      {text && <span className="mx-2 text-sm leading-4">{text}</span>}
+      {text && <span className="mx-2 text-xs leading-14px">{text}</span>}
       {icon}
       {append}
     </button>

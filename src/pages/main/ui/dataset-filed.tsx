@@ -1,52 +1,27 @@
-import { CSSProperties, Fragment, ReactElement } from 'react'
-import styled from 'styled-components'
+import { Fragment, ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
-import { theme } from '@theme'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
+import { Card } from '@ui/card'
 
 interface Props {
   label: string
   value: string
-  style?: CSSProperties
+  className?: Argument
 }
 
-const Root = styled(Box)`
-  border: 1px solid #e2e2e2;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-  width: 175px;
-`
-
-const LabelField = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  color: ${theme('colors.black')};
-  margin: 0px;
-`
-
-const ValueField = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 21px;
-  color: ${theme('colors.black')};
-  margin: 0px;
-  margin-top: 12px;
-`
-
-export const DatasetField = ({ label, value, style }: Props): ReactElement => {
-  if (!value) {
-    return <Fragment />
-  }
+export const DatasetField = ({
+  label,
+  value,
+  className,
+}: Props): ReactElement => {
+  if (!value) return <Fragment />
 
   return (
-    <Root style={style}>
-      <LabelField>{label}</LabelField>
-      <ValueField>{value}</ValueField>
-    </Root>
+    <Card className={cn(className)}>
+      <div className="text-sm text-black leading-16px mb-3">{label}</div>
+      <div className="text-base text-blue-bright leading-18px font-medium">
+        {value}
+      </div>
+    </Card>
   )
 }
