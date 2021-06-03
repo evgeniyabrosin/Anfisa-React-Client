@@ -99,7 +99,7 @@ export const DropDown = observer(
 
     const onSelect = (arg: Option) => {
       datasetStore.setActivePreset(arg.value)
-      datasetStore.fetchPresetTaskIdAsync(arg.value)
+      datasetStore.fetchDsTaskIdAsync({ filter: arg.value })
     }
 
     return (

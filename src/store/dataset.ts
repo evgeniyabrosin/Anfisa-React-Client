@@ -14,10 +14,12 @@ import { tableColumnMap } from '@core/table-column-map'
 
 const INCREASE_INDEX = 50
 
+interface DsListI {
+  filter?: string
+  conditions?: string
+}
 class DatasetStore {
   dsStat: DsStatType = {}
-  wsList: WsListType = {}
-  reccnt: any = []
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
   selectedTags: string[] = []
@@ -26,6 +28,7 @@ class DatasetStore {
 
   datasetName = ''
   activePreset = ''
+  conditions = ''
   searchColumnValue = ''
 
   indexTabReport = 0
@@ -63,29 +66,35 @@ class DatasetStore {
     this.columns = columns
   }
 
+  setDatasetName(datasetName: string) {
+    this.datasetName = datasetName
+  }
+
+  setConditions(conditions: string) {
+    this.conditions = conditions
+  }
+
   resetData() {
     this.indexTabReport = 0
+    this.indexFilteredNo = 0
     this.tabReport = []
     this.wsTags = {}
     this.dsStat = {}
-    this.activePreset = ''
     this.selectedTags = []
-    this.wsList = {}
-    this.reccnt = []
+    this.activePreset = ''
     this.searchColumnValue = ''
   }
 
   async initDatasetAsync(datasetName: string) {
     this.resetData()
-
     this.datasetName = datasetName
 
     await this.fetchDsStatAsync()
-    await this.fetchTabReportAsync()
+    await this.fetchWsTagsAsync()
 
-    this.fetchWsListAsync()
-    this.fetchReccntAsync()
-    this.fetchWsTagsAsync()
+    this.filteredNo.length === 0
+      ? await this.fetchTabReportAsync()
+      : await this.fetchFilteredTabReportAsync()
   }
 
   get getColumns() {
@@ -128,30 +137,6 @@ class DatasetStore {
     runInAction(() => {
       this.dsStat = result
       this.isLoadingDsStat = false
-    })
-  }
-
-  async fetchWsListAsync() {
-    const response = await fetch(getApiUrl(`ws_list?ds=${this.datasetName}`), {
-      method: 'POST',
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.wsList = result
-    })
-  }
-
-  async fetchReccntAsync() {
-    const response = await fetch(
-      getApiUrl(`reccnt?ds=${this.datasetName}&rec=${11}`),
-    )
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.reccnt = result
     })
   }
 
@@ -248,10 +233,12 @@ class DatasetStore {
     })
   }
 
-  async fetchPresetTaskIdAsync(filter: string) {
-    const response = await fetch(
-      getApiUrl(`ds_list?ds=${this.datasetName}&filter=${filter}`),
-    )
+  async fetchDsTaskIdAsync({ filter, conditions }: DsListI) {
+    const url = `ds_list?ds=${this.datasetName}${
+      filter ? `&filter=${filter}` : ''
+    }${conditions ? `&conditions=${conditions}` : ''}`
+
+    const response = await fetch(getApiUrl(url))
 
     const result = await response.json()
 

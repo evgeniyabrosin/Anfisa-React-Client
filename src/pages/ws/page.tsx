@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import dsStore from '@store/dataset'
-import dirinfoStore from '@store/dirinfo'
 import { Header } from '@ui/header'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
@@ -17,15 +16,14 @@ export const WSPage = observer(
       const dsName = params.get('ds') || ''
 
       dsStore.initDatasetAsync(dsName)
-      dirinfoStore.fetchDsinfoAsync(dsName)
     }, [params])
 
-    const handleScroll = debounce(() => {
+    const handleScroll = debounce(async () => {
       if (
         dsStore.filteredNo.length > 0 &&
         dsStore.indexFilteredNo < dsStore.filteredNo.length
       ) {
-        dsStore.fetchFilteredTabReportAsync()
+        await dsStore.fetchFilteredTabReportAsync()
 
         return
       }
@@ -35,7 +33,7 @@ export const WSPage = observer(
           document.body.clientHeight - 100 &&
         dsStore.filteredNo.length === 0
       ) {
-        dsStore.fetchTabReportAsync()
+        await dsStore.fetchTabReportAsync()
       }
     }, 200)
 

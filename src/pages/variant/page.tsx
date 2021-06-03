@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Box } from '@ui/box'
 import { VariantHeader } from './header'
@@ -33,6 +34,7 @@ export const VariantPage = observer(
       variantStore.setIndex(indexVariant)
       variantStore.setDsName(dsName)
       variantStore.fetchVarinatInfoAsync()
+      datasetStore.setDatasetName(dsName)
     }, [dsName, indexVariant])
 
     return (

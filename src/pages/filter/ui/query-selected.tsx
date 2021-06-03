@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import { Routes } from '@router/routes.enum'
 import { Box } from '@ui/box'
 import { Button } from '@ui/button'
@@ -52,13 +53,20 @@ export const QuerySelected = (): ReactElement => {
   const history = useHistory()
   const params = useParams()
 
+  const handleClickAsync = async () => {
+    datasetStore.fetchDsTaskIdAsync({
+      conditions: `[["func","GeneRegion","",["True"],{"locus":"chr1::ESPN,HES2"}]]`,
+    })
+    history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+  }
+
   return (
     <Root>
       <HeaderContainer>
         <Title>{t('filter.selectedVariants')}</Title>
         <StyledButton
           text={t('filter.show', { amount: '1.24 mil' })}
-          onClick={() => history.push(`${Routes.WS}?ds=${params.get('ds')}`)}
+          onClick={handleClickAsync}
         />
 
         <AmountResults>

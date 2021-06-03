@@ -57,6 +57,25 @@ class FilterStore {
     }
   }
 
+  // async fetchStatfuncAsync(dsName: string) {
+  //   const params = new URLSearchParams({
+  //     ANKH: 'true',
+  //   })
+  //   // `/statfunc?ds=PGP3140_HL_PANEL&unit=GeneRegion&param=${params}`,
+
+  //   const response = await fetch(getApiUrl(`/statfunc`), {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       ds: dsName,
+  //       zone: JSON.stringify(['Symbol', ['ABCD1']]),
+  //     }),
+  //   })
+
+  //   const result = await response.json()
+
+  //   console.log(result)
+  // }
+
   addSelectedFilterGroup(
     group: string,
     groupItemName: string,
