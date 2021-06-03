@@ -9,7 +9,11 @@ import { DropDown } from '@ui/dropdown'
 import { Text } from '@ui/text'
 import { EditFilter } from './edit-filter'
 
-const Root = styled(Box)``
+const Root = styled(Box)`
+  background: rgba(255, 255, 255, 0.02);
+  padding: 16px;
+  border-radius: 4px;
+`
 
 const Title = styled(Text)`
   font-style: normal;
@@ -17,7 +21,7 @@ const Title = styled(Text)`
   font-size: 12px;
   line-height: 24px;
   letter-spacing: 0.44px;
-  color: rgba(0, 0, 0, 0.87);
+  color: white;
   margin: 0px;
 `
 

@@ -14,8 +14,12 @@ interface Props {
 const Root = styled(Box)`
   display: flex;
   flex-wrap: wrap;
-  max-width: 350px;
-  max-height: 135px;
+  max-width: 382px;
+  max-height: 167px;
+
+  background: rgba(255, 255, 255, 0.02);
+  padding: 16px;
+  border-radius: 4px;
 `
 
 const Title = styled(Text)`
@@ -24,7 +28,7 @@ const Title = styled(Text)`
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.44px;
-  color: #000000;
+  color: white;
   width: 100%;
   margin: 0px;
 `
