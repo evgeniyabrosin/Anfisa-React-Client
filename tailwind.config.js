@@ -12,6 +12,7 @@ module.exports = {
         '24px': '24px',
       },
       fontSize: {
+        10: '10px',
         20: '20px',
       },
     },
@@ -65,7 +66,7 @@ module.exports = {
     // 'backgroundClip', // The background-clip utilities like bg-clip-padding
     'backgroundColor', // The background-color utilities like bg-green-700
     // 'backgroundImage', // The background-image utilities like bg-gradient-to-br
-    // 'backgroundOpacity', // The background-color opacity utilities like bg-opacity-25
+    'backgroundOpacity', // The background-color opacity utilities like bg-opacity-25
     // 'backgroundPosition', // The background-position utilities like bg-left-top
     // 'backgroundRepeat', // The background-repeat utilities like bg-repeat-x
     // 'backgroundSize', // The background-size utilities like bg-cover
@@ -156,7 +157,6 @@ module.exports = {
     // 'ringOffsetWidth', // The ring-offset-width utilities like ring-offset-2
     // 'ringOpacity', // The ring-opacity utilities like ring-opacity-50
     // 'ringWidth', // The ring-width utilities like ring-2
-    // 'rotate', // The rotate utilities like rotate-180
     // 'saturate', // The saturate utilities like saturate-100
     // 'scale', // The scale utilities like scale-x-95
     // 'sepia', // The sepia utilities like sepia-0
@@ -171,7 +171,8 @@ module.exports = {
     // 'textOpacity', // The text-opacity utilities like text-opacity-50
     // 'textOverflow', // The text-overflow utilities like overflow-ellipsis
     'textTransform', // The text-transform utilities like lowercase
-    // 'transform', // The transform utility (for enabling transform features)
+    'transform', // The transform utility (for enabling transform features)
+    'rotate', // The rotate utilities like rotate-180
     // 'transformOrigin', // The transform-origin utilities like origin-bottom-right
     // 'transitionDelay', // The transition-delay utilities like delay-200
     // 'transitionDuration', // The transition-duration utilities like duration-200

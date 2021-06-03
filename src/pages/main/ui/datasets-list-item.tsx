@@ -1,63 +1,17 @@
 import { Fragment, ReactElement, useState } from 'react'
+import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled, { css } from 'styled-components'
-import { ifProp } from 'styled-tools'
 
 import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 import { DatasetType } from './dataset-type'
 
 interface Props {
   item: DsDistItem
   isSubItems?: boolean
 }
-
-interface RootProps {
-  onClick?: () => void
-  isActive?: boolean
-  isSubItems?: boolean
-}
-
-const Root = styled(Box)<RootProps>`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  flex-wrap: wrap;
-  width: 100%;
-
-  ${ifProp(
-    'isActive',
-    css`
-      background-color: #18a0fb;
-      opacity: 0.1;
-    `,
-  )}
-
-  ${ifProp(
-    'isSubItems',
-    css`
-      padding-left: 24px;
-    `,
-  )}
-`
-
-const StyledName = styled(Text)<{ isActive?: boolean }>`
-  font-size: 14px;
-  line-height: 16px;
-  margin-left: 10px;
-  padding-right: 28px;
-
-  ${ifProp(
-    'isActive',
-    css`
-      font-weight: bold;
-    `,
-  )}
-`
 
 export const DatasetsListItem = observer(
   ({ item, isSubItems }: Props): ReactElement => {
@@ -86,17 +40,28 @@ export const DatasetsListItem = observer(
 
     return (
       <Fragment>
-        <Root
+        <div
           key={item.name}
           onClick={handleClick}
-          isActive={isActive && !isXl}
-          isSubItems={isSubItems}
-          className="text-white text-sm leading-tight py-2"
+          className={cn('py-2 flex items-center cursor-pointer', {
+            'pl-5': isSubItems,
+            'bg-blue-bright bg-opacity-10': isActive && !isXl,
+          })}
         >
           <DatasetType kind={item.kind} isActive={isActive || isActiveXl} />
-          <StyledName isActive={isActive || isActiveXl}>{item.name}</StyledName>
-          <div className="ml-auto pr-2">{formatDate(item['create-time'])}</div>
-        </Root>
+
+          <div
+            className={cn('text-white text-sm leading-18px ml-2 pr-7', {
+              'font-bold': isActive || isActiveXl,
+            })}
+          >
+            {item.name}
+          </div>
+
+          <div className="ml-auto pr-2 text-10 leading-18px text-grey-blue">
+            {formatDate(item['create-time'])}
+          </div>
+        </div>
 
         {isOpenFolder && isXl && (
           <div>
