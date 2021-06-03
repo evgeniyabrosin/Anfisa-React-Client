@@ -1,7 +1,6 @@
 import { Fragment, ReactElement } from 'react'
 
 import { t } from '@i18n'
-import { Box } from '@ui/box'
 import { InfoTextItem } from './info-text-item'
 
 interface Props {
@@ -17,9 +16,7 @@ export const DocsList = ({
   baseDatasetName,
   onClick,
 }: Props): ReactElement => {
-  if (!data[1]) {
-    return <Fragment />
-  }
+  if (!data[1]) return <Fragment />
 
   return (
     <Fragment>
@@ -32,14 +29,12 @@ export const DocsList = ({
       )}
 
       {data[1].map((doc: string[]) => {
-        if (!doc) {
-          return <Fragment />
-        }
+        if (!doc) return <Fragment />
 
         return (
-          <Box key={doc[0]}>
+          <div key={doc[0]}>
             <InfoTextItem
-              style={{ paddingLeft: baseDatasetName ? 20 : 10 }}
+              className={baseDatasetName ? 'pl-2' : 'pl-2'}
               onClick={() => onClick(doc)}
               isActive={activeName === doc[0]}
               isTitleBaseInfo={Array.isArray(doc[1])}
@@ -49,11 +44,11 @@ export const DocsList = ({
             </InfoTextItem>
 
             {Array.isArray(doc[1]) && (
-              <Box>
+              <div>
                 {doc[1].map(item => (
                   <InfoTextItem
                     isClickable
-                    style={{ paddingLeft: baseDatasetName ? 40 : 30 }}
+                    className={baseDatasetName ? 'pl-4' : 'pl-8'}
                     isActive={activeName === item[0]}
                     key={item[0]}
                     onClick={() => onClick(item)}
@@ -61,9 +56,9 @@ export const DocsList = ({
                     {item[0]}
                   </InfoTextItem>
                 ))}
-              </Box>
+              </div>
             )}
-          </Box>
+          </div>
         )
       })}
     </Fragment>

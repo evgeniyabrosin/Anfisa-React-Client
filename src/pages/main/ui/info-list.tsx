@@ -3,7 +3,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '@ui/box'
 import { DocsList } from './docs-list'
 import { ModalInfo } from './modal-info'
 
@@ -12,21 +11,18 @@ export const InfoList = observer(
     const docs = get(dirinfoStore, 'dsinfo.doc', [])
     const baseDatasetName = dirinfoStore.ancestorsDsInfo[0][0]
 
-    if (!docs[1]) {
-      return <Fragment />
-    }
+    if (!docs[1]) return <Fragment />
 
     const handleClickAsync = async (doc: any, isBaseInfo?: boolean) => {
-      if (Array.isArray(doc[1])) {
-        return
-      }
+      if (Array.isArray(doc[1])) return
 
       dirinfoStore.setActiveInfoName(doc[0])
 
       if (doc[2]) {
         dirinfoStore.setInfoFrameLink(
-          // prettier-ignore
-          `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${doc[2].image}`,
+          `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${
+            doc[2].image
+          }`,
         )
 
         return
@@ -46,7 +42,7 @@ export const InfoList = observer(
     }
 
     return (
-      <Box>
+      <div>
         <DocsList
           activeName={dirinfoStore.activeInfoName}
           data={docs}
@@ -64,7 +60,7 @@ export const InfoList = observer(
           )}
 
         <ModalInfo />
-      </Box>
+      </div>
     )
   },
 )

@@ -1,55 +1,37 @@
-import { CSSProperties, ReactElement, ReactNode } from 'react'
-import styled, { css } from 'styled-components'
-import { ifProp } from 'styled-tools'
+import { ReactElement, ReactNode } from 'react'
+import cn, { Argument } from 'classnames'
 
-import { theme } from '@theme'
-import { Text } from '@ui/text'
-
-type Props = TextProps & {
-  children?: ReactNode | string
-  style?: CSSProperties
-  isTitleBaseInfo?: boolean
-}
-
-interface TextProps {
+type Props = {
+  children?: ReactElement | ReactNode
+  className?: Argument
   isClickable?: boolean
   isActive?: boolean
   isTitleBaseInfo?: boolean
   onClick?: () => void
 }
 
-const StyledText = styled(Text)<TextProps>`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  color: ${theme('colors.black')};
-  margin: 4px 0 0;
-  padding: 4px 10px;
-
-  ${ifProp(
-    'isActive',
-    css`
-      background-color: #def1fd;
-    `,
-  )}
-
-  ${ifProp(
-    'isClickable',
-    css`
-      cursor: pointer;
-    `,
-  )}
-
-	${ifProp(
-    'isTitleBaseInfo',
-    css`
-      color: #777777;
-      border-bottom: 1px solid #f0f0f0;
-    `,
-  )}
-`
-
-export const InfoTextItem = ({ children, ...rest }: Props): ReactElement => (
-  <StyledText {...rest}>{children}</StyledText>
-)
+export const InfoTextItem = ({
+  children,
+  isClickable,
+  isActive,
+  isTitleBaseInfo,
+  className,
+  ...rest
+}: Props): ReactElement => {
+  return (
+    <div
+      className={cn(
+        'py-2 leading-16px',
+        {
+          'text-blue-bright underline cursor-pointer': isClickable,
+          'bg-blue-bright bg-opacity-10': isActive,
+          'text-grey-blue font-medium border-t border-grey-light': isTitleBaseInfo,
+        },
+        className,
+      )}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+}

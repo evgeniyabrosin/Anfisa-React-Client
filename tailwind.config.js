@@ -167,7 +167,7 @@ module.exports = {
     // 'tableLayout', // The table-layout utilities like table-auto
     // 'textAlign', // The text-align utilities like text-center
     'textColor', // The text-color utilities like text-green-700
-    // 'textDecoration', // The text-decoration utilities like line-through
+    'textDecoration', // The text-decoration utilities like line-through
     // 'textOpacity', // The text-opacity utilities like text-opacity-50
     // 'textOverflow', // The text-overflow utilities like overflow-ellipsis
     'textTransform', // The text-transform utilities like lowercase
