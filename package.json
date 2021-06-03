@@ -5,6 +5,7 @@
   "dependencies": {
     "@popperjs/core": "2.9.2",
     "date-fns": "2.21.1",
+    "formik": "2.2.8",
     "lodash": "4.17.21",
     "md5": "2.3.0",
     "mobx": "6.2.0",

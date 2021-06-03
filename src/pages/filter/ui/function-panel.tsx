@@ -1,55 +1,90 @@
-import { ReactElement, useState } from 'react'
+import { FunctionComponent, ReactElement, useState } from 'react'
+import { Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
 
-import { getFilterFuncParams } from '@core/get-filter-func-params'
+import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
-import { Input } from '@ui/input'
-import { Text } from '@ui/text'
+import { GeneRegion } from './gene-region'
+import { InheritanceMode } from './inheritance-mode'
+
+const functionsMap: Record<string, any> = {
+  GeneRegion,
+  Inheritance_Mode: InheritanceMode,
+}
+
+const initialStateMap: Record<string, any> = {
+  GeneRegion: {
+    locus: '',
+  },
+  Inheritance_Mode: {
+    problemGroups: [],
+    variants: [],
+  },
+}
 
 export const FunctionPanel = observer(
   (): ReactElement => {
-    const [values, setValues] = useState<Record<string, string>>({})
     const [error, setError] = useState('')
     const selectedFilter = filterStore.selectedGroupItem
 
+    const Component: FunctionComponent<Record<string, any>> =
+      functionsMap[selectedFilter.name]
+
+    const onSubmitAsync = async (values: any) => {
+      const { err } = await datasetStore.fetchStatFuncAsync(
+        selectedFilter.name,
+        values,
+      )
+
+      if (err) {
+        setError(err)
+
+        return
+      }
+
+      if (selectedFilter.name === FilterFunctionEnum.InheritanceMode) {
+        datasetStore.addConditions([
+          [
+            'func',
+            selectedFilter.name,
+            '',
+            values.variants,
+            { problem_group: values.problemGroups },
+          ],
+        ])
+      }
+
+      if (selectedFilter.name === FilterFunctionEnum.GeneRegions) {
+        datasetStore.addConditions([
+          ['func', selectedFilter.name, '', ['True'], values],
+        ])
+      }
+    }
+
+    const handleClear = () => {
+      datasetStore.removeCondition(selectedFilter.name)
+    }
+
     return (
       <div>
-        <Text style={{ color: 'red' }}>{error}</Text>
-        {getFilterFuncParams(selectedFilter.name).map(param => (
-          <div key={param}>
-            <Text>{param}</Text>
-            <Input
-              value={values[param] || ''}
-              onChange={e => {
-                setValues(prev => ({ ...prev, [param]: e.target.value }))
-              }}
-            />
-          </div>
-        ))}
+        <span style={{ color: 'red' }}>{error}</span>
 
-        <Button
-          text="Add"
-          onClick={async () => {
-            const { err } = await datasetStore.fetchStatFuncAsync(
-              selectedFilter.name,
-              values,
-            )
+        <Formik
+          initialValues={initialStateMap[selectedFilter.name]}
+          enableReinitialize
+          onSubmit={onSubmitAsync}
+        >
+          {props => (
+            <div>
+              <Component {...props} />
 
-            if (err) {
-              setError(err)
-
-              return
-            } else {
-              setError('')
-            }
-
-            datasetStore.addConditions([
-              ['func', selectedFilter.name, '', ['True'], values],
-            ])
-          }}
-        />
+              <Button text="Add" onClick={props.submitForm} />
+              <Button text="Clear" onClick={handleClear} />
+            </div>
+          )}
+        </Formik>
       </div>
     )
   },

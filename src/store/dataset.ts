@@ -70,6 +70,12 @@ class DatasetStore {
     this.conditions = this.conditions.concat(conditions)
   }
 
+  removeCondition(functionName: string) {
+    this.conditions = this.conditions.filter(
+      ([_, name]) => name !== functionName,
+    )
+  }
+
   resetData() {
     this.indexTabReport = 0
     this.indexFilteredNo = 0
@@ -254,12 +260,16 @@ class DatasetStore {
     await this.fetchFilteredTabReportAsync()
   }
 
-  async fetchStatFuncAsync(unit: string, param: Record<string, string>) {
+  async fetchStatFuncAsync(
+    unit: string,
+    param?: Record<string, string | string[]>,
+  ) {
     const body = new URLSearchParams({
       ds: this.datasetName,
       unit,
-      param: JSON.stringify(param),
     })
+
+    param && body.append('param', JSON.stringify(param))
 
     const response = await fetch(getApiUrl(`statfunc`), {
       method: 'POST',
@@ -272,6 +282,19 @@ class DatasetStore {
     const result = await response.json()
 
     return result
+  }
+
+  async fetchDsInfoAsync() {
+    const response = await fetch(getApiUrl(`dsinfo?ds=${this.datasetName}`))
+    const result = await response.json()
+
+    return result
+  }
+
+  async fetchProblemGroupsAsync() {
+    const dsInfo = await this.fetchDsInfoAsync()
+
+    return Object.keys(get(dsInfo, 'meta.samples', {}))
   }
 
   /*
