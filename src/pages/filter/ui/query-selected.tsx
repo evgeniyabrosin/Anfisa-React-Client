@@ -60,7 +60,7 @@ const formatData = (filters: any) => {
     }),
   )
 
-  return JSON.stringify(result)
+  return result
 }
 
 const amountSelectedFilters = (filters: any) => {
@@ -84,7 +84,7 @@ export const QuerySelected = observer(
     const selectedAmount = amountSelectedFilters(filterStore.selectedFilters)
 
     const handleClickAsync = async () => {
-      datasetStore.setConditions(formatData(filterStore.selectedFilters))
+      datasetStore.addConditions(formatData(filterStore.selectedFilters))
 
       await datasetStore.fetchWsListAsync()
       history.push(`${Routes.WS}?ds=${params.get('ds')}`)

@@ -1,7 +1,6 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import get from 'lodash/get'
-import noop from 'lodash/noop'
 import { observer } from 'mobx-react-lite'
 import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
@@ -86,6 +85,10 @@ export const FilterRefinerGroupItem = observer(
       false,
     )
 
+    // const kind = get(datasetStore, `getFilterRefiner[${group}]`, []).find(
+    //   (item: StatList) => item.name === name,
+    // )?.kind
+
     const selectedAmounts: number[] = Object.values(
       get(filterStore, `selectedFilters[${group}][${name}]`, {}),
     )
@@ -106,10 +109,7 @@ export const FilterRefinerGroupItem = observer(
           indeterminate={isIndeterminate}
           onChange={event => onChange && onChange(event.target.checked)}
         />
-        <StyledGroupItem
-          key={name}
-          onClick={amount !== 0 ? handleSelect : noop}
-        >
+        <StyledGroupItem key={name} onClick={handleSelect}>
           {name}
         </StyledGroupItem>
 

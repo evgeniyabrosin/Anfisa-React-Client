@@ -15,18 +15,6 @@ interface AddSelectedFiltersI {
   variant?: [string, number]
 }
 
-const formatData = (filters: any) => {
-  const result: any[] = []
-
-  Object.keys(filters).map(key =>
-    Object.keys(filters[key]).forEach(keyItem => {
-      result.push(['enum', keyItem, '', Object.keys(filters[key][keyItem])])
-    }),
-  )
-
-  return JSON.stringify(result)
-}
-
 class FilterStore {
   method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}

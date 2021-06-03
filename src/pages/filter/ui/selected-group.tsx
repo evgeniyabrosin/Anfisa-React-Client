@@ -2,9 +2,11 @@ import { Fragment, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
+import { FunctionPanel } from './function-panel'
 import { SelectedGroupItem } from './selected-group-item'
 
 const Root = styled(Box)`
@@ -69,17 +71,21 @@ export const SelectedGroup = observer(
         />
         <Delimiter />
 
-        <VariantListContainer>
-          {selectedGroupItem.variants &&
-            selectedGroupItem.variants.map((variant: any) => (
-              <SelectedGroupItem
-                key={variant[0]}
-                name={variant[0]}
-                amount={variant[1]}
-                handleSelect={checked => handleSelect(variant, checked)}
-              />
-            ))}
-        </VariantListContainer>
+        {selectedGroupItem.kind === FilterKindEnum.enum && (
+          <VariantListContainer>
+            {selectedGroupItem.variants &&
+              selectedGroupItem.variants.map((variant: any) => (
+                <SelectedGroupItem
+                  key={variant[0]}
+                  name={variant[0]}
+                  amount={variant[1]}
+                  handleSelect={checked => handleSelect(variant, checked)}
+                />
+              ))}
+          </VariantListContainer>
+        )}
+
+        {selectedGroupItem.kind === FilterKindEnum.func && <FunctionPanel />}
       </Root>
     )
   },

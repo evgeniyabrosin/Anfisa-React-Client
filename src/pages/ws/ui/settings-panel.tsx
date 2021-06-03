@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { t } from '@i18n'
 import dsStore from '@store/dataset'
 import { Box } from '@ui/box'
-import { Input } from '@ui/input'
+import { InputSearch } from '@ui/input-search'
 import { Text } from '@ui/text'
 import { ColumnsList } from './columns-list'
 import { TableVisualization } from './table-visualization'
@@ -33,7 +33,7 @@ export const SettingsPanel = observer(
     <Root>
       <StyledText>{t('ds.columns')}</StyledText>
 
-      <Input
+      <InputSearch
         placeholder={t('ds.searchColumns')}
         value={dsStore.searchColumnValue}
         onChange={e => {

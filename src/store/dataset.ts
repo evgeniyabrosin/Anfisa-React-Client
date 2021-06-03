@@ -24,7 +24,7 @@ class DatasetStore {
 
   datasetName = ''
   activePreset = ''
-  conditions = ''
+  conditions: any[] = []
   searchColumnValue = ''
 
   indexTabReport = 0
@@ -66,8 +66,8 @@ class DatasetStore {
     this.datasetName = datasetName
   }
 
-  setConditions(conditions: string) {
-    this.conditions = conditions
+  addConditions(conditions: string[][]) {
+    this.conditions = this.conditions.concat(conditions)
   }
 
   resetData() {
@@ -231,7 +231,8 @@ class DatasetStore {
   async fetchWsListAsync() {
     const body = new URLSearchParams({ ds: this.datasetName })
 
-    this.conditions && body.append('conditions', this.conditions)
+    this.conditions &&
+      body.append('conditions', JSON.stringify(this.conditions))
     this.activePreset && body.append('filter', this.activePreset)
 
     const response = await fetch(getApiUrl(`ws_list`), {
@@ -251,6 +252,26 @@ class DatasetStore {
       : []
 
     await this.fetchFilteredTabReportAsync()
+  }
+
+  async fetchStatFuncAsync(unit: string, param: Record<string, string>) {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      unit,
+      param: JSON.stringify(param),
+    })
+
+    const response = await fetch(getApiUrl(`statfunc`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    return result
   }
 
   /*

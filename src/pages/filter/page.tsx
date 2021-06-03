@@ -1,21 +1,17 @@
 import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
-import { useParams } from '@core/hooks/use-params'
+import { useDatasetName } from '@core/hooks/use-dataset-name'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
 import { FilterHeader } from './filter-header'
 import { FilterRefiner } from './ui/filter-refiner'
 import { QueryBuilder } from './ui/query-builder'
 
-const Root = styled(Box)``
-
 export const FilterPage = observer(
   (): ReactElement => {
-    const params = useParams()
+    useDatasetName()
 
     useEffect(() => {
       const initAsync = async () => {
@@ -23,15 +19,15 @@ export const FilterPage = observer(
       }
 
       initAsync()
-    }, [params])
+    }, [])
 
     return (
-      <Root>
+      <div>
         <FilterHeader />
 
         {filterStore.method === FilterMethodEnum.Query && <QueryBuilder />}
         {filterStore.method === FilterMethodEnum.Refiner && <FilterRefiner />}
-      </Root>
+      </div>
     )
   },
 )
