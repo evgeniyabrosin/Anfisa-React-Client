@@ -1,23 +1,19 @@
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import {
-  DsStatType,
-  StatList,
-  TabReportType,
-  WsListType,
-  WsTagsType,
-} from '@declarations'
+import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { tableColumnMap } from '@core/table-column-map'
 
 const INCREASE_INDEX = 50
 
+/*
 interface DsListI {
   filter?: string
   conditions?: string
 }
+*/
 class DatasetStore {
   dsStat: DsStatType = {}
   tabReport: TabReportType[] = []
@@ -90,7 +86,7 @@ class DatasetStore {
     this.datasetName = datasetName
 
     await this.fetchDsStatAsync()
-    await this.fetchWsTagsAsync()
+    // await this.fetchWsTagsAsync()
 
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
@@ -172,7 +168,6 @@ class DatasetStore {
     if (seq.length === 0) {
       this.isLoadingTabReport = false
       this.isFetchingMore = false
-      this.tabReport = []
 
       return
     }
@@ -233,12 +228,47 @@ class DatasetStore {
     })
   }
 
-  async fetchDsTaskIdAsync({ filter, conditions }: DsListI) {
-    const url = `ds_list?ds=${this.datasetName}${
-      filter ? `&filter=${filter}` : ''
-    }${conditions ? `&conditions=${conditions}` : ''}`
+  async fetchWsListAsync() {
+    const body = new URLSearchParams({ ds: this.datasetName })
 
-    const response = await fetch(getApiUrl(url))
+    this.conditions && body.append('conditions', this.conditions)
+    this.activePreset && body.append('filter', this.activePreset)
+
+    const response = await fetch(getApiUrl(`ws_list`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    this.indexFilteredNo = 0
+
+    this.filteredNo = result.records
+      ? result.records.map((variant: { no: number }) => variant.no)
+      : []
+
+    await this.fetchFilteredTabReportAsync()
+  }
+
+  /*
+  TODO: May not be needed
+  async fetchDsTaskIdAsync({ filter, conditions }: DsListI) {
+    const body = new URLSearchParams({ ds: this.datasetName })
+
+    conditions && body.append('conditions', conditions)
+    // filter && body.append('filter', filter)
+    // conditions && body.append('conditions', conditions)
+
+    const response = await fetch(getApiUrl(`ds_list`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
 
     const result = await response.json()
 
@@ -256,7 +286,7 @@ class DatasetStore {
       : []
 
     await this.fetchFilteredTabReportAsync()
-  }
+  } */
 
   async exportReportAsync(exportType?: ExportTypeEnum) {
     const filterParam = this.activePreset ? `&filter=${this.activePreset}` : ''

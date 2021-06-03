@@ -1,10 +1,12 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Box } from '@ui/box'
 import { Button } from '@ui/button'
@@ -49,32 +51,63 @@ const AmountResults = styled(Text)`
   margin-top: 4px;
 `
 
-export const QuerySelected = (): ReactElement => {
-  const history = useHistory()
-  const params = useParams()
+const formatData = (filters: any) => {
+  const result: any[] = []
 
-  const handleClickAsync = async () => {
-    datasetStore.fetchDsTaskIdAsync({
-      conditions: `[["func","GeneRegion","",["True"],{"locus":"chr1::ESPN,HES2"}]]`,
-    })
-    history.push(`${Routes.WS}?ds=${params.get('ds')}`)
-  }
-
-  return (
-    <Root>
-      <HeaderContainer>
-        <Title>{t('filter.selectedVariants')}</Title>
-        <StyledButton
-          text={t('filter.show', { amount: '1.24 mil' })}
-          onClick={handleClickAsync}
-        />
-
-        <AmountResults>
-          {t('filter.amountOf', { selected: '1.24', all: '1.25' })}
-        </AmountResults>
-      </HeaderContainer>
-
-      <QueryResults />
-    </Root>
+  Object.keys(filters).map(key =>
+    Object.keys(filters[key]).forEach(keyItem => {
+      result.push(['enum', keyItem, '', Object.keys(filters[key][keyItem])])
+    }),
   )
+
+  return JSON.stringify(result)
 }
+
+const amountSelectedFilters = (filters: any) => {
+  const keys = Object.keys(filters)
+
+  const amountArray: number[] = keys
+    .map(keyGroup =>
+      Object.values(filters[keyGroup]).map((item: any) => Object.values(item)),
+    )
+    .flat(2)
+    .map(Number)
+
+  return amountArray.reduce((p, c) => p + c, 0)
+}
+
+export const QuerySelected = observer(
+  (): ReactElement => {
+    const history = useHistory()
+    const params = useParams()
+
+    const selectedAmount = amountSelectedFilters(filterStore.selectedFilters)
+
+    const handleClickAsync = async () => {
+      datasetStore.setConditions(formatData(filterStore.selectedFilters))
+
+      await datasetStore.fetchWsListAsync()
+      history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+    }
+
+    return (
+      <Root>
+        <HeaderContainer>
+          <Title>{t('filter.selectedVariants')}</Title>
+          <StyledButton
+            text={t('filter.show', {
+              amount: selectedAmount,
+            })}
+            onClick={handleClickAsync}
+          />
+
+          <AmountResults>
+            {t('filter.amountOf', { selected: selectedAmount, all: '0' })}
+          </AmountResults>
+        </HeaderContainer>
+
+        <QueryResults />
+      </Root>
+    )
+  },
+)

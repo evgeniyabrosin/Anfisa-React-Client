@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
@@ -26,22 +27,24 @@ const StyledText = styled(Text)`
   margin-block-end: 1em;
 `
 
-export const FilterControl = (): ReactElement => (
-  <Root>
-    <StyledText>{t('filter.method')}</StyledText>
+export const FilterControl = observer(
+  (): ReactElement => (
+    <Root>
+      <StyledText>{t('filter.method')}</StyledText>
 
-    <FilterDropdown
-      options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
-      value={FilterMethodEnum.Query}
-      onChange={args => filterStore.setMethod(args.value as FilterMethodEnum)}
-    />
+      <FilterDropdown
+        options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
+        value={filterStore.method}
+        onChange={args => filterStore.setMethod(args.value as FilterMethodEnum)}
+      />
 
-    <VisualEditorSwitch />
+      <VisualEditorSwitch />
 
-    <FilterDropdown
-      options={['Pick a saved query']}
-      onChange={() => null}
-      placeholder="Pick a saved query"
-    />
-  </Root>
+      <FilterDropdown
+        options={['Pick a saved query']}
+        onChange={() => null}
+        placeholder="Pick a saved query"
+      />
+    </Root>
+  ),
 )

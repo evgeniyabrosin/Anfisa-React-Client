@@ -15,6 +15,18 @@ interface AddSelectedFiltersI {
   variant?: [string, number]
 }
 
+const formatData = (filters: any) => {
+  const result: any[] = []
+
+  Object.keys(filters).map(key =>
+    Object.keys(filters[key]).forEach(keyItem => {
+      result.push(['enum', keyItem, '', Object.keys(filters[key][keyItem])])
+    }),
+  )
+
+  return JSON.stringify(result)
+}
+
 class FilterStore {
   method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}
@@ -56,25 +68,6 @@ class FilterStore {
       delete this.selectedFilters[group][groupItemName][variant[0]]
     }
   }
-
-  // async fetchStatfuncAsync(dsName: string) {
-  //   const params = new URLSearchParams({
-  //     ANKH: 'true',
-  //   })
-  //   // `/statfunc?ds=PGP3140_HL_PANEL&unit=GeneRegion&param=${params}`,
-
-  //   const response = await fetch(getApiUrl(`/statfunc`), {
-  //     method: 'POST',
-  //     body: JSON.stringify({
-  //       ds: dsName,
-  //       zone: JSON.stringify(['Symbol', ['ABCD1']]),
-  //     }),
-  //   })
-
-  //   const result = await response.json()
-
-  //   console.log(result)
-  // }
 
   addSelectedFilterGroup(
     group: string,

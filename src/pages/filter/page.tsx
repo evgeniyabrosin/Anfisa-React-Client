@@ -20,7 +20,6 @@ export const FilterPage = observer(
     useEffect(() => {
       const initAsync = async () => {
         await datasetStore.fetchDsStatAsync()
-        // await filterStore.fetchStatfuncAsync('PGP3140_HL_PANEL')
       }
 
       initAsync()
