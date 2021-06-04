@@ -8,8 +8,8 @@ import { IframeInfo } from './iframe-info'
 export const ModalInfo = observer(
   (): ReactElement => (
     <ModalBase
-      isOpen={!!dirinfoStore.infoFrameLink}
-      close={() => dirinfoStore.setInfoFrameLink('')}
+      isOpen={dirinfoStore.infoFrameModalVisible}
+      close={() => dirinfoStore.setInfoFrameModalVisible(false)}
     >
       <div className="flex flex-col min-h-full" style={{ width: '900px' }}>
         <div className="p-4 bg-grey-6 text-center">

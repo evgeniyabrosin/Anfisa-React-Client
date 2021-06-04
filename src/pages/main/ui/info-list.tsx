@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 
 import dirinfoStore from '@store/dirinfo'
 import { DocsList } from './docs-list'
-import { ModalInfo } from './modal-info'
 
 export const InfoList = observer(
   (): ReactElement => {
@@ -58,8 +57,6 @@ export const InfoList = observer(
               onClick={doc => handleClickAsync(doc, true)}
             />
           )}
-
-        {/* <ModalInfo /> */}
       </div>
     )
   },

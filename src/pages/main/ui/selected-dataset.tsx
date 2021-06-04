@@ -35,7 +35,7 @@ export const SelectedDataset = observer(
           <DatasetGeneral />
         </Card>
 
-        <DatasetsFieldsList className="col-span-2 xl:col-span-3" />
+        <DatasetsFieldsList />
       </div>
     )
   },

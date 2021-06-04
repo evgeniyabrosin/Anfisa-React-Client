@@ -21,6 +21,7 @@ class DirInfoStore {
     [SortDatasets.CreatedAt]: SortDirection.ASC,
   }
   infoFrameLink = ''
+  infoFrameModalVisible = false
   activeInfoName = ''
 
   constructor() {
@@ -37,6 +38,10 @@ class DirInfoStore {
 
   setInfoFrameLink(link: string) {
     this.infoFrameLink = link
+  }
+
+  setInfoFrameModalVisible(visible: boolean) {
+    this.infoFrameModalVisible = visible
   }
 
   setSortType(sortType?: SortDatasets) {
