@@ -8,6 +8,7 @@ interface CardProps {
 
 interface CardTitleProps {
   text: string
+  size?: 'md' | 'sm'
   className?: Argument
 }
 
@@ -18,10 +19,12 @@ export const Card = ({ children, className }: CardProps): ReactElement => (
 export const CardTitle = ({
   text,
   className,
-}: CardTitleProps): ReactElement => (
-  <div
-    className={cn('font-bold text-xl text-blue-dark leading-24px', className)}
-  >
-    {text}
-  </div>
-)
+  size = 'md',
+}: CardTitleProps): ReactElement => {
+  const sizeClass =
+    size === 'md'
+      ? 'text-xl text-blue-dark leading-24px font-bold'
+      : 'text-sm text-black leading-16px mb-3'
+
+  return <div className={cn(sizeClass, className)}>{text}</div>
+}

@@ -1,30 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
-import styled, { css } from 'styled-components'
-import { ifProp } from 'styled-tools'
 
 import dirinfoStore from '@store/dirinfo'
-import { Box } from '@ui/box'
-
-const Root = styled(Box)<{ isImg?: boolean }>`
-  height: 900px;
-  max-height: 900px;
-  width: 900px;
-  padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
-
-  ${ifProp(
-    'isImg',
-    css`
-      height: auto;
-    `,
-  )}
-`
-
-const StyledImg = styled('img')`
-  max-height: 900px;
-`
 
 const imgRegExp = /(.png)|(.jpg)$/m
 
@@ -37,22 +15,20 @@ export const IframeInfo = observer(
     }, [])
 
     return (
-      <Root isImg={isImg}>
+      <div className={cn('flex-grow flex', { 'h-auto': isImg })}>
         {isImg ? (
-          <StyledImg
+          <img
             src={dirinfoStore.infoFrameLink}
-            width="900px"
-            height="auto"
+            className={cn('p-3 h-auto w-full')}
           />
         ) : (
           <iframe
             src={dirinfoStore.infoFrameLink}
             frameBorder="0"
-            height="100%"
-            width="100%"
+            className="flex-grow"
           />
         )}
-      </Root>
+      </div>
     )
   },
 )

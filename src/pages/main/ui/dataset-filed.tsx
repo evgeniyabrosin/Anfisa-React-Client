@@ -1,7 +1,7 @@
 import { Fragment, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { Card } from '@ui/card'
+import { Card, CardTitle } from '@ui/card'
 
 interface Props {
   label: string
@@ -18,7 +18,7 @@ export const DatasetField = ({
 
   return (
     <Card className={cn(className)}>
-      <div className="text-sm text-black leading-16px mb-3">{label}</div>
+      <CardTitle text={label} size={'sm'} />
       <div className="text-base text-blue-bright leading-18px font-medium">
         {value}
       </div>

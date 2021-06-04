@@ -59,7 +59,7 @@ export const InfoList = observer(
             />
           )}
 
-        <ModalInfo />
+        {/* <ModalInfo /> */}
       </div>
     )
   },

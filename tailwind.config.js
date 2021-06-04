@@ -119,7 +119,7 @@ module.exports = {
     // 'gridRowStart', // The grid-row-start utilities like row-start-4
     'gridTemplateColumns', // The grid-template-columns utilities like grid-cols-7
     // 'gridTemplateRows', // The grid-template-rows utilities like grid-rows-4
-    // 'height', // The height utilities like h-64
+    'height', // The height utilities like h-64
     // 'hueRotate', // The hue-rotate utilities like hue-rotate-180
     // 'inset', // The inset utilities like bottom-10
     // 'invert', // The invert utilities like invert-0
@@ -166,7 +166,7 @@ module.exports = {
     // 'stroke', // The stroke utilities like stroke-current
     // 'strokeWidth', // The stroke-width utilities like stroke-1
     'tableLayout', // The table-layout utilities like table-auto
-    // 'textAlign', // The text-align utilities like text-center
+    'textAlign', // The text-align utilities like text-center
     'textColor', // The text-color utilities like text-green-700
     'textDecoration', // The text-decoration utilities like line-through
     // 'textOpacity', // The text-opacity utilities like text-opacity-50

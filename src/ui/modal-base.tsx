@@ -19,7 +19,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    maxHeight: '95vh',
+    height: '95vh',
   },
 }
 

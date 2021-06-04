@@ -18,13 +18,16 @@ export const SelectedDataset = observer(
     return (
       <div className="flex-grow grid gap-4 grid-cols-3 p-4">
         <Card className="col-span-1 xl:col-span-3">
-          <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap">
             <CardTitle
               text={dirinfoStore.selectedDirinfoName}
-              className="mr-3"
+              className="mb-3 mr-3"
             />
 
-            <Link to={`/ws?ds=${dirinfoStore.selectedDirinfoName}`}>
+            <Link
+              to={`/ws?ds=${dirinfoStore.selectedDirinfoName}`}
+              className="mb-3"
+            >
               <Button size="md" text={t('home.openInViewer')} />
             </Link>
           </div>
