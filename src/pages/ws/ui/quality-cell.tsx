@@ -1,11 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { getIcon } from '@core/get-quality-icon'
 import dirInfoStore from '@store/dirinfo'
-import { Box } from '@ui/box'
 import { QualityItem } from './quality-item'
 import { CellI } from './variant-cell'
 
@@ -13,15 +11,6 @@ export interface QualityI {
   genotype: string
   g_quality: number
 }
-
-const Root = styled(Box)`
-  display: flex;
-  padding-top: 5px;
-  width: 280px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
 
 export const QualityCell = observer(
   ({ cell }: CellI): ReactElement => {
@@ -34,7 +23,7 @@ export const QualityCell = observer(
     }, [])
 
     return (
-      <Root>
+      <div className="flex truncate">
         {qualitiesKeys.map((qualityName, index) => (
           <QualityItem
             key={index}
@@ -42,7 +31,7 @@ export const QualityCell = observer(
             iconVariant={getIcon(metaSamples[qualityName])}
           />
         ))}
-      </Root>
+      </div>
     )
   },
 )

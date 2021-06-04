@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import { Box } from '@ui/box'
 import { Loader } from '@ui/loader'
@@ -16,34 +17,30 @@ const Styles = styled.div`
     width: 100%;
 
     thead {
-      padding: 17px 33px;
-
       tr {
+        border-color: ${theme('colors.grey.light')};
+
         th {
-          padding-top: 17px;
-          padding-bottom: 17px;
+          padding: 12px 16px;
           text-align: left;
           font-style: normal;
           font-weight: bold;
           font-size: 12px;
           line-height: 14px;
-          color: #000000;
-
-          :first-child {
-            padding-left: 33px;
-          }
+          color: ${theme('colors.blue.dark')};
         }
       }
     }
 
     tbody {
       tr {
-        border: 1px solid #e3e5e6;
-        padding: 10px 60px 10px 30px;
+        border-top: 1px;
+        border-bottom: 1px;
+        border-style: solid;
+        border-color: ${theme('colors.grey.light')};
 
         td {
-          margin: 0;
-          padding: 0;
+          padding: 20px 16px;
         }
       }
     }

@@ -20,7 +20,7 @@ export const Table = ({ columns, data }: Props): ReactElement => {
 
   // Render the UI for your table
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} className="table-fixed text-black">
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>

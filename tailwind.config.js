@@ -13,6 +13,7 @@ module.exports = {
       },
       fontSize: {
         10: '10px',
+        12: '12px',
         20: '20px',
       },
     },
@@ -164,12 +165,12 @@ module.exports = {
     // 'space', // The "space-between" utilities like space-x-4
     // 'stroke', // The stroke utilities like stroke-current
     // 'strokeWidth', // The stroke-width utilities like stroke-1
-    // 'tableLayout', // The table-layout utilities like table-auto
+    'tableLayout', // The table-layout utilities like table-auto
     // 'textAlign', // The text-align utilities like text-center
     'textColor', // The text-color utilities like text-green-700
     'textDecoration', // The text-decoration utilities like line-through
     // 'textOpacity', // The text-opacity utilities like text-opacity-50
-    // 'textOverflow', // The text-overflow utilities like overflow-ellipsis
+    'textOverflow', // The text-overflow utilities like overflow-ellipsis
     'textTransform', // The text-transform utilities like lowercase
     'transform', // The transform utility (for enabling transform features)
     'rotate', // The rotate utilities like rotate-180

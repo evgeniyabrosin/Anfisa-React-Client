@@ -11,32 +11,14 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import { Routes } from '@router/routes.enum'
 import { ShareSvg } from '@icons/share'
-import { TableFileSvg } from '@icons/table-doc'
 import { Box } from '@ui/box'
-import { Text } from '@ui/text'
+import { CopySvg } from '@ui/icons/copy'
 
 export interface CellI {
   cell: {
     value: string
   }
 }
-
-const Root = styled(Box)`
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
-  padding-right: 20px;
-  width: 150px;
-`
-
-const StyledText = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 16px;
-  color: ${theme('colors.black')};
-  margin: 5px 0px;
-`
 
 const Circle = styled(Box)`
   width: 8px;
@@ -77,27 +59,32 @@ export const VariantCell = ({ cell }: CellI): ReactElement => {
   }
 
   return (
-    <Root>
+    <div className="flex items-center">
       <Circle
         style={{
           border: `2px solid ${getVariantColor(colorNumber)}`,
         }}
       />
 
-      <Box style={{ flex: 1 }}>
+      <div>
         {value.map(gene => (
-          <StyledText key={gene}>{gene}</StyledText>
+          <span className="text-sm leading-18px" key={gene}>
+            {gene}
+          </span>
         ))}
-      </Box>
+      </div>
 
       <ShareSvg
-        style={{ marginLeft: 19, cursor: 'pointer', minWidth: '16px' }}
+        style={{ marginLeft: 20, cursor: 'pointer', flexShrink: 0 }}
+        fill={theme('colors.blue.bright')}
         onClick={handleOpenVariant}
       />
-      <TableFileSvg
-        style={{ marginLeft: 10, cursor: 'pointer', minWidth: '16px' }}
+
+      <CopySvg
+        style={{ marginLeft: 4, cursor: 'pointer', flexShrink: 0 }}
+        fill={theme('colors.blue.bright')}
         onClick={copyDetails}
       />
-    </Root>
+    </div>
   )
 }
