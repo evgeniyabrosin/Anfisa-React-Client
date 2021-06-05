@@ -5,7 +5,7 @@ import DropdownBase, { Option } from 'react-dropdown'
 import styled from 'styled-components'
 
 interface Props {
-  options: string[]
+  options: string[] | { label: string; value: string }[]
   onChange: (arg: Option) => void
   value?: string
   placeholder?: string

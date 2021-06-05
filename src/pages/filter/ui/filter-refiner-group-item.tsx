@@ -6,6 +6,7 @@ import styled, { css } from 'styled-components'
 import { ifProp } from 'styled-tools'
 
 import { StatListType } from '@declarations'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
@@ -79,15 +80,11 @@ export const FilterRefinerGroupItem = observer(
     group,
     ...rest
   }: Props): ReactElement => {
-    const checked = get(
-      filterStore,
-      `selectedFilters[${group}][${name}]`,
-      false,
-    )
-
-    // const kind = get(datasetStore, `getFilterRefiner[${group}]`, []).find(
-    //   (item: StatList) => item.name === name,
-    // )?.kind
+    const checked =
+      get(filterStore, `selectedFilters[${group}][${name}]`, false) ||
+      get(datasetStore, 'conditions', []).some(
+        (condition: [string, string]) => condition[1] === name,
+      )
 
     const selectedAmounts: number[] = Object.values(
       get(filterStore, `selectedFilters[${group}][${name}]`, {}),

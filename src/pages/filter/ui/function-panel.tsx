@@ -6,12 +6,14 @@ import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
+import { CompundHet } from './compound-het'
 import { GeneRegion } from './gene-region'
 import { InheritanceMode } from './inheritance-mode'
 
 const functionsMap: Record<string, any> = {
   GeneRegion,
   Inheritance_Mode: InheritanceMode,
+  Compound_Het: CompundHet,
 }
 
 const initialStateMap: Record<string, any> = {
@@ -21,6 +23,11 @@ const initialStateMap: Record<string, any> = {
   Inheritance_Mode: {
     problemGroups: [],
     variants: [],
+  },
+  Compound_Het: {
+    variants: [],
+    approx: '',
+    state: null,
   },
 }
 
@@ -56,9 +63,21 @@ export const FunctionPanel = observer(
         ])
       }
 
-      if (selectedFilter.name === FilterFunctionEnum.GeneRegions) {
+      if (selectedFilter.name === FilterFunctionEnum.GeneRegion) {
         datasetStore.addConditions([
           ['func', selectedFilter.name, '', ['True'], values],
+        ])
+      }
+
+      if (selectedFilter.name === FilterFunctionEnum.CompoundHet) {
+        datasetStore.addConditions([
+          [
+            'func',
+            selectedFilter.name,
+            '',
+            values.variants,
+            { approx: values.approx || null, state: values.state || null },
+          ],
         ])
       }
     }
