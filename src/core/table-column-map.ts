@@ -1,10 +1,10 @@
 export const tableColumnMap = {
+  gene: 'Gene',
   variant: 'Variant',
   tags: 'Tag(s)',
-  hg19: 'hg19',
-  protein: 'pPos Worst/Canonical',
-  predictions: 'Predictions',
-  gnomad: 'GNOMAD',
-  quality: 'Quality',
+  proteinChange: 'Protein Change',
+  inSilico: 'In-Silico',
+  population: 'Population',
+  samples: 'Samples',
   filter: 'Filter',
 }

@@ -1,11 +1,10 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
+import { CellI, PredicationI } from './cell-interfaces'
 import { GnomadItem } from './gnomad-item'
-import { PredicationI } from './predictions-cell'
-import { CellI } from './variant-cell'
 
-export const GnomadCell = ({ cell }: CellI): ReactElement => {
+export const CellPopulation = ({ cell }: CellI): ReactElement => {
   const gnomads = get(cell, 'value', []) as PredicationI[]
 
   return (

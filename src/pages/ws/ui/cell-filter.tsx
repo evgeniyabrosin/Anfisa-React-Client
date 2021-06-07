@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { theme } from '@theme'
 import { Text } from '@ui/text'
-import { CellI } from './variant-cell'
+import { CellI } from './cell-interfaces'
 
 const StyledText = styled(Text)`
   word-break: break-all;
@@ -17,7 +17,7 @@ const StyledText = styled(Text)`
   margin-block-end: 1em;
 `
 
-export const FilterCell = (cell: CellI): ReactElement => {
+export const CellFilter = (cell: CellI): ReactElement => {
   const filters = get(cell, 'value', []) as string[]
 
   return (

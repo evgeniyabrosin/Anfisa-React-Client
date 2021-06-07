@@ -1,9 +1,9 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
-import { CellI } from './variant-cell'
+import { CellI } from './cell-interfaces'
 
-export const HG19Cell = ({ cell }: CellI): ReactElement => {
+export const CellVariant = ({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value', '').split(' ')
 
   return (

@@ -1,61 +1,62 @@
 import { tableColumnMap } from '@core/table-column-map'
-import { FilterCell } from './ui/filter-cell'
-import { GnomadCell } from './ui/gnomad-cell'
-import { HG19Cell } from './ui/hg19-cell'
-import { PredicationI, PredictionsCell } from './ui/predictions-cell'
-import { ProteinChangeCell } from './ui/protein-change-cell'
-import { QualityCell } from './ui/quality-cell'
-import { TagsCell } from './ui/tags-cell'
-import { VariantCell } from './ui/variant-cell'
+import { CellFilter } from './ui/cell-filter'
+import { CellGene } from './ui/cell-gene'
+import { CellInSilico } from './ui/cell-in-silico'
+import { PredicationI } from './ui/cell-interfaces'
+import { CellPopulation } from './ui/cell-population'
+import { CellProteinChange } from './ui/cell-protein-change'
+import { CellSamples } from './ui/cell-samples'
+import { CellTags } from './ui/cell-tags'
+import { CellVariant } from './ui/cell-variant'
 
 export const variantColumnTable = [
   {
-    Header: tableColumnMap.variant,
+    Header: tableColumnMap.gene,
     accessor: 'GeneColored',
-    Cell: VariantCell,
+    Cell: CellGene,
+  },
+  {
+    Header: tableColumnMap.variant,
+    accessor: (item: any) => `${item.Coordinate} ${item.Change}`,
+    Cell: CellVariant,
   },
   {
     Header: tableColumnMap.tags,
     accessor: '_tags',
-    Cell: TagsCell,
+    Cell: CellTags,
   },
   {
-    Header: 'hg19',
-    accessor: (item: any) => `${item.Coordinate} ${item.Change}`,
-    Cell: HG19Cell,
-  },
-  {
-    Header: tableColumnMap.protein,
+    Header: tableColumnMap.proteinChange,
     accessor: 'Protein Change',
-    Cell: ProteinChangeCell,
+    Cell: CellProteinChange,
   },
   {
-    Header: tableColumnMap.predictions,
+    Header: tableColumnMap.inSilico,
     accessor: (item: any): PredicationI[] => [
       { name: 'Polyphen', value: item.Polyphen },
       { name: 'SIFT', value: item.SIFT },
       { name: 'MUT TASTER', value: item['MUT TASTER'] },
       { name: 'FATHMM', value: item.FATHMM },
     ],
-    Cell: PredictionsCell,
+    Cell: CellInSilico,
   },
   {
-    Header: tableColumnMap.gnomad,
+    Header: tableColumnMap.population,
     accessor: (item: any): PredicationI[] => [
       { name: 'Overall AF', value: item.gnomAD_Overall_AF },
       { name: 'Genome AF', value: item.gnomAD_Genomes_AF },
       { name: 'Exome AF', value: item.gnomAD_Exomes_AF },
     ],
-    Cell: GnomadCell,
+    Cell: CellPopulation,
   },
   {
-    Header: tableColumnMap.quality,
+    Header: tableColumnMap.samples,
     accessor: 'Samples',
-    Cell: QualityCell,
+    Cell: CellSamples,
   },
   {
     Header: tableColumnMap.filter,
     accessor: 'FT',
-    Cell: FilterCell,
+    Cell: CellFilter,
   },
 ]

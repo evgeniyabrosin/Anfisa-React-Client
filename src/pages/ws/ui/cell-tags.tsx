@@ -2,9 +2,9 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 
 import { Tag } from '@ui/tag'
-import { CellI } from './variant-cell'
+import { CellI } from './cell-interfaces'
 
-export const TagsCell = ({ cell }: CellI): ReactElement => {
+export const CellTags = ({ cell }: CellI): ReactElement => {
   const tags = Object.keys(get(cell, 'value', {}) || {}) || []
 
   if (tags.length === 0) {

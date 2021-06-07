@@ -1,10 +1,10 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
+import { CellI } from './cell-interfaces'
 import { ProteinChangeItem } from './protein-change-item'
-import { CellI } from './variant-cell'
 
-export const ProteinChangeCell = ({ cell }: CellI): ReactElement => {
+export const CellProteinChange = ({ cell }: CellI): ReactElement => {
   const proteinChanges = get(cell, 'value', []) as string[]
 
   return (

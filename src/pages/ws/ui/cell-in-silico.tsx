@@ -1,15 +1,10 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
+import { CellI, PredicationI } from './cell-interfaces'
 import { PredictionItem } from './prediction-item'
-import { CellI } from './variant-cell'
 
-export interface PredicationI {
-  name: string
-  value?: string[]
-}
-
-export const PredictionsCell = ({ cell }: CellI): ReactElement => {
+export const CellInSilico = ({ cell }: CellI): ReactElement => {
   const predictions = get(cell, 'value', []) as PredicationI[]
 
   return (

@@ -3,8 +3,12 @@ import styled from 'styled-components'
 
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
-import { QualityI } from './quality-cell'
 import { QualityIcon } from './quality-icon'
+
+export interface QualityI {
+  genotype: string
+  g_quality: number
+}
 
 type Props = QualityI & {
   iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'

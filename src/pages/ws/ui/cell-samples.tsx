@@ -4,15 +4,10 @@ import { observer } from 'mobx-react-lite'
 
 import { getIcon } from '@core/get-quality-icon'
 import dirInfoStore from '@store/dirinfo'
+import { CellI } from './cell-interfaces'
 import { QualityItem } from './quality-item'
-import { CellI } from './variant-cell'
 
-export interface QualityI {
-  genotype: string
-  g_quality: number
-}
-
-export const QualityCell = observer(
+export const CellSamples = observer(
   ({ cell }: CellI): ReactElement => {
     const [metaSamples, setMetaSamples] = useState<any>({})
     const qualities = get(cell, 'value', {}) as any

@@ -13,12 +13,7 @@ import { Routes } from '@router/routes.enum'
 import { ShareSvg } from '@icons/share'
 import { Box } from '@ui/box'
 import { CopySvg } from '@ui/icons/copy'
-
-export interface CellI {
-  cell: {
-    value: string
-  }
-}
+import { CellI } from './cell-interfaces'
 
 const Circle = styled(Box)`
   width: 8px;
@@ -28,7 +23,7 @@ const Circle = styled(Box)`
   margin-right: 10px;
 `
 
-export const VariantCell = ({ cell }: CellI): ReactElement => {
+export const CellGene = ({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value[0]', []) as string[]
   const colorNumber = get(cell, 'value[1]', -1)
   const history = useHistory()
