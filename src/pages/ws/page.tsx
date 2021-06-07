@@ -4,7 +4,10 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import dsStore from '@store/dataset'
+import { ExportPanel } from '@ui/export-panel'
+import { ExportReportButton } from '@ui/export-report-button'
 import { Header } from '@ui/header'
+import { PopperButton } from '@ui/popper-button'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
 
@@ -46,7 +49,15 @@ export const WSPage = observer(
 
     return (
       <div>
-        <Header />
+        <Header>
+          <div className="text-white flex-grow flex justify-end pr-6">
+            <PopperButton
+              ButtonElement={ExportReportButton}
+              ButtonElementClassName={'reddd'}
+              ModalElement={ExportPanel}
+            />
+          </div>
+        </Header>
         <ControlPanel />
         <TableVariants />
       </div>

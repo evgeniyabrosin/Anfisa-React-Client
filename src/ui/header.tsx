@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, ReactNode, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -13,8 +13,12 @@ const UserLogoDummy = () => (
   <CircleSvg fill={'white'} style={{ width: '32px', height: '32px' }} />
 )
 
+type Props = {
+  children?: ReactElement | ReactNode
+}
+
 export const Header = observer(
-  (): ReactElement => {
+  ({ children }: Props): ReactElement => {
     const params = useParams()
     const ds = params.get('ds')
 
@@ -52,6 +56,8 @@ export const Header = observer(
             </span>
           )}
         </div>
+
+        {children}
 
         <div className="text-white flex flex-row items-center">
           <div className="mr-2">Username</div>
