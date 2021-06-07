@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { DownArray } from '@icons/down-array'
+import { ExportSvg } from '@icons/export'
 import { SettingsTableSvg } from '@icons/settings-table'
 import { Button } from '@ui/button'
 
@@ -33,7 +33,7 @@ export const TableProperiesButton = ({
     text={t('ds.tableProperties')}
     prepend={<SettingsTableSvg style={{ marginRight: 6 }} />}
     append={
-      <DownArray
+      <ExportSvg
         style={{
           marginLeft: 10,
           transform: isOpen ? 'rotate(180deg)' : 'none',

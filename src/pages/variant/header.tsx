@@ -8,7 +8,7 @@ import { CloseSvg } from '@icons/close'
 import { Box } from '@ui/box'
 import { ExportPanel } from '@ui/export-panel'
 import { ExportReportButton } from '@ui/export-report-button'
-import { Popper } from '@ui/popper'
+import { PopperButton } from '@ui/popper-button'
 import { Text } from '@ui/text'
 import { NextVariantButton } from './ui/next-variant'
 
@@ -50,7 +50,10 @@ export const VariantHeader = observer(
         <StyledName>{`[${genInfo}] ${hg19}`}</StyledName>
         <StyledNextVariantButton onClick={handleNextVariant} />
 
-        <Popper ButtonElement={ExportReportButton} ModalElement={ExportPanel} />
+        <PopperButton
+          ButtonElement={ExportReportButton}
+          ModalElement={ExportPanel}
+        />
 
         <CloseSvg
           style={{ marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }}

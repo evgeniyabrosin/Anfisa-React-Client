@@ -31,7 +31,7 @@ export const Button = ({
 
   switch (size) {
     case 'sm':
-      padding = 'p-1'
+      padding = 'py-1 ' + (text ? 'px-2' : 'px-1')
       break
     case 'md':
       padding = 'p-2'

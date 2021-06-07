@@ -1,16 +1,19 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
+import { Argument } from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 
 interface Props {
   ButtonElement: any
   ModalElement: any
+  ButtonElementClassName?: Argument
 }
 
-export const Popper = ({
+export const PopperButton = ({
   ButtonElement,
   ModalElement,
+  ButtonElementClassName,
 }: Props): ReactElement => {
   const [isOpen, open, close] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
@@ -23,6 +26,7 @@ export const Popper = ({
       <ButtonElement
         refEl={setReferenceElement}
         isOpen={isOpen}
+        className={ButtonElementClassName}
         onClick={isOpen ? close : open}
       />
 

@@ -1,47 +1,30 @@
 import { ReactElement } from 'react'
-import styled from 'styled-components'
+import { Argument } from 'classnames'
 
 import { t } from '@i18n'
-import { DownArray } from '@icons/down-array'
-import { DownloadSvg } from '@icons/download'
+import { ArrowSvg } from '@icons/arrow'
+import { ExportSvg } from '@icons/export'
 import { Button } from './button'
 
 interface Props {
-  className?: string
-  onClick?: () => void
-  refEl: any
   isOpen?: boolean
+  refEl: any
+  className?: Argument
+  onClick?: () => void
 }
-
-const StyledButton = styled(Button)`
-  background-color: white;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: #0b5fff;
-  border: 1px solid #0b5fff;
-  border-radius: 24px;
-  height: 32px;
-`
 
 export const ExportReportButton = ({
   isOpen,
   refEl,
+  className,
   ...rest
 }: Props): ReactElement => (
-  <StyledButton
+  <Button
     text={t('general.exportReport')}
     refEl={refEl}
-    prepend={<DownloadSvg style={{ marginRight: 7 }} {...rest} />}
+    size={'sm'}
+    prepend={<ExportSvg />}
     onClick={rest.onClick}
-    append={
-      <DownArray
-        style={{
-          marginLeft: 10,
-          transform: isOpen ? 'rotate(180deg)' : 'none',
-        }}
-      />
-    }
+    append={<ArrowSvg fill={'white'} direction={'down'} />}
   />
 )
