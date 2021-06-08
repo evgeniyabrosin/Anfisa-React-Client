@@ -22,12 +22,12 @@ export const EditFilter = (): ReactElement => {
   return (
     <div style={{ minWidth: '144px' }}>
       <ControlPanelTitle title={t('ds.filters')}>
-        <Switch isChecked={true} size={'sm'} onChange={switchHandler} />
+        <Switch isChecked size="sm" onChange={switchHandler} />
       </ControlPanelTitle>
 
       <Button
         text={t('ds.editFilters')}
-        size={'md'}
+        size="md"
         className="w-full"
         onClick={handleClick}
       />

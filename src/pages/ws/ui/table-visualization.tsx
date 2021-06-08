@@ -33,11 +33,7 @@ export const TableVisualization = (): ReactElement => (
         text={t('ds.grid')}
         Icon={GridSvg}
       />
-      <TableVisualizationItem
-        isChecked={true}
-        text={t('ds.rows')}
-        Icon={RowsSvg}
-      />
+      <TableVisualizationItem isChecked text={t('ds.rows')} Icon={RowsSvg} />
     </ConteinerList>
   </Box>
 )

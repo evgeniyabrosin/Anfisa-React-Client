@@ -4,6 +4,7 @@ import cn, { Argument } from 'classnames'
 interface Props {
   text?: string
   size?: 'sm' | 'md'
+  hasBackground?: boolean
   className?: Argument
   onClick?: () => void
   append?: ReactElement
@@ -14,7 +15,8 @@ interface Props {
 
 export const Button = ({
   text,
-  size,
+  size = 'md',
+  hasBackground = true,
   onClick,
   className,
   append,
@@ -34,17 +36,18 @@ export const Button = ({
       padding = 'py-1 ' + (text ? 'px-2' : 'px-1')
       break
     case 'md':
-      padding = 'p-2'
+      padding = 'px-2 ' + (hasBackground ? 'py-2' : 'py-1.5')
       break
   }
 
   const cnButton = cn(
-    'flex items-center',
+    'flex items-center justify-center',
     padding,
     rounding,
     {
       'text-white': true,
-      'bg-blue-bright': isDefaultBackground,
+      'bg-blue-bright': hasBackground && isDefaultBackground,
+      'border-2 border-blue-bright': !hasBackground,
     },
     className,
   )

@@ -22,7 +22,7 @@ export const ExportReportButton = ({
   <Button
     text={t('general.exportReport')}
     refEl={refEl}
-    size={'sm'}
+    size="sm"
     prepend={<ExportSvg />}
     onClick={rest.onClick}
     append={<ArrowSvg fill={'white'} direction={isOpen ? 'top' : 'down'} />}

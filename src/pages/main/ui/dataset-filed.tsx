@@ -18,7 +18,7 @@ export const DatasetField = ({
 
   return (
     <Card className={cn(className)}>
-      <CardTitle text={label} size={'sm'} />
+      <CardTitle text={label} size="sm" />
       <div className="text-base text-blue-bright leading-18px font-medium">
         {value}
       </div>
