@@ -16,6 +16,9 @@ module.exports = {
         12: '12px',
         20: '20px',
       },
+      backgroundOpacity: {
+        2: '0.02',
+      },
     },
     colors: {
       transparent: 'transparent',
@@ -142,7 +145,7 @@ module.exports = {
     // 'opacity', // The opacity utilities like opacity-50
     // 'order', // The order utilities like order-8
     // 'outline', // The outline utilities like outline-white
-    // 'overflow', // The overflow utilities like overflow-y-auto
+    'overflow', // The overflow utilities like overflow-y-auto
     // 'overscrollBehavior', // The overscroll-behavior utilities like overscroll-y-contain
     'padding', // The padding utilities like pr-4
     // 'placeContent', // The place-content utilities like place-content-between

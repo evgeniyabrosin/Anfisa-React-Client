@@ -1,10 +1,9 @@
 import { ReactElement } from 'react'
-import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { ExportSvg } from '@icons/export'
-import { SettingsTableSvg } from '@icons/settings-table'
+import { ArrowSvg } from '@icons/arrow'
 import { Button } from '@ui/button'
+import { SettingsSvg } from '@ui/icons/settings'
 
 interface Props {
   refEl: any
@@ -12,33 +11,17 @@ interface Props {
   onClick?: () => void
 }
 
-const StyledButton = styled(Button)`
-  background: #e6efff;
-  border-radius: 20px;
-  color: #0c65fd;
-  font-weight: bold;
-  line-height: 22px;
-  padding: 5px 16px;
-  margin-right: 24px;
-`
-
 export const TableProperiesButton = ({
   refEl,
   isOpen,
   onClick,
 }: Props): ReactElement => (
-  <StyledButton
+  <Button
     refEl={refEl}
     onClick={onClick}
-    text={t('ds.tableProperties')}
-    prepend={<SettingsTableSvg style={{ marginRight: 6 }} />}
-    append={
-      <ExportSvg
-        style={{
-          marginLeft: 10,
-          transform: isOpen ? 'rotate(180deg)' : 'none',
-        }}
-      />
-    }
+    text={t('ds.customizeTable')}
+    hasBackground={false}
+    prepend={<SettingsSvg />}
+    append={<ArrowSvg fill={'white'} direction={isOpen ? 'top' : 'down'} />}
   />
 )

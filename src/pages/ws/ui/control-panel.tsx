@@ -1,23 +1,38 @@
 import { ReactElement } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
-import { Tags } from '@ui/tags'
-import { Filters } from './filters'
-import { Preset } from './preset'
-import { Settings } from './settings'
+import filterStore from '@store/filter'
+import { ControlPanelDivider } from './control-panel-divider'
+import { EditFilter } from './control-panel-edit-filter'
+import { Preset } from './control-panel-preset'
+import { Results } from './control-panel-settings'
+import { FilterList } from './filter-list'
 
 export const ControlPanel = observer(
   (): ReactElement => {
+    const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
+    const filtersLength = Object.keys(filterStore.selectedFilters).length
+
     return (
       <div className="flex pb-3 px-4 bg-blue-dark">
-        <Preset />
+        <div className={sectionClassName}>
+          <Preset />
 
-        <Filters />
+          <ControlPanelDivider />
 
-        <Tags tags={datasetStore.selectedTags} />
+          <EditFilter />
 
-        <Settings />
+          <ControlPanelDivider />
+
+          <Results />
+        </div>
+
+        {filtersLength && (
+          <div className={cn(sectionClassName, 'overflow-hidden ml-3')}>
+            <FilterList filters={filterStore.selectedFilters} />
+          </div>
+        )}
       </div>
     )
   },

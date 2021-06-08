@@ -20,6 +20,7 @@ export const en = {
   ds: {
     preset: 'Preset',
     filters: 'Filters',
+    results: 'Results',
     variants: 'Variants: ',
     resultsFound: '{0} results found',
     tableVisualization: 'Table Visualization',
@@ -27,7 +28,7 @@ export const en = {
     rows: 'Rows',
     searchColumns: 'Search for a filter',
     columns: 'Columns',
-    tableProperties: 'Table Properties',
+    customizeTable: 'Customize Table',
     copied: 'Copied Successful',
     editFilters: 'Edit filters',
   },
