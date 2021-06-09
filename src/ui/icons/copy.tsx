@@ -1,12 +1,12 @@
-import { CSSProperties, ReactElement } from 'react'
+import { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
 interface Props {
-  style?: CSSProperties
-  fill?: string
+  className?: Argument
   onClick?: () => void
 }
 
-export const CopySvg = ({ style, fill, onClick }: Props): ReactElement => {
+export const CopySvg = ({ className, onClick }: Props): ReactElement => {
   return (
     <svg
       width="16"
@@ -14,18 +14,16 @@ export const CopySvg = ({ style, fill, onClick }: Props): ReactElement => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={style}
+      className={cn('flex-shrink-0 stroke-current', className)}
       onClick={onClick}
     >
       <path
         d="M10.5 10.4998H13.5V2.49976H5.5V5.49976"
-        stroke={fill}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M10.5 5.49976H2.5V13.4998H10.5V5.49976Z"
-        stroke={fill}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

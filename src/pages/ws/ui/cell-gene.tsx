@@ -8,7 +8,6 @@ import { copyToClipboard } from '@core/copy-to-clipboard'
 import { getVariantColor } from '@core/get-variant-color'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import { theme } from '@theme'
 import { Routes } from '@router/routes.enum'
 import { ShareSvg } from '@icons/share'
 import { Box } from '@ui/box'
@@ -70,15 +69,13 @@ export const CellGene = ({ cell }: CellI): ReactElement => {
       </div>
 
       <ShareSvg
-        style={{ marginLeft: 20, cursor: 'pointer', flexShrink: 0 }}
-        fill={theme('colors.blue.bright')}
+        className="ml-5 cursor-pointer text-blue-bright"
         onClick={handleOpenVariant}
       />
 
       <CopySvg
-        style={{ marginLeft: 4, cursor: 'pointer', flexShrink: 0 }}
-        fill={theme('colors.blue.bright')}
         onClick={copyDetails}
+        className="ml-1 cursor-pointer text-blue-bright"
       />
     </div>
   )

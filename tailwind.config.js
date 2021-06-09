@@ -95,7 +95,7 @@ module.exports = {
     // 'divideStyle', // The divide-style utilities like divide-dotted
     // 'divideWidth', // The between elements border-width utilities like divide-x-2
     // 'dropShadow', // The drop-shadow utilities like drop-shadow-lg
-    // 'fill', // The fill utilities like fill-current
+    'fill', // The fill utilities like fill-current
     // 'filter', // The filter utilities like filter
     // 'flex', // The flex utilities like flex-auto
     'flexDirection', // The flex-direction utilities like flex-row-reverse
@@ -167,7 +167,7 @@ module.exports = {
     // 'sepia', // The sepia utilities like sepia-0
     // 'skew', // The skew utilities like -skew-x-1
     // 'space', // The "space-between" utilities like space-x-4
-    // 'stroke', // The stroke utilities like stroke-current
+    'stroke', // The stroke utilities like stroke-current
     // 'strokeWidth', // The stroke-width utilities like stroke-1
     'tableLayout', // The table-layout utilities like table-auto
     'textAlign', // The text-align utilities like text-center
