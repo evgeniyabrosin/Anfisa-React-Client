@@ -18,6 +18,7 @@ class DatasetStore {
   selectedTags: string[] = []
   selectedGenes: string[] = []
   columns: string[] = Object.values(tableColumnMap)
+  selectedColumns: string[] = Object.values(tableColumnMap)
 
   filteredNo: number[] = []
 
@@ -44,6 +45,10 @@ class DatasetStore {
 
   addColumn(name: string) {
     this.columns.push(name)
+  }
+
+  clearColumn() {
+    this.columns = []
   }
 
   setSearchColumnValue(value: string) {
@@ -80,6 +85,14 @@ class DatasetStore {
 
   setColumns(columns: string[]) {
     this.columns = columns
+  }
+
+  showColumns() {
+    this.selectedColumns = this.columns.slice()
+  }
+
+  cancelColumns() {
+    this.columns = this.selectedColumns.slice()
   }
 
   setDatasetName(datasetName: string) {

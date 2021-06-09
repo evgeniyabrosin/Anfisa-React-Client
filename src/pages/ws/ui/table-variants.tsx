@@ -49,7 +49,7 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
-    const columns = datasetStore.columns.map(column =>
+    const columns = datasetStore.selectedColumns.map(column =>
       variantColumnTable.find(item => item.Header === column),
     )
 

@@ -37,6 +37,7 @@ export const en = {
     gene: 'Gene',
     searchFilter: 'Search for a filter',
     searchTag: 'Search for a tag',
+    searchColumn: 'Search for a column',
   },
   variant: {
     next: 'Next variant',

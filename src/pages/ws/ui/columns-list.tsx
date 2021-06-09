@@ -6,24 +6,15 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import datasetStore from '@store/dataset'
-import { Box } from '@ui/box'
 import { ColumnNameItem } from './column-name-item'
 
-const Root = styled(Box)`
-  border-bottom: 1px solid #bfbfbf;
-  margin-top: 12px;
-  padding-bottom: 19px;
-`
-
 const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
-  // border: isDragging ? '1px solid grey' : 'none',
   userSelect: 'none',
   ...draggableStyle,
   left: '0px !important',
-  top: draggableStyle.top - 300 || 600,
+  top: draggableStyle.top - 130 || 600,
 })
 
 const reorder = (
@@ -68,7 +59,7 @@ export const ColumnsList = observer(
     }
 
     return (
-      <Root>
+      <div className="mt-3 pb-5 w-64">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
             {provided => (
@@ -100,7 +91,7 @@ export const ColumnsList = observer(
             )}
           </Droppable>
         </DragDropContext>
-      </Root>
+      </div>
     )
   },
 )
