@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
-import { Box } from '@ui/box'
 import { Loader } from '@ui/loader'
 import { NoResultsFound } from '@ui/no-results-found'
 import { variantColumnTable } from '../columns'
@@ -63,9 +62,9 @@ export const TableVariants = observer(
 
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}
 
-        <Box style={{ height: 100, width: '100%' }}>
+        <div className="h-24 w-full">
           {datasetStore.isFetchingMore && <Loader />}
-        </Box>
+        </div>
       </Styles>
     )
   },

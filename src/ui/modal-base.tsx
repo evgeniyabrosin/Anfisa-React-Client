@@ -30,12 +30,7 @@ export const ModalBase = ({
   isOpen,
   close,
 }: ModalBaseProps): ReactElement => (
-  <Modal
-    isOpen={isOpen}
-    onRequestClose={close}
-    style={customStyles}
-    contentLabel="Example Modal"
-  >
+  <Modal isOpen={isOpen} onRequestClose={close} style={customStyles}>
     {children}
   </Modal>
 )
