@@ -57,13 +57,11 @@ export const TableVariants = observer(
       return <Loader />
     }
 
-    if (datasetStore.tabReport.length === 0) {
-      return <NoResultsFound />
-    }
-
     return (
       <Styles>
         <Table columns={columns} data={datasetStore.tabReport} />
+
+        {datasetStore.tabReport.length === 0 && <NoResultsFound />}
 
         <Box style={{ height: 100, width: '100%' }}>
           {datasetStore.isFetchingMore && <Loader />}

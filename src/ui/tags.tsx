@@ -1,44 +1,29 @@
 import { ReactElement } from 'react'
-import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
-import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import { Box } from './box'
 import { Tag } from './tag'
-import { Text } from './text'
 
 interface Props {
   tags: string[]
 }
 
-const Root = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 382px;
-  max-height: 167px;
+export const Tags = observer(
+  ({ tags }: Props): ReactElement => {
+    if (tags.length === 0) {
+      return <p className="text-center py-4 text-grey-0">No tags</p>
+    }
 
-  background: rgba(255, 255, 255, 0.02);
-  padding: 16px;
-  border-radius: 4px;
-`
-
-const Title = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.44px;
-  color: white;
-  width: 100%;
-  margin: 0px;
-`
-
-export const Tags = ({ tags }: Props): ReactElement => (
-  <Root>
-    <Title>{`${t('general.tags')}:`}</Title>
-
-    {tags.map(tag => (
-      <Tag text={tag} key={tag} removeTag={() => datasetStore.removeTag(tag)} />
-    ))}
-  </Root>
+    return (
+      <div className="flex flex-wrap max-w-xs">
+        {tags.map(tag => (
+          <Tag
+            text={tag}
+            key={tag}
+            isActive={datasetStore.selectedTags.includes(tag)}
+          />
+        ))}
+      </div>
+    )
+  },
 )

@@ -1,47 +1,48 @@
 import { ReactElement } from 'react'
-import styled from 'styled-components'
+import cn from 'classnames'
+import { observer } from 'mobx-react-lite'
 
-import { generateTagColor } from '@core/tags-colors'
+import datasetStore from '@store/dataset'
 import { CloseTagSvg } from '@icons/close-tag'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 
 interface Props {
   text: string
-  color?: string
-  removeTag?: () => void
+  isActive?: boolean
 }
 
-const Root = styled(Box)`
-  background: #8fd6f8;
-  border-radius: 7px;
-  padding: 1px 11px;
-  height: 24px;
-  margin-top: 8px;
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
+export const Tag = observer(
+  ({ text, isActive }: Props): ReactElement => {
+    return (
+      <div
+        className={cn([
+          'rounded-full',
+          'py-1',
+          'px-2',
+          'flex',
+          'justify-between',
+          'items-center',
+          'm-1',
+          isActive ? 'bg-blue-bright' : 'bg-blue-light',
+        ])}
+        onClick={() => !isActive && datasetStore.addTag(text)}
+      >
+        <span
+          className={cn([
+            'text-12',
+            'cursor-pointer',
+            'leading-1',
+            isActive ? 'text-white' : 'text-blue-1',
+          ])}
+        >
+          {text}
+        </span>
 
-const StyledText = styled(Text)`
-  margin: 0;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 24px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: 0.44px;
-  color: #000000;
-  margin-right: 2px;
-`
-
-export const Tag = ({ text, removeTag }: Props): ReactElement => (
-  <Root style={{ backgroundColor: generateTagColor(text) }}>
-    <StyledText>{text}</StyledText>
-
-    <CloseTagSvg onClick={removeTag} />
-  </Root>
+        {isActive && (
+          <CloseTagSvg
+            onClick={() => isActive && datasetStore.removeTag(text)}
+          />
+        )}
+      </div>
+    )
+  },
 )

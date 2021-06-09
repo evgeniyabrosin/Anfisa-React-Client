@@ -5,6 +5,9 @@ export const en = {
     excel: 'Excel',
     csv: 'Csv',
     noResultsFound: 'No results found',
+    clearAll: 'Clear All',
+    cancel: 'Cancel',
+    apply: 'Apply',
   },
   home: {
     title: 'Home',

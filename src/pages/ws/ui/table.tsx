@@ -24,9 +24,11 @@ export const Table = ({ columns, data }: Props): ReactElement => {
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
-            {headerGroup.headers.map(column => (
+            {headerGroup.headers.map((column: any) => (
               <th {...column.getHeaderProps()} key={Math.random()}>
-                {column.render('Header')}
+                {column.HeaderComponent
+                  ? column.render('HeaderComponent')
+                  : column.render('Header')}
               </th>
             ))}
           </tr>

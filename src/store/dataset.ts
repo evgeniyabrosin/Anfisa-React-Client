@@ -8,16 +8,11 @@ import { tableColumnMap } from '@core/table-column-map'
 
 const INCREASE_INDEX = 50
 
-/*
-interface DsListI {
-  filter?: string
-  conditions?: string
-}
-*/
 class DatasetStore {
   dsStat: DsStatType = {}
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
+  tags: string[] = []
   selectedTags: string[] = []
   columns: string[] = Object.values(tableColumnMap)
   filteredNo: number[] = []
@@ -54,8 +49,16 @@ class DatasetStore {
     this.activePreset = value
   }
 
+  addTag(tagName: string) {
+    this.selectedTags = [...this.selectedTags, tagName]
+  }
+
   removeTag(tagName: string) {
     this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+  }
+
+  unselectAllTags = () => {
+    this.selectedTags = []
   }
 
   setColumns(columns: string[]) {
@@ -92,7 +95,7 @@ class DatasetStore {
     this.datasetName = datasetName
 
     await this.fetchDsStatAsync()
-    // await this.fetchWsTagsAsync()
+    await this.fetchWsTagsAsync()
 
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
@@ -230,7 +233,7 @@ class DatasetStore {
 
     runInAction(() => {
       this.wsTags = result
-      this.selectedTags = [...result['op-tags'], ...result['check-tags']]
+      this.tags = [...result['op-tags'], ...result['check-tags']]
     })
   }
 
@@ -256,6 +259,28 @@ class DatasetStore {
     this.filteredNo = result.records
       ? result.records.map((variant: { no: number }) => variant.no)
       : []
+
+    await this.fetchFilteredTabReportAsync()
+  }
+
+  fetchTagSelectAsync = async () => {
+    if (this.selectedTags.length === 0) {
+      this.indexTabReport = 0
+      await this.fetchTabReportAsync()
+
+      return
+    }
+
+    const response = await fetch(
+      getApiUrl(
+        `tag_select?ds=${this.datasetName}&tag=${this.selectedTags[0]}`,
+      ),
+    )
+
+    const result = await response.json()
+
+    this.indexFilteredNo = 0
+    this.filteredNo = result['tag-rec-list']
 
     await this.fetchFilteredTabReportAsync()
   }

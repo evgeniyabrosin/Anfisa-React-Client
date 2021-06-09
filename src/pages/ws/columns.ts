@@ -8,6 +8,7 @@ import { CellProteinChange } from './ui/cell-protein-change'
 import { CellSamples } from './ui/cell-samples'
 import { CellTags } from './ui/cell-tags'
 import { CellVariant } from './ui/cell-variant'
+import { TagsHeaderTable } from './ui/tags-header-table'
 
 export const variantColumnTable = [
   {
@@ -22,6 +23,7 @@ export const variantColumnTable = [
   },
   {
     Header: tableColumnMap.tags,
+    HeaderComponent: TagsHeaderTable,
     accessor: '_tags',
     Cell: CellTags,
   },

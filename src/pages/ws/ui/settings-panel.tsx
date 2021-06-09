@@ -8,7 +8,6 @@ import { Box } from '@ui/box'
 import { InputSearch } from '@ui/input-search'
 import { Text } from '@ui/text'
 import { ColumnsList } from './columns-list'
-import { TableVisualization } from './table-visualization'
 
 const Root = styled(Box)`
   background-color: #ffffff;
@@ -42,8 +41,6 @@ export const SettingsPanel = observer(
       />
 
       <ColumnsList />
-
-      <TableVisualization />
     </Root>
   ),
 )

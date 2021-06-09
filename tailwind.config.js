@@ -14,6 +14,7 @@ module.exports = {
       fontSize: {
         10: '10px',
         12: '12px',
+        16: '16px',
         20: '20px',
       },
       backgroundOpacity: {
@@ -136,7 +137,7 @@ module.exports = {
     // 'listStyleType', // The list-style-type utilities like list-disc
     'margin', // The margin utilities like ml-8
     // 'maxHeight', // The max-height utilities like max-h-32
-    // 'maxWidth', // The max-width utilities like max-w-5xl
+    'maxWidth', // The max-width utilities like max-w-5xl
     'minHeight', // The min-height utilities like min-h-full
     // 'minWidth', // The min-width utilities like min-w-full
     // 'mixBlendMode', // The mix-blend-mode utilities like mix-blend-color-burn
