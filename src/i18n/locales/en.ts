@@ -34,6 +34,9 @@ export const en = {
     customizeTable: 'Customize Table',
     copied: 'Copied Successful',
     editFilters: 'Edit filters',
+    gene: 'Gene',
+    searchFilter: 'Search for a filter',
+    searchTag: 'Search for a tag',
   },
   variant: {
     next: 'Next variant',

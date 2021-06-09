@@ -4,21 +4,17 @@ import { observer } from 'mobx-react-lite'
 import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import { FilterSvg } from '@icons/filter'
 import { PopperButton } from '@ui/popper-button'
 import { PopperTableModal } from '@ui/popper-table-modal'
 import { Tags } from '@ui/tags'
+import { HeaderTableButton } from './header-table-button'
 
 const ButtonElement = ({ refEl, onClick }: any) => (
-  <div
-    ref={refEl}
+  <HeaderTableButton
+    text={tableColumnMap.tags}
+    refEl={refEl}
     onClick={onClick}
-    className="flex item-center justify-between"
-  >
-    <p>{tableColumnMap.tags}</p>
-
-    <FilterSvg />
-  </div>
+  />
 )
 
 const ModalElement = observer(({ close }: { close: () => void }) => {
@@ -34,6 +30,7 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
     <PopperTableModal
       title={t('general.tags')}
       selectedAmount={datasetStore.selectedTags.length}
+      searchInputPlaceholder={t('ds.searchTag')}
       onClose={close}
       onClearAll={datasetStore.unselectAllTags}
       searchValue={searchValue}

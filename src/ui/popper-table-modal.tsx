@@ -2,12 +2,13 @@ import { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import { Button } from '@ui/button'
-import { Input } from '@ui/input'
+import { InputSearch } from './input-search'
 
 interface Props {
   title: string
   selectedAmount: number
   searchValue: string
+  searchInputPlaceholder?: string
   children: ReactElement
   onClearAll?: () => void
   onClose?: () => void
@@ -19,6 +20,7 @@ export const PopperTableModal = ({
   title,
   selectedAmount,
   searchValue,
+  searchInputPlaceholder,
   children,
   onClearAll,
   onClose,
@@ -28,8 +30,9 @@ export const PopperTableModal = ({
   <div className="bg-white p-4 shadow-card rounded p-1">
     <p className="text-16 text-blue-dark mb-5">{title}</p>
 
-    <Input
+    <InputSearch
       value={searchValue}
+      placeholder={searchInputPlaceholder}
       onChange={e => onChange && onChange(e.target.value)}
     />
 

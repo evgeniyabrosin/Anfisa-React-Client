@@ -8,11 +8,13 @@ import { CellProteinChange } from './ui/cell-protein-change'
 import { CellSamples } from './ui/cell-samples'
 import { CellTags } from './ui/cell-tags'
 import { CellVariant } from './ui/cell-variant'
-import { TagsHeaderTable } from './ui/tags-header-table'
+import { GeneHeaderTable } from './ui/header-table-gene'
+import { TagsHeaderTable } from './ui/header-table-tags'
 
 export const variantColumnTable = [
   {
     Header: tableColumnMap.gene,
+    HeaderComponent: GeneHeaderTable,
     accessor: 'GeneColored',
     Cell: CellGene,
   },

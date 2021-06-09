@@ -12,14 +12,19 @@ class DatasetStore {
   dsStat: DsStatType = {}
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
+  genes: string[] = []
   tags: string[] = []
+
   selectedTags: string[] = []
+  selectedGenes: string[] = []
   columns: string[] = Object.values(tableColumnMap)
+
   filteredNo: number[] = []
 
   datasetName = ''
   activePreset = ''
   conditions: any[] = []
+  zone: any[] = []
   searchColumnValue = ''
 
   indexTabReport = 0
@@ -61,12 +66,38 @@ class DatasetStore {
     this.selectedTags = []
   }
 
+  addGene(gene: string) {
+    this.selectedGenes = [...this.selectedGenes, gene]
+  }
+
+  removeGene(geneName: string) {
+    this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
+  }
+
+  unselectAllGenes = () => {
+    this.selectedGenes = []
+  }
+
   setColumns(columns: string[]) {
     this.columns = columns
   }
 
   setDatasetName(datasetName: string) {
     this.datasetName = datasetName
+  }
+
+  addZone(zone: [string, string[]]) {
+    if (zone[1].length === 0) {
+      this.clearZone()
+
+      return
+    }
+
+    this.zone = [...this.zone, zone]
+  }
+
+  clearZone() {
+    this.zone = []
   }
 
   addConditions(conditions: string[][]) {
@@ -238,10 +269,12 @@ class DatasetStore {
   }
 
   async fetchWsListAsync() {
-    const body = new URLSearchParams({ ds: this.datasetName })
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      conditions: JSON.stringify(this.conditions),
+      zone: JSON.stringify(this.zone),
+    })
 
-    this.conditions &&
-      body.append('conditions', JSON.stringify(this.conditions))
     this.activePreset && body.append('filter', this.activePreset)
 
     const response = await fetch(getApiUrl(`ws_list`), {
@@ -261,6 +294,24 @@ class DatasetStore {
       : []
 
     await this.fetchFilteredTabReportAsync()
+  }
+
+  async fetchZoneListAsync(zone: string) {
+    const body = new URLSearchParams({ ds: this.datasetName, zone })
+
+    const response = await fetch(getApiUrl(`zone_list`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.genes = result.variants
+    })
   }
 
   fetchTagSelectAsync = async () => {
