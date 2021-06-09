@@ -6,10 +6,10 @@ import { ToastContainer } from 'react-toastify'
 
 import { GlobalStyle } from '@theme'
 import { Routes } from '@router/routes.enum'
-import { FilterPage } from '../pages/filter/page'
-import { MainPage } from '../pages/main/page'
-import { VariantPage } from '../pages/variant/page'
-import { WSPage } from '../pages/ws/page'
+import { FilterPage } from '@pages/filter/page'
+import { MainPage } from '@pages/main/page'
+import { VariantPage } from '@pages/variant/page'
+import { WSPage } from '@pages/ws/page'
 
 export const RouterBase = (): ReactElement => (
   <Router>
