@@ -1,27 +1,12 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { StatList } from '@declarations'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
-
-const GroupName = styled(Text)`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #78909c;
-  margin: 0;
-  margin-top: 12px;
-  margin-bottom: 10px;
-  padding-left: 24px;
-  padding-right: 180px;
-`
 
 export const FilterRefinerGroups = observer(
   (): ReactElement => {
@@ -48,31 +33,30 @@ export const FilterRefinerGroups = observer(
     }
 
     return (
-      <Box>
+      <div>
         {keys.map(group => (
-          <Box key={group}>
-            <GroupName>{group}</GroupName>
+          <div key={group}>
+            <p className="text-14 font-500 text-grey-blue">{group}</p>
 
-            {datasetStore.getFilterRefiner[group].map((item: StatList) => {
-              const amout = item.variants
-                ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
-                : 0
-
-              return (
-                <FilterRefinerGroupItem
-                  onChange={checked =>
-                    handleCheckGroupItem(checked, group, item.name)
-                  }
-                  {...item}
-                  key={item.name}
-                  amount={amout}
-                  group={group}
-                />
-              )
-            })}
-          </Box>
+            {datasetStore.getFilterRefiner[group].map((item: StatList) => (
+              <FilterRefinerGroupItem
+                onChange={checked =>
+                  handleCheckGroupItem(checked, group, item.name)
+                }
+                {...item}
+                key={item.name}
+                isFunc={item.kind === FilterKindEnum.func}
+                amount={
+                  item.variants
+                    ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
+                    : 0
+                }
+                group={group}
+              />
+            ))}
+          </div>
         ))}
-      </Box>
+      </div>
     )
   },
 )

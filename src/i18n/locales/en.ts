@@ -65,5 +65,6 @@ export const en = {
     selectedVariants: 'Selected variants',
     show: 'Show {amount} variants',
     amountOf: '{selected} / {all}',
+    query: 'Query',
   },
 }

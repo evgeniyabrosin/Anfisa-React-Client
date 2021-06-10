@@ -1,75 +1,20 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled, { css } from 'styled-components'
-import { ifProp } from 'styled-tools'
 
 import { StatListType } from '@declarations'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 
 type Props = StatListType & {
   onChange?: (checked: boolean) => void
   className?: string
   amount?: number
   group?: string
+  isFunc?: boolean
 }
-
-const Root = styled(Box)<{ isIndeterminate?: boolean }>`
-  display: flex;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 24px;
-  align-items: center;
-
-  ${ifProp(
-    'isIndeterminate',
-    css`
-      background-color: #def1fd;
-    `,
-  )}
-`
-
-const StyledGroupItem = styled(Text)`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #000000;
-  margin: 0;
-  margin-left: 8px;
-`
-
-const StyledCheckbox = styled(Checkbox)`
-  background: #ffffff;
-  border: 2px solid #e3e5e5;
-  box-sizing: border-box;
-  border-radius: 2px;
-  width: 16px;
-  height: 16px;
-`
-
-const StyledAmout = styled(Text)`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #a6adaf;
-  margin: 0;
-  margin-left: 8px;
-`
-
-const SelectedAmount = styled('span')`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #0c65fd;
-  margin: 0;
-`
 
 export const FilterRefinerGroupItem = observer(
   ({
@@ -78,6 +23,7 @@ export const FilterRefinerGroupItem = observer(
     className,
     amount,
     group,
+    isFunc,
     ...rest
   }: Props): ReactElement => {
     const checked =
@@ -99,27 +45,49 @@ export const FilterRefinerGroupItem = observer(
     }
 
     return (
-      <Root isIndeterminate={isIndeterminate} className={className}>
-        <StyledCheckbox
+      <div
+        className={cn(
+          'flex items-center py-1 pr-32',
+          {
+            'bg-blue-light': isIndeterminate,
+          },
+          className,
+        )}
+      >
+        <Checkbox
+          className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
           checked={checked}
           style={{ cursor: 'pointer' }}
           indeterminate={isIndeterminate}
           onChange={event => onChange && onChange(event.target.checked)}
         />
-        <StyledGroupItem key={name} onClick={handleSelect}>
+
+        {isFunc && (
+          <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
+            fn
+          </p>
+        )}
+
+        <p
+          key={name}
+          onClick={handleSelect}
+          className={cn('text-14 text-black ml-2', {
+            'font-bold': checked,
+          })}
+        >
           {name}
-        </StyledGroupItem>
+        </p>
 
         {amount !== 0 && (
-          <StyledAmout>
+          <span className="text-14 text-grey-0 ml-1">
             {'('}
             {selectedSum !== 0 && (
-              <SelectedAmount>{`${selectedSum}/`}</SelectedAmount>
+              <span className="text-14 text-blue-0">{`${selectedSum}/`}</span>
             )}
             {`${amount})`}
-          </StyledAmout>
+          </span>
         )}
-      </Root>
+      </div>
     )
   },
 )

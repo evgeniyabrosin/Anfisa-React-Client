@@ -16,7 +16,7 @@ export const GeneList = observer(({ genes }: Props) => {
   }
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 h-60 overflow-y-scroll">
       {genes.map(gene => (
         <div key={gene} className="flex items-center mb-4">
           <Checkbox

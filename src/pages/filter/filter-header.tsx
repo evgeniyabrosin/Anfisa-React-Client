@@ -1,29 +1,10 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
-import styled from 'styled-components'
 
 import { useParams } from '@core/hooks/use-params'
 import { CloseSvg } from '@icons/close'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 import { FilterControl } from './ui/filter-control'
-
-const Root = styled(Box)`
-  background-color: #f0f0f0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 27px 24px 16px 24px;
-`
-
-const StyledText = styled(Text)`
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 30px;
-  color: #000000;
-  margin: 0px;
-`
+import { VisualEditorSwitch } from './ui/visual-editor-switch'
 
 export const FilterHeader = (): ReactElement => {
   const params = useParams()
@@ -32,10 +13,15 @@ export const FilterHeader = (): ReactElement => {
   const handleClose = () => history.goBack()
 
   return (
-    <Root>
-      <StyledText>{params.get('ds')}</StyledText>
-      <CloseSvg onClick={handleClose} style={{ cursor: 'pointer' }} />
+    <div className="flex flex-wrap justify-between bg-blue-dark pt-7 pr-6 pb-4 pl-6">
+      <span className="text-20 text-white font-bold">{params.get('ds')}</span>
+
+      <div className="flex items-center">
+        <VisualEditorSwitch />
+        <CloseSvg onClick={handleClose} style={{ cursor: 'pointer' }} />
+      </div>
+
       <FilterControl />
-    </Root>
+    </div>
   )
 }

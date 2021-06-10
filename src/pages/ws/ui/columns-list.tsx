@@ -59,7 +59,7 @@ export const ColumnsList = observer(
     }
 
     return (
-      <div className="mt-3 pb-5 w-64">
+      <div className="mt-3 w-64 pr-4">
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable">
             {provided => (

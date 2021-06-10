@@ -1,50 +1,41 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
 import { DropDown } from '@ui/dropdown'
-import { Text } from '@ui/text'
-import { VisualEditorSwitch } from './visual-editor-switch'
-
-const Root = styled(Box)`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 19px;
-`
-
-const StyledText = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-  color: #000000;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-`
 
 export const FilterControl = observer(
   (): ReactElement => (
-    <Root>
-      <StyledText>{t('filter.method')}</StyledText>
+    <div className="flex items-center w-full mt-5">
+      <div>
+        <span className="text-grey-blue text-14 font-bold mb-2">
+          {t('filter.method')}
+        </span>
 
-      <DropDown
-        options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
-        value={filterStore.method}
-        onSelect={args => filterStore.setMethod(args.value as FilterMethodEnum)}
-      />
+        <DropDown
+          options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
+          value={filterStore.method}
+          onSelect={args =>
+            filterStore.setMethod(args.value as FilterMethodEnum)
+          }
+        />
+      </div>
 
-      <VisualEditorSwitch />
+      <div className="bg-blue-lighter rounded-lg w-px h-full mx-3" />
 
-      <DropDown
-        options={['Pick a saved query']}
-        onSelect={() => null}
-        placeholder="Pick a saved query"
-      />
-    </Root>
+      <div>
+        <span className="text-grey-blue text-14 font-bold mb-2">
+          {t('filter.query')}
+        </span>
+
+        <DropDown
+          options={['Pick a saved query']}
+          onSelect={() => null}
+          placeholder="Pick a saved query"
+        />
+      </div>
+    </div>
   ),
 )

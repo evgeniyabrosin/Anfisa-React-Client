@@ -14,7 +14,11 @@ module.exports = {
     light: '#e7f4ff',
     secondary: '#2a4567',
   },
-  green: '#27b724',
+  green: {
+    0: '#27b724',
+    light: '#ddf3d9',
+    secondary: '#19af00',
+  },
   grey: {
     0: '#a6adaf',
     1: '#3e4345',
