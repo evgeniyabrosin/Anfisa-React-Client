@@ -8,6 +8,7 @@ import { ExportPanel } from '@ui/export-panel'
 import { ExportReportButton } from '@ui/export-report-button'
 import { Header } from '@ui/header'
 import { PopperButton } from '@ui/popper-button'
+import { VariantDrawer } from '@components/variant/drawer'
 import { ControlPanel } from './ui/control-panel'
 import { TableVariants } from './ui/table-variants'
 
@@ -48,7 +49,7 @@ export const WSPage = observer(
     }, [])
 
     return (
-      <div>
+      <div className="h-full flex flex-col">
         <Header>
           <div className="text-white flex-grow flex justify-end pr-6">
             <PopperButton
@@ -58,8 +59,14 @@ export const WSPage = observer(
             />
           </div>
         </Header>
+
         <ControlPanel />
-        <TableVariants />
+
+        <div className="flex-grow flex overflow-hidden">
+          <TableVariants />
+
+          <VariantDrawer />
+        </div>
       </div>
     )
   },

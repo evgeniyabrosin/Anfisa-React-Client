@@ -51,6 +51,10 @@ class DatasetStore {
     this.columns = []
   }
 
+  setAllColumn() {
+    this.columns = Object.values(tableColumnMap)
+  }
+
   setSearchColumnValue(value: string) {
     this.searchColumnValue = value
   }

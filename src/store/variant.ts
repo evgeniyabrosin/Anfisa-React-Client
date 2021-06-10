@@ -5,6 +5,7 @@ import { ReccntType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 
 class VariantStore {
+  drawerVisible = false
   variant: ReccntType[] = []
   activeTab = ''
   index = 0
@@ -17,6 +18,10 @@ class VariantStore {
   nextVariant() {
     this.index += 1
     this.fetchVarinatInfoAsync()
+  }
+
+  setDrawerVisible(visible: boolean) {
+    this.drawerVisible = visible
   }
 
   setActiveTab(name: string) {

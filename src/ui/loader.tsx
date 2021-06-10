@@ -5,6 +5,8 @@ import { theme } from '@theme'
 import { Box } from './box'
 
 const Root = styled(Box)`
+  width: 100%;
+
   .loader,
   .loader:before,
   .loader:after {

@@ -10,6 +10,8 @@ import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
 const Styles = styled.div`
+  overflow-x: auto;
+
   table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -52,12 +54,10 @@ export const TableVariants = observer(
       variantColumnTable.find(item => item.Header === column),
     )
 
-    if (datasetStore.isLoadingTabReport) {
-      return <Loader />
-    }
+    if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (
-      <Styles>
+      <Styles className="flex-1">
         <Table columns={columns} data={datasetStore.tabReport} />
 
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}

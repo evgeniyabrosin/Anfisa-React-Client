@@ -50,7 +50,7 @@ export const PopperTableModal = ({
 
     <div className="flex justify-end">
       <Button text={t('general.cancel')} onClick={onClose} />
-      <Button text={t('general.apply')} onClick={onApply} />
+      <Button text={t('general.apply')} className="ml-3" onClick={onApply} />
     </div>
   </div>
 )

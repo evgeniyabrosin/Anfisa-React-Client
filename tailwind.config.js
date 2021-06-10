@@ -97,7 +97,7 @@ module.exports = {
     // 'dropShadow', // The drop-shadow utilities like drop-shadow-lg
     'fill', // The fill utilities like fill-current
     // 'filter', // The filter utilities like filter
-    // 'flex', // The flex utilities like flex-auto
+    'flex', // The flex utilities like flex-auto
     'flexDirection', // The flex-direction utilities like flex-row-reverse
     'flexGrow', // The flex-grow utilities like flex-grow-0
     'flexShrink', // The flex-shrink utilities like flex-shrink-0
@@ -180,9 +180,9 @@ module.exports = {
     'rotate', // The rotate utilities like rotate-180
     // 'transformOrigin', // The transform-origin utilities like origin-bottom-right
     // 'transitionDelay', // The transition-delay utilities like delay-200
-    // 'transitionDuration', // The transition-duration utilities like duration-200
+    'transitionDuration', // The transition-duration utilities like duration-200
     // 'transitionProperty', // The transition-property utilities like transition-colors
-    // 'transitionTimingFunction', // The transition-timing-function utilities like ease-in
+    'transitionTimingFunction', // The transition-timing-function utilities like ease-in
     // 'translate', // The translate utilities like -translate-x-full
     // 'userSelect', // The user-select utilities like select-text
     // 'verticalAlign', // The vertical-align utilities like align-middle
