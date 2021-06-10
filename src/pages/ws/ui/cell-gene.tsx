@@ -25,7 +25,7 @@ const Circle = styled(Box)`
 
 export const CellGene = observer(
   ({ cell }: CellI): ReactElement => {
-    const value = get(cell, 'value[0]', []) as string[]
+    const gene = String(get(cell, 'value[0]', []))
     const colorNumber = get(cell, 'value[1]', -1)
     const params = useParams()
 
@@ -38,7 +38,7 @@ export const CellGene = observer(
     }
 
     const copyDetails = () => {
-      copyToClipboard(String(value))
+      copyToClipboard(gene)
 
       toast.info(t('ds.copied'), {
         position: 'bottom-right',
@@ -59,13 +59,7 @@ export const CellGene = observer(
           }}
         />
 
-        <div>
-          {value.map(gene => (
-            <span className="text-sm leading-18px" key={gene}>
-              {gene}
-            </span>
-          ))}
-        </div>
+        <span className="text-sm leading-18px">{gene}</span>
 
         <ShareSvg
           className="ml-5 cursor-pointer text-blue-bright"
