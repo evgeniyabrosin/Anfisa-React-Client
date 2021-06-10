@@ -2,12 +2,16 @@ import 'react-dropdown/style.css'
 
 import { ReactElement } from 'react'
 import DropdownBase, { Option } from 'react-dropdown'
-import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { FilterList } from '@declarations'
-import datasetStore from '@store/dataset'
+import { theme } from '@theme'
+
+interface Props {
+  options: any[]
+  placeholder?: string
+  value?: string
+  onSelect: (arg: Option) => void
+}
 
 const StyledDropDown = styled(DropdownBase)`
   .controlClassName {
@@ -17,12 +21,15 @@ const StyledDropDown = styled(DropdownBase)`
     font-size: 12px;
     line-height: 24px;
     letter-spacing: 0.44px;
-    color: #367bf5;
+    background-color: ${theme('colors.blue.lighter')};
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-left: 0;
     cursor: pointer;
+    border-radius: 4px;
+    width: 209px;
+    padding-right: 20px;
 
     :hover {
       box-shadow: none;
@@ -30,7 +37,7 @@ const StyledDropDown = styled(DropdownBase)`
   }
 
   .placeholderClassName {
-    max-width: 120px;
+    max-width: 209px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -38,20 +45,21 @@ const StyledDropDown = styled(DropdownBase)`
   }
 
   .arrowClassName {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    align-self: center;
+    top: 45%;
+    border-color: white transparent transparent;
   }
 
   .menuClassName {
-    width: auto;
     border: none;
     border-radius: 4px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
     padding-top: 8px;
     padding-bottom: 8px;
     padding-right: 8px;
+    background-color: ${theme('colors.blue.lighter')};
+    color: white;
+    overflow-x: hidden;
+    max-height: 300px;
 
     ::-webkit-scrollbar {
       width: 4px;
@@ -75,44 +83,38 @@ const StyledDropDown = styled(DropdownBase)`
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
-    line-height: 12px;
-    color: #262626;
+    line-height: 14px;
+    color: white;
     padding-top: 10px;
     padding-bottom: 10px;
+    width: 209px;
 
     :hover {
-      background-color: #def1fd;
+      background-color: ${theme('colors.blue.secondary')};
     }
   }
 
   .Dropdown-option.is-selected {
-    color: #367bf5;
-    background-color: white;
+    color: white;
+    background-color: ${theme('colors.blue.secondary')};
   }
 `
 
-export const DropDown = observer(
-  (): ReactElement => {
-    const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
-      (preset: FilterList) => preset.name,
-    )
-
-    const onSelect = (arg: Option) => {
-      datasetStore.setActivePreset(arg.value)
-      datasetStore.fetchWsListAsync()
-    }
-
-    return (
-      <StyledDropDown
-        options={presets}
-        onChange={onSelect}
-        placeholder="Select an option"
-        controlClassName="controlClassName"
-        arrowClassName="arrowClassName"
-        className="rootDropDown"
-        placeholderClassName="placeholderClassName"
-        menuClassName="menuClassName"
-      />
-    )
-  },
+export const DropDown = ({
+  options,
+  value,
+  placeholder,
+  onSelect,
+}: Props): ReactElement => (
+  <StyledDropDown
+    options={options}
+    value={value}
+    onChange={onSelect}
+    placeholder={placeholder}
+    controlClassName="controlClassName"
+    arrowClassName="arrowClassName"
+    className="rootDropDown"
+    placeholderClassName="placeholderClassName"
+    menuClassName="menuClassName"
+  />
 )

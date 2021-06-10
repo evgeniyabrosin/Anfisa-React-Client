@@ -34,9 +34,7 @@ export const FilterHeader = (): ReactElement => {
   return (
     <Root>
       <StyledText>{params.get('ds')}</StyledText>
-
       <CloseSvg onClick={handleClose} style={{ cursor: 'pointer' }} />
-
       <FilterControl />
     </Root>
   )

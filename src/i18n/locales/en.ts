@@ -8,6 +8,7 @@ export const en = {
     clearAll: 'Clear All',
     cancel: 'Cancel',
     apply: 'Apply',
+    selectAnOption: 'Select an option',
   },
   home: {
     title: 'Home',

@@ -3,7 +3,7 @@ import { Option } from 'react-dropdown'
 import { Form, FormikProps } from 'formik'
 
 import datasetStore from '@store/dataset'
-import { FilterDropdown } from './filter-dropdown'
+import { DropDown } from '@ui/dropdown'
 
 type Props = FormikProps<{
   variants: string[]
@@ -53,10 +53,10 @@ export const CompundHet = ({ setFieldValue }: Props): ReactElement => {
 
   return (
     <Form>
-      <FilterDropdown
+      <DropDown
         value={options[0].value}
         options={options}
-        onChange={onChangeAsync}
+        onSelect={onChangeAsync}
       />
 
       {variants.map(variant => (

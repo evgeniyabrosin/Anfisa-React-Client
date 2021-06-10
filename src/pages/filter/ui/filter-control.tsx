@@ -6,8 +6,8 @@ import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Box } from '@ui/box'
+import { DropDown } from '@ui/dropdown'
 import { Text } from '@ui/text'
-import { FilterDropdown } from './filter-dropdown'
 import { VisualEditorSwitch } from './visual-editor-switch'
 
 const Root = styled(Box)`
@@ -32,17 +32,17 @@ export const FilterControl = observer(
     <Root>
       <StyledText>{t('filter.method')}</StyledText>
 
-      <FilterDropdown
+      <DropDown
         options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
         value={filterStore.method}
-        onChange={args => filterStore.setMethod(args.value as FilterMethodEnum)}
+        onSelect={args => filterStore.setMethod(args.value as FilterMethodEnum)}
       />
 
       <VisualEditorSwitch />
 
-      <FilterDropdown
+      <DropDown
         options={['Pick a saved query']}
-        onChange={() => null}
+        onSelect={() => null}
         placeholder="Pick a saved query"
       />
     </Root>
