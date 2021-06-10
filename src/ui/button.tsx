@@ -4,6 +4,7 @@ import cn, { Argument } from 'classnames'
 interface Props {
   text?: string
   size?: 'sm' | 'md'
+  disabled?: boolean
   hasBackground?: boolean
   className?: Argument
   onClick?: () => void
@@ -16,6 +17,7 @@ interface Props {
 export const Button = ({
   text,
   size = 'md',
+  disabled = false,
   hasBackground = true,
   onClick,
   className,
@@ -48,12 +50,22 @@ export const Button = ({
       'text-white': true,
       'bg-blue-bright': hasBackground && isDefaultBackground,
       'border-2 border-blue-bright': !hasBackground,
+      'cursor-not-allowed': disabled,
     },
     className,
   )
 
+  const clickHandler = () => {
+    !disabled && onClick && onClick()
+  }
+
   return (
-    <button onClick={onClick} className={cnButton} ref={refEl}>
+    <button
+      disabled={disabled}
+      className={cnButton}
+      ref={refEl}
+      onClick={clickHandler}
+    >
       {prepend}
       {text && <span className="mx-2 text-xs leading-14px">{text}</span>}
       {icon}

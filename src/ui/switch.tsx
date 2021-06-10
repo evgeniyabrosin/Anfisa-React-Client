@@ -5,8 +5,9 @@ import { theme } from '@theme'
 
 interface Props {
   isChecked: boolean
-  onChange: (checked: boolean) => void
+  disabled?: boolean
   size?: 'sm' | 'md'
+  onChange: (checked: boolean) => void
 }
 
 const height = {
@@ -20,9 +21,10 @@ const width = {
 }
 
 export const Switch = ({
-  onChange,
   isChecked,
+  disabled,
   size = 'md',
+  onChange,
 }: Props): ReactElement => (
   <SwitchBase
     onChange={onChange}
@@ -32,9 +34,9 @@ export const Switch = ({
     onColor={theme('colors.blue.bright')}
     offColor={theme('colors.grey.blue')}
     borderRadius={16}
-    className="SwitchId"
     height={height[size]}
     handleDiameter={height[size] - 4}
     width={width[size]}
+    disabled={disabled}
   />
 )
