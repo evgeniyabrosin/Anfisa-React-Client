@@ -16,11 +16,6 @@ interface Props {
 const StyledDropDown = styled(DropdownBase)`
   .controlClassName {
     border: none;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 24px;
-    letter-spacing: 0.44px;
     background-color: ${theme('colors.blue.lighter')};
     color: white;
     white-space: nowrap;
@@ -111,9 +106,9 @@ export const DropDown = ({
     value={value}
     onChange={onSelect}
     placeholder={placeholder}
-    controlClassName="controlClassName"
+    controlClassName="controlClassName text-12 leadeing-14"
     arrowClassName="arrowClassName"
-    className="rootDropDown"
+    className="rootDropDown leading-16px"
     placeholderClassName="placeholderClassName"
     menuClassName="menuClassName"
   />
