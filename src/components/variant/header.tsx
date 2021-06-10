@@ -10,6 +10,7 @@ import { ExportPanel } from '@ui/export-panel'
 import { ExportReportButton } from '@ui/export-report-button'
 import { PopperButton } from '@ui/popper-button'
 import { Text } from '@ui/text'
+import { closeHandler } from './drawer'
 import { NextVariantButton } from './ui/next-variant'
 
 const Root = styled(Box)`
@@ -41,10 +42,6 @@ export const VariantHeader = observer(
       variantStore.nextVariant()
     }
 
-    const closeVariant = () => {
-      history.back()
-    }
-
     return (
       <Root>
         <StyledName>{`[${genInfo}] ${hg19}`}</StyledName>
@@ -57,7 +54,7 @@ export const VariantHeader = observer(
 
         <CloseSvg
           style={{ marginLeft: 'auto', marginRight: '30px', cursor: 'pointer' }}
-          onClick={closeVariant}
+          onClick={closeHandler}
         />
       </Root>
     )

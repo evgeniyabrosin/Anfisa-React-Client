@@ -4,19 +4,22 @@ import { observer } from 'mobx-react-lite'
 
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
-// import { VariantPage } from '@components/variant/page'
+import { VariantHeader } from './header'
+import { HeaderBaseInfo } from './ui/header-base-info'
+import { TabContent } from './ui/tab-content'
+import { Tabs } from './ui/tabs'
+
+export const closeHandler = () => {
+  variantStore.setDrawerVisible(false)
+
+  setTimeout(() => {
+    datasetStore.setAllColumn()
+    datasetStore.showColumns()
+  }, 200)
+}
 
 export const VariantDrawer = observer(
   (): ReactElement => {
-    const closeHandler = () => {
-      variantStore.setDrawerVisible(false)
-
-      setTimeout(() => {
-        datasetStore.setAllColumn()
-        datasetStore.showColumns()
-      }, 200)
-    }
-
     useEffect(() => {
       return () => {
         closeHandler()
@@ -31,10 +34,13 @@ export const VariantDrawer = observer(
           variantStore.drawerVisible ? 'w-4/5' : 'w-0',
         )}
       >
-        <button className="p-4 text-white" onClick={closeHandler}>
-          Закрыть
-        </button>
-        {/* <VariantPage /> */}
+        <VariantHeader />
+
+        <HeaderBaseInfo />
+
+        <Tabs />
+
+        <TabContent />
       </div>
     )
   },

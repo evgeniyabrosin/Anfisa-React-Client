@@ -29,11 +29,23 @@ class VariantStore {
   }
 
   setIndex(index: number) {
+    const oldIndex = this.index
+
     this.index = index
+
+    if (oldIndex !== index) {
+      this.fetchVarinatInfoAsync()
+    }
   }
 
   setDsName(dsName: string) {
+    const oldDsName = this.dsName
+
     this.dsName = dsName
+
+    if (oldDsName !== dsName) {
+      this.fetchVarinatInfoAsync()
+    }
   }
 
   async fetchVarinatInfoAsync() {
