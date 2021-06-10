@@ -12,7 +12,7 @@ import { FilterList } from './filter-list'
 export const ControlPanel = observer(
   (): ReactElement => {
     const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
-    const filtersLength = Object.keys(filterStore.selectedFilters).length
+    const hasFilters = Object.keys(filterStore.selectedFilters).length > 0
 
     return (
       <div className="flex pb-3 px-4 bg-blue-dark">
@@ -28,7 +28,7 @@ export const ControlPanel = observer(
           <Results />
         </div>
 
-        {filtersLength && (
+        {hasFilters && (
           <div className={cn(sectionClassName, 'overflow-hidden ml-3')}>
             <FilterList filters={filterStore.selectedFilters} />
           </div>
