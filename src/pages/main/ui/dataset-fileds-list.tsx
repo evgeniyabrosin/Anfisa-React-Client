@@ -64,9 +64,7 @@ const InfoDetails = observer(
 
     return (
       <Card className="flex flex-col col-span-2 xl:col-span-3">
-        <div className="flex justify-between mb-3">
-          <CardTitle text={dirinfoStore.activeInfoName} className="mr-5" />
-
+        <div className="flex justify-end mb-3">
           <FullScreenSvg onClick={setVisible} />
         </div>
 
