@@ -21,7 +21,7 @@ const Circle = styled(Box)`
 
 export const CellGene = observer(
   ({ cell }: CellI): ReactElement => {
-    const gene = String(get(cell, 'value[0]', []))
+    const value = get(cell, 'value[0]', []) as string[]
     const colorNumber = get(cell, 'value[1]', -1)
     const params = useParams()
 
@@ -41,7 +41,13 @@ export const CellGene = observer(
           }}
         />
 
-        <span className="text-sm leading-18px">{gene}</span>
+        <div>
+          {value.map(gene => (
+            <div className="text-sm leading-18px" key={gene}>
+              {gene}
+            </div>
+          ))}
+        </div>
 
         <ShareSvg
           className="ml-5 cursor-pointer text-blue-bright"
