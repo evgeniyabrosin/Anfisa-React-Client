@@ -1,5 +1,6 @@
 import { ReactElement } from 'react'
 import { toast } from 'react-toastify'
+import cn from 'classnames'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { t } from '@i18n'
@@ -7,9 +8,13 @@ import { CopySvg } from '@ui/icons/copy'
 
 interface Props {
   text: string
+  colorClass?: string
 }
 
-export const CopyToClipboard = ({ text }: Props): ReactElement => {
+export const CopyToClipboard = ({
+  text,
+  colorClass = 'text-blue-bright',
+}: Props): ReactElement => {
   const copy = () => {
     copyToClipboard(text)
 
@@ -25,6 +30,9 @@ export const CopyToClipboard = ({ text }: Props): ReactElement => {
   }
 
   return (
-    <CopySvg onClick={copy} className="ml-1 cursor-pointer text-blue-bright" />
+    <CopySvg
+      onClick={copy}
+      className={(cn('ml-1 cursor-pointer'), colorClass)}
+    />
   )
 }

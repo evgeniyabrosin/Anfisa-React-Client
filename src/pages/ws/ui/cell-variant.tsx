@@ -14,7 +14,7 @@ export const CellVariant = ({ cell }: CellI): ReactElement => {
   return (
     <div className="text-12 leading-18px">
       <div className="flex">
-        <span>{value[0]}</span>
+        <span className="mr-1">{value[0]}</span>
 
         <CopyToClipboard
           text={`${value[0]} ${value[1]}`}
