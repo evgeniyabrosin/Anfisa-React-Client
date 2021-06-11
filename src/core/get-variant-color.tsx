@@ -1,11 +1,13 @@
+import { theme } from '@theme'
+
 interface ColorMapI {
   [key: string]: string
 }
 
 const colorMap: ColorMapI = {
-  10: '#2FA84F',
-  20: 'yellow',
-  30: 'rgb(234, 225, 47)',
+  10: theme('colors.green.secondary'),
+  20: theme('colors.yellow.bright'),
+  30: theme('colors.yellow.dirty'),
 }
 
 export const getVariantColor = (value: number | string): string => {
