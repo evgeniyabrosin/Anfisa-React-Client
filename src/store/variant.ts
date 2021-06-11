@@ -4,7 +4,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { ReccntType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 
-class VariantStore {
+export class VariantStore {
   drawerVisible = false
   variant: ReccntType[] = []
   activeTab = ''

@@ -1,9 +1,18 @@
 import { ReactElement } from 'react'
 import { useTable } from 'react-table'
 
+import variantStore, { VariantStore } from '@store/variant'
+
 interface Props {
   columns: any[]
   data: any[]
+}
+
+export const isRowSelected = (
+  rowIndex: number,
+  store: VariantStore,
+): boolean => {
+  return rowIndex === store.index && store.drawerVisible
 }
 
 export const Table = ({ columns, data }: Props): ReactElement => {
