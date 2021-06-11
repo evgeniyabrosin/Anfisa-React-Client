@@ -1,11 +1,18 @@
 import { ReactElement } from 'react'
 import { useTable } from 'react-table'
+import cn from 'classnames'
 
+import { useParams } from '@core/hooks/use-params'
+import datasetStore from '@store/dataset'
 import variantStore, { VariantStore } from '@store/variant'
 
 interface Props {
   columns: any[]
   data: any[]
+}
+
+interface PropsRow {
+  index: number
 }
 
 export const isRowSelected = (
@@ -16,6 +23,8 @@ export const isRowSelected = (
 }
 
 export const Table = ({ columns, data }: Props): ReactElement => {
+  const params = useParams()
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -27,10 +36,18 @@ export const Table = ({ columns, data }: Props): ReactElement => {
     data,
   })
 
+  const handleOpenVariant = ({ index }: PropsRow) => {
+    datasetStore.setColumns(['Gene', 'Variant'])
+    datasetStore.showColumns()
+    variantStore.setIndex(index)
+    variantStore.setDsName(params.get('ds') ?? '')
+    variantStore.setDrawerVisible(true)
+  }
+
   // Render the UI for your table
   return (
-    <table {...getTableProps()} className="table-fixed text-black">
-      <thead>
+    <table {...getTableProps()} className="table-fixed">
+      <thead className="text-black">
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
             {headerGroup.headers.map((column: any) => (
@@ -43,12 +60,28 @@ export const Table = ({ columns, data }: Props): ReactElement => {
           </tr>
         ))}
       </thead>
+
       <tbody {...getTableBodyProps()}>
         {rows.map(row => {
           prepareRow(row)
 
           return (
-            <tr {...row.getRowProps()} key={Math.random()}>
+            <tr
+              {...row.getRowProps()}
+              key={Math.random()}
+              className={cn(
+                'cursor-pointer',
+                isRowSelected(row.index, variantStore)
+                  ? 'bg-blue-bright text-white'
+                  : 'text-black hover:bg-blue-light',
+              )}
+              onClick={() =>
+                variantStore.drawerVisible && handleOpenVariant(row)
+              }
+              onDoubleClick={() =>
+                !variantStore.drawerVisible && handleOpenVariant(row)
+              }
+            >
               {row.cells.map(cell => {
                 return (
                   <td {...cell.getCellProps()} key={Math.random()}>
