@@ -1,38 +1,12 @@
 import { Fragment, ReactElement } from 'react'
-import styled from 'styled-components'
 
 import { getVariantColor } from '@core/get-variant-color'
 import { CircleSvg } from '@icons/circle'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
 
 interface Props {
   name: string
   value?: string[]
 }
-
-const Root = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-`
-
-const StyledName = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 10px;
-  line-height: 16px;
-  color: #767272;
-  margin: 0px 5px 0px 0px;
-`
-
-const StyledValue = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 10px;
-  line-height: 16px;
-  color: #000000;
-  margin: 0px;
-`
 
 export const PredictionItem = ({ name, value }: Props): ReactElement => {
   if (!value || value?.length === 0) {
@@ -40,13 +14,10 @@ export const PredictionItem = ({ name, value }: Props): ReactElement => {
   }
 
   return (
-    <Root>
-      <CircleSvg
-        fill={getVariantColor(value[0][1])}
-        style={{ alignSelf: 'center', marginRight: 3 }}
-      />
-      <StyledName>{`${name}:`}</StyledName>
-      <StyledValue>{value[0][0]}</StyledValue>
-    </Root>
+    <div className="flex text-10 leading-16px items-center">
+      <CircleSvg className="mr-1" fill={getVariantColor(value[0][1])} />
+
+      {`${name}: ${value[0][0]}`}
+    </div>
   )
 }

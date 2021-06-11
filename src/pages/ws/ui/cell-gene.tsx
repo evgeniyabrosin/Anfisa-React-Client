@@ -1,23 +1,13 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { getVariantColor } from '@core/get-variant-color'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { ShareSvg } from '@icons/share'
-import { Box } from '@ui/box'
 import { CellI } from './cell-interfaces'
-
-const Circle = styled(Box)`
-  width: 8px;
-  height: 8px;
-  min-width: 8px;
-  border-radius: 50px;
-  margin-right: 10px;
-`
 
 export const CellGene = observer(
   ({ cell }: CellI): ReactElement => {
@@ -35,7 +25,8 @@ export const CellGene = observer(
 
     return (
       <div className="flex items-center">
-        <Circle
+        <div
+          className="flex-shrink-0 w-2 h-2 rounded-full mr-1.5"
           style={{
             border: `2px solid ${getVariantColor(colorNumber)}`,
           }}
