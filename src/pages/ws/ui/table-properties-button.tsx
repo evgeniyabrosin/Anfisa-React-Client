@@ -21,7 +21,7 @@ export const TableProperiesButton = ({
     onClick={onClick}
     text={t('ds.customizeTable')}
     hasBackground={false}
-    prepend={<SettingsSvg />}
+    prepend={<SettingsSvg className="text-blue-bright" />}
     append={<ArrowSvg fill="white" direction={isOpen ? 'top' : 'down'} />}
   />
 )

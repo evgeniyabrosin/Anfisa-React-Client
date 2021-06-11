@@ -1,13 +1,9 @@
-import { CSSProperties, ReactElement } from 'react'
-import cn, { Argument } from 'classnames'
+import { ReactElement } from 'react'
+import cn from 'classnames'
 
-interface Props {
-  fill?: string
-  className?: Argument
-  style?: CSSProperties
-}
+import { IconProps } from '@icons/interfaces'
 
-export const CircleSvg = ({ fill, className, style }: Props): ReactElement => {
+export const CircleSvg = ({ className }: IconProps): ReactElement => {
   return (
     <svg
       width="5"
@@ -15,10 +11,9 @@ export const CircleSvg = ({ fill, className, style }: Props): ReactElement => {
       viewBox="0 0 5 5"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={style}
-      className={cn(className)}
+      className={cn('flex-shrink-0 fill-current', className)}
     >
-      <circle cx="2.5" cy="2.5" r="2.5" fill={fill} />
+      <circle cx="2.5" cy="2.5" r="2.5" />
     </svg>
   )
 }

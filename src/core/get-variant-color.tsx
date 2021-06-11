@@ -10,6 +10,16 @@ const colorMap: ColorMapI = {
   30: theme('colors.yellow.dirty'),
 }
 
+const colorClass: ColorMapI = {
+  10: 'text-green-secondary',
+  20: 'text-yellow-bright',
+  30: 'text-yellow-dirty',
+}
+
 export const getVariantColor = (value: number | string): string => {
   return colorMap[value] || ''
+}
+
+export const getVariantClass = (value: number | string): string => {
+  return colorClass[value] || ''
 }

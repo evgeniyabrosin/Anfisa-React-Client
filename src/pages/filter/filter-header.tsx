@@ -18,7 +18,7 @@ export const FilterHeader = (): ReactElement => {
 
       <div className="flex items-center">
         <VisualEditorSwitch />
-        <CloseSvg onClick={handleClose} style={{ cursor: 'pointer' }} />
+        <CloseSvg className="text-white cursor-pointer" onClick={handleClose} />
       </div>
 
       <FilterControl />

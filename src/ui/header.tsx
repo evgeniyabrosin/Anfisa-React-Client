@@ -9,11 +9,7 @@ import { Routes } from '@router/routes.enum'
 import { CircleSvg } from '@icons/circle'
 import { Logo } from '@icons/logo'
 
-const UserLogoDummy = () => (
-  <CircleSvg fill={'white'} style={{ width: '32px', height: '32px' }} />
-)
-
-type Props = {
+interface Props {
   children?: ReactElement | ReactNode
 }
 
@@ -62,7 +58,7 @@ export const Header = observer(
         <div className="text-white flex flex-row items-center">
           <div className="mr-2">Username</div>
 
-          <UserLogoDummy />
+          <CircleSvg className="w-8 h-8" />
         </div>
       </div>
     )

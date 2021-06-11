@@ -1,6 +1,7 @@
 import { Fragment, ReactElement } from 'react'
+import cn from 'classnames'
 
-import { getVariantColor } from '@core/get-variant-color'
+import { getVariantClass } from '@core/get-variant-color'
 import { CircleSvg } from '@icons/circle'
 
 interface Props {
@@ -15,7 +16,7 @@ export const PredictionItem = ({ name, value }: Props): ReactElement => {
 
   return (
     <div className="flex text-10 leading-16px items-center">
-      <CircleSvg className="mr-1" fill={getVariantColor(value[0][1])} />
+      <CircleSvg className={cn('mr-1', getVariantClass(value[0][1]))} />
 
       {`${name}: ${value[0][0]}`}
     </div>

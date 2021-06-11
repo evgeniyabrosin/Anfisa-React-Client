@@ -1,14 +1,9 @@
 import { ReactElement } from 'react'
-import { CSSProperties } from 'styled-components'
+import cn from 'classnames'
 
-import { theme } from '@theme'
+import { IconProps } from '@icons/interfaces'
 
-interface Props {
-  style?: CSSProperties
-  fill?: string
-}
-
-export const SortSvg = ({ style, fill }: Props): ReactElement => {
+export const SortSvg = ({ className }: IconProps): ReactElement => {
   return (
     <svg
       width="16"
@@ -16,26 +11,11 @@ export const SortSvg = ({ style, fill }: Props): ReactElement => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={style}
+      className={cn('flex-shrink-0 stroke-current', className)}
     >
-      <path
-        d="M4 8H12"
-        stroke={fill || theme('colors.grey.blue')}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M1.5 5H14.5"
-        stroke={fill || theme('colors.grey.blue')}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6.5 11H9.5"
-        stroke={fill || theme('colors.grey.blue')}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M4 8H12" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1.5 5H14.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.5 11H9.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

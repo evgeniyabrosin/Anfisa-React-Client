@@ -1,12 +1,9 @@
 import { ReactElement } from 'react'
-import cn, { Argument } from 'classnames'
+import cn from 'classnames'
 
-interface Props {
-  className?: Argument
-  onClick?: () => void
-}
+import { IconProps } from '@icons/interfaces'
 
-export const ShareSvg = ({ className, onClick }: Props): ReactElement => {
+export const ShareSvg = ({ className, onClick }: IconProps): ReactElement => {
   return (
     <svg
       width="16"

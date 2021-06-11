@@ -29,10 +29,5 @@ export const CopyToClipboard = ({
     })
   }
 
-  return (
-    <CopySvg
-      onClick={copy}
-      className={(cn('ml-1 cursor-pointer'), colorClass)}
-    />
-  )
+  return <CopySvg onClick={copy} className={cn('cursor-pointer', colorClass)} />
 }

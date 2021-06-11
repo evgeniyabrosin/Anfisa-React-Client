@@ -1,9 +1,9 @@
 import { ReactElement } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
-import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
 import { SortSvg } from '@icons/sort'
 
@@ -14,12 +14,8 @@ interface Props {
 
 export const SortItem = observer(
   ({ text, sortType }: Props): ReactElement => {
-    const activeSortColor = theme('colors.blue.bright')
-
     const sortIconTransform =
       dirinfoStore.sortDirections[sortType] === SortDirection.ASC
-        ? 'none'
-        : 'rotate(180deg) scaleX(-1)'
 
     const handleClick = () => {
       if (dirinfoStore.sortType === sortType) {
@@ -29,27 +25,21 @@ export const SortItem = observer(
       }
     }
 
+    const textColor =
+      sortType === dirinfoStore.sortType ? 'text-blue-bright' : 'text-grey-blue'
+
     return (
       <div className="flex items-center cursor-pointer" onClick={handleClick}>
-        <div
-          className="text-sm text-grey-blue leading-tight mr-2"
-          style={{
-            color:
-              sortType === dirinfoStore.sortType
-                ? activeSortColor
-                : theme('colors.grey.blue'),
-          }}
-        >
+        <div className={cn('text-sm leading-tight mr-2', textColor)}>
           {text}
         </div>
 
         <SortSvg
-          style={{ transform: sortIconTransform }}
-          fill={
-            sortType === dirinfoStore.sortType
-              ? activeSortColor
-              : theme('colors.grey.blue')
-          }
+          className={cn(
+            'transform ',
+            { 'rotate-180': sortIconTransform },
+            textColor,
+          )}
         />
       </div>
     )

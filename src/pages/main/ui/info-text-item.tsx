@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
-type Props = {
+interface Props {
   children?: ReactElement | ReactNode
   className?: Argument
   isClickable?: boolean
