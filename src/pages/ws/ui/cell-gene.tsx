@@ -1,18 +1,14 @@
 import { ReactElement } from 'react'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { copyToClipboard } from '@core/copy-to-clipboard'
 import { getVariantColor } from '@core/get-variant-color'
 import { useParams } from '@core/hooks/use-params'
-import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { ShareSvg } from '@icons/share'
 import { Box } from '@ui/box'
-import { CopySvg } from '@ui/icons/copy'
 import { CellI } from './cell-interfaces'
 
 const Circle = styled(Box)`
@@ -37,20 +33,6 @@ export const CellGene = observer(
       variantStore.setDrawerVisible(true)
     }
 
-    const copyDetails = () => {
-      copyToClipboard(gene)
-
-      toast.info(t('ds.copied'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
-    }
-
     return (
       <div className="flex items-center">
         <Circle
@@ -64,11 +46,6 @@ export const CellGene = observer(
         <ShareSvg
           className="ml-5 cursor-pointer text-blue-bright"
           onClick={handleOpenVariant}
-        />
-
-        <CopySvg
-          onClick={copyDetails}
-          className="ml-1 cursor-pointer text-blue-bright"
         />
       </div>
     )
