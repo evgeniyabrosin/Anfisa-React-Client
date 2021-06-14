@@ -25,6 +25,6 @@ export const ExportReportButton = ({
     size="sm"
     prepend={<ExportSvg />}
     onClick={rest.onClick}
-    append={<ArrowSvg fill={'white'} direction={isOpen ? 'top' : 'down'} />}
+    append={<ArrowSvg direction={isOpen ? 'top' : 'down'} />}
   />
 )

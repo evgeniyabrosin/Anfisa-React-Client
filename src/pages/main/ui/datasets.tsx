@@ -29,7 +29,7 @@ export const Datasets = (): ReactElement => {
 
         <Button
           size="sm"
-          icon={<ArrowSvg fill={'white'} />}
+          icon={<ArrowSvg />}
           className={cn('bg-blue-dark transform', { 'rotate-180': !isOpen })}
           onClick={isOpen ? close : open}
         />

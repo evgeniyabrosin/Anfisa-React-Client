@@ -1,8 +1,9 @@
-import { CSSProperties, ReactElement } from 'react'
+import { ReactElement } from 'react'
+import cn from 'classnames'
 
-interface Props {
-  fill?: string
-  style?: CSSProperties
+import { IconProps } from '@icons/interfaces'
+
+interface Props extends IconProps {
   direction?: 'top' | 'right' | 'down' | 'left'
 }
 
@@ -14,9 +15,8 @@ const transform = {
 }
 
 export const ArrowSvg = ({
-  fill,
-  style,
   direction = 'left',
+  className,
 }: Props): ReactElement => {
   return (
     <svg
@@ -25,14 +25,10 @@ export const ArrowSvg = ({
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ ...style, transform: transform[direction] }}
+      className={cn('flex-shrink-0 stroke-current', className)}
+      style={{ transform: transform[direction] }}
     >
-      <path
-        d="M10 4L6 8L10 12"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        stroke={fill}
-      />
+      <path d="M10 4L6 8L10 12" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

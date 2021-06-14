@@ -41,7 +41,6 @@ export const en = {
     searchColumn: 'Search for a column',
   },
   variant: {
-    next: 'Next variant',
     genes: 'Gene(s)',
     worstAnnotation: 'Worst Annotation',
     hg19: 'hg19',
