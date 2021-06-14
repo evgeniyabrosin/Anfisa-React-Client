@@ -4,10 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
-import { VariantHeader } from './header'
-import { HeaderBaseInfo } from './ui/header-base-info'
-import { TabContent } from './ui/tab-content'
-import { Tabs } from './ui/tabs'
+import { VariantBody } from './ui/body'
+import { VariantHeader } from './ui/header'
 
 export const closeHandler = () => {
   variantStore.setDrawerVisible(false)
@@ -30,17 +28,13 @@ export const VariantDrawer = observer(
       <div
         style={{ transitionProperty: 'width' }}
         className={cn(
-          `bg-blue-lighter overflow-hidden duration-200 ease-linear`,
+          `bg-blue-lighter overflow-y-auto overflow-x-hidden duration-200 ease-linear`,
           variantStore.drawerVisible ? 'w-4/5' : 'w-0',
         )}
       >
         <VariantHeader />
 
-        <HeaderBaseInfo />
-
-        <Tabs />
-
-        <TabContent />
+        <VariantBody />
       </div>
     )
   },

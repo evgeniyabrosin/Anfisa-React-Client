@@ -44,8 +44,6 @@ export const en = {
     genes: 'Gene(s)',
     worstAnnotation: 'Worst Annotation',
     hg19: 'hg19',
-    noteTitle: 'Note:',
-    typeNote: 'Type note...',
     generalInfo: 'General info',
     canonicalAnnotations: 'Canonical Annotations',
     transcript: 'Transcript',

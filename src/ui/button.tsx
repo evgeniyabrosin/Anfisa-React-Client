@@ -3,7 +3,7 @@ import cn, { Argument } from 'classnames'
 
 interface Props {
   text?: string
-  size?: 'sm' | 'md'
+  size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   hasBackground?: boolean
   className?: Argument
@@ -34,6 +34,9 @@ export const Button = ({
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
 
   switch (size) {
+    case 'xs':
+      padding = 'py-0.5 ' + (text ? 'px-1' : 'px-0.5')
+      break
     case 'sm':
       padding = 'py-1 ' + (text ? 'px-2' : 'px-1')
       break

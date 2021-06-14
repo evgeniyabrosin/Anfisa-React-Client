@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ReccntType } from '@declarations'
@@ -7,12 +6,17 @@ import { getApiUrl } from '@core/get-api-url'
 export class VariantStore {
   drawerVisible = false
   variant: ReccntType[] = []
-  activeTab = ''
+  activeRecord = ''
   index = 0
   dsName = ''
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  prevVariant() {
+    this.index -= 1
+    this.fetchVarinatInfoAsync()
   }
 
   nextVariant() {
@@ -24,8 +28,8 @@ export class VariantStore {
     this.drawerVisible = visible
   }
 
-  setActiveTab(name: string) {
-    this.activeTab = name
+  setActiveRecord(name: string) {
+    this.activeRecord = name
   }
 
   setIndex(index: number) {
@@ -60,14 +64,8 @@ export class VariantStore {
 
     runInAction(() => {
       this.variant = result
-      this.activeTab = result[0].title
+      this.activeRecord = result[0].title
     })
-  }
-
-  get getTabs() {
-    const tabList = get(this, 'variant', []) as { title: string }[]
-
-    return tabList.map(tab => tab.title)
   }
 }
 
