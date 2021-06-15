@@ -51,9 +51,10 @@ export const Button = ({
     rounding,
     {
       'text-white': true,
-      'bg-blue-bright': hasBackground && isDefaultBackground,
+      'bg-blue-bright': !disabled && hasBackground && isDefaultBackground,
       'border-2 border-blue-bright': !hasBackground,
       'cursor-not-allowed': disabled,
+      'bg-grey-light': disabled && hasBackground,
     },
     className,
   )
