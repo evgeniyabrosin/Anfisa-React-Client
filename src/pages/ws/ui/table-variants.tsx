@@ -1,4 +1,5 @@
-import { ReactElement } from 'react'
+import { MutableRefObject, ReactElement, useRef } from 'react'
+import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -50,14 +51,36 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
+    const wrapperRef = useRef() as MutableRefObject<HTMLDivElement>
+
     const columns = datasetStore.selectedColumns.map(column =>
       variantColumnTable.find(item => item.Header === column),
     )
 
+    const handleScroll = debounce(async () => {
+      if (
+        datasetStore.filteredNo.length > 0 &&
+        datasetStore.indexFilteredNo < datasetStore.filteredNo.length
+      ) {
+        await datasetStore.fetchFilteredTabReportAsync()
+
+        return
+      }
+
+      const scrollLeft: number =
+        wrapperRef.current.scrollHeight -
+        wrapperRef.current.clientHeight -
+        wrapperRef.current.scrollTop
+
+      if (scrollLeft < 200 && datasetStore.filteredNo.length === 0) {
+        await datasetStore.fetchTabReportAsync()
+      }
+    }, 200)
+
     if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (
-      <Styles className="flex-1">
+      <Styles ref={wrapperRef} className="flex-1" onScroll={handleScroll}>
         <Table columns={columns} data={datasetStore.tabReport} />
 
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}

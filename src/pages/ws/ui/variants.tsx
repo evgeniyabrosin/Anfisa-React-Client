@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import { theme } from '@theme'
-import dsStore from '@store/dataset'
+import datasetStore from '@store/dataset'
 import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
@@ -37,9 +37,9 @@ export const Variants = observer(
     <Root>
       <VariantsStyled>{t('ds.variants')}</VariantsStyled>
       <AmountVariants>
-        {dsStore.isLoadingDsStat
+        {datasetStore.isLoadingDsStat
           ? 'Loading'
-          : get(dsStore, 'dsStat.total-counts.0', 0)}
+          : get(datasetStore, 'dsStat.total-counts.0', 0)}
       </AmountVariants>
     </Root>
   ),
