@@ -11,9 +11,9 @@ import { DatasetGeneral } from './dataset-general'
 
 export const SelectedDataset = observer(
   (): ReactElement => {
-    if (!dirinfoStore.selectedDirinfoName) {
-      return <Fragment />
-    }
+    if (!dirinfoStore.selectedDirinfoName) return <Fragment />
+
+    const canOpenInViewer = dirinfoStore.dsinfo.kind === 'ws'
 
     return (
       <div className="flex-grow grid gap-4 grid-cols-3 p-4">
@@ -26,9 +26,16 @@ export const SelectedDataset = observer(
 
             <Link
               to={`/ws?ds=${dirinfoStore.selectedDirinfoName}`}
+              onClick={e => {
+                if (!canOpenInViewer) e.preventDefault()
+              }}
               className="mb-3"
             >
-              <Button size="md" text={t('home.openInViewer')} />
+              <Button
+                size="md"
+                disabled={!canOpenInViewer}
+                text={t('home.openInViewer')}
+              />
             </Link>
           </div>
 
