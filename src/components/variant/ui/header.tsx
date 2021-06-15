@@ -31,12 +31,10 @@ export const VariantHeader = observer(
       <div className="p-4 bg-blue-dark">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
-
             <Button
               size="xs"
               icon={<ArrowSvg className="transform rotate-90" />}
-              className="bg-blue-lighter ml-3 mr-1"
+              className="bg-blue-lighter"
               disabled={!canGetPrevVariant}
               onClick={handlePrevVariant}
             />
@@ -44,9 +42,11 @@ export const VariantHeader = observer(
             <Button
               size="xs"
               icon={<ArrowSvg className="transform -rotate-90" />}
-              className="bg-blue-lighter"
+              className="bg-blue-lighter mx-2"
               onClick={handleNextVariant}
             />
+
+            <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
           </div>
 
           <CloseSvg
