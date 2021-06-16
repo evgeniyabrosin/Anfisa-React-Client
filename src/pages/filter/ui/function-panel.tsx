@@ -52,7 +52,7 @@ export const FunctionPanel = observer(
       }
 
       if (selectedFilter.name === FilterFunctionEnum.InheritanceMode) {
-        const noArray = await datasetStore.addConditionsAsync([
+        const noArray = await datasetStore.setConditionsAsync([
           [
             'func',
             selectedFilter.name,
@@ -70,7 +70,7 @@ export const FunctionPanel = observer(
       }
 
       if (selectedFilter.name === FilterFunctionEnum.GeneRegion) {
-        const noArray = await datasetStore.addConditionsAsync([
+        const noArray = await datasetStore.setConditionsAsync([
           ['func', selectedFilter.name, '', ['True'], values],
         ])
 
@@ -82,7 +82,7 @@ export const FunctionPanel = observer(
       }
 
       if (selectedFilter.name === FilterFunctionEnum.CompoundHet) {
-        const noArray = await datasetStore.addConditionsAsync([
+        const noArray = await datasetStore.setConditionsAsync([
           [
             'func',
             selectedFilter.name,

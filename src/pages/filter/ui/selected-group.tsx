@@ -7,6 +7,7 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 import { FunctionPanel } from './function-panel'
+import { RangePanel } from './range-panel'
 import { SelectedGroupItem } from './selected-group-item'
 
 export const SelectedGroup = observer(
@@ -50,7 +51,7 @@ export const SelectedGroup = observer(
         })
       }
 
-      datasetStore.addConditionsAsync(
+      datasetStore.setConditionsAsync(
         formatDataToConditions(filterStore.selectedFilters),
       )
     }
@@ -83,6 +84,7 @@ export const SelectedGroup = observer(
           </div>
         )}
         {selectedGroupItem.kind === FilterKindEnum.func && <FunctionPanel />}
+        {selectedGroupItem.kind === FilterKindEnum.numeric && <RangePanel />}
       </div>
     )
   },

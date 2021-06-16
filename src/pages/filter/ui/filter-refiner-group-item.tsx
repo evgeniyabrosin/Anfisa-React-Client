@@ -13,6 +13,7 @@ type Props = StatListType & {
   amount?: number
   group?: string
   isFunc?: boolean
+  isNumeric?: boolean
 }
 
 export const FilterRefinerGroupItem = observer(
@@ -23,6 +24,7 @@ export const FilterRefinerGroupItem = observer(
     amount,
     group,
     isFunc,
+    isNumeric,
     ...rest
   }: Props): ReactElement => {
     const checked = get(
@@ -46,7 +48,7 @@ export const FilterRefinerGroupItem = observer(
     return (
       <div
         className={cn(
-          'flex items-center py-1 pr-20 pl-4',
+          'flex items-center py-1 pr-20',
           {
             'bg-blue-light': isIndeterminate,
           },
@@ -56,8 +58,8 @@ export const FilterRefinerGroupItem = observer(
         <Checkbox
           className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
           checked={checked}
-          style={{ cursor: 'pointer' }}
           indeterminate={isIndeterminate}
+          disabled={(isFunc || isNumeric) && !checked}
           onChange={event => onChange && onChange(event.target.checked)}
         />
 

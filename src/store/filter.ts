@@ -85,8 +85,12 @@ class FilterStore {
   }
 
   removeSelectedFiltersGroup(group: string, groupItemName: string) {
-    if (this.selectedFilters[group]) {
+    if (this.selectedFilters[group][groupItemName]) {
       delete this.selectedFilters[group][groupItemName]
+    }
+
+    if (isEmpty(this.selectedFilters[group])) {
+      delete this.selectedFilters[group]
     }
   }
 

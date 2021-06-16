@@ -119,16 +119,20 @@ class DatasetStore {
     this.zone = []
   }
 
-  async addConditionsAsync(conditions: string[][]) {
+  async setConditionsAsync(conditions: string[][]) {
     if (!conditions[0]) {
-      return []
+      this.conditions = []
+
+      return await this.fetchWsListAsync()
     }
 
     const groupCondtionsIndex = this.conditions.findIndex(
       (item: any) => item[1] === conditions[0][1],
     )
 
-    this.conditions.splice(groupCondtionsIndex, 1)
+    if (groupCondtionsIndex !== -1) {
+      this.conditions.splice(groupCondtionsIndex, 1)
+    }
 
     this.conditions = this.conditions.concat(conditions)
 
@@ -443,41 +447,6 @@ class DatasetStore {
 
     return Object.keys(get(dsInfo, 'meta.samples', {}))
   }
-
-  /*
-  TODO: May not be needed
-  async fetchDsTaskIdAsync({ filter, conditions }: DsListI) {
-    const body = new URLSearchParams({ ds: this.datasetName })
-
-    conditions && body.append('conditions', conditions)
-    // filter && body.append('filter', filter)
-    // conditions && body.append('conditions', conditions)
-
-    const response = await fetch(getApiUrl(`ds_list`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    await this.fetchJobStatusAsync(result['task_id'])
-  }
-
-  async fetchJobStatusAsync(taskId: string) {
-    const response = await fetch(getApiUrl(`job_status?task=${taskId}`))
-    const result = await response.json()
-
-    this.indexFilteredNo = 0
-
-    this.filteredNo = result[0].records
-      ? result[0].records.map((variant: { no: number }) => variant.no)
-      : []
-
-    await this.fetchFilteredTabReportAsync()
-  } */
 
   async exportReportAsync(exportType?: ExportTypeEnum) {
     const filterParam = this.activePreset ? `&filter=${this.activePreset}` : ''
