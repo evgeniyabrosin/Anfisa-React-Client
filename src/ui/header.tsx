@@ -1,9 +1,11 @@
-import { ReactElement, ReactNode, useEffect, useState } from 'react'
+import { Fragment, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Option } from 'react-dropdown'
 import { Link, useHistory } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
@@ -11,6 +13,7 @@ import { Routes } from '@router/routes.enum'
 import { CircleSvg } from '@icons/circle'
 import { Logo } from '@icons/logo'
 import { DropDown } from './dropdown'
+import { CopyLinkSvg } from './icons/copy-link'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -19,6 +22,7 @@ interface Props {
 export const Header = observer(
   ({ children }: Props): ReactElement => {
     const [datasets, setDatasets] = useState([])
+    const [xlDatasetName, setXlDatasetName] = useState('')
     const params = useParams()
     const ds = params.get('ds') || ''
     const history = useHistory()
@@ -33,6 +37,8 @@ export const Header = observer(
           '',
         )
 
+        setXlDatasetName(xlName)
+
         setDatasets(
           get(dirinfoStore, `dirinfo.ds-dict.${xlName}.secondary`, []),
         )
@@ -43,6 +49,20 @@ export const Header = observer(
 
     const handleChangeDataset = (arg: Option) => {
       ds !== arg.value && history.push(`${Routes.WS}?ds=${arg.value}`)
+    }
+
+    const copyLink = () => {
+      copyToClipboard(`${window.origin}/${Routes.WS}?ds=${ds}`)
+
+      toast.info(t('ds.copied'), {
+        position: 'bottom-right',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      })
     }
 
     return (
@@ -69,13 +89,21 @@ export const Header = observer(
 
           <div className="text-grey-blue flex items-center">
             <span className="mx-2">/</span>
+            <span>{xlDatasetName}</span>
+            <span className="mx-2">/</span>
 
             {ds && (
-              <DropDown
-                options={datasets}
-                value={ds}
-                onSelect={handleChangeDataset}
-              />
+              <Fragment>
+                <DropDown
+                  options={datasets}
+                  value={ds}
+                  onSelect={handleChangeDataset}
+                />
+
+                <div onClick={copyLink} className="cursor-pointer ml-2">
+                  <CopyLinkSvg />
+                </div>
+              </Fragment>
             )}
           </div>
         </div>
