@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import { ExportPanel } from '@ui/export-panel'
 import { ExportReportButton } from '@ui/export-report-button'
 import { Header } from '@ui/header'
@@ -19,6 +20,7 @@ export const WSPage = observer(
       const dsName = params.get('ds') || ''
 
       datasetStore.initDatasetAsync(dsName)
+      dirinfoStore.fetchDsinfoAsync(dsName)
     }, [params])
 
     return (
