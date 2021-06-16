@@ -1,42 +1,31 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { formatDataToConditions } from '@core/format-data-to-conditions'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 import { FunctionPanel } from './function-panel'
 import { SelectedGroupItem } from './selected-group-item'
-
-const Root = styled(Box)`
-  background-color: #def1fd;
-  padding: 20px 16px;
-  width: 436px;
-  border-radius: 8px 8px 0px 0px;
-`
-
-const Delimiter = styled(Box)`
-  background-color: #9fd6f9;
-  height: 1px;
-  width: 100%;
-  margin-top: 16px;
-`
-
-const VariantListContainer = styled(Box)`
-  margin-top: 16px;
-`
-
-const StyledFilterRefinerGroupItem = styled(FilterRefinerGroupItem)<any>`
-  padding-left: 0;
-`
 
 export const SelectedGroup = observer(
   (): ReactElement => {
     const selectedGroupItem = filterStore.selectedGroupItem
 
     if (!selectedGroupItem.name) {
-      return <Fragment />
+      return (
+        <div className="w-1/3 bg-grey-lighter">
+          <div
+            className="w-1/3 bg-grey-lighter flex items-center justify-center"
+            style={{ height: 'calc(100vh - 100px)' }}
+          >
+            <p className="text-16 leading-16px text-grey-blue align-center">
+              Select a filter
+            </p>
+          </div>
+        </div>
+      )
     }
 
     const groupVariantSum = selectedGroupItem.variants
@@ -60,19 +49,28 @@ export const SelectedGroup = observer(
           variant,
         })
       }
+
+      datasetStore.addConditionsAsync(
+        formatDataToConditions(filterStore.selectedFilters),
+      )
     }
 
     return (
-      <Root>
-        <StyledFilterRefinerGroupItem
+      <div
+        className="bg-blue-light pt-5 px-4 w-1/3 overflow-y-auto"
+        style={{ height: 'calc(100vh - 158px)' }}
+      >
+        <FilterRefinerGroupItem
+          className="pl-0"
           {...selectedGroupItem}
           amount={groupVariantSum}
           onChange={() => filterStore.setSelectedGroupItem({})}
         />
-        <Delimiter />
+
+        <div className="bg-white h-px w-full mt-4" />
 
         {selectedGroupItem.kind === FilterKindEnum.enum && (
-          <VariantListContainer>
+          <div className="mt-4">
             {selectedGroupItem.variants &&
               selectedGroupItem.variants.map((variant: any) => (
                 <SelectedGroupItem
@@ -82,11 +80,10 @@ export const SelectedGroup = observer(
                   handleSelect={checked => handleSelect(variant, checked)}
                 />
               ))}
-          </VariantListContainer>
+          </div>
         )}
-
         {selectedGroupItem.kind === FilterKindEnum.func && <FunctionPanel />}
-      </Root>
+      </div>
     )
   },
 )

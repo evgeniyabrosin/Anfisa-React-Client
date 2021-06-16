@@ -1,3 +1,4 @@
+import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { StatListType } from '@declarations'
@@ -16,7 +17,7 @@ interface AddSelectedFiltersI {
 }
 
 class FilterStore {
-  method: FilterMethodEnum = FilterMethodEnum.Query
+  method: FilterMethodEnum = FilterMethodEnum.Refiner
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
@@ -54,6 +55,14 @@ class FilterStore {
   }: AddSelectedFiltersI) {
     if (this.selectedFilters[group][groupItemName] && variant) {
       delete this.selectedFilters[group][groupItemName][variant[0]]
+    }
+
+    if (isEmpty(this.selectedFilters[group][groupItemName])) {
+      delete this.selectedFilters[group][groupItemName]
+    }
+
+    if (isEmpty(this.selectedFilters[group])) {
+      delete this.selectedFilters[group]
     }
   }
 

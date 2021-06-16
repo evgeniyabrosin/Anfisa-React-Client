@@ -1,51 +1,59 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Text } from '@ui/text'
 import { SelectedFilterCard } from './selected-filter-card'
-
-const NoResultsText = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  color: #6c6c6c;
-  margin-left: auto;
-  margin-right: auto;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-`
 
 export const QueryResults = observer(
   (): ReactElement => {
     const keys = Object.keys(filterStore.selectedFilters)
 
     if (keys.length === 0) {
-      return <NoResultsText>{t('general.noResultsFound')}</NoResultsText>
+      return (
+        <div
+          style={{ height: 'calc(100vh - 223px)' }}
+          className="w-full flex justify-center items-center"
+        >
+          <p className="text-16 leading-16px text-grey-blue">
+            {t('general.noResultsFound')}
+          </p>
+        </div>
+      )
     }
 
     return (
-      <Fragment>
+      <div
+        className="overflow-y-auto"
+        style={{ height: 'calc(100vh - 223px)' }}
+      >
         {keys.map(subGroupKey => (
-          <div
-            key={subGroupKey}
-            style={{ display: 'flex', flexDirection: 'column' }}
-          >
+          <div key={subGroupKey} className="flex flex-col">
             {Object.keys(filterStore.selectedFilters[subGroupKey]).map(
               title => (
                 <SelectedFilterCard
                   key={title}
                   title={title}
                   filters={filterStore.selectedFilters[subGroupKey][title]}
+                  onRemove={itemName => {
+                    filterStore.removeSelectedFilters({
+                      group: subGroupKey,
+                      groupItemName: title,
+                      variant: [itemName, 0],
+                    })
+
+                    datasetStore.removeCondition({
+                      subGroup: title,
+                      itemName,
+                    })
+                  }}
                 />
               ),
             )}
           </div>
         ))}
-      </Fragment>
+      </div>
     )
   },
 )

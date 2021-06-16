@@ -1,87 +1,55 @@
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
+import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
+import { useToggle } from '@core/hooks/use-toggle'
+import { theme } from '@theme'
+import { ArrowSvg } from '@ui/icons/arrow'
 
 interface Props {
   title: string
   filters: Record<string, number>
+  onRemove: (name: string) => void
 }
 
-const Root = styled(Box)`
-  margin-bottom: 22px;
-`
-
-const TitleContainer = styled(Box)`
-  display: flex;
-  align-items: center;
-`
-
-const Title = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #5e6366;
-  margin: 0;
-  margin-bottom: 6px;
-`
-
-const AmountGroup = styled(Title)`
-  color: #0c65fd;
-  margin-left: 5px;
-`
-
-const FilterContainer = styled(Box)`
-  display: flex;
-  align-items: center;
-`
-
-const Filters = styled(Box)`
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 12px 18px;
-`
-
-const FilterName = styled(Text)`
-  font-family: 'Work Sans', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #000000;
-  margin: 0;
-`
-
-const FilterAmount = styled(FilterName)`
-  color: #5e6366;
-  margin-left: 5px;
-`
-
 export const SelectedFilterCard = observer(
-  ({ title, filters }: Props): ReactElement => {
+  ({ title, filters, onRemove }: Props): ReactElement => {
+    const [isOpen, open, close] = useToggle(false)
     const filterKeys = Object.keys(filters)
 
-    const amountGroup = Object.values(filters).reduce((p, c) => p + c, 0)
+    if (filterKeys.length === 0) {
+      return <Fragment />
+    }
 
     return (
-      <Root>
-        <TitleContainer>
-          <Title>{title} </Title>
-          <AmountGroup>{`(${amountGroup} variants)`}</AmountGroup>
-        </TitleContainer>
-        <Filters>
-          {filterKeys.map(filterKey => (
-            <FilterContainer key={filterKey}>
-              <FilterName>{filterKey}</FilterName>
-              <FilterAmount>{`(${filters[filterKey]})`}</FilterAmount>
-            </FilterContainer>
-          ))}
-        </Filters>
-      </Root>
+      <div>
+        <div
+          className="flex items-center border-b border-grey-light p-4 cursor-pointer"
+          onClick={isOpen ? close : open}
+        >
+          <span className="text-16 leading-16px text-black">{title}</span>
+
+          <ArrowSvg
+            fill={theme('colors.blue.bright')}
+            direction={isOpen ? 'top' : 'down'}
+            style={{ marginLeft: 'auto' }}
+          />
+        </div>
+
+        {isOpen && (
+          <div>
+            {filterKeys.map(filterKey => (
+              <div key={filterKey} className="flex items-center pl-6 py-4">
+                <Checkbox checked onChange={() => onRemove(filterKey)} />
+                <span className="text-14 leading-16px font-bold text-black ml-2">
+                  {filterKey}
+                </span>
+                <span className="text-14 leading-16px font-bold text-grey-0 ml-2">{`(${filters[filterKey]})`}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     )
   },
 )

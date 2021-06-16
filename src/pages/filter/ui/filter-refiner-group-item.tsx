@@ -5,7 +5,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { StatListType } from '@declarations'
-import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 
 type Props = StatListType & {
@@ -26,11 +25,11 @@ export const FilterRefinerGroupItem = observer(
     isFunc,
     ...rest
   }: Props): ReactElement => {
-    const checked =
-      get(filterStore, `selectedFilters[${group}][${name}]`, false) ||
-      get(datasetStore, 'conditions', []).some(
-        (condition: [string, string]) => condition[1] === name,
-      )
+    const checked = get(
+      filterStore,
+      `selectedFilters[${group}][${name}]`,
+      false,
+    )
 
     const selectedAmounts: number[] = Object.values(
       get(filterStore, `selectedFilters[${group}][${name}]`, {}),
@@ -47,7 +46,7 @@ export const FilterRefinerGroupItem = observer(
     return (
       <div
         className={cn(
-          'flex items-center py-1 pr-32',
+          'flex items-center py-1 pr-20 pl-4',
           {
             'bg-blue-light': isIndeterminate,
           },
@@ -71,7 +70,7 @@ export const FilterRefinerGroupItem = observer(
         <p
           key={name}
           onClick={handleSelect}
-          className={cn('text-14 text-black ml-2', {
+          className={cn('text-14 text-black ml-2 cursor-pointer', {
             'font-bold': checked,
           })}
         >

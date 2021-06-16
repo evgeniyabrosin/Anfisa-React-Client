@@ -22,7 +22,7 @@ export const FilterPage = observer(
     }, [])
 
     return (
-      <div>
+      <div className="overflow-hidden">
         <FilterHeader />
 
         {filterStore.method === FilterMethodEnum.Query && <QueryBuilder />}

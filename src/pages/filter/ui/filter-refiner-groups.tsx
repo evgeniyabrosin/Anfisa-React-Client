@@ -33,10 +33,13 @@ export const FilterRefinerGroups = observer(
     }
 
     return (
-      <div>
+      <div
+        className="mt-4 w-1/3 overflow-y-scroll"
+        style={{ maxHeight: 'calc(100vh - 170px)' }}
+      >
         {keys.map(group => (
           <div key={group}>
-            <p className="text-14 font-500 text-grey-blue">{group}</p>
+            <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
 
             {datasetStore.getFilterRefiner[group].map((item: StatList) => (
               <FilterRefinerGroupItem

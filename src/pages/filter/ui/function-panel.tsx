@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement, useState } from 'react'
+import { Fragment, FunctionComponent, ReactElement, useState } from 'react'
 import { Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
 
@@ -52,7 +52,7 @@ export const FunctionPanel = observer(
       }
 
       if (selectedFilter.name === FilterFunctionEnum.InheritanceMode) {
-        datasetStore.addConditions([
+        const noArray = await datasetStore.addConditionsAsync([
           [
             'func',
             selectedFilter.name,
@@ -61,16 +61,28 @@ export const FunctionPanel = observer(
             { problem_group: values.problemGroups },
           ],
         ])
+
+        filterStore.addSelectedFilterGroup(
+          'Inheritance',
+          FilterFunctionEnum.InheritanceMode,
+          [[FilterFunctionEnum.InheritanceMode, noArray.length]],
+        )
       }
 
       if (selectedFilter.name === FilterFunctionEnum.GeneRegion) {
-        datasetStore.addConditions([
+        const noArray = await datasetStore.addConditionsAsync([
           ['func', selectedFilter.name, '', ['True'], values],
         ])
+
+        filterStore.addSelectedFilterGroup(
+          'Coordinates',
+          FilterFunctionEnum.GeneRegion,
+          [[FilterFunctionEnum.GeneRegion, noArray.length]],
+        )
       }
 
       if (selectedFilter.name === FilterFunctionEnum.CompoundHet) {
-        datasetStore.addConditions([
+        const noArray = await datasetStore.addConditionsAsync([
           [
             'func',
             selectedFilter.name,
@@ -79,11 +91,21 @@ export const FunctionPanel = observer(
             { approx: values.approx || null, state: values.state || null },
           ],
         ])
+
+        filterStore.addSelectedFilterGroup(
+          'Inheritance',
+          FilterFunctionEnum.CompoundHet,
+          [[FilterFunctionEnum.CompoundHet, noArray.length]],
+        )
       }
     }
 
     const handleClear = () => {
-      datasetStore.removeCondition(selectedFilter.name)
+      datasetStore.removeFunctionCondition(selectedFilter.name)
+    }
+
+    if (!Component) {
+      return <Fragment />
     }
 
     return (

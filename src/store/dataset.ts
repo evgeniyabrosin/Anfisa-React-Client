@@ -1,8 +1,10 @@
+import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
+import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { tableColumnMap } from '@core/table-column-map'
 
@@ -117,14 +119,62 @@ class DatasetStore {
     this.zone = []
   }
 
-  addConditions(conditions: string[][]) {
+  async addConditionsAsync(conditions: string[][]) {
+    if (!conditions[0]) {
+      return []
+    }
+
+    const groupCondtionsIndex = this.conditions.findIndex(
+      (item: any) => item[1] === conditions[0][1],
+    )
+
+    this.conditions.splice(groupCondtionsIndex, 1)
+
     this.conditions = this.conditions.concat(conditions)
+
+    return await this.fetchWsListAsync()
   }
 
-  removeCondition(functionName: string) {
+  removeFunctionCondition(functionName: string) {
     this.conditions = this.conditions.filter(
       ([_, name]) => name !== functionName,
     )
+
+    this.fetchWsListAsync()
+  }
+
+  removeCondition({
+    subGroup,
+    itemName,
+  }: {
+    subGroup: string
+    itemName: string
+  }) {
+    const cloneConditions = cloneDeep(this.conditions)
+
+    const subGroupIndex = cloneConditions.findIndex(
+      item => item[1] === subGroup,
+    )
+
+    const filiterFunctionArray: string[] = Object.values(FilterFunctionEnum)
+
+    if (filiterFunctionArray.includes(itemName)) {
+      cloneConditions.splice(subGroupIndex, 1)
+    } else {
+      const filteredItems = cloneConditions[subGroupIndex][3].filter(
+        (item: string) => item !== itemName,
+      )
+
+      if (filteredItems.length === 0) {
+        cloneConditions.splice(subGroupIndex, 1)
+      } else {
+        cloneConditions[subGroupIndex][3] = filteredItems
+      }
+    }
+
+    this.conditions = cloneConditions
+
+    this.fetchWsListAsync()
   }
 
   resetData() {
@@ -306,11 +356,15 @@ class DatasetStore {
 
     this.indexFilteredNo = 0
 
-    this.filteredNo = result.records
-      ? result.records.map((variant: { no: number }) => variant.no)
-      : []
+    runInAction(() => {
+      this.filteredNo = result.records
+        ? result.records.map((variant: { no: number }) => variant.no)
+        : []
+    })
 
     await this.fetchFilteredTabReportAsync()
+
+    return this.filteredNo
   }
 
   async fetchZoneListAsync(zone: string) {
