@@ -36,9 +36,14 @@ class DatasetStore {
   isLoadingTabReport = false
   isFetchingMore = false
   isLoadingDsStat = false
+  isFilterDisabled = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setIsFilterDisabled(value: boolean) {
+    this.isFilterDisabled = value
   }
 
   removeColumn(name: string) {
@@ -342,9 +347,12 @@ class DatasetStore {
   async fetchWsListAsync() {
     const body = new URLSearchParams({
       ds: this.datasetName,
-      conditions: JSON.stringify(this.conditions),
-      zone: JSON.stringify(this.zone),
     })
+
+    if (!this.isFilterDisabled) {
+      body.append('conditions', JSON.stringify(this.conditions))
+      body.append('zone', JSON.stringify(this.zone))
+    }
 
     this.activePreset && body.append('filter', this.activePreset)
 
