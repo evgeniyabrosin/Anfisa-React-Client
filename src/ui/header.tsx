@@ -1,5 +1,7 @@
-import { ReactElement, ReactNode, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { ReactElement, ReactNode, useEffect, useState } from 'react'
+import { Option } from 'react-dropdown'
+import { Link, useHistory } from 'react-router-dom'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
@@ -8,6 +10,7 @@ import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { CircleSvg } from '@icons/circle'
 import { Logo } from '@icons/logo'
+import { DropDown } from './dropdown'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -15,12 +18,32 @@ interface Props {
 
 export const Header = observer(
   ({ children }: Props): ReactElement => {
+    const [datasets, setDatasets] = useState([])
     const params = useParams()
-    const ds = params.get('ds')
+    const ds = params.get('ds') || ''
+    const history = useHistory()
 
     useEffect(() => {
-      dirinfoStore.fetchDirInfoAsync()
-    }, [])
+      const initAsync = async () => {
+        await dirinfoStore.fetchDirInfoAsync()
+
+        const xlName = get(
+          dirinfoStore,
+          `dirinfo['ds-dict'][${ds}].ancestors[0][0]`,
+          '',
+        )
+
+        setDatasets(
+          get(dirinfoStore, `dirinfo.ds-dict.${xlName}.secondary`, []),
+        )
+      }
+
+      initAsync()
+    }, [ds])
+
+    const handleChangeDataset = (arg: Option) => {
+      ds !== arg.value && history.push(`${Routes.WS}?ds=${arg.value}`)
+    }
 
     return (
       <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
@@ -44,13 +67,17 @@ export const Header = observer(
             </div>
           </Link>
 
-          {ds && (
-            <span className="font-bold uppercase text-xs text-grey-blue">
-              <span className="mx-2">/</span>
+          <div className="text-grey-blue flex items-center">
+            <span className="mx-2">/</span>
 
-              <span>{ds}</span>
-            </span>
-          )}
+            {ds && (
+              <DropDown
+                options={datasets}
+                value={ds}
+                onSelect={handleChangeDataset}
+              />
+            )}
+          </div>
         </div>
 
         {children}
