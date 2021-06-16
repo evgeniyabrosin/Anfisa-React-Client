@@ -100,9 +100,10 @@ export const Header = observer(
                   onSelect={handleChangeDataset}
                 />
 
-                <div onClick={copyLink} className="cursor-pointer ml-2">
-                  <CopyLinkSvg />
-                </div>
+                <CopyLinkSvg
+                  className="cursor-pointer ml-2"
+                  onClick={copyLink}
+                />
               </Fragment>
             )}
           </div>

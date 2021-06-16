@@ -11,7 +11,7 @@ export const CircleSvg = ({ className }: IconProps): ReactElement => {
       viewBox="0 0 5 5"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn('flex-shrink-0 fill-current', className)}
+      className={cn('fill-current', className)}
     >
       <circle cx="2.5" cy="2.5" r="2.5" />
     </svg>

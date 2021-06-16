@@ -1,5 +1,4 @@
 @tailwind base;
-@tailwind utilities;
 
 @layer base {
   html {
@@ -13,4 +12,10 @@
   button:focus {
     outline: none;
   }
+
+  svg {
+    @apply flex-shrink-0;
+  }
 }
+
+@tailwind utilities;

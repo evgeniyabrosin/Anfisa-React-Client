@@ -11,7 +11,7 @@ export const CopySvg = ({ className, onClick }: IconProps): ReactElement => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn('flex-shrink-0 stroke-current', className)}
+      className={cn('stroke-current', className)}
       onClick={onClick}
     >
       <path

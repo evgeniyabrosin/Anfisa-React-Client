@@ -10,7 +10,7 @@ export const SettingsSvg = ({ className }: IconProps): ReactElement => (
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={cn('flex-shrink-0 stroke-current', className)}
+    className={cn('stroke-current', className)}
   >
     <path
       d="M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11Z"
