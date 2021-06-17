@@ -7,14 +7,18 @@ type Props = FormikProps<any>
 export const GeneRegion = ({ values, setFieldValue }: Props) => {
   return (
     <Form>
-      <span>Gene Region</span>
+      <div className="mt-4">
+        <span className="text-14 leading-16px text-grey-blue font-bold">
+          Locus
+        </span>
 
-      <Input
-        value={values.locus}
-        onChange={e => {
-          setFieldValue('locus', e.target.value)
-        }}
-      />
+        <Input
+          value={values.locus}
+          onChange={e => {
+            setFieldValue('locus', e.target.value)
+          }}
+        />
+      </div>
     </Form>
   )
 }

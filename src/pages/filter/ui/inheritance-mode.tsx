@@ -1,25 +1,9 @@
-import { Fragment, useEffect, useState } from 'react'
+import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import datasetStore from '@store/dataset'
-import { Box } from '@ui/box'
-import { Text } from '@ui/text'
-
-const VariantBox = styled(Box)`
-  display: flex;
-  align-items: center;
-`
-
-const VariantName = styled(Text)`
-  margin: 0;
-`
-
-const VariantAmount = styled(Text)`
-  margin: 0;
-`
 
 export const InheritanceMode = observer(
   ({
@@ -38,8 +22,25 @@ export const InheritanceMode = observer(
       )
 
       setVariants(
-        statFuncData.variants.filter((item: [string, number]) => item[1] > 0),
+        statFuncData?.variants?.filter(
+          (item: [string, number]) => item[1] > 0,
+        ) || [],
       )
+    }
+
+    const handleChangeAsync = async (
+      e: ChangeEvent<HTMLInputElement>,
+      problemGroup: string,
+    ) => {
+      const value = e.target.checked
+        ? [...values.problemGroups, problemGroup]
+        : values.problemGroups.filter(group => group !== problemGroup)
+
+      await fetchStatFuncAsync({
+        problem_group: value,
+      })
+      setFieldValue('variants', [])
+      setFieldValue('problemGroups', value)
     }
 
     useEffect(() => {
@@ -57,28 +58,49 @@ export const InheritanceMode = observer(
 
     return (
       <Form>
-        <Text>Problem group</Text>
+        <div className="flex items-center justify-between">
+          <p className="text-14 leading-16px font-bold text-grey-blue mt-4">
+            Problem group
+          </p>
 
-        {problemGroups.map(problemGroup => (
-          <VariantBox key={problemGroup}>
-            <Checkbox
-              checked={values.problemGroups.includes(problemGroup)}
-              onChange={async e => {
-                const value = e.target.checked
-                  ? [...values.problemGroups, problemGroup]
-                  : values.problemGroups.filter(group => group !== problemGroup)
+          <p
+            className="text-12 leading-14px text-grey-blue cursor-pointer"
+            onClick={() => {
+              setFieldValue('variants', [])
+              setFieldValue('problemGroups', [])
+            }}
+          >
+            Reset
+          </p>
+        </div>
+        <div className="flex items-center justify-between mt-4">
+          {problemGroups.map(problemGroup => (
+            <div key={problemGroup} className="flex items-center">
+              <Checkbox
+                checked={values.problemGroups.includes(problemGroup)}
+                onChange={e => handleChangeAsync(e, problemGroup)}
+              />
+              <span className="text-14 leading-16px text-black ml-2">
+                {problemGroup}
+              </span>
+            </div>
+          ))}
+        </div>
 
-                await fetchStatFuncAsync({
-                  problem_group: value,
-                })
-                setFieldValue('problemGroups', value)
-              }}
-            />
-            <VariantName>{problemGroup}</VariantName>
-          </VariantBox>
-        ))}
+        <div className="h-px w-full bg-white my-4" />
 
-        <Text>Variants</Text>
+        <div className="flex items-center justify-between">
+          <p className="text-14 leading-14px text-grey-blue">
+            {values.variants.length} Selected
+          </p>
+
+          <p
+            className="text-12 leading-14px text-blue-bright cursor-pointer"
+            onClick={() => setFieldValue('variants', [])}
+          >
+            Clear All
+          </p>
+        </div>
 
         {variants.map(variant => {
           if (variant[1] === 0) {
@@ -86,7 +108,7 @@ export const InheritanceMode = observer(
           }
 
           return (
-            <VariantBox key={variant[0]}>
+            <div key={variant[0]} className="flex items-center mt-4">
               <Checkbox
                 checked={values.variants.includes(variant[0])}
                 onChange={e => {
@@ -97,9 +119,11 @@ export const InheritanceMode = observer(
                   setFieldValue('variants', value)
                 }}
               />
-              <VariantName>{variant[0]}</VariantName>
-              <VariantAmount>{`(${variant[1]})`}</VariantAmount>
-            </VariantBox>
+              <span className="text-14 leading-16px text-black ml-2">
+                {variant[0]}
+              </span>
+              <span className="text-14 leading-16px text-grey-blue ml-1">{`(${variant[1]})`}</span>
+            </div>
           )
         })}
       </Form>

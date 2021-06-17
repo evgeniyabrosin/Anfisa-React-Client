@@ -102,6 +102,17 @@ export const FunctionPanel = observer(
 
     const handleClear = () => {
       datasetStore.removeFunctionCondition(selectedFilter.name)
+
+      datasetStore.removeCondition({
+        subGroup: selectedFilter.vgroup,
+        itemName: selectedFilter.name,
+      })
+
+      filterStore.removeSelectedFilters({
+        group: selectedFilter.vgroup,
+        groupItemName: selectedFilter.name,
+        variant: [selectedFilter.name, 0],
+      })
     }
 
     if (!Component) {
@@ -110,8 +121,6 @@ export const FunctionPanel = observer(
 
     return (
       <div>
-        <span style={{ color: 'red' }}>{error}</span>
-
         <Formik
           initialValues={initialStateMap[selectedFilter.name]}
           enableReinitialize
@@ -121,8 +130,17 @@ export const FunctionPanel = observer(
             <div>
               <Component {...props} />
 
-              <Button text="Add" onClick={props.submitForm} />
-              <Button text="Clear" onClick={handleClear} />
+              {selectedFilter.name === FilterFunctionEnum.GeneRegion && (
+                <span className="text-red-secondary text-14 leading-16px">
+                  {error}
+                </span>
+              )}
+
+              <div className="flex items-center justify-between mt-5">
+                <Button text="Clear" onClick={handleClear} />
+
+                <Button text="Add" onClick={props.submitForm} />
+              </div>
             </div>
           )}
         </Formik>
