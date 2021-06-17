@@ -41,6 +41,7 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
         tags={datasetStore.tags.filter(item =>
           item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
         )}
+        className="flex-wrap max-w-xs"
       />
     </PopperTableModal>
   )
