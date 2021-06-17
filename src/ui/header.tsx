@@ -51,7 +51,7 @@ export const Header = observer(
     }
 
     const copyLink = () => {
-      copyToClipboard(`${window.origin}/${Routes.WS}?ds=${ds}`)
+      copyToClipboard(`${window.origin}${Routes.WS}?ds=${ds}`)
 
       toast.info(t('ds.copied'), {
         position: 'bottom-right',
@@ -87,12 +87,14 @@ export const Header = observer(
           </Link>
 
           <div className="text-grey-blue flex items-center">
-            <span className="mx-2">/</span>
-            <span>{xlDatasetName}</span>
-            <span className="mx-2">/</span>
-
-            {ds && (
+            {xlDatasetName && datasets && (
               <Fragment>
+                <span className="mx-2">/</span>
+
+                <span>{xlDatasetName}</span>
+
+                <span className="mx-2">/</span>
+
                 <DropDown
                   options={datasets}
                   value={ds}
