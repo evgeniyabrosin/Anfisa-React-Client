@@ -17,10 +17,15 @@ export const Datasets = (): ReactElement => {
         'bg-blue-lighter',
         'flex-shrink-0',
         'py-4',
-        isOpen ? 'px-4' : 'px-2',
+        isOpen ? 'pl-4' : 'pl-2',
       ])}
+      style={{
+        width: isOpen ? '320px' : 'auto',
+      }}
     >
-      <div className="flex justify-between mb-3">
+      <div
+        className={cn('flex justify-between mb-3', isOpen ? 'pr-4' : 'pr-2')}
+      >
         {isOpen && (
           <div className="font-bold text-white text-20 leading-6">
             {t('home.datasets')}

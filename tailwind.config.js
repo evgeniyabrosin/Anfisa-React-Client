@@ -188,7 +188,7 @@ module.exports = {
     // 'userSelect', // The user-select utilities like select-text
     // 'verticalAlign', // The vertical-align utilities like align-middle
     // 'visibility', // The visibility utilities like visible
-    // 'whitespace', // The whitespace utilities like whitespace-pre
+    'whitespace', // The whitespace utilities like whitespace-pre
     'width', // The width utilities like w-0.5
     // 'wordBreak', // The word-break utilities like break-words
     // 'zIndex', // The z-index utilities like z-30

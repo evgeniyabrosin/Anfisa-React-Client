@@ -1,5 +1,5 @@
 import { Fragment, ReactElement, useState } from 'react'
-import cn from 'classnames'
+import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -13,9 +13,56 @@ interface Props {
   isSubItems?: boolean
 }
 
+interface DsNameProps {
+  dsName: any
+  kind: string | null
+  isActive: boolean
+  isActiveXl: boolean
+  isChildrenVisible?: boolean
+  isChild?: boolean
+  className?: Argument
+}
+
+const DatasetName = ({
+  dsName,
+  kind,
+  isActive,
+  isActiveXl,
+  isChildrenVisible,
+  isChild = false,
+  className,
+}: DsNameProps): ReactElement => {
+  return (
+    <div
+      className={cn(
+        'text-white text-sm leading-18px',
+        {
+          'font-bold': isActiveXl,
+          truncate: !isChildrenVisible,
+          'py-2': !kind,
+        },
+        isChild ? 'absolute top-0 left-0' : 'relative ml-2 pr-7',
+        className,
+      )}
+    >
+      {dsName}
+      {!isChild && isChildrenVisible && (
+        <DatasetName
+          dsName={dsName}
+          kind={kind}
+          isActive={isActive}
+          isActiveXl={isActiveXl}
+          isChild={true}
+        />
+      )}
+    </div>
+  )
+}
+
 export const DatasetsListItem = observer(
   ({ item, isSubItems }: Props): ReactElement => {
     const [isOpenFolder, setIsOpenFolder] = useState(false)
+    const [isChildrenVisible, setIsChildrenVisible] = useState(false)
     const isXl = item.kind === 'xl'
     const secondaryKeys: string[] = get(item, 'secondary', [])
     const isActive = item.name === dirinfoStore.selectedDirinfoName
@@ -43,23 +90,35 @@ export const DatasetsListItem = observer(
         <div
           key={item.name}
           onClick={handleClick}
-          className={cn('py-2 flex items-center cursor-pointer', {
+          className={cn('flex items-center cursor-pointer relative', {
             'pl-5': isSubItems,
-            'bg-blue-bright bg-opacity-10': isActive && !isXl,
+            'bg-blue-bright bg-opacity-10': isActive,
           })}
+          onMouseEnter={() => {
+            setIsChildrenVisible(true)
+          }}
+          onMouseLeave={() => {
+            setIsChildrenVisible(false)
+          }}
         >
           <DatasetType kind={item.kind} isActive={isActive || isActiveXl} />
 
-          <div
-            className={cn('text-white text-sm leading-18px ml-2 pr-7', {
-              'font-bold': isActive || isActiveXl,
-            })}
-          >
-            {item.name}
-          </div>
+          <DatasetName
+            dsName={item.name}
+            kind={item.kind}
+            isActive={isActive}
+            isActiveXl={isActiveXl}
+            isChildrenVisible={isChildrenVisible}
+          />
 
-          <div className="ml-auto pr-2 text-10 leading-18px text-grey-blue">
-            {formatDate(item['create-time'])}
+          <div className="ml-auto text-10 leading-18px text-grey-blue whitespace-nowrap bg-blue-lighter">
+            <div
+              className={cn('py-2 pr-4', {
+                'bg-blue-bright bg-opacity-10': isActive,
+              })}
+            >
+              {formatDate(item['create-time'])}
+            </div>
           </div>
         </div>
 
