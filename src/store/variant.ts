@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ReccntType } from '@declarations'
+import { ReccntCommon } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 
 export class VariantStore {
   drawerVisible = false
-  variant: ReccntType[] = []
+  variant: ReccntCommon[] = []
   activeRecord = ''
   index = 0
   dsName = ''

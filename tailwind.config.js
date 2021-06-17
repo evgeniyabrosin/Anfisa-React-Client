@@ -47,6 +47,9 @@ module.exports = {
   },
   variants: {
     appearance: [],
+    extend: {
+      borderWidth: ['last'],
+    },
   },
   corePlugins: [
     'preflight', // Tailwind's base/reset styles

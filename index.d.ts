@@ -223,25 +223,24 @@ export interface WsTagsI {
 
 export type WsTagsType = WsTagsI | Record<string, unknown>
 
-export interface Row {
+export interface ReccntRow {
   name: string
   title: string
-  cells: string[][]
-  tooltip: string
+  cells: [content: string, cell: string][]
+  tooltip?: string
+  render?: string
 }
 
-export interface ReccntI {
+export interface ReccntCommon {
   name: string
   title: string
-  kind: string
-  type: string
-  parcontrol: string
-  colgroup: string[]
-  columns: number
-  rows: Row[]
-  colhead: any[][]
-  parmodes: any[]
-  content: string
+  kind: 'norm' | 'tech'
+  type: 'table' | 'pre'
+  columns?: number
+  colhead?: [title: string, count: int][]
+  colgroup?: string[]
+  rows?: ReccntRow[]
+  parmodes?: any[]
+  parcontrol?: string
+  content?: string
 }
-
-export type ReccntType = ReccntI | Record<string, unknown>
