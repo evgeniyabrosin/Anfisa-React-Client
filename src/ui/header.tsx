@@ -10,10 +10,9 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
-import { CircleSvg } from '@icons/circle'
-import { Logo } from '@icons/logo'
+import { Icon } from '@ui/icon'
+import { Logo } from '@ui/logo'
 import { DropDown } from './dropdown'
-import { CopyLinkSvg } from './icons/copy-link'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -100,7 +99,8 @@ export const Header = observer(
                   onSelect={handleChangeDataset}
                 />
 
-                <CopyLinkSvg
+                <Icon
+                  name="CopyLink"
                   className="cursor-pointer ml-2"
                   onClick={copyLink}
                 />
@@ -114,7 +114,7 @@ export const Header = observer(
         <div className="text-white flex flex-row items-center">
           <div className="mr-2">Username</div>
 
-          <CircleSvg className="w-8 h-8" />
+          <Icon name="Circle" size={32} />
         </div>
       </div>
     )

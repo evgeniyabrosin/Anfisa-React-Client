@@ -1,9 +1,9 @@
 import { ReactElement } from 'react'
+import cn from 'classnames'
 
 import { t } from '@i18n'
-import { ArrowSvg } from '@icons/arrow'
 import { Button } from '@ui/button'
-import { SettingsSvg } from '@ui/icons/settings'
+import { Icon } from '@ui/icon'
 
 interface Props {
   refEl: any
@@ -21,7 +21,12 @@ export const TableProperiesButton = ({
     onClick={onClick}
     text={t('ds.customizeTable')}
     hasBackground={false}
-    prepend={<SettingsSvg className="text-blue-bright" />}
-    append={<ArrowSvg direction={isOpen ? 'top' : 'down'} />}
+    prepend={<Icon name="Settings" className="text-blue-bright" />}
+    append={
+      <Icon
+        name="Arrow"
+        className={cn('transform', isOpen ? 'rotate-90' : '-rotate-90')}
+      />
+    }
   />
 )

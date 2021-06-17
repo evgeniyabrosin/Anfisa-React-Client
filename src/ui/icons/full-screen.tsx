@@ -1,22 +1,13 @@
-import { ReactElement } from 'react'
-import cn from 'classnames'
+import { Fragment } from 'react'
 
-import { IconProps } from '@icons/interfaces'
+const size = 20
 
-export const FullScreenSvg = ({
-  className,
-  onClick,
-}: IconProps): ReactElement => {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn('stroke-current', className)}
-      onClick={onClick}
-    >
+export default {
+  size,
+  viewBox: { w: size, h: size },
+  stroke: true,
+  content: (
+    <Fragment>
       <path
         d="M13.125 4.25H16.25V7.375"
         strokeWidth="1.5"
@@ -41,6 +32,6 @@ export const FullScreenSvg = ({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  )
+    </Fragment>
+  ),
 }

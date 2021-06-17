@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import datasetStore from '@store/dataset'
-import { CloseTagSvg } from '@icons/close-tag'
+import { Icon } from '@ui/icon'
 
 interface Props {
   text: string
@@ -38,7 +38,9 @@ export const Tag = observer(
         </span>
 
         {isActive && (
-          <CloseTagSvg
+          <Icon
+            name="CloseTag"
+            className="ml-1 cursor-pointer opacity-60"
             onClick={() => isActive && datasetStore.removeTag(text)}
           />
         )}

@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { t } from '@i18n'
-import { CopySvg } from '@ui/icons/copy'
+import { Icon } from '@ui/icon'
 
 interface Props {
   text: string
@@ -29,5 +29,11 @@ export const CopyToClipboard = ({
     })
   }
 
-  return <CopySvg onClick={copy} className={cn('cursor-pointer', colorClass)} />
+  return (
+    <Icon
+      name="Copy"
+      className={cn('cursor-pointer', colorClass)}
+      onClick={copy}
+    />
+  )
 }

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
 import dirinfoStore from '@store/dirinfo'
-import { SortSvg } from '@icons/sort'
+import { Icon } from '@ui/icon'
 
 interface Props {
   text: string
@@ -34,12 +34,11 @@ export const SortItem = observer(
           {text}
         </div>
 
-        <SortSvg
-          className={cn(
-            'transform ',
-            { 'rotate-180': sortIconTransform },
-            textColor,
-          )}
+        <Icon
+          name="Sort"
+          className={cn(textColor, 'transform', {
+            'rotate-180': sortIconTransform,
+          })}
         />
       </div>
     )

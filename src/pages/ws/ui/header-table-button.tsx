@@ -1,4 +1,4 @@
-import { FilterSvg } from '@icons/filter'
+import { Icon } from '@ui/icon'
 
 interface Props {
   refEl: any
@@ -14,6 +14,6 @@ export const HeaderTableButton = ({ text, refEl, onClick }: Props) => (
   >
     <p>{text}</p>
 
-    <FilterSvg />
+    <Icon name="Filter" />
   </div>
 )

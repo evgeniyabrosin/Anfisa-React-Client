@@ -7,7 +7,7 @@ import { Versions } from '@declarations'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { Card, CardTitle } from '@ui/card'
-import { FullScreenSvg } from '@ui/icons/full-screen'
+import { Icon } from '@ui/icon'
 import { DatasetField } from './dataset-filed'
 import { IframeInfo } from './iframe-info'
 import { ModalInfo } from './modal-info'
@@ -65,7 +65,8 @@ const InfoDetails = observer(
     return (
       <Card className="flex flex-col col-span-2 xl:col-span-3">
         <div className="flex justify-end mb-3">
-          <FullScreenSvg
+          <Icon
+            name="FullScreen"
             className="text-grey-blue cursor-pointer"
             onClick={setVisible}
           />

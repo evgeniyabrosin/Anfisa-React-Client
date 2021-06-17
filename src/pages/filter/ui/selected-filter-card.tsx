@@ -1,10 +1,10 @@
 import { Fragment, ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { useToggle } from '@core/hooks/use-toggle'
-import { theme } from '@theme'
-import { ArrowSvg } from '@ui/icons/arrow'
+import { Icon } from '@ui/icon'
 
 interface Props {
   title: string
@@ -29,10 +29,12 @@ export const SelectedFilterCard = observer(
         >
           <span className="text-16 leading-16px text-black">{title}</span>
 
-          <ArrowSvg
-            fill={theme('colors.blue.bright')}
-            direction={isOpen ? 'top' : 'down'}
-            style={{ marginLeft: 'auto' }}
+          <Icon
+            name="Arrow"
+            className={cn(
+              'text-blue-bright ml-auto transform',
+              isOpen ? 'rotate-90' : '-rotate-90',
+            )}
           />
         </div>
 

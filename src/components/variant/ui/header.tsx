@@ -4,9 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import variantStore from '@store/variant'
-import { ArrowSvg } from '@icons/arrow'
-import { CloseSvg } from '@icons/close'
 import { Button } from '@ui/button'
+import { Icon } from '@ui/icon'
 import { Tags } from '@ui/tags'
 import { closeHandler } from '../drawer'
 
@@ -33,7 +32,7 @@ export const VariantHeader = observer(
           <div className="flex items-center">
             <Button
               size="xs"
-              icon={<ArrowSvg className="transform rotate-90" />}
+              icon={<Icon name="Arrow" className="transform rotate-90" />}
               className="bg-blue-lighter"
               disabled={!canGetPrevVariant}
               onClick={handlePrevVariant}
@@ -41,7 +40,7 @@ export const VariantHeader = observer(
 
             <Button
               size="xs"
-              icon={<ArrowSvg className="transform -rotate-90" />}
+              icon={<Icon name="Arrow" className="transform -rotate-90" />}
               className="bg-blue-lighter mx-2"
               onClick={handleNextVariant}
             />
@@ -49,7 +48,8 @@ export const VariantHeader = observer(
             <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
           </div>
 
-          <CloseSvg
+          <Icon
+            name="Close"
             className="cursor-pointer text-white"
             onClick={closeHandler}
           />

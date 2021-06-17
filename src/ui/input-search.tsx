@@ -1,8 +1,7 @@
 import { ChangeEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { theme } from '@theme'
-import { LoupeSvg } from '@icons/loupe'
+import { Icon } from '@ui/icon'
 import { Input } from '@ui/input'
 
 interface Props {
@@ -19,11 +18,7 @@ export const InputSearch = ({ ...rest }: Props): ReactElement => {
     <div className={cn('relative', className)}>
       <Input {...tempRest} />
 
-      {/* TODO tailwind refactor */}
-      <LoupeSvg
-        style={{ position: 'absolute', top: 8, right: 8 }}
-        fill={theme('colors.grey.blue')}
-      />
+      <Icon name="Loupe" className="text-grey-blue absolute top-2 right-2" />
     </div>
   )
 }

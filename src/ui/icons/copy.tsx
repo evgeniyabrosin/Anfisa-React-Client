@@ -1,19 +1,13 @@
-import { ReactElement } from 'react'
-import cn from 'classnames'
+import { Fragment } from 'react'
 
-import { IconProps } from '@icons/interfaces'
+const size = 16
 
-export const CopySvg = ({ className, onClick }: IconProps): ReactElement => {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn('stroke-current', className)}
-      onClick={onClick}
-    >
+export default {
+  size,
+  viewBox: { w: size, h: size },
+  stroke: true,
+  content: (
+    <Fragment>
       <path
         d="M10.5 10.4998H13.5V2.49976H5.5V5.49976"
         strokeLinecap="round"
@@ -24,6 +18,6 @@ export const CopySvg = ({ className, onClick }: IconProps): ReactElement => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  )
+    </Fragment>
+  ),
 }

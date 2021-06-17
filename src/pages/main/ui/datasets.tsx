@@ -3,8 +3,8 @@ import cn from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
-import { ArrowSvg } from '@icons/arrow'
 import { Button } from '@ui/button'
+import { Icon } from '@ui/icon'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 
@@ -29,7 +29,7 @@ export const Datasets = (): ReactElement => {
 
         <Button
           size="sm"
-          icon={<ArrowSvg />}
+          icon={<Icon name="Arrow" />}
           className={cn('bg-blue-dark transform', { 'rotate-180': !isOpen })}
           onClick={isOpen ? close : open}
         />

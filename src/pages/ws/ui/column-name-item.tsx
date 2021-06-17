@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import datasetStore from '@store/dataset'
-import { DndSvg } from '@icons/dnd'
 import { Box } from '@ui/box'
+import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 import { Text } from '@ui/text'
 
@@ -49,7 +49,7 @@ export const ColumnNameItem = observer(
     return (
       <Root>
         <Wrapper>
-          <DndSvg />
+          <Icon name="Dnd" />
           <StyledText>{name}</StyledText>
         </Wrapper>
 

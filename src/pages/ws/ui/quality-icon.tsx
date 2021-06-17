@@ -1,17 +1,23 @@
 import { ReactElement } from 'react'
 
-import { QualityCircleSvg } from '@icons/quality-circle'
-import { RectSvg } from '@icons/rect'
 import { Box } from '@ui/box'
+import { Icon } from '@ui/icon'
 
 interface Props {
   iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'
 }
 export const QualityIcon = ({ iconVariant }: Props): ReactElement => (
   <Box>
-    {iconVariant === 'fill-rect' && <RectSvg isFilled />}
-    {iconVariant === 'outline-rect' && <RectSvg isFilled={false} />}
-    {iconVariant === 'fill-circle' && <QualityCircleSvg isFilled />}
-    {iconVariant === 'outline-circle' && <QualityCircleSvg isFilled={false} />}
+    {iconVariant === 'fill-rect' && <Icon name="Rect" />}
+    {iconVariant === 'outline-rect' && (
+      <Icon
+        name="Rect"
+        fill={false}
+        stroke={true}
+        className="text-transparent border border-black"
+      />
+    )}
+    {iconVariant === 'fill-circle' && <Icon name="Circle" />}
+    {iconVariant === 'outline-circle' && <Icon name="Ring" />}
   </Box>
 )

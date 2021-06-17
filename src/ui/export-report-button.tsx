@@ -1,9 +1,8 @@
 import { ReactElement } from 'react'
-import { Argument } from 'classnames'
+import cn, { Argument } from 'classnames'
 
 import { t } from '@i18n'
-import { ArrowSvg } from '@icons/arrow'
-import { ExportSvg } from '@icons/export'
+import { Icon } from '@ui/icon'
 import { Button } from './button'
 
 interface Props {
@@ -23,8 +22,13 @@ export const ExportReportButton = ({
     text={t('general.exportReport')}
     refEl={refEl}
     size="sm"
-    prepend={<ExportSvg />}
+    prepend={<Icon name="Export" />}
     onClick={rest.onClick}
-    append={<ArrowSvg direction={isOpen ? 'top' : 'down'} />}
+    append={
+      <Icon
+        name="Arrow"
+        className={cn('transform', isOpen ? 'rotate-90' : '-rotate-90')}
+      />
+    }
   />
 )

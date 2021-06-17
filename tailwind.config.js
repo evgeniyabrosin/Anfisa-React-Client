@@ -126,7 +126,7 @@ module.exports = {
     // 'gridTemplateRows', // The grid-template-rows utilities like grid-rows-4
     'height', // The height utilities like h-64
     // 'hueRotate', // The hue-rotate utilities like hue-rotate-180
-    // 'inset', // The inset utilities like bottom-10
+    'inset', // The inset utilities like bottom-10
     // 'invert', // The invert utilities like invert-0
     // 'isolation', // The isolation utilities like isolate
     'justifyContent', // The justify-content utilities like justify-center
@@ -144,7 +144,7 @@ module.exports = {
     // 'mixBlendMode', // The mix-blend-mode utilities like mix-blend-color-burn
     // 'objectFit', // The object-fit utilities like object-fill
     // 'objectPosition', // The object-position utilities like object-left-top
-    // 'opacity', // The opacity utilities like opacity-50
+    'opacity', // The opacity utilities like opacity-50
     // 'order', // The order utilities like order-8
     // 'outline', // The outline utilities like outline-white
     'overflow', // The overflow utilities like overflow-y-auto

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'

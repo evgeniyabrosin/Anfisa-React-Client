@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
 
 import { useParams } from '@core/hooks/use-params'
-import { CloseSvg } from '@icons/close'
+import { Icon } from '@ui/icon'
 import { FilterControl } from './ui/filter-control'
 import { VisualEditorSwitch } from './ui/visual-editor-switch'
 
@@ -18,7 +18,11 @@ export const FilterHeader = (): ReactElement => {
 
       <div className="flex items-center">
         <VisualEditorSwitch />
-        <CloseSvg className="text-white cursor-pointer" onClick={handleClose} />
+        <Icon
+          name="Close"
+          className="text-white cursor-pointer"
+          onClick={handleClose}
+        />
       </div>
 
       <FilterControl />
