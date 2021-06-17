@@ -12,7 +12,7 @@ export const ModalInfo = observer(
       close={() => dirinfoStore.setInfoFrameModalVisible(false)}
     >
       <div className="flex flex-col min-h-full" style={{ width: '900px' }}>
-        <div className="p-4 bg-grey-6 text-center">
+        <div className="p-4 bg-grey-light text-center">
           {dirinfoStore.activeInfoName}
         </div>
 

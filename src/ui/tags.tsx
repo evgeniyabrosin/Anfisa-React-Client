@@ -11,7 +11,7 @@ interface Props {
 export const Tags = observer(
   ({ tags }: Props): ReactElement => {
     if (tags.length === 0) {
-      return <div className="text-center py-4 text-grey-0">No tags</div>
+      return <div className="text-center py-4 text-grey-blue">No tags</div>
     }
 
     return (

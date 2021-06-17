@@ -80,10 +80,10 @@ export const FilterRefinerGroupItem = observer(
         </p>
 
         {amount !== 0 && (
-          <span className="text-14 text-grey-0 ml-1">
+          <span className="text-14 text-grey-blue ml-1">
             {'('}
             {selectedSum !== 0 && (
-              <span className="text-14 text-blue-0">{`${selectedSum}/`}</span>
+              <span className="text-14 text-blue-bright">{`${selectedSum}/`}</span>
             )}
             {`${amount})`}
           </span>

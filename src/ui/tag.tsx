@@ -31,7 +31,7 @@ export const Tag = observer(
             'text-12',
             'cursor-pointer',
             'leading-1',
-            isActive ? 'text-white' : 'text-blue-1',
+            isActive ? 'text-white' : 'text-blue-bright',
           ])}
         >
           {text}

@@ -1,7 +1,6 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { theme } from '@theme'
 import { Box } from './box'
 
 const Root = styled(Box)`
@@ -19,7 +18,6 @@ const Root = styled(Box)`
     animation: load7 1.8s infinite ease-in-out;
   }
   .loader {
-    color: ${theme('colors.blue.0')};
     font-size: 10px;
     margin: 80px auto;
     position: relative;
@@ -69,7 +67,7 @@ const Root = styled(Box)`
 export const Loader = (): ReactElement => {
   return (
     <Root>
-      <div className="loader">Loading...</div>
+      <div className="loader text-blue-bright">Loading...</div>
     </Root>
   )
 }
