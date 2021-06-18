@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -27,7 +26,7 @@ export const VariantHeader = observer(
     }
 
     return (
-      <div className="p-4 bg-blue-dark">
+      <div className="px-4 pb-4 pt-1 bg-blue-dark">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Button
@@ -46,6 +45,12 @@ export const VariantHeader = observer(
             />
 
             <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
+
+            {fakeTags.length > 0 && (
+              <div className="text-white ml-3 flex items-center">
+                <Tags tags={fakeTags} />
+              </div>
+            )}
           </div>
 
           <Icon
@@ -54,13 +59,6 @@ export const VariantHeader = observer(
             onClick={closeHandler}
           />
         </div>
-
-        {fakeTags.length > 0 && (
-          <div className="text-white mt-3 flex items-center">
-            <div className="mr-3">{t('general.tags')}</div>
-            <Tags tags={fakeTags} />
-          </div>
-        )}
       </div>
     )
   },
