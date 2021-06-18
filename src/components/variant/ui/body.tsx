@@ -60,7 +60,7 @@ const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
 export const VariantBody = observer(
   (): ReactElement => {
     return (
-      <div className="p-4 flex flex-col">
+      <div className="p-4 flex-grow overflow-y-auto overflow-x-hidden flex flex-col">
         {variantStore.variant.map((aspect: ReccntCommon) => {
           if (aspect.rows && aspect.rows.length === 0) {
             return <Fragment key={aspect.name} />
@@ -69,7 +69,7 @@ export const VariantBody = observer(
           return (
             <div
               key={aspect.name}
-              className="bg-blue-dark rounded text-grey-blue py-2 px-3 mb-2 text-14 leading-16px overflow-hidden"
+              className="bg-blue-dark rounded text-grey-blue py-2 px-3 mb-2 text-14 leading-16px"
             >
               <div className="font-bold text-white uppercase mb-3">
                 {aspect.title}

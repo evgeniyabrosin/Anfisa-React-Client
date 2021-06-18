@@ -28,7 +28,7 @@ export const VariantDrawer = observer(
       <div
         style={{ transitionProperty: 'width' }}
         className={cn(
-          `bg-blue-lighter overflow-y-auto overflow-x-hidden duration-200 ease-linear`,
+          `bg-blue-lighter duration-200 ease-linear flex flex-col`,
           variantStore.drawerVisible ? 'w-4/5' : 'w-0',
         )}
       >
