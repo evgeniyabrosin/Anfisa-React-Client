@@ -143,7 +143,7 @@ module.exports = {
     // 'maxHeight', // The max-height utilities like max-h-32
     'maxWidth', // The max-width utilities like max-w-5xl
     'minHeight', // The min-height utilities like min-h-full
-    // 'minWidth', // The min-width utilities like min-w-full
+    'minWidth', // The min-width utilities like min-w-full
     // 'mixBlendMode', // The mix-blend-mode utilities like mix-blend-color-burn
     // 'objectFit', // The object-fit utilities like object-fill
     // 'objectPosition', // The object-position utilities like object-left-top

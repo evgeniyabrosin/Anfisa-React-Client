@@ -1,12 +1,12 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ReccntCommon } from '@declarations'
+import { ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 
 export class VariantStore {
   drawerVisible = false
   variant: ReccntCommon[] = []
-  activeRecord = ''
+  recordsDisplayConfig: { [key: string]: ReccntDisplayItem } = {}
   index = 0
   dsName = ''
 
@@ -28,8 +28,17 @@ export class VariantStore {
     this.drawerVisible = visible
   }
 
-  setActiveRecord(name: string) {
-    this.activeRecord = name
+  initRecordsDisplayConfig() {
+    const conf: { [key: string]: ReccntDisplayItem } = {}
+    const isFirstInit = Object.keys(this.recordsDisplayConfig).length === 0
+
+    if (!isFirstInit) return
+
+    this.variant.map(record => {
+      conf[record.name] = { isOpen: false }
+    })
+
+    this.recordsDisplayConfig = conf
   }
 
   setIndex(index: number) {
@@ -64,7 +73,7 @@ export class VariantStore {
 
     runInAction(() => {
       this.variant = result
-      this.activeRecord = result[0].title
+      this.initRecordsDisplayConfig()
     })
   }
 }

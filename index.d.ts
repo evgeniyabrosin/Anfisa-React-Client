@@ -231,6 +231,10 @@ export interface ReccntRow {
   render?: string
 }
 
+export interface ReccntDisplayItem {
+  isOpen: boolean
+}
+
 export interface ReccntCommon {
   name: string
   title: string

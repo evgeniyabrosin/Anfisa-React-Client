@@ -1,4 +1,5 @@
 import { Fragment, ReactElement } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ReccntCommon } from '@declarations'
@@ -11,17 +12,13 @@ const PreView = ({ content }: ReccntCommon): ReactElement => {
 const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
   return (
     <div className="overflow-auto">
-      <table>
+      <table className="min-w-full">
         {colhead && colhead.length > 0 && (
           <thead>
-            <tr>
+            <tr className="text-blue-bright border-b border-blue-lighter">
               <td />
               {colhead.map((th, i) => (
-                <td
-                  key={i}
-                  className="pb-1 pr-2 text-blue-bright"
-                  colSpan={th[1]}
-                >
+                <td key={i} className="py-3 pr-3" colSpan={th[1]}>
                   {th[0]}
                 </td>
               ))}
@@ -35,7 +32,7 @@ const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
             return (
               <tr
                 key={row.name}
-                className="border-b last:border-0 border-blue-lighter "
+                className="border-b last:border-0 border-blue-lighter"
               >
                 <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
                   {row.title}
@@ -60,26 +57,41 @@ const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
 export const VariantBody = observer(
   (): ReactElement => {
     return (
-      <div className="p-4 flex-grow overflow-y-auto overflow-x-hidden flex flex-col">
+      <div className="p-4 flex-grow overflow-y-scroll overflow-x-hidden flex flex-col">
         {variantStore.variant.map((aspect: ReccntCommon) => {
           if (aspect.rows && aspect.rows.length === 0) {
             return <Fragment key={aspect.name} />
           }
 
+          const currentDisplayConfig =
+            variantStore.recordsDisplayConfig[aspect.name]
+
           return (
             <div
               key={aspect.name}
-              className="bg-blue-dark rounded text-grey-blue py-2 px-3 mb-2 text-14 leading-16px"
+              className="flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden"
             >
-              <div className="font-bold text-white uppercase mb-3">
+              <div
+                className="p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
+                onClick={() => {
+                  currentDisplayConfig.isOpen = !currentDisplayConfig.isOpen
+                }}
+              >
                 {aspect.title}
               </div>
 
-              {aspect.type === 'pre' ? (
-                <PreView {...aspect} />
-              ) : (
-                <TableView {...aspect} />
-              )}
+              <div
+                className={cn(
+                  'px-3',
+                  currentDisplayConfig.isOpen ? 'h-auto pb-3' : 'h-0',
+                )}
+              >
+                {aspect.type === 'pre' ? (
+                  <PreView {...aspect} />
+                ) : (
+                  <TableView {...aspect} />
+                )}
+              </div>
             </div>
           )
         })}
