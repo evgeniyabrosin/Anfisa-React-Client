@@ -15,7 +15,9 @@ export const CopyToClipboard = ({
   text,
   colorClass = 'text-blue-bright',
 }: Props): ReactElement => {
-  const copy = () => {
+  const copy = (event: any) => {
+    event.stopPropagation()
+
     copyToClipboard(text)
 
     toast.info(t('ds.copied'), {

@@ -1,10 +1,12 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useTable } from 'react-table'
 import cn from 'classnames'
+import { observer } from 'mobx-react-lite'
 
+import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
-import variantStore, { VariantStore } from '@store/variant'
+import variantStore from '@store/variant'
 
 interface Props {
   columns: any[]
@@ -17,82 +19,112 @@ interface PropsRow {
 
 export const isRowSelected = (
   rowIndex: number,
-  store: VariantStore,
+  activeIndex: number,
 ): boolean => {
-  return rowIndex === store.index && store.drawerVisible
+  return rowIndex === activeIndex
 }
 
-export const Table = ({ columns, data }: Props): ReactElement => {
-  const params = useParams()
+export const Table = observer(
+  ({ columns, data }: Props): ReactElement => {
+    const params = useParams()
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
-  })
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      rows,
+      prepareRow,
+    } = useTable({
+      columns,
+      data,
+    })
 
-  const handleOpenVariant = ({ index }: PropsRow) => {
-    datasetStore.setColumns(['Gene', 'Variant'])
-    datasetStore.showColumns()
-    variantStore.setIndex(index)
-    variantStore.setDsName(params.get('ds') ?? '')
-    variantStore.setDrawerVisible(true)
-  }
+    const handleOpenVariant = ({ index }: PropsRow) => {
+      datasetStore.setColumns(['Gene', 'Variant'])
+      datasetStore.showColumns()
+      variantStore.setIndex(index)
+      variantStore.setDsName(params.get('ds') ?? '')
+      variantStore.setDrawerVisible(true)
 
-  // Render the UI for your table
-  return (
-    <table {...getTableProps()} className="table-fixed">
-      <thead className="text-black">
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
-            {headerGroup.headers.map((column: any) => (
-              <th {...column.getHeaderProps()} key={Math.random()}>
-                {column.HeaderComponent
-                  ? column.render('HeaderComponent')
-                  : column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
+      if (window.history.pushState) {
+        const newurl =
+          window.location.protocol +
+          '//' +
+          window.location.host +
+          window.location.pathname +
+          `?ds=${params.get('ds') ?? ''}&variant=${index}`
 
-      <tbody {...getTableBodyProps()}>
-        {rows.map(row => {
-          prepareRow(row)
+        window.history.pushState({ path: newurl }, '', newurl)
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
 
-          return (
-            <tr
-              {...row.getRowProps()}
-              key={Math.random()}
-              className={cn(
-                'cursor-pointer',
-                isRowSelected(row.index, variantStore)
-                  ? 'bg-blue-bright text-white'
-                  : 'text-black hover:bg-blue-light',
-              )}
-              onClick={() =>
-                variantStore.drawerVisible && handleOpenVariant(row)
-              }
-              onDoubleClick={() =>
-                !variantStore.drawerVisible && handleOpenVariant(row)
-              }
-            >
-              {row.cells.map(cell => {
-                return (
-                  <td {...cell.getCellProps()} key={Math.random()}>
-                    {cell.render('Cell')}
-                  </td>
-                )
-              })}
+    useEffect(() => {
+      const variantNo = params.get('variant')
+
+      variantNo && handleOpenVariant({ index: Number(variantNo) })
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    // Render the UI for your table
+    return (
+      <table {...getTableProps()} className="table-fixed">
+        <thead className="text-black">
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
+              {headerGroup.headers.map((column: any) => (
+                <th {...column.getHeaderProps()} key={Math.random()}>
+                  {column.HeaderComponent
+                    ? column.render('HeaderComponent')
+                    : column.render('Header')}
+                </th>
+              ))}
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
-  )
-}
+          ))}
+        </thead>
+
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row)
+
+            return (
+              <tr
+                {...row.getRowProps()}
+                key={Math.random()}
+                className={cn(
+                  'cursor-pointer',
+                  isRowSelected(row.index, variantStore.index) &&
+                    variantStore.drawerVisible
+                    ? 'bg-blue-bright text-white'
+                    : 'text-black hover:bg-blue-light',
+                )}
+                onClick={() =>
+                  variantStore.drawerVisible && handleOpenVariant(row)
+                }
+                onDoubleClick={() =>
+                  !variantStore.drawerVisible && handleOpenVariant(row)
+                }
+              >
+                {row.cells.map(cell => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      key={Math.random()}
+                      style={
+                        datasetStore.viewType === ViewTypeEnum.Compact
+                          ? { padding: '5px 20px' }
+                          : {}
+                      }
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  )
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    )
+  },
+)

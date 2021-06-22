@@ -1,20 +1,24 @@
 import { ReactElement, useRef } from 'react'
 import noop from 'lodash/noop'
 
+import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { InputSearch } from './input-search'
+import { ViewTypeTable } from './view-type-table'
 
 interface Props {
   title: string
   selectedAmount: number
   searchValue: string
   searchInputPlaceholder?: string
+  viewType?: ViewTypeEnum
   children: ReactElement
   onClearAll?: () => void
   onClose?: () => void
   onApply?: () => void
+  setViewType?: (viewType: ViewTypeEnum) => void
   onChange?: (value: string) => void
 }
 
@@ -23,7 +27,9 @@ export const PopperTableModal = ({
   selectedAmount,
   searchValue,
   searchInputPlaceholder,
+  viewType,
   children,
+  setViewType,
   onClearAll,
   onClose,
   onApply,
@@ -43,6 +49,10 @@ export const PopperTableModal = ({
           placeholder={searchInputPlaceholder}
           onChange={e => onChange && onChange(e.target.value)}
         />
+
+        {viewType && setViewType && (
+          <ViewTypeTable setViewType={setViewType} viewType={viewType} />
+        )}
 
         <div className="flex justify-between mt-5">
           <span className="text-14 text-grey-blue">

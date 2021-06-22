@@ -7,6 +7,7 @@ import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { getApiUrl } from '@core/get-api-url'
 import { tableColumnMap } from '@core/table-column-map'
 import filterStore from '@store/filter'
@@ -23,6 +24,7 @@ class DatasetStore {
   selectedTags: string[] = []
   selectedGenes: string[] = []
   columns: string[] = Object.values(tableColumnMap)
+  viewType: ViewTypeEnum = ViewTypeEnum.Cozy
   selectedColumns: string[] = Object.values(tableColumnMap)
 
   filteredNo: number[] = []
@@ -43,6 +45,10 @@ class DatasetStore {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setViewType(viewType: ViewTypeEnum) {
+    this.viewType = viewType
   }
 
   setIsFilterDisabled(value: boolean) {

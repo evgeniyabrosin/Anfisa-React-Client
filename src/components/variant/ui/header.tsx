@@ -2,10 +2,11 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { Tags } from '@ui/tags'
+import { Tag } from '@ui/tag'
 import { closeHandler } from '../drawer'
 
 export const VariantHeader = observer(
@@ -13,7 +14,9 @@ export const VariantHeader = observer(
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = !!variantStore.index
-    const fakeTags = ['Fake Previously Triaged', 'Fake Benign/Likely benign']
+
+    const canGetNextVariant =
+      variantStore.index !== get(datasetStore, 'dsStat.total-counts.0', 0) - 1
 
     const handlePrevVariant = () => {
       if (!canGetPrevVariant) return
@@ -21,7 +24,7 @@ export const VariantHeader = observer(
     }
 
     const handleNextVariant = () => {
-      // TODO add last item check
+      if (!canGetNextVariant) return
       variantStore.nextVariant()
     }
 
@@ -41,14 +44,17 @@ export const VariantHeader = observer(
               size="xs"
               icon={<Icon name="Arrow" className="transform -rotate-90" />}
               className="bg-blue-lighter mx-2"
+              disabled={!canGetNextVariant}
               onClick={handleNextVariant}
             />
 
             <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
 
-            {fakeTags.length > 0 && (
+            {variantStore.tags.length > 0 && (
               <div className="text-white ml-3 flex items-center">
-                <Tags tags={fakeTags} />
+                {variantStore.tags.map(tag => (
+                  <Tag text={tag} key={tag} isActive />
+                ))}
               </div>
             )}
           </div>

@@ -40,6 +40,8 @@ export const en = {
     searchFilter: 'Search for a filter',
     searchTag: 'Search for a tag',
     searchColumn: 'Search for a column',
+    Compact: 'Compact View',
+    Cozy: 'Cozy View',
   },
   variant: {
     genes: 'Gene(s)',

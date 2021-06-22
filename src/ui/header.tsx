@@ -9,6 +9,7 @@ import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
+import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { Icon } from '@ui/icon'
 import { Logo } from '@ui/logo'
@@ -51,7 +52,11 @@ export const Header = observer(
     }
 
     const copyLink = () => {
-      copyToClipboard(`${window.origin}${Routes.WS}?ds=${ds}`)
+      copyToClipboard(
+        `${window.origin}${Routes.WS}?ds=${ds}${
+          variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''
+        }`,
+      )
 
       toast.info(t('ds.copied'), {
         position: 'bottom-right',
@@ -86,7 +91,7 @@ export const Header = observer(
             </div>
           </Link>
 
-          <div className="text-grey-blue flex items-center">
+          <div className="text-grey-blue flex items-center mr-2">
             {xlDatasetName && datasets && (
               <Fragment>
                 <span className="mx-2">/</span>

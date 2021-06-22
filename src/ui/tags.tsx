@@ -23,6 +23,8 @@ export const Tags = observer(
             text={tag}
             key={tag}
             isActive={datasetStore.selectedTags.includes(tag)}
+            onClick={() => datasetStore.addTag(tag)}
+            onRemove={() => datasetStore.removeTag(tag)}
           />
         ))}
       </div>

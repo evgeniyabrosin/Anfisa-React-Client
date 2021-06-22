@@ -14,7 +14,7 @@ export const CellTags = ({ cell }: CellI): ReactElement => {
   return (
     <div className="flex flex-wrap">
       {tags.map(tag => (
-        <Tag key={tag} text={tag} />
+        <Tag key={tag} text={tag} isActive hideCloseIcon />
       ))}
     </div>
   )

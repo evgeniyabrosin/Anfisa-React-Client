@@ -9,6 +9,7 @@ export class VariantStore {
   recordsDisplayConfig: { [key: string]: ReccntDisplayItem } = {}
   index = 0
   dsName = ''
+  tags: string[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -62,17 +63,21 @@ export class VariantStore {
   }
 
   async fetchVarinatInfoAsync() {
-    const response = await fetch(
-      getApiUrl(`reccnt?ds=${this.dsName}&rec=${this.index}`),
-      {
+    const [variantResponse, tagsResponse] = await Promise.all([
+      fetch(getApiUrl(`reccnt?ds=${this.dsName}&rec=${this.index}`), {
         method: 'POST',
-      },
-    )
+      }),
+      fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
+    ])
 
-    const result = await response.json()
+    const [variant, tags] = await Promise.all([
+      variantResponse.json(),
+      tagsResponse.json(),
+    ])
 
     runInAction(() => {
-      this.variant = result
+      this.variant = variant
+      this.tags = Object.keys(tags['rec-tags'])
       this.initRecordsDisplayConfig()
     })
   }

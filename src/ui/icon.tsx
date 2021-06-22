@@ -53,7 +53,7 @@ interface IconProps {
   stroke?: boolean
   fill?: boolean
   className?: Argument
-  onClick?: () => void
+  onClick?: (event: any) => void
 }
 
 export const Icon = ({
