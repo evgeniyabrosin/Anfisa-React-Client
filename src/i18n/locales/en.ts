@@ -9,6 +9,7 @@ export const en = {
     cancel: 'Cancel',
     apply: 'Apply',
     selectAnOption: 'Select an option',
+    filter: '+ Filter',
   },
   home: {
     title: 'Home',
@@ -63,5 +64,6 @@ export const en = {
     show: 'Show {amount} variants',
     amountOf: '{selected} / {all}',
     query: 'Query',
+    presetName: 'Preset name',
   },
 }

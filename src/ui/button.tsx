@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-interface Props {
+export interface ButtonProps {
   text?: string
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
@@ -25,7 +25,7 @@ export const Button = ({
   prepend,
   icon,
   refEl,
-}: Props): ReactElement => {
+}: ButtonProps): ReactElement => {
   let padding = ''
   const rounding = icon ? 'rounded' : 'rounded-full'
   const classNameString: string = cn(className)

@@ -46,7 +46,6 @@ export const SelectedFilterCard = observer(
                 <span className="text-14 leading-16px font-bold text-black ml-2">
                   {filterKey}
                 </span>
-                <span className="text-14 leading-16px font-bold text-grey-blue ml-2">{`(${filters[filterKey]})`}</span>
               </div>
             ))}
           </div>

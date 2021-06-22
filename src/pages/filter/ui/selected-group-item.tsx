@@ -45,13 +45,12 @@ export const SelectedGroupItem = observer(
     const checked = get(
       filterStore,
       `selectedFilters[${filterStore.selectedGroupItem.vgroup}][${filterStore.selectedGroupItem.name}][${name}]`,
-      false,
     )
 
     return (
       <Root>
         <Checkbox
-          checked={checked}
+          checked={Number.isInteger(checked)}
           style={{ cursor: 'pointer' }}
           indeterminate={filterStore.selectedGroupItem.name === name}
           onChange={event => {

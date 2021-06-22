@@ -6,8 +6,10 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { tableColumnMap } from '@core/table-column-map'
+import filterStore from '@store/filter'
 
 const INCREASE_INDEX = 50
 
@@ -125,7 +127,7 @@ class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: string[][]) {
+  async setConditionsAsync(conditions: any[][]) {
     if (!conditions[0]) {
       this.conditions = []
 
@@ -180,6 +182,22 @@ class DatasetStore {
       } else {
         cloneConditions[subGroupIndex][3] = filteredItems
       }
+    }
+
+    this.conditions = cloneConditions
+
+    this.fetchWsListAsync()
+  }
+
+  removeConditionGroup({ subGroup }: { subGroup: string }) {
+    const cloneConditions = cloneDeep(this.conditions)
+
+    const subGroupIndex = cloneConditions.findIndex(
+      item => item[1] === subGroup,
+    )
+
+    if (subGroupIndex !== -1) {
+      cloneConditions.splice(subGroupIndex, 1)
     }
 
     this.conditions = cloneConditions
@@ -251,6 +269,116 @@ class DatasetStore {
       this.dsStat = result
       this.isLoadingDsStat = false
     })
+  }
+
+  updatePresetLoad(dsStatData: any) {
+    this.conditions = dsStatData.conditions
+    filterStore.selectedFilters = {}
+
+    dsStatData.conditions?.forEach((condition: any[]) => {
+      const name = condition[1]
+
+      const filterItem = dsStatData['stat-list']?.find(
+        (item: any) => item.name === name,
+      )
+
+      if (condition[0] === FilterKindEnum.enum) {
+        condition[3]?.forEach((value: string) => {
+          filterStore.addSelectedFilters({
+            group: filterItem.vgroup,
+            groupItemName: name,
+            variant: [value, 0],
+          })
+        })
+      }
+    })
+
+    this.fetchWsListAsync()
+  }
+
+  async loadPresetAsync(filter: string) {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      filter,
+    })
+
+    const response = await fetch(getApiUrl(`ds_stat`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    this.updatePresetLoad(result)
+  }
+
+  async deletePresetAsync(presetName: string) {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      conditions: JSON.stringify(this.conditions),
+      instr: JSON.stringify(['DELETE', presetName]),
+    })
+
+    const response = await fetch(getApiUrl(`ds_stat`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.dsStat = result
+    })
+  }
+
+  async joinPresetAsync(presetName: string) {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      conditions: JSON.stringify(this.conditions),
+      instr: JSON.stringify(['JOIN', presetName]),
+    })
+
+    const response = await fetch(getApiUrl(`ds_stat`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    this.updatePresetLoad(result)
+  }
+
+  async updatePresetAsync(presetName: string) {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      conditions: JSON.stringify(this.conditions),
+      instr: JSON.stringify(['UPDATE', presetName]),
+    })
+
+    const response = await fetch(getApiUrl(`ds_stat`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.dsStat = result
+    })
+
+    this.updatePresetLoad(result)
   }
 
   async fetchTabReportAsync() {

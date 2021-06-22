@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
-import { formatDataToConditions } from '@core/format-data-to-conditions'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
@@ -23,18 +22,25 @@ export const FilterRefinerGroups = observer(
           datasetStore.getFilterRefiner[group] &&
           datasetStore.getFilterRefiner[group].find(item => item.name === name)
 
-        filterStore.addSelectedFilterGroup(
-          group,
-          name,
-          get(filterItem, 'variants', []) as [string, number][],
-        )
+        const filterItemVariants = get(filterItem, 'variants', []) as [
+          string,
+          number,
+        ][]
+
+        filterStore.addSelectedFilterGroup(group, name, filterItemVariants)
+
+        datasetStore.setConditionsAsync([
+          [
+            FilterKindEnum.enum,
+            name,
+            '',
+            filterItemVariants.map(item => item[0]),
+          ],
+        ])
       } else {
         filterStore.removeSelectedFiltersGroup(group, name)
+        datasetStore.removeConditionGroup({ subGroup: name })
       }
-
-      datasetStore.setConditionsAsync(
-        formatDataToConditions(filterStore.selectedFilters),
-      )
     }
 
     return (

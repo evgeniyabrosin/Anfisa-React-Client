@@ -2,6 +2,7 @@ import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { StatListType } from '@declarations'
+import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
 
@@ -21,9 +22,14 @@ class FilterStore {
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
+  actionName?: ActionFilterEnum
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setActionName(actionName: ActionFilterEnum) {
+    this.actionName = actionName
   }
 
   setMethod(method: FilterMethodEnum) {
