@@ -11,7 +11,7 @@ const PreView = ({ content }: ReccntCommon): ReactElement => {
 
 const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
   return (
-    <div className="overflow-auto">
+    <div className="overflow-auto" style={{ maxHeight: '460px' }}>
       <table className="min-w-full">
         {colhead && colhead.length > 0 && (
           <thead>
