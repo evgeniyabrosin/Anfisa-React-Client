@@ -110,11 +110,12 @@ export const Table = observer(
                     <td
                       {...cell.getCellProps()}
                       key={Math.random()}
-                      style={
+                      className={cn(
+                        'px-4',
                         datasetStore.viewType === ViewTypeEnum.Compact
-                          ? { padding: '5px 20px' }
-                          : {}
-                      }
+                          ? 'py-1'
+                          : 'py-4',
+                      )}
                     >
                       {cell.render('Cell')}
                     </td>

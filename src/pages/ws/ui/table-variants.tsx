@@ -40,10 +40,6 @@ const Styles = styled.div`
         border-bottom: 1px;
         border-style: solid;
         border-color: ${theme('colors.grey.light')};
-
-        td {
-          padding: 20px 16px;
-        }
       }
     }
   }

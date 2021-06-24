@@ -23,12 +23,12 @@ export const Tag = observer(
     <div
       className={cn([
         'rounded-full',
-        'py-1',
+        'py-0.5',
         'px-2',
         'flex',
         'justify-between',
         'items-center',
-        'm-1',
+        'my-0.5 mr-1',
         isActive ? 'bg-blue-bright' : 'bg-blue-light',
       ])}
       onClick={() => !isActive && onClick && onClick(text)}
@@ -37,7 +37,7 @@ export const Tag = observer(
         className={cn([
           'text-12',
           'cursor-pointer',
-          'leading-1',
+          'leading-14px',
           'truncate',
           isActive ? 'text-white' : 'text-blue-bright',
         ])}
