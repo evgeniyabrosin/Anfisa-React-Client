@@ -149,6 +149,7 @@ class DatasetStore {
     this.tabReport = []
     this.wsTags = {}
     this.dsStat = {}
+    this.filteredNo = []
     this.activePreset = ''
     zoneStore.selectedTags = []
     columnsStore.searchColumnValue = ''

@@ -83,7 +83,7 @@ export const VariantBody = observer(
               <div
                 className={cn(
                   'px-3',
-                  currentDisplayConfig.isOpen ? 'h-auto pb-3' : 'h-0',
+                  currentDisplayConfig?.isOpen ? 'h-auto pb-3' : 'h-0',
                 )}
               >
                 {aspect.type === 'pre' ? (

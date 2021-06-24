@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
+import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 
@@ -21,7 +22,11 @@ export const isRowSelected = (
   rowIndex: number,
   activeIndex: number,
 ): boolean => {
-  return rowIndex === activeIndex
+  return (
+    (datasetStore.filteredNo.length === 0
+      ? rowIndex
+      : datasetStore.filteredNo[rowIndex]) === activeIndex
+  )
 }
 
 export const Table = observer(
@@ -40,9 +45,14 @@ export const Table = observer(
     })
 
     const handleOpenVariant = ({ index }: PropsRow) => {
+      const variantIndex =
+        datasetStore.filteredNo.length === 0
+          ? index
+          : datasetStore.filteredNo[index]
+
       columnsStore.setColumns(['Gene', 'Variant'])
       columnsStore.showColumns()
-      variantStore.setIndex(index)
+      variantStore.setIndex(variantIndex)
       variantStore.setDsName(params.get('ds') ?? '')
       variantStore.setDrawerVisible(true)
 
@@ -52,7 +62,11 @@ export const Table = observer(
           '//' +
           window.location.host +
           window.location.pathname +
-          `?ds=${params.get('ds') ?? ''}&variant=${index}`
+          `?ds=${params.get('ds') ?? ''}${
+            Number.isInteger(variantIndex)
+              ? `&variantIndex=${variantIndex}`
+              : ''
+          }`
 
         window.history.pushState({ path: newurl }, '', newurl)
       }
@@ -60,7 +74,7 @@ export const Table = observer(
     }
 
     useEffect(() => {
-      const variantNo = params.get('variant')
+      const variantNo = params.get('variantIndex')
 
       variantNo && handleOpenVariant({ index: Number(variantNo) })
       // eslint-disable-next-line react-hooks/exhaustive-deps
