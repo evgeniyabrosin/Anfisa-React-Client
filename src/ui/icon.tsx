@@ -4,7 +4,7 @@ import cn, { Argument } from 'classnames'
 import Arrow from '@icons/arrow'
 import Circle from '@icons/circle'
 import Close from '@icons/close'
-import CloseTag from '@icons/close-tag'
+import ClosePadded from '@icons/close-padded'
 import Copy from '@icons/copy'
 import CopyLink from '@icons/copy-link'
 import Dnd from '@icons/dnd'
@@ -31,7 +31,7 @@ const iconItems: { [key: string]: IconItem } = {
   Arrow,
   Circle,
   Close,
-  CloseTag,
+  ClosePadded,
   CopyLink,
   Copy,
   Export,

@@ -1,17 +1,15 @@
 import { Fragment } from 'react'
 
-const size = 18
+const size = 24
 
 export default {
   size,
   viewBox: { w: size, h: size },
-  fill: true,
+  stroke: true,
   content: (
     <Fragment>
-      <g opacity="0.6">
-        <path d="M3 3L9 9" stroke="white" strokeLinecap="round" />
-        <path d="M9 3L3 9" stroke="white" strokeLinecap="round" />
-      </g>
+      <path d="M4 4L20 20" strokeWidth="2" strokeLinecap="round" />
+      <path d="M20 4L4 20" strokeWidth="2" strokeLinecap="round" />
     </Fragment>
   ),
 }

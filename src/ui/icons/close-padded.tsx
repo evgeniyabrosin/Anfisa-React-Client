@@ -8,10 +8,8 @@ export default {
   stroke: true,
   content: (
     <Fragment>
-      <g opacity="0.6">
-        <path d="M3 3L9 9" stroke="white" strokeLinecap="round" />
-        <path d="M9 3L3 9" stroke="white" strokeLinecap="round" />
-      </g>
+      <path d="M3 3L9 9" strokeLinecap="round" />
+      <path d="M9 3L3 9" strokeLinecap="round" />
     </Fragment>
   ),
 }
