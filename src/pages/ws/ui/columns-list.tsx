@@ -7,7 +7,7 @@ import {
 } from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
+import columnsStore from '@store/wsColumns'
 import { ColumnNameItem } from './column-name-item'
 
 const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
@@ -32,12 +32,12 @@ const reorder = (
 
 export const ColumnsList = observer(
   (): ReactElement => {
-    const [columns, setColumns] = useState<string[]>(datasetStore.getColumns)
+    const [columns, setColumns] = useState<string[]>(columnsStore.getColumns)
 
     useEffect(() => {
-      setColumns(datasetStore.getColumns)
+      setColumns(columnsStore.getColumns)
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [datasetStore.searchColumnValue])
+    }, [columnsStore.searchColumnValue])
 
     const onDragEnd = (result: DropResult) => {
       if (!result.destination) {
@@ -51,10 +51,10 @@ export const ColumnsList = observer(
       )
 
       const activeColumns = items.filter(item =>
-        datasetStore.columns.includes(item),
+        columnsStore.columns.includes(item),
       )
 
-      datasetStore.setColumns(activeColumns)
+      columnsStore.setColumns(activeColumns)
       setColumns(items)
     }
 
@@ -69,7 +69,7 @@ export const ColumnsList = observer(
                     key={item}
                     draggableId={item}
                     index={index}
-                    isDragDisabled={!!datasetStore.searchColumnValue}
+                    isDragDisabled={!!columnsStore.searchColumnValue}
                   >
                     {(providedDraggable, snapshot) => (
                       <div

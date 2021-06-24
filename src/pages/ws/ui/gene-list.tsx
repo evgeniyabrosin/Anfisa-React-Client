@@ -1,7 +1,8 @@
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
+import zoneStore from '@store/filterZone'
+
 interface Props {
   genes: string[]
 }
@@ -9,9 +10,9 @@ interface Props {
 export const GeneList = observer(({ genes }: Props) => {
   const handleCheck = (checked: boolean, geneName: string) => {
     if (checked) {
-      datasetStore.addGene(geneName)
+      zoneStore.addGene(geneName)
     } else {
-      datasetStore.removeGene(geneName)
+      zoneStore.removeGene(geneName)
     }
   }
 
@@ -20,7 +21,7 @@ export const GeneList = observer(({ genes }: Props) => {
       {genes.map(gene => (
         <div key={gene} className="flex items-center mb-4">
           <Checkbox
-            checked={datasetStore.selectedGenes.includes(gene)}
+            checked={zoneStore.selectedGenes.includes(gene)}
             className="w-4 h-4"
             onChange={e => handleCheck(e.target.checked, gene)}
           />

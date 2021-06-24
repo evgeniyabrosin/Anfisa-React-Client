@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import columnsStore from '@store/wsColumns'
 import { PopperTableModal } from '@ui/popper-table-modal'
 import { ColumnsList } from './columns-list'
 
@@ -14,24 +14,24 @@ interface Props {
 export const SettingsPanel = observer(
   ({ close }: Props): ReactElement => {
     const [viewType, setViewType] = useState<ViewTypeEnum>(
-      datasetStore.viewType,
+      columnsStore.viewType,
     )
 
     return (
       <PopperTableModal
         title={t('ds.columns')}
         searchInputPlaceholder={t('ds.searchColumn')}
-        selectedAmount={datasetStore.columns.length}
-        searchValue={datasetStore.searchColumnValue}
-        onChange={v => datasetStore.setSearchColumnValue(v)}
-        onClearAll={() => datasetStore.clearColumn()}
+        selectedAmount={columnsStore.columns.length}
+        searchValue={columnsStore.searchColumnValue}
+        onChange={v => columnsStore.setSearchColumnValue(v)}
+        onClearAll={() => columnsStore.clearColumn()}
         onApply={() => {
-          datasetStore.showColumns()
-          datasetStore.setViewType(viewType)
+          columnsStore.showColumns()
+          columnsStore.setViewType(viewType)
           close()
         }}
         onClose={() => {
-          datasetStore.cancelColumns()
+          columnsStore.cancelColumns()
           close()
         }}
         setViewType={setViewType}

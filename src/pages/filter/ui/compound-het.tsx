@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react'
 import { Option } from 'react-dropdown'
 import { Form, FormikProps } from 'formik'
 
-import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
 import { DropDown } from '@ui/dropdown'
 
 type Props = FormikProps<{
@@ -23,7 +23,7 @@ export const CompundHet = ({ setFieldValue }: Props): ReactElement => {
   const fetchStatFuncAsync = async (
     param?: Record<string, string | string[]>,
   ) => {
-    const statFuncData = await datasetStore.fetchStatFuncAsync(
+    const statFuncData = await filterStore.fetchStatFuncAsync(
       'Compound_Het',
       param || {},
     )

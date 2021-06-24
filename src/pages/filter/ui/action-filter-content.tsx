@@ -8,6 +8,7 @@ import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
+import presetStore from '@store/filterPreset'
 import { Button } from '@ui/button'
 import { DropDown, DropdownVariantEnum } from '@ui/dropdown'
 import { Input } from '@ui/input'
@@ -41,24 +42,24 @@ export const ActionFilterContent = observer(
 
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
-        datasetStore.loadPresetAsync(activeFilter)
+        presetStore.loadPresetAsync(activeFilter)
       }
 
       if (filterStore.actionName === ActionFilterEnum.Delete) {
-        datasetStore.deletePresetAsync(activeFilter)
+        presetStore.deletePresetAsync(activeFilter)
         setActiveFilter('')
       }
 
       if (filterStore.actionName === ActionFilterEnum.Join) {
-        datasetStore.joinPresetAsync(activeFilter)
+        presetStore.joinPresetAsync(activeFilter)
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
-        createPresetName && datasetStore.updatePresetAsync(createPresetName)
+        createPresetName && presetStore.updatePresetAsync(createPresetName)
       }
 
       if (filterStore.actionName === ActionFilterEnum.Modify) {
-        datasetStore.updatePresetAsync(activeFilter)
+        presetStore.updatePresetAsync(activeFilter)
       }
     }
 

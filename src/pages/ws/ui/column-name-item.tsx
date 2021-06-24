@@ -2,12 +2,11 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import datasetStore from '@store/dataset'
+import columnsStore from '@store/wsColumns'
 import { Box } from '@ui/box'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 import { Text } from '@ui/text'
-
 interface Props {
   name: string
 }
@@ -38,11 +37,11 @@ export const ColumnNameItem = observer(
   ({ name }: Props): ReactElement => {
     const handleChange = (checked: boolean) => {
       if (!checked) {
-        datasetStore.removeColumn(name)
+        columnsStore.removeColumn(name)
       }
 
       if (checked) {
-        datasetStore.addColumn(name)
+        columnsStore.addColumn(name)
       }
     }
 
@@ -55,7 +54,7 @@ export const ColumnNameItem = observer(
 
         <Switch
           onChange={handleChange}
-          isChecked={datasetStore.columns.includes(name)}
+          isChecked={columnsStore.columns.includes(name)}
         />
       </Root>
     )

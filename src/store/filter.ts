@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction } from 'mobx'
 
@@ -5,6 +6,7 @@ import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
+import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
   string,
@@ -117,6 +119,46 @@ class FilterStore {
     runInAction(() => {
       this.dtreeSet = result
     })
+  }
+
+  async fetchDsInfoAsync() {
+    const response = await fetch(
+      getApiUrl(`dsinfo?ds=${datasetStore.datasetName}`),
+    )
+
+    const result = await response.json()
+
+    return result
+  }
+
+  async fetchProblemGroupsAsync() {
+    const dsInfo = await this.fetchDsInfoAsync()
+
+    return Object.keys(get(dsInfo, 'meta.samples', {}))
+  }
+
+  async fetchStatFuncAsync(
+    unit: string,
+    param?: Record<string, string | string[]>,
+  ) {
+    const body = new URLSearchParams({
+      ds: datasetStore.datasetName,
+      unit,
+    })
+
+    param && body.append('param', JSON.stringify(param))
+
+    const response = await fetch(getApiUrl(`statfunc`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    return result
   }
 }
 

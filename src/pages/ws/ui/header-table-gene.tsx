@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import zoneStore from '@store/filterZone'
 import { PopperButton } from '@ui/popper-button'
 import { PopperTableModal } from '@ui/popper-table-modal'
 import { GeneList } from './gene-list'
@@ -29,7 +30,7 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
   }, [])
 
   const handleApplyAsync = async () => {
-    datasetStore.addZone(['Symbol', datasetStore.selectedGenes])
+    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
 
     await datasetStore.fetchWsListAsync()
 
@@ -41,9 +42,9 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
     <PopperTableModal
       title={t('ds.gene')}
       searchInputPlaceholder={t('ds.searchFilter')}
-      selectedAmount={datasetStore.selectedGenes.length}
+      selectedAmount={zoneStore.selectedGenes.length}
       onClose={close}
-      onClearAll={datasetStore.unselectAllGenes}
+      onClearAll={zoneStore.unselectAllGenes}
       searchValue={searchValue}
       onApply={handleApplyAsync}
       onChange={setSearchValue}

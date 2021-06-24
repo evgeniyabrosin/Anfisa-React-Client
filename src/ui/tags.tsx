@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
+import zoneStore from '@store/filterZone'
 import { Tag } from './tag'
 
 interface Props {
@@ -22,9 +22,9 @@ export const Tags = observer(
           <Tag
             text={tag}
             key={tag}
-            isActive={datasetStore.selectedTags.includes(tag)}
-            onClick={() => datasetStore.addTag(tag)}
-            onRemove={() => datasetStore.removeTag(tag)}
+            isActive={zoneStore.selectedTags.includes(tag)}
+            onClick={() => zoneStore.addTag(tag)}
+            onRemove={() => zoneStore.removeTag(tag)}
           />
         ))}
       </div>

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import zoneStore from '@store/filterZone'
 import { PopperButton } from '@ui/popper-button'
 import { PopperTableModal } from '@ui/popper-table-modal'
 import { Tags } from '@ui/tags'
@@ -21,7 +22,7 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
   const [searchValue, setSearchValue] = useState('')
 
   const handleApply = () => {
-    datasetStore.fetchTagSelectAsync()
+    zoneStore.fetchTagSelectAsync()
 
     close()
   }
@@ -29,10 +30,10 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
   return (
     <PopperTableModal
       title={t('general.tags')}
-      selectedAmount={datasetStore.selectedTags.length}
+      selectedAmount={zoneStore.selectedTags.length}
       searchInputPlaceholder={t('ds.searchTag')}
       onClose={close}
-      onClearAll={datasetStore.unselectAllTags}
+      onClearAll={zoneStore.unselectAllTags}
       searchValue={searchValue}
       onApply={handleApply}
       onChange={setSearchValue}

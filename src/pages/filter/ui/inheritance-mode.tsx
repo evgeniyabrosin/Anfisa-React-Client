@@ -3,7 +3,7 @@ import Checkbox from 'react-three-state-checkbox'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
 
 export const InheritanceMode = observer(
   ({
@@ -16,7 +16,7 @@ export const InheritanceMode = observer(
     const fetchStatFuncAsync = async (
       param?: Record<string, string | string[]>,
     ) => {
-      const statFuncData = await datasetStore.fetchStatFuncAsync(
+      const statFuncData = await filterStore.fetchStatFuncAsync(
         'Inheritance_Mode',
         param || {},
       )
@@ -46,7 +46,7 @@ export const InheritanceMode = observer(
     useEffect(() => {
       const initAsync = async () => {
         const [problemGroupsData] = await Promise.all([
-          datasetStore.fetchProblemGroupsAsync(),
+          filterStore.fetchProblemGroupsAsync(),
           fetchStatFuncAsync(),
         ])
 

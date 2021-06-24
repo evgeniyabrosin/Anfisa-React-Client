@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
+import columnsStore from '@store/wsColumns'
 import { Loader } from '@ui/loader'
 import { NoResultsFound } from '@ui/no-results-found'
 import { variantColumnTable } from '../columns'
@@ -49,7 +50,7 @@ export const TableVariants = observer(
   (): ReactElement => {
     const wrapperRef = useRef() as MutableRefObject<HTMLDivElement>
 
-    const columns = datasetStore.selectedColumns.map(column =>
+    const columns = columnsStore.selectedColumns.map(column =>
       variantColumnTable.find(item => item.Header === column),
     )
 

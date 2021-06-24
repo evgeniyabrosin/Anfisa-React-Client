@@ -36,6 +36,7 @@ module.exports = {
         ],
       },
     ],
+    'unicorn/filename-case': 'off',
     // typescript
     '@typescript-eslint/no-explicit-any': 'off',
     //react

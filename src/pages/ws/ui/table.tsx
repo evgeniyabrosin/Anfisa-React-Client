@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
-import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
+import columnsStore from '@store/wsColumns'
 
 interface Props {
   columns: any[]
@@ -40,8 +40,8 @@ export const Table = observer(
     })
 
     const handleOpenVariant = ({ index }: PropsRow) => {
-      datasetStore.setColumns(['Gene', 'Variant'])
-      datasetStore.showColumns()
+      columnsStore.setColumns(['Gene', 'Variant'])
+      columnsStore.showColumns()
       variantStore.setIndex(index)
       variantStore.setDsName(params.get('ds') ?? '')
       variantStore.setDrawerVisible(true)
@@ -112,7 +112,7 @@ export const Table = observer(
                       key={Math.random()}
                       className={cn(
                         'px-4',
-                        datasetStore.viewType === ViewTypeEnum.Compact
+                        columnsStore.viewType === ViewTypeEnum.Compact
                           ? 'py-1'
                           : 'py-4',
                       )}

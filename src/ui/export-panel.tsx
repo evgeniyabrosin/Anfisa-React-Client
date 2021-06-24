@@ -3,10 +3,9 @@ import styled from 'styled-components'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import operationsStore from '@store/operations'
 import { Box } from './box'
 import { Text } from './text'
-
 interface Props {
   close: () => void
 }
@@ -36,7 +35,7 @@ const StyledText = styled(Text)`
 
 export const ExportPanel = ({ close }: Props): ReactElement => {
   const handleDownload = (type: ExportTypeEnum) => {
-    datasetStore.exportReportAsync(type)
+    operationsStore.exportReportAsync(type)
     close()
   }
 

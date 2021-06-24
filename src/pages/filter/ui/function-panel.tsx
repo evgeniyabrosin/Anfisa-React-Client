@@ -40,7 +40,7 @@ export const FunctionPanel = observer(
       functionsMap[selectedFilter.name]
 
     const onSubmitAsync = async (values: any) => {
-      const { err } = await datasetStore.fetchStatFuncAsync(
+      const { err } = await filterStore.fetchStatFuncAsync(
         selectedFilter.name,
         values,
       )
