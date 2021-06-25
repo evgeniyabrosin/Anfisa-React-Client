@@ -45,11 +45,13 @@ export const Tag = observer(
         {text}
       </span>
 
-      <Icon
-        name="ClosePadded"
-        className="ml-1 cursor-pointer opacity-60"
-        onClick={() => isActive && onRemove && onRemove(text)}
-      />
+      {isActive && !hideCloseIcon && (
+        <Icon
+          name="ClosePadded"
+          className="ml-1 cursor-pointer opacity-60"
+          onClick={() => isActive && onRemove && onRemove(text)}
+        />
+      )}
     </div>
   ),
 )
