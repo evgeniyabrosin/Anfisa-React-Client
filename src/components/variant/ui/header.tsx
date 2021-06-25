@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { useKeydown } from '@core/hooks/use-keydown'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
@@ -13,20 +14,25 @@ export const VariantHeader = observer(
   (): ReactElement => {
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
-    const canGetPrevVariant = !!variantStore.index
+    const canGetPrevVariant = () => !!variantStore.index
 
-    const canGetNextVariant =
+    const canGetNextVariant = () =>
       variantStore.index !== get(datasetStore, 'dsStat.total-counts.0', 0) - 1
 
     const handlePrevVariant = () => {
-      if (!canGetPrevVariant) return
+      if (!variantStore.drawerVisible || !canGetPrevVariant()) return
       variantStore.prevVariant()
     }
 
     const handleNextVariant = () => {
-      if (!canGetNextVariant) return
+      if (!variantStore.drawerVisible || !canGetNextVariant()) return
       variantStore.nextVariant()
     }
+
+    useKeydown([
+      { eventCode: 'ArrowUp', callback: handlePrevVariant },
+      { eventCode: 'ArrowDown', callback: handleNextVariant },
+    ])
 
     return (
       <div className="px-4 pb-4 pt-1 bg-blue-dark">
@@ -36,7 +42,7 @@ export const VariantHeader = observer(
               size="xs"
               icon={<Icon name="Arrow" className="transform rotate-90" />}
               className="bg-blue-lighter"
-              disabled={!canGetPrevVariant}
+              disabled={!canGetPrevVariant()}
               onClick={handlePrevVariant}
             />
 
@@ -44,7 +50,7 @@ export const VariantHeader = observer(
               size="xs"
               icon={<Icon name="Arrow" className="transform -rotate-90" />}
               className="bg-blue-lighter mx-2"
-              disabled={!canGetNextVariant}
+              disabled={!canGetNextVariant()}
               onClick={handleNextVariant}
             />
 
