@@ -14,7 +14,7 @@ export const CellVariant = observer(
     const selectedRow = isRowSelected(rowIndex, variantStore.index)
 
     return (
-      <div className="text-12 leading-18px">
+      <div className="leading-18px">
         <div className="flex">
           <span className="mr-1">{value[0]}</span>
 

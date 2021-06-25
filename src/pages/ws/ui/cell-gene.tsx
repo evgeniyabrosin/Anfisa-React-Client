@@ -21,7 +21,7 @@ export const CellGene = observer(
 
         <div>
           {value.map(gene => (
-            <div className="text-sm leading-18px" key={gene}>
+            <div className="text-14 leading-18px" key={gene}>
               {gene}
             </div>
           ))}

@@ -17,7 +17,7 @@ const Styles = styled.div`
   table {
     border-spacing: 0;
     border-collapse: collapse;
-    width: 100%;
+    min-width: 100%;
 
     thead {
       tr {

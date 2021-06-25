@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 
 import { CellI, PredicationI } from './cell-interfaces'
@@ -8,10 +8,10 @@ export const CellInSilico = ({ cell }: CellI): ReactElement => {
   const predictions = get(cell, 'value', []) as PredicationI[]
 
   return (
-    <div>
+    <Fragment>
       {predictions.map((prediction: PredicationI) => (
         <PredictionItem key={prediction.name} {...prediction} />
       ))}
-    </div>
+    </Fragment>
   )
 }

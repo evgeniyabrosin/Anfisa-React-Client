@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 
 import { CellI, PredicationI } from './cell-interfaces'
@@ -8,10 +8,10 @@ export const CellPopulation = ({ cell }: CellI): ReactElement => {
   const gnomads = get(cell, 'value', []) as PredicationI[]
 
   return (
-    <div>
+    <Fragment>
       {gnomads.map(gnomad => (
         <GnomadItem key={gnomad.name} {...gnomad} />
       ))}
-    </div>
+    </Fragment>
   )
 }

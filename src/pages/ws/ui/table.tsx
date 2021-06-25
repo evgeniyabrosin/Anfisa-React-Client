@@ -82,7 +82,7 @@ export const Table = observer(
 
     // Render the UI for your table
     return (
-      <table {...getTableProps()} className="table-fixed">
+      <table {...getTableProps()}>
         <thead className="text-black">
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
@@ -97,7 +97,7 @@ export const Table = observer(
           ))}
         </thead>
 
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className="text-12">
           {rows.map(row => {
             prepareRow(row)
 
