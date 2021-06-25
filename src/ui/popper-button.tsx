@@ -1,6 +1,6 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
-import { Argument } from 'classnames'
+import cn, { Argument } from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 
@@ -26,7 +26,7 @@ export const PopperButton = ({
       <ButtonElement
         refEl={setReferenceElement}
         isOpen={isOpen}
-        className={ButtonElementClassName}
+        className={cn(ButtonElementClassName)}
         onClick={isOpen ? close : open}
       />
 

@@ -29,7 +29,6 @@ export const WSPage = observer(
           <div className="text-white flex-grow flex justify-end pr-6">
             <PopperButton
               ButtonElement={ExportReportButton}
-              ButtonElementClassName={'reddd'}
               ModalElement={ExportPanel}
             />
           </div>
