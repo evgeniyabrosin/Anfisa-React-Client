@@ -11,7 +11,9 @@ export const CellVariant = observer(
   ({ cell }: CellI): ReactElement => {
     const value = get(cell, 'value', '').split(' ')
     const rowIndex = get(cell, 'row.index', null)
-    const selectedRow = isRowSelected(rowIndex, variantStore.index)
+
+    const selectedRow =
+      variantStore.drawerVisible && isRowSelected(rowIndex, variantStore.index)
 
     return (
       <div className="leading-18px">
@@ -20,7 +22,7 @@ export const CellVariant = observer(
 
           <CopyToClipboard
             text={`${value[0]} ${value[1]}`}
-            colorClass={selectedRow ? 'text-white' : undefined}
+            className={selectedRow ? 'text-white' : 'text-blue-bright'}
           />
         </div>
         <div>{value[1]}</div>

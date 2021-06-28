@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 import { toast } from 'react-toastify'
-import cn from 'classnames'
+import cn, { Argument } from 'classnames'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { t } from '@i18n'
@@ -8,13 +8,10 @@ import { Icon } from '@ui/icon'
 
 interface Props {
   text: string
-  colorClass?: string
+  className?: Argument
 }
 
-export const CopyToClipboard = ({
-  text,
-  colorClass = 'text-blue-bright',
-}: Props): ReactElement => {
+export const CopyToClipboard = ({ text, className }: Props): ReactElement => {
   const copy = (event: any) => {
     event.stopPropagation()
 
@@ -34,7 +31,7 @@ export const CopyToClipboard = ({
   return (
     <Icon
       name="Copy"
-      className={cn('cursor-pointer', colorClass)}
+      className={cn('cursor-pointer', className)}
       onClick={copy}
     />
   )
