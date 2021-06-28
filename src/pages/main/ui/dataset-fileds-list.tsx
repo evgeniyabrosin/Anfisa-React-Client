@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -10,7 +10,6 @@ import { Card, CardTitle } from '@ui/card'
 import { Icon } from '@ui/icon'
 import { DatasetField } from './dataset-filed'
 import { IframeInfo } from './iframe-info'
-import { ModalInfo } from './modal-info'
 
 interface Props {
   className?: Argument
@@ -58,9 +57,33 @@ const CommonDetails = observer(
 
 const InfoDetails = observer(
   (): ReactElement => {
-    const setVisible = () => {
-      dirinfoStore.setInfoFrameModalVisible(true)
+    const id = 'IframeInfo'
+
+    const openFullScreen = () => {
+      const el = document.querySelector(`#${id}`)
+
+      if (!el) return
+
+      el.requestFullscreen()
     }
+
+    const toggleStoreFullScreen = () => {
+      const el = document.querySelector(`#${id}`)
+
+      if (!el) return
+
+      const fullscreenEnabled = document.fullscreenElement !== null
+
+      if (fullscreenEnabled) dirinfoStore.setIframeInfoFullscreen(true)
+      else dirinfoStore.setIframeInfoFullscreen(false)
+    }
+
+    useEffect(() => {
+      document.addEventListener('fullscreenchange', toggleStoreFullScreen)
+
+      return () =>
+        document.addEventListener('fullscreenchange', toggleStoreFullScreen)
+    }, [])
 
     return (
       <Card className="flex flex-col col-span-2 xl:col-span-3">
@@ -68,13 +91,11 @@ const InfoDetails = observer(
           <Icon
             name="FullScreen"
             className="text-grey-blue cursor-pointer"
-            onClick={setVisible}
+            onClick={openFullScreen}
           />
         </div>
 
-        <IframeInfo />
-
-        <ModalInfo />
+        <IframeInfo id="IframeInfo" />
       </Card>
     )
   },

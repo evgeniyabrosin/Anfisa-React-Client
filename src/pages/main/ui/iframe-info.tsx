@@ -6,8 +6,12 @@ import dirinfoStore from '@store/dirinfo'
 
 const imgRegExp = /(.png)|(.jpg)$/m
 
+interface Props {
+  id: string
+}
+
 export const IframeInfo = observer(
-  (): ReactElement => {
+  ({ id }: Props): ReactElement => {
     const [isImg, setIsImg] = useState(true)
 
     useEffect(() => {
@@ -15,12 +19,17 @@ export const IframeInfo = observer(
     }, [])
 
     return (
-      <div className={cn('flex-grow flex', { 'h-auto': isImg })}>
+      <div
+        id={id}
+        className={cn(
+          { flex: !isImg },
+          dirinfoStore.iframeInfoFullscreen
+            ? 'overflow-auto bg-white'
+            : 'flex-grow',
+        )}
+      >
         {isImg ? (
-          <img
-            src={dirinfoStore.infoFrameLink}
-            className={cn('p-3 h-auto w-full')}
-          />
+          <img src={dirinfoStore.infoFrameLink} className={cn('p-3 m-auto')} />
         ) : (
           <iframe
             src={dirinfoStore.infoFrameLink}
