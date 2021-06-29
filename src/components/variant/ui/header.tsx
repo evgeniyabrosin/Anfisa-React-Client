@@ -39,7 +39,7 @@ export const VariantHeader = observer(
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Button
-              size="xs"
+              size="sm"
               icon={<Icon name="Arrow" className="transform rotate-90" />}
               className="bg-blue-lighter"
               disabled={!canGetPrevVariant()}
@@ -47,14 +47,14 @@ export const VariantHeader = observer(
             />
 
             <Button
-              size="xs"
+              size="sm"
               icon={<Icon name="Arrow" className="transform -rotate-90" />}
               className="bg-blue-lighter mx-2"
               disabled={!canGetNextVariant()}
               onClick={handleNextVariant}
             />
 
-            <div className="text-blue-bright font-bold text-2xl leading-7">{`[${genInfo}] ${hg19}`}</div>
+            <div className="text-blue-bright font-bold text-16 leading-18px">{`[${genInfo}] ${hg19}`}</div>
 
             {variantStore.tags.length > 0 && (
               <div className="text-white ml-3 flex items-center">
