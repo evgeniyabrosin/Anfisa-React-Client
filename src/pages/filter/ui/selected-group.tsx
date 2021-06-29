@@ -8,6 +8,7 @@ import { EnumPanel } from './enum-panel'
 import { FunctionPanel } from './function-panel'
 import { RangePanel } from './range-panel'
 import { SelectedGroupHeader } from './selected-group-header'
+
 export const SelectedGroup = observer(
   (): ReactElement => {
     if (!filterStore.selectedGroupItem.name) {

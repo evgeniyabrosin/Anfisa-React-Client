@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import filterStore from '@store/filter'
-import { Text } from '@ui/text'
 
 interface Props {
   name: string
@@ -19,7 +18,7 @@ const Root = styled.div`
   align-items: center;
 `
 
-const StyledGroupItem = styled(Text)`
+const StyledGroupItem = styled.span`
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
@@ -28,7 +27,7 @@ const StyledGroupItem = styled(Text)`
   margin-left: 8px;
 `
 
-const AmoutText = styled(Text)`
+const AmoutText = styled.span`
   font-size: 14px;
   line-height: 16px;
   margin: 0;

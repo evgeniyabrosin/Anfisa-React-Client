@@ -5,15 +5,12 @@ import styled from 'styled-components'
 import columnsStore from '@store/wsColumns'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
-import { Text } from '@ui/text'
 
 interface Props {
   name: string
 }
 
-const StyledText = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
+const StyledText = styled.span`
   font-size: 12px;
   line-height: 22px;
   margin-left: 10px;

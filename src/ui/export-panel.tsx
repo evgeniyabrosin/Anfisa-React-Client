@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { t } from '@i18n'
 import operationsStore from '@store/operations'
-import { Text } from './text'
+
 interface Props {
   close: () => void
 }
@@ -16,7 +16,7 @@ const Root = styled.div`
   padding-top: 8px;
 `
 
-const StyledText = styled(Text)`
+const StyledText = styled.span`
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
