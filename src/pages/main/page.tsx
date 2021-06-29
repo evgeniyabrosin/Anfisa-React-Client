@@ -1,10 +1,28 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 
+import { useParams } from '@core/hooks/use-params'
+import dirinfoStore from '@store/dirinfo'
 import { Header } from '@ui/header'
 import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 
 export const MainPage = (): ReactElement => {
+  const params = useParams()
+
+  useEffect(() => {
+    const handlerAsync = async () => {
+      const dsName = params.get('ds') || ''
+
+      if (dsName) {
+        await dirinfoStore.fetchDsinfoAsync(dsName)
+      }
+
+      dirinfoStore.setSelectedDirinfoName(dsName)
+    }
+
+    handlerAsync()
+  }, [params])
+
   return (
     <div className="min-h-full flex flex-col">
       <Header />

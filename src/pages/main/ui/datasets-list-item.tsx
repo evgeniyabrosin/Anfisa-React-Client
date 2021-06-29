@@ -1,4 +1,5 @@
 import { Fragment, ReactElement, useState } from 'react'
+import { useHistory } from 'react-router'
 import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -6,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
 import dirinfoStore from '@store/dirinfo'
+import { Routes } from '@router/routes.enum'
 import { DatasetType } from './dataset-type'
 
 interface Props {
@@ -61,11 +63,12 @@ const DatasetName = ({
 
 export const DatasetsListItem = observer(
   ({ item, isSubItems }: Props): ReactElement => {
-    const [isOpenFolder, setIsOpenFolder] = useState(false)
+    const history = useHistory()
+    const isActive = item.name === dirinfoStore.selectedDirinfoName
+    const [isOpenFolder, setIsOpenFolder] = useState(isActive)
     const [isChildrenVisible, setIsChildrenVisible] = useState(false)
     const isXl = item.kind === 'xl'
     const secondaryKeys: string[] = get(item, 'secondary', [])
-    const isActive = item.name === dirinfoStore.selectedDirinfoName
 
     const isActiveXl =
       isXl && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
@@ -77,12 +80,9 @@ export const DatasetsListItem = observer(
       }
 
       dirinfoStore.setInfoFrameLink('')
-      dirinfoStore.setSelectedDirinfoName(item.name)
       dirinfoStore.setActiveInfoName('')
 
-      if (!isXl) {
-        dirinfoStore.fetchDsinfoAsync(item.name)
-      }
+      history.replace(`${Routes.Root}?ds=${item.name}`)
     }
 
     return (
