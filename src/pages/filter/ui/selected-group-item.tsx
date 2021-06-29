@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import filterStore from '@store/filter'
 
@@ -12,29 +11,6 @@ interface Props {
   handleSelect: (checked: boolean) => void
 }
 
-const Root = styled.div`
-  display: flex;
-  margin-bottom: 11px;
-  align-items: center;
-`
-
-const StyledGroupItem = styled.span`
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  color: #000000;
-  margin: 0;
-  margin-left: 8px;
-`
-
-const AmoutText = styled.span`
-  font-size: 14px;
-  line-height: 16px;
-  margin: 0;
-  color: rgba(0, 0, 0, 0.7);
-  margin-left: 8px;
-`
-
 export const SelectedGroupItem = observer(
   ({ name, amount, handleSelect }: Props): ReactElement => {
     const checked = get(
@@ -43,7 +19,7 @@ export const SelectedGroupItem = observer(
     )
 
     return (
-      <Root>
+      <div className="flex items-center mb-3 text-14  leading-16px">
         <Checkbox
           checked={Number.isInteger(checked)}
           style={{ cursor: 'pointer' }}
@@ -53,10 +29,14 @@ export const SelectedGroupItem = observer(
           }}
         />
 
-        <StyledGroupItem key={name}>{name}</StyledGroupItem>
+        <span key={name} className="font-medium ml-2">
+          {name}
+        </span>
 
-        {amount !== 0 && <AmoutText>{`(${amount})`}</AmoutText>}
-      </Root>
+        {amount !== 0 && (
+          <span className="ml-1 text-grey-blue">{`(${amount})`}</span>
+        )}
+      </div>
     )
   },
 )

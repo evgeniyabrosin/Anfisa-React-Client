@@ -1,6 +1,5 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import columnsStore from '@store/wsColumns'
 import { Icon } from '@ui/icon'
@@ -9,14 +8,6 @@ import { Switch } from '@ui/switch'
 interface Props {
   name: string
 }
-
-const StyledText = styled.span`
-  font-size: 12px;
-  line-height: 22px;
-  margin-left: 10px;
-  margin-top: 4px;
-  margin-bottom: 4px;
-`
 
 export const ColumnNameItem = observer(
   ({ name }: Props): ReactElement => {
@@ -34,7 +25,7 @@ export const ColumnNameItem = observer(
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Icon name="Dnd" />
-          <StyledText>{name}</StyledText>
+          <span className="text-12 my-1">{name}</span>
         </div>
 
         <Switch
