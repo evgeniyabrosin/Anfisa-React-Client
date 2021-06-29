@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 
 // import { useParams } from '@core/hooks/use-params'
 // import filterStore from '@store/filter'
-import { Box } from '@ui/box'
 
 export const QueryEditor = observer(
   (): ReactElement => {
@@ -33,11 +32,11 @@ export const QueryEditor = observer(
     // }, [code, params])
 
     return (
-      <Box>
+      <div>
         {/* <textarea onChange={handleChange} />
 
         <div id="resultHTML" /> */}
-      </Box>
+      </div>
     )
   },
 )

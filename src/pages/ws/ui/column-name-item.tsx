@@ -3,24 +3,13 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import columnsStore from '@store/wsColumns'
-import { Box } from '@ui/box'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 import { Text } from '@ui/text'
+
 interface Props {
   name: string
 }
-
-const Root = styled(Box)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
-const Wrapper = styled(Box)`
-  display: flex;
-  align-items: center;
-`
 
 const StyledText = styled(Text)`
   font-style: normal;
@@ -46,17 +35,17 @@ export const ColumnNameItem = observer(
     }
 
     return (
-      <Root>
-        <Wrapper>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <Icon name="Dnd" />
           <StyledText>{name}</StyledText>
-        </Wrapper>
+        </div>
 
         <Switch
           onChange={handleChange}
           isChecked={columnsStore.columns.includes(name)}
         />
-      </Root>
+      </div>
     )
   },
 )

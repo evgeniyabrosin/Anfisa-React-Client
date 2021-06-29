@@ -1,13 +1,12 @@
 import { ReactElement } from 'react'
 
-import { Box } from '@ui/box'
 import { Icon } from '@ui/icon'
 
 interface Props {
   iconVariant: 'fill-circle' | 'outline-circle' | 'fill-rect' | 'outline-rect'
 }
 export const QualityIcon = ({ iconVariant }: Props): ReactElement => (
-  <Box>
+  <div>
     {iconVariant === 'fill-rect' && <Icon name="Rect" />}
     {iconVariant === 'outline-rect' && (
       <Icon
@@ -19,5 +18,5 @@ export const QualityIcon = ({ iconVariant }: Props): ReactElement => (
     )}
     {iconVariant === 'fill-circle' && <Icon name="Circle" />}
     {iconVariant === 'outline-circle' && <Icon name="Ring" />}
-  </Box>
+  </div>
 )

@@ -1,9 +1,7 @@
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Box } from './box'
-
-const Root = styled(Box)`
+const Root = styled.div`
   width: 100%;
 
   .loader,

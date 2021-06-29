@@ -4,13 +4,12 @@ import styled from 'styled-components'
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { t } from '@i18n'
 import operationsStore from '@store/operations'
-import { Box } from './box'
 import { Text } from './text'
 interface Props {
   close: () => void
 }
 
-const Root = styled(Box)`
+const Root = styled.div`
   background: white;
   border-radius: 4px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);

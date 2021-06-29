@@ -2,9 +2,8 @@ import { ReactElement } from 'react'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import { Box } from './box'
 
-const Root = styled(Box)`
+const Root = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

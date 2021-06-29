@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import filterStore from '@store/filter'
-import { Box } from '@ui/box'
 import { Text } from '@ui/text'
 
 interface Props {
@@ -14,14 +13,13 @@ interface Props {
   handleSelect: (checked: boolean) => void
 }
 
-const Root = styled(Box)`
+const Root = styled.div`
   display: flex;
   margin-bottom: 11px;
   align-items: center;
 `
 
 const StyledGroupItem = styled(Text)`
-  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
@@ -31,8 +29,6 @@ const StyledGroupItem = styled(Text)`
 `
 
 const AmoutText = styled(Text)`
-  font-style: normal;
-  font-weight: normal;
   font-size: 14px;
   line-height: 16px;
   margin: 0;
