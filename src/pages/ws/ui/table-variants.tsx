@@ -28,7 +28,6 @@ const Styles = styled.div`
           text-align: left;
           font-style: normal;
           font-weight: bold;
-          font-size: 12px;
           line-height: 14px;
         }
       }

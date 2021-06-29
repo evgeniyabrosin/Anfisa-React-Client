@@ -42,7 +42,7 @@ export const PopperTableModal = ({
   return (
     <div className="bg-white shadow-card rounded" ref={ref}>
       <div className="px-4 pt-4">
-        <p className="text-16 text-blue-dark mb-5 ">{title}</p>
+        <p className="text-blue-dark mb-5">{title}</p>
 
         <InputSearch
           value={searchValue}

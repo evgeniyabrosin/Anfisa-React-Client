@@ -6,7 +6,7 @@ export const EmptySelectedGroup = (): ReactElement => (
       className="flex items-center justify-center"
       style={{ height: 'calc(100vh - 100px)' }}
     >
-      <p className="text-16 leading-16px text-grey-blue align-center">
+      <p className="leading-16px text-grey-blue align-center">
         Select a filter
       </p>
     </div>

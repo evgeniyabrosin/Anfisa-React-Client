@@ -16,7 +16,7 @@ export const QueryResults = observer(
           style={{ height: 'calc(100vh - 223px)' }}
           className="w-full flex justify-center items-center"
         >
-          <p className="text-16 leading-16px text-grey-blue">
+          <p className="leading-16px text-grey-blue">
             {t('general.noResultsFound')}
           </p>
         </div>

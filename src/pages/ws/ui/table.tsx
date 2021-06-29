@@ -87,7 +87,11 @@ export const Table = observer(
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
               {headerGroup.headers.map((column: any) => (
-                <th {...column.getHeaderProps()} key={Math.random()}>
+                <th
+                  {...column.getHeaderProps()}
+                  key={Math.random()}
+                  className="text-14"
+                >
                   {column.HeaderComponent
                     ? column.render('HeaderComponent')
                     : column.render('Header')}

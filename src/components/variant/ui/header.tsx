@@ -54,7 +54,7 @@ export const VariantHeader = observer(
               onClick={handleNextVariant}
             />
 
-            <div className="text-blue-bright font-bold text-16 leading-18px">{`[${genInfo}] ${hg19}`}</div>
+            <div className="text-blue-bright font-bold leading-18px">{`[${genInfo}] ${hg19}`}</div>
 
             {variantStore.tags.length > 0 && (
               <div className="text-white ml-3 flex items-center">
