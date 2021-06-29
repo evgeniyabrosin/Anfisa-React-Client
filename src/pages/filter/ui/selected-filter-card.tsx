@@ -27,7 +27,7 @@ export const SelectedFilterCard = observer(
           className="flex items-center border-b border-grey-light p-4 cursor-pointer"
           onClick={isOpen ? close : open}
         >
-          <span className="text-16 leading-16px text-black">{title}</span>
+          <span className="leading-16px">{title}</span>
 
           <Icon
             name="Arrow"
@@ -43,7 +43,7 @@ export const SelectedFilterCard = observer(
             {filterKeys.map(filterKey => (
               <div key={filterKey} className="flex items-center pl-6 py-4">
                 <Checkbox checked onChange={() => onRemove(filterKey)} />
-                <span className="text-14 leading-16px font-bold text-black ml-2">
+                <span className="text-14 leading-16px font-bold ml-2">
                   {filterKey}
                 </span>
               </div>

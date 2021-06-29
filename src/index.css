@@ -8,6 +8,7 @@
 
   html {
     min-width: 1024px;
+    @apply text-black;
   }
 
   html, body, #root {

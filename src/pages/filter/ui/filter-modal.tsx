@@ -28,7 +28,7 @@ export const FilterModal = ({ close }: Props): ReactElement => {
 
   return (
     <div
-      className="bg-white w-24 flex flex-col rounded text-black text-12 leading-12px"
+      className="bg-white w-24 flex flex-col rounded text-12 leading-12px"
       ref={ref}
     >
       {actions.map(action => (

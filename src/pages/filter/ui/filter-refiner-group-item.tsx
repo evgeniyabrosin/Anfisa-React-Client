@@ -72,7 +72,7 @@ export const FilterRefinerGroupItem = observer(
         <p
           key={name}
           onClick={handleSelect}
-          className={cn('text-14 text-black ml-2 cursor-pointer', {
+          className={cn('text-14 ml-2 cursor-pointer', {
             'font-bold': checked,
           })}
         >

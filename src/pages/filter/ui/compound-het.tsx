@@ -54,7 +54,7 @@ export const CompundHet = ({ setFieldValue }: Props): ReactElement => {
   return (
     <Form>
       <div className="flex items-center mt-4">
-        <span className="mr-2 text-18 leading-14px text-black">Approx:</span>
+        <span className="mr-2 text-18 leading-14px">Approx:</span>
 
         <DropDown
           value={options[0].value}
@@ -66,7 +66,7 @@ export const CompundHet = ({ setFieldValue }: Props): ReactElement => {
       <div className="mt-4">
         {variants.map(variant => (
           <div key={variant[0]} className="text-14 leading-14px">
-            <span className="text-black">{variant[0]}</span>
+            <span>{variant[0]}</span>
             <span className="text-grey-blue ml-1">{`(${variant[1]})`}</span>
           </div>
         ))}

@@ -25,7 +25,7 @@ export const GeneList = observer(({ genes }: Props) => {
             className="w-4 h-4"
             onChange={e => handleCheck(e.target.checked, gene)}
           />
-          <span className="text-12 text-black ml-1">{gene}</span>
+          <span className="text-12 ml-1">{gene}</span>
         </div>
       ))}
     </div>

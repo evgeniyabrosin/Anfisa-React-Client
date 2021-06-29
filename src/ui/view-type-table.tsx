@@ -12,7 +12,7 @@ interface Props {
 
 export const ViewTypeTable = observer(
   ({ viewType, setViewType }: Props): ReactElement => (
-    <div className="flex items-center text-14 leading-14 text-black mt-5">
+    <div className="flex items-center text-14 leading-14 mt-5">
       {[ViewTypeEnum.Compact, ViewTypeEnum.Cozy].map(viewTypeItem => (
         <div key={viewTypeItem} className="mr-4 flex items-center">
           <RadioButton

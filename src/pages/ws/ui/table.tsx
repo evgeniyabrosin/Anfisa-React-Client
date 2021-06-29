@@ -83,7 +83,7 @@ export const Table = observer(
     // Render the UI for your table
     return (
       <table {...getTableProps()}>
-        <thead className="text-black">
+        <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()} key={Math.random()}>
               {headerGroup.headers.map((column: any) => (
@@ -110,7 +110,7 @@ export const Table = observer(
                   isRowSelected(row.index, variantStore.index) &&
                     variantStore.drawerVisible
                     ? 'bg-blue-bright text-white'
-                    : 'text-black hover:bg-blue-light',
+                    : 'hover:bg-blue-light',
                 )}
                 onClick={() =>
                   variantStore.drawerVisible && handleOpenVariant(row)

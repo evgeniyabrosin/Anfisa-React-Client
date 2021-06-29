@@ -24,7 +24,7 @@ export const CardTitle = ({
   const sizeClass =
     size === 'md'
       ? 'text-xl text-blue-dark leading-24px font-bold'
-      : 'text-sm text-black leading-16px mb-3'
+      : 'text-sm leading-16px mb-3'
 
   return <div className={cn(sizeClass, className)}>{text}</div>
 }

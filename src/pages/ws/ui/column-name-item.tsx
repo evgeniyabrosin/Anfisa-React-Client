@@ -16,7 +16,6 @@ const StyledText = styled(Text)`
   font-weight: normal;
   font-size: 12px;
   line-height: 22px;
-  color: #595959;
   margin-left: 10px;
   margin-top: 4px;
   margin-bottom: 4px;

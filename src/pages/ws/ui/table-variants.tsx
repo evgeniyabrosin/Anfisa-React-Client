@@ -30,7 +30,6 @@ const Styles = styled.div`
           font-weight: bold;
           font-size: 12px;
           line-height: 14px;
-          color: ${theme('colors.blue.dark')};
         }
       }
     }

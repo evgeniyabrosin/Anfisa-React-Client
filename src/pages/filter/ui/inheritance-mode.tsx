@@ -80,9 +80,7 @@ export const InheritanceMode = observer(
                 checked={values.problemGroups.includes(problemGroup)}
                 onChange={e => handleChangeAsync(e, problemGroup)}
               />
-              <span className="text-14 leading-16px text-black ml-2">
-                {problemGroup}
-              </span>
+              <span className="text-14 leading-16px ml-2">{problemGroup}</span>
             </div>
           ))}
         </div>
@@ -119,9 +117,7 @@ export const InheritanceMode = observer(
                   setFieldValue('variants', value)
                 }}
               />
-              <span className="text-14 leading-16px text-black ml-2">
-                {variant[0]}
-              </span>
+              <span className="text-14 leading-16px ml-2">{variant[0]}</span>
               <span className="text-14 leading-16px text-grey-blue ml-1">{`(${variant[1]})`}</span>
             </div>
           )
