@@ -18,7 +18,7 @@ export const QualityItem = ({
   iconVariant,
   qualityName,
 }: Props): ReactElement => (
-  <div className="text-10 leading-16px mr-6">
+  <div className="text-10 leading-16px mr-3 w-1/3 overflow-x-hidden max-w-xs">
     <div>
       <QualityIcon iconVariant={iconVariant} />
       <div>{qualityName}</div>

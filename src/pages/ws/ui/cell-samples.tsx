@@ -15,7 +15,7 @@ export const CellSamples = observer(
     const metaSamples = get(dirInfoStore, 'dsinfo.meta.samples', {})
 
     return (
-      <div className="flex">
+      <div className="flex overflow-x-hidden">
         {qualitiesKeys.map((qualityName, index) => (
           <QualityItem
             key={index}

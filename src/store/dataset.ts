@@ -19,7 +19,7 @@ class DatasetStore {
   wsTags: WsTagsType = {}
   genes: string[] = []
   tags: string[] = []
-
+  offset = 0
   filteredNo: number[] = []
 
   datasetName = ''
@@ -39,12 +39,20 @@ class DatasetStore {
     makeAutoObservable(this)
   }
 
+  setTableOffest(value: number) {
+    this.offset = value
+  }
+
   setIsFilterDisabled(value: boolean) {
     this.isFilterDisabled = value
   }
 
   setActivePreset(value: string) {
     this.activePreset = value
+  }
+
+  setIsLoadingTabReport(value: boolean) {
+    this.isLoadingTabReport = value
   }
 
   setDatasetName(datasetName: string) {

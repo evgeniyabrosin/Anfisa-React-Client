@@ -6,6 +6,7 @@ import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { VariantBody } from './ui/body'
 import { VariantHeader } from './ui/header'
+
 export const closeHandler = () => {
   variantStore.setDrawerVisible(false)
 
@@ -25,11 +26,11 @@ export const VariantDrawer = observer(
 
     return (
       <div
-        style={{ transitionProperty: 'width' }}
-        className={cn(
-          `bg-blue-lighter duration-200 ease-linear flex flex-col`,
-          variantStore.drawerVisible ? 'w-4/5' : 'w-0',
-        )}
+        style={{
+          transitionProperty: 'width',
+          width: variantStore.drawerVisible ? 'calc(100vw - 380px)' : 0,
+        }}
+        className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
       >
         <VariantHeader />
 

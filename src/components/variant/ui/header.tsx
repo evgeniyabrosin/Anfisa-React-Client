@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useKeydown } from '@core/hooks/use-keydown'
+import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
@@ -15,6 +16,7 @@ export const VariantHeader = observer(
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = () => !!variantStore.index
+    const params = useParams()
 
     const canGetNextVariant = () =>
       variantStore.index !== get(datasetStore, 'dsStat.total-counts.0', 0) - 1
@@ -33,6 +35,21 @@ export const VariantHeader = observer(
       { eventCode: 'ArrowUp', callback: handlePrevVariant },
       { eventCode: 'ArrowDown', callback: handleNextVariant },
     ])
+
+    const handleCloseDrawer = () => {
+      if (window.history.pushState) {
+        const newurl =
+          window.location.protocol +
+          '//' +
+          window.location.host +
+          window.location.pathname +
+          `?ds=${params.get('ds') ?? ''}`
+
+        window.history.pushState({ path: newurl }, '', newurl)
+      }
+
+      closeHandler()
+    }
 
     return (
       <div className="px-4 pb-4 pt-1 bg-blue-dark">
@@ -68,7 +85,7 @@ export const VariantHeader = observer(
           <Icon
             name="Close"
             className="cursor-pointer text-white"
-            onClick={closeHandler}
+            onClick={handleCloseDrawer}
           />
         </div>
       </div>

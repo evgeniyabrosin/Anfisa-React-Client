@@ -1,5 +1,4 @@
-import { MutableRefObject, ReactElement, useRef } from 'react'
-import debounce from 'lodash/debounce'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -13,28 +12,29 @@ import { Table } from './table'
 
 const Styles = styled.div`
   overflow-x: auto;
+  overflow-y: hidden;
 
-  table {
+  .table {
     border-spacing: 0;
     border-collapse: collapse;
     min-width: 100%;
 
-    thead {
-      tr {
+    .thead {
+      .tr {
         border-color: ${theme('colors.grey.light')};
 
-        th {
+        .th {
           padding: 12px 16px;
-          text-align: left;
           font-style: normal;
           font-weight: bold;
+          font-size: 14px;
           line-height: 14px;
         }
       }
     }
 
-    tbody {
-      tr {
+    .tbody {
+      .tr {
         border-top: 1px;
         border-bottom: 1px;
         border-style: solid;
@@ -46,43 +46,17 @@ const Styles = styled.div`
 
 export const TableVariants = observer(
   (): ReactElement => {
-    const wrapperRef = useRef() as MutableRefObject<HTMLDivElement>
-
     const columns = columnsStore.selectedColumns.map(column =>
       variantColumnTable.find(item => item.Header === column),
     )
 
-    const handleScroll = debounce(async () => {
-      if (
-        datasetStore.filteredNo.length > 0 &&
-        datasetStore.indexFilteredNo < datasetStore.filteredNo.length
-      ) {
-        await datasetStore.fetchFilteredTabReportAsync()
-
-        return
-      }
-
-      const scrollLeft: number =
-        wrapperRef.current.scrollHeight -
-        wrapperRef.current.clientHeight -
-        wrapperRef.current.scrollTop
-
-      if (scrollLeft < 200 && datasetStore.filteredNo.length === 0) {
-        await datasetStore.fetchTabReportAsync()
-      }
-    }, 200)
-
     if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (
-      <Styles ref={wrapperRef} className="flex-1" onScroll={handleScroll}>
+      <Styles className="flex-1 min-w-max">
         <Table columns={columns} data={datasetStore.tabReport} />
 
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}
-
-        <div className="h-24 w-full">
-          {datasetStore.isFetchingMore && <Loader />}
-        </div>
       </Styles>
     )
   },

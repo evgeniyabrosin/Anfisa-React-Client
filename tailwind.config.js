@@ -194,7 +194,7 @@ module.exports = {
     // 'visibility', // The visibility utilities like visible
     'whitespace', // The whitespace utilities like whitespace-pre
     'width', // The width utilities like w-0.5
-    // 'wordBreak', // The word-break utilities like break-words
-    // 'zIndex', // The z-index utilities like z-30
+    'wordBreak', // The word-break utilities like break-words
+    'zIndex', // The z-index utilities like z-30
   ],
 }

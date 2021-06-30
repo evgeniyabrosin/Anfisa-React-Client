@@ -33,6 +33,7 @@ export const PopperButton = ({
       {isOpen && (
         <div
           ref={setPopperElement}
+          className="z-50"
           style={styles.popper}
           {...attributes.popper}
         >
