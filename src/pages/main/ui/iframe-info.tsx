@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -15,6 +15,12 @@ export const IframeInfo = observer(
     const [isImg, setIsImg] = useState(true)
 
     useEffect(() => {
+      if (Array.isArray(dirinfoStore.infoFrameLink)) {
+        setIsImg(true)
+
+        return
+      }
+
       setIsImg(imgRegExp.test(dirinfoStore.infoFrameLink))
     }, [])
 
@@ -28,14 +34,29 @@ export const IframeInfo = observer(
             : 'flex-grow',
         )}
       >
-        {isImg ? (
-          <img src={dirinfoStore.infoFrameLink} className={cn('p-3 m-auto')} />
-        ) : (
-          <iframe
-            src={dirinfoStore.infoFrameLink}
-            frameBorder="0"
-            className="flex-grow"
-          />
+        {Array.isArray(dirinfoStore.infoFrameLink) && (
+          <div>
+            {dirinfoStore.infoFrameLink.map(link => {
+              return <img key={link} src={link} className={cn('p-3 m-auto')} />
+            })}
+          </div>
+        )}
+
+        {!Array.isArray(dirinfoStore.infoFrameLink) && (
+          <Fragment>
+            {isImg ? (
+              <img
+                src={dirinfoStore.infoFrameLink}
+                className={cn('p-3 m-auto')}
+              />
+            ) : (
+              <iframe
+                src={dirinfoStore.infoFrameLink}
+                frameBorder="0"
+                className="flex-grow"
+              />
+            )}
+          </Fragment>
         )}
       </div>
     )

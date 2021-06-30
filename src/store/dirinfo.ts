@@ -20,7 +20,7 @@ class DirInfoStore {
     [SortDatasets.Name]: SortDirection.ASC,
     [SortDatasets.CreatedAt]: SortDirection.ASC,
   }
-  infoFrameLink = ''
+  infoFrameLink: string | string[] = ''
   iframeInfoFullscreen = false
   activeInfoName = ''
 
@@ -36,7 +36,7 @@ class DirInfoStore {
     this.selectedDirinfoName = name
   }
 
-  setInfoFrameLink(link: string) {
+  setInfoFrameLink(link: string | string[]) {
     this.infoFrameLink = link
   }
 

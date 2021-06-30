@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 
 import dirinfoStore from '@store/dirinfo'
 import { DocsList } from './docs-list'
-
 export const InfoList = observer(
   (): ReactElement => {
     const docs = get(dirinfoStore, 'dsinfo.doc', [])
@@ -13,15 +12,26 @@ export const InfoList = observer(
     if (!docs[1]) return <Fragment />
 
     const handleClickAsync = async (doc: any, isBaseInfo?: boolean) => {
-      if (Array.isArray(doc[1])) return
-
       dirinfoStore.setActiveInfoName(doc[0])
 
       if (doc[2]) {
+        if (doc[2].image) {
+          dirinfoStore.setInfoFrameLink(
+            `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${
+              doc[2].image
+            }`,
+          )
+
+          return
+        }
+
         dirinfoStore.setInfoFrameLink(
-          `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${
-            doc[2].image
-          }`,
+          doc[2].images.map(
+            (image: string) =>
+              `app/dsdoc/${
+                baseDatasetName ?? dirinfoStore.selectedDirinfoName
+              }/${image}`,
+          ),
         )
 
         return
