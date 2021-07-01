@@ -89,8 +89,8 @@ export const Table = observer(
 
       columnsStore.setColumns(['Gene', 'Variant'])
       columnsStore.showColumns()
-      variantStore.setIndex(variantIndex)
       variantStore.setDsName(params.get('ds') ?? '')
+      variantStore.setIndex(variantIndex)
       variantStore.setDrawerVisible(true)
 
       if (window.history.pushState) {
