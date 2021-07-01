@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import variantStore from '@store/variant'
 import { ExportPanel } from '@ui/export-panel'
 import { ExportReportButton } from '@ui/export-report-button'
 import { Header } from '@ui/header'
@@ -18,6 +19,10 @@ export const WSPage = observer(
 
     useEffect(() => {
       const dsName = params.get('ds') || ''
+
+      if (dsName && !variantStore.dsName) {
+        variantStore.setDsName(params.get('ds') ?? '')
+      }
 
       datasetStore.initDatasetAsync(dsName)
       dirinfoStore.fetchDsinfoAsync(dsName)

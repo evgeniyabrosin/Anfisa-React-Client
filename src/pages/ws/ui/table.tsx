@@ -89,13 +89,18 @@ export const Table = observer(
           ? index
           : datasetStore.filteredNo[index]
 
-      columnsStore.setColumns(['Gene', 'Variant'])
-      columnsStore.showColumns()
-      variantStore.setDsName(params.get('ds') ?? '')
-      variantStore.setIndex(variantIndex)
-      variantStore.setDrawerVisible(true)
+      if (!variantStore.drawerVisible) {
+        columnsStore.setColumns(['Gene', 'Variant'])
+        columnsStore.showColumns()
+        variantStore.setDsName(params.get('ds') ?? '')
+      }
 
+      variantStore.setIndex(variantIndex)
       setVariantIndex(variantIndex)
+
+      if (!variantStore.drawerVisible) {
+        variantStore.setDrawerVisible(true)
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
