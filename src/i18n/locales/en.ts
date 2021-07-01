@@ -8,6 +8,8 @@ export const en = {
     clearAll: 'Clear All',
     cancel: 'Cancel',
     apply: 'Apply',
+    clear: 'Clear',
+    add: 'Add',
     selectAnOption: 'Select an option',
     filter: '+ Filter',
   },

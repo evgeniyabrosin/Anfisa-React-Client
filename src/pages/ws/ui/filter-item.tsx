@@ -20,6 +20,8 @@ export const FilterItem = ({ group, variants }: Props): ReactElement => {
         {groupItemkeys.slice(0, 2).map((groupItemKey, index) => {
           const amountValues: number[] = Object.values(variants[groupItemKey])
 
+          const sum = amountValues.reduce((prev, cur) => prev + cur, 0)
+
           return (
             <div
               key={groupItemKey}
@@ -28,10 +30,8 @@ export const FilterItem = ({ group, variants }: Props): ReactElement => {
               <div className="flex">
                 <div className="text-white mr-1">{groupItemKey}</div>
 
-                {amountValues.length > 0 && (
-                  <div className="text-grey-blue">
-                    ({amountValues.reduce((prev, cur) => prev + cur, 0)})
-                  </div>
+                {amountValues.length > 0 && sum !== 0 && (
+                  <div className="text-grey-blue">({sum})</div>
                 )}
               </div>
 

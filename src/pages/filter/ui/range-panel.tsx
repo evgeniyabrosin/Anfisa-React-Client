@@ -2,6 +2,7 @@ import { ReactElement, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
@@ -28,6 +29,15 @@ export const RangePanel = observer(
 
     const handleClear = () => {
       datasetStore.removeFunctionCondition(selectedFilter.name)
+
+      filterStore.removeSelectedFilters({
+        group: selectedFilter.vgroup,
+        groupItemName: selectedFilter.name,
+        variant: [selectedFilter.name, 0],
+      })
+
+      setMin('')
+      setMax('')
     }
 
     return (
@@ -38,8 +48,8 @@ export const RangePanel = observer(
         <span>Max {selectedFilter.max}</span>
         <Input value={max} onChange={e => setMax(e.target.value)} />
 
-        <Button text="Add" onClick={handleAddConditionsAsync} />
-        <Button text="Clear" onClick={handleClear} />
+        <Button text={t('general.add')} onClick={handleAddConditionsAsync} />
+        <Button text={t('general.clear')} onClick={handleClear} />
       </div>
     )
   },

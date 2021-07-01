@@ -22,9 +22,7 @@ export const Preset = observer(
 
     return (
       <div>
-        <ControlPanelTitle title={t('ds.preset')}>
-          <div className="text-blue-bright">Save</div>
-        </ControlPanelTitle>
+        <ControlPanelTitle title={t('ds.preset')} />
 
         <DropDown
           options={presets}

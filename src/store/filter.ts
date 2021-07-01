@@ -61,6 +61,10 @@ class FilterStore {
     groupItemName,
     variant,
   }: AddSelectedFiltersI) {
+    if (!this.selectedFilters[group]) {
+      return
+    }
+
     if (this.selectedFilters[group][groupItemName] && variant) {
       delete this.selectedFilters[group][groupItemName][variant[0]]
     }

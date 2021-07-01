@@ -3,6 +3,7 @@ import { Formik } from 'formik'
 import { observer } from 'mobx-react-lite'
 
 import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
+import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
@@ -103,11 +104,6 @@ export const FunctionPanel = observer(
     const handleClear = () => {
       datasetStore.removeFunctionCondition(selectedFilter.name)
 
-      datasetStore.removeCondition({
-        subGroup: selectedFilter.vgroup,
-        itemName: selectedFilter.name,
-      })
-
       filterStore.removeSelectedFilters({
         group: selectedFilter.vgroup,
         groupItemName: selectedFilter.name,
@@ -137,9 +133,15 @@ export const FunctionPanel = observer(
               )}
 
               <div className="flex items-center justify-between mt-5">
-                <Button text="Clear" onClick={handleClear} />
+                <Button
+                  text={t('general.clear')}
+                  onClick={() => {
+                    handleClear()
+                    props.resetForm()
+                  }}
+                />
 
-                <Button text="Add" onClick={props.submitForm} />
+                <Button text={t('general.add')} onClick={props.submitForm} />
               </div>
             </div>
           )}

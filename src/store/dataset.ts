@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
-import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
@@ -114,11 +113,9 @@ class DatasetStore {
       item => item[1] === subGroup,
     )
 
-    const filiterFunctionArray: string[] = Object.values(FilterFunctionEnum)
+    const conditionKind = cloneConditions.find(item => item[1] === subGroup)[0]
 
-    if (filiterFunctionArray.includes(itemName)) {
-      cloneConditions.splice(subGroupIndex, 1)
-    } else {
+    if (conditionKind === FilterKindEnum.enum) {
       const filteredItems = cloneConditions[subGroupIndex][3].filter(
         (item: string) => item !== itemName,
       )
@@ -128,6 +125,8 @@ class DatasetStore {
       } else {
         cloneConditions[subGroupIndex][3] = filteredItems
       }
+    } else {
+      cloneConditions.splice(subGroupIndex, 1)
     }
 
     this.conditions = cloneConditions
