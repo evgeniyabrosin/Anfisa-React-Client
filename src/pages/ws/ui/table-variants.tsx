@@ -20,26 +20,19 @@ const Styles = styled.div`
     min-width: 100%;
 
     .thead {
-      .tr {
-        border-color: ${theme('colors.grey.light')};
-
-        .th {
-          padding: 12px 16px;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 14px;
-          line-height: 14px;
-        }
+      .th {
+        padding: 12px 16px;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 14px;
       }
     }
 
-    .tbody {
-      .tr {
-        border-top: 1px;
-        border-bottom: 1px;
-        border-style: solid;
-        border-color: ${theme('colors.grey.light')};
-      }
+    .tr {
+      border-bottom: 1px;
+      border-style: solid;
+      border-color: ${theme('colors.grey.light')};
     }
   }
 `
