@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useKeydown } from '@core/hooks/use-keydown'
-import { useParams } from '@core/hooks/use-params'
+import { useVariantIndex } from '@core/hooks/use-variant-index'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
@@ -16,19 +16,22 @@ export const VariantHeader = observer(
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = () => !!variantStore.index
-    const params = useParams()
 
     const canGetNextVariant = () =>
       variantStore.index !== get(datasetStore, 'dsStat.total-counts.0', 0) - 1
 
+    const { setVariantIndex } = useVariantIndex()
+
     const handlePrevVariant = () => {
       if (!variantStore.drawerVisible || !canGetPrevVariant()) return
       variantStore.prevVariant()
+      setVariantIndex(variantStore.index)
     }
 
     const handleNextVariant = () => {
       if (!variantStore.drawerVisible || !canGetNextVariant()) return
       variantStore.nextVariant()
+      setVariantIndex(variantStore.index)
     }
 
     useKeydown([
@@ -37,16 +40,7 @@ export const VariantHeader = observer(
     ])
 
     const handleCloseDrawer = () => {
-      if (window.history.pushState) {
-        const newurl =
-          window.location.protocol +
-          '//' +
-          window.location.host +
-          window.location.pathname +
-          `?ds=${params.get('ds') ?? ''}`
-
-        window.history.pushState({ path: newurl }, '', newurl)
-      }
+      setVariantIndex()
 
       closeHandler()
     }

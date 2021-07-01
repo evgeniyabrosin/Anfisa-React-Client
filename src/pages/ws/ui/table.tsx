@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
+import { useVariantIndex } from '@core/hooks/use-variant-index'
 import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
@@ -35,6 +36,7 @@ export const isRowSelected = (
 export const Table = observer(
   ({ columns, data }: Props): ReactElement => {
     const params = useParams()
+    const { setVariantIndex } = useVariantIndex()
     const [ref, setRef] = useState<any>(null)
 
     const defaultColumn = {
@@ -93,20 +95,7 @@ export const Table = observer(
       variantStore.setIndex(variantIndex)
       variantStore.setDrawerVisible(true)
 
-      if (window.history.pushState) {
-        const newurl =
-          window.location.protocol +
-          '//' +
-          window.location.host +
-          window.location.pathname +
-          `?ds=${params.get('ds') ?? ''}${
-            Number.isInteger(variantIndex)
-              ? `&variantIndex=${variantIndex}`
-              : ''
-          }`
-
-        window.history.pushState({ path: newurl }, '', newurl)
-      }
+      setVariantIndex(variantIndex)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
