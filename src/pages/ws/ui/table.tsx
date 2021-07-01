@@ -84,6 +84,8 @@ export const Table = observer(
     )
 
     const handleOpenVariant = useCallback(({ index }: PropsRow) => {
+      if (window.getSelection()?.toString()) return
+
       const variantIndex =
         datasetStore.filteredNo.length === 0
           ? index
@@ -132,10 +134,7 @@ export const Table = observer(
                 ? 'bg-blue-bright text-white'
                 : 'text-black hover:bg-blue-light',
             )}
-            onClick={() => variantStore.drawerVisible && handleOpenVariant(row)}
-            onDoubleClick={() =>
-              !variantStore.drawerVisible && handleOpenVariant(row)
-            }
+            onClick={() => handleOpenVariant(row)}
           >
             {row.cells.map((cell: any) => {
               return (
