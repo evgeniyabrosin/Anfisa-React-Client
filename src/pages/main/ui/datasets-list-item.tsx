@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
+import { useParams } from '@core/hooks/use-params'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { DatasetType } from './dataset-type'
@@ -64,6 +65,7 @@ const DatasetName = ({
 export const DatasetsListItem = observer(
   ({ item, isSubItems }: Props): ReactElement => {
     const history = useHistory()
+    const params = useParams()
     const isActive = item.name === dirinfoStore.selectedDirinfoName
     const [isOpenFolder, setIsOpenFolder] = useState(isActive)
     const [isChildrenVisible, setIsChildrenVisible] = useState(false)
@@ -72,6 +74,11 @@ export const DatasetsListItem = observer(
 
     const isActiveXl =
       isXl && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
+
+    useEffect(() => {
+      setIsOpenFolder(secondaryKeys.includes(params.get('ds') || ''))
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleClick = () => {
       if (isXl) {
