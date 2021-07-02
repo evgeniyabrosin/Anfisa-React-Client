@@ -142,7 +142,7 @@ export const Table = observer(
                   {...cell.getCellProps()}
                   key={Math.random()}
                   className={cn(
-                    'px-4',
+                    'td px-4',
                     columnsStore.viewType === ViewTypeEnum.Compact
                       ? 'py-1'
                       : 'py-4',

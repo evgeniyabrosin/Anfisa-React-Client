@@ -29,6 +29,12 @@ const Styles = styled.div`
       }
     }
 
+    .tbody {
+      .td > div {
+        cursor: text;
+      }
+    }
+
     .tr {
       border-bottom: 1px;
       border-style: solid;
