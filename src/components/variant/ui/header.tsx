@@ -76,11 +76,29 @@ export const VariantHeader = observer(
             )}
           </div>
 
-          <Icon
-            name="Close"
-            className="cursor-pointer text-white"
-            onClick={handleCloseDrawer}
-          />
+          <div className="flex items-center">
+            <div className="flex text-grey-blue">
+              <Icon
+                name="Expand"
+                size={24}
+                className="cursor-pointer"
+                onClick={() => variantStore.handleAllRecordsOpen(true)}
+              />
+
+              <Icon
+                name="Collapse"
+                size={24}
+                className="cursor-pointer ml-1 mr-5"
+                onClick={() => variantStore.handleAllRecordsOpen(false)}
+              />
+            </div>
+
+            <Icon
+              name="Close"
+              className="cursor-pointer text-white"
+              onClick={handleCloseDrawer}
+            />
+          </div>
         </div>
       </div>
     )

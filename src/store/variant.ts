@@ -42,6 +42,16 @@ export class VariantStore {
     this.recordsDisplayConfig = conf
   }
 
+  handleAllRecordsOpen(status: boolean) {
+    for (const key in this.recordsDisplayConfig) {
+      if (
+        Object.prototype.hasOwnProperty.call(this.recordsDisplayConfig, key)
+      ) {
+        this.recordsDisplayConfig[key].isOpen = status
+      }
+    }
+  }
+
   setIndex(index: number) {
     const oldIndex = this.index
 

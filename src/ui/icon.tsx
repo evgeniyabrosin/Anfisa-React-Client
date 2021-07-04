@@ -2,12 +2,15 @@ import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
 import Arrow from '@icons/arrow'
+import ArrowsOut from '@icons/arrows-out'
 import Circle from '@icons/circle'
 import Close from '@icons/close'
 import ClosePadded from '@icons/close-padded'
+import Collapse from '@icons/collapse'
 import Copy from '@icons/copy'
 import CopyLink from '@icons/copy-link'
 import Dnd from '@icons/dnd'
+import Expand from '@icons/expand'
 import Export from '@icons/export'
 import File from '@icons/file'
 import Filter from '@icons/filter'
@@ -29,13 +32,16 @@ interface IconItem {
 
 const iconItems: { [key: string]: IconItem } = {
   Arrow,
+  ArrowsOut,
   Circle,
   Close,
+  Collapse,
   ClosePadded,
   CopyLink,
   Copy,
   Export,
   Dnd,
+  Expand,
   File,
   Filter,
   Folder,
