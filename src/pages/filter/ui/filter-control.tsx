@@ -22,20 +22,6 @@ export const FilterControl = observer(
           }
         />
       </div>
-
-      <div className="bg-blue-lighter rounded-lg w-px h-full mx-3" />
-
-      <div>
-        <span className="text-grey-blue text-14 font-bold mb-2">
-          {t('filter.query')}
-        </span>
-
-        <DropDown
-          options={['Pick a saved query']}
-          onSelect={() => null}
-          placeholder="Pick a saved query"
-        />
-      </div>
     </div>
   ),
 )

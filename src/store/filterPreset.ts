@@ -64,7 +64,7 @@ class PresetStore {
 
     const result = await response.json()
 
-    datasetStore.updatePresetLoad(result)
+    await datasetStore.updatePresetLoad(result)
   }
 
   async updatePresetAsync(presetName: string) {
@@ -88,7 +88,7 @@ class PresetStore {
       datasetStore.dsStat = result
     })
 
-    datasetStore.updatePresetLoad(result)
+    await datasetStore.updatePresetLoad(result)
   }
 }
 

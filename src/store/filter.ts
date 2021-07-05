@@ -30,7 +30,7 @@ class FilterStore {
     makeAutoObservable(this)
   }
 
-  setActionName(actionName: ActionFilterEnum) {
+  setActionName(actionName?: ActionFilterEnum) {
     this.actionName = actionName
   }
 

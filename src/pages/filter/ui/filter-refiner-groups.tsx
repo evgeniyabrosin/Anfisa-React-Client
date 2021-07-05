@@ -52,24 +52,31 @@ export const FilterRefinerGroups = observer(
           <div key={group}>
             <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
 
-            {datasetStore.getFilterRefiner[group].map((item: StatList) => (
-              <FilterRefinerGroupItem
-                className="pl-4"
-                onChange={checked =>
-                  handleCheckGroupItem(checked, group, item.name)
-                }
-                {...item}
-                key={item.name}
-                isFunc={item.kind === FilterKindEnum.func}
-                isNumeric={item.kind === FilterKindEnum.numeric}
-                amount={
-                  item.variants
-                    ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
-                    : 0
-                }
-                group={group}
-              />
-            ))}
+            {datasetStore.getFilterRefiner[group].map((item: StatList) => {
+              const numericAmount =
+                item.kind === FilterKindEnum.numeric
+                  ? get(datasetStore, 'dsStat.total-counts.0', 0)
+                  : 0
+
+              return (
+                <FilterRefinerGroupItem
+                  className="pl-4"
+                  onChange={checked =>
+                    handleCheckGroupItem(checked, group, item.name)
+                  }
+                  {...item}
+                  key={item.name}
+                  isFunc={item.kind === FilterKindEnum.func}
+                  isNumeric={item.kind === FilterKindEnum.numeric}
+                  amount={
+                    item.variants
+                      ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
+                      : numericAmount
+                  }
+                  group={group}
+                />
+              )
+            })}
           </div>
         ))}
       </div>

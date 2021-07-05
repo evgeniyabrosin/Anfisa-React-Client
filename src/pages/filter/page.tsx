@@ -12,7 +12,6 @@ import { QueryBuilder } from './ui/query-builder'
 export const FilterPage = observer(
   (): ReactElement => {
     useDatasetName()
-
     useEffect(() => {
       const initAsync = async () => {
         await datasetStore.fetchDsStatAsync()

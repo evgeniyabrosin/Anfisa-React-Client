@@ -53,9 +53,11 @@ export const TableVariants = observer(
 
     return (
       <Styles className="flex-1 min-w-max">
-        <Table columns={columns} data={datasetStore.tabReport} />
-
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}
+
+        {datasetStore.tabReport.length > 0 && (
+          <Table columns={columns} data={datasetStore.tabReport} />
+        )}
       </Styles>
     )
   },

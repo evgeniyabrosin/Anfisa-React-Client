@@ -15,6 +15,13 @@ export const QuerySelected = observer(
     const history = useHistory()
     const params = useParams()
 
+    const allAmount = get(datasetStore, 'dsStat.total-counts.0', 0)
+
+    const selectedVariants =
+      datasetStore.conditions.length === 0
+        ? allAmount
+        : datasetStore.filteredNo.length
+
     const handleClick = () =>
       history.push(`${Routes.WS}?ds=${params.get('ds')}`)
 
@@ -27,15 +34,15 @@ export const QuerySelected = observer(
 
           <span className="text-14 leading-14px text-grey-blue ml-2">
             {t('filter.amountOf', {
-              selected: datasetStore.filteredNo.length,
-              all: get(datasetStore, 'dsStat.total-counts.0', 0),
+              selected: selectedVariants,
+              all: allAmount,
             })}
           </span>
 
           <Button
             className="h-8 ml-auto"
             text={t('filter.show', {
-              amount: datasetStore.filteredNo.length,
+              amount: selectedVariants,
             })}
             onClick={handleClick}
           />

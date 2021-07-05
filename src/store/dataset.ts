@@ -157,7 +157,6 @@ class DatasetStore {
     this.wsTags = {}
     this.dsStat = {}
     this.filteredNo = []
-    this.activePreset = ''
     zoneStore.selectedTags = []
     columnsStore.searchColumnValue = ''
   }

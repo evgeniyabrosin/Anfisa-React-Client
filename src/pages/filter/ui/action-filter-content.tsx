@@ -1,5 +1,6 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { Option } from 'react-dropdown'
+import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -56,6 +57,20 @@ export const ActionFilterContent = observer(
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
         createPresetName && presetStore.updatePresetAsync(createPresetName)
+
+        toast.info(t('general.presetCreated'), {
+          position: 'bottom-right',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+        })
+
+        setCreatePresetName('')
+
+        filterStore.setActionName()
       }
 
       if (filterStore.actionName === ActionFilterEnum.Modify) {

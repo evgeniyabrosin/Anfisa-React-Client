@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { FilterList } from '@declarations'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import filterPresetStore from '@store/filterPreset'
 import { DropDown } from '@ui/dropdown'
 import { ControlPanelTitle } from './control-panel-title'
 
@@ -15,9 +16,10 @@ export const Preset = observer(
       (preset: FilterList) => preset.name,
     )
 
-    const onSelect = (arg: Option) => {
+    const onSelectAsync = async (arg: Option) => {
+      datasetStore.setIsLoadingTabReport(true)
       datasetStore.setActivePreset(arg.value)
-      datasetStore.fetchWsListAsync()
+      filterPresetStore.loadPresetAsync(arg.value)
     }
 
     return (
@@ -26,7 +28,8 @@ export const Preset = observer(
 
         <DropDown
           options={presets}
-          onSelect={onSelect}
+          value={datasetStore.activePreset}
+          onSelect={onSelectAsync}
           placeholder={t('general.selectAnOption')}
         />
       </div>

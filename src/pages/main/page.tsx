@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from 'react'
 
 import { useParams } from '@core/hooks/use-params'
+import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Header } from '@ui/header'
 import { Datasets } from './ui/datasets'
@@ -18,6 +19,7 @@ export const MainPage = (): ReactElement => {
       }
 
       dirinfoStore.setSelectedDirinfoName(dsName)
+      datasetStore.setActivePreset('')
     }
 
     handlerAsync()

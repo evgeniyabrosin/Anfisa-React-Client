@@ -12,6 +12,7 @@ export const en = {
     add: 'Add',
     selectAnOption: 'Select an option',
     filter: '+ Filter',
+    presetCreated: 'Preset created',
   },
   home: {
     title: 'Home',
