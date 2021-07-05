@@ -3,6 +3,7 @@ import Checkbox from 'react-three-state-checkbox'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 
+import { t } from '@i18n'
 import filterStore from '@store/filter'
 
 export const InheritanceMode = observer(
@@ -96,7 +97,7 @@ export const InheritanceMode = observer(
             className="text-12 leading-14px text-blue-bright cursor-pointer"
             onClick={() => setFieldValue('variants', [])}
           >
-            Clear All
+            {t('general.clearAll')}
           </p>
         </div>
 
