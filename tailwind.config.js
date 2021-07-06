@@ -58,7 +58,7 @@ module.exports = {
     // 'accessibility',	The sr-only and not-sr-only utilities
     // 'alignContent', // The align-content utilities like content-end
     'alignItems', // The align-items utilities like items-center
-    // 'alignSelf', // The align-self utilities like self-end
+    'alignSelf', // The align-self utilities like self-end
     // 'animation', // The animation utilities like animate-none
     // 'appearance', // The appearance utilities like appearance-none
     // 'backdropBlur', // The backdrop-blur utilities like backdrop-blur-md
@@ -161,7 +161,7 @@ module.exports = {
     // 'placeSelf', // The place-self utilities like place-self-end
     // 'pointerEvents', // The pointer-events utilities like pointer-events-none
     'position', // The position utilities like absolute
-    // 'resize', // The resize utilities like resize-y
+    'resize', // The resize utilities like resize-y
     // 'ringColor', // The ring-color utilities like ring-green-700
     // 'ringOffsetColor', // The ring-offset-color utilities like ring-offset-green-700
     // 'ringOffsetWidth', // The ring-offset-width utilities like ring-offset-2

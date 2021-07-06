@@ -31,7 +31,7 @@ export const Tag = observer(
         'my-0.5 mr-1',
         isActive ? 'bg-blue-bright' : 'bg-blue-light',
       ])}
-      onClick={() => !isActive && onClick && onClick(text)}
+      onClick={() => onClick && onClick(text)}
     >
       <span
         className={cn([
@@ -49,7 +49,7 @@ export const Tag = observer(
         <Icon
           name="ClosePadded"
           className="ml-1 cursor-pointer opacity-60"
-          onClick={() => isActive && onRemove && onRemove(text)}
+          onClick={() => onRemove && onRemove(text)}
         />
       )}
     </div>

@@ -15,22 +15,6 @@
     @apply h-full;
   }
 
-  ::-webkit-scrollbar {
-    @apply w-2 h-2;
-  }
-
-  ::-webkit-scrollbar-corner {
-    @apply bg-grey-light;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-grey-light shadow-scrollbar;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-blue-secondary;
-  }
-
   button:focus {
     outline: none;
   }
@@ -41,3 +25,19 @@
 }
 
 @tailwind utilities;
+
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-corner {
+  @apply bg-grey-light;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-grey-light shadow-scrollbar;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-secondary;
+}

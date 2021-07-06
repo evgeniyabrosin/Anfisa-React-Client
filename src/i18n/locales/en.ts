@@ -13,6 +13,7 @@ export const en = {
     selectAnOption: 'Select an option',
     filter: '+ Filter',
     presetCreated: 'Preset created',
+    showLess: 'Show less',
   },
   home: {
     title: 'Home',

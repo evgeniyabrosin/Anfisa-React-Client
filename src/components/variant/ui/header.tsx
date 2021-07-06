@@ -8,8 +8,9 @@ import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { Tag } from '@ui/tag'
 import { closeHandler } from '../drawer'
+import { DrawerNote } from './drawer-note'
+import { DrawerTags } from './drawer-tags'
 
 export const VariantHeader = observer(
   (): ReactElement => {
@@ -47,33 +48,31 @@ export const VariantHeader = observer(
 
     return (
       <div className="px-4 pb-4 pt-1 bg-blue-dark">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <div className="flex items-center">
-            <Button
-              size="sm"
-              icon={<Icon name="Arrow" className="transform rotate-90" />}
-              className="bg-blue-lighter"
-              disabled={!canGetPrevVariant()}
-              onClick={handlePrevVariant}
-            />
+            <div className="flex items-center">
+              <Button
+                size="sm"
+                icon={<Icon name="Arrow" className="transform rotate-90" />}
+                className="bg-blue-lighter"
+                disabled={!canGetPrevVariant()}
+                onClick={handlePrevVariant}
+              />
 
-            <Button
-              size="sm"
-              icon={<Icon name="Arrow" className="transform -rotate-90" />}
-              className="bg-blue-lighter mx-2"
-              disabled={!canGetNextVariant()}
-              onClick={handleNextVariant}
-            />
+              <Button
+                size="sm"
+                icon={<Icon name="Arrow" className="transform -rotate-90" />}
+                className="bg-blue-lighter mx-2"
+                disabled={!canGetNextVariant()}
+                onClick={handleNextVariant}
+              />
+            </div>
 
             <div className="text-blue-bright font-bold leading-18px">{`[${genInfo}] ${hg19}`}</div>
 
-            {variantStore.tags.length > 0 && (
-              <div className="text-white ml-3 flex items-center">
-                {variantStore.tags.map(tag => (
-                  <Tag text={tag} key={tag} isActive />
-                ))}
-              </div>
-            )}
+            <DrawerTags />
+
+            <DrawerNote />
           </div>
 
           <div className="flex items-center">

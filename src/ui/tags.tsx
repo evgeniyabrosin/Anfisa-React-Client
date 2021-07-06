@@ -18,15 +18,19 @@ export const Tags = observer(
 
     return (
       <div className={cn('flex', className)}>
-        {tags.map(tag => (
-          <Tag
-            text={tag}
-            key={tag}
-            isActive={zoneStore.selectedTags.includes(tag)}
-            onClick={() => zoneStore.addTag(tag)}
-            onRemove={() => zoneStore.removeTag(tag)}
-          />
-        ))}
+        {tags.map(tag => {
+          const isActive = zoneStore.selectedTags.includes(tag)
+
+          return (
+            <Tag
+              text={tag}
+              key={tag}
+              isActive={isActive}
+              onClick={() => !isActive && zoneStore.addTag(tag)}
+              onRemove={() => isActive && zoneStore.removeTag(tag)}
+            />
+          )
+        })}
       </div>
     )
   },

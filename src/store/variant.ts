@@ -10,9 +10,14 @@ export class VariantStore {
   index = 0
   dsName = ''
   tags: string[] = []
+  noteText = ''
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setNoteText(value: string) {
+    this.noteText = value
   }
 
   prevVariant() {
@@ -80,14 +85,19 @@ export class VariantStore {
       fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
     ])
 
-    const [variant, tags] = await Promise.all([
+    const [variant, tagsData] = await Promise.all([
       variantResponse.json(),
       tagsResponse.json(),
     ])
 
+    const tags = Object.keys(tagsData['rec-tags']).filter(
+      tag => tag !== '_note',
+    )
+
     runInAction(() => {
       this.variant = variant
-      this.tags = Object.keys(tags['rec-tags'])
+      this.tags = tags
+      this.noteText = tagsData['rec-tags']['_note']
       this.initRecordsDisplayConfig()
     })
   }
