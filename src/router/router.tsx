@@ -1,5 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css'
-
 import { ReactElement } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'

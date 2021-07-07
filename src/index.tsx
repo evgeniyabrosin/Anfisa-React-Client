@@ -1,3 +1,4 @@
+import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
 import React from 'react'

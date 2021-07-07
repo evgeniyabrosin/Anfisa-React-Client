@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .Toastify__toast--info {
-    background-color: #0C65FD;
+    background-color: ${colors.blue.bright};
     border-radius: 8px;
     height: 52px;
   }
@@ -25,12 +25,9 @@ export const GlobalStyle = createGlobalStyle`
   .Toastify__toast {
     max-height: 52px;
     min-height: auto;
-    width: 266px;
   }
 
   .Toastify__toast-body {
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
     line-height: 16px;
     letter-spacing: -0.02em;
@@ -40,6 +37,11 @@ export const GlobalStyle = createGlobalStyle`
   .Toastify__close-button {
     margin-top: auto;
     margin-bottom: auto;
+  }
+
+  .Toastify__toast-container--bottom-right {
+    bottom: 4px;
+    right: 20px;
   }
 `
 
