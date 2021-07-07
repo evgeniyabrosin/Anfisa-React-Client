@@ -18,6 +18,8 @@ export const closeHandler = () => {
 
 export const VariantDrawer = observer(
   (): ReactElement => {
+    const drawerWidth = window.innerWidth - 380
+
     useEffect(() => {
       return () => {
         closeHandler()
@@ -28,13 +30,13 @@ export const VariantDrawer = observer(
       <div
         style={{
           transitionProperty: 'width',
-          width: variantStore.drawerVisible ? 'calc(100vw - 380px)' : 0,
+          width: variantStore.drawerVisible ? drawerWidth : 0,
         }}
         className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
       >
         <VariantHeader />
 
-        <VariantBody />
+        <VariantBody drawerWidth={drawerWidth} />
       </div>
     )
   },
