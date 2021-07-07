@@ -13,6 +13,7 @@ import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { Icon } from '@ui/icon'
 import { Logo } from '@ui/logo'
+import userIcon from '@images/thomas-hunt.jpg'
 import { DropDown } from './dropdown'
 
 interface Props {
@@ -119,9 +120,9 @@ export const Header = observer(
         {children}
 
         <div className="text-white flex flex-row items-center">
-          <div className="mr-2">Username</div>
+          <div className="mr-2">Thomas Hunt</div>
 
-          <Icon name="Circle" size={32} />
+          <img src={userIcon} className="w-8 h-8 rounded-full" />
         </div>
       </div>
     )
