@@ -15,7 +15,8 @@ interface Props {
   searchInputPlaceholder?: string
   viewType?: ViewTypeEnum
   children: ReactElement
-  onClearAll?: () => void
+  onSelectAll?: () => void
+  onClearAll: () => void
   onClose?: () => void
   onApply?: () => void
   setViewType?: (viewType: ViewTypeEnum) => void
@@ -30,6 +31,7 @@ export const PopperTableModal = ({
   viewType,
   children,
   setViewType,
+  onSelectAll,
   onClearAll,
   onClose,
   onApply,
@@ -58,11 +60,17 @@ export const PopperTableModal = ({
           <span className="text-14 text-grey-blue">
             {selectedAmount} Selected
           </span>
-          <span
-            className="text-12 text-blue-bright leading-14 cursor-pointer"
-            onClick={onClearAll}
-          >
-            {t('general.clearAll')}
+
+          <span className="text-12 text-blue-bright leading-14">
+            {onSelectAll && (
+              <span className="cursor-pointer mr-3" onClick={onSelectAll}>
+                {t('general.selectAll')}
+              </span>
+            )}
+
+            <span className="cursor-pointer" onClick={onClearAll}>
+              {t('general.clearAll')}
+            </span>
           </span>
         </div>
       </div>

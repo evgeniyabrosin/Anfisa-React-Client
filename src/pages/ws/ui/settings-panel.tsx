@@ -24,6 +24,7 @@ export const SettingsPanel = observer(
         selectedAmount={columnsStore.columns.length}
         searchValue={columnsStore.searchColumnValue}
         onChange={v => columnsStore.setSearchColumnValue(v)}
+        onSelectAll={() => columnsStore.setAllColumn()}
         onClearAll={() => columnsStore.clearColumn()}
         onApply={() => {
           columnsStore.showColumns()
