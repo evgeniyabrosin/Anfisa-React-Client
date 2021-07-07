@@ -38,7 +38,8 @@ const DatasetName = ({
   return (
     <div
       className={cn(
-        'text-white text-sm leading-18px',
+        kind === null ? 'text-grey-blue' : 'text-white',
+        'text-sm leading-18px',
         {
           'font-bold': isActiveXl,
           truncate: !isChildrenVisible,
@@ -70,6 +71,7 @@ export const DatasetsListItem = observer(
     const [isOpenFolder, setIsOpenFolder] = useState(isActive)
     const [isChildrenVisible, setIsChildrenVisible] = useState(false)
     const isXl = item.kind === 'xl'
+    const isNullKind = item.kind === null
     const secondaryKeys: string[] = get(item, 'secondary', [])
 
     const isActiveXl =
@@ -81,6 +83,8 @@ export const DatasetsListItem = observer(
     }, [])
 
     const handleClick = () => {
+      if (isNullKind) return
+
       if (isXl) {
         setIsOpenFolder(prev => !prev)
         dirinfoStore.setDsInfo(item as DsDistItem)
@@ -97,10 +101,14 @@ export const DatasetsListItem = observer(
         <div
           key={item.name}
           onClick={handleClick}
-          className={cn('flex items-center cursor-pointer relative', {
-            'pl-5': isSubItems,
-            'bg-blue-bright bg-opacity-10': isActive,
-          })}
+          className={cn(
+            'flex items-center relative',
+            isNullKind ? 'cursor-not-allowed' : 'cursor-pointer',
+            {
+              'pl-5': isSubItems,
+              'bg-blue-bright bg-opacity-10': isActive,
+            },
+          )}
           onMouseEnter={() => {
             setIsChildrenVisible(true)
           }}
