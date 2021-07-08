@@ -14,7 +14,7 @@ class DirInfoStore {
   dirinfo: DirInfoType = {}
   selectedDirinfoName = ''
   dsinfo: DsInfoType = {}
-  sortType: SortDatasets | undefined
+  sortType: SortDatasets | undefined = SortDatasets.Name
   filterValue = ''
   sortDirections: SortDirectionsType = {
     [SortDatasets.Name]: SortDirection.ASC,
