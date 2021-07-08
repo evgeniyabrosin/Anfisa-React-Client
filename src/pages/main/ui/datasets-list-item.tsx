@@ -20,7 +20,7 @@ interface DsNameProps {
   dsName: any
   kind: string | null
   isActive: boolean
-  isActiveXl: boolean
+  isActiveParent: boolean
   isChildrenVisible?: boolean
   isChild?: boolean
   className?: Argument
@@ -30,7 +30,7 @@ const DatasetName = ({
   dsName,
   kind,
   isActive,
-  isActiveXl,
+  isActiveParent,
   isChildrenVisible,
   isChild = false,
   className,
@@ -41,7 +41,7 @@ const DatasetName = ({
         kind === null ? 'text-grey-blue' : 'text-white',
         'text-sm leading-18px',
         {
-          'font-bold': isActiveXl,
+          'font-bold': isActiveParent,
           truncate: !isChildrenVisible,
           'py-2': !kind,
         },
@@ -55,7 +55,7 @@ const DatasetName = ({
           dsName={dsName}
           kind={kind}
           isActive={isActive}
-          isActiveXl={isActiveXl}
+          isActiveParent={isActiveParent}
           isChild={true}
         />
       )}
@@ -70,13 +70,12 @@ export const DatasetsListItem = observer(
     const isActive = item.name === dirinfoStore.selectedDirinfoName
     const [isOpenFolder, setIsOpenFolder] = useState(isActive)
     const [isChildrenVisible, setIsChildrenVisible] = useState(false)
-    const isXl = item.kind === 'xl' || /^XL.*/.test(item.name)
     const isNullKind = item.kind === null
     const secondaryKeys: string[] = get(item, 'secondary', [])
     const hasChildren = secondaryKeys.length > 0
 
-    const isActiveXl =
-      isXl && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
+    const isActiveParent =
+      hasChildren && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
 
     useEffect(() => {
       setIsOpenFolder(secondaryKeys.includes(params.get('ds') || ''))
@@ -86,7 +85,7 @@ export const DatasetsListItem = observer(
     const handleClick = () => {
       if (isNullKind) return
 
-      if (isXl) {
+      if (hasChildren) {
         setIsOpenFolder(prev => !prev)
         dirinfoStore.setDsInfo(item as DsDistItem)
       }
@@ -119,14 +118,14 @@ export const DatasetsListItem = observer(
         >
           <DatasetType
             hasChildren={hasChildren}
-            isActive={isActive || isActiveXl}
+            isActive={isActive || isActiveParent}
           />
 
           <DatasetName
             dsName={item.name}
             kind={item.kind}
             isActive={isActive}
-            isActiveXl={isActiveXl}
+            isActiveParent={isActiveParent}
             isChildrenVisible={isChildrenVisible}
           />
 
@@ -141,7 +140,7 @@ export const DatasetsListItem = observer(
           </div>
         </div>
 
-        {isOpenFolder && isXl && (
+        {isOpenFolder && hasChildren && (
           <div>
             {secondaryKeys.map((secondaryKey: string) => {
               const secondaryItem: DsDistItem =
