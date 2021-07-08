@@ -70,7 +70,7 @@ export const DatasetsListItem = observer(
     const isActive = item.name === dirinfoStore.selectedDirinfoName
     const [isOpenFolder, setIsOpenFolder] = useState(isActive)
     const [isChildrenVisible, setIsChildrenVisible] = useState(false)
-    const isXl = item.kind === 'xl'
+    const isXl = item.kind === 'xl' || /^XL.*/.test(item.name)
     const isNullKind = item.kind === null
     const secondaryKeys: string[] = get(item, 'secondary', [])
 
