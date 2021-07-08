@@ -3,16 +3,12 @@ import { ReactElement } from 'react'
 import { Icon } from '@ui/icon'
 
 interface Props {
-  kind: string
+  hasChildren: boolean
   isActive?: boolean
 }
 
-export const DatasetType = ({ kind, isActive }: Props): ReactElement => {
+export const DatasetType = ({ hasChildren, isActive }: Props): ReactElement => {
   const color = isActive ? 'text-blue-bright' : 'text-grey-blue'
 
-  return kind === 'ws' ? (
-    <Icon name="File" className={color} />
-  ) : (
-    <Icon name="Folder" className={color} />
-  )
+  return <Icon name={hasChildren ? 'Folder' : 'File'} className={color} />
 }

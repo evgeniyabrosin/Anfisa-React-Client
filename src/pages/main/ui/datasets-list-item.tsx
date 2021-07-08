@@ -73,6 +73,7 @@ export const DatasetsListItem = observer(
     const isXl = item.kind === 'xl' || /^XL.*/.test(item.name)
     const isNullKind = item.kind === null
     const secondaryKeys: string[] = get(item, 'secondary', [])
+    const hasChildren = secondaryKeys.length > 0
 
     const isActiveXl =
       isXl && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
@@ -116,7 +117,10 @@ export const DatasetsListItem = observer(
             setIsChildrenVisible(false)
           }}
         >
-          <DatasetType kind={item.kind} isActive={isActive || isActiveXl} />
+          <DatasetType
+            hasChildren={hasChildren}
+            isActive={isActive || isActiveXl}
+          />
 
           <DatasetName
             dsName={item.name}
