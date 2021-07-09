@@ -83,7 +83,7 @@ export const DatasetsListItem = observer(
     }, [])
 
     const handleClick = () => {
-      if (isNullKind) return
+      if (isNullKind && !hasChildren) return
 
       if (hasChildren) {
         setIsOpenFolder(prev => !prev)
@@ -93,7 +93,7 @@ export const DatasetsListItem = observer(
       dirinfoStore.setInfoFrameLink('')
       dirinfoStore.setActiveInfoName('')
 
-      history.replace(`${Routes.Root}?ds=${item.name}`)
+      history.replace(`${Routes.Root}?ds=${isNullKind ? '' : item.name}`)
     }
 
     return (
