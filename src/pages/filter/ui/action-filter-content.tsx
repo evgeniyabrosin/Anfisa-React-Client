@@ -84,7 +84,7 @@ export const ActionFilterContent = observer(
       (filterStore.actionName === ActionFilterEnum.Create && !createPresetName)
 
     return (
-      <div className="flex items-center justify-between w-full mt-5">
+      <div className="flex items-center justify-between">
         {filterStore.actionName === ActionFilterEnum.Create ? (
           <Input
             value={createPresetName}

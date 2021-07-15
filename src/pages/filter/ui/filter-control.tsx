@@ -1,27 +1,160 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
+import { toast } from 'react-toastify'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { FilterList } from '@declarations'
+import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
+import { theme } from '@theme'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
+import presetStore from '@store/filterPreset'
+import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
+import { Input } from '@ui/input'
+import { PopperButton } from '@ui/popper-button'
+import { FilterButton } from './filter-button'
+import { FilterModal } from './filter-modal'
 
 export const FilterControl = observer(
-  (): ReactElement => (
-    <div className="flex items-center w-full mt-5">
-      <div>
-        <span className="text-grey-blue text-14 font-bold mb-2">
-          {t('filter.method')}
-        </span>
+  (): ReactElement => {
+    const [activePreset, setActivePreset] = useState('')
+    const [createPresetName, setCreatePresetName] = useState('')
 
-        <DropDown
-          options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
-          value={filterStore.method}
-          onSelect={args =>
-            filterStore.setMethod(args.value as FilterMethodEnum)
-          }
-        />
+    const presets: string[] = get(datasetStore, 'dsStat.filter-list', [])
+      .filter((preset: FilterList) => {
+        if (
+          filterStore.actionName === ActionFilterEnum.Delete ||
+          filterStore.actionName === ActionFilterEnum.Modify
+        ) {
+          return !preset.standard
+        }
+
+        return true
+      })
+      .map((preset: FilterList) => preset.name)
+
+    const handleClick = () => {
+      if (filterStore.actionName === ActionFilterEnum.Load) {
+        presetStore.loadPresetAsync(activePreset)
+      }
+
+      if (filterStore.actionName === ActionFilterEnum.Delete) {
+        presetStore.deletePresetAsync(activePreset)
+        setActivePreset('')
+      }
+
+      if (filterStore.actionName === ActionFilterEnum.Join) {
+        presetStore.joinPresetAsync(activePreset)
+      }
+
+      if (filterStore.actionName === ActionFilterEnum.Create) {
+        createPresetName && presetStore.updatePresetAsync(createPresetName)
+
+        toast.info(t('general.presetCreated'), {
+          position: 'bottom-right',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+        })
+
+        setCreatePresetName('')
+
+        filterStore.setActionName()
+      }
+
+      if (filterStore.actionName === ActionFilterEnum.Modify) {
+        presetStore.updatePresetAsync(activePreset)
+      }
+    }
+
+    return (
+      <div className="flex items-center w-full mt-5">
+        <div className="flex flex-col">
+          <span className="text-grey-blue text-14 font-bold mb-2">
+            {t('filter.method')}
+          </span>
+
+          <DropDown
+            options={[FilterMethodEnum.Refiner, FilterMethodEnum.Query]}
+            value={filterStore.method}
+            onSelect={args =>
+              filterStore.setMethod(args.value as FilterMethodEnum)
+            }
+          />
+        </div>
+
+        <div className="h-full w-px bg-blue-lighter mx-3" />
+
+        <div className="flex items-center border-black">
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-grey-blue text-14 font-bold">
+                {t('filter.presets')}
+              </span>
+
+              <span
+                className="text-blue-bright text-14 cursor-pointer"
+                onClick={() =>
+                  filterStore.setActionName(ActionFilterEnum.Create)
+                }
+              >
+                {t('filter.createPreset')}
+              </span>
+            </div>
+
+            {filterStore.actionName === ActionFilterEnum.Create ? (
+              <Input
+                value={createPresetName}
+                placeholder={t('filter.presetName')}
+                className="bg-blue-lighter text-white border-2 border-blue-bright"
+                style={{ width: 209 }}
+                onChange={e => setCreatePresetName(e.target.value)}
+              />
+            ) : (
+              <DropDown
+                options={presets}
+                value={activePreset}
+                onSelect={args => setActivePreset(args.value)}
+              />
+            )}
+          </div>
+
+          {filterStore.actionName !== ActionFilterEnum.Create && (
+            <PopperButton
+              ButtonElement={FilterButton}
+              ModalElement={FilterModal}
+            />
+          )}
+
+          {filterStore.actionName === ActionFilterEnum.Create && (
+            <Button
+              text={t('general.cancel')}
+              size="md"
+              hasBackground={false}
+              className="text-white mt-auto ml-2 w-24 rounded-2xl"
+              onClick={() => {
+                setActivePreset('')
+                filterStore.setActionName()
+              }}
+            />
+          )}
+
+          {filterStore.actionName && (activePreset || createPresetName) && (
+            <Button
+              text={t('general.apply')}
+              size="md"
+              onClick={handleClick}
+              className="text-white mt-auto ml-2"
+            />
+          )}
+        </div>
       </div>
-    </div>
-  ),
+    )
+  },
 )

@@ -72,5 +72,8 @@ export const en = {
     amountOf: '{selected} / {all}',
     query: 'Query',
     presetName: 'Preset name',
+    presets: 'Presets',
+    createPreset: '+ Create New',
+    actions: 'Actions',
   },
 }

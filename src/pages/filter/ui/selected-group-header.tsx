@@ -2,10 +2,6 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import filterStore from '@store/filter'
-import { PopperButton } from '@ui/popper-button'
-import { ActionFilterContent } from './action-filter-content'
-import { FilterButton } from './filter-button'
-import { FilterModal } from './filter-modal'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 export const SelectedGroupHeader = observer(
@@ -25,10 +21,6 @@ export const SelectedGroupHeader = observer(
           amount={groupVariantSum}
           onChange={() => filterStore.setSelectedGroupItem({})}
         />
-
-        <PopperButton ButtonElement={FilterButton} ModalElement={FilterModal} />
-
-        <ActionFilterContent />
       </div>
     )
   },

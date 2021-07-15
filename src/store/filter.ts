@@ -25,6 +25,7 @@ class FilterStore {
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
+  activePreset = ''
 
   constructor() {
     makeAutoObservable(this)
