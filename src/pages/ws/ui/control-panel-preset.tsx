@@ -24,7 +24,18 @@ export const Preset = observer(
 
     return (
       <div>
-        <ControlPanelTitle title={t('ds.preset')} />
+        <div className="flex items-center justify-between">
+          <ControlPanelTitle title={t('ds.preset')} />
+
+          {datasetStore.activePreset && (
+            <span
+              onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
+              className="text-14 text-blue-bright cursor-pointer"
+            >
+              {t('general.clear')}
+            </span>
+          )}
+        </div>
 
         <DropDown
           options={presets}
