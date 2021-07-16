@@ -39,8 +39,11 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
       onChange={setSearchValue}
     >
       <Tags
-        tags={datasetStore.tags.filter(item =>
-          item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+        tags={datasetStore.tags.filter(
+          item =>
+            item
+              .toLocaleLowerCase()
+              .includes(searchValue.toLocaleLowerCase()) && item !== '_note',
         )}
         className="flex-wrap max-w-xs mt-3"
       />
