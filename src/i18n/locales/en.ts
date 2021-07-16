@@ -15,6 +15,7 @@ export const en = {
     filter: '+ Filter',
     presetCreated: 'Preset created',
     showLess: 'Show less',
+    delete: 'Delete',
   },
   home: {
     title: 'Home',
@@ -26,6 +27,7 @@ export const en = {
     info: 'Info',
     general: 'General',
     base: 'Base {name}',
+    pickDataset: 'Pick a dataset',
   },
   ds: {
     preset: 'Preset',

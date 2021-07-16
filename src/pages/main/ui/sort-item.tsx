@@ -30,7 +30,9 @@ export const SortItem = observer(
 
     return (
       <div className="flex items-center cursor-pointer" onClick={handleClick}>
-        <div className={cn('text-sm leading-tight mr-2', textColor)}>
+        <div
+          className={cn('text-sm leading-tight mr-2 select-none', textColor)}
+        >
           {text}
         </div>
 

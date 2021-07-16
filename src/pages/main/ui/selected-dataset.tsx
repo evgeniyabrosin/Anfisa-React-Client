@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
@@ -11,7 +11,11 @@ import { DatasetGeneral } from './dataset-general'
 
 export const SelectedDataset = observer(
   (): ReactElement => {
-    if (!dirinfoStore.selectedDirinfoName) return <Fragment />
+    if (!dirinfoStore.selectedDirinfoName) {
+      return (
+        <span className="m-auto text-grey-blue">{t('home.pickDataset')}</span>
+      )
+    }
 
     const canOpenInViewer = dirinfoStore.dsinfo.kind === 'ws'
 

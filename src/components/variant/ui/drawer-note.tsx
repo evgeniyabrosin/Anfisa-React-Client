@@ -41,26 +41,43 @@ const DrawerNoteModal = observer(({ close }: any) => {
     close()
   }
 
+  const deleteNoteAsync = async () => {
+    await operationsStore.createNoteAsync('')
+    variantStore.setNoteText('')
+    setValue('')
+    close()
+  }
+
   return (
     <div className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
       <span className="w-full">
         Note for{' '}
         <span className="text-blue-bright">{`[${genInfo}] ${hg19}`}</span>
       </span>
+
       <textarea
         placeholder="Enter text"
-        className="w-96 mt-5 p-3 h-80 rounded-lg resize-none"
+        className="w-96 mt-5 p-3 h-80 rounded-lg resize-none mx-auto"
         rows={15}
         value={value}
         onChange={(e: any) => setValue(e.target.value)}
       />
 
-      <div className="flex ml-auto mt-4">
+      <div className="flex mt-4">
+        {variantStore.noteText && (
+          <Button
+            text={t('general.delete')}
+            onClick={deleteNoteAsync}
+            hasBackground={false}
+            className="text-black border-red-secondary mr-auto"
+          />
+        )}
+
         <Button
           text={t('general.cancel')}
           onClick={close}
           hasBackground={false}
-          className="text-black mr-3"
+          className="text-black mr-3 ml-auto"
         />
         <Button
           text="Save note"
