@@ -25,6 +25,7 @@ class DatasetStore {
   activePreset = ''
   conditions: any[] = []
   zone: any[] = []
+  statAmount: number[] = []
 
   indexTabReport = 0
   indexFilteredNo = 0
@@ -192,14 +193,30 @@ class DatasetStore {
     this.isLoadingDsStat = true
     this.isLoadingTabReport = true
 
-    const response = await fetch(getApiUrl(`ds_stat?ds=${this.datasetName}`), {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+    })
+
+    if (!this.isFilterDisabled) {
+      body.append('conditions', JSON.stringify(this.conditions))
+      body.append('zone', JSON.stringify(this.zone))
+    }
+
+    this.activePreset && body.append('filter', this.activePreset)
+
+    const response = await fetch(getApiUrl(`ds_stat`), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
     })
 
     const result = await response.json()
 
     runInAction(() => {
       this.dsStat = result
+      this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
   }
@@ -349,6 +366,8 @@ class DatasetStore {
       this.filteredNo = result.records
         ? result.records.map((variant: { no: number }) => variant.no)
         : []
+
+      this.statAmount = get(result, 'filtered-counts', [])
     })
 
     await this.fetchFilteredTabReportAsync()

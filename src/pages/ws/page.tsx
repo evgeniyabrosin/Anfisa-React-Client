@@ -1,7 +1,9 @@
 import { ReactElement, useEffect } from 'react'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
+import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
@@ -18,20 +20,49 @@ export const WSPage = observer(
     const params = useParams()
 
     useEffect(() => {
-      const dsName = params.get('ds') || ''
+      const initAsync = async () => {
+        const dsName = params.get('ds') || ''
 
-      if (dsName && !variantStore.dsName) {
-        variantStore.setDsName(params.get('ds') ?? '')
+        if (dsName && !variantStore.dsName) {
+          variantStore.setDsName(params.get('ds') ?? '')
+        }
+
+        await datasetStore.initDatasetAsync(dsName)
+        await dirinfoStore.fetchDsinfoAsync(dsName)
       }
 
-      datasetStore.initDatasetAsync(dsName)
-      dirinfoStore.fetchDsinfoAsync(dsName)
-    }, [params])
+      initAsync()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const [allVariants, transcribedVariants, allTranscripts] = get(
+      datasetStore,
+      'statAmount',
+      [],
+    )
 
     return (
       <div className="h-full flex flex-col">
         <Header>
           <div className="text-white flex-grow flex justify-end pr-6">
+            <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
+              {t('filter.variants', {
+                all: allVariants,
+              })}
+            </span>
+
+            <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold">
+              {t('filter.transcribedVariants', {
+                all: transcribedVariants,
+              })}
+            </span>
+
+            <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 mr-6 font-bold">
+              {t('filter.transcripts', {
+                all: allTranscripts,
+              })}
+            </span>
+
             <PopperButton
               ButtonElement={ExportReportButton}
               ModalElement={ExportPanel}

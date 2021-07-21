@@ -16,6 +16,7 @@ export const en = {
     presetCreated: 'Preset created',
     showLess: 'Show less',
     delete: 'Delete',
+    total: 'Total',
   },
   home: {
     title: 'Home',
@@ -71,7 +72,9 @@ export const en = {
     method: 'Filtering method',
     selectedVariants: 'Selected variants',
     show: 'Show {amount} variants',
-    amountOf: '{selected} / {all}',
+    variants: 'Variants: {all}',
+    transcripts: 'Transcripts: {all}',
+    transcribedVariants: 'Transcribed variants: {all}',
     query: 'Query',
     presetName: 'Preset name',
     presets: 'Presets',

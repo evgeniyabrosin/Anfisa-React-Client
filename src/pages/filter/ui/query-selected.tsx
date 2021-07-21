@@ -15,11 +15,15 @@ export const QuerySelected = observer(
     const history = useHistory()
     const params = useParams()
 
-    const allAmount = get(datasetStore, 'dsStat.total-counts.0', 0)
+    const [allVariants, transcribedVariants, allTranscripts] = get(
+      datasetStore,
+      'statAmount',
+      [],
+    )
 
     const selectedVariants =
       datasetStore.conditions.length === 0
-        ? allAmount
+        ? allVariants
         : datasetStore.filteredNo.length
 
     const handleClick = () =>
@@ -27,21 +31,34 @@ export const QuerySelected = observer(
 
     return (
       <div className="w-1/3">
-        <div className="flex items-center flex-wrap p-4 border-b border-grey-light bg-blue-lighter">
-          <span className="font-bold text-20 leading-20 text-white">
-            {t('filter.selectedVariants')}
-          </span>
+        <div className="flex items-center p-4 border-b border-grey-light bg-blue-lighter">
+          <div className="flex flex-wrap">
+            <span className="font-bold text-20 leading-20 text-white w-full">
+              {t('general.total')}
+            </span>
 
-          <span className="text-14 leading-14px text-grey-blue ml-2">
-            {t('filter.amountOf', {
-              selected: selectedVariants,
-              all: allAmount,
-            })}
-          </span>
+            <span className="text-12 leading-14px text-grey-blue mt-2">
+              {t('filter.variants', {
+                all: allVariants,
+              })}
+            </span>
+
+            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+              {t('filter.transcribedVariants', {
+                all: transcribedVariants,
+              })}
+            </span>
+
+            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+              {t('filter.transcripts', {
+                all: allTranscripts,
+              })}
+            </span>
+          </div>
 
           <Button
-            className="h-8 ml-auto"
-            text={t('filter.show', {
+            className="h-8 ml-auto w-18"
+            text={t('general.apply', {
               amount: selectedVariants,
             })}
             onClick={handleClick}
