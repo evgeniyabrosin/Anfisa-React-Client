@@ -5,7 +5,7 @@ import { QuerySelected } from './query-selected'
 
 export const QueryBuilder = (): ReactElement => {
   return (
-    <div className="flex justify-between p-6">
+    <div className="flex justify-between">
       <QueryEditor />
 
       <QuerySelected />

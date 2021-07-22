@@ -14,7 +14,7 @@ interface Props {
 
 export const SelectedFilterCard = observer(
   ({ title, filters, onRemove }: Props): ReactElement => {
-    const [isOpen, open, close] = useToggle(false)
+    const [isOpen, open, close] = useToggle(true)
     const filterKeys = Object.keys(filters)
 
     if (filterKeys.length === 0) {

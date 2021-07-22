@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
 import datasetStore from './dataset'
@@ -6,6 +6,7 @@ import datasetStore from './dataset'
 class ZoneStore {
   selectedTags: string[] = []
   selectedGenes: string[] = []
+  selectedSamples: string[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -23,6 +24,20 @@ class ZoneStore {
     this.selectedTags = []
   }
 
+  addSample(sample: string) {
+    this.selectedSamples = [...this.selectedSamples, sample]
+  }
+
+  removeSample(sample: string) {
+    this.selectedSamples = this.selectedSamples.filter(
+      sampleItem => sampleItem !== sample,
+    )
+  }
+
+  unselectAllSamples = () => {
+    this.selectedSamples = []
+  }
+
   addGene(gene: string) {
     this.selectedGenes = [...this.selectedGenes, gene]
   }
@@ -33,24 +48,6 @@ class ZoneStore {
 
   unselectAllGenes = () => {
     this.selectedGenes = []
-  }
-
-  async fetchZoneListAsync(zone: string) {
-    const body = new URLSearchParams({ ds: datasetStore.datasetName, zone })
-
-    const response = await fetch(getApiUrl(`zone_list`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      datasetStore.genes = result.variants
-    })
   }
 
   fetchTagSelectAsync = async () => {

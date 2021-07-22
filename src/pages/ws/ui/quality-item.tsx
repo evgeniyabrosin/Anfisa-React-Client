@@ -18,13 +18,16 @@ export const QualityItem = ({
   iconVariant,
   qualityName,
 }: Props): ReactElement => (
-  <div className="text-10 leading-16px mr-3 w-1/3 overflow-x-hidden max-w-xs">
+  <div
+    className="text-10 leading-16px mr-3 w-1/3 overflow-x-hidden max-w-xs"
+    style={{ maxWidth: 65 }}
+  >
     <div>
       <QualityIcon iconVariant={iconVariant} />
       <div>{qualityName}</div>
       <div>{genotype}</div>
     </div>
 
-    <div>{g_quality}</div>
+    <div>{g_quality || '-'}</div>
   </div>
 )

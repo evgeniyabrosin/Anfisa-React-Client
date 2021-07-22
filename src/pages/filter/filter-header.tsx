@@ -4,7 +4,6 @@ import { useHistory } from 'react-router'
 import { useParams } from '@core/hooks/use-params'
 import { Icon } from '@ui/icon'
 import { FilterControl } from './ui/filter-control'
-import { VisualEditorSwitch } from './ui/visual-editor-switch'
 
 export const FilterHeader = (): ReactElement => {
   const params = useParams()
@@ -17,7 +16,6 @@ export const FilterHeader = (): ReactElement => {
       <span className="text-20 text-white font-bold">{params.get('ds')}</span>
 
       <div className="flex items-center">
-        <VisualEditorSwitch />
         <Icon
           name="Close"
           className="text-white cursor-pointer"

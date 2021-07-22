@@ -18,6 +18,8 @@ class DatasetStore {
   wsTags: WsTagsType = {}
   genes: string[] = []
   tags: string[] = []
+  samples: string[] = []
+
   offset = 0
   filteredNo: number[] = []
 
@@ -390,6 +392,27 @@ class DatasetStore {
 
     runInAction(() => {
       this.genes = result.variants
+    })
+  }
+
+  async fetchSamplesZoneAsync() {
+    const body = new URLSearchParams({
+      ds: this.datasetName,
+      zone: 'Has_Variant',
+    })
+
+    const response = await fetch(getApiUrl(`zone_list`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.samples = result.variants
     })
   }
 }

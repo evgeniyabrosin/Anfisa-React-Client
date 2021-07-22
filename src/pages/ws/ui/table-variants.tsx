@@ -6,7 +6,6 @@ import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
 import { Loader } from '@ui/loader'
-import { NoResultsFound } from '@ui/no-results-found'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
@@ -49,15 +48,13 @@ export const TableVariants = observer(
       variantColumnTable.find(item => item.Header === column),
     )
 
+    console.log(datasetStore.tabReport)
+
     if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (
       <Styles className="flex-1 min-w-max">
-        {datasetStore.tabReport.length === 0 && <NoResultsFound />}
-
-        {datasetStore.tabReport.length > 0 && (
-          <Table columns={columns} data={datasetStore.tabReport} />
-        )}
+        <Table columns={columns} data={datasetStore.tabReport} />
       </Styles>
     )
   },

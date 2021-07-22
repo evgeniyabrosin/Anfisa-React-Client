@@ -12,6 +12,7 @@ import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
+import { NoResultsFound } from '@ui/no-results-found'
 
 interface Props {
   columns: any[]
@@ -182,7 +183,7 @@ export const Table = observer(
     }
 
     return (
-      <div {...getTableProps()} className="table">
+      <div {...getTableProps()} className="table h-full">
         <div className="thead">
           {headerGroups.map(headerGroup => (
             <div
@@ -215,32 +216,38 @@ export const Table = observer(
           ))}
         </div>
 
-        <div {...getTableBodyProps()} className="text-12 tbody">
-          <FixedSizeList
-            ref={setRef}
-            height={
-              (window.innerHeight ||
-                document.documentElement.clientHeight ||
-                document.body.clientHeight) - 200
-            }
-            itemCount={rows.length}
-            initialScrollOffset={datasetStore.offset}
-            itemSize={columnsStore.viewType === ViewTypeEnum.Compact ? 60 : 80}
-            onScroll={debounce(props => {
-              datasetStore.setTableOffest(props.scrollOffset)
+        {datasetStore.tabReport.length === 0 && <NoResultsFound />}
 
-              if (
-                props.scrollDirection === 'forward' &&
-                props.scrollOffset >= 2800
-              ) {
-                handleScrollAsync()
+        {datasetStore.tabReport.length > 0 && (
+          <div {...getTableBodyProps()} className="text-12 tbody">
+            <FixedSizeList
+              ref={setRef}
+              height={
+                (window.innerHeight ||
+                  document.documentElement.clientHeight ||
+                  document.body.clientHeight) - 200
               }
-            }, 700)}
-            width={totalColumnsWidth}
-          >
-            {RenderRow}
-          </FixedSizeList>
-        </div>
+              itemCount={rows.length}
+              initialScrollOffset={datasetStore.offset}
+              itemSize={
+                columnsStore.viewType === ViewTypeEnum.Compact ? 60 : 80
+              }
+              onScroll={debounce(props => {
+                datasetStore.setTableOffest(props.scrollOffset)
+
+                if (
+                  props.scrollDirection === 'forward' &&
+                  props.scrollOffset >= 2800
+                ) {
+                  handleScrollAsync()
+                }
+              }, 700)}
+              width={totalColumnsWidth}
+            >
+              {RenderRow}
+            </FixedSizeList>
+          </div>
+        )}
       </div>
     )
   },

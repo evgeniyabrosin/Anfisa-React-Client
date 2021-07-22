@@ -50,6 +50,7 @@ export const en = {
     searchColumn: 'Search for a column',
     Compact: 'Compact View',
     Cozy: 'Cozy View',
+    samples: 'Samples',
   },
   variant: {
     genes: 'Gene(s)',

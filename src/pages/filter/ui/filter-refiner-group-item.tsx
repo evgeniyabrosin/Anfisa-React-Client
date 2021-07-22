@@ -25,6 +25,7 @@ export const FilterRefinerGroupItem = observer(
     group,
     isFunc,
     isNumeric,
+    title,
     ...rest
   }: Props): ReactElement => {
     const checked = get(
@@ -76,7 +77,7 @@ export const FilterRefinerGroupItem = observer(
             'font-bold': checked,
           })}
         >
-          {name}
+          {title || name}
         </p>
 
         {amount !== 0 && (

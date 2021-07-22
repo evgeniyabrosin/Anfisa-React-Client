@@ -7,12 +7,12 @@ import datasetStore from '@store/dataset'
 import zoneStore from '@store/filterZone'
 import { PopperButton } from '@ui/popper-button'
 import { PopperTableModal } from '@ui/popper-table-modal'
-import { GeneList } from './gene-list'
 import { HeaderTableButton } from './header-table-button'
+import { SampleList } from './sample-list'
 
 const ButtonElement = ({ refEl, onClick }: any) => (
   <HeaderTableButton
-    text={tableColumnMap.gene}
+    text={tableColumnMap.samples}
     refEl={refEl}
     onClick={onClick}
   />
@@ -23,11 +23,11 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
 
   useEffect(() => {
     const initAsync = async () => {
-      if (datasetStore.genes.length > 0) {
+      if (datasetStore.samples.length > 0) {
         return
       }
 
-      await datasetStore.fetchZoneListAsync('Symbol')
+      await datasetStore.fetchSamplesZoneAsync()
     }
 
     initAsync()
@@ -35,27 +35,26 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
   }, [])
 
   const handleApplyAsync = async () => {
-    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
+    datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
 
     await datasetStore.fetchWsListAsync()
 
-    datasetStore.clearZone()
     close()
   }
 
   return (
     <PopperTableModal
-      title={t('ds.gene')}
+      title={t('ds.samples')}
       searchInputPlaceholder={t('ds.searchFilter')}
-      selectedAmount={zoneStore.selectedGenes.length}
+      selectedAmount={zoneStore.selectedSamples.length}
       onClose={close}
-      onClearAll={zoneStore.unselectAllGenes}
+      onClearAll={zoneStore.unselectAllSamples}
       searchValue={searchValue}
       onApply={handleApplyAsync}
       onChange={setSearchValue}
     >
-      <GeneList
-        genes={datasetStore.genes.filter(item =>
+      <SampleList
+        samples={datasetStore.samples.filter(item =>
           item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
         )}
       />
@@ -63,6 +62,6 @@ const ModalElement = observer(({ close }: { close: () => void }) => {
   )
 })
 
-export const GeneHeaderTable = () => (
+export const SamplesHeaderTable = () => (
   <PopperButton ButtonElement={ButtonElement} ModalElement={ModalElement} />
 )
