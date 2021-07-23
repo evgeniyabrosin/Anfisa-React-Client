@@ -20,6 +20,7 @@ module.exports = {
   yellow: {
     bright: '#ffff00',
     dirty: '#eae12f',
+    secondary: '#fdd500',
   },
   red: {
     secondary: '#dc3737',

@@ -48,8 +48,6 @@ export const TableVariants = observer(
       variantColumnTable.find(item => item.Header === column),
     )
 
-    console.log(datasetStore.tabReport)
-
     if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (

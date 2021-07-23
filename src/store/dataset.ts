@@ -20,6 +20,7 @@ class DatasetStore {
   tags: string[] = []
   samples: string[] = []
 
+  wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
   offset = 0
   filteredNo: number[] = []
 
@@ -170,6 +171,7 @@ class DatasetStore {
 
     await this.fetchDsStatAsync()
     await this.fetchWsTagsAsync()
+    await this.fetchWsListAsync()
 
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
@@ -370,6 +372,7 @@ class DatasetStore {
         : []
 
       this.statAmount = get(result, 'filtered-counts', [])
+      this.wsRecords = result.records
     })
 
     await this.fetchFilteredTabReportAsync()
