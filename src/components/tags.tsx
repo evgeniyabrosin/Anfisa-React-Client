@@ -3,7 +3,7 @@ import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import zoneStore from '@store/filterZone'
-import { Tag } from './tag'
+import { Tag } from '@ui/tag'
 
 interface Props {
   tags: string[]

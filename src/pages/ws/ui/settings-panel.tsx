@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
 import columnsStore from '@store/wsColumns'
-import { PopperTableModal } from '@ui/popper-table-modal'
+import { PopperTableModal } from '@components/popper-table-modal'
 import { ColumnsList } from './columns-list'
 
 interface Props {

@@ -12,7 +12,7 @@ import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
-import { NoResultsFound } from '@ui/no-results-found'
+import { NoResultsFound } from '@components/no-results-found'
 
 interface Props {
   columns: any[]

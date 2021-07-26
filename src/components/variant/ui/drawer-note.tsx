@@ -8,7 +8,7 @@ import operationsStore from '@store/operations'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { PopperButton } from '@ui/popper-button'
+import { PopperButton } from '@components/popper-button'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
   return (

@@ -3,7 +3,7 @@ import { ReactElement, useEffect } from 'react'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
-import { Header } from '@ui/header'
+import { Header } from '@components/header'
 import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 

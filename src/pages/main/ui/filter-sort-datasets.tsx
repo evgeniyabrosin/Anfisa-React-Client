@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
-import { InputSearch } from '@ui/input-search'
+import { InputSearch } from '@components/input-search'
 import { SortItem } from './sort-item'
 
 export const FilterSortDatasets = observer(

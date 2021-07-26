@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import variantStore from '@store/variant'
-import { CopyToClipboard } from '@ui/copy-to-clipboard'
+import { CopyToClipboard } from '@components/copy-to-clipboard'
 import { CellI } from './cell-interfaces'
 import { isRowSelected } from './table'
 

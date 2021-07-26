@@ -11,10 +11,10 @@ import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
+import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
-import { Logo } from '@ui/logo'
+import { Logo } from '@components/logo'
 import userIcon from '@images/thomas-hunt.jpg'
-import { DropDown } from './dropdown'
 
 interface Props {
   children?: ReactElement | ReactNode

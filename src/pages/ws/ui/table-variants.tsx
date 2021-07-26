@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
-import { Loader } from '@ui/loader'
+import { Loader } from '@components/loader'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
 

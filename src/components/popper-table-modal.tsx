@@ -5,8 +5,8 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
-import { InputSearch } from './input-search'
-import { ViewTypeTable } from './view-type-table'
+import { InputSearch } from '@components/input-search'
+import { ViewTypeTable } from '@components/view-type-table'
 
 interface Props {
   title: string

@@ -5,9 +5,9 @@ import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import zoneStore from '@store/filterZone'
-import { PopperButton } from '@ui/popper-button'
-import { PopperTableModal } from '@ui/popper-table-modal'
-import { Tags } from '@ui/tags'
+import { PopperButton } from '@components/popper-button'
+import { PopperTableModal } from '@components/popper-table-modal'
+import { Tags } from '@components/tags'
 import { HeaderTableButton } from './header-table-button'
 
 const ButtonElement = ({ refEl, onClick }: any) => (

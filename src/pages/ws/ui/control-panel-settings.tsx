@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { t } from '@i18n'
-import { PopperButton } from '@ui/popper-button'
+import { PopperButton } from '@components/popper-button'
 import { ControlPanelTitle } from './control-panel-title'
 import { SettingsPanel } from './settings-panel'
 import { TableProperiesButton } from './table-properties-button'
