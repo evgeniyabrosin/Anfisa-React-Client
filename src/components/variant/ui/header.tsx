@@ -68,7 +68,10 @@ export const VariantHeader = observer(
               />
             </div>
 
-            <div className="text-blue-bright font-bold leading-18px">{`[${genInfo}] ${hg19}`}</div>
+            <div className="text-blue-bright font-bold leading-18px">
+              {`[${genInfo}] `}
+              <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+            </div>
 
             <DrawerTags />
 

@@ -52,7 +52,10 @@ const DrawerNoteModal = observer(({ close }: any) => {
     <div className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
       <span className="w-full">
         Note for{' '}
-        <span className="text-blue-bright">{`[${genInfo}] ${hg19}`}</span>
+        <span className="text-blue-bright">
+          {`[${genInfo}] `}
+          <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+        </span>
       </span>
 
       <textarea
