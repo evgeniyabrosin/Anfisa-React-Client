@@ -27,6 +27,7 @@ export const Header = observer(
     const params = useParams()
     const ds = params.get('ds') || ''
     const history = useHistory()
+    const isHomepage = window.location.pathname === Routes.Root
 
     useEffect(() => {
       const initAsync = async () => {
@@ -80,21 +81,21 @@ export const Header = observer(
               <span className="text-grey-blue">
                 {dirinfoStore.dirinfo.version as string}
               </span>
-
-              <div
-                className="mx-4 bg-blue-lighter"
-                style={{ width: '2px', height: '16px' }}
-              />
-
-              <span className="font-bold uppercase text-xs text-blue-bright">
-                {t('home.title')}
-              </span>
             </div>
           </Link>
 
           <div className="text-grey-blue flex items-center mr-2">
-            {xlDatasetName && datasets && (
+            {!isHomepage && xlDatasetName && datasets && (
               <Fragment>
+                <div
+                  className="mx-4 bg-blue-lighter"
+                  style={{ width: '2px', height: '16px' }}
+                />
+
+                <span className="font-bold uppercase text-xs text-blue-bright">
+                  {t('home.title')}
+                </span>
+
                 <span className="mx-2">/</span>
 
                 <span>{xlDatasetName}</span>
