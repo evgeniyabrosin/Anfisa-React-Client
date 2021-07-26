@@ -21,7 +21,7 @@ export const ExportPanel = ({ close }: Props): ReactElement => {
 
   return (
     <div
-      className="bg-white text-black rounded mt-2 shadow-card text-12 cursor-pointer flex"
+      className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex"
       ref={ref}
     >
       <span
