@@ -12,7 +12,7 @@ export const DatasetsList = observer(
 
     const newRef = useRef<any>(null)
 
-    const offsetTop = newRef?.current?.offsetTop
+    const offsetTop = newRef?.current?.offsetTop || 0
 
     return (
       <div
