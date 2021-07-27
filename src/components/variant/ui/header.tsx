@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { Dispatch, ReactElement, SetStateAction } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -12,8 +12,12 @@ import { closeHandler } from '../drawer'
 import { DrawerNote } from './drawer-note'
 import { DrawerTags } from './drawer-tags'
 
+interface Props {
+  setLayout: Dispatch<SetStateAction<any>>
+}
+
 export const VariantHeader = observer(
-  (): ReactElement => {
+  ({ setLayout }: Props): ReactElement => {
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = () => !!variantStore.index
@@ -84,14 +88,30 @@ export const VariantHeader = observer(
                 name="Expand"
                 size={24}
                 className="cursor-pointer"
-                onClick={() => variantStore.handleAllRecordsOpen(true)}
+                onClick={() => {
+                  setLayout((prev: any[]) =>
+                    prev.map((item: any) => ({
+                      ...item,
+                      h: 6,
+                    })),
+                  )
+                  variantStore.handleAllRecordsOpen(true)
+                }}
               />
 
               <Icon
                 name="Collapse"
                 size={24}
                 className="cursor-pointer ml-1 mr-5"
-                onClick={() => variantStore.handleAllRecordsOpen(false)}
+                onClick={() => {
+                  setLayout((prev: any[]) =>
+                    prev.map((item: any) => ({
+                      ...item,
+                      h: 1,
+                    })),
+                  )
+                  variantStore.handleAllRecordsOpen(false)
+                }}
               />
             </div>
 

@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -50,7 +50,7 @@ export const VariantDrawer = observer(
         }}
         className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
       >
-        <VariantHeader />
+        <VariantHeader setLayout={setLayout} />
 
         <VariantBody
           drawerWidth={drawerWidth}

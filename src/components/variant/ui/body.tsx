@@ -99,7 +99,13 @@ export const VariantBody = observer(
                     variantStore.recordsDisplayConfig,
                   )
 
-                  const openedH = get(aspect, 'rows.length') + 1
+                  const drawerElement = document.querySelector(
+                    `#drawer-${aspect.name}`,
+                  )
+
+                  const openedH = Math.ceil(
+                    get(drawerElement, 'clientHeight', 0) / 40 + 1,
+                  )
 
                   setLayout((prev: any[]) => {
                     const cloned: any[] = clone(prev)
@@ -113,8 +119,8 @@ export const VariantBody = observer(
                       : openedH
 
                     const reflowLayout = cloned.map(
-                      (layoutItem, index: number) => {
-                        if (index <= layoutItemIndex) {
+                      (layoutItem, layoutIndex: number) => {
+                        if (layoutIndex < layoutItemIndex) {
                           return layoutItem
                         }
 
@@ -141,7 +147,10 @@ export const VariantBody = observer(
                 {aspect.title}
               </div>
 
-              <div className={cn('px-3 overflow-auto')}>
+              <div
+                className={cn('px-3 overflow-auto')}
+                id={`drawer-${aspect.name}`}
+              >
                 {aspect.type === 'pre' ? (
                   <PreView {...aspect} />
                 ) : (
