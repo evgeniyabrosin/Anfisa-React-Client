@@ -85,9 +85,10 @@ export const VariantBody = observer(
           setLayout(newLayout)
         }}
       >
-        {filtered.map((aspect: ReccntCommon) => {
+        {filtered.map((aspect: ReccntCommon, index: number) => {
           return (
             <div
+              data-grid={{ x: 0, y: index, w: 6, h: 1, i: aspect.name }}
               key={aspect.name}
               className="flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
             >
