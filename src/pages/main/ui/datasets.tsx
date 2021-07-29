@@ -16,7 +16,7 @@ export const Datasets = (): ReactElement => {
       className={cn([
         'bg-blue-lighter',
         'flex-shrink-0',
-        'py-4',
+        'pt-4',
         isOpen ? 'pl-4' : 'pl-2',
       ])}
       style={{

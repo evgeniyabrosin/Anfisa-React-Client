@@ -18,7 +18,7 @@ export const DatasetsList = observer(
       <div
         ref={newRef}
         style={{ height: height - offsetTop }}
-        className="overflow-y-scroll overflow-x-hidden"
+        className="overflow-y-auto overflow-x-hidden"
       >
         {dirinfoStore.dsDistKeys.map(key => {
           const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
