@@ -56,7 +56,7 @@ const DatasetName = ({
         onMouseLeave={hideTooltip}
         className={cn(
           kind === null ? 'text-grey-blue' : 'text-white',
-          'text-sm leading-18px',
+          'text-sm leading-18px hover:text-blue-bright',
           {
             'font-bold': isActiveParent,
             truncate: !isChildrenVisible,
@@ -123,14 +123,11 @@ export const DatasetsListItem = observer(
         <div
           key={item.name}
           onClick={handleClick}
-          className={cn(
-            'flex items-center relative w-full',
-            isNullKind ? 'cursor-not-allowed' : 'cursor-pointer',
-            {
-              'pl-5': isSubItems,
-              'bg-blue-bright bg-opacity-10': isActive,
-            },
-          )}
+          className={cn('flex items-center relative w-full', {
+            'cursor-pointer': hasChildren || !isNullKind,
+            'pl-5': isSubItems,
+            'bg-blue-bright bg-opacity-10': isActive,
+          })}
         >
           <DatasetType
             hasChildren={hasChildren}
