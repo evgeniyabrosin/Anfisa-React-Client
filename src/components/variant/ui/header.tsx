@@ -87,7 +87,7 @@ export const VariantHeader = observer(
               <Icon
                 name="Expand"
                 size={24}
-                className="cursor-pointer"
+                className="cursor-pointer hover:text-blue-bright"
                 onClick={() => {
                   setLayout((prev: any[]) =>
                     prev.map((item: any) => ({
@@ -102,7 +102,7 @@ export const VariantHeader = observer(
               <Icon
                 name="Collapse"
                 size={24}
-                className="cursor-pointer ml-1 mr-5"
+                className="cursor-pointer hover:text-blue-bright ml-1 mr-5"
                 onClick={() => {
                   setLayout((prev: any[]) =>
                     prev.map((item: any) => ({
@@ -117,7 +117,7 @@ export const VariantHeader = observer(
 
             <Icon
               name="Close"
-              className="cursor-pointer text-white"
+              className="cursor-pointer text-white hover:text-blue-bright"
               onClick={handleCloseDrawer}
             />
           </div>
