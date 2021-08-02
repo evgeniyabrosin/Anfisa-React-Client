@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ReccntCommon } from '@declarations'
 import variantStore from '@store/variant'
+import { Icon } from '@ui/icon'
 
 const PreView = ({ content }: ReccntCommon): ReactElement => {
   return <pre className="overflow-y-hidden">{content}</pre>
@@ -78,6 +79,7 @@ export const VariantBody = observer(
         width={drawerWidth}
         margin={[8, 8]}
         className="flex-grow overflow-y-scroll overflow-x-hidden"
+        draggableHandle=".dragHandleSelector"
         onResizeStop={layoutData => {
           setLayout(layoutData)
         }}
@@ -93,7 +95,7 @@ export const VariantBody = observer(
               className="flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
             >
               <div
-                className="p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
+                className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
                 onClick={() => {
                   const cloneRoot: any = cloneDeep(
                     variantStore.recordsDisplayConfig,
@@ -145,6 +147,13 @@ export const VariantBody = observer(
                 }}
               >
                 {aspect.title}
+
+                <div className="flex">
+                  <Icon
+                    name="ArrowsOut"
+                    className="dragHandleSelector cursor-move hover:text-blue-bright"
+                  />
+                </div>
               </div>
 
               <div
