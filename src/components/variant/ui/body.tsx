@@ -96,7 +96,16 @@ export const VariantBody = observer(
             >
               <div
                 className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
-                onClick={() => {
+                onClick={e => {
+                  const target = e.target as HTMLButtonElement
+
+                  if (
+                    target &&
+                    target.classList.contains('dragHandleSelector')
+                  ) {
+                    return
+                  }
+
                   const cloneRoot: any = cloneDeep(
                     variantStore.recordsDisplayConfig,
                   )
