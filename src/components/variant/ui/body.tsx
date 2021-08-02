@@ -92,7 +92,7 @@ export const VariantBody = observer(
             <div
               data-grid={{ x: 0, y: index, w: 6, h: 1, i: aspect.name }}
               key={aspect.name}
-              className="flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
+              className="grid-item-dark flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
             >
               <div
                 className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
@@ -148,12 +148,10 @@ export const VariantBody = observer(
               >
                 {aspect.title}
 
-                <div className="flex">
-                  <Icon
-                    name="ArrowsOut"
-                    className="dragHandleSelector cursor-move hover:text-blue-bright"
-                  />
-                </div>
+                <Icon
+                  name="ArrowsOut"
+                  className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
+                />
               </div>
 
               <div

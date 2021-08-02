@@ -41,3 +41,7 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-blue-secondary;
 }
+
+.grid-item-dark.react-grid-item > .react-resizable-handle::after {
+  @apply border-white;
+}
