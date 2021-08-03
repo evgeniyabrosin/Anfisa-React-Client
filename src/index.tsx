@@ -2,6 +2,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
+import 'rc-tooltip/assets/bootstrap_white.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'

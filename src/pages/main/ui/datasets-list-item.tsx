@@ -3,15 +3,14 @@ import { useHistory } from 'react-router'
 import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
+import Tooltip from 'rc-tooltip'
 
 import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
 import { useParams } from '@core/hooks/use-params'
-import { useToggle } from '@core/hooks/use-toggle'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { DatasetType } from './dataset-type'
-
 interface Props {
   item: DsDistItem
   isSubItems?: boolean
@@ -37,23 +36,15 @@ const DatasetName = ({
 }: DsNameProps): ReactElement => {
   const datasetRef = useRef<any>(null)
 
-  const [isVisible, showToolTip, hideTooltip] = useToggle(false)
-
-  const showTooltip = (width: number, x: number) => {
-    width + x > 235 ? showToolTip() : null
-  }
+  const isTooltip =
+    datasetRef?.current?.getBoundingClientRect().width +
+      datasetRef?.current?.getBoundingClientRect().x >
+    235
 
   return (
-    <Fragment>
+    <Tooltip overlay={dsName} trigger={isTooltip ? ['hover'] : []}>
       <div
         ref={datasetRef}
-        onMouseEnter={() => {
-          showTooltip(
-            datasetRef.current.getBoundingClientRect().width,
-            datasetRef.current.getBoundingClientRect().x,
-          )
-        }}
-        onMouseLeave={hideTooltip}
         className={cn(
           kind === null ? 'text-grey-blue' : 'text-white',
           'text-sm leading-18px hover:text-blue-bright',
@@ -68,21 +59,7 @@ const DatasetName = ({
       >
         {dsName}
       </div>
-
-      {isVisible && (
-        <div
-          className={cn(
-            datasetRef.current.getBoundingClientRect().y / window.innerHeight >
-              0.9
-              ? 'bottom-9'
-              : 'top-9',
-            'flex items-center w-auto p-2 border-black border-2 bg-grey-light text-12 rounded h-6 shadow-xl absolute z-50 left-5',
-          )}
-        >
-          {dsName}
-        </div>
-      )}
-    </Fragment>
+    </Tooltip>
   )
 }
 

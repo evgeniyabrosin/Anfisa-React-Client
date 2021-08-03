@@ -3,6 +3,7 @@ import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
+import Tooltip from 'rc-tooltip'
 
 import { StatListType } from '@declarations'
 import filterStore from '@store/filter'
@@ -26,6 +27,7 @@ export const FilterRefinerGroupItem = observer(
     isFunc,
     isNumeric,
     title,
+    tooltip,
     ...rest
   }: Props): ReactElement => {
     const checked = get(
@@ -47,49 +49,56 @@ export const FilterRefinerGroupItem = observer(
     }
 
     return (
-      <div
-        className={cn(
-          'flex items-center py-1 pr-20',
-          {
-            'bg-blue-light': isIndeterminate,
-          },
-          className,
-        )}
+      <Tooltip
+        key={group}
+        overlay={tooltip}
+        placement="bottomLeft"
+        trigger={tooltip ? ['hover'] : []}
       >
-        <Checkbox
-          className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
-          checked={checked}
-          indeterminate={isIndeterminate}
-          disabled={(isFunc || isNumeric) && !checked}
-          onChange={event => onChange && onChange(event.target.checked)}
-        />
-
-        {isFunc && (
-          <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-            fn
-          </p>
-        )}
-
-        <p
-          key={name}
-          onClick={handleSelect}
-          className={cn('text-14 ml-2 cursor-pointer', {
-            'font-bold': checked,
-          })}
+        <div
+          className={cn(
+            'flex items-center py-1 pr-20',
+            {
+              'bg-blue-light': isIndeterminate,
+            },
+            className,
+          )}
         >
-          {title || name}
-        </p>
+          <Checkbox
+            className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
+            checked={checked}
+            indeterminate={isIndeterminate}
+            disabled={(isFunc || isNumeric) && !checked}
+            onChange={event => onChange && onChange(event.target.checked)}
+          />
 
-        {amount !== 0 && (
-          <span className="text-14 text-grey-blue ml-1">
-            {'('}
-            {selectedSum !== 0 && (
-              <span className="text-14 text-blue-bright">{`${selectedSum}/`}</span>
-            )}
-            {`${amount})`}
-          </span>
-        )}
-      </div>
+          {isFunc && (
+            <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
+              fn
+            </p>
+          )}
+
+          <p
+            key={name}
+            onClick={handleSelect}
+            className={cn('text-14 ml-2 cursor-pointer', {
+              'font-bold': checked,
+            })}
+          >
+            {title || name}
+          </p>
+
+          {amount !== 0 && (
+            <span className="text-14 text-grey-blue ml-1">
+              {'('}
+              {selectedSum !== 0 && (
+                <span className="text-14 text-blue-bright">{`${selectedSum}/`}</span>
+              )}
+              {`${amount})`}
+            </span>
+          )}
+        </div>
+      </Tooltip>
     )
   },
 )
