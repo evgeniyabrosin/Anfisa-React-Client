@@ -1,8 +1,10 @@
 import { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
-export const ControlPanelDivider = (): ReactElement => (
-  <div
-    className={'bg-blue-lighter mx-4 rounded-sm '}
-    style={{ width: '2px' }}
-  />
+type Props = {
+  className?: Argument
+}
+
+export const ControlPanelDivider = ({ className }: Props): ReactElement => (
+  <div className={cn('bg-blue-lighter mx-4 rounded-sm w-0.5', className)} />
 )

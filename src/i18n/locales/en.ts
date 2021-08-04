@@ -51,6 +51,10 @@ export const en = {
     Compact: 'Compact View',
     Cozy: 'Cozy View',
     samples: 'Samples',
+    geneList: 'Gene List',
+    sample: 'Sample',
+    tags: 'Tag(s)',
+    edit: 'Edit',
   },
   variant: {
     genes: 'Gene(s)',

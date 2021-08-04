@@ -17,6 +17,7 @@ class DatasetStore {
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
   genes: string[] = []
+  genesList: string[] = []
   tags: string[] = []
   samples: string[] = []
 
@@ -394,7 +395,9 @@ class DatasetStore {
     const result = await response.json()
 
     runInAction(() => {
-      this.genes = result.variants
+      zone === 'Symbol'
+        ? (this.genes = result.variants)
+        : (this.genesList = result.variants)
     })
   }
 

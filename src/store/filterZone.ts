@@ -4,24 +4,39 @@ import { getApiUrl } from '@core/get-api-url'
 import datasetStore from './dataset'
 
 class ZoneStore {
-  selectedTags: string[] = []
   selectedGenes: string[] = []
+  selectedGenesList: string[] = []
   selectedSamples: string[] = []
+  selectedTags: string[] = []
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  addTag(tagName: string) {
-    this.selectedTags = [...this.selectedTags, tagName]
+  addGene(gene: string) {
+    this.selectedGenes = [...this.selectedGenes, gene]
   }
 
-  removeTag(tagName: string) {
-    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+  removeGene(geneName: string) {
+    this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
   }
 
-  unselectAllTags = () => {
-    this.selectedTags = []
+  unselectAllGenes = () => {
+    this.selectedGenes = []
+  }
+
+  addGenesList(gene: string) {
+    this.selectedGenesList = [...this.selectedGenesList, gene]
+  }
+
+  removeGenesList(geneName: string) {
+    this.selectedGenesList = this.selectedGenesList.filter(
+      genesList => geneName !== genesList,
+    )
+  }
+
+  unselectAllGenesList = () => {
+    this.selectedGenesList = []
   }
 
   addSample(sample: string) {
@@ -38,16 +53,16 @@ class ZoneStore {
     this.selectedSamples = []
   }
 
-  addGene(gene: string) {
-    this.selectedGenes = [...this.selectedGenes, gene]
+  addTag(tagName: string) {
+    this.selectedTags = [...this.selectedTags, tagName]
   }
 
-  removeGene(geneName: string) {
-    this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
+  removeTag(tagName: string) {
+    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
   }
 
-  unselectAllGenes = () => {
-    this.selectedGenes = []
+  unselectAllTags = () => {
+    this.selectedTags = []
   }
 
   fetchTagSelectAsync = async () => {

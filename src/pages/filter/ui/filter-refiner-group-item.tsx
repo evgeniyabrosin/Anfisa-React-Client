@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import cn from 'classnames'
+import cn, { Argument } from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
@@ -10,7 +10,7 @@ import filterStore from '@store/filter'
 
 type Props = StatListType & {
   onChange?: (checked: boolean) => void
-  className?: string
+  className?: Argument
   amount?: number
   group?: string
   isFunc?: boolean

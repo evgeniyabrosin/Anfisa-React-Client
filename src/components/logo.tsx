@@ -1,11 +1,12 @@
 import { CSSProperties, ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
 import { theme } from '@theme'
 
 interface Props {
   mode: 'white' | 'blue'
   style?: CSSProperties
-  className?: string
+  className?: Argument
 }
 
 export const Logo = ({ mode, style, className }: Props): ReactElement => {
@@ -20,7 +21,7 @@ export const Logo = ({ mode, style, className }: Props): ReactElement => {
       viewBox="0 0 64 15"
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: '92px', ...style }}
-      className={className}
+      className={cn(className)}
     >
       <path
         style={{ fill: textFill }}

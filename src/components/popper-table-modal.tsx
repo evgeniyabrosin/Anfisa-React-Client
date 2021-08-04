@@ -1,86 +1,133 @@
 import { ReactElement, useRef } from 'react'
+import cn, { Argument } from 'classnames'
 import noop from 'lodash/noop'
+import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
+import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { InputSearch } from '@components/input-search'
 import { ViewTypeTable } from '@components/view-type-table'
 
 interface Props {
-  title: string
-  selectedAmount: number
+  title?: string
+  selectedAmount?: number
   searchValue: string
   searchInputPlaceholder?: string
   viewType?: ViewTypeEnum
   children: ReactElement
   onSelectAll?: () => void
-  onClearAll: () => void
+  onClearAll?: () => void
   onClose?: () => void
   onApply?: () => void
   setViewType?: (viewType: ViewTypeEnum) => void
   onChange?: (value: string) => void
+  isGenes?: boolean
+  isGenesList?: boolean
+  isSamples?: boolean
+  isTags?: boolean
+  className?: Argument
 }
 
-export const PopperTableModal = ({
-  title,
-  selectedAmount,
-  searchValue,
-  searchInputPlaceholder,
-  viewType,
-  children,
-  setViewType,
-  onSelectAll,
-  onClearAll,
-  onClose,
-  onApply,
-  onChange,
-}: Props) => {
-  const ref = useRef(null)
+export const PopperTableModal = observer(
+  ({
+    title,
+    selectedAmount,
+    searchValue,
+    searchInputPlaceholder,
+    viewType,
+    children,
+    setViewType,
+    onSelectAll,
+    onClearAll,
+    onClose,
+    onApply,
+    onChange,
+    isGenes,
+    isGenesList,
+    isSamples,
+    isTags,
+    className,
+  }: Props) => {
+    const ref = useRef(null)
 
-  useOutsideClick(ref, onClose ?? noop)
+    useOutsideClick(ref, onClose ?? noop)
 
-  return (
-    <div className="bg-white shadow-card rounded" ref={ref}>
-      <div className="px-4 pt-4">
-        <p className="text-blue-dark mb-5">{title}</p>
+    const defineClearFilter = () => {
+      isGenes && zoneStore.unselectAllGenes()
+      isGenesList && zoneStore.unselectAllGenesList()
+      isSamples && zoneStore.unselectAllSamples()
+      isTags && zoneStore.unselectAllTags()
+    }
 
-        <InputSearch
-          value={searchValue}
-          placeholder={searchInputPlaceholder}
-          onChange={e => onChange && onChange(e.target.value)}
-        />
+    const defintSelectedAmount = () => {
+      if (isGenes) return zoneStore.selectedGenes.length
 
-        {viewType && setViewType && (
-          <ViewTypeTable setViewType={setViewType} viewType={viewType} />
-        )}
+      if (isGenesList) return zoneStore.selectedGenesList.length
 
-        <div className="flex justify-between mt-5">
-          <span className="text-14 text-grey-blue">
-            {selectedAmount} Selected
-          </span>
+      if (isSamples) return zoneStore.selectedSamples.length
 
-          <span className="text-12 text-blue-bright leading-14">
-            {onSelectAll && (
-              <span className="cursor-pointer mr-3" onClick={onSelectAll}>
-                {t('general.selectAll')}
+      if (isTags) return zoneStore.selectedTags.length
+    }
+
+    return (
+      <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
+        <div className="px-4 pt-4">
+          <p className="text-blue-dark mb-5 font-medium">{title}</p>
+
+          <InputSearch
+            value={searchValue}
+            placeholder={searchInputPlaceholder}
+            onChange={e => onChange && onChange(e.target.value)}
+          />
+
+          {viewType && setViewType && (
+            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
+          )}
+
+          <div className="flex justify-between mt-5">
+            {viewType ? (
+              <span className="text-14 text-grey-blue">
+                {selectedAmount} Selected
+              </span>
+            ) : (
+              <span className="text-14 text-grey-blue">
+                {defintSelectedAmount() || 0} Selected
               </span>
             )}
 
-            <span className="cursor-pointer" onClick={onClearAll}>
-              {t('general.clearAll')}
+            <span className="text-12 text-blue-bright leading-14">
+              {onSelectAll && (
+                <span className="cursor-pointer mr-3" onClick={onSelectAll}>
+                  {t('general.selectAll')}
+                </span>
+              )}
+              {viewType ? (
+                <span className="cursor-pointer" onClick={onClearAll}>
+                  {t('general.clearAll')}
+                </span>
+              ) : (
+                <span className="cursor-pointer" onClick={defineClearFilter}>
+                  {t('general.clearAll')}
+                </span>
+              )}
             </span>
-          </span>
+          </div>
+        </div>
+
+        <div className="w-full pl-4">{children}</div>
+
+        <div className="flex justify-end pb-4 px-4 mt-4">
+          <Button text={t('general.cancel')} onClick={onClose} />
+          <Button
+            text={t('general.apply')}
+            className="ml-3"
+            onClick={onApply}
+          />
         </div>
       </div>
-
-      <div className="w-full pl-4">{children}</div>
-
-      <div className="flex justify-end pb-4 px-4 mt-4">
-        <Button text={t('general.cancel')} onClick={onClose} />
-        <Button text={t('general.apply')} className="ml-3" onClick={onApply} />
-      </div>
-    </div>
-  )
-}
+    )
+  },
+)
