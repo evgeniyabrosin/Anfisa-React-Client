@@ -29,6 +29,8 @@ export const en = {
     general: 'General',
     base: 'Base {name}',
     pickDataset: 'Pick a dataset',
+    table: 'Main Table',
+    filter: 'Desicion Tree Panel',
   },
   ds: {
     preset: 'Preset',
