@@ -150,7 +150,7 @@ module.exports = {
     // 'objectPosition', // The object-position utilities like object-left-top
     'opacity', // The opacity utilities like opacity-50
     // 'order', // The order utilities like order-8
-    // 'outline', // The outline utilities like outline-white
+    'outline', // The outline utilities like outline-white
     'overflow', // The overflow utilities like overflow-y-auto
     // 'overscrollBehavior', // The overscroll-behavior utilities like overscroll-y-contain
     'padding', // The padding utilities like pr-4

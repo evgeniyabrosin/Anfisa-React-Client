@@ -9,14 +9,20 @@ interface Props {
   value: string
   className?: Argument
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  filter?: boolean
 }
 
 export const InputSearch = ({ ...rest }: Props): ReactElement => {
-  const { className, ...tempRest } = rest
+  const { className, filter, ...tempRest } = rest
 
   return (
     <div className={cn('relative', className)}>
-      <Input {...tempRest} />
+      <Input
+        className={cn({
+          'outline-none rounded-2xl': filter,
+        })}
+        {...tempRest}
+      />
 
       <Icon name="Loupe" className="text-grey-blue absolute top-2 right-2" />
     </div>

@@ -39,6 +39,8 @@ class DatasetStore {
   isLoadingDsStat = false
   isFilterDisabled = false
 
+  searchField = ''
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -184,10 +186,17 @@ class DatasetStore {
 
     this.dsStat['stat-list'] &&
       this.dsStat['stat-list'].forEach((item: StatList) => {
-        if (groups[item.vgroup]) {
-          groups[item.vgroup] = [...groups[item.vgroup], item]
-        } else {
-          groups[item.vgroup] = [item]
+        if (
+          (item.title || item.name) &&
+          (item.title || item.name)
+            .toLocaleLowerCase()
+            .includes(this.searchField.toLocaleLowerCase())
+        ) {
+          if (groups[item.vgroup]) {
+            groups[item.vgroup] = [...groups[item.vgroup], item]
+          } else {
+            groups[item.vgroup] = [item]
+          }
         }
       })
 
@@ -420,6 +429,9 @@ class DatasetStore {
     runInAction(() => {
       this.samples = result.variants
     })
+  }
+  addSearchField = (item: string) => {
+    this.searchField = item
   }
 }
 
