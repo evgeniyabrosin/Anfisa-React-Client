@@ -110,7 +110,7 @@ export const FilterItemSamples = observer(
           }}
           className="flex justify-between mt-0.4"
         >
-          <FilterTags data={zoneStore.selectedSamples} />
+          <FilterTags data={zoneStore.selectedSamples} isSamples />
         </div>
       </div>
     )

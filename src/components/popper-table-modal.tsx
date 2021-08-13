@@ -10,6 +10,7 @@ import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { InputSearch } from '@components/input-search'
 import { ViewTypeTable } from '@components/view-type-table'
+import { FilterMods } from '@pages/ws/ui/filter-mods'
 
 interface Props {
   title?: string
@@ -115,6 +116,8 @@ export const PopperTableModal = observer(
               )}
             </span>
           </div>
+
+          {isTags && <FilterMods />}
         </div>
 
         <div className="w-full pl-4">{children}</div>

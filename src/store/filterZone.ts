@@ -1,6 +1,8 @@
+import { difference } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
+import zoneStore from '@store/filterZone'
 import datasetStore from './dataset'
 
 class ZoneStore {
@@ -8,6 +10,9 @@ class ZoneStore {
   selectedGenesList: string[] = []
   selectedSamples: string[] = []
   selectedTags: string[] = []
+
+  isModeNOT = false
+  isModeWithNotes = false
 
   constructor() {
     makeAutoObservable(this)
@@ -19,9 +24,13 @@ class ZoneStore {
 
   removeGene(geneName: string) {
     this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
+
+    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
+    datasetStore.fetchWsListAsync()
+    datasetStore.clearZone()
   }
 
-  unselectAllGenes = () => {
+  unselectAllGenes() {
     this.selectedGenes = []
   }
 
@@ -33,9 +42,13 @@ class ZoneStore {
     this.selectedGenesList = this.selectedGenesList.filter(
       genesList => geneName !== genesList,
     )
+
+    datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
+    datasetStore.fetchWsListAsync()
+    datasetStore.clearZone()
   }
 
-  unselectAllGenesList = () => {
+  unselectAllGenesList() {
     this.selectedGenesList = []
   }
 
@@ -47,9 +60,12 @@ class ZoneStore {
     this.selectedSamples = this.selectedSamples.filter(
       sampleItem => sampleItem !== sample,
     )
+
+    datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
+    datasetStore.fetchWsListAsync()
   }
 
-  unselectAllSamples = () => {
+  unselectAllSamples() {
     this.selectedSamples = []
   }
 
@@ -59,32 +75,77 @@ class ZoneStore {
 
   removeTag(tagName: string) {
     this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+
+    tagName === '_note' && this.resetModeWithNotes()
+
+    this.fetchTagSelectAsync()
   }
 
-  unselectAllTags = () => {
+  unselectAllTags() {
     this.selectedTags = []
+    this.resetModeNOT()
+    this.resetModeWithNotes()
   }
 
-  fetchTagSelectAsync = async () => {
-    if (this.selectedTags.length === 0) {
+  resetAllSelectedItems() {
+    this.unselectAllGenes()
+    this.unselectAllGenesList()
+    this.unselectAllSamples()
+    this.unselectAllTags()
+  }
+
+  async fetchTagSelectAsync() {
+    if (this.selectedTags.length === 0 && !this.isModeWithNotes) {
       datasetStore.indexTabReport = 0
       await datasetStore.fetchTabReportAsync()
 
       return
     }
 
-    const response = await fetch(
-      getApiUrl(
-        `tag_select?ds=${datasetStore.datasetName}&tag=${this.selectedTags[0]}`,
-      ),
+    this.isModeWithNotes && this.selectedTags.push('_note')
+
+    if (!this.isModeWithNotes && this.selectedTags.includes('_note')) {
+      this.selectedTags = this.selectedTags.filter(item => item !== '_note')
+    }
+
+    const filteredData = await Promise.all(
+      (this.isModeNOT
+        ? difference(datasetStore.tags, this.selectedTags)
+        : this.selectedTags
+      ).map(async tag => {
+        const response = await fetch(
+          getApiUrl(`tag_select?ds=${datasetStore.datasetName}&tag=${tag}`),
+        )
+
+        const result = await response.json()
+        const currentNo = result['tag-rec-list']
+
+        return currentNo
+      }),
     )
 
-    const result = await response.json()
+    const uniqueNo = Array.from(new Set(filteredData.flat()))
 
     datasetStore.indexFilteredNo = 0
-    datasetStore.filteredNo = result['tag-rec-list']
+    datasetStore.filteredNo = uniqueNo
 
     await datasetStore.fetchFilteredTabReportAsync()
+  }
+
+  setModeNOT() {
+    this.isModeNOT = true
+  }
+
+  resetModeNOT() {
+    this.isModeNOT = false
+  }
+
+  setModeWithNotes() {
+    this.isModeWithNotes = true
+  }
+
+  resetModeWithNotes() {
+    this.isModeWithNotes = false
   }
 }
 

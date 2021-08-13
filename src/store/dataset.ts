@@ -348,7 +348,9 @@ class DatasetStore {
 
     runInAction(() => {
       this.wsTags = result
-      this.tags = [...result['op-tags'], ...result['check-tags']]
+      this.tags = [...result['op-tags'], ...result['check-tags']].filter(
+        item => item !== '_note',
+      )
     })
   }
 

@@ -6,6 +6,7 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import filterZone from '@store/filterZone'
 import variantStore from '@store/variant'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
@@ -32,6 +33,11 @@ export const WSPage = observer(
       }
 
       initAsync()
+
+      return () => {
+        filterZone.resetAllSelectedItems()
+      }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
