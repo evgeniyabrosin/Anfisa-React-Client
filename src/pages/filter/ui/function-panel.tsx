@@ -102,7 +102,7 @@ export const FunctionPanel = observer(
     }
 
     const handleClear = () => {
-      datasetStore.removeFunctionCondition(selectedFilter.name)
+      datasetStore.removeFunctionConditionAsync(selectedFilter.name)
 
       filterStore.removeSelectedFilters({
         group: selectedFilter.vgroup,

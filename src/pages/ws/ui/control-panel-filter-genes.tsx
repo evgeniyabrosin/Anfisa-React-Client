@@ -54,7 +54,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 
   const handleApplyAsync = async () => {
     datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
-    await datasetStore.fetchWsListAsync()
+    await datasetStore.fetchWsListAsync(datasetStore.isXL)
     datasetStore.clearZone()
 
     close()

@@ -43,17 +43,21 @@ export const QuerySelected = observer(
               })}
             </span>
 
-            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
-              {t('filter.transcribedVariants', {
-                all: transcribedVariants,
-              })}
-            </span>
+            {transcribedVariants && (
+              <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+                {t('filter.transcribedVariants', {
+                  all: transcribedVariants,
+                })}
+              </span>
+            )}
 
-            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
-              {t('filter.transcripts', {
-                all: allTranscripts,
-              })}
-            </span>
+            {allTranscripts && (
+              <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+                {t('filter.transcripts', {
+                  all: allTranscripts,
+                })}
+              </span>
+            )}
           </div>
 
           <Button

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -47,10 +48,12 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
   const history = useHistory()
 
   const goToWs = () => {
+    datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
     history.push(`/ws?ds=${dirinfoStore.selectedDirinfoName}`)
   }
 
   const goToFilter = () => {
+    datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
     history.push(`/filter?ds=${dirinfoStore.selectedDirinfoName}`)
   }
 

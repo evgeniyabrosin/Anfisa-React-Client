@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -12,24 +12,28 @@ export const CellGene = observer(
     const value = get(cell, 'value[0]', []) as string[]
     const rowIndex = get(cell, 'row.index', -1)
 
-    const iconColor = datasetStore.wsRecords[rowIndex].cl.split('-')[0]
+    const iconColor = datasetStore?.wsRecords?.[rowIndex]?.cl.split('-')[0]
 
     return (
       <div className="flex items-center">
-        {datasetStore.wsRecords[rowIndex].cl.includes('cross') ? (
-          <PlusIcon color={geneColorMap[iconColor]} />
-        ) : (
-          <div
-            className={cn(
-              'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
-              {
-                'bg-grey-blue': iconColor === 'grey',
-              },
+        {datasetStore?.wsRecords?.[rowIndex]?.cl && (
+          <Fragment>
+            {datasetStore?.wsRecords?.[rowIndex]?.cl.includes('cross') ? (
+              <PlusIcon color={geneColorMap[iconColor]} />
+            ) : (
+              <div
+                className={cn(
+                  'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
+                  {
+                    'bg-grey-blue': iconColor === 'grey',
+                  },
+                )}
+                style={{
+                  border: `2px solid ${geneColorMap[iconColor]}`,
+                }}
+              />
             )}
-            style={{
-              border: `2px solid ${geneColorMap[iconColor]}`,
-            }}
-          />
+          </Fragment>
         )}
 
         <div>

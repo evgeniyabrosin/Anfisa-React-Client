@@ -1,4 +1,5 @@
-import { makeAutoObservable } from 'mobx'
+import get from 'lodash/get'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { getApiUrl } from '@core/get-api-url'
@@ -7,6 +8,8 @@ import dirinfoStore from './dirinfo'
 import variantStore from './variant'
 
 class OperationsStore {
+  savingStatus: [boolean, string] = [false, '']
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -110,6 +113,65 @@ class OperationsStore {
         return
       })
     }
+  }
+
+  async saveDatasetAsync(
+    wsName: string,
+  ): Promise<{ ok: boolean; message?: string }> {
+    const body = new URLSearchParams({
+      ds: datasetStore.datasetName,
+      ws: wsName,
+      conditions: JSON.stringify(datasetStore.conditions),
+    })
+
+    const [allVariants] = get(datasetStore, 'statAmount', [])
+
+    if (!(allVariants > 0 && allVariants < 9000)) {
+      return {
+        ok: false,
+        message: 'Too many variants',
+      }
+    }
+
+    datasetStore.setIsLoadingTabReport(true)
+
+    const response = await fetch(getApiUrl(`ds2ws`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    const jobStatusResponse = await this.getJobStatusAsync(result.task_id)
+
+    if (!jobStatusResponse.ok) {
+      return { ok: false, message: jobStatusResponse?.message }
+    }
+
+    datasetStore.setIsLoadingTabReport(false)
+
+    return { ok: true }
+  }
+
+  async getJobStatusAsync(taskId: string): Promise<any> {
+    const response = await fetch(getApiUrl(`job_status?task=${taskId}`))
+
+    const result = await response.json()
+
+    if (result[0] === null) {
+      return { ok: false, message: result[1] }
+    }
+
+    runInAction(() => {
+      this.savingStatus = result
+    })
+
+    return !result[0]
+      ? setTimeout(async () => await this.getJobStatusAsync(taskId), 1000)
+      : { ok: true, data: result }
   }
 }
 

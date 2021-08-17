@@ -85,7 +85,7 @@ export const Table = observer(
     )
 
     const handleOpenVariant = useCallback(({ index }: PropsRow) => {
-      if (window.getSelection()?.toString()) return
+      if (window.getSelection()?.toString() || datasetStore.isXL) return
 
       const variantIndex =
         datasetStore.filteredNo.length === 0

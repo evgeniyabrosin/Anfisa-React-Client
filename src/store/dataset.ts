@@ -7,7 +7,9 @@ import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
+import dirinfoStore from './dirinfo'
 import zoneStore from './filterZone'
+import operations from './operations'
 import columnsStore from './wsColumns'
 
 const INCREASE_INDEX = 50
@@ -34,6 +36,7 @@ class DatasetStore {
   indexTabReport = 0
   indexFilteredNo = 0
 
+  isXL = true
   isLoadingTabReport = false
   isFetchingMore = false
   isLoadingDsStat = false
@@ -43,6 +46,10 @@ class DatasetStore {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setIsXL(value: boolean) {
+    this.isXL = value
   }
 
   setTableOffest(value: number) {
@@ -82,8 +89,8 @@ class DatasetStore {
   async setConditionsAsync(conditions: any[][]) {
     if (!conditions[0]) {
       this.conditions = []
-
-      return await this.fetchWsListAsync()
+      await this.fetchDsStatAsync()
+      // return await this.fetchWsListAsync()
     }
 
     const groupCondtionsIndex = this.conditions.findIndex(
@@ -96,15 +103,20 @@ class DatasetStore {
 
     this.conditions = this.conditions.concat(conditions)
 
-    return await this.fetchWsListAsync()
+    await this.fetchDsStatAsync()
+
+    return Array.from({ length: this.statAmount[0] })
+    // return await this.fetchWsListAsync()
   }
 
-  removeFunctionCondition(functionName: string) {
+  async removeFunctionConditionAsync(functionName: string) {
     this.conditions = this.conditions.filter(
       ([_, name]) => name !== functionName,
     )
 
-    this.fetchWsListAsync()
+    await this.fetchDsStatAsync()
+
+    // this.fetchWsListAsync()
   }
 
   removeCondition({
@@ -138,7 +150,7 @@ class DatasetStore {
 
     this.conditions = cloneConditions
 
-    this.fetchWsListAsync()
+    this.fetchDsStatAsync()
   }
 
   removeConditionGroup({ subGroup }: { subGroup: string }) {
@@ -154,7 +166,7 @@ class DatasetStore {
 
     this.conditions = cloneConditions
 
-    this.fetchWsListAsync()
+    this.fetchDsStatAsync()
   }
 
   resetData() {
@@ -172,9 +184,10 @@ class DatasetStore {
     this.resetData()
     this.datasetName = datasetName
 
+    await dirinfoStore.fetchDsinfoAsync(datasetName)
     await this.fetchDsStatAsync()
     await this.fetchWsTagsAsync()
-    await this.fetchWsListAsync()
+    await this.fetchWsListAsync(this.isXL)
 
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
@@ -257,7 +270,7 @@ class DatasetStore {
       }
     })
 
-    this.fetchWsListAsync()
+    this.fetchDsStatAsync()
   }
 
   async fetchTabReportAsync() {
@@ -337,6 +350,8 @@ class DatasetStore {
   }
 
   async fetchWsTagsAsync() {
+    if (this.isXL) return
+
     const response = await fetch(
       getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${0}`),
       {
@@ -354,7 +369,7 @@ class DatasetStore {
     })
   }
 
-  async fetchWsListAsync() {
+  async fetchWsListAsync(isXL?: boolean) {
     const body = new URLSearchParams({
       ds: this.datasetName,
     })
@@ -366,7 +381,7 @@ class DatasetStore {
 
     this.activePreset && body.append('filter', this.activePreset)
 
-    const response = await fetch(getApiUrl(`ws_list`), {
+    const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -378,14 +393,26 @@ class DatasetStore {
 
     this.indexFilteredNo = 0
 
-    runInAction(() => {
-      this.filteredNo = result.records
-        ? result.records.map((variant: { no: number }) => variant.no)
-        : []
+    if (isXL) {
+      const taskResult = await operations.getJobStatusAsync(result.task_id)
 
-      this.statAmount = get(result, 'filtered-counts', [])
-      this.wsRecords = result.records
-    })
+      runInAction(() => {
+        this.filteredNo = taskResult?.data?.[0].samples
+          ? taskResult.data[0].samples.map(
+              (variant: { no: number }) => variant.no,
+            )
+          : []
+      })
+    } else {
+      runInAction(() => {
+        this.filteredNo = result.records
+          ? result.records.map((variant: { no: number }) => variant.no)
+          : []
+
+        this.statAmount = get(result, 'filtered-counts', [])
+        this.wsRecords = result.records
+      })
+    }
 
     await this.fetchFilteredTabReportAsync()
 

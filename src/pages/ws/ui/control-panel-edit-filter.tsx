@@ -21,7 +21,7 @@ export const EditFilter = observer(
 
     const switchHandler = (checked: boolean) => {
       datasetStore.setIsFilterDisabled(!checked)
-      datasetStore.fetchWsListAsync()
+      datasetStore.fetchWsListAsync(datasetStore.isXL)
     }
 
     return (

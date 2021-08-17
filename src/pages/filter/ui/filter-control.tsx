@@ -14,6 +14,7 @@ import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
+import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
 
@@ -153,6 +154,8 @@ export const FilterControl = observer(
             />
           )}
         </div>
+
+        <DatasetCreationButton />
       </div>
     )
   },

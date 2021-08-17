@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import datasetStore from './dataset'
 
 export class VariantStore {
   drawerVisible = false
@@ -78,6 +79,8 @@ export class VariantStore {
   }
 
   async fetchVarinatInfoAsync() {
+    if (datasetStore.isXL) return
+
     const [variantResponse, tagsResponse] = await Promise.all([
       fetch(getApiUrl(`reccnt?ds=${this.dsName}&rec=${this.index}`), {
         method: 'POST',

@@ -7,6 +7,7 @@ import { DirInfoType, DsDistItem, DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
+import datasetStore from './dataset'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
@@ -161,6 +162,8 @@ class DirInfoStore {
     runInAction(() => {
       this.dsinfo = result
     })
+
+    datasetStore.setIsXL(result?.kind === 'xl')
   }
 }
 
