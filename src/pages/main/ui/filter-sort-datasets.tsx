@@ -15,6 +15,7 @@ export const FilterSortDatasets = observer(
         placeholder={t('home.searchForADataset')}
         value={dirinfoStore.filterValue}
         className="mb-4"
+        filter
         onChange={e => {
           dirinfoStore.setFilterValue(e.target.value)
         }}
