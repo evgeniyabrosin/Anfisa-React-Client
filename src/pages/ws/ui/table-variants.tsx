@@ -10,8 +10,8 @@ import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
 const Styles = styled.div`
-  overflow-x: auto;
-  overflow-y: hidden;
+  // overflow-x: auto;
+  // overflow-y: hidden;
 
   .table {
     border-spacing: 0;
@@ -51,7 +51,7 @@ export const TableVariants = observer(
     if (datasetStore.isLoadingTabReport) return <Loader />
 
     return (
-      <Styles className="flex-1 min-w-max">
+      <Styles className="flex-1 overflow-auto">
         <Table columns={columns} data={datasetStore.tabReport} />
       </Styles>
     )

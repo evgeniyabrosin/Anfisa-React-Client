@@ -26,17 +26,11 @@ export const FilterTags = observer(
 
     return (
       <Fragment>
-        <div
-          className="flex flex-wrap items-center"
-          style={{ width: 'auto', maxWidth: '100%' }}
-        >
+        <div className="flex flex-wrap items-center w-auto max-w-full">
           {visibleTagsData?.map((item: string) => (
             <div key={item}>
-              <div
-                style={{ width: 'auto', maxWidth: '100%' }}
-                className="inline-flex items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg"
-              >
-                <div className="truncate w-auto" style={{ maxWidth: 96 }}>
+              <div className="inline-flex items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg w-auto max-w-full">
+                <div className="truncate w-auto" style={{ maxWidth: 70 }}>
                   {item === '_note' ? item.replace('_note', 'notes') : item}
                 </div>
 
@@ -52,9 +46,9 @@ export const FilterTags = observer(
 
           <div>
             <div
-              style={{ display: data && data.length >= 3 ? 'flex' : 'none' }}
               className={cn(
-                ' w-8.5 inline-flex flex-nowrap items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg',
+                'items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg flex-nowrap',
+                data && data.length >= 3 ? 'inline-flex' : 'hidden',
               )}
             >
               + {data && data.length - 2}

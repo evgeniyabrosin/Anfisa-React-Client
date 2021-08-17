@@ -87,7 +87,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 export const FilterItemTags = observer(
   ({ title }: FilterItemProps): ReactElement => {
     return (
-      <div>
+      <div style={{ minWidth: 75 }}>
         <ControlPanelTitle title={title}>
           {zoneStore.selectedTags.length > 0 && (
             <PopperButton
@@ -110,7 +110,8 @@ export const FilterItemTags = observer(
           style={{
             maxHeight: '70%',
             width: 'auto',
-            minWidth: '50px',
+            maxWidth: 101,
+            minWidth: 50,
           }}
           className="flex justify-between mt-0.4"
         >

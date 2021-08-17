@@ -147,21 +147,18 @@ export const Table = observer(
                 <div
                   {...cell.getCellProps()}
                   key={Math.random()}
-                  className={cn(
-                    'td px-4',
-                    columnsStore.viewType === ViewTypeEnum.Compact
-                      ? 'py-1'
-                      : 'py-4',
-                  )}
-                  style={{
-                    width:
-                      cell.column.Header === tableColumnMap.samples
-                        ? `${
-                            Number.parseFloat(cell.getCellProps().style.width) +
-                            100
-                          }px`
-                        : cell.getCellProps().style.width,
-                  }}
+                  className={cn('td overflow-hidden', {
+                    'py-1':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType === ViewTypeEnum.Compact,
+                    'py-4':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType !== ViewTypeEnum.Compact,
+                    'h-full':
+                      cell.column.Header === tableColumnMap.samples &&
+                      columnsStore.viewType !== ViewTypeEnum.Compact,
+                    'px-4': cell.column.Header !== tableColumnMap.samples,
+                  })}
                 >
                   {cell.render('Cell')}
                 </div>
@@ -188,7 +185,11 @@ export const Table = observer(
     }
 
     return (
-      <div {...getTableProps()} className="table h-full">
+      <div
+        {...getTableProps()}
+        style={{ width: totalColumnsWidth }}
+        className="table h-full"
+      >
         <div className="thead">
           {headerGroups.map(headerGroup => (
             <div
@@ -196,27 +197,25 @@ export const Table = observer(
               key={Math.random()}
               className="tr"
             >
-              {headerGroup.headers.map((column: any) => (
-                <div
-                  {...column.getHeaderProps()}
-                  key={Math.random()}
-                  className="th"
-                  style={{
-                    width:
-                      column.Header === tableColumnMap.samples
-                        ? `${
-                            Number.parseFloat(
-                              column.getHeaderProps().style.width,
-                            ) + 100
-                          }px`
-                        : column.getHeaderProps().style.width,
-                  }}
-                >
-                  {column.HeaderComponent
-                    ? column.render('HeaderComponent')
-                    : column.render('Header')}
-                </div>
-              ))}
+              {headerGroup.headers.map((column: any) => {
+                return (
+                  <div
+                    {...column.getHeaderProps()}
+                    key={Math.random()}
+                    className="th"
+                    style={{
+                      ...column.getHeaderProps().style,
+                      width:
+                        Number.parseFloat(column.getHeaderProps().style.width) -
+                        1,
+                    }}
+                  >
+                    {column.HeaderComponent
+                      ? column.render('HeaderComponent')
+                      : column.render('Header')}
+                  </div>
+                )
+              })}
             </div>
           ))}
         </div>

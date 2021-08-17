@@ -87,10 +87,7 @@ export const Header = observer(
           <div className="text-grey-blue flex items-center mr-2">
             {!isHomepage && xlDatasetName && datasets && (
               <Fragment>
-                <div
-                  className="mx-4 bg-blue-lighter"
-                  style={{ width: '2px', height: '16px' }}
-                />
+                <div className="mx-4 bg-blue-lighter w-0.5 h-4" />
 
                 <span className="font-bold uppercase text-xs text-blue-bright">
                   {t('home.title')}
