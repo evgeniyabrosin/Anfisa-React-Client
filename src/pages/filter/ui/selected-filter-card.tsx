@@ -32,7 +32,7 @@ export const SelectedFilterCard = observer(
           <Icon
             name="Arrow"
             className={cn(
-              'text-blue-bright ml-auto transform',
+              'text-blue-bright ml-auto transform transition-transform',
               isOpen ? 'rotate-90' : '-rotate-90',
             )}
           />

@@ -27,7 +27,10 @@ export const ExportReportButton = ({
     append={
       <Icon
         name="Arrow"
-        className={cn('transform', isOpen ? 'rotate-90' : '-rotate-90')}
+        className={cn(
+          'transform transition-transform',
+          isOpen ? 'rotate-90' : '-rotate-90',
+        )}
       />
     }
   />
