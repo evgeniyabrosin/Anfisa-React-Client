@@ -26,8 +26,6 @@ module.exports = {
       transparent: 'transparent',
       current: 'currentColor',
       ...themeColors,
-      blue: { ...themeColors.blue },
-      grey: { ...themeColors.grey },
     },
     fontFamily: {
       sans: ['"Roboto"', 'sans-serif'],
