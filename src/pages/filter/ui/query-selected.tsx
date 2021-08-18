@@ -61,7 +61,7 @@ export const QuerySelected = observer(
           </div>
 
           <Button
-            className="h-8 ml-auto w-18"
+            className="ml-auto"
             text={t('general.apply', {
               amount: selectedVariants,
             })}

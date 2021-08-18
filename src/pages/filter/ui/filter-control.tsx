@@ -137,7 +137,7 @@ export const FilterControl = observer(
               text={t('general.cancel')}
               size="md"
               hasBackground={false}
-              className="text-white mt-auto ml-2 w-24 rounded-2xl"
+              className="text-white mt-auto ml-2 rounded-full"
               onClick={() => {
                 setActivePreset('')
                 filterStore.setActionName()

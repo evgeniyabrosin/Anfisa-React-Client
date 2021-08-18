@@ -31,8 +31,7 @@ const ButtonBase = ({
   <Button
     text={t('home.openInViewer')}
     refEl={refEl}
-    size="sm"
-    className="py-2 px-4"
+    size="md"
     onClick={rest.onClick}
     append={
       <Icon
