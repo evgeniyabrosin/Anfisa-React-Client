@@ -123,10 +123,10 @@ export const DatasetCreationButton = () => {
     <Fragment>
       <ControlPanelDivider />
 
-      <div>
-        <span className="text-grey-blue font-bold text-14 leading-16px">
+      <div className="self-stretch">
+        <div className="text-grey-blue text-14 font-bold mb-2">
           {t('dsCreation.datasetCreation')}
-        </span>
+        </div>
         <PopperButton ButtonElement={ButtonBase} ModalElement={Panel} />
       </div>
     </Fragment>

@@ -30,7 +30,7 @@ export const en = {
     base: 'Base {name}',
     pickDataset: 'Pick a dataset',
     table: 'Main Table',
-    filter: 'Desicion Tree Panel',
+    filter: 'Decision Tree Panel',
   },
   ds: {
     preset: 'Preset',
