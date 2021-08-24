@@ -73,6 +73,11 @@ export const FilterControl = observer(
       }
     }
 
+    const isApplyDisabled =
+      activePreset.startsWith('⏚') &&
+      (filterStore.actionName === ActionFilterEnum.Modify ||
+        filterStore.actionName === ActionFilterEnum.Delete)
+
     return (
       <div className="flex items-center w-full mt-5">
         <div className="flex flex-col">
@@ -150,6 +155,7 @@ export const FilterControl = observer(
               text={t('general.apply')}
               size="md"
               onClick={handleClick}
+              disabled={isApplyDisabled}
               className="text-white mt-auto ml-2"
             />
           )}
