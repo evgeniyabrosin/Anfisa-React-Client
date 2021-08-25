@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { clone, cloneDeep, get } from 'lodash'
 import { runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
+import Tooltip from 'rc-tooltip'
 
 import { ReccntCommon } from '@declarations'
 import variantStore from '@store/variant'
@@ -38,10 +39,16 @@ const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
                 key={row.name}
                 className="border-b last:border-0 border-blue-lighter"
               >
-                <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
-                  {row.title}
-                  {/* TODO add row.tooltip */}
-                </td>
+                <Tooltip
+                  overlay={row.tooltip}
+                  placement="bottomLeft"
+                  trigger={row.tooltip ? ['hover'] : []}
+                >
+                  <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
+                    {row.title}
+                  </td>
+                </Tooltip>
+
                 {row.cells.map((cell, cIndex) => (
                   <td
                     key={cIndex}
