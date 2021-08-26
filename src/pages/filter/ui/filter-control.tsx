@@ -130,12 +130,13 @@ export const FilterControl = observer(
             )}
           </div>
 
-          {filterStore.actionName !== ActionFilterEnum.Create && (
-            <PopperButton
-              ButtonElement={FilterButton}
-              ModalElement={FilterModal}
-            />
-          )}
+          {filterStore.actionName !== ActionFilterEnum.Create &&
+            activePreset && (
+              <PopperButton
+                ButtonElement={FilterButton}
+                ModalElement={FilterModal}
+              />
+            )}
 
           {filterStore.actionName === ActionFilterEnum.Create && (
             <Button
