@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
+import Add from '@icons/add'
 import Arrow from '@icons/arrow'
 import ArrowsOut from '@icons/arrows-out'
 import Circle from '@icons/circle'
@@ -16,11 +17,16 @@ import File from '@icons/file'
 import Filter from '@icons/filter'
 import Folder from '@icons/folder'
 import FullScreen from '@icons/full-screen'
+import Lines from '@icons/lines'
 import Loupe from '@icons/loupe'
+import Options from '@icons/options'
 import Rect from '@icons/rect'
 import Ring from '@icons/ring'
 import Settings from '@icons/settings'
+import SettingsFat from '@icons/settings-fat'
 import Sort from '@icons/sort'
+import ThreadAdd from '@icons/thread-add'
+import ThreadClose from '@icons/thread-close'
 
 interface IconItem {
   size: number
@@ -31,6 +37,7 @@ interface IconItem {
 }
 
 const iconItems: { [key: string]: IconItem } = {
+  Add,
   Arrow,
   ArrowsOut,
   Circle,
@@ -46,11 +53,16 @@ const iconItems: { [key: string]: IconItem } = {
   Filter,
   Folder,
   FullScreen,
+  Lines,
   Loupe,
+  Options,
   Rect,
   Ring,
   Settings,
+  SettingsFat,
   Sort,
+  ThreadAdd,
+  ThreadClose,
 }
 
 interface IconProps {

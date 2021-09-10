@@ -248,3 +248,12 @@ export interface ReccntCommon {
   parcontrol?: string
   content?: string
 }
+
+export interface DsStatI {
+  totalCounts: number[]
+  'filtered-counts': number[]
+  'stat-list': StatList[]
+  'rq-id': string
+}
+
+export type DtreeStatType = DtreeStatI | Record<string, any>

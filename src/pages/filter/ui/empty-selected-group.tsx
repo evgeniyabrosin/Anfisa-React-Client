@@ -1,7 +1,11 @@
 import { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
-export const EmptySelectedGroup = (): ReactElement => (
-  <div className="w-1/3 bg-grey-lighter">
+type Props = {
+  className?: Argument
+}
+export const EmptySelectedGroup = ({ className }: Props): ReactElement => (
+  <div className={cn('w-1/3 bg-grey-lighter', className)}>
     <div
       className="flex items-center justify-center"
       style={{ height: 'calc(100vh - 100px)' }}

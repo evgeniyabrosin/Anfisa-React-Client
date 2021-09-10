@@ -7,9 +7,11 @@ module.exports = {
     lighter: '#1f3653',
     light: '#e7f4ff',
     secondary: '#2a4567',
+    medium: '#d9ecff',
   },
   green: {
     light: '#ddf3d9',
+    medium: '#caf3c7',
     secondary: '#19af00',
   },
   grey: {
@@ -24,5 +26,10 @@ module.exports = {
   },
   red: {
     secondary: '#dc3737',
+  },
+  orange: {
+    secondary: '#f87c3a',
+    bright: '#ff7c33',
+    light: '#ffefe7',
   },
 }

@@ -20,7 +20,8 @@ interface AddSelectedFiltersI {
 }
 
 class FilterStore {
-  method: FilterMethodEnum = FilterMethodEnum.Refiner
+  // method: FilterMethodEnum = FilterMethodEnum.Refiner
+  method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
@@ -33,6 +34,10 @@ class FilterStore {
 
   setActionName(actionName?: ActionFilterEnum) {
     this.actionName = actionName
+  }
+
+  resetActionName() {
+    this.actionName = undefined
   }
 
   setMethod(method: FilterMethodEnum) {

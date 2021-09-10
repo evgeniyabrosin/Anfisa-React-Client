@@ -13,6 +13,7 @@ import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 export const FilterRefinerGroups = observer(
   (): ReactElement => {
     const keys = Object.keys(datasetStore.getFilterRefiner)
+
     const values = Object.values(datasetStore.getFilterRefiner)
 
     const handleCheckGroupItem = (
@@ -46,21 +47,8 @@ export const FilterRefinerGroups = observer(
       }
     }
 
-    const parent = document.querySelector('#parent')
-
-    parent?.addEventListener('DOMSubtreeModified', () => {
-      for (const item of parent.children) {
-        if (item.children.length === 1 && item.id !== 'input') {
-          item.className = 'hidden'
-        } else if (item.id !== 'input') {
-          item.className = 'block'
-        }
-      }
-    })
-
     return (
       <div
-        id="parent"
         className="pt-4 w-1/3 overflow-y-scroll border-gre"
         style={{ maxHeight: 'calc(100vh - 170px)' }}
       >

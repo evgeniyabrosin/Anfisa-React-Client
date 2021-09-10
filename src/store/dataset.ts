@@ -459,6 +459,7 @@ class DatasetStore {
       this.samples = result.variants
     })
   }
+
   addSearchField = (item: string) => {
     this.searchField = item
   }

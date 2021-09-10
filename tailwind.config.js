@@ -43,6 +43,9 @@ module.exports = {
       card: '0px 2px 8px rgba(167, 167, 167, 0.25)',
       scrollbar: `4px 4px 4px 0px ${themeColors.grey.blue}40 inset`,
     },
+    minHeight: {
+      50: '50px',
+    },
   },
   variants: {
     appearance: [],
