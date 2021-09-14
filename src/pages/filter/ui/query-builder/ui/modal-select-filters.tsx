@@ -54,7 +54,7 @@ export const ModalSelectFilters = observer(
     }
 
     const handleAddAttribute = (subGroupName: string) => {
-      dtreeStore.addStepData(subGroupName)
+      dtreeStore.addStepData(subGroupName, 'enum')
       dtreeStore.closeModalSelectFilter()
     }
 
@@ -70,7 +70,7 @@ export const ModalSelectFilters = observer(
     }
 
     const handleReplace = (subGroupName: string) => {
-      dtreeStore.replaceStepData(subGroupName)
+      dtreeStore.replaceStepData(subGroupName, 'enum')
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
     }

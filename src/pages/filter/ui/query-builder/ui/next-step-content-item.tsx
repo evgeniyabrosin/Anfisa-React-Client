@@ -69,7 +69,8 @@ export const NextStepContentItem = observer(
           >
             <div className="mr-1">{t('dtree.joinBy')}</div>
             <JoinType className="flex items-center justify-center bg-orange-light text-orange-bright">
-              {currentGroup[0]}
+              {currentGroup.includes('or') && 'OR'}
+              {currentGroup.includes('and') && 'AND'}
             </JoinType>
 
             <ExpandContentButton

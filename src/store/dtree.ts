@@ -159,7 +159,6 @@ class DtreeStore {
 
     const stepCodes = splitDtreeCode(this.dtreeCode)
 
-    console.log(stepCodes)
     this.stepData = []
 
     dtreeSteps.map((item: any, index: number) => {
@@ -180,7 +179,8 @@ class DtreeStore {
     this.stepData.map((step: IStepData, index: number) => {
       if (step.groups.length > 1) {
         step.groups.map((group: any[], currNo: number) => {
-          currNo !== 0 && group.unshift(stepCodes[index].types[currNo - 1])
+          currNo !== 0 &&
+            group.splice(-1, 0, stepCodes[index].types[currNo - 1])
         })
       }
     })
@@ -285,11 +285,11 @@ class DtreeStore {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
   }
 
-  addStepData(subGroupName: string) {
+  addStepData(subGroupName: string, typeOfAttr: string) {
     const currentStep = this.stepData[this.currentStepIndex]
 
-    if (!currentStep.groups) {
-      currentStep.groups = [[this.selectedGroups[0], this.selectedGroups[1]]]
+    if (!currentStep.groups || currentStep.groups.length === 0) {
+      currentStep.groups = [[typeOfAttr, this.selectedGroups[1]]]
     } else if (!currentStep.groups.join().includes(this.selectedGroups[1])) {
       currentStep.groups = [...currentStep.groups, this.selectedGroups]
     }
@@ -303,14 +303,13 @@ class DtreeStore {
     this.selectedFilters = []
   }
 
-  joinStepData(type: string) {
+  joinStepData(typeOfJoin: string, typeOfAttr: string) {
     const currentStep = this.stepData[this.currentStepIndex]
-    const groupsToAdd = [this.selectedGroups[0], this.selectedGroups[1]]
 
-    currentStep.groups = [...currentStep.groups, groupsToAdd]
-    const jointedGroupIndex = currentStep.groups.length - 1
-
-    currentStep.groups[jointedGroupIndex].push(this.selectedFilters, type)
+    currentStep.groups = [
+      ...currentStep.groups,
+      [typeOfAttr, this.selectedGroups[1], typeOfJoin, this.selectedFilters],
+    ]
 
     this.selectedFilters = []
   }
@@ -325,14 +324,18 @@ class DtreeStore {
   }
 
   updateStepData(indexOfCurrentGroup: number) {
-    this.stepData[this.currentStepIndex].groups[
+    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
       indexOfCurrentGroup
-    ][2] = this.selectedFilters
+    ].length
+
+    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
+      currentGroupLength - 1
+    ] = this.selectedFilters
   }
 
-  replaceStepData(subGroupName: string) {
+  replaceStepData(subGroupName: string, typeOfAttr: string) {
     this.stepData[this.currentStepIndex].groups = []
-    this.addStepData(subGroupName)
+    this.addStepData(subGroupName, typeOfAttr)
   }
 
   resetSelectedFilters() {

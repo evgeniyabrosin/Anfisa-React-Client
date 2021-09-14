@@ -59,17 +59,23 @@ export const NextStepContent = observer(
 
           {groups && groups.length > 0 && (
             <ContentEditor className="w-1/3 h-full">
-              <div className="bg-blue-secondary w-full h-auto rounded-md text-12 font-normal font-mono">
-                {/* <div className="flex p-2">
+              <div className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono">
+                {dtreeStore.stepData[index].comment && (
+                  <div className="text-white mb-2">
+                    {dtreeStore.stepData[index].comment}
+                  </div>
+                )}
+
+                <div className="flex">
                   <div className="text-grey-light mr-2">If</div>
 
                   <div className="flex flex-wrap text-orange-secondary">
-                    {dtreeStore.stepData[index].groups[0][0]} in &#123;{' '}
+                    {dtreeStore.stepData[index].groups[0][1]} in &#123;{' '}
                     {dtreeStore.stepData[index].groups[0][1]} &#125;
                   </div>
                 </div>
 
-                <div className="text-grey-light pl-2">return false</div> */}
+                <div className="text-grey-light pl-2">return false</div>
               </div>
             </ContentEditor>
           )}

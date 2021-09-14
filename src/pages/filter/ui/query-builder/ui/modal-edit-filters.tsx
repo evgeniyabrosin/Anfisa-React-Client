@@ -53,15 +53,22 @@ export const ModalEditFilters = observer(
 
     const indexOfCurrentGroup = dtreeStore.groupIndexToChange
 
+    const currentGroupLength =
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        indexOfCurrentGroup
+      ].length
+
     useEffect(() => {
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
         indexOfCurrentGroup
-      ][2].map((item: string) => dtreeStore.addSelectedFilter(item))
+      ][currentGroupLength - 1].map((item: string) =>
+        dtreeStore.addSelectedFilter(item),
+      )
 
       return () => {
         dtreeStore.resetSelectedFilters()
       }
-    }, [indexOfCurrentGroup])
+    }, [indexOfCurrentGroup, currentGroupLength])
 
     const handleCheckGroupItem = (checked: boolean, name: string) => {
       if (checked) {
