@@ -21,22 +21,22 @@ export const DropDownJoin = observer(
     const currentGroup = dtreeStore.stepData[index].groups[currNo]
 
     const handleJoin = (type: string) => {
-      currentGroup[3] = type
+      currentGroup[currentGroup.length - 2] = type
       close()
     }
 
     return (
-      <div ref={ref} className="top-10 absolute">
+      <div ref={ref} className="top-10 absolute z-50">
         <Card className="z-50 top-8 w-28 flex flex-col justify-between px-0 py-0 bg-white rounded-md">
           <div
-            onClick={() => handleJoin('AND')}
+            onClick={() => handleJoin('and')}
             className="text-14 cursor-pointer rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-blue-bright hover:text-white"
           >
             {t('dtree.joinByAnd')}
           </div>
 
           <div
-            onClick={() => handleJoin('OR')}
+            onClick={() => handleJoin('or')}
             className="text-14 cursor-pointer font-normal py-2 px-2 hover:bg-blue-bright hover:text-white rounded-bl-md rounded-br-md"
           >
             {t('dtree.joinByOr')}

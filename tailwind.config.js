@@ -41,6 +41,7 @@ module.exports = {
     },
     boxShadow: {
       card: '0px 2px 8px rgba(167, 167, 167, 0.25)',
+      dark: '0px 0px 4px rgba(167, 167, 167, 0.75)',
       scrollbar: `4px 4px 4px 0px ${themeColors.grey.blue}40 inset`,
     },
     minHeight: {

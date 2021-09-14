@@ -1,6 +1,4 @@
-import { Fragment, ReactElement, useRef } from 'react'
-import Checkbox from 'react-three-state-checkbox'
-import { toJS } from 'mobx'
+import { Fragment, ReactElement, useRef, useState } from 'react'
 // import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -10,8 +8,11 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { Input } from '@ui/input'
+import { InputNumber } from '@ui/input-number'
+import { DropDownSelectSign } from './dropdown-select-sign'
+import { ExpandContentButton } from './expand-content-button'
 import { ModalJoin } from './modal-join'
-import { ModsDivider } from './mods-divider'
 
 const ModalContainer = styled.div`
   display: block;
@@ -30,28 +31,20 @@ const ModalContent = styled.div`
   top: 50%;
   left: 50%;
   width: 580px;
-  height: 260px;
+  height: 190px;
   background: white;
   transform: translate(-50%, -50%);
   border-radius: 0.5rem;
-  z-index: 1000;
+  z-index: 10;
 `
 
-export const ModalSelectFilters = observer(
+export const ModalSelectNumbers = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectFilter())
+    useOutsideClick(ref, () => dtreeStore.closeModalSelectNumbers())
 
     const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
-
-    const handleCheckGroupItem = (checked: boolean, name: string) => {
-      if (checked) {
-        dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
-      }
-    }
 
     const handleAddAttribute = (subGroupName: string) => {
       dtreeStore.addStepData(subGroupName, 'enum')
@@ -59,7 +52,7 @@ export const ModalSelectFilters = observer(
     }
 
     const handleClose = () => {
-      dtreeStore.closeModalSelectFilter()
+      dtreeStore.closeModalSelectNumbers()
       dtreeStore.resetSelectedFilters()
     }
 
@@ -75,13 +68,33 @@ export const ModalSelectFilters = observer(
       dtreeStore.closeModalSelectFilter()
     }
 
+    const [leftDropValue, setLeftDropValue] = useState(0)
+    const [rightDropValue, setRightDropValue] = useState(0)
+
+    const [leftDropType, setLeftDropType] = useState(0)
+    const [rightDropType, setRightDropType] = useState(1)
+
+    const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
+    const [isVisibleRightDrop, setIsVisibleRightDrop] = useState(false)
+
+    const toggleIsVisibleLeftDrop = () => {
+      setIsVisibleLeftDrop(prev => !prev)
+    }
+
+    const toggleIsVisibleRightDrop = () => {
+      setIsVisibleRightDrop(prev => !prev)
+    }
+
+    const minValue = 10
+    const maxValue = 100
+
     return (
       <ModalContainer>
         <ModalView className="bg-grey-blue" />
 
         <ModalContent ref={ref} className="py-4 px-4">
           <div className="flex w-full justify-between items-center font-medium mb-3">
-            <div>{dtreeStore.selectedGroups[1]}</div>
+            <div>Number group name</div>
 
             <Icon
               name="Close"
@@ -91,66 +104,70 @@ export const ModalSelectFilters = observer(
             />
           </div>
 
-          <div className="flex justify-between w-full">
-            <div className="text-14 text-grey-blue">
-              {dtreeStore.selectedFilters.length} selected
+          <div className="flex items-center h-2/5 pt-3 overflow-y-auto">
+            <div className="mr-1">{minValue}</div>
+
+            <div className="flex justify-end h-8 w-1/2 pr-4 pl-px">
+              <InputNumber
+                value={leftDropValue}
+                onChange={(e: any) => setLeftDropValue(e.target.value)}
+                className="shadow-dark border-grey-blue"
+              />
+
+              <div className="flex items-center w-12 p-1 ml-2 shadow-dark rounded">
+                <div className="flex items-center justify-center w-3/5 h-full bg-blue-medium rounded text-blue-bright">
+                  {/* <Icon name="LessSign" className="ml-auto mt-auto" /> */}
+                  {leftDropType === 0 ? `<` : `≤`}
+                </div>
+
+                <ExpandContentButton
+                  isVisible={isVisibleLeftDrop}
+                  expandContent={toggleIsVisibleLeftDrop}
+                  isDropDown
+                />
+
+                {isVisibleLeftDrop && (
+                  <DropDownSelectSign
+                    close={toggleIsVisibleLeftDrop}
+                    setDropType={setLeftDropType}
+                  />
+                )}
+              </div>
             </div>
 
-            <div className="flex">
-              <div className="flex items-center">
-                <Checkbox checked={false} className="mr-1 cursor-pointer" />
-                <div className="text-14 font-normal">{t('ds.notMode')}</div>
+            <div className="w-4 h-px bg-grey-blue" />
+
+            <div className="flex justify-start h-8 w-1/2 pl-4 pr-px">
+              <div className="flex items-center w-12 p-1 mr-2 shadow-dark rounded">
+                <div className="flex items-center justify-center w-3/5 h-full bg-blue-medium rounded text-blue-bright">
+                  {/* <Icon name="LessEqualSign" className="ml-auto mt-auto" /> */}
+                  {rightDropType === 1 ? `≤` : `<`}
+                </div>
+
+                <ExpandContentButton
+                  isVisible={isVisibleRightDrop}
+                  expandContent={toggleIsVisibleRightDrop}
+                  isDropDown
+                />
+
+                {isVisibleRightDrop && (
+                  <DropDownSelectSign
+                    close={toggleIsVisibleRightDrop}
+                    setDropType={setRightDropType}
+                  />
+                )}
               </div>
 
-              <ModsDivider />
-
-              <div className="text-14 text-blue-bright">
-                {t('general.selectAll')}
-              </div>
-
-              <ModsDivider />
-
-              <div className="text-14 text-blue-bright">
-                {t('general.clearAll')}
-              </div>
+              <InputNumber
+                value={rightDropValue}
+                onChange={(e: any) => setRightDropValue(e.target.value)}
+                className="shadow-dark border-grey-blue"
+              />
             </div>
+            <div className="ml-1">{maxValue}</div>
           </div>
 
-          <div className="h-3/5 pt-3 overflow-y-auto">
-            {dtreeStore.selectedGroups[2] ? (
-              dtreeStore.selectedGroups[2].map(
-                (variant: any) =>
-                  variant[1] !== 0 && (
-                    <div
-                      key={variant}
-                      className="flex items-center mb-2 text-14"
-                    >
-                      <Checkbox
-                        checked={dtreeStore.selectedFilters.includes(
-                          variant[0],
-                        )}
-                        className="-mt-0.5 mr-1 cursor-pointer"
-                        onChange={e =>
-                          handleCheckGroupItem(e.target.checked, variant[0])
-                        }
-                      />
-
-                      <span className="text-black">{variant[0]}</span>
-
-                      <span className="text-grey-blue ml-2">
-                        {variant[1]} {t('dtree.variants')}
-                      </span>
-                    </div>
-                  ),
-              )
-            ) : (
-              <div className="flex justify-center items-center text-14 text-grey-blue">
-                There are no filters to show
-              </div>
-            )}
-          </div>
-
-          <div className="flex mt-1 justify-between items-center">
+          <div className="flex h-3/5 justify-between items-center">
             <div
               className="text-14 text-blue-bright font-medium cursor-pointer"
               onClick={handleModals}
@@ -204,3 +221,8 @@ export const ModalSelectFilters = observer(
     )
   },
 )
+{
+  /* <div className="flex justify-center items-center text-14 text-grey-blue">
+                There are no filters to show
+              </div> */
+}

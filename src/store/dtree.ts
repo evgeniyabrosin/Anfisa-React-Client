@@ -67,6 +67,7 @@ class DtreeStore {
   isModalSelectFilterVisible = false
   isModalEditFiltersVisible = false
   isModalJoinVisible = false
+  isModalSelectNumbersVisible = false
 
   groupNameToChange = ''
   groupIndexToChange = 0
@@ -208,6 +209,8 @@ class DtreeStore {
     })
 
     const result = await response.json()
+
+    console.log(result)
 
     runInAction(() => {
       this.dtreeStat = result
@@ -383,6 +386,14 @@ class DtreeStore {
 
   closeModalJoin() {
     this.isModalJoinVisible = false
+  }
+
+  openModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = true
+  }
+
+  closeModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = false
   }
 
   addStep(index: number) {

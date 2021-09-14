@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import dtree from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 import { getGreaterLessSign } from '../../../../../utils/getGreaterLessSign'
@@ -48,6 +49,14 @@ export const NextStepContentItem = observer(
     const currentGroup = dtreeStore.stepData[index].groups[currNo]
     const currentStep = dtreeStore.stepData[index]
 
+    const handleModals = () => {
+      currentGroup[0] === StepTypeEnum.Enum &&
+        dtreeStore.openModalEditFilters(group[1], index, currNo)
+      currentGroup[0] === StepTypeEnum.Numeric && dtree.openModalSelectNumbers()
+      currentGroup[0] === StepTypeEnum.Func &&
+        alert('This function is not ready yet')
+    }
+
     const getNumber = (data: any) => {
       let number = 0
 
@@ -56,6 +65,15 @@ export const NextStepContentItem = observer(
       })
 
       return number
+    }
+
+    const getStringFromProperty = (data: any) => {
+      const string =
+        Object.keys(data).length > 0
+          ? `${Object.keys(data)[0]} = ${Object.values(data)[0]}`
+          : ``
+
+      return string
     }
 
     return (
@@ -101,12 +119,14 @@ export const NextStepContentItem = observer(
               className="mr-2 -mt-px cursor-pointer"
               size={18}
               stroke={false}
-              onClick={() =>
-                dtreeStore.openModalEditFilters(group[1], index, currNo)
-              }
+              onClick={handleModals}
             />
 
-            <div className="text-14 font-medium mr-2">{`${group[1]}`}</div>
+            <div className="text-14 font-medium mr-2">
+              {`${group[1]}`}
+              {group.includes(StepTypeEnum.Func) &&
+                `(${getStringFromProperty(group[group.length - 1])})`}
+            </div>
 
             <div className="mt-1">
               <Switch isChecked={isChecked} onChange={toggleChecked} />

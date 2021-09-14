@@ -13,6 +13,7 @@ import { QueryBuilder } from './ui/query-builder/query-builder'
 import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
+import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 
 export const FilterPage = observer(
   (): ReactElement => {
@@ -38,6 +39,7 @@ export const FilterPage = observer(
         {dtreeStore.isModalAttributeVisible && <ModalSelectAttribute />}
         {dtreeStore.isModalSelectFilterVisible && <ModalSelectFilters />}
         {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
+        {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
 
         <div className="overflow-hidden">
           <FilterHeader />

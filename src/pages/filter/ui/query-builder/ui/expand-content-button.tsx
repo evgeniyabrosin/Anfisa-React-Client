@@ -34,8 +34,8 @@ export const ExpandContentButton = ({
         className={cn(
           'transform rotate-90 cursor-pointer hover:text-blue-bright',
           {
-            'transform rotate-90': !isVisible,
-            'transform -rotate-90': isVisible,
+            'transform rotate-90': isVisible,
+            'transform -rotate-90': !isVisible,
           },
         )}
       />
