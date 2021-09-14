@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@popperjs/core": "2.9.2",
+    "chart.js": "3.5.1",
     "date-fns": "2.21.1",
     "formik": "2.2.8",
     "lodash": "4.17.21",

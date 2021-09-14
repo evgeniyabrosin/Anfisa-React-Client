@@ -6,6 +6,7 @@ import { StatList } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
 
 type Props = {
   subGroupItem: StatList
@@ -70,24 +71,7 @@ export const QueryBuilderSubgroupItem = observer(
           !isModal &&
           subGroupItem.variants &&
           subGroupItem.variants.length > 0 && (
-            <div className="rounded-md bg-blue-secondary p-2">
-              {subGroupItem.variants &&
-                subGroupItem.variants.map(
-                  (variant: any) =>
-                    variant[1] !== 0 && (
-                      <div
-                        key={variant}
-                        className="flex items-center mb-2 text-14"
-                      >
-                        <span className="text-white">{variant[0]}</span>
-
-                        <span className="text-grey-blue ml-2">
-                          {variant[1]} {t('dtree.variants')}
-                        </span>
-                      </div>
-                    ),
-                )}
-            </div>
+            <QueryBuilderSubgroupChart variants={subGroupItem.variants} />
           )}
       </div>
     )
