@@ -10,7 +10,9 @@ export const splitDtreeCode = (code: string) => {
       ? element.slice(element.indexOf('#'), element.indexOf(lastCommentWord))
       : ''
 
-    const words = element.split(' ')
+    const changedElement = element.replace(/\r\n|\r|\n/g, ' ')
+
+    const words = changedElement.split(' ')
 
     const types: string[] = words.filter(
       word => word === 'or' || word === 'and',
