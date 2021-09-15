@@ -146,7 +146,11 @@ class DtreeStore {
 
     const splittedCode = this.splitDtreeCode()
 
+    console.log(splittedCode)
+
     const indexOfLabel: number[] = []
+
+    console.log('before:', toJS(dtreePointCounts))
 
     splittedCode.map((item: string, index: number) => {
       if (item.includes('label')) {
@@ -155,7 +159,10 @@ class DtreeStore {
     })
 
     if (indexOfLabel.length > 0) {
-      indexOfLabel.forEach((item: number) => dtreePointCounts.splice(item, 1))
+      indexOfLabel.map((item: number) => {
+        dtreePointCounts.splice(item * 2, 1)
+        console.log('after:', toJS(dtreePointCounts))
+      })
     }
 
     const stepCodes = splitDtreeCode(this.dtreeCode)
