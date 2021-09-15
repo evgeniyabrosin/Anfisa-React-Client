@@ -6,7 +6,7 @@ import dtreeStore from '@store/dtree'
 import { QueryBuilderSubgroupItem } from './query-builder-subgroup-item'
 import { ExpandContentButton } from './ui/expand-content-button'
 
-type Props = {
+interface IProps {
   groupName: string
   index: number
   isContentExpanded: boolean
@@ -21,7 +21,7 @@ export const QueryBuilderSubgroup = observer(
     isContentExpanded,
     changeIndicator,
     isModal,
-  }: Props) => {
+  }: IProps) => {
     const subGroupData = Object.values(dtreeStore.getQueryBuilder)
 
     const [isVisibleSubGroup, setIsVisibleSubGroup] = useState(true)

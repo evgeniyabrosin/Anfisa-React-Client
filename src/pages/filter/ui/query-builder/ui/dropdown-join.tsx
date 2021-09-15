@@ -6,14 +6,14 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Card } from '@ui/card'
 
-type Props = {
+interface IProps {
   close: () => void
   index: number
   currNo: number
 }
 
 export const DropDownJoin = observer(
-  ({ close, index, currNo }: Props): ReactElement => {
+  ({ close, index, currNo }: IProps): ReactElement => {
     const ref = useRef(null)
 
     useOutsideClick(ref, close)

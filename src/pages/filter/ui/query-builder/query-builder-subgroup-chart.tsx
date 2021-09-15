@@ -56,25 +56,54 @@ Chart.register(
 )
 
 type Props = {
-  variants: any[][]
+  variants?: any[][]
+  histogram?: any[]
 }
 
-export const QueryBuilderSubgroupChart: FC<Props> = ({ variants = [] }) => {
+export const QueryBuilderSubgroupChart: FC<Props> = ({
+  variants = [],
+  histogram,
+}) => {
   const ref = useRef<HTMLCanvasElement>(document.createElement('canvas'))
 
   useEffect(() => {
-    const titleList = variants.map((element: any[]) => element[0])
+    let titleList: any[], quantityList: any[], data: any
 
-    const quantityList = variants.map((element: any[]) => +element[1])
+    if (variants) {
+      titleList = variants.map((element: any[]) => element[0])
 
-    const data = {
-      labels: titleList,
-      datasets: [
-        {
-          data: quantityList,
-          backgroundColor: [theme('colors.blue.bright')],
-        },
-      ],
+      quantityList = variants.map((element: any[]) => +element[1])
+
+      data = {
+        labels: titleList,
+        datasets: [
+          {
+            data: quantityList,
+            backgroundColor: [theme('colors.blue.bright')],
+          },
+        ],
+      }
+    }
+
+    if (histogram) {
+      titleList = histogram[3].map(() => {
+        return ''
+      })
+
+      titleList[0] = histogram[1]
+      titleList[titleList.length - 1] = histogram[2]
+
+      quantityList = histogram[3]
+
+      data = {
+        labels: titleList,
+        datasets: [
+          {
+            data: quantityList,
+            backgroundColor: [theme('colors.blue.bright')],
+          },
+        ],
+      }
     }
 
     const config: ChartConfiguration<
@@ -111,7 +140,7 @@ export const QueryBuilderSubgroupChart: FC<Props> = ({ variants = [] }) => {
     }
 
     new Chart(ref.current, config)
-  }, [variants])
+  }, [variants, histogram])
 
   return (
     <div className="rounded-md bg-blue-secondary p-2 mr-5">

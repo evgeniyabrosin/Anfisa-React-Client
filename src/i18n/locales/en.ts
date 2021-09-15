@@ -135,5 +135,8 @@ export const en = {
     delete: 'Delete',
     addStepBefore: 'Add Step Before',
     addStepAfter: 'Add Step After',
+    upperBoundError: 'Upper bound is not correct',
+    lowerBoundError: 'Lower bound is not correct',
+    conditionError: 'Condition is not correct',
   },
 }

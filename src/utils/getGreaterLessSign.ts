@@ -7,15 +7,11 @@ export const getGreaterLessSign = (data: any[]) => {
     !item ? filterData.push('null') : filterData.push(item.toString())
   })
 
-  let sign: any
+  if (filterData.join() === 'null,true,null') return '<'
 
-  if (filterData.join() === 'null,true,null') sign = '<'
+  if (filterData.join() === 'null,null,true') return '>'
 
-  if (filterData.join() === 'null,null,true') sign = '>'
+  if (filterData.join() === 'null,true,true') return '<='
 
-  if (filterData.join() === 'null,true,true') sign = '<='
-
-  if (filterData.join() === 'true,null,true') sign = '>='
-
-  return sign
+  if (filterData.join() === 'true,null,true') return '>='
 }

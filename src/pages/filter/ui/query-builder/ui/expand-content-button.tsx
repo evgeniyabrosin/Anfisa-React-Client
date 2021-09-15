@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 import { Icon } from '@ui/icon'
 
-type Props = {
+interface IProps {
   isVisible: boolean
   isStep?: boolean
   isModal?: boolean
@@ -17,7 +17,7 @@ export const ExpandContentButton = ({
   isModal,
   isDropDown,
   expandContent,
-}: Props): ReactElement => {
+}: IProps): ReactElement => {
   return (
     <div
       className={cn('w-4 h-4', {
@@ -34,7 +34,6 @@ export const ExpandContentButton = ({
         className={cn(
           'transform rotate-90 cursor-pointer hover:text-blue-bright',
           {
-            'transform rotate-90': isVisible,
             'transform -rotate-90': !isVisible,
           },
         )}

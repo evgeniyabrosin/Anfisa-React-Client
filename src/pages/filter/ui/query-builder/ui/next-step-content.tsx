@@ -1,5 +1,4 @@
 import { ReactElement } from 'react'
-// import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -7,19 +6,9 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { NextStepContentItem } from './next-step-content-item'
 
-type Props = {
+interface IProps {
   index: number
 }
-
-const Container = styled.div`
-  height: auto;
-  width: 100%;
-  flex-direction: column;
-  display: flex;
-  align-items: start;
-  padding-top: 8px;
-  padding-bottom: 8px;
-`
 
 const Content = styled.div`
   display: flex;
@@ -34,11 +23,11 @@ const ContentEditor = styled.div`
 `
 
 export const NextStepContent = observer(
-  ({ index }: Props): ReactElement => {
+  ({ index }: IProps): ReactElement => {
     const groups = dtreeStore.stepData[index].groups
 
     return (
-      <Container>
+      <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
           <div className="flex flex-col w-2/3 h-auto justify-between">
             {groups && groups.length > 0 ? (
@@ -87,7 +76,7 @@ export const NextStepContent = observer(
         >
           {t('dtree.addAttribute')}
         </div>
-      </Container>
+      </div>
     )
   },
 )

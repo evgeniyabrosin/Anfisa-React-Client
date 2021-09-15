@@ -24,6 +24,9 @@ module.exports = {
     dirty: '#eae12f',
     secondary: '#fdd500',
   },
+  purple: {
+    bright: '#aa23fb',
+  },
   red: {
     secondary: '#dc3737',
   },

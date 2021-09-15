@@ -127,6 +127,7 @@ export interface StatList {
   'approx-modes': string[][]
   labels: any[]
   render: string
+  histogram?: any[][]
 }
 
 export type StatListType = StatList | Record<string, any>

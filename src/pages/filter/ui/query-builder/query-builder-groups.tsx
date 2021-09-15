@@ -36,7 +36,6 @@ export const QueryBuilderGroups = observer(
               text={t('dtree.addStep')}
               hasBackground={false}
               disabled={true}
-              // onClick={() => dtreeStore.addStep(index)}
             />
           </div>
 

@@ -6,7 +6,7 @@ import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
 
-type Props = {
+interface IProps {
   value: string
   onChange: (item: string) => void
   isFilter?: boolean
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const QueryBuilderSearch = observer(
-  ({ value, onChange, isFilter, isModal }: Props): ReactElement => {
+  ({ value, onChange, isFilter, isModal }: IProps): ReactElement => {
     const handleClick = (operation: string) => {
       if (isFilter || isModal) {
         operation === 'expand' && dtreeStore.expandFilterContent()

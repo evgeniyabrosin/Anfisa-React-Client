@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Card } from '@ui/card'
 
 export const ModalJoin = observer(
   (): ReactElement => {
@@ -20,7 +19,7 @@ export const ModalJoin = observer(
 
     return (
       <div ref={ref} className="top-10 absolute z-50 text-14 font-normal">
-        <Card className="top-8 w-28 flex flex-col justify-between px-0 py-0 bg-white rounded-md">
+        <div className="top-8 w-28 flex flex-col justify-between px-0 py-0 bg-white rounded-md shadow-dark">
           <div
             onClick={() => handleJoin('and', 'enum')}
             className="cursor-pointer rounded-br-none rounded-bl-none rounded-l-md rounded-r-md py-2 px-2 hover:bg-blue-bright hover:text-white"
@@ -34,7 +33,7 @@ export const ModalJoin = observer(
           >
             {t('dtree.joinByOr')}
           </div>
-        </Card>
+        </div>
       </div>
     )
   },

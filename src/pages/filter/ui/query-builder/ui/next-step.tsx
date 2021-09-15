@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useState } from 'react'
 import cn from 'classnames'
-// import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -23,13 +22,13 @@ const ResultsView = styled.div`
   align-items: center;
 `
 
-type Props = {
+interface IProps {
   index: number
   length: number
 }
 
 export const NextStep = observer(
-  ({ index, length }: Props): ReactElement => {
+  ({ index, length }: IProps): ReactElement => {
     const [isExpanded, setIsExpanded] = useState(true)
 
     const expandContent = () => {

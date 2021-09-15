@@ -1,17 +1,14 @@
 import { ReactElement, useState } from 'react'
 import cn from 'classnames'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { type } from 'os'
 import styled from 'styled-components'
 
 import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import dtree from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
-import { getGreaterLessSign } from '../../../../../utils/getGreaterLessSign'
+import { getGreaterLessSign } from '@utils/getGreaterLessSign'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
 
@@ -26,14 +23,14 @@ const JoinType = styled.div`
   height: 28px;
 `
 
-type Props = {
+interface IProps {
   group: any
   index: number
   currNo: number
 }
 
 export const NextStepContentItem = observer(
-  ({ group, index, currNo }: Props): ReactElement => {
+  ({ group, index, currNo }: IProps): ReactElement => {
     const [isChecked, setIsChecked] = useState(true)
 
     const toggleChecked = () => {
@@ -52,7 +49,8 @@ export const NextStepContentItem = observer(
     const handleModals = () => {
       currentGroup[0] === StepTypeEnum.Enum &&
         dtreeStore.openModalEditFilters(group[1], index, currNo)
-      currentGroup[0] === StepTypeEnum.Numeric && dtree.openModalSelectNumbers()
+      currentGroup[0] === StepTypeEnum.Numeric &&
+        alert('This function is not ready yet')
       currentGroup[0] === StepTypeEnum.Func &&
         alert('This function is not ready yet')
     }
@@ -109,14 +107,14 @@ export const NextStepContentItem = observer(
 
         <ContentControl
           className={cn(
-            'w-full h-auto flex rounded-md mr-2 pl-2 py-2',
+            'w-full h-auto flex rounded-md mr-2 pl-2 py-3',
             currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
           )}
         >
           <div className="flex items-center h-1/2 w-full">
             <Icon
               name="SettingsFat"
-              className="mr-2 -mt-px cursor-pointer"
+              className="mr-2 -mt-px cursor-pointer text-blue-bright"
               size={18}
               stroke={false}
               onClick={handleModals}

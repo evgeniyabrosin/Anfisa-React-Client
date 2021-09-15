@@ -1,7 +1,5 @@
 import { Fragment, ReactElement, useRef } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import { toJS } from 'mobx'
-// import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 

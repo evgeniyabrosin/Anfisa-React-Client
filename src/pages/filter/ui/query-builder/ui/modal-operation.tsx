@@ -4,22 +4,21 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Card } from '@ui/card'
 
-type Props = {
+interface IProps {
   hideModal: () => void
   index: number
 }
 
 export const ModalOperation = observer(
-  ({ hideModal, index }: Props): ReactElement => {
+  ({ hideModal, index }: IProps): ReactElement => {
     const ref = useRef(null)
 
     useOutsideClick(ref, hideModal)
 
     return (
       <div ref={ref}>
-        <Card className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer">
+        <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
           <div
             onClick={() => dtreeStore.insertStep('BEFORE', index)}
             className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
@@ -63,7 +62,7 @@ export const ModalOperation = observer(
           >
             {t('dtree.delete')}
           </div>
-        </Card>
+        </div>
       </div>
     )
   },

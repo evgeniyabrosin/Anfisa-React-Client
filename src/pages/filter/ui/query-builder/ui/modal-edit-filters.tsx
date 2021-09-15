@@ -31,7 +31,6 @@ const ModalContent = styled.div`
   background: white;
   transform: translate(-50%, -50%);
   border-radius: 0.5rem;
-  z-index: 1000;
 `
 
 export const ModalEditFilters = observer(
@@ -109,7 +108,7 @@ export const ModalEditFilters = observer(
       <ModalContainer>
         <ModalView className="bg-grey-blue" />
 
-        <ModalContent ref={ref} className="py-4 px-4">
+        <ModalContent ref={ref} className="py-4 px-4 z-10">
           <div className="flex w-full justify-between items-center font-medium mb-3">
             <div>{dtreeStore.selectedGroups[1]}</div>
 

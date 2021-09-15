@@ -22,7 +22,7 @@ const Step = styled.div`
   font-weight: 500;
 `
 
-type Props = {
+interface IProps {
   isExpanded: boolean
   expandContent: () => void
   index: number
@@ -30,7 +30,7 @@ type Props = {
 }
 
 export const NextStepHeader = observer(
-  ({ isExpanded, expandContent, index, isIncluded }: Props): ReactElement => {
+  ({ isExpanded, expandContent, index, isIncluded }: IProps): ReactElement => {
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
     const currentStep = dtreeStore.stepData[index]
@@ -44,7 +44,7 @@ export const NextStepHeader = observer(
           <div className="relative flex items-center">
             <Icon
               name="Options"
-              className="cursor-pointer"
+              className="cursor-pointer text-blue-bright"
               stroke={false}
               onClick={showModal}
             />

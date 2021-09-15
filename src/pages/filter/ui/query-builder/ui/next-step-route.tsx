@@ -4,6 +4,7 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
@@ -55,9 +56,15 @@ const ExcludeTurn = styled.div<{ isIncluded: boolean }>`
   width: 20px;
   height: 60px;
   border-bottom: 6.5px solid
-    ${props => (props.isIncluded ? '#19af00' : '#aa23fb')};
+    ${props =>
+      props.isIncluded
+        ? theme('colors.green.secondary')
+        : theme('colors.purple.bright')};
   border-right: 6.5px solid
-    ${props => (props.isIncluded ? '#19af00' : '#aa23fb')};
+    ${props =>
+      props.isIncluded
+        ? theme('colors.green.secondary')
+        : theme('colors.purple.bright')};
   border-bottom-right-radius: 20px;
 `
 
@@ -65,10 +72,13 @@ const ExcludeAmount = styled.div<{ isIncluded: boolean }>`
   width: auto;
   font-size: 13px;
   font-weight: 700;
-  color: ${props => (props.isIncluded ? '#19af00' : '#aa23fb')};
+  color: ${props =>
+    props.isIncluded
+      ? theme('colors.green.secondary')
+      : theme('colors.purple.bright')};
 `
 
-type Props = {
+interface IProps {
   isExpanded: boolean
   index: number
   length: number
@@ -80,8 +90,8 @@ function getNumberWithCommas(value: number) {
 }
 
 export const NextStepRoute = observer(
-  ({ isExpanded, index, length, isIncluded }: Props): ReactElement => {
-    const [allVariants, transcribedVariants] = get(
+  ({ isExpanded, index, length, isIncluded }: IProps): ReactElement => {
+    const [_allVariants, transcribedVariants] = get(
       datasetStore,
       'statAmount',
       [],
@@ -135,9 +145,12 @@ export const NextStepRoute = observer(
 
                 <div className="ml-1">
                   {isIncluded ? (
-                    <Icon name="ThreadAdd" className="transform rotate-45" />
+                    <Icon
+                      name="ThreadAdd"
+                      className="transform rotate-45 text-green-secondary"
+                    />
                   ) : (
-                    <Icon name="ThreadClose" />
+                    <Icon name="ThreadClose" className="text-purple-bright" />
                   )}
                 </div>
               </div>
