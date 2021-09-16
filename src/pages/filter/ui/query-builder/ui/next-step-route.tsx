@@ -102,7 +102,7 @@ export const NextStepRoute = observer(
     const currentStep = dtreeStore.stepData[index]
 
     return (
-      <div style={{ minHeight: 53 }} className="flex h-full w-full relative">
+      <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
           <div>
             {index === 0
@@ -131,29 +131,29 @@ export const NextStepRoute = observer(
 
           {isExpanded && currentStep.groups && (
             <Fragment>
-              <ExcludeTurn isIncluded={isIncluded} />
+              <ExcludeTurn isIncluded={isIncluded}>
+                <div
+                  className="absolute w-full right-4 flex justify-end items-center"
+                  style={{ top: 48 }}
+                >
+                  <ExcludeAmount isIncluded={isIncluded}>
+                    {isIncluded
+                      ? `+${currentStep.difference}`
+                      : `-${currentStep.difference}`}
+                  </ExcludeAmount>
 
-              <div
-                className="absolute w-full flex justify-end items-center mr-24 pr-4"
-                style={{ top: 77 }}
-              >
-                <ExcludeAmount isIncluded={isIncluded}>
-                  {isIncluded
-                    ? `+${currentStep.difference}`
-                    : `-${currentStep.difference}`}
-                </ExcludeAmount>
-
-                <div className="ml-1">
-                  {isIncluded ? (
-                    <Icon
-                      name="ThreadAdd"
-                      className="transform rotate-45 text-green-secondary"
-                    />
-                  ) : (
-                    <Icon name="ThreadClose" className="text-purple-bright" />
-                  )}
+                  <div className="ml-1">
+                    {isIncluded ? (
+                      <Icon
+                        name="ThreadAdd"
+                        className="transform rotate-45 text-green-secondary"
+                      />
+                    ) : (
+                      <Icon name="ThreadClose" className="text-purple-bright" />
+                    )}
+                  </div>
                 </div>
-              </div>
+              </ExcludeTurn>
             </Fragment>
           )}
 
