@@ -43,6 +43,7 @@ export const NextStep = observer(
       const code = dtreeStore.dtreeCode
       const indexForApi = dtreeStore.getLastStepIndexForApi()
 
+      dtreeStore.setCurrentStepIndexForApi(indexForApi)
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 

@@ -16,18 +16,29 @@ export const ModalOperation = observer(
 
     useOutsideClick(ref, hideModal)
 
+    const createStep = (stepIndex: number, position: 'BEFORE' | 'AFTER') => {
+      dtreeStore.insertStep(position, stepIndex)
+
+      const currentIndex = position === 'BEFORE' ? stepIndex : stepIndex + 1
+      const indexForApi = dtreeStore.getStepIndexForApi(currentIndex)
+      const code = dtreeStore.dtreeCode
+
+      dtreeStore.setCurrentStepIndexForApi(indexForApi)
+      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+    }
+
     return (
       <div ref={ref}>
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
           <div
-            onClick={() => dtreeStore.insertStep('BEFORE', index)}
+            onClick={() => createStep(index, 'BEFORE')}
             className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
           >
             {t('dtree.addStepBefore')}
           </div>
 
           <div
-            onClick={() => dtreeStore.insertStep('AFTER', index)}
+            onClick={() => createStep(index, 'AFTER')}
             className="font-normal py-2 px-2 hover:bg-grey-light"
           >
             {t('dtree.addStepAfter')}

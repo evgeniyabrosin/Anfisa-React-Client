@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -110,25 +110,6 @@ class FilterStore {
     if (isEmpty(this.selectedFilters[group])) {
       delete this.selectedFilters[group]
     }
-  }
-
-  async fetchDtreeSetAsync(dsName: string, code: string) {
-    const response = await fetch(getApiUrl(`dtree_set`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        ds: dsName,
-        code,
-      }),
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dtreeSet = result
-    })
   }
 
   async fetchDsInfoAsync() {

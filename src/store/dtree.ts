@@ -74,6 +74,7 @@ class DtreeStore {
   groupIndexToChange = 0
 
   currentStepIndex = 0
+  currentStepIndexForApi = 0
 
   requestData: IRequestData[] = []
 
@@ -258,24 +259,36 @@ class DtreeStore {
     return currentIndex
   }
 
-  async fetchDtreeSetAsync(subGroupName: string) {
-    this.setIsFiltersLoading()
+  getStepIndexForApi = (index: number) => {
+    const currentIndex = Number(this.dtreeStepIndices[index])
 
-    const currentCode = this.dtreeCode || 'return False'
+    return currentIndex
+  }
+  setCurrentStepIndexForApi = (index: number) => {
+    runInAction(() => {
+      this.currentStepIndexForApi = index
+    })
+  }
+
+  async fetchDtreeSetAsync(
+    subGroupName: string,
+    code = 'return False',
+    no = 0,
+  ) {
+    this.setIsFiltersLoading()
 
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      code: currentCode,
-    })
 
-    const currentIndex = this.getLastStepIndexForApi()
+      code,
+    })
 
     body.append(
       'instr',
       JSON.stringify([
         'POINT',
         'INSERT',
-        currentIndex,
+        no,
         ['enum', subGroupName, '', this.selectedFilters],
       ]),
     )

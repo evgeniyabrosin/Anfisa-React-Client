@@ -40,8 +40,8 @@ export const ModalSelectFilters = observer(
     const ref = useRef(null)
 
     useOutsideClick(ref, () => dtreeStore.closeModalSelectFilter())
-
-    const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
+    const index = dtreeStore.currentStepIndex
+    const currentGroup = dtreeStore.stepData[index].groups
 
     const handleCheckGroupItem = (checked: boolean, name: string) => {
       if (checked) {
@@ -52,7 +52,12 @@ export const ModalSelectFilters = observer(
     }
 
     const handleAddAttribute = (subGroupName: string) => {
-      dtreeStore.fetchDtreeSetAsync(subGroupName)
+      const code = dtreeStore.dtreeCode
+      const lastIndex = dtreeStore.getLastStepIndexForApi()
+
+      const indexForApi = lastIndex
+
+      dtreeStore.fetchDtreeSetAsync(subGroupName, code, indexForApi)
 
       dtreeStore.addStepData(subGroupName, 'enum')
       dtreeStore.closeModalSelectFilter()
@@ -65,7 +70,7 @@ export const ModalSelectFilters = observer(
 
     const handleModals = () => {
       dtreeStore.closeModalSelectFilter()
-      dtreeStore.openModalAttribute(dtreeStore.currentStepIndex)
+      dtreeStore.openModalAttribute(index)
       dtreeStore.resetSelectedFilters()
     }
 
