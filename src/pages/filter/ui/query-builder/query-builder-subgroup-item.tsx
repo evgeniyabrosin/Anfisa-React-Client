@@ -27,10 +27,13 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeStore.addSelectedGroup(filterGroup)
     }
 
-    const handleModal = () => {
+    const handleModal = (group: StatList) => {
       addSelectedGroup()
       dtreeStore.closeModalAttribute()
-      dtreeStore.openModalSelectFilter()
+
+      group.variants
+        ? dtreeStore.openModalSelectFilter()
+        : dtreeStore.openModalSelectNumbers()
     }
 
     return (
@@ -39,7 +42,7 @@ export const QueryBuilderSubgroupItem = observer(
           <div
             className="flex items-center cursor-pointer"
             onClick={() => {
-              isModal ? handleModal() : expandContent()
+              isModal ? handleModal(subGroupItem) : expandContent()
             }}
           >
             <Icon
@@ -47,7 +50,7 @@ export const QueryBuilderSubgroupItem = observer(
               stroke={false}
               className="-mt-0.5"
               onClick={() => {
-                isModal ? handleModal() : expandContent()
+                isModal ? handleModal(subGroupItem) : expandContent()
               }}
             />
 

@@ -69,6 +69,7 @@ class DtreeStore {
   isModalEditFiltersVisible = false
   isModalJoinVisible = false
   isModalEditNumbersVisible = false
+  isModalSelectNumbersVisible = false
 
   groupNameToChange = ''
   groupIndexToChange = 0
@@ -181,6 +182,7 @@ class DtreeStore {
         comment: stepCodes[index].comment,
       })
     })
+
     localStepData.map((step: IStepData, index: number) => {
       if (step.groups.length > 1) {
         step.groups.map((group: any[], currNo: number) => {
@@ -326,7 +328,7 @@ class DtreeStore {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
   }
 
-  addStepData(subGroupName: string, typeOfAttr: string) {
+  addStepData(subGroupName: string, typeOfAttr: string, numericData?: any[]) {
     const currentStep = this.stepData[this.currentStepIndex]
 
     if (!currentStep.groups || currentStep.groups.length === 0) {
@@ -337,20 +339,36 @@ class DtreeStore {
 
     currentStep.groups.map((item: string, index: number) => {
       if (item[1] === subGroupName) {
-        currentStep.groups[index][2] = this.selectedFilters
+        numericData
+          ? (currentStep.groups[index][
+              currentStep.groups[index].length
+            ] = numericData)
+          : (currentStep.groups[index][
+              currentStep.groups[index].length
+            ] = this.selectedFilters)
       }
     })
 
     this.selectedFilters = []
   }
 
-  joinStepData(typeOfJoin: string, typeOfAttr: string) {
+  joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
     const currentStep = this.stepData[this.currentStepIndex]
 
-    currentStep.groups = [
-      ...currentStep.groups,
-      [typeOfAttr, this.selectedGroups[1], typeOfJoin, this.selectedFilters],
-    ]
+    numericData
+      ? (currentStep.groups = [
+          ...currentStep.groups,
+          [typeOfAttr, this.selectedGroups[1], typeOfJoin, numericData],
+        ])
+      : (currentStep.groups = [
+          ...currentStep.groups,
+          [
+            typeOfAttr,
+            this.selectedGroups[1],
+            typeOfJoin,
+            this.selectedFilters,
+          ],
+        ])
 
     this.selectedFilters = []
   }
@@ -364,7 +382,7 @@ class DtreeStore {
     }
   }
 
-  updateStepData(indexOfCurrentGroup: number) {
+  updateEnumStepData(indexOfCurrentGroup: number) {
     const currentGroupLength = this.stepData[this.currentStepIndex].groups[
       indexOfCurrentGroup
     ].length
@@ -374,9 +392,23 @@ class DtreeStore {
     ] = this.selectedFilters
   }
 
-  replaceStepData(subGroupName: string, typeOfAttr: string) {
+  updateNumericStepData(indexOfCurrentGroup: number, numericData: any[]) {
+    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
+      indexOfCurrentGroup
+    ].length
+
+    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
+      currentGroupLength - 1
+    ] = numericData
+  }
+
+  replaceStepData(
+    subGroupName: string,
+    typeOfAttr: string,
+    numericData?: any[],
+  ) {
     this.stepData[this.currentStepIndex].groups = []
-    this.addStepData(subGroupName, typeOfAttr)
+    this.addStepData(subGroupName, typeOfAttr, numericData)
   }
 
   resetSelectedFilters() {
@@ -440,6 +472,14 @@ class DtreeStore {
 
   closeModalEditNumbers() {
     this.isModalEditNumbersVisible = false
+  }
+
+  openModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = true
+  }
+
+  closeModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = false
   }
 
   addStep(index: number) {

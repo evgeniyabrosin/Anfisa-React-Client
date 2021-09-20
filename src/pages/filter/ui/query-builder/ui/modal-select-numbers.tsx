@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ReactElement, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -12,6 +12,7 @@ import { Icon } from '@ui/icon'
 import { InputNumber } from '@ui/input-number'
 import { DropDownSelectSign } from './dropdown-select-sign'
 import { ExpandContentButton } from './expand-content-button'
+import { ModalJoin } from './modal-join'
 
 const ModalContainer = styled.div`
   display: block;
@@ -37,14 +38,13 @@ const ModalContent = styled.div`
   z-index: 10;
 `
 
-export const ModalEditNumbers = observer(
+export const ModalSelectNumbers = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalEditNumbers())
+    useOutsideClick(ref, () => dtreeStore.closeModalSelectNumbers())
 
-    const groupName = dtreeStore.groupNameToChange
-    const indexOfCurrentGroup = dtreeStore.groupIndexToChange
+    const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -52,7 +52,7 @@ export const ModalEditNumbers = observer(
 
     subGroups.map(subGroup => {
       subGroup.map((item, index) => {
-        if (item.name === groupName) {
+        if (item.name === dtreeStore.selectedGroups[1]) {
           attrData = subGroup[index]
         }
       })
@@ -61,39 +61,12 @@ export const ModalEditNumbers = observer(
     const minValue = attrData.min
     const maxValue = attrData.max
 
-    const currentGroupLength: number =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0].length
+    const [valueFrom, setValueFrom] = useState('')
+    const [valueTo, setValueTo] = useState('')
 
-    const currentValueFrom: number | undefined =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][0]
+    const [leftDropType, setLeftDropType] = useState<boolean>(false)
 
-    const currentLeftDropType: boolean =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][1]
-
-    const currentValueTo: number | undefined =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][2]
-
-    const currentRightDropType: boolean =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][3]
-
-    const [valueFrom, setValueFrom] = useState(currentValueFrom || '')
-    const [valueTo, setValueTo] = useState(currentValueTo || '')
-
-    const [leftDropType, setLeftDropType] = useState<boolean>(
-      currentValueFrom ? currentLeftDropType : false,
-    )
-
-    const [rightDropType, setRightDropType] = useState<boolean>(
-      currentValueTo ? currentRightDropType : true,
-    )
+    const [rightDropType, setRightDropType] = useState<boolean>(true)
 
     const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
     const [isVisibleRightDrop, setIsVisibleRightDrop] = useState(false)
@@ -128,15 +101,12 @@ export const ModalEditNumbers = observer(
       }
     }
 
-    const handleClose = () => {
-      dtreeStore.closeModalEditNumbers()
+    const handleModals = () => {
+      dtreeStore.closeModalSelectNumbers()
+      dtreeStore.openModalAttribute(dtreeStore.currentStepIndex)
     }
 
-    const handleSaveChanges = () => {
-      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
-        return
-      }
-
+    const getNumericData = () => {
       const numericData: any[] = [
         valueFrom || null,
         leftDropType,
@@ -150,8 +120,38 @@ export const ModalEditNumbers = observer(
         }
       })
 
-      dtreeStore.updateNumericStepData(indexOfCurrentGroup, numericData)
-      dtreeStore.closeModalEditNumbers()
+      return numericData
+    }
+
+    const handleReplace = (subGroupName: string) => {
+      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
+        return
+      }
+
+      const numericData = getNumericData()
+
+      dtreeStore.replaceStepData(subGroupName, 'numeric', numericData)
+      dtreeStore.closeModalSelectNumbers()
+    }
+
+    const handleAddAttribute = (subGroupName: string) => {
+      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
+        return
+      }
+
+      const numericData = getNumericData()
+
+      dtreeStore.addStepData(subGroupName, 'numeric', numericData)
+
+      dtreeStore.closeModalSelectNumbers()
+    }
+
+    const handleModalJoin = () => {
+      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
+        return
+      }
+
+      dtreeStore.openModalJoin()
     }
 
     useEffect(() => {
@@ -180,13 +180,13 @@ export const ModalEditNumbers = observer(
 
         <ModalContent ref={ref} className="py-4 px-4">
           <div className="flex w-full justify-between items-center font-medium mb-3">
-            <div>{groupName}</div>
+            <div>{dtreeStore.selectedGroups[1]}</div>
 
             <Icon
               name="Close"
               size={16}
               className="cursor-pointer"
-              onClick={handleClose}
+              onClick={() => dtreeStore.closeModalSelectNumbers()}
             />
           </div>
 
@@ -305,31 +305,55 @@ export const ModalEditNumbers = observer(
             )}
           </div>
 
-          <div className="flex h-1/5 justify-between items-center">
-            <Button
-              text={t('dtree.deleteInstruction')}
-              hasBackground={false}
-              className="text-black border-red-secondary"
-              onClick={() => {
-                dtreeStore.closeModalEditNumbers()
-                dtreeStore.removeStepData(indexOfCurrentGroup)
-              }}
-            />
+          <div className="flex mt-1 justify-between items-center">
+            <div
+              className="text-14 text-blue-bright font-medium cursor-pointer"
+              onClick={handleModals}
+            >
+              {t('dtree.backToAttribute')}
+            </div>
 
             <div className="flex">
               <Button
                 text={t('general.cancel')}
                 hasBackground={false}
                 className="mr-2 text-black hover:bg-blue-bright hover:text-white"
-                onClick={handleClose}
+                onClick={() => dtreeStore.closeModalSelectNumbers()}
               />
-              <div className="relative">
+              {currentGroup && currentGroup.length > 0 ? (
+                <Fragment>
+                  <Button
+                    disabled={!valueFrom && !valueTo}
+                    text={t('dtree.replace')}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => handleReplace(dtreeStore.selectedGroups[1])}
+                  />
+
+                  <div className="relative">
+                    <Button
+                      disabled={!valueFrom && !valueTo}
+                      text={t('dtree.addByJoin')}
+                      className="cursor-pointer rounded-full"
+                      onClick={handleModalJoin}
+                      icon={
+                        <Icon name="Arrow" className="transform -rotate-90" />
+                      }
+                    />
+
+                    {dtreeStore.isModalJoinVisible && (
+                      <ModalJoin numericData={getNumericData()} />
+                    )}
+                  </div>
+                </Fragment>
+              ) : (
                 <Button
+                  text={t('dtree.addNewAttribute')}
+                  onClick={() =>
+                    handleAddAttribute(dtreeStore.selectedGroups[1])
+                  }
                   disabled={!valueFrom && !valueTo}
-                  text={t('dtree.saveChanges')}
-                  onClick={handleSaveChanges}
                 />
-              </div>
+              )}
             </div>
           </div>
         </ModalContent>

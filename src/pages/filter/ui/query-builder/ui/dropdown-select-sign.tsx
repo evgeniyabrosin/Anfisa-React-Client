@@ -5,7 +5,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 
 interface IProps {
   close: () => void
-  setDropType: (value: number) => void
+  setDropType: (value: boolean) => void
 }
 
 export const DropDownSelectSign = observer(
@@ -15,12 +15,12 @@ export const DropDownSelectSign = observer(
     useOutsideClick(ref, close)
 
     const handleClick = (type = 'less') => {
-      type === 'less' ? setDropType(0) : setDropType(1)
+      type === 'less' ? setDropType(false) : setDropType(true)
       close()
     }
 
     return (
-      <div ref={ref} className="top-32 absolute z-50">
+      <div ref={ref} className="top-16 absolute z-50">
         <div className="w-12 flex flex-col justify-between px-0 py-0 bg-white rounded-md shadow-dark">
           <div
             onClick={() => handleClick()}

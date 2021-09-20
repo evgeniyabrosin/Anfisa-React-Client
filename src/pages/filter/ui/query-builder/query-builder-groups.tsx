@@ -39,7 +39,7 @@ export const QueryBuilderGroups = observer(
             />
           </div>
 
-          <div className="h-full overflow-y-scroll">
+          <div className="h-full overflow-y-auto">
             {groupNames.map((groupName, index) => (
               <QueryBuilderSubgroup
                 groupName={groupName}

@@ -78,7 +78,7 @@ export const ModalEditFilters = observer(
     }
 
     const handleSaveChanges = () => {
-      dtreeStore.updateStepData(indexOfCurrentGroup)
+      dtreeStore.updateEnumStepData(indexOfCurrentGroup)
       dtreeStore.closeModalEditFilters()
     }
 
@@ -175,7 +175,10 @@ export const ModalEditFilters = observer(
               text={t('dtree.deleteInstruction')}
               hasBackground={false}
               className="text-black border-red-secondary"
-              onClick={() => dtreeStore.removeStepData(indexOfCurrentGroup)}
+              onClick={() => {
+                dtreeStore.closeModalEditFilters()
+                dtreeStore.removeStepData(indexOfCurrentGroup)
+              }}
             />
 
             <div className="flex">

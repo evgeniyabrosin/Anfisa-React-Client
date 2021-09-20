@@ -14,6 +14,7 @@ import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
 import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
+import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 
 export const FilterPage = observer(
   (): ReactElement => {
@@ -40,6 +41,7 @@ export const FilterPage = observer(
         {dtreeStore.isModalSelectFilterVisible && <ModalSelectFilters />}
         {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
         {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
+        {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
 
         <div className="overflow-hidden">
           <FilterHeader />

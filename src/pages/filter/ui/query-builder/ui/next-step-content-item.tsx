@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
-import { getGreaterLessSign } from '@utils/getGreaterLessSign'
+import { getExpression } from '@utils/getExpression'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
 
@@ -50,19 +50,9 @@ export const NextStepContentItem = observer(
       currentGroup[0] === StepTypeEnum.Enum &&
         dtreeStore.openModalEditFilters(group[1], index, currNo)
       currentGroup[0] === StepTypeEnum.Numeric &&
-        alert('This function is not ready yet')
+        dtreeStore.openModalEditNumbers(group[1], index, currNo)
       currentGroup[0] === StepTypeEnum.Func &&
         alert('This function is not ready yet')
-    }
-
-    const getNumber = (data: any) => {
-      let number = 0
-
-      data.map((item: any) => {
-        if (typeof item === 'number') number = item
-      })
-
-      return number
     }
 
     const getStringFromProperty = (data: any) => {
@@ -140,8 +130,7 @@ export const NextStepContentItem = observer(
           {group.includes(StepTypeEnum.Numeric) && (
             <div className="flex text-14 font-normal h-full flex-wrap">
               <div key={Math.random()}>
-                {getGreaterLessSign(group[group.length - 1])}{' '}
-                {getNumber(group[group.length - 1])}
+                {getExpression(group[group.length - 1], group[1])}
               </div>
             </div>
           )}
