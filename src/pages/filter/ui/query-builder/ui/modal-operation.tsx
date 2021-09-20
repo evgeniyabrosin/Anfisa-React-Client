@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { deleteAttributeFromStep } from '@utils/deleteAttributeFromStep'
 
 interface IProps {
   hideModal: () => void
@@ -16,15 +17,22 @@ export const ModalOperation = observer(
 
     useOutsideClick(ref, hideModal)
 
+    const code = dtreeStore.dtreeCode
+
     const createStep = (stepIndex: number, position: 'BEFORE' | 'AFTER') => {
       dtreeStore.insertStep(position, stepIndex)
 
       const currentIndex = position === 'BEFORE' ? stepIndex : stepIndex + 1
       const indexForApi = dtreeStore.getStepIndexForApi(currentIndex)
-      const code = dtreeStore.dtreeCode
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+    }
+
+    const deleteStep = (stepIndex: number) => {
+      deleteAttributeFromStep(stepIndex, 'POINT')
+
+      hideModal()
     }
 
     return (
@@ -66,8 +74,7 @@ export const ModalOperation = observer(
 
           <div
             onClick={() => {
-              dtreeStore.removeStep(index)
-              hideModal()
+              deleteStep(index)
             }}
             className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
           >

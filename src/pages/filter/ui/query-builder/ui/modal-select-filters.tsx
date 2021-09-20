@@ -10,6 +10,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { ModalJoin } from './modal-join'
 import { ModsDivider } from './mods-divider'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 
 const ModalContainer = styled.div`
   display: block;
@@ -52,12 +53,7 @@ export const ModalSelectFilters = observer(
     }
 
     const handleAddAttribute = (subGroupName: string) => {
-      const code = dtreeStore.dtreeCode
-      const lastIndex = dtreeStore.getLastStepIndexForApi()
-
-      const indexForApi = lastIndex
-
-      dtreeStore.fetchDtreeSetAsync(subGroupName, code, indexForApi)
+      addAttributeToStep(subGroupName, 'POINT', 'INSERT')
 
       dtreeStore.addStepData(subGroupName, 'enum')
       dtreeStore.closeModalSelectFilter()

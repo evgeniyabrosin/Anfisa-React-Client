@@ -272,28 +272,8 @@ class DtreeStore {
     })
   }
 
-  async fetchDtreeSetAsync(
-    subGroupName: string,
-    code = 'return False',
-    no = 0,
-  ) {
+  async fetchDtreeSetAsync(body: URLSearchParams) {
     this.setIsFiltersLoading()
-
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-
-      code,
-    })
-
-    body.append(
-      'instr',
-      JSON.stringify([
-        'POINT',
-        'INSERT',
-        no,
-        ['enum', subGroupName, '', this.selectedFilters],
-      ]),
-    )
 
     const response = await fetch(getApiUrl(`dtree_set`), {
       method: 'POST',
