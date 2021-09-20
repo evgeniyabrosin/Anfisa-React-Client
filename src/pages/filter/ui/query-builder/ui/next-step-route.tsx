@@ -112,7 +112,7 @@ export const NextStepRoute = observer(
 
           {length - index < 2 && (
             <div style={{ marginBottom: -3 }}>
-              {(finishFilterCounts &&
+              {(finishFilterCounts >= 0 &&
                 getNumberWithCommas(finishFilterCounts)) ||
                 (transcribedVariants &&
                   getNumberWithCommas(transcribedVariants))}

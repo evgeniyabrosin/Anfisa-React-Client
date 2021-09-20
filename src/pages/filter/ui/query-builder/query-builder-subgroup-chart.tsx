@@ -127,7 +127,7 @@ export const QueryBuilderSubgroupChart: FC<Props> = ({
             type: 'logarithmic',
           },
           xAxes: {
-            display: true,
+            display: false,
             grid: {
               borderWidth: 1,
               borderColor: theme('colors.grey.blue'),

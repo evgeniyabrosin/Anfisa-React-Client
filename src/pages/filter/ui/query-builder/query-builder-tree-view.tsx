@@ -8,13 +8,19 @@ export const QueryBuilderTreeView = observer(
   (): ReactElement => {
     return (
       <div id="parent" className="flex flex-col overflow-auto h-full">
-        {dtreeStore.stepData.map((_item, index: number) => (
-          <NextStep
-            key={Math.random()}
-            index={index}
-            length={dtreeStore.stepData.length}
-          />
-        ))}
+        {dtreeStore.stepData.map((element, index: number) => {
+          const key = element.groups
+            ? JSON.stringify(element.groups) + element.finishFilterCounts
+            : index
+
+          return (
+            <NextStep
+              key={key}
+              index={index}
+              length={dtreeStore.stepData.length}
+            />
+          )
+        })}
       </div>
     )
   },

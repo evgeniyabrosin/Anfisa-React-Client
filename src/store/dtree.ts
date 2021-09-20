@@ -38,6 +38,7 @@ class DtreeStore {
 
   selectedGroups: any = []
   selectedFilters: string[] = []
+  dtreeStepIndices: string[] = []
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
@@ -162,10 +163,10 @@ class DtreeStore {
 
     const stepCodes = splitDtreeCode(this.dtreeCode)
 
-    this.stepData = []
+    const localStepData: IStepData[] = []
 
     dtreeSteps.map((item: any, index: number) => {
-      this.stepData.push({
+      localStepData.push({
         step: index + 1,
         groups: item,
         excluded: !stepCodes[index].result,
@@ -179,7 +180,7 @@ class DtreeStore {
         comment: stepCodes[index].comment,
       })
     })
-    this.stepData.map((step: IStepData, index: number) => {
+    localStepData.map((step: IStepData, index: number) => {
       if (step.groups.length > 1) {
         step.groups.map((group: any[], currNo: number) => {
           currNo !== 0 &&
@@ -188,10 +189,15 @@ class DtreeStore {
       }
     })
 
-    this.stepData.map((step: IStepData) => {
+    localStepData.map((step: IStepData) => {
       step.groups.map((group: any[], index: number) => {
         step.groups[index] = group.filter((elem: any[]) => elem)
       })
+    })
+
+    runInAction(() => {
+      this.stepData = [...localStepData]
+      this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
     })
   }
 
@@ -242,35 +248,56 @@ class DtreeStore {
     return groups
   }
 
-  async fetchDtreeSetAsync(
-    subGroupName: string,
-    filterName: string,
-    no: number,
-  ) {
+  getLastStepIndexForApi = () => {
+    const lastIndexValue = Number(
+      this.dtreeStepIndices[this.currentStepIndex - 1],
+    )
+
+    const currentIndex = lastIndexValue + 2
+
+    return currentIndex
+  }
+
+  async fetchDtreeSetAsync(subGroupName: string) {
     this.setIsFiltersLoading()
+
+    const currentCode = this.dtreeCode || 'return False'
 
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      code: '',
+      code: currentCode,
     })
+
+    const currentIndex = this.getLastStepIndexForApi()
 
     body.append(
       'instr',
       JSON.stringify([
         'POINT',
         'INSERT',
-        no,
-        ['enum', subGroupName, '', filterName],
+        currentIndex,
+        ['enum', subGroupName, '', this.selectedFilters],
       ]),
     )
 
-    await fetch(getApiUrl(`dtree_set`), {
+    const response = await fetch(getApiUrl(`dtree_set`), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body,
     })
+
+    const result = await response.json()
+
+    const newCode = result.code
+
+    runInAction(() => {
+      this.dtree = result
+      this.dtreeCode = newCode
+    })
+
+    this.drawDecesionTree()
   }
 
   addSelectedGroup(group: any) {

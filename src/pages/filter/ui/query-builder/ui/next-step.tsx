@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { NextStepContent } from './next-step-content'
@@ -37,6 +38,14 @@ export const NextStep = observer(
 
     const currentStep = dtreeStore.stepData[index]
 
+    const createStep = (stepIndex: number) => {
+      dtreeStore.addStep(stepIndex)
+      const code = dtreeStore.dtreeCode
+      const indexForApi = dtreeStore.getLastStepIndexForApi()
+
+      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+    }
+
     return (
       <Fragment>
         <div className="flex flex-col mb-2">
@@ -68,9 +77,9 @@ export const NextStep = observer(
               {length - index < 2 && (
                 <Button
                   disabled={!dtreeStore.stepData[index].groups}
-                  text="+ Add Step"
+                  text={t('dtree.addStep')}
                   className="absolute -bottom-9 z-1000 left-0"
-                  onClick={() => dtreeStore.addStep(index)}
+                  onClick={() => createStep(index)}
                 />
               )}
             </ResultsView>

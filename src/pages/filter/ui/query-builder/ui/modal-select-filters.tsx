@@ -52,6 +52,8 @@ export const ModalSelectFilters = observer(
     }
 
     const handleAddAttribute = (subGroupName: string) => {
+      dtreeStore.fetchDtreeSetAsync(subGroupName)
+
       dtreeStore.addStepData(subGroupName, 'enum')
       dtreeStore.closeModalSelectFilter()
     }
