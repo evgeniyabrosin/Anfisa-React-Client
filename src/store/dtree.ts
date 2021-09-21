@@ -591,9 +591,6 @@ class DtreeStore {
 
   toggleIsExcluded(index: number) {
     this.stepData[index].excluded = !this.stepData[index].excluded
-
-    // this.stepData[index].excluded && this.updateStatListAsync(index, '2')
-    // !this.stepData[index].excluded && this.updateStatListAsync(index, '1')
   }
 }
 export default new DtreeStore()

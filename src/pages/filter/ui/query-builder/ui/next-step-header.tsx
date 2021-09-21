@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
+import { changeStep } from '@utils/changeStep'
 import { ExpandContentButton } from './expand-content-button'
 import { ModalOperation } from './modal-operation'
 import { StepDivider } from './step-divider'
@@ -34,6 +35,15 @@ export const NextStepHeader = observer(
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
     const currentStep = dtreeStore.stepData[index]
+
+    const toggleExclude = (
+      stepIndex: number,
+      action: 'BOOL-TRUE' | 'BOOL-FALSE',
+    ) => {
+      dtreeStore.toggleIsExcluded(stepIndex)
+      changeStep(stepIndex, action)
+      // TODO: change true/false in console
+    }
 
     return (
       <Fragment>
@@ -75,7 +85,7 @@ export const NextStepHeader = observer(
               <div className="flex items-center mr-3">
                 <RadioButton
                   isChecked={!currentStep.excluded}
-                  onChange={() => dtreeStore.toggleIsExcluded(index)}
+                  onChange={() => toggleExclude(index, 'BOOL-TRUE')}
                 />
 
                 <Operation className="ml-1">{t('dtree.include')}</Operation>
@@ -84,7 +94,7 @@ export const NextStepHeader = observer(
               <div className="flex items-center">
                 <RadioButton
                   isChecked={currentStep.excluded}
-                  onChange={() => dtreeStore.toggleIsExcluded(index)}
+                  onChange={() => toggleExclude(index, 'BOOL-FALSE')}
                 />
 
                 <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>

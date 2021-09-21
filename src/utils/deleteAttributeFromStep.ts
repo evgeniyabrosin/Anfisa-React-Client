@@ -5,7 +5,7 @@ type ActionType = 'POINT' | 'ATOM'
 
 export const deleteAttributeFromStep = (
   index: number,
-  action: ActionType = 'POINT',
+  action: ActionType = 'ATOM',
   locationIndex = 0,
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'

@@ -10,7 +10,9 @@ export const QueryBuilderTreeView = observer(
       <div id="parent" className="flex flex-col overflow-auto h-full">
         {dtreeStore.stepData.map((element, index: number) => {
           const key = element.groups
-            ? JSON.stringify(element.groups) + element.finishFilterCounts
+            ? JSON.stringify(element.groups) +
+              element.finishFilterCounts +
+              index
             : index
 
           return (

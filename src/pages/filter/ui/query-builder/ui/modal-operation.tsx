@@ -1,10 +1,11 @@
-import { ReactElement, useRef } from 'react'
+import { Fragment, ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ChangeStepActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { deleteAttributeFromStep } from '@utils/deleteAttributeFromStep'
+import { changeStep } from '@utils/changeStep'
 
 interface IProps {
   hideModal: () => void
@@ -29,12 +30,14 @@ export const ModalOperation = observer(
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 
-    const deleteStep = (stepIndex: number) => {
-      deleteAttributeFromStep(stepIndex, 'POINT')
-
+    const sendChange = (stepIndex: number, action: ChangeStepActionType) => {
+      changeStep(stepIndex, action)
       hideModal()
     }
 
+    const isFirstelement = index === 0
+
+    // TODO: add split
     return (
       <div ref={ref}>
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
@@ -53,10 +56,7 @@ export const ModalOperation = observer(
           </div>
 
           <div
-            onClick={() => {
-              dtreeStore.duplicateStep(index)
-              hideModal()
-            }}
+            onClick={() => sendChange(index, 'DUPLICATE')}
             className="font-normal py-2 px-2 hover:bg-grey-light"
           >
             {t('dtree.duplicate')}
@@ -64,8 +64,7 @@ export const ModalOperation = observer(
 
           <div
             onClick={() => {
-              dtreeStore.negateStep(index)
-              hideModal()
+              sendChange(index, 'NEGATE')
             }}
             className="font-normal py-2 px-2 hover:bg-grey-light"
           >
@@ -74,12 +73,33 @@ export const ModalOperation = observer(
 
           <div
             onClick={() => {
-              deleteStep(index)
+              sendChange(index, 'DELETE')
             }}
             className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
           >
             {t('dtree.delete')}
           </div>
+          {/* UI is not yet ready for such functionality */}
+          {/* {!isFirstelement && (
+            <Fragment>
+              <div
+                onClick={() => {
+                  sendChange(index, 'JOIN-AND')
+                }}
+                className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+              >
+                {t('dtree.joinByAnd')}
+              </div>
+              <div
+                onClick={() => {
+                  sendChange(index, 'JOIN-OR')
+                }}
+                className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+              >
+                {t('dtree.joinByOr')}
+              </div>
+            </Fragment>
+          )} */}
         </div>
       </div>
     )

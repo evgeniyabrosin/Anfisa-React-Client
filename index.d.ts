@@ -258,3 +258,13 @@ export interface DsStatI {
 }
 
 export type DtreeStatType = DtreeStatI | Record<string, any>
+
+export type ChangeStepActionType =
+  | 'DUPLICATE'
+  | 'DELETE'
+  | 'NEGATE'
+  | 'JOIN-AND'
+  | 'JOIN-OR'
+  | 'SPLIT'
+  | 'BOOL-TRUE'
+  | 'BOOL-FALSE'
