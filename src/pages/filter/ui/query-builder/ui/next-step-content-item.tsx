@@ -3,13 +3,12 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
-import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
-import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
@@ -23,13 +22,6 @@ const ContentControl = styled.div`
 const JoinType = styled.div`
   width: 34px;
   height: 28px;
-`
-
-const NegateWrapper = styled(JoinType)`
-  padding: 2px 6px;
-  margin: 2px 4px;
-  color: ${theme('colors.red.light')};
-  background-color: ${theme('colors.red.lighter')};
 `
 
 interface IProps {
@@ -52,31 +44,36 @@ export const NextStepContentItem = observer(
       setIsVisible(prev => !prev)
     }
 
-    const currentGroup = dtreeStore.stepData[index].groups[currNo]
     const currentStep = dtreeStore.stepData[index]
 
     const handleModals = () => {
-      currentGroup[0] === StepTypeEnum.Enum &&
+      group[0] === StepTypeEnum.Enum &&
         dtreeStore.openModalEditFilters(group[1], index, currNo)
-      currentGroup[0] === StepTypeEnum.Numeric &&
+
+      group[0] === StepTypeEnum.Numeric &&
         dtreeStore.openModalEditNumbers(group[1], index, currNo)
-      currentGroup[0] === StepTypeEnum.Func &&
-        alert('This function is not ready yet')
+
+      if (group[0] === StepTypeEnum.Func) {
+        group[1] === FuncStepTypesEnum.InheritanceMode &&
+          dtreeStore.openModalEditInheritanceModeFunc(group[1], index, currNo)
+
+        group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
+          dtreeStore.openModalEditCustomInheritanceModeFunc(
+            group[1],
+            index,
+            currNo,
+          )
+
+        group[1] === FuncStepTypesEnum.CompoundHet &&
+          alert('This function is not ready yet')
+
+        group[1] === FuncStepTypesEnum.CompoundRequest &&
+          alert('This function is not ready yet')
+
+        group[1] === FuncStepTypesEnum.GeneRegion &&
+          alert('This function is not ready yet')
+      }
     }
-
-    const getStringFromProperty = (data: any) => {
-      const string =
-        Object.keys(data).length > 0
-          ? `${Object.keys(data)[0]} = ${Object.values(data)[0]}`
-          : ``
-
-      return string
-    }
-
-    const isNumeric = currentGroup[0] === 'numeric'
-
-    const isNegateAttribute = currentGroup[2] === 'NOT'
-    const isNegateStep = currentStep.negate
 
     return (
       <div className="flex flex-col h-auto">
@@ -89,8 +86,8 @@ export const NextStepContentItem = observer(
           >
             <div className="mr-1">{t('dtree.joinBy')}</div>
             <JoinType className="flex items-center justify-center bg-orange-light text-orange-bright">
-              {currentGroup.includes('or') && 'OR'}
-              {currentGroup.includes('and') && 'AND'}
+              {group.includes('or') && 'OR'}
+              {group.includes('and') && 'AND'}
             </JoinType>
 
             <ExpandContentButton
@@ -115,72 +112,49 @@ export const NextStepContentItem = observer(
             currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
           )}
         >
-          <div className="flex items-center h-1/2 w-full">
+          <div className="flex items-center h-auto w-full pr-2">
             <Icon
               name="SettingsFat"
-              className="mr-2 -mt-px cursor-pointer text-blue-bright"
+              className="mr-1 cursor-pointer text-blue-bright"
               size={18}
               stroke={false}
               onClick={handleModals}
             />
-            {isNegateStep && (
-              <NegateWrapper className="flex items-center justify-center">
-                NOT
-              </NegateWrapper>
-            )}
 
-            <div className="text-14 font-medium mr-2">
+            <div className="flex items-center text-14 font-medium mr-2">
+              {group.includes(StepTypeEnum.Func) && (
+                <div
+                  style={{ width: 18, height: 18 }}
+                  className={cn(
+                    'flex items-center justify-center mr-1 text-12 shadow-dark rounded-sm font-mono',
+                    {
+                      'text-green-secondary bg-green-light': !currentStep.isActive,
+                      'text-blue-bright bg-blue-medium': currentStep.isActive,
+                    },
+                  )}
+                >
+                  {t('dtree.fn')}
+                </div>
+              )}
               {`${group[1]}`}
-              {group.includes(StepTypeEnum.Func) &&
-                `(${getStringFromProperty(group[group.length - 1])})`}
             </div>
-            <div className="mt-1">
+
+            <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div>
-            {!isNumeric && (
-              <label className="pl-4">
-                <input
-                  className="mr-1"
-                  type="checkbox"
-                  checked={isNegateAttribute}
-                  onChange={() =>
-                    editStepAttribute(index, currNo, isNegateAttribute)
-                  }
-                />
-                {t('dtree.negate')}
-              </label>
-            )}
           </div>
 
-          <div className="flex">
-            {isNegateAttribute && (
-              <NegateWrapper className="flex items-center justify-center">
-                NOT
-              </NegateWrapper>
-            )}
-            <div>
-              {group.includes(StepTypeEnum.Enum) && (
-                <div className="flex flex-col text-14 font-normal h-full flex-wrap">
-                  {group[group.length - 1].map((item: any[]) => (
-                    <div key={JSON.stringify(item) ?? index}>{item}</div>
-                  ))}
-                </div>
+          <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
+            {group[0] === StepTypeEnum.Numeric &&
+              getExpression(
+                group.find((elem: any) => Array.isArray(elem)),
+                group[1],
               )}
-              {group.includes(StepTypeEnum.Numeric) && (
-                <div className="flex text-14 font-normal h-full flex-wrap items-center">
-                  <div>{getExpression(group[group.length - 1], group[1])}</div>
-                </div>
-              )}
-              {group.includes(StepTypeEnum.Func) && (
-                <div className="flex text-14 font-normal h-full flex-wrap items-center">
-                  {group[group.length - 2].map(
-                    (item: any[], localIndex: number) => (
-                      <div key={JSON.stringify(item) ?? localIndex}>{item}</div>
-                    ),
-                  )}
-                </div>
-              )}
-            </div>
+
+            {group[0] !== StepTypeEnum.Numeric &&
+              group
+                .find((elem: any) => Array.isArray(elem))
+                .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
           </div>
         </ContentControl>
       </div>

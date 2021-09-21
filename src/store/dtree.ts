@@ -33,6 +33,9 @@ class DtreeStore {
   dtree: any
   dtreeCode = ''
 
+  statFuncData: any = []
+  scenario: any
+
   dtreeStat: DtreeStatType = {}
   statAmount: number[] = []
 
@@ -71,6 +74,9 @@ class DtreeStore {
   isModalEditNumbersVisible = false
   isModalSelectNumbersVisible = false
 
+  isModalEditInheritanceModeFuncVisible = false
+  isModalEditCustomInheritanceModeFuncVisible = false
+
   groupNameToChange = ''
   groupIndexToChange = 0
 
@@ -82,6 +88,8 @@ class DtreeStore {
   constructor() {
     makeAutoObservable(this)
   }
+
+  // functions to load / draw / edit decision trees
 
   async fetchDtreeListAsync() {
     const body = new URLSearchParams({
@@ -296,172 +304,36 @@ class DtreeStore {
     this.drawDecesionTree()
   }
 
-  addSelectedGroup(group: any) {
-    this.selectedGroups = []
-    this.selectedGroups = group
-  }
+  async fetchStatFuncAsync(subGroupName: string, param: string) {
+    this.setIsFiltersLoading()
 
-  addSelectedFilter(filter: string) {
-    this.selectedFilters = [...this.selectedFilters, filter]
-  }
-
-  removeSelectedFilter(filter: string) {
-    this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
-  }
-
-  addStepData(subGroupName: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    if (!currentStep.groups || currentStep.groups.length === 0) {
-      currentStep.groups = [[typeOfAttr, this.selectedGroups[1]]]
-    } else if (!currentStep.groups.join().includes(this.selectedGroups[1])) {
-      currentStep.groups = [...currentStep.groups, this.selectedGroups]
-    }
-
-    currentStep.groups.map((item: string, index: number) => {
-      if (item[1] === subGroupName) {
-        numericData
-          ? (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = numericData)
-          : (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = this.selectedFilters)
-      }
+    const body = new URLSearchParams({
+      ds: datasetStore.datasetName,
+      no: this.currentStepIndexForApi.toString(),
+      code: this.dtreeCode,
+      rq_id: Math.random().toString(),
+      unit: subGroupName,
+      param,
     })
 
-    this.selectedFilters = []
+    const response = await fetch(getApiUrl(`statfunc`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.statFuncData = result
+
+      if (result.scenario) this.scenario = result.scenario
+    })
   }
 
-  joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    numericData
-      ? (currentStep.groups = [
-          ...currentStep.groups,
-          [typeOfAttr, this.selectedGroups[1], typeOfJoin, numericData],
-        ])
-      : (currentStep.groups = [
-          ...currentStep.groups,
-          [
-            typeOfAttr,
-            this.selectedGroups[1],
-            typeOfJoin,
-            this.selectedFilters,
-          ],
-        ])
-
-    this.selectedFilters = []
-  }
-
-  removeStepData(indexOfCurrentGroup: number) {
-    this.stepData[this.currentStepIndex].groups.splice(indexOfCurrentGroup, 1)
-    this.isModalEditFiltersVisible = false
-
-    if (this.stepData[0].groups[0] && this.stepData[0].groups[0][3]) {
-      this.stepData[0].groups[0].pop()
-    }
-  }
-
-  updateEnumStepData(indexOfCurrentGroup: number) {
-    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
-      indexOfCurrentGroup
-    ].length
-
-    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
-      currentGroupLength - 1
-    ] = this.selectedFilters
-  }
-
-  updateNumericStepData(indexOfCurrentGroup: number, numericData: any[]) {
-    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
-      indexOfCurrentGroup
-    ].length
-
-    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
-      currentGroupLength - 1
-    ] = numericData
-  }
-
-  replaceStepData(
-    subGroupName: string,
-    typeOfAttr: string,
-    numericData?: any[],
-  ) {
-    this.stepData[this.currentStepIndex].groups = []
-    this.addStepData(subGroupName, typeOfAttr, numericData)
-  }
-
-  resetSelectedFilters() {
-    this.selectedFilters = []
-  }
-
-  openModalAttribute(index: number) {
-    this.isModalAttributeVisible = true
-
-    this.currentStepIndex = index
-  }
-
-  closeModalAttribute() {
-    this.isModalAttributeVisible = false
-  }
-
-  openModalSelectFilter() {
-    this.isModalSelectFilterVisible = true
-  }
-
-  closeModalSelectFilter() {
-    this.isModalSelectFilterVisible = false
-  }
-
-  openModalEditFilters(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditFiltersVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  closeModalEditFilters() {
-    this.isModalEditFiltersVisible = false
-    this.selectedFilters = []
-  }
-
-  openModalJoin() {
-    this.isModalJoinVisible = true
-  }
-
-  closeModalJoin() {
-    this.isModalJoinVisible = false
-  }
-
-  openModalEditNumbers(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditNumbersVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  closeModalEditNumbers() {
-    this.isModalEditNumbersVisible = false
-  }
-
-  openModalSelectNumbers() {
-    this.isModalSelectNumbersVisible = true
-  }
-
-  closeModalSelectNumbers() {
-    this.isModalSelectNumbersVisible = false
-  }
+  // UI functions to display adding / deleting / editing steps
 
   addStep(index: number) {
     if (this.stepData.length === 0) {
@@ -545,6 +417,218 @@ class DtreeStore {
       this.stepData[index].negate = !this.stepData[index].negate
     }
   }
+
+  addSelectedGroup(group: any) {
+    this.selectedGroups = []
+    this.selectedGroups = group
+  }
+
+  addSelectedFilter(filter: string) {
+    this.selectedFilters = [...this.selectedFilters, filter]
+  }
+
+  removeSelectedFilter(filter: string) {
+    this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
+  }
+
+  addStepData(subGroupName: string, typeOfAttr: string, numericData?: any[]) {
+    const currentStep = this.stepData[this.currentStepIndex]
+
+    if (!currentStep.groups || currentStep.groups.length === 0) {
+      currentStep.groups = [[typeOfAttr, this.selectedGroups[1]]]
+    } else if (!currentStep.groups.join().includes(this.selectedGroups[1])) {
+      currentStep.groups = [...currentStep.groups, this.selectedGroups]
+    }
+
+    currentStep.groups.map((item: string, index: number) => {
+      if (item[1] === subGroupName) {
+        numericData
+          ? (currentStep.groups[index][
+              currentStep.groups[index].length
+            ] = numericData)
+          : (currentStep.groups[index][
+              currentStep.groups[index].length
+            ] = this.selectedFilters)
+      }
+    })
+
+    this.selectedFilters = []
+  }
+
+  joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
+    const currentStep = this.stepData[this.currentStepIndex]
+
+    numericData
+      ? (currentStep.groups = [
+          ...currentStep.groups,
+          [typeOfAttr, this.selectedGroups[1], typeOfJoin, numericData],
+        ])
+      : (currentStep.groups = [
+          ...currentStep.groups,
+          [
+            typeOfAttr,
+            this.selectedGroups[1],
+            typeOfJoin,
+            this.selectedFilters,
+          ],
+        ])
+
+    this.selectedFilters = []
+  }
+
+  removeStepData(indexOfCurrentGroup: number) {
+    this.stepData[this.currentStepIndex].groups.splice(indexOfCurrentGroup, 1)
+    this.isModalEditFiltersVisible = false
+
+    // DONT DELETE
+    // if (this.stepData[0].groups[0] && this.stepData[0].groups[0][3]) {
+    //   this.stepData[0].groups[0].pop()
+    // }
+  }
+
+  updateStepData(indexOfCurrentGroup: number, params?: any) {
+    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup].forEach(
+      (elem: any, index: number) => {
+        if (Array.isArray(elem) && this.selectedFilters.length > 0) {
+          this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
+            index
+          ] = this.selectedFilters
+        }
+
+        if (typeof elem === 'object' && !Array.isArray(elem)) {
+          this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
+            index
+          ] = params
+        }
+      },
+    )
+  }
+
+  updateNumericStepData(indexOfCurrentGroup: number, numericData: any[]) {
+    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
+      indexOfCurrentGroup
+    ].length
+
+    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
+      currentGroupLength - 1
+    ] = numericData
+  }
+
+  replaceStepData(
+    subGroupName: string,
+    typeOfAttr: string,
+    numericData?: any[],
+  ) {
+    this.stepData[this.currentStepIndex].groups = []
+    this.addStepData(subGroupName, typeOfAttr, numericData)
+  }
+
+  resetSelectedFilters() {
+    this.selectedFilters = []
+  }
+
+  // modals control block
+
+  openModalAttribute(index: number) {
+    this.isModalAttributeVisible = true
+
+    this.currentStepIndex = index
+  }
+
+  closeModalAttribute() {
+    this.isModalAttributeVisible = false
+  }
+
+  openModalSelectFilter() {
+    this.isModalSelectFilterVisible = true
+  }
+
+  closeModalSelectFilter() {
+    this.isModalSelectFilterVisible = false
+  }
+
+  openModalEditFilters(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditFiltersVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditFilters() {
+    this.isModalEditFiltersVisible = false
+    this.selectedFilters = []
+  }
+
+  openModalJoin() {
+    this.isModalJoinVisible = true
+  }
+
+  closeModalJoin() {
+    this.isModalJoinVisible = false
+  }
+
+  openModalEditNumbers(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditNumbersVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditNumbers() {
+    this.isModalEditNumbersVisible = false
+  }
+
+  openModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = true
+  }
+
+  closeModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = false
+  }
+
+  openModalEditInheritanceModeFunc(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditInheritanceModeFuncVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditInheritanceModeFunc() {
+    this.isModalEditInheritanceModeFuncVisible = false
+  }
+
+  openModalEditCustomInheritanceModeFunc(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCustomInheritanceModeFuncVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditCustomInheritanceModeFunc() {
+    this.isModalEditCustomInheritanceModeFuncVisible = false
+  }
+
+  // other UI control functions
 
   expandFilterContent() {
     this.isFilterContentExpanded = true

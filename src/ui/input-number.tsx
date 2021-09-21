@@ -15,7 +15,6 @@ export const InputNumber = ({ ...rest }: Props): ReactElement => {
   return (
     <input
       type="number"
-      max="10"
       className={cn(
         'text-sm rounded w-full leading-tight py-1.5 px-3',
         className,

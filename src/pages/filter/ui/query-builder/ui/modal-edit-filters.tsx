@@ -78,7 +78,7 @@ export const ModalEditFilters = observer(
     }
 
     const handleSaveChanges = () => {
-      dtreeStore.updateEnumStepData(indexOfCurrentGroup)
+      dtreeStore.updateStepData(indexOfCurrentGroup)
       dtreeStore.closeModalEditFilters()
     }
 

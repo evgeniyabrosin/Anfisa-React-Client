@@ -138,5 +138,13 @@ export const en = {
     upperBoundError: 'Upper bound is not correct',
     lowerBoundError: 'Lower bound is not correct',
     conditionError: 'Condition is not correct',
+    problemGroup: 'Problem group:',
+    fn: 'fn',
+    noFilters: 'There are no filters to show',
+    scenario: 'Scenario',
+    all: 'All',
+    not: 'Not',
+    reset: 'Reset',
+    empty: 'empty',
   },
 }

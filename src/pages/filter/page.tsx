@@ -10,7 +10,9 @@ import filterStore from '@store/filter'
 import { FilterHeader } from './filter-header'
 import { FilterRefiner } from './ui/filter-refiner'
 import { QueryBuilder } from './ui/query-builder/query-builder'
+import { ModalEditCustomInheritanceModeFunc } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode-func'
 import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
+import { ModalEditInheritanceModeFunc } from './ui/query-builder/ui/modal-edit-inheritance-mode-func'
 import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
@@ -42,6 +44,12 @@ export const FilterPage = observer(
         {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
         {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
         {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
+        {dtreeStore.isModalEditInheritanceModeFuncVisible && (
+          <ModalEditInheritanceModeFunc />
+        )}
+        {dtreeStore.isModalEditCustomInheritanceModeFuncVisible && (
+          <ModalEditCustomInheritanceModeFunc />
+        )}
 
         <div className="overflow-hidden">
           <FilterHeader />

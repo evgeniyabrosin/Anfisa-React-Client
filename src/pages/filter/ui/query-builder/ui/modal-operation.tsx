@@ -80,7 +80,7 @@ export const ModalOperation = observer(
             {t('dtree.delete')}
           </div>
           {/* UI is not yet ready for such functionality */}
-          {/* {!isFirstelement && (
+          {!isFirstelement && (
             <Fragment>
               <div
                 onClick={() => {
@@ -99,7 +99,7 @@ export const ModalOperation = observer(
                 {t('dtree.joinByOr')}
               </div>
             </Fragment>
-          )} */}
+          )}
         </div>
       </div>
     )

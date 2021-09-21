@@ -63,6 +63,8 @@ export const NextStepContent = observer(
                 <div className="flex">
                   <div className="text-grey-light mr-2">If</div>
 
+                  {/*TODO: to display func attr content, use getFuncParams util */}
+
                   <div className="flex flex-wrap text-orange-secondary">
                     {dtreeStore.stepData[index].groups[0][1]} in &#123;{' '}
                     {dtreeStore.stepData[index].groups[0][1]} &#125;

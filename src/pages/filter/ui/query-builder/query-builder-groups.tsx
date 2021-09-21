@@ -13,10 +13,6 @@ export const QueryBuilderGroups = observer(
 
     return (
       <Fragment>
-        {dtreeStore.isFiltersLoading && (
-          <div className="absolute z-50 w-1/3 h-full bg-grey-blue opacity-30" />
-        )}
-
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
           <div id="input" className="flex mb-3 w-full static">
             <QueryBuilderSearch
