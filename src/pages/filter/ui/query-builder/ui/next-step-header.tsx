@@ -42,7 +42,6 @@ export const NextStepHeader = observer(
     ) => {
       dtreeStore.toggleIsExcluded(stepIndex)
       changeStep(stepIndex, action)
-      // TODO: change true/false in console
     }
 
     return (

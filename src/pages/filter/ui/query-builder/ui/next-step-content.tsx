@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -26,6 +27,10 @@ export const NextStepContent = observer(
   ({ index }: IProps): ReactElement => {
     const groups = dtreeStore.stepData[index].groups
 
+    const currentStepData = dtreeStore.stepData[index]
+    const isExcluded = currentStepData.excluded
+    const result = String(!isExcluded)
+
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
@@ -33,7 +38,7 @@ export const NextStepContent = observer(
             {groups && groups.length > 0 ? (
               groups.map((group: any, currNo: number) => (
                 <NextStepContentItem
-                  key={Math.random()}
+                  key={JSON.stringify(group) + currNo}
                   group={group}
                   index={index}
                   currNo={currNo}
@@ -64,7 +69,7 @@ export const NextStepContent = observer(
                   </div>
                 </div>
 
-                <div className="text-grey-light pl-2">return false</div>
+                <div className="text-grey-light pl-2">return {result}</div>
               </div>
             </ContentEditor>
           )}

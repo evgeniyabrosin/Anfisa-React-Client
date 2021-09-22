@@ -18,10 +18,13 @@ export const splitDtreeCode = (code: string) => {
       word => word === 'or' || word === 'and',
     )
 
+    const isNegate = changedElement.includes('if not ')
+
     return {
       comment,
       types,
       result: false,
+      isNegate,
     }
   })
 

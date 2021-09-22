@@ -5,9 +5,11 @@ import styled from 'styled-components'
 
 import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
+import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
+import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
@@ -21,6 +23,13 @@ const ContentControl = styled.div`
 const JoinType = styled.div`
   width: 34px;
   height: 28px;
+`
+
+const NegateWrapper = styled(JoinType)`
+  padding: 2px 6px;
+  margin: 2px 4px;
+  color: ${theme('colors.red.light')};
+  background-color: ${theme('colors.red.lighter')};
 `
 
 interface IProps {
@@ -63,6 +72,11 @@ export const NextStepContentItem = observer(
 
       return string
     }
+
+    const isNumeric = currentGroup[0] === 'numeric'
+
+    const isNegateAttribute = currentGroup[2] === 'NOT'
+    const isNegateStep = currentStep.negate
 
     return (
       <div className="flex flex-col h-auto">
@@ -109,38 +123,65 @@ export const NextStepContentItem = observer(
               stroke={false}
               onClick={handleModals}
             />
+            {isNegateStep && (
+              <NegateWrapper className="flex items-center justify-center">
+                NOT
+              </NegateWrapper>
+            )}
 
             <div className="text-14 font-medium mr-2">
               {`${group[1]}`}
               {group.includes(StepTypeEnum.Func) &&
                 `(${getStringFromProperty(group[group.length - 1])})`}
             </div>
-
             <div className="mt-1">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div>
+            {!isNumeric && (
+              <label className="pl-4">
+                <input
+                  className="mr-1"
+                  type="checkbox"
+                  checked={isNegateAttribute}
+                  onChange={() =>
+                    editStepAttribute(index, currNo, isNegateAttribute)
+                  }
+                />
+                {t('dtree.negate')}
+              </label>
+            )}
           </div>
-          {group.includes(StepTypeEnum.Enum) && (
-            <div className="flex flex-col text-14 font-normal h-full flex-wrap">
-              {group[group.length - 1].map((item: any[]) => (
-                <div key={Math.random()}>{item}</div>
-              ))}
+
+          <div className="flex">
+            {isNegateAttribute && (
+              <NegateWrapper className="flex items-center justify-center">
+                NOT
+              </NegateWrapper>
+            )}
+            <div>
+              {group.includes(StepTypeEnum.Enum) && (
+                <div className="flex flex-col text-14 font-normal h-full flex-wrap">
+                  {group[group.length - 1].map((item: any[]) => (
+                    <div key={JSON.stringify(item) ?? index}>{item}</div>
+                  ))}
+                </div>
+              )}
+              {group.includes(StepTypeEnum.Numeric) && (
+                <div className="flex text-14 font-normal h-full flex-wrap items-center">
+                  <div>{getExpression(group[group.length - 1], group[1])}</div>
+                </div>
+              )}
+              {group.includes(StepTypeEnum.Func) && (
+                <div className="flex text-14 font-normal h-full flex-wrap items-center">
+                  {group[group.length - 2].map(
+                    (item: any[], localIndex: number) => (
+                      <div key={JSON.stringify(item) ?? localIndex}>{item}</div>
+                    ),
+                  )}
+                </div>
+              )}
             </div>
-          )}
-          {group.includes(StepTypeEnum.Numeric) && (
-            <div className="flex text-14 font-normal h-full flex-wrap">
-              <div key={Math.random()}>
-                {getExpression(group[group.length - 1], group[1])}
-              </div>
-            </div>
-          )}
-          {group.includes(StepTypeEnum.Func) && (
-            <div className="flex text-14 font-normal h-full flex-wrap">
-              {group[group.length - 2].map((item: any[]) => (
-                <div key={Math.random()}>{item}</div>
-              ))}
-            </div>
-          )}
+          </div>
         </ContentControl>
       </div>
     )

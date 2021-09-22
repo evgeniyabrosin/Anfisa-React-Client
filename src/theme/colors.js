@@ -29,6 +29,8 @@ module.exports = {
   },
   red: {
     secondary: '#dc3737',
+    light: '#ff3137',
+    lighter: '#FFE6E7',
   },
   orange: {
     secondary: '#f87c3a',

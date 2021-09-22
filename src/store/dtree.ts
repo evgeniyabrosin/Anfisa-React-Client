@@ -180,6 +180,7 @@ class DtreeStore {
             ? dtreePointCounts[index + 1][0]
             : dtreePointCounts[index * 2 + 1][0],
         comment: stepCodes[index].comment,
+        negate: stepCodes[index].isNegate,
       })
     })
 
