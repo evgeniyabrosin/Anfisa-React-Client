@@ -146,5 +146,6 @@ export const en = {
     not: 'Not',
     reset: 'Reset',
     empty: 'empty',
+    split: 'Split',
   },
 }

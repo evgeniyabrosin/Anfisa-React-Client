@@ -49,7 +49,10 @@ export const ModalOperation = observer(
 
     const isFirstelement = index === 0
 
-    // TODO: add split
+    const currentStep = dtreeStore.stepData[index]
+
+    const isSplitPossible = currentStep.groups.length > 1
+
     return (
       <div ref={ref}>
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
@@ -91,7 +94,7 @@ export const ModalOperation = observer(
           >
             {t('dtree.delete')}
           </div>
-          {/* UI is not yet ready for such functionality */}
+
           {!isFirstelement && (
             <Fragment>
               <div
@@ -111,6 +114,16 @@ export const ModalOperation = observer(
                 {t('dtree.joinByOr')}
               </div>
             </Fragment>
+          )}
+          {isSplitPossible && (
+            <div
+              onClick={() => {
+                sendChange(index, 'SPLIT')
+              }}
+              className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+            >
+              {t('dtree.split')}
+            </div>
           )}
         </div>
       </div>
