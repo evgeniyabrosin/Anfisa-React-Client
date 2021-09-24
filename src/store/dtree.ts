@@ -18,6 +18,7 @@ type IStepData = {
   finishFilterCounts: number
   difference: number
   comment?: string
+  condition?: string
 }
 
 interface IRequestData {
@@ -189,6 +190,7 @@ class DtreeStore {
             : dtreePointCounts[index * 2 + 1][0],
         comment: stepCodes[index].comment,
         negate: stepCodes[index].isNegate,
+        condition: stepCodes[index].condition,
       })
     })
 

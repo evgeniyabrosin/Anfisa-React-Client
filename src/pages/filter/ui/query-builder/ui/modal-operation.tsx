@@ -51,7 +51,9 @@ export const ModalOperation = observer(
 
     const currentStep = dtreeStore.stepData[index]
 
-    const isSplitPossible = currentStep.groups.length > 1
+    const hasMoreThanOneAttribute = currentStep.groups.length > 1
+    const isNegateStep = currentStep.negate
+    const isSplitPossible = hasMoreThanOneAttribute && !isNegateStep
 
     return (
       <div ref={ref}>

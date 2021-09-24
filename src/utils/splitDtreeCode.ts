@@ -2,13 +2,17 @@ export const splitDtreeCode = (code: string) => {
   const scriptList = code.split('return')
 
   const data = scriptList.map(element => {
-    const reg = /if [(A-Z|]/g
+    const startCondition = /if [(A-Z|]/g
 
-    const lastCommentWord = reg.exec(element)?.[0] ?? ''
+    const lastCommentWord = startCondition.exec(element)?.[0] ?? ''
 
     const comment = element.includes('#')
       ? element.slice(element.indexOf('#'), element.indexOf(lastCommentWord))
       : ''
+
+    const fullCondition = /(\r\n|\r|\n)if( not | )[\w(|](.|\r\n|\r|\n)+/
+
+    const condition = fullCondition.exec(element)?.[0] ?? ''
 
     const changedElement = element.replace(/\r\n|\r|\n/g, ' ')
 
@@ -25,6 +29,7 @@ export const splitDtreeCode = (code: string) => {
       types,
       result: false,
       isNegate,
+      condition,
     }
   })
 

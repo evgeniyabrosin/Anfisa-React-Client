@@ -30,6 +30,8 @@ export const NextStepContent = observer(
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 
+    const condition = currentStepData.condition
+
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
@@ -60,14 +62,9 @@ export const NextStepContent = observer(
                 )}
 
                 <div className="flex">
-                  <div className="text-grey-light mr-2">If</div>
+                  <div className="text-grey-light mr-2">{condition}</div>
 
                   {/*TODO: to display func attr content, use getFuncParams util */}
-
-                  <div className="flex flex-wrap text-orange-secondary">
-                    {dtreeStore.stepData[index].groups[0][1]} in &#123;{' '}
-                    {dtreeStore.stepData[index].groups[0][1]} &#125;
-                  </div>
                 </div>
 
                 <div className="text-grey-light pl-2">return {result}</div>
