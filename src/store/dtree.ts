@@ -207,10 +207,20 @@ class DtreeStore {
       })
     })
 
+    localStepData[localStepData.length - 1].isActive = true
+
     runInAction(() => {
       this.stepData = [...localStepData]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
     })
+
+    const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
+
+    const finalStepCount = 2
+
+    const indexForApi = lastIndex + finalStepCount
+
+    this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
@@ -364,32 +374,6 @@ class DtreeStore {
         },
       ]
     }
-  }
-
-  insertStep(type: string, index: number) {
-    if (type === 'BEFORE') {
-      this.stepData.splice(index, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    } else {
-      this.stepData.splice(index + 1, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    }
-
-    this.stepData.map((item, currNo: number) => {
-      item.step = currNo + 1
-    })
   }
 
   duplicateStep(index: number) {
@@ -611,6 +595,37 @@ class DtreeStore {
   closeModalEditInheritanceModeFunc() {
     this.isModalEditInheritanceModeFuncVisible = false
   }
+  insertStep(type: string, index: number) {
+    this.stepData.forEach(element => {
+      element.isActive = false
+
+      return element
+    })
+
+    if (type === 'BEFORE') {
+      this.stepData.splice(index, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        startFilterCounts: 0,
+        finishFilterCounts: 0,
+        difference: 0,
+      })
+    } else {
+      this.stepData.splice(index + 1, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        startFilterCounts: 0,
+        finishFilterCounts: 0,
+        difference: 0,
+      })
+    }
+
+    this.stepData.map((item, currNo: number) => {
+      item.step = currNo + 1
+    })
+  }
 
   openModalEditCustomInheritanceModeFunc(
     groupName: string,
@@ -677,5 +692,14 @@ class DtreeStore {
   toggleIsExcluded(index: number) {
     this.stepData[index].excluded = !this.stepData[index].excluded
   }
+
+  setStepActive = (index: number) => {
+    this.stepData.forEach(element => {
+      element.isActive = false
+    })
+
+    this.stepData[index].isActive = !this.stepData[index].isActive
+  }
 }
+
 export default new DtreeStore()

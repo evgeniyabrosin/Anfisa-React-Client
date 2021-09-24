@@ -1,5 +1,4 @@
 import { ReactElement } from 'react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -34,7 +33,7 @@ export const NextStepContent = observer(
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
-          <div className="flex flex-col w-2/3 h-auto justify-between">
+          <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
             {groups && groups.length > 0 ? (
               groups.map((group: any, currNo: number) => (
                 <NextStepContentItem
@@ -45,7 +44,7 @@ export const NextStepContent = observer(
                 />
               ))
             ) : (
-              <div className="text-14 text-grey-blue font-normal">
+              <div className="text-14 text-grey-blue font-normal step-content-area">
                 {t('dtree.nothingSelected')}
               </div>
             )}

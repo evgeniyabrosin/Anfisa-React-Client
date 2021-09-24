@@ -48,7 +48,7 @@ export const NextStepHeader = observer(
       <Fragment>
         <div
           style={{ minHeight: 43 }}
-          className="flex w-full justify-between items-center mt-1"
+          className="flex w-full justify-between items-center mt-1 step-content-area"
         >
           <div className="relative flex items-center">
             <Icon

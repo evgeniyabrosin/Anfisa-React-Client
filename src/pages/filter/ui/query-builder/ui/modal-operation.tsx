@@ -30,6 +30,18 @@ export const ModalOperation = observer(
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 
+    const deleteStep = (stepIndex: number) => {
+      const currentStep = dtreeStore.stepData[stepIndex]
+
+      const stepHasAttribute = currentStep.hasOwnProperty('groups')
+
+      stepHasAttribute
+        ? changeStep(stepIndex, 'DELETE')
+        : dtreeStore.removeStep(stepIndex)
+
+      hideModal()
+    }
+
     const sendChange = (stepIndex: number, action: ChangeStepActionType) => {
       changeStep(stepIndex, action)
       hideModal()
@@ -73,7 +85,7 @@ export const ModalOperation = observer(
 
           <div
             onClick={() => {
-              sendChange(index, 'DELETE')
+              deleteStep(index)
             }}
             className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
           >

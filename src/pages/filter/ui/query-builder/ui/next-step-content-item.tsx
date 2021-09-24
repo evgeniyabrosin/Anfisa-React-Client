@@ -1,4 +1,5 @@
 import { ReactElement, useState } from 'react'
+import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -6,9 +7,11 @@ import styled from 'styled-components'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
+import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
+import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
@@ -22,6 +25,13 @@ const ContentControl = styled.div`
 const JoinType = styled.div`
   width: 34px;
   height: 28px;
+`
+
+const NegateWrapper = styled(JoinType)`
+  padding: 2px 6px;
+  margin: 2px 4px;
+  color: ${theme('colors.red.light')};
+  background-color: ${theme('colors.red.lighter')};
 `
 
 interface IProps {
@@ -75,12 +85,18 @@ export const NextStepContentItem = observer(
       }
     }
 
+    const currentGroup = currentStep.groups[currNo]
+    const isNumeric = currentGroup[0] === 'numeric'
+
+    const isNegateAttribute = currentGroup[2] === 'NOT'
+    const isNegateStep = currentStep.negate
+
     return (
       <div className="flex flex-col h-auto">
         {currNo > 0 && (
           <div
             className={cn(
-              'flex w-full h-2/5 py-2 text-14 font-normal items-center relative',
+              'flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area',
               currentStep.isActive ? 'bg-green-light' : 'bg-blue-light',
             )}
           >
@@ -108,11 +124,11 @@ export const NextStepContentItem = observer(
 
         <ContentControl
           className={cn(
-            'w-full h-auto flex rounded-md mr-2 pl-2 py-3',
+            'w-full h-auto flex rounded-md mr-2 pl-2 py-3 step-content-area',
             currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
           )}
         >
-          <div className="flex items-center h-auto w-full pr-2">
+          <div className="flex items-center h-auto w-full pr-2 step-content-area">
             <Icon
               name="SettingsFat"
               className="mr-1 cursor-pointer text-blue-bright"
@@ -120,6 +136,12 @@ export const NextStepContentItem = observer(
               stroke={false}
               onClick={handleModals}
             />
+
+            {isNegateStep && (
+              <NegateWrapper className="flex items-center justify-center">
+                NOT
+              </NegateWrapper>
+            )}
 
             <div className="flex items-center text-14 font-medium mr-2">
               {group.includes(StepTypeEnum.Func) && (
@@ -142,19 +164,39 @@ export const NextStepContentItem = observer(
             <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div>
+            {!isNumeric && (
+              <label className="pl-4">
+                <Checkbox
+                  checked={isNegateAttribute}
+                  className="mr-1"
+                  onChange={() =>
+                    editStepAttribute(index, currNo, isNegateAttribute)
+                  }
+                />
+                {t('dtree.negate')}
+              </label>
+            )}
           </div>
 
-          <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
-            {group[0] === StepTypeEnum.Numeric &&
-              getExpression(
-                group.find((elem: any) => Array.isArray(elem)),
-                group[1],
-              )}
+          <div className="flex flex-row step-content-area">
+            {isNegateAttribute && (
+              <NegateWrapper className="flex items-center justify-center">
+                NOT
+              </NegateWrapper>
+            )}
 
-            {group[0] !== StepTypeEnum.Numeric &&
-              group
-                .find((elem: any) => Array.isArray(elem))
-                .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
+            <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
+              {group[0] === StepTypeEnum.Numeric &&
+                getExpression(
+                  group.find((elem: any) => Array.isArray(elem)),
+                  group[1],
+                )}
+
+              {group[0] !== StepTypeEnum.Numeric &&
+                group
+                  .find((elem: any) => Array.isArray(elem))
+                  .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
+            </div>
           </div>
         </ContentControl>
       </div>
