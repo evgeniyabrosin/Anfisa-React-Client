@@ -203,7 +203,7 @@ export const ModalEditNumbers = observer(
                     setValueFrom(e.target.value)
                     validateValues(e.target.value, 'from')
                   }}
-                  className="h-8 shadow-dark"
+                  className="h-8 w-full shadow-dark"
                 />
 
                 {isVisibleLeftError && (
@@ -285,7 +285,7 @@ export const ModalEditNumbers = observer(
                     setValueTo(e.target.value)
                     validateValues(e.target.value, 'to')
                   }}
-                  className="shadow-dark h-8"
+                  className="h-8 w-full shadow-dark"
                 />
 
                 {isVisibleRightError && (
@@ -307,7 +307,7 @@ export const ModalEditNumbers = observer(
 
           <div className="flex h-1/5 justify-between items-center">
             <Button
-              text={t('dtree.deleteInstruction')}
+              text={t('dtree.deleteAttribute')}
               hasBackground={false}
               className="text-black border-red-secondary"
               onClick={() => {

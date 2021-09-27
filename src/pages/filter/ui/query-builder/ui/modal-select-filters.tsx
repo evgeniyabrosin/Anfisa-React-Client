@@ -8,9 +8,9 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { ModalJoin } from './modal-join'
 import { ModsDivider } from './mods-divider'
-import { addAttributeToStep } from '@utils/addAttributeToStep'
 
 const ModalContainer = styled.div`
   display: block;

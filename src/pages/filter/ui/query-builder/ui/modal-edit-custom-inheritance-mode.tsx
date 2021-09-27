@@ -1,45 +1,27 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
-import { Icon } from '@ui/icon'
 import { Select } from '@ui/select'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getSortedArray } from '@utils/getSortedArray'
-import { ModsDivider } from './mods-divider'
+import { AllNotModalMods } from './all-not-modal-mods'
+import { EditModalButtons } from './edit-modal-buttons'
+import { EditModalVariants } from './edit-modal-variants'
+import { HeaderModal } from './header-modal'
+import { ModalBase } from './modal-base'
 
-const ModalView = styled.div`
-  display: flex;
-  position: fixed;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.8);
-`
+export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
 
-const ModalContent = styled.div`
-  width: 580px;
-  height: 250px;
-  background: white;
-  border-radius: 0.5rem;
-`
-
-export const ModalEditCustomInheritanceModeFunc = observer(
+export const ModalEditCustomInheritanceMode = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () =>
-      dtreeStore.closeModalEditCustomInheritanceModeFunc(),
-    )
+    useOutsideClick(ref, () => dtreeStore.closeModalEditCustomInheritanceMode())
 
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
@@ -56,8 +38,6 @@ export const ModalEditCustomInheritanceModeFunc = observer(
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    const scenarioOptions = ['--', '0', '0-1', '1', '1-2', '2']
-
     subGroups.map(subGroup => {
       subGroup.map((item, currNo) => {
         if (item.name === groupName) {
@@ -73,7 +53,10 @@ export const ModalEditCustomInheritanceModeFunc = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const scenarioString = getFuncParams(currentGroup)
+      const scenarioString = getFuncParams(
+        groupName,
+        currentGroup[currentGroup.length - 1],
+      )
         .slice(10)
         .replace(/\s+/g, '')
 
@@ -152,7 +135,7 @@ export const ModalEditCustomInheritanceModeFunc = observer(
 
     const handleDeleteInstruction = () => {
       dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditCustomInheritanceModeFunc()
+      dtreeStore.closeModalEditCustomInheritanceMode()
     }
 
     function getSelectedValue(group: string): any {
@@ -233,132 +216,64 @@ export const ModalEditCustomInheritanceModeFunc = observer(
     }
 
     const handleClose = () => {
-      dtreeStore.closeModalEditCustomInheritanceModeFunc()
+      dtreeStore.closeModalEditCustomInheritanceMode()
     }
 
     const handleSaveChanges = () => {
       const params = { scenario: dtreeStore.scenario }
 
       dtreeStore.updateStepData(currentGroupIndex, params)
-      dtreeStore.closeModalEditCustomInheritanceModeFunc()
+      dtreeStore.closeModalEditCustomInheritanceMode()
     }
 
     return (
-      <ModalView className="bg-grey-blue">
-        <ModalContent
-          ref={ref}
-          className="flex flex-col justify-between py-4 px-4"
-        >
-          <div className="flex w-full justify-between items-center font-medium mb-5">
-            <div>{dtreeStore.groupNameToChange}</div>
+      <ModalBase refer={ref} minHeight={250}>
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
-            <Icon
-              name="Close"
-              size={16}
-              className="cursor-pointer"
-              onClick={handleClose}
-            />
-          </div>
+        <div className="flex items-center justify-between w-full mt-4 text-14">
+          <div>{t('dtree.scenario')}</div>
 
-          <div className="flex items-center justify-between w-full mb-1 text-14">
-            <div>{t('dtree.scenario')}</div>
-
-            {attrData.family.map((group: string, index: number) => (
-              <div key={group}>
-                <span>{group}</span>
-
-                <Select
-                  onChange={(e: any) =>
-                    handleSetScenario(group, e.target.value)
-                  }
-                  className="w-auto ml-1"
-                  options={scenarioOptions}
-                  value={selectStates[index]}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-between mt-1 w-full text-14">
-            <div className="flex w-1/2">
-              <span>{t('dtree.reset')}</span>
+          {attrData.family.map((group: string, index: number) => (
+            <div key={group}>
+              <span>{group}</span>
 
               <Select
-                options={resetData.available}
-                onChange={(e: any) => handleReset(e.target.value)}
-                className="w-full ml-2"
-                reset
+                onChange={(e: any) => handleSetScenario(group, e.target.value)}
+                className="w-auto ml-1"
+                options={selectOptions}
+                value={selectStates[index]}
               />
             </div>
+          ))}
+        </div>
 
-            <div className="flex text-14 text-blue-bright">
-              <div className="flex items-center">
-                <Checkbox checked={false} className="mr-1" />
+        <div className="flex justify-between w-full mt-4 text-14">
+          <div className="flex w-1/2">
+            <span>{t('dtree.reset')}</span>
 
-                <span>{t('dtree.all')}</span>
-              </div>
-
-              <ModsDivider />
-
-              <div className="flex items-center">
-                <Checkbox checked={false} className="mr-1" />
-
-                <span>{t('dtree.not')}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="h-full mt-4 overflow-y-auto text-14">
-            {variants ? (
-              variants.map((variant: any) => (
-                <div key={variant} className="flex items-center mb-2">
-                  <Checkbox
-                    checked={true}
-                    disabled={true}
-                    className="-mt-0.5 mr-1 cursor-pointer"
-                  />
-
-                  <span className="text-black">{variant[0]}</span>
-
-                  <span className="text-grey-blue ml-2">
-                    {variant[1]} {t('dtree.variants')}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <div className="flex justify-center items-center h-full text-14 text-grey-blue">
-                {t('dtree.noFilters')}
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-between items-center">
-            <Button
-              text={t('dtree.deleteInstruction')}
-              hasBackground={false}
-              className="text-black border-red-secondary hover:text-white hover:bg-red-secondary"
-              onClick={handleDeleteInstruction}
+            <Select
+              options={resetData.available}
+              onChange={(e: any) => handleReset(e.target.value)}
+              className="w-full ml-2"
+              reset
             />
-
-            <div className="flex">
-              <Button
-                text={t('general.cancel')}
-                hasBackground={false}
-                className="mr-2 text-black hover:bg-blue-bright hover:text-white"
-                onClick={handleClose}
-              />
-
-              <div className="relative">
-                <Button
-                  disabled={!variants}
-                  text={t('dtree.saveChanges')}
-                  onClick={handleSaveChanges}
-                />
-              </div>
-            </div>
           </div>
-        </ModalContent>
-      </ModalView>
+
+          <AllNotModalMods />
+        </div>
+
+        <EditModalVariants variants={variants} disabled={true} />
+
+        <EditModalButtons
+          handleClose={handleClose}
+          handleSaveChanges={handleSaveChanges}
+          handleDeleteInstruction={handleDeleteInstruction}
+          disabled={!variants}
+        />
+      </ModalBase>
     )
   },
 )

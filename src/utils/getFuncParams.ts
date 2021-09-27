@@ -1,7 +1,4 @@
-export const getFuncParams = (group: any[]) => {
-  const groupData = group[group.length - 1]
-  const groupName = group[1]
-
+export const getFuncParams = (groupName: string, groupData: any) => {
   if (Object.keys(groupData).length === 0) return `...`
 
   let string = ''
@@ -24,14 +21,14 @@ export const getFuncParams = (group: any[]) => {
       })}}`
     }
 
-    if (Array.isArray(item[1]) && groupName === 'Compound_Request') {
+    if (groupName === 'Compound_Request' && item[0] === 'request') {
       string += `${item[0]} = [${item[1].map((elem: any) => {
         return ` [ ${elem[0]}, {${Object.entries(elem[1]).map(
           (subElem: any) => {
-            return ` "${subElem[0]}" : [${subElem[1]
+            return ` "${subElem[0]}" : ["${subElem[1]
               .toString()
               .split(',')
-              .join(', ')} ] `
+              .join('", "')}"]`
           },
         )} } ] `
       })}]`

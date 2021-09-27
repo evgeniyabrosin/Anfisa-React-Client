@@ -203,7 +203,7 @@ export const ModalSelectNumbers = observer(
                     setValueFrom(e.target.value)
                     validateValues(e.target.value, 'from')
                   }}
-                  className="h-8 shadow-dark"
+                  className="h-8 w-full shadow-dark"
                 />
 
                 {isVisibleLeftError && (
@@ -285,7 +285,7 @@ export const ModalSelectNumbers = observer(
                     setValueTo(e.target.value)
                     validateValues(e.target.value, 'to')
                   }}
-                  className="shadow-dark h-8"
+                  className="h-8 w-full shadow-dark"
                 />
 
                 {isVisibleRightError && (

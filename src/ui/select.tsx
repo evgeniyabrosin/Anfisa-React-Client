@@ -10,18 +10,31 @@ interface Props {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void
   options?: string[]
   reset?: boolean
-  value?: string
+  value?: any
+  disabled?: boolean
+  approx?: boolean
+  values?: string[]
 }
 
 export const Select = observer(
   ({ ...rest }: Props): ReactElement => {
-    const { className, options, reset, value, ...tempRest } = rest
+    const {
+      className,
+      options,
+      reset,
+      value,
+      disabled,
+      approx,
+      values,
+      ...tempRest
+    } = rest
 
     return (
       <select
         className={cn('border-grey-blue border rounded', className)}
         {...tempRest}
         value={value}
+        disabled={disabled}
       >
         {reset && (
           <Fragment>
@@ -32,8 +45,11 @@ export const Select = observer(
         )}
 
         {options &&
-          options.map(option => (
-            <option key={option} value={option}>
+          options.map((option, index) => (
+            <option
+              key={Math.random()}
+              value={approx && values ? values[index] : option}
+            >
               {option}
             </option>
           ))}

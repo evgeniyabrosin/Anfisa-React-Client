@@ -123,7 +123,7 @@ export const en = {
     selectAnAttribute: 'Select An Attribute',
     backToAttribute: 'Back to Attribute',
     saveChanges: 'Save Changes',
-    deleteInstruction: 'Delete Instruction',
+    deleteAttribute: 'Delete Attribute',
     selected: 'selected',
     replace: 'Replace',
     join: 'Join',
@@ -147,5 +147,7 @@ export const en = {
     reset: 'Reset',
     empty: 'empty',
     split: 'Split',
+    approx: 'Approx',
+    state: 'State',
   },
 }

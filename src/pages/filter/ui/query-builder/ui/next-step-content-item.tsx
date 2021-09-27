@@ -65,20 +65,16 @@ export const NextStepContentItem = observer(
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeStore.openModalEditInheritanceModeFunc(group[1], index, currNo)
+          dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
 
         group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeStore.openModalEditCustomInheritanceModeFunc(
-            group[1],
-            index,
-            currNo,
-          )
+          dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
 
         group[1] === FuncStepTypesEnum.CompoundHet &&
-          alert('This function is not ready yet')
+          dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
 
         group[1] === FuncStepTypesEnum.CompoundRequest &&
-          alert('This function is not ready yet')
+          dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
           alert('This function is not ready yet')

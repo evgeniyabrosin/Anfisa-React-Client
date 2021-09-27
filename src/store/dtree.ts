@@ -36,6 +36,7 @@ class DtreeStore {
 
   statFuncData: any = []
   scenario: any
+  request: any
 
   dtreeStat: DtreeStatType = {}
   statAmount: number[] = []
@@ -75,8 +76,10 @@ class DtreeStore {
   isModalEditNumbersVisible = false
   isModalSelectNumbersVisible = false
 
-  isModalEditInheritanceModeFuncVisible = false
-  isModalEditCustomInheritanceModeFuncVisible = false
+  isModalEditInheritanceModeVisible = false
+  isModalEditCustomInheritanceModeVisible = false
+  isModalEditCompoundHetVisible = false
+  isModalEditCompoundRequestVisible = false
 
   groupNameToChange = ''
   groupIndexToChange = 0
@@ -342,6 +345,8 @@ class DtreeStore {
       this.statFuncData = result
 
       if (result.scenario) this.scenario = result.scenario
+
+      if (result.request) this.request = result.request
     })
   }
 
@@ -464,7 +469,6 @@ class DtreeStore {
 
   removeStepData(indexOfCurrentGroup: number) {
     this.stepData[this.currentStepIndex].groups.splice(indexOfCurrentGroup, 1)
-    this.isModalEditFiltersVisible = false
 
     // DONT DELETE
     // if (this.stepData[0].groups[0] && this.stepData[0].groups[0][3]) {
@@ -582,20 +586,52 @@ class DtreeStore {
     this.isModalSelectNumbersVisible = false
   }
 
-  openModalEditInheritanceModeFunc(
+  openModalEditInheritanceMode(
     groupName: string,
     stepIndex: number,
     groupIndex: number,
   ) {
-    this.isModalEditInheritanceModeFuncVisible = true
+    this.isModalEditInheritanceModeVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
 
     this.currentStepIndex = stepIndex
   }
 
-  closeModalEditInheritanceModeFunc() {
-    this.isModalEditInheritanceModeFuncVisible = false
+  closeModalEditInheritanceMode() {
+    this.isModalEditInheritanceModeVisible = false
+  }
+
+  openModalEditCustomInheritanceMode(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCustomInheritanceModeVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditCustomInheritanceMode() {
+    this.isModalEditCustomInheritanceModeVisible = false
+  }
+
+  openModalEditCompoundHet(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCompoundHetVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditCompoundHet() {
+    this.isModalEditCompoundHetVisible = false
   }
   insertStep(type: string, index: number) {
     this.stepData.forEach(element => {
@@ -629,20 +665,20 @@ class DtreeStore {
     })
   }
 
-  openModalEditCustomInheritanceModeFunc(
+  openModalEditCompoundRequest(
     groupName: string,
     stepIndex: number,
     groupIndex: number,
   ) {
-    this.isModalEditCustomInheritanceModeFuncVisible = true
+    this.isModalEditCompoundRequestVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
 
     this.currentStepIndex = stepIndex
   }
 
-  closeModalEditCustomInheritanceModeFunc() {
-    this.isModalEditCustomInheritanceModeFuncVisible = false
+  closeModalEditCompoundRequest() {
+    this.isModalEditCompoundRequestVisible = false
   }
 
   // other UI control functions

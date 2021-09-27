@@ -10,9 +10,11 @@ import filterStore from '@store/filter'
 import { FilterHeader } from './filter-header'
 import { FilterRefiner } from './ui/filter-refiner'
 import { QueryBuilder } from './ui/query-builder/query-builder'
-import { ModalEditCustomInheritanceModeFunc } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode-func'
+import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-het'
+import { ModalEditCompoundRequest } from './ui/query-builder/ui/modal-edit-compound-request'
+import { ModalEditCustomInheritanceMode } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode'
 import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
-import { ModalEditInheritanceModeFunc } from './ui/query-builder/ui/modal-edit-inheritance-mode-func'
+import { ModalEditInheritanceMode } from './ui/query-builder/ui/modal-edit-inheritance-mode'
 import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
@@ -44,11 +46,15 @@ export const FilterPage = observer(
         {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
         {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
         {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
-        {dtreeStore.isModalEditInheritanceModeFuncVisible && (
-          <ModalEditInheritanceModeFunc />
+        {dtreeStore.isModalEditInheritanceModeVisible && (
+          <ModalEditInheritanceMode />
         )}
-        {dtreeStore.isModalEditCustomInheritanceModeFuncVisible && (
-          <ModalEditCustomInheritanceModeFunc />
+        {dtreeStore.isModalEditCustomInheritanceModeVisible && (
+          <ModalEditCustomInheritanceMode />
+        )}
+        {dtreeStore.isModalEditCompoundHetVisible && <ModalEditCompoundHet />}
+        {dtreeStore.isModalEditCompoundRequestVisible && (
+          <ModalEditCompoundRequest />
         )}
 
         <div className="overflow-hidden">

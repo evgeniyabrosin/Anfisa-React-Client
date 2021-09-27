@@ -104,6 +104,11 @@ export const ModalEditFilters = observer(
       })
     })
 
+    const handleDeleteInstruction = () => {
+      dtreeStore.removeStepData(indexOfCurrentGroup)
+      dtreeStore.closeModalEditFilters()
+    }
+
     return (
       <ModalContainer>
         <ModalView className="bg-grey-blue" />
@@ -172,12 +177,11 @@ export const ModalEditFilters = observer(
 
           <div className="flex mt-1 justify-between items-center">
             <Button
-              text={t('dtree.deleteInstruction')}
+              text={t('dtree.deleteAttribute')}
               hasBackground={false}
               className="text-black border-red-secondary"
               onClick={() => {
-                dtreeStore.closeModalEditFilters()
-                dtreeStore.removeStepData(indexOfCurrentGroup)
+                handleDeleteInstruction()
               }}
             />
 
