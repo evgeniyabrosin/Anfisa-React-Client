@@ -1,4 +1,4 @@
-export const splitDtreeCode = (code: string) => {
+export const getDataFromCode = (code: string) => {
   const scriptList = code.split('return')
 
   const data = scriptList.map(element => {
@@ -10,7 +10,7 @@ export const splitDtreeCode = (code: string) => {
       ? element.slice(element.indexOf('#'), element.indexOf(lastCommentWord))
       : ''
 
-    const fullCondition = /(\r\n|\r|\n)if( not | )[\w(|](.|\r\n|\r|\n)+/
+    const fullCondition = /((\r\n|\r|\n)|^)if( not | )[\w(|](.|\r\n|\r|\n)+/
 
     const condition = fullCondition.exec(element)?.[0] ?? ''
 

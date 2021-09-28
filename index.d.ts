@@ -268,3 +268,5 @@ export type ChangeStepActionType =
   | 'SPLIT'
   | 'BOOL-TRUE'
   | 'BOOL-FALSE'
+
+export type FilterCountsType = number | '...' | null

@@ -3,20 +3,20 @@ import { cloneDeep } from 'lodash'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DtreeStatType, StatList } from '@declarations'
+import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
-import { splitDtreeCode } from '@utils/splitDtreeCode'
+import { getStepDataAsync } from '@utils/getStepDataAsync'
 import datasetStore from './dataset'
 
-type IStepData = {
+export type IStepData = {
   step?: number
   groups?: any
   negate?: boolean
   excluded: boolean
   isActive?: boolean
-  startFilterCounts: number
-  finishFilterCounts: number
-  difference: number
+  startFilterCounts: FilterCountsType
+  finishFilterCounts: FilterCountsType
+  difference: FilterCountsType
   comment?: string
   condition?: string
 }
@@ -44,6 +44,8 @@ class DtreeStore {
   selectedGroups: any = []
   selectedFilters: string[] = []
   dtreeStepIndices: string[] = []
+
+  pointCounts: [number | null][] = []
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
@@ -138,7 +140,7 @@ class DtreeStore {
       this.dtreeCode = result['code']
     })
 
-    this.drawDecesionTree()
+    this.drawDecesionTreeAsync()
   }
 
   splitDtreeCode() {
@@ -153,67 +155,8 @@ class DtreeStore {
     return filteredData
   }
 
-  drawDecesionTree() {
-    const dtreeSteps = Object.values(this.dtree['cond-atoms'])
-
-    const dtreePointCounts: number[][] = Object.values(
-      this.dtree['point-counts'],
-    )
-
-    const splittedCode = this.splitDtreeCode()
-
-    const indexOfLabel: number[] = []
-
-    splittedCode.map((item: string, index: number) => {
-      if (item.includes('label')) {
-        indexOfLabel.push(index)
-      }
-    })
-
-    if (indexOfLabel.length > 0) {
-      indexOfLabel.map((item: number) => {
-        dtreePointCounts.splice(item * 2, 1)
-      })
-    }
-
-    const stepCodes = splitDtreeCode(this.dtreeCode)
-
-    const localStepData: IStepData[] = []
-
-    dtreeSteps.map((item: any, index: number) => {
-      localStepData.push({
-        step: index + 1,
-        groups: item,
-        excluded: !stepCodes[index].result,
-        isActive: false,
-        startFilterCounts: dtreePointCounts[index * 2][1],
-        finishFilterCounts: dtreePointCounts[index * 2 + 2][1],
-        difference:
-          index === 0
-            ? dtreePointCounts[index + 1][0]
-            : dtreePointCounts[index * 2 + 1][0],
-        comment: stepCodes[index].comment,
-        negate: stepCodes[index].isNegate,
-        condition: stepCodes[index].condition,
-      })
-    })
-
-    localStepData.map((step: IStepData, index: number) => {
-      if (step.groups.length > 1) {
-        step.groups.map((group: any[], currNo: number) => {
-          currNo !== 0 &&
-            group.splice(-1, 0, stepCodes[index].types[currNo - 1])
-        })
-      }
-    })
-
-    localStepData.map((step: IStepData) => {
-      step.groups.map((group: any[], index: number) => {
-        step.groups[index] = group.filter((elem: any[]) => elem)
-      })
-    })
-
-    localStepData[localStepData.length - 1].isActive = true
+  async drawDecesionTreeAsync() {
+    const localStepData = await getStepDataAsync()
 
     runInAction(() => {
       this.stepData = [...localStepData]
@@ -221,9 +164,7 @@ class DtreeStore {
     })
 
     const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
-
     const finalStepCount = 2
-
     const indexForApi = lastIndex + finalStepCount
 
     this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
@@ -317,7 +258,7 @@ class DtreeStore {
       this.dtreeCode = newCode
     })
 
-    this.drawDecesionTree()
+    this.drawDecesionTreeAsync()
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
@@ -668,7 +609,60 @@ class DtreeStore {
     })
   }
 
+  setPointCounts(pointCounts: [number | null][] | number[][]) {
+    runInAction(() => {
+      this.pointCounts = JSON.parse(JSON.stringify(pointCounts))
+    })
+  }
+
+  updatePointCounts(pointCounts: [number | null][]) {
+    const localStepData = [...this.stepData]
+
+    localStepData.forEach((element, index) => {
+      const startCountsIndex = this.getStepIndexForApi(index)
+
+      const startCounts =
+        pointCounts[startCountsIndex] === null
+          ? '...'
+          : pointCounts[startCountsIndex]?.[0]
+
+      const diferenceCountsIndex = this.getStepIndexForApi(index) + 1
+
+      const diferenceCounts =
+        pointCounts[diferenceCountsIndex] === null
+          ? '...'
+          : pointCounts[diferenceCountsIndex]?.[0]
+
+      const finishCountsIndex = this.getStepIndexForApi(index) + 2
+
+      const finishCounts =
+        pointCounts[finishCountsIndex] === null
+          ? '...'
+          : pointCounts[finishCountsIndex]?.[0]
+
+      element.startFilterCounts = startCounts
+      element.difference = diferenceCounts
+      element.finishFilterCounts = finishCounts
+    })
+
+    runInAction(() => {
+      this.stepData = [...localStepData]
+    })
+  }
+
   openModalEditCompoundRequest(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCompoundRequestVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  openModalEditCustomInheritanceModeFunc(
     groupName: string,
     stepIndex: number,
     groupIndex: number,

@@ -4,6 +4,7 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { FilterCountsType } from '@declarations'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
@@ -85,13 +86,15 @@ interface IProps {
   isIncluded: boolean
 }
 
-function getNumberWithCommas(value: number) {
+function getNumberWithCommas(value: FilterCountsType) {
+  if (typeof value !== 'number') return '...'
+
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
 export const NextStepRoute = observer(
   ({ isExpanded, index, length, isIncluded }: IProps): ReactElement => {
-    const [_allVariants, transcribedVariants] = get(
+    const [allVariants, transcribedVariants] = get(
       datasetStore,
       'statAmount',
       [],
@@ -101,18 +104,33 @@ export const NextStepRoute = observer(
     const finishFilterCounts = dtreeStore.stepData[index].finishFilterCounts
     const currentStep = dtreeStore.stepData[index]
 
+    const changedStartCounts = startFilterCounts
+      ? getNumberWithCommas(startFilterCounts)
+      : startFilterCounts
+
+    const changedAllVariants = allVariants
+      ? getNumberWithCommas(allVariants)
+      : allVariants
+
+    const alternativeCounts = changedStartCounts || changedAllVariants
+
+    const firstStepValue = transcribedVariants
+      ? changedStartCounts
+      : alternativeCounts
+
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
           <div>
             {index === 0
-              ? transcribedVariants && getNumberWithCommas(transcribedVariants)
+              ? firstStepValue
               : getNumberWithCommas(startFilterCounts)}
           </div>
 
           {length - index < 2 && (
             <div style={{ marginBottom: -3 }}>
-              {(finishFilterCounts >= 0 &&
+              {(finishFilterCounts &&
+                finishFilterCounts > 0 &&
                 getNumberWithCommas(finishFilterCounts)) ||
                 (transcribedVariants &&
                   getNumberWithCommas(transcribedVariants))}
