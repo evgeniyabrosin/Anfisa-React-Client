@@ -530,8 +530,9 @@ class DtreeStore {
     this.isModalAttributeVisible = false
   }
 
-  openModalSelectFilter() {
+  openModalSelectFilter(groupName: string) {
     this.isModalSelectFilterVisible = true
+    this.groupNameToChange = groupName
   }
 
   closeModalSelectFilter() {
@@ -579,8 +580,9 @@ class DtreeStore {
     this.isModalEditNumbersVisible = false
   }
 
-  openModalSelectNumbers() {
+  openModalSelectNumbers(groupName: string) {
     this.isModalSelectNumbersVisible = true
+    this.groupNameToChange = groupName
   }
 
   closeModalSelectNumbers() {

@@ -1,37 +1,14 @@
 import { ReactElement, useEffect, useRef } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
-import { Icon } from '@ui/icon'
+import { EditModalButtons } from './edit-modal-buttons'
+import { HeaderModal } from './header-modal'
+import { ModalBase } from './modal-base'
 import { ModsDivider } from './mods-divider'
-
-const ModalContainer = styled.div`
-  display: block;
-`
-
-const ModalView = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  z-index: 10;
-  opacity: 0.7;
-`
-
-const ModalContent = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 580px;
-  height: 260px;
-  background: white;
-  transform: translate(-50%, -50%);
-  border-radius: 0.5rem;
-`
 
 export const ModalEditFilters = observer(
   (): ReactElement => {
@@ -51,6 +28,7 @@ export const ModalEditFilters = observer(
     )
 
     const indexOfCurrentGroup = dtreeStore.groupIndexToChange
+    const groupName = dtreeStore.groupNameToChange
 
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
@@ -110,97 +88,62 @@ export const ModalEditFilters = observer(
     }
 
     return (
-      <ModalContainer>
-        <ModalView className="bg-grey-blue" />
+      <ModalBase refer={ref} minHeight={200}>
+        <HeaderModal groupName={groupName} handleClose={handleClose} />
 
-        <ModalContent ref={ref} className="py-4 px-4 z-10">
-          <div className="flex w-full justify-between items-center font-medium mb-3">
-            <div>{dtreeStore.selectedGroups[1]}</div>
-
-            <Icon
-              name="Close"
-              size={16}
-              className="cursor-pointer"
-              onClick={() => handleClose()}
-            />
+        <div className="flex justify-between items-center w-full mt-4 text-14">
+          <div className="text-14 text-grey-blue">
+            {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0}{' '}
+            {t('dtree.selected')}
           </div>
 
-          <div className="flex justify-between w-full">
-            <div className="text-14 text-grey-blue">
-              {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0}{' '}
-              {t('dtree.selected')}
+          <div className="flex">
+            <div className="flex items-center">
+              <Checkbox checked={false} className="mr-1 cursor-pointer" />
+              <div className="text-14 font-normal">{t('ds.notMode')}</div>
             </div>
 
-            <div className="flex">
-              <div className="flex items-center">
-                <Checkbox checked={false} className="mr-1 cursor-pointer" />
-                <div className="text-14 font-normal">{t('ds.notMode')}</div>
-              </div>
+            <ModsDivider />
 
-              <ModsDivider />
+            <div className="text-blue-bright">{t('general.selectAll')}</div>
 
-              <div className="text-14 text-blue-bright">
-                {t('general.selectAll')}
-              </div>
+            <ModsDivider />
 
-              <ModsDivider />
-
-              <div className="text-14 text-blue-bright">
-                {t('general.clearAll')}
-              </div>
-            </div>
+            <div className="text-blue-bright">{t('general.clearAll')}</div>
           </div>
+        </div>
 
-          <div className="h-3/5 pt-3 overflow-y-auto">
-            {variants.map((variant: any) => (
-              <div key={variant} className="flex items-center mb-2">
-                <Checkbox
-                  checked={
-                    currentGroup.length > 0
-                      ? dtreeStore.selectedFilters.includes(variant[0])
-                      : false
-                  }
-                  className="-mt-0.5 mr-1"
-                  onChange={e =>
-                    handleCheckGroupItem(e.target.checked, variant[0])
-                  }
-                />
-
-                <p className="text-14 text-black">{variant[0]}</p>
-
-                <p className="text-14 text-grey-blue ml-2">
-                  {variant[1]} {t('dtree.variants')}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex mt-1 justify-between items-center">
-            <Button
-              text={t('dtree.deleteAttribute')}
-              hasBackground={false}
-              className="text-black border-red-secondary"
-              onClick={() => {
-                handleDeleteInstruction()
-              }}
-            />
-
-            <div className="flex">
-              <Button
-                text={t('general.cancel')}
-                hasBackground={false}
-                className="text-black mr-2"
-                onClick={handleClose}
+        <div className="flex-1 overflow-y-auto my-4 text-14">
+          {variants.map((variant: any) => (
+            <div key={variant} className="flex items-center mb-2">
+              <Checkbox
+                checked={
+                  currentGroup.length > 0
+                    ? dtreeStore.selectedFilters.includes(variant[0])
+                    : false
+                }
+                className="-mt-0.5 mr-1"
+                onChange={e =>
+                  handleCheckGroupItem(e.target.checked, variant[0])
+                }
               />
-              <Button
-                disabled={selectedGroupsAmount.length === 0}
-                text={t('dtree.saveChanges')}
-                onClick={() => handleSaveChanges()}
-              />
+
+              <p className="text-black">{variant[0]}</p>
+
+              <p className="text-grey-blue ml-2">
+                {variant[1]} {t('dtree.variants')}
+              </p>
             </div>
-          </div>
-        </ModalContent>
-      </ModalContainer>
+          ))}
+        </div>
+
+        <EditModalButtons
+          handleClose={handleClose}
+          handleSaveChanges={handleSaveChanges}
+          handleDeleteInstruction={handleDeleteInstruction}
+          disabled={selectedGroupsAmount.length === 0}
+        />
+      </ModalBase>
     )
   },
 )

@@ -15,12 +15,13 @@ const ModalContent = styled.div<{ minHeight: number }>`
   width: 580px;
   height: auto;
   min-height: ${props => props.minHeight};
+  max-height: 500px;
 `
 
 interface IProps {
-  children: any
   minHeight: number
   refer: any
+  children: any
 }
 
 export const ModalBase = ({ minHeight, refer, children }: IProps) => (

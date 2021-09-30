@@ -32,8 +32,8 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeStore.closeModalAttribute()
 
       group.variants
-        ? dtreeStore.openModalSelectFilter()
-        : dtreeStore.openModalSelectNumbers()
+        ? dtreeStore.openModalSelectFilter(groupName)
+        : dtreeStore.openModalSelectNumbers(groupName)
     }
 
     return (
