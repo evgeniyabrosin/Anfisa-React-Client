@@ -77,7 +77,7 @@ export const NextStepContentItem = observer(
           dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
-          alert('This function is not ready yet')
+          dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
       }
     }
 

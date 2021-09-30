@@ -149,5 +149,7 @@ export const en = {
     split: 'Split',
     approx: 'Approx',
     state: 'State',
+    locus: 'Locus',
+    chromosomeNameIsNotCorrect: 'Chromosome name is not correct',
   },
 }

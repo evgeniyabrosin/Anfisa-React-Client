@@ -80,6 +80,7 @@ class DtreeStore {
   isModalEditCustomInheritanceModeVisible = false
   isModalEditCompoundHetVisible = false
   isModalEditCompoundRequestVisible = false
+  isModalEditGeneRegionVisible = false
 
   groupNameToChange = ''
   groupIndexToChange = 0
@@ -679,6 +680,22 @@ class DtreeStore {
 
   closeModalEditCompoundRequest() {
     this.isModalEditCompoundRequestVisible = false
+  }
+
+  openModalEditGeneRegion(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditGeneRegionVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditGeneRegion() {
+    this.isModalEditGeneRegionVisible = false
   }
 
   // other UI control functions

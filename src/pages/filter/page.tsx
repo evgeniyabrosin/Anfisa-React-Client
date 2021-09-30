@@ -14,6 +14,7 @@ import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-
 import { ModalEditCompoundRequest } from './ui/query-builder/ui/modal-edit-compound-request'
 import { ModalEditCustomInheritanceMode } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode'
 import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
+import { ModalEditGeneRegion } from './ui/query-builder/ui/modal-edit-gene-region'
 import { ModalEditInheritanceMode } from './ui/query-builder/ui/modal-edit-inheritance-mode'
 import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
@@ -56,6 +57,7 @@ export const FilterPage = observer(
         {dtreeStore.isModalEditCompoundRequestVisible && (
           <ModalEditCompoundRequest />
         )}
+        {dtreeStore.isModalEditGeneRegionVisible && <ModalEditGeneRegion />}
 
         <div className="overflow-hidden">
           <FilterHeader />
