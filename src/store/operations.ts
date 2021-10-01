@@ -1,8 +1,8 @@
-import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { getApiUrl } from '@core/get-api-url'
+import dtreeStore from '@store/dtree'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
 import variantStore from './variant'
@@ -121,12 +121,12 @@ class OperationsStore {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       ws: wsName,
-      conditions: JSON.stringify(datasetStore.conditions),
+      code: dtreeStore.dtreeCode,
     })
 
-    const [allVariants] = get(datasetStore, 'statAmount', [])
+    const compareValue = dtreeStore.acceptedVariants
 
-    if (!(allVariants > 0 && allVariants < 9000)) {
+    if (!(compareValue > 0 && compareValue < 9000)) {
       return {
         ok: false,
         message: 'Too many variants',

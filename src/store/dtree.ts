@@ -5,6 +5,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import datasetStore from './dataset'
 
@@ -46,6 +47,7 @@ class DtreeStore {
   dtreeStepIndices: string[] = []
 
   pointCounts: [number | null][] = []
+  acceptedVariants = 0
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
@@ -141,18 +143,6 @@ class DtreeStore {
     })
 
     this.drawDecesionTreeAsync()
-  }
-
-  splitDtreeCode() {
-    const stepCodes: any[] = []
-
-    this.dtreeCode.split('return').forEach((item: string) => {
-      stepCodes.push(item.trim())
-    })
-
-    const filteredData = stepCodes.filter(Boolean)
-
-    return filteredData
   }
 
   async drawDecesionTreeAsync() {
@@ -647,6 +637,13 @@ class DtreeStore {
 
     runInAction(() => {
       this.stepData = [...localStepData]
+    })
+  }
+  setAcceptedVariants() {
+    const calculatedAcceptedVariants = calculateAcceptedVariants(this.stepData)
+
+    runInAction(() => {
+      this.acceptedVariants = calculatedAcceptedVariants
     })
   }
 

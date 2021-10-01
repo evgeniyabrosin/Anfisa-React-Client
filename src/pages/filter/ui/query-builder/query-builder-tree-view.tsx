@@ -10,6 +10,7 @@ export const QueryBuilderTreeView = observer(
 
     useEffect(() => {
       dtreeStore.updatePointCounts(poitnCounts)
+      dtreeStore.setAcceptedVariants()
     }, [poitnCounts])
 
     return (
