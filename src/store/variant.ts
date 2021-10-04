@@ -148,6 +148,25 @@ export class VariantStore {
       this.initRecordsDisplayConfig()
     })
   }
+
+  async fetchVarinatInfoForModalAsync(
+    datasetName: string,
+    orderNumber: number,
+  ) {
+    const variantResponse = await fetch(
+      getApiUrl(`reccnt?ds=${datasetName}&rec=${orderNumber}`),
+      {
+        method: 'POST',
+      },
+    )
+
+    const variant = await variantResponse.json()
+
+    runInAction(() => {
+      this.variant = variant
+      this.initRecordsDisplayConfig()
+    })
+  }
 }
 
 export default new VariantStore()

@@ -20,6 +20,7 @@ import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
 import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
+import { TableModal } from './ui/TableModal'
 
 export const FilterPage = observer(
   (): ReactElement => {
@@ -58,6 +59,8 @@ export const FilterPage = observer(
           <ModalEditCompoundRequest />
         )}
         {dtreeStore.isModalEditGeneRegionVisible && <ModalEditGeneRegion />}
+
+        {dtreeStore.isTableModalVisible && <TableModal />}
 
         <div className="overflow-hidden">
           <FilterHeader />

@@ -44,6 +44,12 @@ export const NextStepHeader = observer(
       changeStep(stepIndex, action)
     }
 
+    const openTableModal = () => {
+      const nextStepIndex = dtreeStore.getStepIndexForApi(index) + 1
+
+      dtreeStore.openTableModal(nextStepIndex)
+    }
+
     return (
       <Fragment>
         <div
@@ -97,6 +103,10 @@ export const NextStepHeader = observer(
                 />
 
                 <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
+              </div>
+              {/* TODO: temporarly btn */}
+              <div className="ml-1" onClick={openTableModal}>
+                View variants
               </div>
             </div>
           </div>

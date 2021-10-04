@@ -16,7 +16,7 @@ export const closeHandler = () => {
   }, 200)
 }
 
-const defaultLayout = [
+export const defaultLayout = [
   { y: 0, x: 0, w: 6, h: 1, i: 'view_gen' },
   { y: 1, x: 0, w: 6, h: 1, i: 'view_transcripts' },
   { y: 2, x: 0, w: 6, h: 1, i: 'colocated_v' },

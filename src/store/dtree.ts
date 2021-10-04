@@ -49,6 +49,8 @@ class DtreeStore {
   pointCounts: [number | null][] = []
   acceptedVariants = 0
 
+  savingStatus: any = []
+
   isFilterContentExpanded = false
   filterChangeIndicator = 0
   isFiltersLoading = false
@@ -85,6 +87,9 @@ class DtreeStore {
   isModalEditCompoundHetVisible = false
   isModalEditCompoundRequestVisible = false
   isModalEditGeneRegionVisible = false
+
+  isTableModalVisible = false
+  tableModalIndexNumber: null | number = null
 
   groupNameToChange = ''
   groupIndexToChange = 0
@@ -599,6 +604,12 @@ class DtreeStore {
     })
   }
 
+  setJobStatus(jobStatus: any) {
+    runInAction(() => {
+      this.savingStatus = JSON.parse(JSON.stringify(jobStatus))
+    })
+  }
+
   setPointCounts(pointCounts: [number | null][] | number[][]) {
     runInAction(() => {
       this.pointCounts = JSON.parse(JSON.stringify(pointCounts))
@@ -639,6 +650,7 @@ class DtreeStore {
       this.stepData = [...localStepData]
     })
   }
+
   setAcceptedVariants() {
     const calculatedAcceptedVariants = calculateAcceptedVariants(this.stepData)
 
@@ -747,6 +759,14 @@ class DtreeStore {
     })
 
     this.stepData[index].isActive = !this.stepData[index].isActive
+  }
+  openTableModal(index: number) {
+    this.isTableModalVisible = true
+    this.tableModalIndexNumber = index
+  }
+  closeTableModal() {
+    this.isTableModalVisible = false
+    this.tableModalIndexNumber = null
   }
 }
 
