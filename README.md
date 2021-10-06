@@ -7,5 +7,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 `yarn start`, `yarn test`, `yarn build`, `yarn eject`
 
 ### Environment configuration
-- `REACT_APP_PROXY_AUTH` - at local development we use `src/setupProxy.js` with `http-proxy-middleware` and `auth` setting (basic auth). For fast automatic authorization you can create `.env.development.local` at root folder with `REACT_APP_PROXY_AUTH=login:password`.
-- `REACT_APP_URL_BACKEND` - backend api root enpoint.
+- `REACT_APP_PROXY_AUTH` - at local development we use `src/setupProxy.js` with `http-proxy-middleware` and `auth` setting (basic auth). For fast automatic authorization you can create `.env.development.local` at root folder with following strings:
+- REACT_APP_PROXY_AUTH=login:password
+- REACT_APP_URL_BACKEND=https://anfisa.forome.dev/app
+If you get a CORS error, try to make hard reload.
