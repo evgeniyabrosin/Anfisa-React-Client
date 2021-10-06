@@ -88,18 +88,21 @@ export const VariantBody = observer(
         className="flex-grow overflow-y-scroll overflow-x-hidden"
         draggableHandle=".dragHandleSelector"
         onResizeStop={layoutData => {
+          layoutData.forEach(layoutItem => {
+            variantStore.updateRecordsDisplayConfig(layoutItem.i, layoutItem.h)
+          })
+          window.localStorage.setItem('gridLayout', JSON.stringify(layoutData))
+
           setLayout(layoutData)
-        }}
-        onLayoutChange={newLayout => {
-          setLayout(newLayout)
         }}
       >
         {filtered.map((aspect: ReccntCommon, index: number) => {
           return (
             <div
-              data-grid={{ x: 0, y: index, w: 6, h: 1, i: aspect.name }}
+              data-grid={layout[index]}
               key={aspect.name}
-              className="grid-item-dark flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
+              id="parent"
+              className="flex flex-col grid-item-dark flex-shrink-0 bg-blue-dark rounded text-grey-blue mb-2 text-14 leading-16px overflow-hidden pb-3"
             >
               <div
                 className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
@@ -121,9 +124,13 @@ export const VariantBody = observer(
                     `#drawer-${aspect.name}`,
                   )
 
-                  const openedH = Math.ceil(
-                    get(drawerElement, 'clientHeight', 0) / 40 + 1,
+                  const clientHeight = get(
+                    drawerElement?.firstChild,
+                    'clientHeight',
+                    0,
                   )
+
+                  const openedH = clientHeight * 0.0208 + 1.3
 
                   setLayout((prev: any[]) => {
                     const cloned: any[] = clone(prev)
@@ -149,6 +156,11 @@ export const VariantBody = observer(
                       },
                     )
 
+                    window.localStorage.setItem(
+                      'gridLayout',
+                      JSON.stringify(reflowLayout),
+                    )
+
                     return reflowLayout
                   })
 
@@ -171,8 +183,16 @@ export const VariantBody = observer(
               </div>
 
               <div
-                className={cn('px-3 overflow-auto')}
+                className={cn(
+                  'px-3 overflow-x-auto overflow-y-scroll content-child',
+                )}
                 id={`drawer-${aspect.name}`}
+                style={{
+                  height:
+                    (get(variantStore.recordsDisplayConfig, aspect.name, 0).h -
+                      1.3) /
+                    0.0208,
+                }}
               >
                 {aspect.type === 'pre' ? (
                   <PreView {...aspect} />

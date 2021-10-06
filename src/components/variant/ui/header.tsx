@@ -14,10 +14,11 @@ import { DrawerTags } from './drawer-tags'
 
 interface Props {
   setLayout: Dispatch<SetStateAction<any>>
+  layout: any
 }
 
 export const VariantHeader = observer(
-  ({ setLayout }: Props): ReactElement => {
+  ({ setLayout, layout }: Props): ReactElement => {
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = () => !!variantStore.index
@@ -89,12 +90,29 @@ export const VariantHeader = observer(
                 size={24}
                 className="cursor-pointer hover:text-blue-bright"
                 onClick={() => {
-                  setLayout((prev: any[]) =>
-                    prev.map((item: any) => ({
+                  const parents = document.querySelectorAll('#parent')
+
+                  setLayout((prev: any[]) => {
+                    const newLayout = prev.map((item: any, index: number) => ({
                       ...item,
-                      h: 6,
-                    })),
-                  )
+                      h:
+                        get(
+                          parents[index].children[1].firstChild,
+                          'clientHeight',
+                          0,
+                        ) *
+                          0.0208 +
+                        1.3,
+                    }))
+
+                    window.localStorage.setItem(
+                      'gridLayout',
+                      JSON.stringify(newLayout),
+                    )
+
+                    return newLayout
+                  })
+
                   variantStore.handleAllRecordsOpen(true)
                 }}
               />
@@ -104,12 +122,19 @@ export const VariantHeader = observer(
                 size={24}
                 className="cursor-pointer hover:text-blue-bright ml-1 mr-5"
                 onClick={() => {
-                  setLayout((prev: any[]) =>
-                    prev.map((item: any) => ({
+                  setLayout((prev: any[]) => {
+                    const newLayout = prev.map((item: any) => ({
                       ...item,
                       h: 1,
-                    })),
-                  )
+                    }))
+
+                    window.localStorage.setItem(
+                      'gridLayout',
+                      JSON.stringify(newLayout),
+                    )
+
+                    return newLayout
+                  })
                   variantStore.handleAllRecordsOpen(false)
                 }}
               />

@@ -7,7 +7,7 @@ import datasetStore from './dataset'
 export class VariantStore {
   drawerVisible = false
   variant: ReccntCommon[] = []
-  recordsDisplayConfig: { [key: string]: ReccntDisplayItem } = {}
+  recordsDisplayConfig: any = {}
   index = 0
   dsName = ''
   tags: string[] = []
@@ -42,7 +42,7 @@ export class VariantStore {
     if (!isFirstInit) return
 
     this.variant.map(record => {
-      conf[record.name] = { isOpen: false }
+      conf[record.name] = { isOpen: false, h: 1 }
     })
 
     this.recordsDisplayConfig = conf
@@ -56,6 +56,10 @@ export class VariantStore {
         this.recordsDisplayConfig[key].isOpen = status
       }
     }
+  }
+
+  updateRecordsDisplayConfig(name: string, height: number) {
+    this.recordsDisplayConfig[name].h = height
   }
 
   setIndex(index: number) {

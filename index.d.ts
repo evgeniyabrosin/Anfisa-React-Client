@@ -234,6 +234,7 @@ export interface ReccntRow {
 
 export interface ReccntDisplayItem {
   isOpen: boolean
+  h: number
 }
 
 export interface ReccntCommon {

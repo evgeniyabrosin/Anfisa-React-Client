@@ -34,7 +34,10 @@ const defaultLayout = [
 export const VariantDrawer = observer(
   (): ReactElement => {
     const drawerWidth = window.innerWidth - 380
-    const [layout, setLayout] = useState(defaultLayout)
+    const localStorageData = window.localStorage.getItem('gridLayout')
+    const currentGridLayout = localStorageData && JSON.parse(localStorageData)
+
+    const [layout, setLayout] = useState(currentGridLayout || defaultLayout)
 
     useEffect(() => {
       return () => {
@@ -50,7 +53,7 @@ export const VariantDrawer = observer(
         }}
         className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
       >
-        <VariantHeader setLayout={setLayout} />
+        <VariantHeader setLayout={setLayout} layout={layout} />
 
         <VariantBody
           drawerWidth={drawerWidth}
