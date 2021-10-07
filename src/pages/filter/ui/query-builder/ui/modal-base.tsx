@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styled from 'styled-components'
 
 const ModalView = styled.div`
@@ -11,25 +12,44 @@ const ModalView = styled.div`
   background: rgba(0, 0, 0, 0.8);
 `
 
-const ModalContent = styled.div<{ minHeight: number }>`
-  width: 580px;
+const ModalContent = styled.div<{
+  minHeight: number | string
+  maxHeight: number | string
+  width: number | string
+}>`
+  width: ${props => props.width};
   height: auto;
   min-height: ${props => props.minHeight};
-  max-height: 500px;
+  max-height: ${props => props.maxHeight};
 `
 
 interface IProps {
-  minHeight: number
+  minHeight: number | string
+  maxHeight?: number | string
   refer: any
+  width?: number | string
   children: any
+  theme?: string
 }
 
-export const ModalBase = ({ minHeight, refer, children }: IProps) => (
+export const ModalBase = ({
+  minHeight,
+  maxHeight = '580px',
+  refer,
+  width = '580px',
+  theme = 'light',
+  children,
+}: IProps) => (
   <ModalView className="bg-grey-blue">
     <ModalContent
       ref={refer}
-      className="flex flex-col justify-between py-4 px-4 bg-white rounded-lg"
+      className={cn(
+        'flex flex-col justify-between py-4 px-4 rounded-lg',
+        theme === 'light' ? 'bg-white' : 'bg-black',
+      )}
       minHeight={minHeight}
+      maxHeight={maxHeight}
+      width={width}
     >
       {children}
     </ModalContent>

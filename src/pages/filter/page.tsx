@@ -9,6 +9,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { FilterHeader } from './filter-header'
 import { FilterRefiner } from './ui/filter-refiner'
+import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
 import { QueryBuilder } from './ui/query-builder/query-builder'
 import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-het'
 import { ModalEditCompoundRequest } from './ui/query-builder/ui/modal-edit-compound-request'
@@ -61,6 +62,7 @@ export const FilterPage = observer(
         {dtreeStore.isModalEditGeneRegionVisible && <ModalEditGeneRegion />}
 
         {dtreeStore.isTableModalVisible && <TableModal />}
+        {dtreeStore.isModalTextEditorVisible && <ModalTextEditor />}
 
         <div className="overflow-hidden">
           <FilterHeader />

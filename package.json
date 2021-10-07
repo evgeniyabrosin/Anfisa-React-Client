@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@monaco-editor/react": "^4.3.1",
     "@popperjs/core": "2.9.2",
     "chart.js": "3.5.1",
     "date-fns": "2.21.1",

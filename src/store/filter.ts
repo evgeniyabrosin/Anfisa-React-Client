@@ -20,7 +20,6 @@ interface AddSelectedFiltersI {
 }
 
 class FilterStore {
-  // method: FilterMethodEnum = FilterMethodEnum.Refiner
   method: FilterMethodEnum = FilterMethodEnum.Query
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}

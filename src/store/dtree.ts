@@ -34,6 +34,8 @@ class DtreeStore {
   dtreeList: any
   dtree: any
   dtreeCode = ''
+  startDtreeCode = ''
+  activeTree = ''
 
   statFuncData: any = []
   scenario: any
@@ -83,6 +85,8 @@ class DtreeStore {
   isModalEditNumbersVisible = false
   isModalSelectNumbersVisible = false
 
+  isModalTextEditorVisible = false
+
   isModalEditInheritanceModeVisible = false
   isModalEditCustomInheritanceModeVisible = false
   isModalEditCompoundHetVisible = false
@@ -128,6 +132,8 @@ class DtreeStore {
   }
 
   async fetchDtreeAsync(name: string) {
+    this.activeTree = name
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       dtree: name,
@@ -679,6 +685,13 @@ class DtreeStore {
     this.isModalEditGeneRegionVisible = false
   }
 
+  openModalTextEditor() {
+    this.isModalTextEditorVisible = true
+  }
+
+  closeModalTextEditor() {
+    this.isModalTextEditorVisible = false
+  }
   // other UI control functions
 
   expandFilterContent() {
@@ -743,6 +756,15 @@ class DtreeStore {
   closeTableModal() {
     this.isTableModalVisible = false
     this.tableModalIndexNumber = null
+  }
+  // Text editor control functions
+
+  setNextDtreeCode(code: string) {
+    this.dtreeCode = code
+  }
+
+  setStartDtreeCode() {
+    this.startDtreeCode = this.dtreeCode
   }
 }
 

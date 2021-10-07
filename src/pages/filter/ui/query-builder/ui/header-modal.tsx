@@ -1,18 +1,41 @@
+import cn from 'classnames'
+
 import { Icon } from '@ui/icon'
+import { SwitchTheme } from './switch-theme'
 
 interface IProps {
   groupName: string
   handleClose: () => void
+  theme?: string
+  isTextEditor?: boolean
+  handleChangeTheme?: any
 }
 
-export const HeaderModal = ({ groupName, handleClose }: IProps) => (
+export const HeaderModal = ({
+  groupName,
+  handleClose,
+  theme = 'light',
+  isTextEditor,
+  handleChangeTheme,
+}: IProps) => (
   <div className="flex w-full justify-between items-center font-medium">
-    <div>{groupName}</div>
+    <div
+      className={cn(theme === 'light' ? 'text-black' : 'text-white', 'flex')}
+    >
+      {groupName}
+
+      {isTextEditor && (
+        <SwitchTheme handleChangeTheme={handleChangeTheme} theme={theme} />
+      )}
+    </div>
 
     <Icon
       name="Close"
       size={16}
-      className="cursor-pointer"
+      className={cn(
+        'cursor-pointer',
+        theme === 'light' ? 'text-black' : 'text-white',
+      )}
       onClick={handleClose}
     />
   </div>

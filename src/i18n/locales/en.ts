@@ -159,5 +159,8 @@ export const en = {
     chromosomeNameIsNotCorrect: 'Chromosome name is not correct',
     fullList: 'Full list',
     samples25: 'Samples-25',
+    editCurrentDecisionTreeCode: 'Edit current decision tree code',
+    expressionIsNotCorrect: 'Expression is not correct',
+    darkMode: 'dark mode',
   },
 }
