@@ -64,6 +64,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
     close()
   }
 
+  const tags = [...variantStore.generalTags, ...variantStore.optionalTags]
+
   return (
     <div
       ref={ref}
@@ -79,8 +81,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
         </span>
       </span>
 
-      <div className="mt-4 h-auto">
-        {variantStore.generalTags.map(tag => (
+      <div className="mt-4 h-auto overflow-auto" style={{ maxHeight: 300 }}>
+        {tags.map(tag => (
           <div key={tag} className="flex items-center mb-4">
             <Checkbox
               checked={checkedTags.includes(tag)}
@@ -133,10 +135,12 @@ export const DrawerTags = observer(() => {
     <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
       <span className="text-14 text-white px-3">{t('variant.tags')}</span>
 
-      <PopperButton
-        ButtonElement={DrawerNoteButton}
-        ModalElement={DrawerNoteModal}
-      />
+      <div className="mr-3">
+        <PopperButton
+          ButtonElement={DrawerNoteButton}
+          ModalElement={DrawerNoteModal}
+        />
+      </div>
 
       {variantStore.checkedTags.length > 0 && <TagsContainer />}
     </div>

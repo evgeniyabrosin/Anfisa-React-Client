@@ -108,10 +108,14 @@ export class VariantStore {
       tag => tag !== '_note',
     )
 
+    const optionalTags = get(tagsData, 'op-tags').filter(
+      (tag: string) => tag !== '_note',
+    )
+
     runInAction(() => {
       this.variant = variant
       this.generalTags = get(tagsData, 'check-tags')
-
+      this.optionalTags = optionalTags
       this.checkedTags = checkedTags
 
       this.noteText = tagsData['rec-tags']['_note']

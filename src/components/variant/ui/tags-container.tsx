@@ -11,10 +11,10 @@ export const TagsContainer = observer(() => {
   const [isExpandTags, expand, roll] = useToggle(false)
 
   return (
-    <div className="w-auto self-center" style={{ maxWidth: 288 }}>
+    <div className="w-auto" style={{ maxWidth: 288 }}>
       {variantStore.checkedTags.length > 0 && (
         <div
-          className={cn('text-white ml-3 flex max-w-xs', {
+          className={cn('text-white flex max-w-xs', {
             'flex-wrap': isExpandTags,
           })}
         >
