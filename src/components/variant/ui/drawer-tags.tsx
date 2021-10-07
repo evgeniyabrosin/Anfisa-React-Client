@@ -104,6 +104,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
         <div className="flex justify-end">
           <Button
             text="Add custom tag"
+            disabled={!customTag.trim()}
             hasBackground={false}
             className="text-black mt-2 hover:bg-blue-bright hover:text-white"
             onClick={handleSetCustomTag}
