@@ -14,11 +14,10 @@ import { DrawerTags } from './drawer-tags'
 
 interface Props {
   setLayout: Dispatch<SetStateAction<any>>
-  layout: any
 }
 
 export const VariantHeader = observer(
-  ({ setLayout, layout }: Props): ReactElement => {
+  ({ setLayout }: Props): ReactElement => {
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
     const canGetPrevVariant = () => !!variantStore.index

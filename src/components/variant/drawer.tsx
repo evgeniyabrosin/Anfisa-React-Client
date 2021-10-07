@@ -53,7 +53,7 @@ export const VariantDrawer = observer(
         }}
         className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
       >
-        <VariantHeader setLayout={setLayout} layout={layout} />
+        <VariantHeader setLayout={setLayout} />
 
         <VariantBody
           drawerWidth={drawerWidth}
