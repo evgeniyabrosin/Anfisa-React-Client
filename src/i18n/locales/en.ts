@@ -85,6 +85,10 @@ export const en = {
     maternal: 'Maternal',
     paternal: 'Paternal',
     geneAnnotation: 'Gene annotation',
+    tags: 'Tags',
+    tagsFor: 'Tags for',
+    notes: 'Notes',
+    notesFor: 'Notes for',
   },
   filter: {
     method: 'Filtering method',

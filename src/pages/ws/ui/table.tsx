@@ -101,6 +101,8 @@ export const Table = observer(
       variantStore.setIndex(variantIndex)
       setVariantIndex(variantIndex)
 
+      variantStore.fetchVarinatInfoAsync()
+
       if (!variantStore.drawerVisible) {
         variantStore.setDrawerVisible(true)
       }

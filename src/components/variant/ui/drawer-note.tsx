@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import operationsStore from '@store/operations'
 import variantStore from '@store/variant'
@@ -15,7 +16,7 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
     <Button
       refEl={refEl}
       text={variantStore.noteText ? undefined : '+ Add'}
-      className={classNames('text-white', {
+      className={classNames('text-white hover:bg-blue-bright', {
         'bg-blue-bright': !!variantStore.noteText,
       })}
       size="xs"
@@ -30,6 +31,10 @@ const DrawerNoteModal = observer(({ close }: any) => {
   const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
   const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
   const [value, setValue] = useState('')
+
+  const ref = useRef(null)
+
+  useOutsideClick(ref, () => close())
 
   useEffect(() => {
     setValue(variantStore.noteText)
@@ -49,11 +54,13 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
+    <div ref={ref} className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
       <span className="w-full">
-        Note for{' '}
+        <span>{t('variant.notesFor')} </span>
+
         <span className="text-blue-bright">
           {`[${genInfo}] `}
+
           <span dangerouslySetInnerHTML={{ __html: hg19 }} />
         </span>
       </span>
@@ -96,7 +103,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
 export const DrawerNote = observer(() => {
   return (
     <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
-      <span className="text-14 text-white px-3">Notes</span>
+      <span className="text-14 text-white px-3">{t('variant.notes')}</span>
 
       <PopperButton
         ButtonElement={DrawerNoteButton}

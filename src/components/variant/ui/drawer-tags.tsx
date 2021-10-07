@@ -1,54 +1,144 @@
-import { Fragment } from 'react'
-import cn from 'classnames'
+import { useRef, useState } from 'react'
+import Checkbox from 'react-three-state-checkbox'
+import classNames from 'classnames'
+import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
-import { useToggle } from '@core/hooks/use-toggle'
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
-import { Tag } from '@ui/tag'
+import { Button } from '@ui/button'
+import { Input } from '@ui/input'
+import { PopperButton } from '@components/popper-button'
+import { TagsContainer } from './tags-container'
 
-export const DrawerTags = observer(() => {
-  const [isExpandTags, expand, roll] = useToggle(false)
+const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
+  return (
+    <Button
+      refEl={refEl}
+      text={'+ Add'}
+      className={classNames('text-white hover:bg-blue-bright')}
+      size="xs"
+      hasBackground={false}
+      onClick={onClick}
+    />
+  )
+})
 
-  if (variantStore.tags.length === 0) {
-    return <Fragment />
+const DrawerNoteModal = observer(({ close }: any) => {
+  const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
+  const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
+
+  const [checkedTags, setCheckedTags] = useState<string[]>(
+    variantStore.checkedTags,
+  )
+
+  const [customTag, setCustomTag] = useState<string>('')
+
+  const ref = useRef(null)
+
+  useOutsideClick(ref, () => close())
+
+  const handleCheck = (checked: boolean, item: string) => {
+    checked
+      ? setCheckedTags(prev => [...prev, item])
+      : setCheckedTags(prev => prev.filter(tag => tag !== item))
+  }
+
+  const handleSetCustomTag = () => {
+    variantStore.updateGeneralTags(customTag)
+    setCustomTag('')
+  }
+
+  const handleSaveTags = () => {
+    let params = ''
+
+    checkedTags.map((tag, index) => {
+      params += `"${tag}":${true}`
+
+      if (checkedTags[index + 1]) params += `,`
+    })
+
+    variantStore.fetchSelectedTagsAsync(params)
+
+    close()
   }
 
   return (
-    <div className="w-72 mr-3 self-center">
-      {variantStore.tags.length > 0 && (
-        <div
-          className={cn('text-white ml-3 flex max-w-xs', {
-            'flex-wrap': isExpandTags,
-          })}
-        >
-          {variantStore.tags
-            .slice(0, isExpandTags ? variantStore.tags.length : 2)
-            .map(tag => (
-              <Tag text={tag} key={tag} isActive hideCloseIcon />
-            ))}
+    <div
+      ref={ref}
+      className="bg-blue-light flex flex-col py-5 px-4 rounded-xl overflow-y-auto"
+    >
+      <span className="w-full">
+        <span>{t('variant.tagsFor')} </span>
 
-          {variantStore.tags.length > 2 && (
-            <Fragment>
-              {isExpandTags ? (
-                <span
-                  className="text-12 leading-14px font-bold text-blue-bright p-1 cursor-pointer"
-                  onClick={roll}
-                >
-                  {t('general.showLess')}
-                </span>
-              ) : (
-                <Tag
-                  text={`+${variantStore.tags.length - 2}`}
-                  isActive
-                  onClick={expand}
-                  hideCloseIcon
-                />
-              )}
-            </Fragment>
-          )}
+        <span className="text-blue-bright">
+          {`[${genInfo}] `}
+
+          <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+        </span>
+      </span>
+
+      <div className="mt-4 h-auto">
+        {variantStore.generalTags.map(tag => (
+          <div key={tag} className="flex items-center mb-4">
+            <Checkbox
+              checked={checkedTags.includes(tag)}
+              className="w-4 h-4"
+              onChange={e => handleCheck(e.target.checked, tag)}
+            />
+
+            <span className="text-12 ml-1">{tag}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-2 h-auto">
+        <Input
+          value={customTag}
+          onChange={(e: any) => setCustomTag(e.target.value)}
+        />
+
+        <div className="flex justify-end">
+          <Button
+            text="Add custom tag"
+            hasBackground={false}
+            className="text-black mt-2 hover:bg-blue-bright hover:text-white"
+            onClick={handleSetCustomTag}
+          />
         </div>
-      )}
+      </div>
+
+      <div className="flex mt-4">
+        <Button
+          text={t('general.cancel')}
+          onClick={close}
+          hasBackground={false}
+          className="text-black mr-3 ml-auto hover:bg-blue-bright hover:text-white"
+        />
+
+        <Button
+          text="Save tags"
+          hasBackground={false}
+          className="text-black hover:bg-blue-bright hover:text-white"
+          onClick={handleSaveTags}
+        />
+      </div>
+    </div>
+  )
+})
+
+export const DrawerTags = observer(() => {
+  return (
+    <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
+      <span className="text-14 text-white px-3">{t('variant.tags')}</span>
+
+      <PopperButton
+        ButtonElement={DrawerNoteButton}
+        ModalElement={DrawerNoteModal}
+      />
+
+      {variantStore.checkedTags.length > 0 && <TagsContainer />}
     </div>
   )
 })

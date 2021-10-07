@@ -1,3 +1,4 @@
+import { get } from 'lodash'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ReccntCommon, ReccntDisplayItem } from '@declarations'
@@ -10,7 +11,9 @@ export class VariantStore {
   recordsDisplayConfig: any = {}
   index = 0
   dsName = ''
-  tags: string[] = []
+  generalTags: string[] = []
+  optionalTags: string[] = []
+  checkedTags: string[] = []
   noteText = ''
 
   constructor() {
@@ -82,6 +85,10 @@ export class VariantStore {
     }
   }
 
+  updateGeneralTags(tagName: string) {
+    this.generalTags = [...this.generalTags, tagName]
+  }
+
   async fetchVarinatInfoAsync() {
     if (datasetStore.isXL) return
 
@@ -97,14 +104,47 @@ export class VariantStore {
       tagsResponse.json(),
     ])
 
-    const tags = Object.keys(tagsData['rec-tags']).filter(
+    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
       tag => tag !== '_note',
     )
 
     runInAction(() => {
       this.variant = variant
-      this.tags = tags
+      this.generalTags = get(tagsData, 'check-tags')
+
+      this.checkedTags = checkedTags
+
       this.noteText = tagsData['rec-tags']['_note']
+      this.initRecordsDisplayConfig()
+    })
+  }
+
+  async fetchSelectedTagsAsync(params: string) {
+    if (datasetStore.isXL) return
+
+    const body = new URLSearchParams({
+      ds: this.dsName,
+      rec: this.index.toString(),
+      tags: `{${params}}`,
+    })
+
+    const response = await fetch(getApiUrl(`ws_tags`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    })
+
+    const tagsData = await response.json()
+
+    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
+      tag => tag !== '_note',
+    )
+
+    runInAction(() => {
+      this.checkedTags = checkedTags
+
       this.initRecordsDisplayConfig()
     })
   }

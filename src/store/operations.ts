@@ -19,7 +19,7 @@ class OperationsStore {
       ds: datasetStore.datasetName,
       rec: String(variantStore.index),
       tags: JSON.stringify({
-        ...variantStore.tags.reduce((p, c) => ({ ...p, [c]: true }), {}),
+        ...variantStore.checkedTags.reduce((p, c) => ({ ...p, [c]: true }), {}),
         _note: noteText,
       }),
     })
