@@ -155,5 +155,7 @@ export const en = {
     state: 'State',
     locus: 'Locus',
     chromosomeNameIsNotCorrect: 'Chromosome name is not correct',
+    fullList: 'Full list',
+    samples25: 'Samples-25',
   },
 }

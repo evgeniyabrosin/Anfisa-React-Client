@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
@@ -23,15 +25,18 @@ const ModalView = styled.div`
 
 const ModalContent = styled.div`
   width: 90%;
-  /* height: auto; */
   min-height: 700px;
   max-height: 500px;
 `
+
+type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
 export const TableModal = observer(() => {
   const [layout, setLayout] = useState(defaultLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
+  const [isSampleMode, setIsSampleMode] = useState(false)
+  const [variantSize, setVariantSize] = useState<VariantsSize>()
   const ref = useRef(null)
 
   useEffect(() => {
@@ -52,19 +57,37 @@ export const TableModal = observer(() => {
 
   const jobStatus = dtreeStore.savingStatus
   const jobStatusData = jobStatus?.[0] ? jobStatus[0] : null
+  const records = jobStatusData?.records
+  const samples = jobStatusData?.samples
 
   useEffect(() => {
     if (jobStatusData) {
-      const { records } = jobStatusData
-      const orderNumber = records[variantIndex]?.no ?? 0
+      if (
+        Boolean(jobStatusData['samples']) &&
+        Boolean(jobStatusData['records'])
+      ) {
+        setVariantSize('MIDDLE')
+      } else if (jobStatusData['records']) {
+        setVariantSize('SMALL')
+      } else {
+        setVariantSize('LARGE')
+      }
 
-      setVariantList(records)
+      const isSample = Boolean(samples)
+
+      setIsSampleMode(isSample)
+
+      setVariantList(samples || records)
 
       const datasetName = datasetStore.datasetName
 
+      const orderNumber = isSample
+        ? samples[variantIndex]?.no ?? 0
+        : records[variantIndex]?.no ?? 0
+
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
-  }, [jobStatusData, variantIndex])
+  }, [jobStatusData, records, samples, variantIndex])
 
   const drawerWidth = window.innerWidth - 380
 
@@ -74,28 +97,71 @@ export const TableModal = observer(() => {
     }
   }
 
+  const isLoading = jobStatus.length === 0 || jobStatus[0] === false
+
+  const toggleMode = () => {
+    setIsSampleMode(!isSampleMode)
+    const newVariantList = !isSampleMode ? samples : records
+
+    setVariantList(newVariantList)
+  }
+
   return (
     <ModalView className="bg-grey-blue" onClick={closeModal}>
       <ModalContent
         className="flex flex-col py-4 px-4 bg-white rounded-lg overflow-y-auto"
         ref={ref}
       >
-        {jobStatus[0] === false && jobStatus[1]}
-        <h1 className="text-center">{variantList[variantIndex]?.lb ?? ''}</h1>
-        <div className="flex">
-          <div className="p-5">
-            {variantList.map((_element: any, index: number) => (
-              <div key={index} className="shadow-dark p-1 mb-5 cursor-pointer">
-                <p onClick={() => setVariantIndex(index)}>N - {index + 1}</p>
+        {isLoading ? (
+          jobStatus[1]
+        ) : (
+          <Fragment>
+            <h1 className="text-center">
+              {variantList[variantIndex]?.lb ?? ''}
+            </h1>
+            <div className="flex">
+              <div className="p-5">
+                <div className="flex">
+                  {/* TODO: change Checkbox to radio btn */}
+                  <label className="pl-4">
+                    <Checkbox
+                      disabled={variantSize === 'LARGE'}
+                      checked={!isSampleMode}
+                      className="mr-1"
+                      onChange={toggleMode}
+                    />
+                    {t('dtree.fullList')}
+                  </label>
+                  <label className="pl-4">
+                    <Checkbox
+                      disabled={variantSize === 'SMALL'}
+                      checked={isSampleMode}
+                      className="mr-1"
+                      onChange={toggleMode}
+                    />
+                    {t('dtree.samples25')}
+                  </label>
+                </div>
+
+                {variantList.map((_element: any, index: number) => (
+                  <div
+                    key={index}
+                    className="shadow-dark p-1 mb-5 cursor-pointer"
+                  >
+                    <p onClick={() => setVariantIndex(index)}>
+                      N - {index + 1}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <VariantBody
-            drawerWidth={drawerWidth}
-            setLayout={setLayout}
-            layout={layout}
-          />
-        </div>
+              <VariantBody
+                drawerWidth={drawerWidth}
+                setLayout={setLayout}
+                layout={layout}
+              />
+            </div>
+          </Fragment>
+        )}
       </ModalContent>
     </ModalView>
   )

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
 import { changeStep } from '@utils/changeStep'
@@ -106,7 +107,11 @@ export const NextStepHeader = observer(
               </div>
               {/* TODO: temporarly btn */}
               <div className="ml-1" onClick={openTableModal}>
-                View variants
+                <Button
+                  text="View variants"
+                  hasBackground={false}
+                  className="ml-2 text-black hover:bg-blue-bright hover:text-white"
+                />
               </div>
             </div>
           </div>
