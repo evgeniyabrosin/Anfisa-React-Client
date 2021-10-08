@@ -73,6 +73,7 @@ const ExcludeAmount = styled.div<{ isIncluded: boolean }>`
   width: auto;
   font-size: 13px;
   font-weight: 700;
+  cursor: pointer;
   color: ${props =>
     props.isIncluded
       ? theme('colors.green.secondary')
@@ -118,6 +119,13 @@ export const NextStepRoute = observer(
       ? changedStartCounts
       : alternativeCounts
 
+    const showStatistics = () => {
+      const code = dtreeStore.dtreeCode
+      const indexForApi = dtreeStore.getStepIndexForApi(index) + 1
+
+      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+    }
+
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
@@ -154,7 +162,10 @@ export const NextStepRoute = observer(
                   className="absolute w-full right-4 flex justify-end items-center"
                   style={{ top: 48 }}
                 >
-                  <ExcludeAmount isIncluded={isIncluded}>
+                  <ExcludeAmount
+                    isIncluded={isIncluded}
+                    onClick={showStatistics}
+                  >
                     {isIncluded
                       ? `+${currentStep.difference}`
                       : `-${currentStep.difference}`}

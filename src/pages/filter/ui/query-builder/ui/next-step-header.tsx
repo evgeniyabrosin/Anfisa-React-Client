@@ -45,8 +45,9 @@ export const NextStepHeader = observer(
       changeStep(stepIndex, action)
     }
 
-    const openTableModal = () => {
-      const nextStepIndex = dtreeStore.getStepIndexForApi(index) + 1
+    const openTableModal = (isReturnedVariants = true) => {
+      const indexForApi = dtreeStore.getStepIndexForApi(index)
+      const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
 
       dtreeStore.openTableModal(nextStepIndex)
     }
@@ -105,9 +106,18 @@ export const NextStepHeader = observer(
 
                 <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
               </div>
-              {/* TODO: temporarly btn */}
-              <div className="ml-1" onClick={openTableModal}>
+              {/* TODO: temporarly btns */}
+              <div className="ml-1">
                 <Button
+                  onClick={() => openTableModal(true)}
+                  text="View returned variants"
+                  hasBackground={false}
+                  className="ml-2 text-black hover:bg-blue-bright hover:text-white"
+                />
+              </div>
+              <div className="ml-1">
+                <Button
+                  onClick={() => openTableModal(false)}
                   text="View variants"
                   hasBackground={false}
                   className="ml-2 text-black hover:bg-blue-bright hover:text-white"

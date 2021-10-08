@@ -39,15 +39,15 @@ export const TableModal = observer(() => {
   const [variantSize, setVariantSize] = useState<VariantsSize>()
   const ref = useRef(null)
 
+  const stepIndex = dtreeStore.tableModalIndexNumber
+
   useEffect(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      const index = dtreeStore.tableModalIndexNumber
+      if (stepIndex === null) return
 
-      if (typeof index !== 'number') return
-
-      const result = await fetchDsListAsync(index)
+      const result = await fetchDsListAsync(stepIndex)
 
       fetchJobStatusAsync(result.task_id)
     }
@@ -58,12 +58,15 @@ export const TableModal = observer(() => {
       dtreeStore.clearJobStatus()
       dtreeStore.setShouldLoadTableModal(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const jobStatus = dtreeStore.savingStatus
   const jobStatusData = jobStatus?.[0] ? jobStatus[0] : null
   const records = jobStatusData?.records
   const samples = jobStatusData?.samples
+  const datasetName = datasetStore.datasetName
+  const isSample = Boolean(samples)
 
   useEffect(() => {
     if (jobStatusData) {
@@ -78,21 +81,28 @@ export const TableModal = observer(() => {
         setVariantSize('LARGE')
       }
 
-      const isSample = Boolean(samples)
-
       setIsSampleMode(isSample)
 
       setVariantList(samples || records)
 
-      const datasetName = datasetStore.datasetName
+      const orderNumber = isSample ? samples[0]?.no ?? 0 : records[0]?.no ?? 0
 
+      variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobStatusData])
+
+  useEffect(() => {
+    if (jobStatusData) {
       const orderNumber = isSample
         ? samples[variantIndex]?.no ?? 0
         : records[variantIndex]?.no ?? 0
 
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
-  }, [jobStatusData, records, samples, variantIndex])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobStatusData, variantIndex])
 
   const drawerWidth = window.innerWidth - 380
 
@@ -111,6 +121,8 @@ export const TableModal = observer(() => {
     setVariantList(newVariantList)
   }
 
+  const allVaraints = stepIndex ? dtreeStore.pointCounts[stepIndex] : ''
+
   return (
     <ModalView className="bg-grey-blue" onClick={closeModal}>
       <ModalContent
@@ -127,6 +139,7 @@ export const TableModal = observer(() => {
             <div className="flex">
               <div className="p-5">
                 <div className="flex flex-col">
+                  <p>In scope: {allVaraints}</p>
                   <div className="flex items-center mr-3">
                     <RadioButton
                       isDisabled={variantSize === 'LARGE'}
