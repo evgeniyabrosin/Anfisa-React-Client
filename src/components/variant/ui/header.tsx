@@ -102,6 +102,7 @@ export const VariantHeader = observer(
                         ) *
                           0.0208 +
                         1.3,
+                      y: index,
                     }))
 
                     window.localStorage.setItem(
@@ -111,8 +112,6 @@ export const VariantHeader = observer(
 
                     return newLayout
                   })
-
-                  variantStore.handleAllRecordsOpen(true)
                 }}
               />
 
@@ -134,7 +133,6 @@ export const VariantHeader = observer(
 
                     return newLayout
                   })
-                  variantStore.handleAllRecordsOpen(false)
                 }}
               />
             </div>

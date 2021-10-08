@@ -65,6 +65,12 @@ export class VariantStore {
     this.recordsDisplayConfig[name].h = height
   }
 
+  checkRecodsDisplaying() {
+    Object.values(this.recordsDisplayConfig).map((record: any) => {
+      record.h > 1 ? (record.isOpen = true) : (record.isOpen = false)
+    })
+  }
+
   setIndex(index: number) {
     const oldIndex = this.index
 

@@ -1,8 +1,7 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import GridLayout from 'react-grid-layout'
 import cn from 'classnames'
-import { clone, cloneDeep, get } from 'lodash'
-import { runInAction } from 'mobx'
+import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
@@ -77,6 +76,14 @@ export const VariantBody = observer(
       (aspect: ReccntCommon) => !(aspect.rows && aspect.rows.length === 0),
     )
 
+    // important variable to prevent variant block compression after first render
+    let indicator = 0
+
+    useEffect(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      indicator = 1
+    })
+
     return (
       <GridLayout
         cols={6}
@@ -91,9 +98,31 @@ export const VariantBody = observer(
           layoutData.forEach(layoutItem => {
             variantStore.updateRecordsDisplayConfig(layoutItem.i, layoutItem.h)
           })
+
+          variantStore.checkRecodsDisplaying()
           window.localStorage.setItem('gridLayout', JSON.stringify(layoutData))
 
           setLayout(layoutData)
+        }}
+        onLayoutChange={layoutData => {
+          if (indicator === 0) {
+            return
+          } else {
+            layoutData.forEach(layoutItem => {
+              variantStore.updateRecordsDisplayConfig(
+                layoutItem.i,
+                layoutItem.h,
+              )
+            })
+
+            variantStore.checkRecodsDisplaying()
+            window.localStorage.setItem(
+              'gridLayout',
+              JSON.stringify(layoutData),
+            )
+
+            setLayout(layoutData)
+          }
         }}
       >
         {filtered.map((aspect: ReccntCommon, index: number) => {
@@ -116,9 +145,7 @@ export const VariantBody = observer(
                     return
                   }
 
-                  const cloneRoot: any = cloneDeep(
-                    variantStore.recordsDisplayConfig,
-                  )
+                  const cloneRecords: any = variantStore.recordsDisplayConfig
 
                   const drawerElement = document.querySelector(
                     `#drawer-${aspect.name}`,
@@ -133,17 +160,23 @@ export const VariantBody = observer(
                   const openedH = clientHeight * 0.0208 + 1.3
 
                   setLayout((prev: any[]) => {
-                    const cloned: any[] = clone(prev)
+                    const clonedLayout: any[] = clone(prev)
 
-                    const layoutItemIndex = cloned.findIndex(
+                    const layoutItemIndex = clonedLayout.findIndex(
                       (aspectItem: any) => aspectItem.i === aspect.name,
                     )
 
-                    cloned[layoutItemIndex].h = cloneRoot[aspect.name].isOpen
+                    clonedLayout[layoutItemIndex].h = cloneRecords[aspect.name]
+                      .isOpen
                       ? 1
                       : openedH
 
-                    const reflowLayout = cloned.map(
+                    variantStore.updateRecordsDisplayConfig(
+                      clonedLayout[layoutItemIndex].i,
+                      clonedLayout[layoutItemIndex].h,
+                    )
+
+                    const reflowLayout = clonedLayout.map(
                       (layoutItem, layoutIndex: number) => {
                         if (layoutIndex < layoutItemIndex) {
                           return layoutItem
@@ -163,15 +196,7 @@ export const VariantBody = observer(
 
                     return reflowLayout
                   })
-
-                  cloneRoot[aspect.name] = {
-                    isOpen: !cloneRoot[aspect.name].isOpen,
-                    h: cloneRoot[aspect.name].isOpen ? 1 : openedH,
-                  }
-
-                  runInAction(() => {
-                    variantStore.recordsDisplayConfig = cloneRoot
-                  })
+                  variantStore.checkRecodsDisplaying()
                 }}
               >
                 {aspect.title}
@@ -188,10 +213,7 @@ export const VariantBody = observer(
                 )}
                 id={`drawer-${aspect.name}`}
                 style={{
-                  height:
-                    (get(variantStore.recordsDisplayConfig, aspect.name, 0).h -
-                      1.3) /
-                    0.0208,
+                  height: get(layout, aspect.name, 0).h,
                 }}
               >
                 {aspect.type === 'pre' ? (
