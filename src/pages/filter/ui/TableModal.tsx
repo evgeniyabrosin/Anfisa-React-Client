@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -7,6 +6,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
+import { RadioButton } from '@ui/radio-button'
 import { defaultLayout } from '@components/variant/drawer'
 import { VariantBody } from '@components/variant/ui/body'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
@@ -40,6 +40,8 @@ export const TableModal = observer(() => {
   const ref = useRef(null)
 
   useEffect(() => {
+    dtreeStore.setShouldLoadTableModal(true)
+
     const initAsync = async () => {
       const index = dtreeStore.tableModalIndexNumber
 
@@ -52,7 +54,10 @@ export const TableModal = observer(() => {
 
     initAsync()
 
-    // TODO: clear store when component will unmount
+    return () => {
+      dtreeStore.clearJobStatus()
+      dtreeStore.setShouldLoadTableModal(false)
+    }
   }, [])
 
   const jobStatus = dtreeStore.savingStatus
@@ -121,26 +126,26 @@ export const TableModal = observer(() => {
             </h1>
             <div className="flex">
               <div className="p-5">
-                <div className="flex">
-                  {/* TODO: change Checkbox to radio btn */}
-                  <label className="pl-4">
-                    <Checkbox
-                      disabled={variantSize === 'LARGE'}
-                      checked={!isSampleMode}
-                      className="mr-1"
+                <div className="flex flex-col">
+                  <div className="flex items-center mr-3">
+                    <RadioButton
+                      isDisabled={variantSize === 'LARGE'}
+                      isChecked={!isSampleMode}
                       onChange={toggleMode}
                     />
-                    {t('dtree.fullList')}
-                  </label>
-                  <label className="pl-4">
-                    <Checkbox
-                      disabled={variantSize === 'SMALL'}
-                      checked={isSampleMode}
-                      className="mr-1"
+
+                    <p className="ml-1">{t('dtree.fullList')}</p>
+                  </div>
+
+                  <div className="flex items-center">
+                    <RadioButton
+                      isDisabled={variantSize === 'SMALL'}
+                      isChecked={isSampleMode}
                       onChange={toggleMode}
                     />
-                    {t('dtree.samples25')}
-                  </label>
+
+                    <p className="ml-1 ">{t('dtree.samples25')}</p>
+                  </div>
                 </div>
 
                 {variantList.map((_element: any, index: number) => (

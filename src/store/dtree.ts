@@ -50,6 +50,7 @@ class DtreeStore {
   acceptedVariants = 0
 
   savingStatus: any = []
+  shouldLoadTableModal = false
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
@@ -607,6 +608,18 @@ class DtreeStore {
   setJobStatus(jobStatus: any) {
     runInAction(() => {
       this.savingStatus = JSON.parse(JSON.stringify(jobStatus))
+    })
+  }
+
+  clearJobStatus() {
+    runInAction(() => {
+      this.savingStatus = []
+    })
+  }
+
+  setShouldLoadTableModal(shouldLoad: boolean) {
+    runInAction(() => {
+      this.shouldLoadTableModal = shouldLoad
     })
   }
 
