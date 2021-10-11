@@ -1,35 +1,32 @@
 import { ReactElement } from 'react'
-import { useHistory } from 'react-router'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import { Routes } from '@router/routes.enum'
+import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 
 export const QueryBuilderTotalNumbers = observer(
   (): ReactElement => {
-    const history = useHistory()
-    const params = useParams()
-
     const [allVariants, transcribedVariants, allTranscripts] = get(
       datasetStore,
       'statAmount',
       [],
     )
 
-    const selectedVariants =
-      datasetStore.conditions.length === 0
-        ? allVariants
-        : datasetStore.filteredNo.length
+    const openTableModal = (isReturnedVariants = true) => {
+      const stepData = dtreeStore.stepData
 
-    const handleClick = () =>
-      history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+      const index = stepData.findIndex(element => element.isActive)
+      const indexForApi = dtreeStore.getStepIndexForApi(index)
+      const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
+
+      dtreeStore.openTableModal(nextStepIndex)
+    }
 
     return (
-      <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark">
+      <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark justify-between">
         <div className="flex flex-wrap">
           <span className="font-bold text-white w-full">
             {t('dtree.results')}
@@ -57,14 +54,20 @@ export const QueryBuilderTotalNumbers = observer(
             </span>
           )}
         </div>
-
-        <Button
-          className="ml-auto"
-          text={t('dtree.applyFilter', {
-            amount: selectedVariants,
-          })}
-          onClick={handleClick}
-        />
+        <div className="flex">
+          <Button
+            onClick={() => openTableModal(true)}
+            text="View returned variants"
+            hasBackground={false}
+            className="ml-auto hover:bg-blue-bright"
+          />
+          <Button
+            onClick={() => openTableModal(false)}
+            text="View variants"
+            hasBackground={false}
+            className="ml-5 hover:bg-blue-bright"
+          />
+        </div>
       </div>
     )
   },

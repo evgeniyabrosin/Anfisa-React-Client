@@ -139,7 +139,7 @@ export const TableModal = observer(() => {
             <div className="flex">
               <div className="p-5">
                 <div className="flex flex-col">
-                  <p>In scope: {allVaraints}</p>
+                  <div>In scope: {allVaraints}</div>
                   <div className="flex items-center mr-3">
                     <RadioButton
                       isDisabled={variantSize === 'LARGE'}
@@ -147,7 +147,7 @@ export const TableModal = observer(() => {
                       onChange={toggleMode}
                     />
 
-                    <p className="ml-1">{t('dtree.fullList')}</p>
+                    <div className="ml-1">{t('dtree.fullList')}</div>
                   </div>
 
                   <div className="flex items-center">

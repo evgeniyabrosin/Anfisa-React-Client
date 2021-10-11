@@ -123,6 +123,7 @@ export const NextStepRoute = observer(
       const code = dtreeStore.dtreeCode
       const indexForApi = dtreeStore.getStepIndexForApi(index) + 1
 
+      dtreeStore.setStepActive(index)
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 

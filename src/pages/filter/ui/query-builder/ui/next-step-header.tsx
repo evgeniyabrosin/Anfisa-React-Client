@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
 import { changeStep } from '@utils/changeStep'
@@ -43,13 +42,6 @@ export const NextStepHeader = observer(
     ) => {
       dtreeStore.toggleIsExcluded(stepIndex)
       changeStep(stepIndex, action)
-    }
-
-    const openTableModal = (isReturnedVariants = true) => {
-      const indexForApi = dtreeStore.getStepIndexForApi(index)
-      const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
-
-      dtreeStore.openTableModal(nextStepIndex)
     }
 
     return (
@@ -105,23 +97,6 @@ export const NextStepHeader = observer(
                 />
 
                 <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
-              </div>
-              {/* TODO: temporarly btns */}
-              <div className="ml-1">
-                <Button
-                  onClick={() => openTableModal(true)}
-                  text="View returned variants"
-                  hasBackground={false}
-                  className="ml-2 text-black hover:bg-blue-bright hover:text-white"
-                />
-              </div>
-              <div className="ml-1">
-                <Button
-                  onClick={() => openTableModal(false)}
-                  text="View variants"
-                  hasBackground={false}
-                  className="ml-2 text-black hover:bg-blue-bright hover:text-white"
-                />
               </div>
             </div>
           </div>
