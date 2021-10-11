@@ -89,6 +89,7 @@ export const en = {
     tagsFor: 'Tags for',
     notes: 'Notes',
     notesFor: 'Notes for',
+    tagExists: 'Tag is already exists',
   },
   filter: {
     method: 'Filtering method',

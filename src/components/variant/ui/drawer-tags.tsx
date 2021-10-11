@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import { toast } from 'react-toastify'
 import classNames from 'classnames'
 import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
@@ -46,8 +48,20 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   const handleSetCustomTag = () => {
-    variantStore.updateGeneralTags(customTag)
-    setCustomTag('')
+    if (variantStore.generalTags.includes(customTag)) {
+      toast.error(t('variant.tagExists'), {
+        position: 'bottom-right',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      })
+    } else {
+      variantStore.updateGeneralTags(customTag)
+      setCustomTag('')
+    }
   }
 
   const handleSaveTags = () => {
@@ -60,7 +74,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
     })
 
     variantStore.fetchSelectedTagsAsync(params)
-
+    datasetStore.initDatasetAsync(datasetStore.datasetName)
     close()
   }
 
