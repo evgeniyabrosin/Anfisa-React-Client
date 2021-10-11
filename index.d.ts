@@ -243,7 +243,7 @@ export interface ReccntCommon {
   kind: 'norm' | 'tech'
   type: 'table' | 'pre'
   columns?: number
-  colhead?: [title: string, count: int][]
+  colhead?: any[]
   colgroup?: string[]
   rows?: ReccntRow[]
   parmodes?: any[]

@@ -77,7 +77,10 @@ class ZoneStore {
 
     tagName === '_note' && this.resetModeWithNotes()
 
-    this.fetchTagSelectAsync()
+    datasetStore.addZone(['_tags', this.selectedSamples])
+    datasetStore.fetchWsListAsync()
+
+    // TODO: removed this.fetchTagSelectAsync()
   }
 
   unselectAllTags() {

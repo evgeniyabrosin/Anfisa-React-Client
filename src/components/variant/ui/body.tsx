@@ -1,11 +1,13 @@
 import { ReactElement, useEffect } from 'react'
 import GridLayout from 'react-grid-layout'
+import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
 import { ReccntCommon } from '@declarations'
+import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
 
@@ -13,7 +15,17 @@ const PreView = ({ content }: ReccntCommon): ReactElement => {
   return <pre className="overflow-y-hidden">{content}</pre>
 }
 
-const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
+const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
+  let colheadData: string[] = []
+
+  if (colhead) {
+    colheadData = [colhead && colhead[0][0]]
+
+    if (name === 'view_transcripts') {
+      colheadData.push(t('variant.showSelectionOnly'))
+    }
+  }
+
   return (
     <div>
       <table className="min-w-full">
@@ -21,9 +33,13 @@ const TableView = ({ colhead, rows }: ReccntCommon): ReactElement => {
           <thead>
             <tr className="text-blue-bright border-b border-blue-lighter">
               <td />
-              {colhead.map((th, i) => (
-                <td key={i} className="py-3 pr-4" colSpan={th[1]}>
-                  {th[0]}
+              {colheadData.map((th, i) => (
+                <td key={i} className="py-3 pr-4">
+                  {th}
+
+                  {th === t('variant.showSelectionOnly') && (
+                    <Checkbox checked={false} className="ml-1" />
+                  )}
                 </td>
               ))}
             </tr>
@@ -219,7 +235,7 @@ export const VariantBody = observer(
                 {aspect.type === 'pre' ? (
                   <PreView {...aspect} />
                 ) : (
-                  <TableView {...aspect} />
+                  <TableView {...aspect} name={aspect.name} />
                 )}
               </div>
             </div>
