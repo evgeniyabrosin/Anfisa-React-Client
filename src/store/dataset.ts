@@ -79,7 +79,7 @@ class DatasetStore {
       return
     }
 
-    this.zone = [...this.zone, zone]
+    this.zone = [zone]
   }
 
   clearZone() {

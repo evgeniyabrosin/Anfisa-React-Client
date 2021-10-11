@@ -53,7 +53,11 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   }, [])
 
   const handleApplyAsync = async () => {
+    zoneStore.resetCertainSelectedItems('tags')
     zoneStore.fetchTagSelectAsync()
+
+    datasetStore.addZone(['_tags', zoneStore.selectedTags])
+    await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     close()
   }

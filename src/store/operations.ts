@@ -64,7 +64,15 @@ class OperationsStore {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       conditions: JSON.stringify(datasetStore.conditions),
-      filter: datasetStore.activePreset,
+      zone:
+        datasetStore.zone.length > 0
+          ? `[["${
+              datasetStore.zone[0][0]
+            }",["${datasetStore.zone[0][1]
+              .toString()
+              .split(',')
+              .join('","')}"]]]`
+          : `[]`,
     })
 
     if (exportType === ExportTypeEnum.Excel) {

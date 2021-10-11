@@ -53,6 +53,8 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   }, [])
 
   const handleApplyAsync = async () => {
+    zoneStore.resetCertainSelectedItems('samples')
+
     datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 

@@ -2,7 +2,6 @@ import { difference } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
-import zoneStore from '@store/filterZone'
 import datasetStore from './dataset'
 
 class ZoneStore {
@@ -25,7 +24,7 @@ class ZoneStore {
   removeGene(geneName: string) {
     this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
 
-    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
+    datasetStore.addZone(['Symbol', this.selectedGenes])
     datasetStore.fetchWsListAsync()
     datasetStore.clearZone()
   }
@@ -43,7 +42,7 @@ class ZoneStore {
       genesList => geneName !== genesList,
     )
 
-    datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
+    datasetStore.addZone(['Panels', this.selectedGenesList])
     datasetStore.fetchWsListAsync()
     datasetStore.clearZone()
   }
@@ -61,7 +60,7 @@ class ZoneStore {
       sampleItem => sampleItem !== sample,
     )
 
-    datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
+    datasetStore.addZone(['Has_Variant', this.selectedSamples])
     datasetStore.fetchWsListAsync()
   }
 
@@ -92,6 +91,32 @@ class ZoneStore {
     this.unselectAllGenesList()
     this.unselectAllSamples()
     this.unselectAllTags()
+  }
+
+  resetCertainSelectedItems(type: string) {
+    if (type === 'genes') {
+      this.unselectAllGenesList()
+      this.unselectAllSamples()
+      this.unselectAllTags()
+    }
+
+    if (type === 'genesList') {
+      this.unselectAllGenes()
+      this.unselectAllSamples()
+      this.unselectAllTags()
+    }
+
+    if (type === 'samples') {
+      this.unselectAllGenes()
+      this.unselectAllGenesList()
+      this.unselectAllTags()
+    }
+
+    if (type === 'tags') {
+      this.unselectAllGenes()
+      this.unselectAllGenesList()
+      this.unselectAllSamples()
+    }
   }
 
   async fetchTagSelectAsync() {
