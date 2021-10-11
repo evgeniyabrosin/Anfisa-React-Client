@@ -30,7 +30,33 @@ export const NextStepContent = observer(
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 
-    const condition = currentStepData.condition
+    const condition = currentStepData.condition ?? null
+
+    const getWords = (text: string | null) => {
+      if (!text) return []
+      const textList = text.split(' ')
+
+      const words = textList.map((word, wordIndex: number) => {
+        const changedWord = word.trim()
+
+        switch (changedWord) {
+          case 'if':
+          case 'and':
+          case 'or':
+          case 'not':
+            return (
+              <span key={wordIndex} className="text-white">{` ${word} `}</span>
+            )
+
+          default:
+            return <span key={wordIndex}>{`${word} `}</span>
+        }
+      })
+
+      return words
+    }
+
+    const wordList = getWords(condition)
 
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
@@ -62,9 +88,9 @@ export const NextStepContent = observer(
                 )}
 
                 <div className="flex">
-                  <div className="text-grey-light mr-2">{condition}</div>
-
-                  {/*TODO: to display func attr content, use getFuncParams util */}
+                  <div className="text-orange-secondary mr-2">
+                    {wordList.map(element => element)}
+                  </div>
                 </div>
 
                 <div className="text-grey-light pl-2">return {result}</div>
