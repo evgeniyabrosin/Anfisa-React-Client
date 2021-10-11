@@ -67,8 +67,8 @@ class OperationsStore {
       zone:
         datasetStore.zone.length > 0
           ? `[["${
-              datasetStore.zone[0][0]
-            }",["${datasetStore.zone[0][1]
+              datasetStore.zone[datasetStore.zone[0].length - 1][0]
+            }",["${datasetStore.zone[datasetStore.zone[0].length - 1][1]
               .toString()
               .split(',')
               .join('","')}"]]]`

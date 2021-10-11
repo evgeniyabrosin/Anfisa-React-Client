@@ -96,32 +96,6 @@ class ZoneStore {
     this.unselectAllTags()
   }
 
-  resetCertainSelectedItems(type: string) {
-    if (type === 'genes') {
-      this.unselectAllGenesList()
-      this.unselectAllSamples()
-      this.unselectAllTags()
-    }
-
-    if (type === 'genesList') {
-      this.unselectAllGenes()
-      this.unselectAllSamples()
-      this.unselectAllTags()
-    }
-
-    if (type === 'samples') {
-      this.unselectAllGenes()
-      this.unselectAllGenesList()
-      this.unselectAllTags()
-    }
-
-    if (type === 'tags') {
-      this.unselectAllGenes()
-      this.unselectAllGenesList()
-      this.unselectAllSamples()
-    }
-  }
-
   async fetchTagSelectAsync() {
     if (this.selectedTags.length === 0 && !this.isModeWithNotes) {
       datasetStore.indexTabReport = 0
