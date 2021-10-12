@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import GridLayout from 'react-grid-layout'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
@@ -11,6 +11,10 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
 
+const normClass = 'norm'
+const normHitClass = 'norm hit'
+const noTrHitClass = 'no-tr-hit'
+
 const PreView = ({ content }: ReccntCommon): ReactElement => {
   return <pre className="overflow-y-hidden">{content}</pre>
 }
@@ -19,11 +23,21 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
   let colheadData: string[] = []
 
   if (colhead) {
-    colheadData = [colhead && colhead[0][0]]
+    colheadData = [colhead[0][0]]
+
+    const endOfString = colheadData[0].indexOf(']')
+
+    colheadData[0] = colheadData[0].slice(0, endOfString + 1)
 
     if (name === 'view_transcripts') {
       colheadData.push(t('variant.showSelectionOnly'))
     }
+  }
+
+  const [filterSelection, setFilterSelection] = useState(normClass)
+
+  const handleSelection = (checked: boolean) => {
+    checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
   }
 
   return (
@@ -38,7 +52,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                   {th}
 
                   {th === t('variant.showSelectionOnly') && (
-                    <Checkbox checked={false} className="ml-1" />
+                    <Checkbox
+                      checked={filterSelection !== normClass}
+                      className="ml-1"
+                      onChange={(e: any) => handleSelection(e.target.checked)}
+                    />
                   )}
                 </td>
               ))}
@@ -64,13 +82,18 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                   </td>
                 </Tooltip>
 
-                {row.cells.map((cell, cIndex) => (
-                  <td
-                    key={cIndex}
-                    className="py-3 pr-3 font-medium"
-                    dangerouslySetInnerHTML={{ __html: cell[0] }}
-                  />
-                ))}
+                {row.cells
+                  .filter(cell => cell[1].includes(filterSelection))
+                  .map((cell, cIndex) => (
+                    <td
+                      key={cIndex}
+                      className={cn(
+                        'py-3 pr-3 font-medium',
+                        !cell[1].includes(noTrHitClass) && 'text-white',
+                      )}
+                      dangerouslySetInnerHTML={{ __html: cell[0] }}
+                    />
+                  ))}
               </tr>
             )
           })}

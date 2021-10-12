@@ -25,12 +25,23 @@ export class VariantStore {
   }
 
   prevVariant() {
-    this.index -= 1
+    datasetStore.filteredNo.length === 0
+      ? (this.index += 1)
+      : (this.index =
+          datasetStore.filteredNo[
+            datasetStore.filteredNo.indexOf(this.index) - 1
+          ])
     this.fetchVarinatInfoAsync()
   }
 
   nextVariant() {
-    this.index += 1
+    datasetStore.filteredNo.length === 0
+      ? (this.index += 1)
+      : (this.index =
+          datasetStore.filteredNo[
+            datasetStore.filteredNo.indexOf(this.index) + 1
+          ])
+
     this.fetchVarinatInfoAsync()
   }
 
@@ -79,6 +90,8 @@ export class VariantStore {
     if (oldIndex !== index) {
       this.fetchVarinatInfoAsync()
     }
+
+    this.fetchVarinatInfoAsync()
   }
 
   setDsName(dsName: string) {
@@ -98,10 +111,19 @@ export class VariantStore {
   async fetchVarinatInfoAsync() {
     if (datasetStore.isXL) return
 
+    const details = datasetStore.wsRecords.find(
+      record => record.no === this.index,
+    )
+
     const [variantResponse, tagsResponse] = await Promise.all([
-      fetch(getApiUrl(`reccnt?ds=${this.dsName}&rec=${this.index}`), {
-        method: 'POST',
-      }),
+      fetch(
+        getApiUrl(
+          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${details?.dt}`,
+        ),
+        {
+          method: 'POST',
+        },
+      ),
       fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
     ])
 
