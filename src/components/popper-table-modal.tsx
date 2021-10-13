@@ -73,6 +73,12 @@ export const PopperTableModal = observer(
       if (isTags) return zoneStore.selectedTags.length
     }
 
+    const handleClose = () => {
+      defineClearFilter()
+
+      onClose && onClose()
+    }
+
     return (
       <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
         <div className="px-4 pt-4">
@@ -110,7 +116,7 @@ export const PopperTableModal = observer(
                   {t('general.clearAll')}
                 </span>
               ) : (
-                <span className="cursor-pointer" onClick={defineClearFilter}>
+                <span className="cursor-pointer" onClick={handleClose}>
                   {t('general.clearAll')}
                 </span>
               )}
@@ -123,7 +129,8 @@ export const PopperTableModal = observer(
         <div className="w-full pl-4">{children}</div>
 
         <div className="flex justify-end pb-4 px-4 mt-4">
-          <Button text={t('general.cancel')} onClick={onClose} />
+          <Button text={t('general.cancel')} onClick={handleClose} />
+
           <Button
             text={t('general.apply')}
             className="ml-3"

@@ -74,12 +74,32 @@ class DatasetStore {
 
   addZone(zone: [string, string[]]) {
     if (zone[1].length === 0) {
-      this.clearZone()
+      this.zone = this.zone.filter(item => item[0] !== zone[0])
 
       return
     }
 
-    this.zone = [...this.zone, zone]
+    if (this.zone.length === 0) {
+      this.zone = [...this.zone, zone]
+
+      return
+    }
+
+    const indexOfExistingZone = this.zone.findIndex(elem => elem[0] === zone[0])
+
+    indexOfExistingZone !== -1
+      ? (this.zone[indexOfExistingZone] = zone)
+      : (this.zone = [...this.zone, zone])
+  }
+
+  removeZone(zone: [string, string[]]) {
+    this.zone.map((item, index) => {
+      if (item[0] === zone[0]) {
+        this.zone[index] = zone
+      }
+    })
+
+    this.zone = this.zone.filter(item => item[1].length > 0)
   }
 
   clearZone() {
@@ -188,6 +208,7 @@ class DatasetStore {
     await this.fetchDsStatAsync()
     await this.fetchWsTagsAsync()
     await this.fetchWsListAsync(this.isXL)
+
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
       : await this.fetchFilteredTabReportAsync()
@@ -412,6 +433,8 @@ class DatasetStore {
         this.wsRecords = result.records
       })
     }
+
+    await this.fetchFilteredTabReportAsync()
 
     return this.filteredNo
   }

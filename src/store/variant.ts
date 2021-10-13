@@ -118,7 +118,9 @@ export class VariantStore {
     const [variantResponse, tagsResponse] = await Promise.all([
       fetch(
         getApiUrl(
-          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${details?.dt}`,
+          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${
+            details ? details.dt : ''
+          }`,
         ),
         {
           method: 'POST',
