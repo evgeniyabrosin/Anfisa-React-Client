@@ -10,6 +10,7 @@ import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
+import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
@@ -24,7 +25,7 @@ import { selectOptions } from './modal-edit-custom-inheritance-mode'
 
 interface IParams {
   approx: any
-  state?: string[]
+  state?: string[] | null
   default?: string
   request?: any[]
 }
@@ -288,11 +289,6 @@ export const ModalEditCompoundRequest = observer(
 
     // common UI functions
 
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditCompoundRequest()
-    }
-
     const handleClose = () => {
       dtreeStore.closeModalEditCompoundRequest()
     }
@@ -303,13 +299,15 @@ export const ModalEditCompoundRequest = observer(
       }
 
       if (stateCondition) {
-        params.state = stateOptions
-        params.default = stateCondition === '-current-' ? null : stateCondition
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
       }
 
       params.request = requestCondition
 
-      dtreeStore.updateStepData(currentGroupIndex, params)
+      changeFunctionalStep(params)
       dtreeStore.closeModalEditCompoundRequest()
     }
 
@@ -439,7 +437,6 @@ export const ModalEditCompoundRequest = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={!variants}
         />
       </ModalBase>

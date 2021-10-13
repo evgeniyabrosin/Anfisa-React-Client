@@ -2,45 +2,47 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import { Button } from '@ui/button'
+import { deleteAttribute } from '@utils/changeAttribute/deleteAttribute'
 
 interface IProps {
-  handleDeleteInstruction: () => void
   handleClose: () => void
   handleSaveChanges: () => void
   disabled: any
 }
 
 export const EditModalButtons = observer(
-  ({
-    handleDeleteInstruction,
-    handleClose,
-    disabled,
-    handleSaveChanges,
-  }: IProps) => (
-    <div className="flex justify-between items-center">
-      <Button
-        text={t('dtree.deleteAttribute')}
-        hasBackground={false}
-        className="text-black border-red-secondary hover:text-white hover:bg-red-secondary"
-        onClick={handleDeleteInstruction}
-      />
+  ({ handleClose, disabled, handleSaveChanges }: IProps) => {
+    const handleDeleteAttribute = () => {
+      deleteAttribute()
+      handleClose()
+    }
 
-      <div className="flex">
+    return (
+      <div className="flex justify-between items-center">
         <Button
-          text={t('general.cancel')}
+          text={t('dtree.deleteAttribute')}
           hasBackground={false}
-          className="mr-2 text-black hover:bg-blue-bright hover:text-white"
-          onClick={handleClose}
+          className="text-black border-red-secondary hover:text-white hover:bg-red-secondary"
+          onClick={handleDeleteAttribute}
         />
 
-        <div className="relative">
+        <div className="flex">
           <Button
-            disabled={disabled}
-            text={t('dtree.saveChanges')}
-            onClick={handleSaveChanges}
+            text={t('general.cancel')}
+            hasBackground={false}
+            className="mr-2 text-black hover:bg-blue-bright hover:text-white"
+            onClick={handleClose}
           />
+
+          <div className="relative">
+            <Button
+              disabled={disabled}
+              text={t('dtree.saveChanges')}
+              onClick={handleSaveChanges}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  ),
+    )
+  },
 )

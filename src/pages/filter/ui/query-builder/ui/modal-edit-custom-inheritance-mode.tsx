@@ -7,6 +7,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Select } from '@ui/select'
+import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getSortedArray } from '@utils/getSortedArray'
 import { AllNotModalMods } from './all-not-modal-mods'
@@ -133,11 +134,6 @@ export const ModalEditCustomInheritanceMode = observer(
       }
     }
 
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditCustomInheritanceMode()
-    }
-
     function getSelectedValue(group: string): any {
       const data: any[] = Object.entries(
         currentGroup[currentGroup.length - 1].scenario,
@@ -222,7 +218,7 @@ export const ModalEditCustomInheritanceMode = observer(
     const handleSaveChanges = () => {
       const params = { scenario: dtreeStore.scenario }
 
-      dtreeStore.updateStepData(currentGroupIndex, params)
+      changeFunctionalStep(params)
       dtreeStore.closeModalEditCustomInheritanceMode()
     }
 
@@ -270,7 +266,6 @@ export const ModalEditCustomInheritanceMode = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={!variants}
         />
       </ModalBase>

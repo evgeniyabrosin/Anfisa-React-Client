@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { makeStepActive } from '@utils/makeStepActive'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'
@@ -47,16 +48,13 @@ export const NextStep = observer(
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 
-    const makeStepActive = (stepIndex: number, event: any) => {
+    const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
 
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        dtreeStore.setStepActive(stepIndex)
-        const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
-
-        dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+        makeStepActive(stepIndex)
       }
     }
 
@@ -77,7 +75,7 @@ export const NextStep = observer(
               'border-l border-grey-light font-medium px-5 relative',
               currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
             )}
-            onClick={event => makeStepActive(index, event)}
+            onClick={event => setStepActive(index, event)}
           >
             <NextStepHeader
               isExpanded={isExpanded}

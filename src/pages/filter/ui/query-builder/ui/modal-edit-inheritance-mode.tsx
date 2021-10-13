@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { EditModalButtons } from './edit-modal-buttons'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
@@ -96,15 +97,10 @@ export const ModalEditInheritanceMode = observer(
       dtreeStore.closeModalEditInheritanceMode()
     }
 
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditInheritanceMode()
-    }
-
     const handleSaveChanges = () => {
       const params = { problem_group: problemGroupData }
 
-      dtreeStore.updateStepData(currentGroupIndex, params)
+      changeFunctionalStep(params, true)
       dtreeStore.closeModalEditInheritanceMode()
       dtreeStore.resetSelectedFilters()
     }
@@ -227,7 +223,6 @@ export const ModalEditInheritanceMode = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={
             selectedGroupsAmount.length === 0 ||
             (problemGroupData && problemGroupData.length === 0)

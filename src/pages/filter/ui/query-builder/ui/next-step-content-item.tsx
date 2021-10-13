@@ -13,6 +13,7 @@ import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
+import { makeStepActive } from '@utils/makeStepActive'
 import { DropDownJoin } from './dropdown-join'
 import { ExpandContentButton } from './expand-content-button'
 
@@ -57,6 +58,8 @@ export const NextStepContentItem = observer(
     const currentStep = dtreeStore.stepData[index]
 
     const handleModals = () => {
+      makeStepActive(index)
+
       group[0] === StepTypeEnum.Enum &&
         dtreeStore.openModalEditFilters(group[1], index, currNo)
 
@@ -124,7 +127,7 @@ export const NextStepContentItem = observer(
             currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
           )}
         >
-          <div className="flex items-center h-auto w-full pr-2 step-content-area">
+          <div className="flex items-center h-auto w-full pr-2 ">
             <Icon
               name="SettingsFat"
               className="mr-1 cursor-pointer text-blue-bright"

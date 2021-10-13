@@ -9,6 +9,7 @@ import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { ModsDivider } from './mods-divider'
+import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 
 export const ModalEditFilters = observer(
   (): ReactElement => {
@@ -56,7 +57,7 @@ export const ModalEditFilters = observer(
     }
 
     const handleSaveChanges = () => {
-      dtreeStore.updateStepData(indexOfCurrentGroup)
+      changeEnumAttribute()
       dtreeStore.closeModalEditFilters()
     }
 
@@ -81,11 +82,6 @@ export const ModalEditFilters = observer(
         }
       })
     })
-
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(indexOfCurrentGroup)
-      dtreeStore.closeModalEditFilters()
-    }
 
     return (
       <ModalBase refer={ref} minHeight={200}>
@@ -140,7 +136,6 @@ export const ModalEditFilters = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={selectedGroupsAmount.length === 0}
         />
       </ModalBase>

@@ -405,43 +405,6 @@ class DtreeStore {
     this.selectedFilters = []
   }
 
-  removeStepData(indexOfCurrentGroup: number) {
-    this.stepData[this.currentStepIndex].groups.splice(indexOfCurrentGroup, 1)
-
-    // DONT DELETE
-    // if (this.stepData[0].groups[0] && this.stepData[0].groups[0][3]) {
-    //   this.stepData[0].groups[0].pop()
-    // }
-  }
-
-  updateStepData(indexOfCurrentGroup: number, params?: any) {
-    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup].forEach(
-      (elem: any, index: number) => {
-        if (Array.isArray(elem) && this.selectedFilters.length > 0) {
-          this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
-            index
-          ] = this.selectedFilters
-        }
-
-        if (typeof elem === 'object' && !Array.isArray(elem)) {
-          this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
-            index
-          ] = params
-        }
-      },
-    )
-  }
-
-  updateNumericStepData(indexOfCurrentGroup: number, numericData: any[]) {
-    const currentGroupLength = this.stepData[this.currentStepIndex].groups[
-      indexOfCurrentGroup
-    ].length
-
-    this.stepData[this.currentStepIndex].groups[indexOfCurrentGroup][
-      currentGroupLength - 1
-    ] = numericData
-  }
-
   replaceStepData(
     subGroupName: string,
     typeOfAttr: string,

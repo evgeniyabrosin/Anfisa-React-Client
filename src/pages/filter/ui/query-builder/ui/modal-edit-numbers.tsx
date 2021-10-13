@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
 import { DropDownSelectSign } from './dropdown-select-sign'
 import { EditModalButtons } from './edit-modal-buttons'
 import { ExpandContentButton } from './expand-content-button'
@@ -19,7 +20,6 @@ export const ModalEditNumbers = observer(
     useOutsideClick(ref, () => dtreeStore.closeModalEditNumbers())
 
     const groupName = dtreeStore.groupNameToChange
-    const currentGroupIndex = dtreeStore.groupIndexToChange
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -125,7 +125,7 @@ export const ModalEditNumbers = observer(
         }
       })
 
-      dtreeStore.updateNumericStepData(currentGroupIndex, numericData)
+      changeNumericAttribute(numericData)
       dtreeStore.closeModalEditNumbers()
     }
 
@@ -148,11 +148,6 @@ export const ModalEditNumbers = observer(
 
       setIsVisibleCenterError(false)
     }, [valueFrom, valueTo, leftDropType, rightDropType])
-
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditNumbers()
-    }
 
     return (
       <ModalBase refer={ref} minHeight={200}>
@@ -276,7 +271,6 @@ export const ModalEditNumbers = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={!valueFrom && !valueTo}
         />
       </ModalBase>

@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Input } from '@ui/input'
+import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { EditModalButtons } from './edit-modal-buttons'
 import { EditModalVariants } from './edit-modal-variants'
@@ -88,15 +89,10 @@ export const ModalEditGeneRegion = observer(
       dtreeStore.closeModalEditGeneRegion()
     }
 
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditGeneRegion()
-    }
-
     const handleSaveChanges = () => {
       const params = { locus: locusCondition }
 
-      dtreeStore.updateStepData(currentGroupIndex, params)
+      changeFunctionalStep(params)
       dtreeStore.closeModalEditGeneRegion()
     }
 
@@ -137,7 +133,6 @@ export const ModalEditGeneRegion = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={isErrorVisible}
         />
       </ModalBase>

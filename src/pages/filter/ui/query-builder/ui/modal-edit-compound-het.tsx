@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
+import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { EditModalButtons } from './edit-modal-buttons'
@@ -13,7 +14,7 @@ import { ModalBase } from './modal-base'
 
 interface IParams {
   approx: any
-  state?: string[]
+  state?: string[] | null
   default?: string
 }
 
@@ -109,11 +110,6 @@ export const ModalEditCompoundHet = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleDeleteInstruction = () => {
-      dtreeStore.removeStepData(currentGroupIndex)
-      dtreeStore.closeModalEditCompoundHet()
-    }
-
     const handleClose = () => {
       dtreeStore.closeModalEditCompoundHet()
     }
@@ -122,11 +118,13 @@ export const ModalEditCompoundHet = observer(
       const params: IParams = { approx: approxCondition }
 
       if (stateCondition) {
-        params.state = stateOptions
-        params.default = stateCondition === '-current-' ? null : stateCondition
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
       }
 
-      dtreeStore.updateStepData(currentGroupIndex, params)
+      changeFunctionalStep(params)
       dtreeStore.closeModalEditCompoundHet()
     }
 
@@ -183,7 +181,6 @@ export const ModalEditCompoundHet = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          handleDeleteInstruction={handleDeleteInstruction}
           disabled={!variants}
         />
       </ModalBase>
