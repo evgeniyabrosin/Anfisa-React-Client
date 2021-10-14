@@ -83,13 +83,13 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                 </Tooltip>
 
                 {row.cells
-                  .filter(cell => cell[1].includes(filterSelection))
+                  .filter(cell => cell[1]?.includes(filterSelection))
                   .map((cell, cIndex) => (
                     <td
                       key={cIndex}
                       className={cn(
                         'py-3 pr-3 font-medium',
-                        !cell[1].includes(noTrHitClass) && 'text-white',
+                        !cell[1]?.includes(noTrHitClass) && 'text-white',
                       )}
                       dangerouslySetInnerHTML={{ __html: cell[0] }}
                     />
