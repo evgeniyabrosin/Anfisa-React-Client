@@ -5,11 +5,11 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { ModsDivider } from './mods-divider'
-import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 
 export const ModalEditFilters = observer(
   (): ReactElement => {
