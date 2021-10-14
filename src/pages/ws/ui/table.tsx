@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
-import { useVariantIndex } from '@core/hooks/use-variant-index'
 import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
@@ -30,17 +29,12 @@ export const isRowSelected = (
   rowIndex: number,
   activeIndex: number,
 ): boolean => {
-  return (
-    (datasetStore.filteredNo.length === 0
-      ? rowIndex
-      : datasetStore.filteredNo[rowIndex]) === activeIndex
-  )
+  return datasetStore.filteredNo[rowIndex] === activeIndex
 }
 
 export const Table = observer(
   ({ columns, data }: Props): ReactElement => {
     const params = useParams()
-    const { setVariantIndex } = useVariantIndex()
     const [ref, setRef] = useState<any>(null)
 
     const defaultColumn = {
@@ -67,7 +61,9 @@ export const Table = observer(
 
       window.addEventListener('resize', handleResize)
 
-      return () => window.removeEventListener('resize', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -102,7 +98,8 @@ export const Table = observer(
       }
 
       variantStore.setIndex(variantIndex)
-      setVariantIndex(variantIndex)
+
+      variantStore.setIsActiveVariant()
 
       variantStore.fetchVarinatInfoAsync()
 
@@ -113,11 +110,9 @@ export const Table = observer(
     }, [])
 
     useEffect(() => {
-      params.get('variantIndex') &&
+      variantStore.isActiveVariant &&
         handleOpenVariant({
-          index: !variantStore.index
-            ? Number(params.get('variantIndex'))
-            : variantStore.index,
+          index: 0,
         })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

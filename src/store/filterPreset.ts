@@ -24,7 +24,9 @@ class PresetStore {
 
     const result = await response.json()
 
-    datasetStore.updatePresetLoad(result)
+    runInAction(() => {
+      datasetStore.dsStat = result
+    })
   }
 
   async deletePresetAsync(presetName: string) {

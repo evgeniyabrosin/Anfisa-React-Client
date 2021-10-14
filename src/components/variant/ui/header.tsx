@@ -20,23 +20,35 @@ export const VariantHeader = observer(
   ({ setLayout }: Props): ReactElement => {
     const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
     const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
-    const canGetPrevVariant = () => !!variantStore.index
 
-    const canGetNextVariant = () =>
-      variantStore.index !== get(datasetStore, 'dsStat.total-counts.0', 0) - 1
+    const canGetPrevVariant = (): boolean => {
+      return !(
+        datasetStore.filteredNo[
+          datasetStore.filteredNo.indexOf(variantStore.index) - 1
+        ] >= 0
+      )
+    }
+
+    const canGetNextVariant = (): boolean => {
+      return !(
+        datasetStore.filteredNo[
+          datasetStore.filteredNo.indexOf(variantStore.index) + 1
+        ] >= 0
+      )
+    }
 
     const { setVariantIndex } = useVariantIndex()
 
     const handlePrevVariant = () => {
-      if (!variantStore.drawerVisible || !canGetPrevVariant()) return
+      if (!variantStore.drawerVisible || canGetPrevVariant()) return
       variantStore.prevVariant()
-      setVariantIndex(variantStore.index)
+      // setVariantIndex(variantStore.index)
     }
 
     const handleNextVariant = () => {
-      if (!variantStore.drawerVisible || !canGetNextVariant()) return
+      if (!variantStore.drawerVisible || canGetNextVariant()) return
       variantStore.nextVariant()
-      setVariantIndex(variantStore.index)
+      // setVariantIndex(variantStore.index)
     }
 
     useKeydown([
@@ -59,7 +71,7 @@ export const VariantHeader = observer(
                 size="sm"
                 icon={<Icon name="Arrow" className="transform rotate-90" />}
                 className="bg-blue-lighter"
-                disabled={!canGetPrevVariant()}
+                disabled={canGetPrevVariant()}
                 onClick={handlePrevVariant}
               />
 
@@ -67,7 +79,7 @@ export const VariantHeader = observer(
                 size="sm"
                 icon={<Icon name="Arrow" className="transform -rotate-90" />}
                 className="bg-blue-lighter mx-2"
-                disabled={!canGetNextVariant()}
+                disabled={canGetNextVariant()}
                 onClick={handleNextVariant}
               />
             </div>

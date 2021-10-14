@@ -15,9 +15,18 @@ export class VariantStore {
   optionalTags: string[] = []
   checkedTags: string[] = []
   noteText = ''
+  isActiveVariant = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setIsActiveVariant() {
+    this.isActiveVariant = true
+  }
+
+  resetIsActiveVariant() {
+    this.isActiveVariant = false
   }
 
   setNoteText(value: string) {
