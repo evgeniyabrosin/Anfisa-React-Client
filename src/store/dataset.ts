@@ -432,7 +432,9 @@ class DatasetStore {
         this.wsRecords = result.records
       })
     }
+
     await this.fetchFilteredTabReportAsync()
+
     return this.filteredNo
   }
 
