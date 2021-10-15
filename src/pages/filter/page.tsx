@@ -29,10 +29,14 @@ export const FilterPage = observer(
 
     useEffect(() => {
       const initAsync = async () => {
-        await datasetStore.fetchDsStatAsync()
-        await dtreeStore.fetchDtreeStatAsync()
+        const body = new URLSearchParams({
+          ds: datasetStore.datasetName,
+          tm: '0',
+          code: 'return False',
+        })
+
         await dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
-        await dtreeStore.fetchDtreeListAsync()
+        await dtreeStore.fetchDtreeSetAsync(body)
       }
 
       initAsync()

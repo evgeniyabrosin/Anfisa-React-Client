@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { DropDownSelectSign } from './dropdown-select-sign'
 import { ExpandContentButton } from './expand-content-button'
 import { HeaderModal } from './header-modal'
@@ -98,14 +99,13 @@ export const ModalSelectNumbers = observer(
       return numericData
     }
 
-    const handleReplace = (subGroupName: string) => {
+    // TODO:fix
+    const handleReplace = () => {
       if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
         return
       }
 
-      const numericData = getNumericData()
-
-      dtreeStore.replaceStepData(subGroupName, 'numeric', numericData)
+      // dtreeStore.replaceStepData(subGroupName, 'numeric', numericData)
       dtreeStore.closeModalSelectNumbers()
     }
 
@@ -116,7 +116,7 @@ export const ModalSelectNumbers = observer(
 
       const numericData = getNumericData()
 
-      dtreeStore.addStepData(subGroupName, 'numeric', numericData)
+      addAttributeToStep('numeric', subGroupName, numericData)
 
       dtreeStore.closeModalSelectNumbers()
     }

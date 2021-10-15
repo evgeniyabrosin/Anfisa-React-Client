@@ -66,16 +66,7 @@ class DtreeStore {
   searchFieldResults = ''
   filteredCounts = 0
 
-  stepData: IStepData[] = [
-    {
-      step: 1,
-      excluded: true,
-      isActive: true,
-      startFilterCounts: 0,
-      finishFilterCounts: 0,
-      difference: 0,
-    },
-  ]
+  stepData: IStepData[] = []
   stepAmout = 0
 
   isModalAttributeVisible = false
@@ -110,27 +101,6 @@ class DtreeStore {
 
   // functions to load / draw / edit decision trees
 
-  async fetchDtreeListAsync() {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      code: 'return False',
-    })
-
-    const response = await fetch(getApiUrl(`dtree_set`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dtreeList = result['dtree-list']
-    })
-  }
-
   async fetchDtreeAsync(name: string) {
     this.activeTree = name
 
@@ -158,16 +128,32 @@ class DtreeStore {
   }
 
   async drawDecesionTreeAsync() {
-    const localStepData = await getStepDataAsync()
+    const computedStepData = await getStepDataAsync()
+
+    const initialStepData = [
+      {
+        step: 1,
+        excluded: true,
+        isActive: true,
+        startFilterCounts: null,
+        finishFilterCounts: null,
+        difference: null,
+      },
+    ]
+
+    const newStepData =
+      computedStepData.length === 0 ? initialStepData : computedStepData
 
     runInAction(() => {
-      this.stepData = [...localStepData]
+      this.stepData = [...newStepData]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
     })
 
     const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
     const finalStepCount = 2
-    const indexForApi = lastIndex + finalStepCount
+    const calculatedIndex = +lastIndex + finalStepCount
+
+    const indexForApi = this.dtreeStepIndices.length === 0 ? 0 : calculatedIndex
 
     this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
   }
@@ -225,15 +211,20 @@ class DtreeStore {
     )
 
     const currentIndex = lastIndexValue + 2
+    const lastIndex = this.dtreeStepIndices.length === 0 ? 0 : currentIndex
 
-    return currentIndex
+    return lastIndex
   }
 
   getStepIndexForApi = (index: number) => {
     const currentIndex = Number(this.dtreeStepIndices[index])
 
-    return currentIndex
+    const stepIndexForApi =
+      this.dtreeStepIndices.length === 0 ? 0 : currentIndex
+
+    return stepIndexForApi
   }
+
   setCurrentStepIndexForApi = (index: number) => {
     runInAction(() => {
       this.currentStepIndexForApi = index
@@ -258,6 +249,7 @@ class DtreeStore {
     runInAction(() => {
       this.dtree = result
       this.dtreeCode = newCode
+      this.dtreeList = result['dtree-list']
     })
 
     this.drawDecesionTreeAsync()
@@ -366,30 +358,6 @@ class DtreeStore {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
   }
 
-  addStepData(subGroupName: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    if (!currentStep.groups || currentStep.groups.length === 0) {
-      currentStep.groups = [[typeOfAttr, this.selectedGroups[1]]]
-    } else if (!currentStep.groups.join().includes(this.selectedGroups[1])) {
-      currentStep.groups = [...currentStep.groups, this.selectedGroups]
-    }
-
-    currentStep.groups.map((item: string, index: number) => {
-      if (item[1] === subGroupName) {
-        numericData
-          ? (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = numericData)
-          : (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = this.selectedFilters)
-      }
-    })
-
-    this.selectedFilters = []
-  }
-
   joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
     const currentStep = this.stepData[this.currentStepIndex]
 
@@ -409,15 +377,6 @@ class DtreeStore {
         ])
 
     this.selectedFilters = []
-  }
-
-  replaceStepData(
-    subGroupName: string,
-    typeOfAttr: string,
-    numericData?: any[],
-  ) {
-    this.stepData[this.currentStepIndex].groups = []
-    this.addStepData(subGroupName, typeOfAttr, numericData)
   }
 
   resetSelectedFilters() {

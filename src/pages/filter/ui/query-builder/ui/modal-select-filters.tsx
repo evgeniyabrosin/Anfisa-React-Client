@@ -29,9 +29,9 @@ export const ModalSelectFilters = observer(
     }
 
     const handleAddAttribute = (subGroupName: string) => {
-      addAttributeToStep(subGroupName, 'POINT', 'INSERT')
+      addAttributeToStep('enum', subGroupName)
 
-      dtreeStore.addStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
     }
 
@@ -46,8 +46,9 @@ export const ModalSelectFilters = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    const handleReplace = (subGroupName: string) => {
-      dtreeStore.replaceStepData(subGroupName, 'enum')
+    // TODO:fix
+    const handleReplace = () => {
+      // dtreeStore.replaceStepData(subGroupName, 'enum')
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
     }
