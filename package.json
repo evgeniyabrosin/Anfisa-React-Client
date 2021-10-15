@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@monaco-editor/react": "^4.3.1",
+    "@monaco-editor/react": "4.3.1",
     "@popperjs/core": "2.9.2",
     "chart.js": "3.5.1",
     "date-fns": "2.21.1",
@@ -63,6 +63,7 @@
     "eslint": "7.24.0",
     "eslint-config-react-config-r13v": "1.4.0",
     "eslint-plugin-react": "7.23.2",
+    "husky": "7.0.2",
     "postcss": "7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
@@ -73,6 +74,11 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:fix"
+    }
   },
   "eslintConfig": {
     "extends": [
