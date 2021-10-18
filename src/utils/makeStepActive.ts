@@ -5,5 +5,8 @@ export const makeStepActive = (index: number) => {
   const indexForApi = dtreeStore.getStepIndexForApi(index)
   const code = dtreeStore.dtreeCode
 
-  dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+  dtreeStore
+    .fetchDtreeStatAsync(code, String(indexForApi))
+    .then(() => dtreeStore.setQueryBuilderRenderKey(Date.now()))
+    .catch(() => null)
 }

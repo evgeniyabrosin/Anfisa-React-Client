@@ -25,6 +25,7 @@ export const FilterControlQueryBuilder = observer(
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
         dtreeStore.fetchDtreeAsync(activeTree)
+        dtreeStore.setQueryBuilderRenderKey(Date.now())
       }
 
       filterStore.resetActionName()

@@ -4,12 +4,29 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from './query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer(
   (): ReactElement => {
     const groupNames = Object.keys(dtreeStore.getQueryBuilder)
+    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
+    const chunkSize = 2
+    let groupsCount = Math.trunc(groupNames.length / 2)
+    let requestIdleCallbackIds: number[] = []
+
+    function decrement(id: number) {
+      requestIdleCallbackIds.push(id)
+      groupsCount--
+
+      if (groupsCount === 0) {
+        requestIdleCallbackIds.forEach(requestId => {
+          window.cancelAnimationFrame(requestId)
+        })
+        requestIdleCallbackIds = []
+      }
+    }
 
     return (
       <Fragment>
@@ -35,16 +52,21 @@ export const QueryBuilderGroups = observer(
             />
           </div>
 
-          <div className="h-full overflow-y-auto">
-            {groupNames.map((groupName, index) => (
-              <QueryBuilderSubgroup
-                groupName={groupName}
-                index={index}
-                key={groupName}
-                changeIndicator={dtreeStore.filterChangeIndicator}
-                isContentExpanded={dtreeStore.isFilterContentExpanded}
-              />
-            ))}
+          <div
+            className="h-full overflow-y-auto"
+            key={dtreeStore.queryBuilderRenderKey}
+          >
+            <DeferRender chunkSize={chunkSize} renderId={decrement}>
+              {groupNames.map((groupName, index) => (
+                <QueryBuilderSubgroup
+                  groupName={groupName}
+                  subGroupData={subGroupData[index]}
+                  key={groupName}
+                  changeIndicator={dtreeStore.filterChangeIndicator}
+                  isContentExpanded={dtreeStore.isFilterContentExpanded}
+                />
+              ))}
+            </DeferRender>
           </div>
         </div>
       </Fragment>

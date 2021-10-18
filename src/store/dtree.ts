@@ -40,6 +40,7 @@ class DtreeStore {
   statFuncData: any = []
   scenario: any
   request: any
+  queryBuilderRenderKey = Date.now()
 
   dtreeStat: DtreeStatType = {}
   statAmount: number[] = []
@@ -589,6 +590,12 @@ class DtreeStore {
   setShouldLoadTableModal(shouldLoad: boolean) {
     runInAction(() => {
       this.shouldLoadTableModal = shouldLoad
+    })
+  }
+
+  setQueryBuilderRenderKey(key: number) {
+    runInAction(() => {
+      this.queryBuilderRenderKey = key
     })
   }
 
