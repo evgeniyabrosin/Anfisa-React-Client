@@ -220,9 +220,11 @@ class DtreeStore {
 
   getStepIndexForApi = (index: number) => {
     const currentIndex = Number(this.dtreeStepIndices[index])
+    const stepIndex = this.dtreeStepIndices.length === 0 ? 0 : currentIndex
 
-    const stepIndexForApi =
-      this.dtreeStepIndices.length === 0 ? 0 : currentIndex
+    const lastIndex = this.getLastStepIndexForApi()
+
+    const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
 
     return stepIndexForApi
   }

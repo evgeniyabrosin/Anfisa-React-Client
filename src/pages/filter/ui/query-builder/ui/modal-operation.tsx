@@ -50,82 +50,96 @@ export const ModalOperation = observer(
       hideModal()
     }
 
-    const isFirstelement = index === 0
-
     const currentStep = dtreeStore.stepData[index]
 
-    const hasMoreThanOneAttribute = currentStep.groups.length > 1
+    const isFirstStep = index === 0
+    const isEmptyStep = !currentStep.groups
+
+    const hasMoreThanOneAttribute = currentStep.groups?.length > 1
     const isNegateStep = currentStep.negate
     const isSplitPossible = hasMoreThanOneAttribute && !isNegateStep
 
     return (
       <div ref={ref}>
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
-          <div
-            onClick={() => createStep(index, 'BEFORE')}
-            className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
-          >
-            {t('dtree.addStepBefore')}
-          </div>
-
-          <div
-            onClick={() => createStep(index, 'AFTER')}
-            className="font-normal py-2 px-2 hover:bg-grey-light"
-          >
-            {t('dtree.addStepAfter')}
-          </div>
-
-          <div
-            onClick={() => sendChange(index, 'DUPLICATE')}
-            className="font-normal py-2 px-2 hover:bg-grey-light"
-          >
-            {t('dtree.duplicate')}
-          </div>
-
-          <div
-            onClick={() => {
-              sendChange(index, 'NEGATE')
-            }}
-            className="font-normal py-2 px-2 hover:bg-grey-light"
-          >
-            {t('dtree.negate')}
-          </div>
-
-          <div
-            onClick={() => {
-              deleteStep(index)
-            }}
-            className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
-          >
-            {t('dtree.delete')}
-          </div>
-
-          {!isFirstelement && (
+          {isEmptyStep ? (
+            <div
+              onClick={() => {
+                deleteStep(index)
+              }}
+              className="step-menu-btn"
+            >
+              {t('dtree.delete')}
+            </div>
+          ) : (
             <Fragment>
               <div
-                onClick={() => {
-                  sendChange(index, 'JOIN-AND')
-                }}
-                className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+                onClick={() => createStep(index, 'BEFORE')}
+                className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
               >
-                {t('dtree.joinByAnd')}
+                {t('dtree.addStepBefore')}
               </div>
+
+              <div
+                onClick={() => createStep(index, 'AFTER')}
+                className="font-normal py-2 px-2 hover:bg-grey-light"
+              >
+                {t('dtree.addStepAfter')}
+              </div>
+
+              <div
+                onClick={() => sendChange(index, 'DUPLICATE')}
+                className="font-normal py-2 px-2 hover:bg-grey-light"
+              >
+                {t('dtree.duplicate')}
+              </div>
+
               <div
                 onClick={() => {
-                  sendChange(index, 'JOIN-OR')
+                  sendChange(index, 'NEGATE')
                 }}
-                className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+                className="font-normal py-2 px-2 hover:bg-grey-light"
               >
-                {t('dtree.joinByOr')}
+                {t('dtree.negate')}
               </div>
+
+              <div
+                onClick={() => {
+                  deleteStep(index)
+                }}
+                className="font-normal py-2 px-2 hover:bg-grey-light"
+              >
+                {t('dtree.delete')}
+              </div>
+              {!isFirstStep && (
+                <Fragment>
+                  <div
+                    onClick={() => {
+                      sendChange(index, 'JOIN-AND')
+                    }}
+                    className="font-normal py-2 px-2 hover:bg-grey-light"
+                  >
+                    {t('dtree.joinByAnd')}
+                  </div>
+                  <div
+                    onClick={() => {
+                      sendChange(index, 'JOIN-OR')
+                    }}
+                    className="step-menu-btn"
+                  >
+                    {t('dtree.joinByOr')}
+                  </div>
+                </Fragment>
+              )}
             </Fragment>
           )}
+
           {isSplitPossible && (
             <div
               onClick={() => {
                 sendChange(index, 'SPLIT')
               }}
-              className="rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light"
+              className="step-menu-btn"
             >
               {t('dtree.split')}
             </div>

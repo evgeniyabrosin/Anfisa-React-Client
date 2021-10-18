@@ -45,3 +45,7 @@
 .grid-item-dark.react-grid-item > .react-resizable-handle::after {
   @apply border-white;
 }
+
+.step-menu-btn {
+  @apply rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light;
+}
