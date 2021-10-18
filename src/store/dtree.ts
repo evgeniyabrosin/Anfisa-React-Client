@@ -159,6 +159,8 @@ class DtreeStore {
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
+    this.setIsFiltersLoading()
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       no,

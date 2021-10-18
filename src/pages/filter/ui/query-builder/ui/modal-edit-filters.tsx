@@ -17,19 +17,28 @@ export const ModalEditFilters = observer(
 
     useOutsideClick(ref, () => dtreeStore.closeModalEditFilters())
 
-    let currentGroup = ''
-
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups.map(
-      (item: string, index: number) => {
-        if (item[1] === dtreeStore.groupNameToChange) {
-          currentGroup =
-            dtreeStore.stepData[dtreeStore.currentStepIndex].groups[index]
-        }
-      },
-    )
+    const currentGroup =
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        dtreeStore.groupIndexToChange
+      ]
 
     const indexOfCurrentGroup = dtreeStore.groupIndexToChange
     const groupName = dtreeStore.groupNameToChange
+
+    const selectedGroupsAmount =
+      currentGroup.length > 0 ? dtreeStore.selectedFilters : []
+
+    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+
+    let attrData: (string | number)[][] = []
+
+    subGroups.map(subGroup => {
+      subGroup.map((item, index) => {
+        if (item.name === groupName) {
+          attrData = subGroup[index].variants
+        }
+      })
+    })
 
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
@@ -66,23 +75,6 @@ export const ModalEditFilters = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    const selectedGroupsAmount =
-      currentGroup.length > 0 ? dtreeStore.selectedFilters : []
-
-    const name = dtreeStore.groupNameToChange
-
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
-
-    let variants: (string | number)[][] = []
-
-    subGroups.map(subGroup => {
-      subGroup.map((item, index) => {
-        if (item.name === name) {
-          variants = subGroup[index].variants
-        }
-      })
-    })
-
     return (
       <ModalBase refer={ref} minHeight={200}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
@@ -110,7 +102,7 @@ export const ModalEditFilters = observer(
         </div>
 
         <div className="flex-1 overflow-y-auto my-4 text-14">
-          {variants.map((variant: any) => (
+          {attrData.map((variant: any) => (
             <div key={variant} className="flex items-center mb-2">
               <Checkbox
                 checked={

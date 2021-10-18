@@ -162,5 +162,6 @@ export const en = {
     editCurrentDecisionTreeCode: 'Edit current decision tree code',
     expressionIsNotCorrect: 'Expression is not correct',
     darkMode: 'dark mode',
+    loading: 'Loading...',
   },
 }

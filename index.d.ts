@@ -120,8 +120,8 @@ export interface StatList {
   affected: string[]
   available: string[]
   tooltip: string
-  min: any
-  max: any
+  min: number
+  max: number
   counts: number[]
   'trio-variants': string[]
   'approx-modes': string[][]
