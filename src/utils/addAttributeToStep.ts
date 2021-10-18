@@ -1,11 +1,12 @@
 import dtreeStore from '@store/dtree'
 import datasetStore from '../store/dataset'
 
+type ActionType = 'INSERT' | 'REPLACE' | 'JOIN-AND' | 'JOIN-OR'
 type AttributeType = 'enum' | 'numeric'
 
 export const addAttributeToStep = (
+  action: ActionType,
   attributeType: AttributeType,
-  subGroupName: string,
   params: any = null,
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -17,6 +18,7 @@ export const addAttributeToStep = (
 
   const isEnumAttribute = attributeType === 'enum'
   const currentParams = isEnumAttribute ? dtreeStore.selectedFilters : params
+  const subGroupName = dtreeStore.selectedGroups[1]
   const attribute = [attributeType, subGroupName, currentParams]
 
   if (isEnumAttribute) {
@@ -24,7 +26,7 @@ export const addAttributeToStep = (
   }
 
   const index = dtreeStore.getLastStepIndexForApi()
-  const instruction = ['POINT', 'INSERT', index, attribute]
+  const instruction = ['POINT', action, index, attribute]
 
   body.append('instr', JSON.stringify(instruction))
 

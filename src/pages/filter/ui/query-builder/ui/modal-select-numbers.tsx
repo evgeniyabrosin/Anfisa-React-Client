@@ -99,24 +99,25 @@ export const ModalSelectNumbers = observer(
       return numericData
     }
 
-    // TODO:fix
     const handleReplace = () => {
-      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
-        return
-      }
-
-      // dtreeStore.replaceStepData(subGroupName, 'numeric', numericData)
-      dtreeStore.closeModalSelectNumbers()
-    }
-
-    const handleAddAttribute = (subGroupName: string) => {
       if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
         return
       }
 
       const numericData = getNumericData()
 
-      addAttributeToStep('numeric', subGroupName, numericData)
+      addAttributeToStep('REPLACE', 'numeric', numericData)
+      dtreeStore.closeModalSelectNumbers()
+    }
+
+    const handleAddAttribute = () => {
+      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
+        return
+      }
+
+      const numericData = getNumericData()
+
+      addAttributeToStep('INSERT', 'numeric', numericData)
 
       dtreeStore.closeModalSelectNumbers()
     }

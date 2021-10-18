@@ -9,10 +9,10 @@ import { ModalJoin } from './modal-join'
 
 interface IProps {
   handleModals: () => void
-  handleReplace: (value: string) => void
+  handleReplace: () => void
   handleClose: () => void
   handleModalJoin: () => void
-  handleAddAttribute: (attr: string) => void
+  handleAddAttribute: () => void
   currentGroup: string
   getNumericData?: () => any[]
   disabled: any
@@ -51,7 +51,7 @@ export const SelectModalButtons = observer(
                 disabled={disabled}
                 text={t('dtree.replace')}
                 className="mr-2 cursor-pointer"
-                onClick={() => handleReplace(dtreeStore.selectedGroups[1])}
+                onClick={handleReplace}
               />
 
               <div className="relative">
@@ -74,7 +74,7 @@ export const SelectModalButtons = observer(
           ) : (
             <Button
               text={t('dtree.addNewAttribute')}
-              onClick={() => handleAddAttribute(dtreeStore.selectedGroups[1])}
+              onClick={handleAddAttribute}
               disabled={disabled}
             />
           )}

@@ -213,7 +213,7 @@ class DtreeStore {
     )
 
     const currentIndex = lastIndexValue + 2
-    const lastIndex = this.dtreeStepIndices.length === 0 ? 0 : currentIndex
+    const lastIndex = Number.isNaN(lastIndexValue) ? 0 : currentIndex
 
     return lastIndex
   }
@@ -360,27 +360,6 @@ class DtreeStore {
 
   removeSelectedFilter(filter: string) {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
-  }
-
-  joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    numericData
-      ? (currentStep.groups = [
-          ...currentStep.groups,
-          [typeOfAttr, this.selectedGroups[1], typeOfJoin, numericData],
-        ])
-      : (currentStep.groups = [
-          ...currentStep.groups,
-          [
-            typeOfAttr,
-            this.selectedGroups[1],
-            typeOfJoin,
-            this.selectedFilters,
-          ],
-        ])
-
-    this.selectedFilters = []
   }
 
   resetSelectedFilters() {
