@@ -10,6 +10,7 @@ import { QueryBuilderSubgroup } from './query-builder-subgroup'
 export const QueryBuilderGroups = observer(
   (): ReactElement => {
     const groupNames = Object.keys(dtreeStore.getQueryBuilder)
+    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
 
     return (
       <Fragment>
@@ -39,7 +40,7 @@ export const QueryBuilderGroups = observer(
             {groupNames.map((groupName, index) => (
               <QueryBuilderSubgroup
                 groupName={groupName}
-                index={index}
+                subGroupData={subGroupData[index]}
                 key={groupName}
                 changeIndicator={dtreeStore.filterChangeIndicator}
                 isContentExpanded={dtreeStore.isFilterContentExpanded}

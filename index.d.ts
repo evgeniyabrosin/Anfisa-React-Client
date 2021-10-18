@@ -1,3 +1,14 @@
+declare global {
+  interface Window {
+    requestIdleCallback: (
+      callback: IdleRequestCallback,
+      options?: IdleRequestOptions,
+    ) => number
+  }
+}
+
+let requestIdleCallback = window.requestIdleCallback
+
 export interface DsDistItem {
   name: string
   'upd-time': Date

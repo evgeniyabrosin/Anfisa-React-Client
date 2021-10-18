@@ -12,6 +12,7 @@ import { ModalBase } from './modal-base'
 export const ModalSelectAttribute = observer(
   (): ReactElement => {
     const groupNames = Object.keys(dtreeStore.getQueryBuilder)
+    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
 
     const ref = useRef(null)
 
@@ -40,7 +41,7 @@ export const ModalSelectAttribute = observer(
           {groupNames.map((groupName, index) => (
             <QueryBuilderSubgroup
               groupName={groupName}
-              index={index}
+              subGroupData={subGroupData[index]}
               key={groupName}
               changeIndicator={dtreeStore.filterChangeIndicator}
               isContentExpanded={dtreeStore.isFilterContentExpanded}
