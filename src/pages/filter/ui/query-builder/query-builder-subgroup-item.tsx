@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
@@ -31,9 +32,43 @@ export const QueryBuilderSubgroupItem = observer(
       addSelectedGroup()
       dtreeStore.closeModalAttribute()
 
-      group.variants
-        ? dtreeStore.openModalSelectFilter(groupName)
-        : dtreeStore.openModalSelectNumbers(groupName)
+      if (group.kind === 'enum') dtreeStore.openModalSelectFilter(group.name)
+
+      if (group.kind === 'numeric') {
+        dtreeStore.openModalSelectNumbers(group.name)
+      }
+
+      if (group.kind === 'func') {
+        group.name === FuncStepTypesEnum.InheritanceMode &&
+          dtreeStore.openModalSelectInheritanceMode(
+            group.name,
+            dtreeStore.currentStepIndex,
+          )
+
+        group.name === FuncStepTypesEnum.CustomInheritanceMode &&
+          dtreeStore.openModalSelectCustomInheritanceMode(
+            group.name,
+            dtreeStore.currentStepIndex,
+          )
+
+        group.name === FuncStepTypesEnum.CompoundHet &&
+          dtreeStore.openModalSelectCompoundHet(
+            group.name,
+            dtreeStore.currentStepIndex,
+          )
+
+        group.name === FuncStepTypesEnum.CompoundRequest &&
+          dtreeStore.openModalSelectCompoundRequest(
+            group.name,
+            dtreeStore.currentStepIndex,
+          )
+
+        group.name === FuncStepTypesEnum.GeneRegion &&
+          dtreeStore.openModalSelectGeneRegion(
+            group.name,
+            dtreeStore.currentStepIndex,
+          )
+      }
     }
 
     return (

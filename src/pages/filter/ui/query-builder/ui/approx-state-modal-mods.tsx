@@ -6,7 +6,7 @@ import { Select } from '@ui/select'
 interface IProps {
   approxOptions: string[]
   approxValues: string[]
-  approxCondition: string[]
+  approxCondition: string
   stateOptions: string[]
   stateCondition: string
   handleSetCondition: (value: string, type: string) => void

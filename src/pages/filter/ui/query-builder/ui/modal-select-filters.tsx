@@ -16,6 +16,7 @@ export const ModalSelectFilters = observer(
     const ref = useRef(null)
 
     useOutsideClick(ref, () => dtreeStore.closeModalSelectFilter())
+
     const index = dtreeStore.currentStepIndex
     const currentGroup = dtreeStore.stepData[index].groups
     const groupName = dtreeStore.groupNameToChange

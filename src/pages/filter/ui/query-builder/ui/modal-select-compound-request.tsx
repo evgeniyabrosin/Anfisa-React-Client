@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
-import { cloneDeep, get } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
@@ -10,39 +10,33 @@ import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
-import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getSortedArray } from '@utils/getSortedArray'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
-import { EditModalButtons } from './edit-modal-buttons'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { selectOptions } from './modal-edit-custom-inheritance-mode'
+import { SelectModalButtons } from './select-modal-buttons'
 
-interface IParams {
-  approx: any
-  state?: string[] | null
-  default?: string
-  request?: any[]
-}
-
-export const ModalEditCompoundRequest = observer(
+export const ModalSelectCompoundRequest = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalEditCompoundRequest())
+    useOutsideClick(ref, () => dtreeStore.closeModalSelectCompoundRequest())
+
+    useEffect(() => {
+      return () => dtreeStore.resetStatFuncData()
+    }, [])
 
     // important variables
 
     const currentStepIndex = dtreeStore.currentStepIndex
-    const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
     const groupName = dtreeStore.groupNameToChange
 
@@ -75,50 +69,13 @@ export const ModalEditCompoundRequest = observer(
       approxValues.push(mode[0])
     })
 
-    const [stateCondition, setStateCondition] = useState(
-      getDefaultValue('state'),
-    )
+    const [requestCondition, setRequestCondition] = useState([[1, {}]])
 
-    const [approxCondition, setApproxCondition] = useState(
-      getDefaultValue('approx'),
-    )
+    const [stateCondition, setStateCondition] = useState('-current-')
 
-    const [requestCondition, setRequestCondition] = useState(
-      currentGroup[currentGroup.length - 1].request,
-    )
+    const [approxCondition, setApproxCondition] = useState('transcript')
 
-    const getStateOptions = () => {
-      const state = get(currentGroup[currentGroup.length - 1], 'state')
-      const defaultValue = get(currentGroup[currentGroup.length - 1], 'default')
-
-      if (!state) return ['-current-']
-
-      return defaultValue === null || defaultValue
-        ? state
-        : ['-current-', state]
-    }
-
-    const stateOptions: string[] = getStateOptions()
-
-    function getDefaultValue(type: string) {
-      const approx = get(currentGroup[currentGroup.length - 1], 'approx')
-      const state = get(currentGroup[currentGroup.length - 1], 'state')
-      const defaultValue = get(currentGroup[currentGroup.length - 1], 'default')
-
-      if (type === 'approx') {
-        if (approx === null) return 'transcript'
-
-        return `${approx}`
-      }
-
-      if (type === 'state') {
-        if (state === undefined) return '-current-'
-
-        if (defaultValue === null) return '-current-'
-
-        return defaultValue ? defaultValue : state
-      }
-    }
+    const stateOptions: string[] = [stateCondition]
 
     const handleSetCondition = (value: string, type: string) => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
@@ -154,6 +111,8 @@ export const ModalEditCompoundRequest = observer(
         dtreeStore.fetchStatFuncAsync(groupName, params)
       }
     }
+
+    // request condition functions
 
     const [activeRequestIndex, setActiveRequestIndex] = useState(
       requestCondition.length - 1,
@@ -261,55 +220,10 @@ export const ModalEditCompoundRequest = observer(
       sendRequest(newRequestCondition)
     }
 
-    // get start variants
-
-    useEffect(() => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-      const requestString = getFuncParams(
-        groupName,
-        currentGroup[currentGroup.length - 1],
-      )
-        .slice(10)
-        .replace(/\s+/g, '')
-
-      const params = `{"approx":"${approxCondition}","state":${
-        stateCondition === '-current-' || !stateCondition
-          ? null
-          : `"${stateCondition}"`
-      },"request":${requestString}}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
-      dtreeStore.fetchStatFuncAsync(groupName, params)
-
-      return () => dtreeStore.resetStatFuncData()
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     // common UI functions
 
     const handleClose = () => {
-      dtreeStore.closeModalEditCompoundRequest()
-    }
-
-    const handleSaveChanges = () => {
-      const params: IParams = {
-        approx: approxCondition,
-      }
-
-      if (stateCondition) {
-        params.state =
-          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
-            ? null
-            : stateOptions
-      }
-
-      params.request = requestCondition
-
-      changeFunctionalStep(params)
-      dtreeStore.closeModalEditCompoundRequest()
+      dtreeStore.closeModalSelectCompoundRequest()
     }
 
     function sendRequest(newRequestCondition: any[]) {
@@ -330,6 +244,30 @@ export const ModalEditCompoundRequest = observer(
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
+    }
+
+    const handleModals = () => {
+      dtreeStore.closeModalSelectCompoundRequest()
+      dtreeStore.openModalAttribute(currentStepIndex)
+      dtreeStore.resetSelectedFilters()
+    }
+
+    // TODO:fix
+    const handleReplace = () => {
+      // dtreeStore.replaceStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectCompoundRequest()
+    }
+
+    const handleModalJoin = () => {
+      dtreeStore.openModalJoin()
+    }
+
+    const handleAddAttribute = () => {
+      // addAttributeToStep('func', subGroupName)
+
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectCompoundRequest()
     }
 
     return (
@@ -435,10 +373,14 @@ export const ModalEditCompoundRequest = observer(
 
         <EditModalVariants variants={variants} disabled={true} />
 
-        <EditModalButtons
+        <SelectModalButtons
+          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
+          handleModals={handleModals}
+          handleModalJoin={handleModalJoin}
+          handleReplace={handleReplace}
           disabled={!variants}
+          currentGroup={currentGroup}
         />
       </ModalBase>
     )

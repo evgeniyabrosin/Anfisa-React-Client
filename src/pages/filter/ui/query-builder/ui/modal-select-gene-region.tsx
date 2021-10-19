@@ -1,41 +1,35 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Input } from '@ui/input'
-import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { AllNotModalMods } from './all-not-modal-mods'
-import { EditModalButtons } from './edit-modal-buttons'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+import { SelectModalButtons } from './select-modal-buttons'
 
-export const ModalEditGeneRegion = observer(
+export const ModalSelectGeneRegion = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalEditGeneRegion())
+    useEffect(() => {
+      return () => dtreeStore.resetStatFuncData()
+    }, [])
+
+    useOutsideClick(ref, () => dtreeStore.closeModalSelectGeneRegion())
 
     const currentStepIndex = dtreeStore.currentStepIndex
-    const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
     const groupName = dtreeStore.groupNameToChange
 
     const variants = dtreeStore.statFuncData.variants
 
-    const getDefaultValue = () => {
-      const defaultValue = get(currentGroup[currentGroup.length - 1], 'locus')
-
-      return defaultValue || ''
-    }
-
-    const [locusCondition, setLocusCondition] = useState(getDefaultValue())
+    const [locusCondition, setLocusCondition] = useState('')
 
     const [isErrorVisible, setIsErrorVisible] = useState(false)
 
@@ -73,29 +67,32 @@ export const ModalEditGeneRegion = observer(
       }
     }
 
-    useEffect(() => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-      const params = `{"locus":"${getDefaultValue()}"}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
-      dtreeStore.fetchStatFuncAsync(groupName, params)
-
-      return () => dtreeStore.resetStatFuncData()
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     const handleClose = () => {
-      dtreeStore.closeModalEditGeneRegion()
+      dtreeStore.closeModalSelectGeneRegion()
     }
 
-    const handleSaveChanges = () => {
-      const params = { locus: locusCondition }
+    const handleModals = () => {
+      dtreeStore.closeModalSelectGeneRegion()
+      dtreeStore.openModalAttribute(currentStepIndex)
+      dtreeStore.resetSelectedFilters()
+    }
 
-      changeFunctionalStep(params)
-      dtreeStore.closeModalEditGeneRegion()
+    // TODO:fix
+    const handleReplace = () => {
+      // dtreeStore.replaceStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectGeneRegion()
+    }
+
+    const handleModalJoin = () => {
+      dtreeStore.openModalJoin()
+    }
+
+    const handleAddAttribute = () => {
+      // addAttributeToStep('func', subGroupName)
+
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectGeneRegion()
     }
 
     return (
@@ -132,10 +129,14 @@ export const ModalEditGeneRegion = observer(
 
         <EditModalVariants variants={variants} disabled={true} />
 
-        <EditModalButtons
+        <SelectModalButtons
+          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
+          handleModals={handleModals}
+          handleModalJoin={handleModalJoin}
+          handleReplace={handleReplace}
           disabled={isErrorVisible}
+          currentGroup={currentGroup}
         />
       </ModalBase>
     )

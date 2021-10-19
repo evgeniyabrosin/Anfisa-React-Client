@@ -2,7 +2,7 @@ import dtreeStore from '@store/dtree'
 import datasetStore from '../store/dataset'
 
 type ActionType = 'INSERT' | 'REPLACE' | 'JOIN-AND' | 'JOIN-OR'
-type AttributeType = 'enum' | 'numeric'
+type AttributeType = 'enum' | 'numeric' | 'func'
 
 export const addAttributeToStep = (
   action: ActionType,
