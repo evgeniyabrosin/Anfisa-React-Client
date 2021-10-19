@@ -119,6 +119,7 @@ export const NextStepRoute = observer(
       ? changedStartCounts
       : alternativeCounts
 
+    // show statistics for returned value
     const showStatistics = () => {
       const code = dtreeStore.dtreeCode
       const indexForApi = dtreeStore.getStepIndexForApi(index) + 1
