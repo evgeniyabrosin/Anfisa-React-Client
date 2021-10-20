@@ -18,7 +18,10 @@ export const QueryBuilderTotalNumbers = observer(
     const openTableModal = (isReturnedVariants = true) => {
       const stepData = dtreeStore.stepData
 
-      const index = stepData.findIndex(element => element.isActive)
+      const index = stepData.findIndex(
+        element => element.isActive || element.isReturnedVariantsActive,
+      )
+
       const indexForApi = dtreeStore.getStepIndexForApi(index)
       const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
 

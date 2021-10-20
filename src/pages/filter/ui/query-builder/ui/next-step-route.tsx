@@ -9,6 +9,7 @@ import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { makeStepActive } from '@utils/makeStepActive'
 
 const StartAmount = styled.div`
   font-size: 13px;
@@ -80,6 +81,16 @@ const ExcludeAmount = styled.div<{ isIncluded: boolean }>`
       : theme('colors.purple.bright')};
 `
 
+const DifferenceCounts = styled.span<{
+  isIncluded: boolean
+}>`
+  border-bottom: 2px dashed
+    ${props =>
+      props.isIncluded
+        ? theme('colors.green.secondary')
+        : theme('colors.purple.bright')};
+`
+
 interface IProps {
   isExpanded: boolean
   index: number
@@ -119,14 +130,7 @@ export const NextStepRoute = observer(
       ? changedStartCounts
       : alternativeCounts
 
-    // show statistics for returned value
-    const showStatistics = () => {
-      const code = dtreeStore.dtreeCode
-      const indexForApi = dtreeStore.getStepIndexForApi(index) + 1
-
-      dtreeStore.setStepActive(index)
-      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
-    }
+    const isDifferenceActive = currentStep.isReturnedVariantsActive
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
@@ -166,11 +170,20 @@ export const NextStepRoute = observer(
                 >
                   <ExcludeAmount
                     isIncluded={isIncluded}
-                    onClick={showStatistics}
+                    onClick={() =>
+                      makeStepActive(index, 'isReturnedVariantsActive')
+                    }
                   >
-                    {isIncluded
-                      ? `+${currentStep.difference}`
-                      : `-${currentStep.difference}`}
+                    <span>
+                      {isIncluded ? `+` : `-`}
+                      {isDifferenceActive ? (
+                        <DifferenceCounts isIncluded={isIncluded}>
+                          {currentStep.difference}
+                        </DifferenceCounts>
+                      ) : (
+                        <span>{currentStep.difference}</span>
+                      )}
+                    </span>
                   </ExcludeAmount>
 
                   <div className="ml-1">

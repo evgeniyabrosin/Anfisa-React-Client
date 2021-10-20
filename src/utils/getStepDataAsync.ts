@@ -33,6 +33,7 @@ export const getStepDataAsync = async (): Promise<IStepData[]> => {
       groups: item,
       excluded: !stepCodes[index].result,
       isActive: false,
+      isReturnedVariantsActive: false,
       startFilterCounts: '...',
       finishFilterCounts: '...',
       difference: '...',

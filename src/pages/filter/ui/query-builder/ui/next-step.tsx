@@ -61,7 +61,12 @@ export const NextStep = observer(
     return (
       <div className="flex flex-col mb-2">
         <div className="flex">
-          <TreeView className="justify-end items-start pr-3">
+          <TreeView
+            className={cn(
+              'justify-end items-start pr-3',
+              currentStep.isReturnedVariantsActive ? 'bg-green-light' : '',
+            )}
+          >
             <NextStepRoute
               isExpanded={isExpanded}
               index={index}

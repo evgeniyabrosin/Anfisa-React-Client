@@ -14,7 +14,8 @@ export type IStepData = {
   groups?: any
   negate?: boolean
   excluded: boolean
-  isActive?: boolean
+  isActive: boolean
+  isReturnedVariantsActive: boolean
   startFilterCounts: FilterCountsType
   finishFilterCounts: FilterCountsType
   difference: FilterCountsType
@@ -141,6 +142,7 @@ class DtreeStore {
         step: 1,
         excluded: true,
         isActive: true,
+        isReturnedVariantsActive: false,
         startFilterCounts: null,
         finishFilterCounts: null,
         difference: null,
@@ -305,6 +307,7 @@ class DtreeStore {
           step: 1,
           excluded: true,
           isActive: true,
+          isReturnedVariantsActive: false,
           startFilterCounts: 0,
           finishFilterCounts: 0,
           difference: 0,
@@ -323,6 +326,7 @@ class DtreeStore {
           step: this.stepData.length + 1,
           excluded: true,
           isActive: true,
+          isReturnedVariantsActive: false,
           startFilterCounts,
           finishFilterCounts: startFilterCounts,
           difference: 0,
@@ -345,6 +349,7 @@ class DtreeStore {
         step: index,
         excluded: true,
         isActive: true,
+        isReturnedVariantsActive: false,
         startFilterCounts,
         finishFilterCounts: startFilterCounts,
         difference: 0,
@@ -358,6 +363,7 @@ class DtreeStore {
         step: index,
         excluded: true,
         isActive: true,
+        isReturnedVariantsActive: false,
         startFilterCounts,
         finishFilterCounts: startFilterCounts,
         difference: 0,
@@ -787,12 +793,16 @@ class DtreeStore {
     this.stepData[index].excluded = !this.stepData[index].excluded
   }
 
-  setStepActive = (index: number) => {
+  setStepActive = (
+    index: number,
+    option: 'isActive' | 'isReturnedVariantsActive',
+  ) => {
     this.stepData.forEach(element => {
       element.isActive = false
+      element.isReturnedVariantsActive = false
     })
 
-    this.stepData[index].isActive = !this.stepData[index].isActive
+    this.stepData[index][option] = !this.stepData[index][option]
   }
 
   openTableModal(index: number) {
