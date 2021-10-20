@@ -186,33 +186,35 @@ export const Table = observer(
         className="table h-full"
       >
         <div className="thead">
-          {headerGroups.map(headerGroup => (
-            <div
-              {...headerGroup.getHeaderGroupProps()}
-              key={Math.random()}
-              className="tr"
-            >
-              {headerGroup.headers.map((column: any) => {
-                return (
-                  <div
-                    {...column.getHeaderProps()}
-                    key={Math.random()}
-                    className="th"
-                    style={{
-                      ...column.getHeaderProps().style,
-                      width:
-                        Number.parseFloat(column.getHeaderProps().style.width) -
-                        1,
-                    }}
-                  >
-                    {column.HeaderComponent
-                      ? column.render('HeaderComponent')
-                      : column.render('Header')}
-                  </div>
-                )
-              })}
-            </div>
-          ))}
+          {headerGroups.map(headerGroup => {
+            const stylesHead = { ...headerGroup.getHeaderGroupProps().style }
+
+            stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
+
+            return (
+              <div
+                {...headerGroup.getHeaderGroupProps()}
+                key={Math.random()}
+                className="tr"
+                style={stylesHead}
+              >
+                {headerGroup.headers.map((column: any) => {
+                  return (
+                    <div
+                      {...column.getHeaderProps()}
+                      key={Math.random()}
+                      className="th"
+                      // style={styleCell}
+                    >
+                      {column.HeaderComponent
+                        ? column.render('HeaderComponent')
+                        : column.render('Header')}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
         </div>
 
         {datasetStore.tabReport.length === 0 && <NoResultsFound />}

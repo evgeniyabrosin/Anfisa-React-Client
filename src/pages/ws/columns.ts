@@ -60,6 +60,5 @@ export const variantColumnTable = [
     Header: tableColumnMap.filter,
     accessor: 'FT',
     Cell: CellFilter,
-    maxWidth: 150,
   },
 ]
