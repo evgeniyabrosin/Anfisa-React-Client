@@ -1,17 +1,13 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
-import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { EditModalButtons } from './edit-modal-buttons'
-import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
+import { InheritanceModeContent } from './inheritance-mode-content'
 import { ModalBase } from './modal-base'
-import { ModsDivider } from './mods-divider'
 
 export const ModalEditInheritanceMode = observer(
   (): ReactElement => {
@@ -32,8 +28,6 @@ export const ModalEditInheritanceMode = observer(
 
     const currentGroupLength =
       dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].length
-
-    const variants = dtreeStore.statFuncData.variants
 
     let attrData: any
 
@@ -84,14 +78,6 @@ export const ModalEditInheritanceMode = observer(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const handleCheckGroupItem = (checked: boolean, name: string) => {
-      if (checked) {
-        dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
-      }
-    }
 
     const handleClose = () => {
       dtreeStore.closeModalEditInheritanceMode()
@@ -156,62 +142,11 @@ export const ModalEditInheritanceMode = observer(
           handleClose={handleClose}
         />
 
-        <div className="flex items-center justify-between w-full mt-4 text-14">
-          <div>{t('dtree.problemGroup')}</div>
-
-          {attrData.family.map((group: string) => (
-            <div key={group}>
-              <Checkbox
-                onChange={(e: any) =>
-                  handleProblemGroup(e.target.checked, group)
-                }
-                checked={
-                  problemGroupData
-                    ? problemGroupData.includes(group)
-                    : attrData.affected.includes(group)
-                }
-                className="mx-1 cursor-pointer"
-              />
-              <span>{group}</span>
-            </div>
-          ))}
-
-          <Button
-            onClick={handleReset}
-            text="Reset"
-            hasBackground={false}
-            className="text-black h-4/5"
-          />
-        </div>
-
-        <div className="flex justify-between w-full mt-4">
-          <div className="text-14 text-grey-blue">
-            {dtreeStore.selectedFilters.length} {t('dtree.selected')}
-          </div>
-
-          <div className="flex">
-            <div
-              className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
-            >
-              {t('general.selectAll')}
-            </div>
-
-            <ModsDivider />
-
-            <div
-              className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
-            >
-              {t('general.clearAll')}
-            </div>
-          </div>
-        </div>
-
-        <EditModalVariants
-          variants={variants}
-          disabled={false}
-          handleCheckGroupItem={handleCheckGroupItem}
+        <InheritanceModeContent
+          attrData={attrData}
+          handleProblemGroup={handleProblemGroup}
+          problemGroupData={problemGroupData}
+          handleReset={handleReset}
         />
 
         <EditModalButtons

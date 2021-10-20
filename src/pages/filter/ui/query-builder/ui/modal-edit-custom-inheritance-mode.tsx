@@ -4,15 +4,12 @@ import { observer } from 'mobx-react-lite'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
-import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Select } from '@ui/select'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getSortedArray } from '@utils/getSortedArray'
-import { AllNotModalMods } from './all-not-modal-mods'
+import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
 import { EditModalButtons } from './edit-modal-buttons'
-import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
@@ -229,39 +226,13 @@ export const ModalEditCustomInheritanceMode = observer(
           handleClose={handleClose}
         />
 
-        <div className="flex items-center justify-between w-full mt-4 text-14">
-          <div>{t('dtree.scenario')}</div>
-
-          {attrData.family.map((group: string, index: number) => (
-            <div key={group}>
-              <span>{group}</span>
-
-              <Select
-                onChange={(e: any) => handleSetScenario(group, e.target.value)}
-                className="w-auto ml-1"
-                options={selectOptions}
-                value={selectStates[index]}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex justify-between w-full mt-4 text-14">
-          <div className="flex w-1/2">
-            <span>{t('dtree.reset')}</span>
-
-            <Select
-              options={resetData.available}
-              onChange={(e: any) => handleReset(e.target.value)}
-              className="w-full ml-2"
-              reset
-            />
-          </div>
-
-          <AllNotModalMods />
-        </div>
-
-        <EditModalVariants variants={variants} disabled={true} />
+        <CustomInheritanceModeContent
+          attrData={attrData}
+          resetData={resetData}
+          handleSetScenario={handleSetScenario}
+          selectStates={selectStates}
+          handleReset={handleReset}
+        />
 
         <EditModalButtons
           handleClose={handleClose}

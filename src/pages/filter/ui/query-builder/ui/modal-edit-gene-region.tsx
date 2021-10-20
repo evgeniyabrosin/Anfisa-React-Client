@@ -3,13 +3,10 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
-import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Input } from '@ui/input'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
-import { AllNotModalMods } from './all-not-modal-mods'
 import { EditModalButtons } from './edit-modal-buttons'
-import { EditModalVariants } from './edit-modal-variants'
+import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
@@ -105,32 +102,13 @@ export const ModalEditGeneRegion = observer(
           handleClose={handleClose}
         />
 
-        <div className="flex justify-between w-full mt-4 text-14">
-          <div className="flex h-9">
-            <span>{t('dtree.locus')}</span>
-
-            <div className="relative flex h-9 ml-2">
-              <Input
-                value={locusCondition}
-                onChange={(e: any) => {
-                  validateValue(e.target.value)
-                  handleSetValue(e.target.value)
-                }}
-                className="h-5"
-              />
-
-              {isErrorVisible && (
-                <div className="absolute bottom-0 flex items-center h-3 text-10 text-red-secondary">
-                  {t('dtree.chromosomeNameIsNotCorrect')}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <AllNotModalMods />
-        </div>
-
-        <EditModalVariants variants={variants} disabled={true} />
+        <GeneRegionContent
+          locusCondition={locusCondition}
+          validateValue={validateValue}
+          handleSetValue={handleSetValue}
+          isErrorVisible={isErrorVisible}
+          variants={variants}
+        />
 
         <EditModalButtons
           handleClose={handleClose}
