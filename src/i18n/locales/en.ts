@@ -163,5 +163,6 @@ export const en = {
     expressionIsNotCorrect: 'Expression is not correct',
     darkMode: 'dark mode',
     loading: 'Loading...',
+    chooseActiveStep: 'Choose an active step',
   },
 }

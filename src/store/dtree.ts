@@ -315,6 +315,8 @@ class DtreeStore {
 
       const startFilterCounts = this.stepData[index].finishFilterCounts
 
+      this.stepData.map(step => (step.isActive = false))
+
       this.stepData = [
         ...this.stepData,
         {
@@ -327,6 +329,44 @@ class DtreeStore {
         },
       ]
     }
+  }
+
+  insertStep(type: string, index: number) {
+    this.stepData.forEach(element => {
+      element.isActive = false
+
+      return element
+    })
+
+    if (type === 'BEFORE') {
+      const startFilterCounts = this.stepData[index - 1].finishFilterCounts
+
+      this.stepData.splice(index, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        startFilterCounts,
+        finishFilterCounts: startFilterCounts,
+        difference: 0,
+      })
+    } else {
+      this.currentStepIndex = index + 1
+
+      const startFilterCounts = this.stepData[index].finishFilterCounts
+
+      this.stepData.splice(index + 1, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        startFilterCounts,
+        finishFilterCounts: startFilterCounts,
+        difference: 0,
+      })
+    }
+
+    this.stepData.map((item, currNo: number) => {
+      item.step = currNo + 1
+    })
   }
 
   duplicateStep(index: number) {
@@ -631,38 +671,6 @@ class DtreeStore {
   }
 
   // 4. Other UI control functions
-
-  insertStep(type: string, index: number) {
-    this.stepData.forEach(element => {
-      element.isActive = false
-
-      return element
-    })
-
-    if (type === 'BEFORE') {
-      this.stepData.splice(index, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    } else {
-      this.stepData.splice(index + 1, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    }
-
-    this.stepData.map((item, currNo: number) => {
-      item.step = currNo + 1
-    })
-  }
 
   setJobStatus(jobStatus: any) {
     runInAction(() => {

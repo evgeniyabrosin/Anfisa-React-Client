@@ -28,6 +28,8 @@ export const ModalOperation = observer(
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+
+      hideModal()
     }
 
     const deleteStep = (stepIndex: number) => {

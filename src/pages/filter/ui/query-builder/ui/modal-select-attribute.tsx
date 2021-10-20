@@ -38,16 +38,22 @@ export const ModalSelectAttribute = observer(
         </div>
 
         <div className="flex-1 overflow-y-scroll mt-4">
-          {groupNames.map((groupName, index) => (
-            <QueryBuilderSubgroup
-              groupName={groupName}
-              subGroupData={subGroupData[index]}
-              key={groupName}
-              changeIndicator={dtreeStore.filterChangeIndicator}
-              isContentExpanded={dtreeStore.isFilterContentExpanded}
-              isModal
-            />
-          ))}
+          {dtreeStore.isFiltersLoading ? (
+            <div className="flex justify-center w-full">
+              {t('dtree.loading')}
+            </div>
+          ) : (
+            groupNames.map((groupName, index) => (
+              <QueryBuilderSubgroup
+                groupName={groupName}
+                subGroupData={subGroupData[index]}
+                key={groupName}
+                changeIndicator={dtreeStore.filterChangeIndicator}
+                isContentExpanded={dtreeStore.isFilterContentExpanded}
+                isModal
+              />
+            ))
+          )}
         </div>
       </ModalBase>
     )
