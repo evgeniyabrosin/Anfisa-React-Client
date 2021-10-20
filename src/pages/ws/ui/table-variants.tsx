@@ -10,8 +10,8 @@ import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
 const Styles = styled.div`
-  // overflow-x: auto;
-  // overflow-y: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   .table {
     border-spacing: 0;
