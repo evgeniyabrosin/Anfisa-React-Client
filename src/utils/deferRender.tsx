@@ -1,5 +1,6 @@
-import { ReactElement, useEffect, useMemo, useState } from 'react'
-import React from 'react'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+import React, { ReactElement, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 interface DeferProps {
@@ -17,6 +18,7 @@ export const DeferRender = observer(
 
     useEffect(() => {
       if (renderedItemsCount < childrenArray.length) {
+        //@ts-ignore
         window.requestIdleCallback(
           () => {
             setRenderedItemsCount(
