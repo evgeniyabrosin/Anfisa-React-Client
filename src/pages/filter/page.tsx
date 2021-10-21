@@ -41,6 +41,7 @@ export const FilterPage = observer(
         })
 
         await dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
+
         await dtreeStore.fetchDtreeSetAsync(body)
       }
 

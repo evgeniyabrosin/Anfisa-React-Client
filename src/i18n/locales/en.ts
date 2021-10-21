@@ -106,6 +106,8 @@ export const en = {
     actions: 'Actions',
     searchForAField: 'Search for a field',
     decisionTrees: 'Decision Trees',
+    tooMuchVariants: 'Number of variants is more than 2600!',
+    prohibitToOpen: 'You cant open xl-dataset on Filter Refiner',
   },
   dtree: {
     variants: 'variants',
