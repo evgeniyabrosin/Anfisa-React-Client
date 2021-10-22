@@ -19,7 +19,10 @@ export const FilterButton = observer(
       size="md"
       icon={<Icon name="Arrow" className="transform -rotate-90" />}
       hasBackground={false}
-      className={cn('text-white mt-auto ml-2 rounded-full', className)}
+      className={cn(
+        'text-white mt-auto ml-2 rounded-full hover:bg-blue-bright',
+        className,
+      )}
       onClick={rest.onClick}
     />
   ),

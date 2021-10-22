@@ -37,6 +37,8 @@ class DtreeStore {
   dtreeCode = ''
   startDtreeCode = ''
   activeTree = ''
+  currentDtreeName = ''
+  previousDtreeName = ''
 
   statFuncData: any = []
   scenario: any
@@ -109,32 +111,6 @@ class DtreeStore {
   }
 
   // 1. Functions to load / draw / edit decision trees
-
-  async fetchDtreeAsync(name: string) {
-    this.activeTree = name
-
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      dtree: name,
-    })
-
-    const response = await fetch(getApiUrl(`dtree_set`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dtree = result
-      this.dtreeCode = result['code']
-    })
-
-    this.drawDecesionTreeAsync()
-  }
 
   async drawDecesionTreeAsync() {
     const computedStepData = await getStepDataAsync()
@@ -259,6 +235,14 @@ class DtreeStore {
     const newCode = result.code
 
     runInAction(() => {
+      if (
+        !this.startDtreeCode ||
+        this.currentDtreeName !== this.previousDtreeName
+      ) {
+        this.startDtreeCode = newCode
+        this.setPrevDtreeName(this.currentDtreeName)
+      }
+
       this.dtree = result
       this.dtreeCode = newCode
       this.dtreeList = result['dtree-list']
@@ -849,6 +833,26 @@ class DtreeStore {
 
   resetStatFuncData() {
     this.statFuncData = []
+  }
+
+  setDtreeName(name: string) {
+    if (this.currentDtreeName) {
+      this.setPrevDtreeName(this.currentDtreeName)
+    }
+
+    this.currentDtreeName = name
+  }
+
+  resetDtreeName() {
+    this.currentDtreeName = ''
+  }
+
+  setPrevDtreeName(name: string) {
+    this.previousDtreeName = name
+  }
+
+  resetPrevDtreeName() {
+    this.previousDtreeName = ''
   }
 }
 
