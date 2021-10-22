@@ -1,13 +1,13 @@
+import { ActionType, AttributeType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import datasetStore from '../store/dataset'
-
-type ActionType = 'INSERT' | 'REPLACE' | 'JOIN-AND' | 'JOIN-OR'
-type AttributeType = 'enum' | 'numeric' | 'func'
 
 export const addAttributeToStep = (
   action: ActionType,
   attributeType: AttributeType,
+  filters: any = null,
   params: any = null,
+  // eslint-disable-next-line max-params
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
@@ -16,14 +16,20 @@ export const addAttributeToStep = (
     code,
   })
 
-  const isEnumAttribute = attributeType === 'enum'
-  const currentParams = isEnumAttribute ? dtreeStore.selectedFilters : params
-  const subGroupName = dtreeStore.selectedGroups[1]
-  const attribute = [attributeType, subGroupName, currentParams]
+  const shouldTakeAttributeFromStore = attributeType !== 'numeric'
 
-  if (isEnumAttribute) {
+  const currentFilters = shouldTakeAttributeFromStore
+    ? dtreeStore.selectedFilters
+    : filters
+
+  const subGroupName = dtreeStore.selectedGroups[1]
+  const attribute = [attributeType, subGroupName, currentFilters]
+
+  if (shouldTakeAttributeFromStore) {
     attribute.splice(2, 0, '')
   }
+
+  if (params) attribute.push(params)
 
   const index = dtreeStore.getLastStepIndexForApi()
   const instruction = ['POINT', action, index, attribute]

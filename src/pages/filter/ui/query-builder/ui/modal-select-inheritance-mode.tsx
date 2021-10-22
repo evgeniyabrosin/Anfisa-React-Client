@@ -1,8 +1,10 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { HeaderModal } from './header-modal'
 import { InheritanceModeContent } from './inheritance-mode-content'
 import { ModalBase } from './modal-base'
@@ -113,19 +115,14 @@ export const ModalSelectInheritanceMode = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    // TODO:fix
-    const handleReplace = () => {
-      // dtreeStore.replaceStepData(subGroupName, 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectInheritanceMode()
-    }
-
     const handleModalJoin = () => {
       dtreeStore.openModalJoin()
     }
 
-    const handleAddAttribute = () => {
-      // addAttributeToStep('func', subGroupName)
+    const handleAddAttribute = (action: ActionType) => {
+      const params = { problem_group: problemGroupData }
+
+      addAttributeToStep(action, 'func', null, params)
 
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectInheritanceMode()
@@ -146,11 +143,10 @@ export const ModalSelectInheritanceMode = observer(
         />
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
+          handleAddAttribute={handleAddAttribute}
           disabled={dtreeStore.selectedFilters.length === 0}
           currentGroup={currentGroup}
         />

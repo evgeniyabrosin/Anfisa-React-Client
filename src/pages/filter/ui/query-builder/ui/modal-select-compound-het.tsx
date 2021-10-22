@@ -1,13 +1,16 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+import { IParams } from './modal-edit-compound-het'
 import { SelectModalButtons } from './select-modal-buttons'
 
 export const ModalSelectCompoundHet = observer(
@@ -106,19 +109,23 @@ export const ModalSelectCompoundHet = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    // TODO:fix
-    const handleReplace = () => {
-      // dtreeStore.replaceStepData(subGroupName, 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectCompoundHet()
-    }
-
     const handleModalJoin = () => {
       dtreeStore.openModalJoin()
     }
 
-    const handleAddAttribute = () => {
-      // addAttributeToStep('func', subGroupName)
+    const handleAddAttribute = (action: ActionType) => {
+      dtreeStore.addSelectedFilter(variants[0][0])
+
+      const params: IParams = { approx: approxCondition }
+
+      if (stateCondition) {
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
+      }
+
+      addAttributeToStep(action, 'func', null, params)
 
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectCompoundHet()
@@ -147,13 +154,12 @@ export const ModalSelectCompoundHet = observer(
         <EditModalVariants variants={variants} disabled={true} />
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
           disabled={!variants}
           currentGroup={currentGroup}
+          handleAddAttribute={handleAddAttribute}
         />
       </ModalBase>
     )

@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { cloneDeep } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
@@ -10,6 +11,7 @@ import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
@@ -19,6 +21,7 @@ import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+import { IParams } from './modal-edit-compound-het'
 import { selectOptions } from './modal-edit-custom-inheritance-mode'
 import { SelectModalButtons } from './select-modal-buttons'
 
@@ -252,20 +255,25 @@ export const ModalSelectCompoundRequest = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    // TODO:fix
-    const handleReplace = () => {
-      // dtreeStore.replaceStepData(subGroupName, 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectCompoundRequest()
-    }
-
     const handleModalJoin = () => {
       dtreeStore.openModalJoin()
     }
 
-    const handleAddAttribute = () => {
-      // addAttributeToStep('func', subGroupName)
+    const handleAddAttribute = (action: ActionType) => {
+      const params: IParams = {
+        approx: approxCondition,
+      }
 
+      if (stateCondition) {
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
+      }
+
+      params.request = requestCondition
+
+      addAttributeToStep(action, 'func', null, params)
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectCompoundRequest()
     }
@@ -374,13 +382,12 @@ export const ModalSelectCompoundRequest = observer(
         <EditModalVariants variants={variants} disabled={true} />
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
           disabled={!variants}
           currentGroup={currentGroup}
+          handleAddAttribute={handleAddAttribute}
         />
       </ModalBase>
     )

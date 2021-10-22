@@ -12,10 +12,11 @@ import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
-interface IParams {
+export interface IParams {
   approx: any
   state?: string[] | null
   default?: string
+  request?: any[]
 }
 
 export const ModalEditCompoundHet = observer(

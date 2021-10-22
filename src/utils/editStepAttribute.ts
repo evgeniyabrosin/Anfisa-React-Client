@@ -27,7 +27,14 @@ export const editStepAttribute = (
 
   const negation = isNegate ? '' : 'NOT'
 
-  filteredAttribute.splice(-1, 0, negation)
+  const lastAttribute = filteredAttribute[filteredAttribute.length - 1]
+  const isLastAttributeArray = Array.isArray(lastAttribute)
+
+  if (isLastAttributeArray) {
+    filteredAttribute.splice(-1, 0, negation)
+  } else {
+    filteredAttribute.splice(-2, 0, negation)
+  }
 
   body.append(
     'instr',

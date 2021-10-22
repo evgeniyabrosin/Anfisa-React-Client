@@ -2,6 +2,7 @@ import { ReactElement, useRef } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
@@ -29,8 +30,8 @@ export const ModalSelectFilters = observer(
       }
     }
 
-    const handleAddAttribute = () => {
-      addAttributeToStep('INSERT', 'enum')
+    const handleAddAttribute = (action: ActionType) => {
+      addAttributeToStep(action, 'enum')
 
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
@@ -45,12 +46,6 @@ export const ModalSelectFilters = observer(
       dtreeStore.closeModalSelectFilter()
       dtreeStore.openModalAttribute(index)
       dtreeStore.resetSelectedFilters()
-    }
-
-    const handleReplace = () => {
-      addAttributeToStep('REPLACE', 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectFilter()
     }
 
     const handleModalJoin = () => {
@@ -112,13 +107,12 @@ export const ModalSelectFilters = observer(
         </div>
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
           disabled={dtreeStore.selectedFilters.length === 0}
           currentGroup={currentGroup}
+          handleAddAttribute={handleAddAttribute}
         />
       </ModalBase>
     )
