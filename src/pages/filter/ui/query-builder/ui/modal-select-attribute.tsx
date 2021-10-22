@@ -39,7 +39,7 @@ export const ModalSelectAttribute = observer(
 
         <div className="flex-1 overflow-y-scroll mt-4">
           {dtreeStore.isFiltersLoading ? (
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full my-4">
               {t('dtree.loading')}
             </div>
           ) : (

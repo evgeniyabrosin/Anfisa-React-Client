@@ -146,8 +146,7 @@ export const NextStepRoute = observer(
               {(finishFilterCounts &&
                 finishFilterCounts > 0 &&
                 getNumberWithCommas(finishFilterCounts)) ||
-                (transcribedVariants &&
-                  getNumberWithCommas(transcribedVariants))}
+                getNumberWithCommas(startFilterCounts)}
             </div>
           )}
         </StartAmount>

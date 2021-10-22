@@ -102,6 +102,8 @@ class DtreeStore {
 
   requestData: IRequestData[] = []
 
+  modalSource = ''
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -442,7 +444,9 @@ class DtreeStore {
 
   // 3.1.1 Modal for enum attr
 
-  openModalSelectFilter(groupName: string) {
+  openModalSelectFilter(groupName: string, source: string) {
+    this.modalSource = source
+
     this.isModalSelectFilterVisible = true
     this.groupNameToChange = groupName
   }
@@ -453,7 +457,9 @@ class DtreeStore {
 
   // 3.1.2 Modal for numeric attr
 
-  openModalSelectNumbers(groupName: string) {
+  openModalSelectNumbers(groupName: string, source: string) {
+    this.modalSource = source
+
     this.isModalSelectNumbersVisible = true
     this.groupNameToChange = groupName
   }
@@ -464,7 +470,13 @@ class DtreeStore {
 
   // 3.1.3 Modals for func attr
 
-  openModalSelectInheritanceMode(groupName: string, stepIndex: number) {
+  openModalSelectInheritanceMode(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
     this.isModalSelectInheritanceModeVisible = true
 
     this.groupNameToChange = groupName
@@ -476,7 +488,13 @@ class DtreeStore {
     this.isModalSelectInheritanceModeVisible = false
   }
 
-  openModalSelectCustomInheritanceMode(groupName: string, stepIndex: number) {
+  openModalSelectCustomInheritanceMode(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
     this.isModalSelectCustomInheritanceModeVisible = true
 
     this.groupNameToChange = groupName
@@ -488,7 +506,13 @@ class DtreeStore {
     this.isModalSelectCustomInheritanceModeVisible = false
   }
 
-  openModalSelectCompoundHet(groupName: string, stepIndex: number) {
+  openModalSelectCompoundHet(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
     this.isModalSelectCompoundHetVisible = true
 
     this.groupNameToChange = groupName
@@ -500,7 +524,13 @@ class DtreeStore {
     this.isModalSelectCompoundHetVisible = false
   }
 
-  openModalSelectCompoundRequest(groupName: string, stepIndex: number) {
+  openModalSelectCompoundRequest(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
     this.isModalSelectCompoundRequestVisible = true
 
     this.groupNameToChange = groupName
@@ -512,7 +542,13 @@ class DtreeStore {
     this.isModalSelectCompoundRequestVisible = false
   }
 
-  openModalSelectGeneRegion(groupName: string, stepIndex: number) {
+  openModalSelectGeneRegion(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
     this.isModalSelectGeneRegionVisible = true
     this.groupNameToChange = groupName
 
