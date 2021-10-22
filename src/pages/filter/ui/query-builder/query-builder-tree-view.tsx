@@ -27,6 +27,8 @@ export const QueryBuilderTreeView = observer(
               key={key}
               index={index}
               length={dtreeStore.stepData.length}
+              changeIndicator={dtreeStore.resultsChangeIndicator}
+              isContentExpanded={dtreeStore.isResultsContentExpanded}
             />
           )
         })}

@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -27,11 +27,23 @@ const ResultsView = styled.div`
 interface IProps {
   index: number
   length: number
+  isContentExpanded: boolean
+  changeIndicator: number
 }
 
 export const NextStep = observer(
-  ({ index, length }: IProps): ReactElement => {
+  ({
+    index,
+    length,
+    isContentExpanded,
+    changeIndicator,
+  }: IProps): ReactElement => {
     const [isExpanded, setIsExpanded] = useState(true)
+
+    useEffect(() => {
+      !isContentExpanded && setIsExpanded(true)
+      isContentExpanded && setIsExpanded(false)
+    }, [isContentExpanded, changeIndicator])
 
     const expandContent = () => {
       setIsExpanded(prev => !prev)
@@ -86,7 +98,7 @@ export const NextStep = observer(
               isExpanded={isExpanded}
               expandContent={expandContent}
               index={index}
-              isIncluded={dtreeStore.stepData[index].excluded}
+              isExcluded={dtreeStore.stepData[index].excluded}
             />
 
             {isExpanded && <NextStepContent index={index} />}

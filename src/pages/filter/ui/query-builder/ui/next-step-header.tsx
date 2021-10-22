@@ -11,6 +11,7 @@ import { RadioButton } from '@ui/radio-button'
 import { changeStep } from '@utils/changeStep'
 import { ExpandContentButton } from './expand-content-button'
 import { ModalOperation } from './modal-operation'
+import { getNumberWithCommas } from './next-step-route'
 import { StepDivider } from './step-divider'
 
 const Operation = styled.div`
@@ -27,14 +28,16 @@ interface IProps {
   isExpanded: boolean
   expandContent: () => void
   index: number
-  isIncluded: boolean
+  isExcluded: boolean
 }
 
 export const NextStepHeader = observer(
-  ({ isExpanded, expandContent, index, isIncluded }: IProps): ReactElement => {
+  ({ isExpanded, expandContent, index, isExcluded }: IProps): ReactElement => {
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
     const currentStep = dtreeStore.stepData[index]
+
+    const difference = dtreeStore.stepData[index].difference
 
     const toggleExclude = (
       stepIndex: number,
@@ -68,10 +71,10 @@ export const NextStepHeader = observer(
               )}
             </div>
 
-            {!isExpanded && (
+            {!isExpanded && (difference || difference === 0) && (
               <div className="ml-2 text-14 text-grey-blue font-normal">
-                {`(37,542 variants are ${
-                  isIncluded ? 'included' : 'excluded'
+                {`(${getNumberWithCommas(difference)} variants are ${
+                  isExcluded ? 'excluded' : 'included'
                 })`}
               </div>
             )}

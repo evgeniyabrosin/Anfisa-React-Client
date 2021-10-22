@@ -40,10 +40,7 @@ export const QueryBuilderSubgroup = observer(
 
     return (
       <div key={groupName}>
-        <div
-          className="flex items-center justify-between mb-3 cursor-pointer"
-          onClick={() => onClick}
-        >
+        <div className="flex items-center justify-between mb-3 cursor-pointer">
           <span
             className={cn('text-16 font-500', {
               'text-black': !isVisibleSubGroup,
@@ -53,6 +50,7 @@ export const QueryBuilderSubgroup = observer(
               'hover:text-blue-dark': isModal,
               'text-blue-dark': isModal && isVisibleSubGroup,
             })}
+            onClick={onClick}
           >
             {groupName}
           </span>
@@ -60,6 +58,7 @@ export const QueryBuilderSubgroup = observer(
           <ExpandContentButton
             isVisible={isVisibleSubGroup}
             isModal={isModal}
+            expandContent={onClick}
           />
         </div>
 

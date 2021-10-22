@@ -97,7 +97,9 @@ export const FilterPage = observer(
         <div className="overflow-hidden">
           <FilterHeader />
 
-          {filterStore.method === FilterMethodEnum.Query && <QueryBuilder />}
+          {filterStore.method === FilterMethodEnum.DecisionTree && (
+            <QueryBuilder />
+          )}
           {filterStore.method === FilterMethodEnum.Refiner && <FilterRefiner />}
         </div>
       </Fragment>
