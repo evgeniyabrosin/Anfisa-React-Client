@@ -1,5 +1,6 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -26,8 +27,19 @@ export const QuerySelected = observer(
         ? allVariants
         : datasetStore.filteredNo.length
 
-    const handleClick = () =>
-      history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+    const handleClick = () => {
+      allVariants > 2600
+        ? toast.error(t('filter.tooMuchVariants'), {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+          })
+        : history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+    }
 
     return (
       <div className="w-1/3">

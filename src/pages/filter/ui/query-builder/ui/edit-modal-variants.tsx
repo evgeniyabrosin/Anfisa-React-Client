@@ -7,13 +7,12 @@ import dtreeStore from '@store/dtree'
 interface IProps {
   variants: any[]
   disabled: boolean
-  currentGroup?: any[]
   handleCheckGroupItem?: (event: any, variant: string) => void
   inheritanceMode?: boolean
 }
 
 export const EditModalVariants = observer(
-  ({ variants, disabled, currentGroup, handleCheckGroupItem }: IProps) => (
+  ({ variants, disabled, handleCheckGroupItem }: IProps) => (
     <div className="flex-1 my-4 text-14">
       {variants ? (
         variants.map((variant: any) => (
@@ -26,11 +25,7 @@ export const EditModalVariants = observer(
               />
             ) : (
               <Checkbox
-                checked={
-                  currentGroup && currentGroup.length > 0
-                    ? dtreeStore.selectedFilters.includes(variant[0])
-                    : false
-                }
+                checked={dtreeStore.selectedFilters.includes(variant[0])}
                 className="-mt-0.5 mr-1 cursor-pointer"
                 onChange={(e: any) =>
                   handleCheckGroupItem &&

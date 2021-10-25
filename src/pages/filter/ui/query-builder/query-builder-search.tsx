@@ -21,7 +21,7 @@ export const QueryBuilderSearch = observer(
         operation === 'collapse' && dtreeStore.collapseFilterContent()
       } else {
         operation === 'expand' && dtreeStore.expandResultsContent()
-        operation === 'collapse' && dtreeStore.collapseFilterContent()
+        operation === 'collapse' && dtreeStore.collapseResultsContent()
       }
     }
 
@@ -43,7 +43,7 @@ export const QueryBuilderSearch = observer(
               name="Expand"
               size={20}
               className="cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick('expand')}
+              onClick={() => handleClick('collapse')}
             />
           </div>
 
@@ -52,7 +52,7 @@ export const QueryBuilderSearch = observer(
               name="Collapse"
               size={20}
               className="cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick('collapse')}
+              onClick={() => handleClick('expand')}
             />
           </div>
         </div>

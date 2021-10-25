@@ -17,10 +17,11 @@ export const Preset = observer(
     )
 
     const onSelectAsync = async (arg: Option) => {
-      datasetStore.fetchWsListAsync(false, arg.value)
-      datasetStore.setIsLoadingTabReport(true)
-      datasetStore.setActivePreset(arg.value)
       filterPresetStore.loadPresetAsync(arg.value)
+      datasetStore.setActivePreset(arg.value)
+
+      datasetStore.fetchWsListAsync(false)
+      datasetStore.setIsLoadingTabReport(true)
     }
 
     return (

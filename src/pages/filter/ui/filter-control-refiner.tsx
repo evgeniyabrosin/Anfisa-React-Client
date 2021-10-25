@@ -37,7 +37,7 @@ export const FilterControlRefiner = observer(
 
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
-        presetStore.loadPresetAsync(activePreset)
+        presetStore.loadPresetAsync(activePreset, 'refiner')
       }
 
       if (filterStore.actionName === ActionFilterEnum.Delete) {

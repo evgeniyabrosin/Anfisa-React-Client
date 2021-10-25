@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
@@ -51,6 +52,15 @@ export const Header = observer(
 
     const handleChangeDataset = (arg: Option) => {
       ds !== arg.value && history.push(`${Routes.WS}?ds=${arg.value}`)
+
+      const dsName = arg.value
+
+      if (dsName && !variantStore.dsName) {
+        variantStore.setDsName(arg.value)
+      }
+
+      datasetStore.initDatasetAsync(dsName)
+      dirinfoStore.fetchDsinfoAsync(dsName)
     }
 
     const copyLink = () => {
@@ -87,10 +97,7 @@ export const Header = observer(
           <div className="text-grey-blue flex items-center mr-2">
             {!isHomepage && xlDatasetName && datasets && (
               <Fragment>
-                <div
-                  className="mx-4 bg-blue-lighter"
-                  style={{ width: '2px', height: '16px' }}
-                />
+                <div className="mx-4 bg-blue-lighter w-0.5 h-4" />
 
                 <span className="font-bold uppercase text-xs text-blue-bright">
                   {t('home.title')}

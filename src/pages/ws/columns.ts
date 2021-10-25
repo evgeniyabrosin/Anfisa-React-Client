@@ -24,6 +24,7 @@ export const variantColumnTable = [
     Header: tableColumnMap.tags,
     accessor: '_tags',
     Cell: CellTags,
+    minWidth: 224,
   },
   {
     Header: tableColumnMap.proteinChange,
@@ -53,6 +54,7 @@ export const variantColumnTable = [
     Header: tableColumnMap.samples,
     accessor: 'Samples',
     Cell: CellSamples,
+    minWidth: 270,
   },
   {
     Header: tableColumnMap.filter,

@@ -21,9 +21,14 @@ export const ModalEditNumbers = observer(
 
     const groupName = dtreeStore.groupNameToChange
 
+    const currentGroup =
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        dtreeStore.groupIndexToChange
+      ]
+
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    let attrData: any
+    let attrData: any = {}
 
     subGroups.map(subGroup => {
       subGroup.map((item, index) => {
@@ -36,38 +41,29 @@ export const ModalEditNumbers = observer(
     const minValue = attrData.min
     const maxValue = attrData.max
 
-    const currentGroupLength: number =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0].length
+    const currentGroupLength: number = currentGroup.length
 
     const currentValueFrom: number | undefined =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][0]
+      currentGroup[currentGroupLength - 1][0]
 
-    const currentLeftDropType: boolean =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][1]
+    const currentLeftDropType: boolean = currentGroup[currentGroupLength - 1][1]
 
     const currentValueTo: number | undefined =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][2]
+      currentGroup[currentGroupLength - 1][2]
 
     const currentRightDropType: boolean =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[0][
-        currentGroupLength - 1
-      ][3]
+      currentGroup[currentGroupLength - 1][3]
 
-    const [valueFrom, setValueFrom] = useState(currentValueFrom || '')
-    const [valueTo, setValueTo] = useState(currentValueTo || '')
+    const [valueFrom, setValueFrom] = useState(currentValueFrom ?? '')
+
+    const [valueTo, setValueTo] = useState(currentValueTo ?? '')
 
     const [leftDropType, setLeftDropType] = useState<boolean>(
-      currentValueFrom ? currentLeftDropType : false,
+      currentValueFrom && currentValueFrom >= 0 ? currentLeftDropType : false,
     )
 
     const [rightDropType, setRightDropType] = useState<boolean>(
-      currentValueTo ? currentRightDropType : true,
+      currentValueTo && currentValueTo >= 0 ? currentRightDropType : true,
     )
 
     const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
@@ -149,6 +145,12 @@ export const ModalEditNumbers = observer(
       setIsVisibleCenterError(false)
     }, [valueFrom, valueTo, leftDropType, rightDropType])
 
+    const formatValue = (value: number) => {
+      if (value < 1 && value > 0) return value.toFixed(5)
+
+      return value
+    }
+
     return (
       <ModalBase refer={ref} minHeight={200}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
@@ -156,7 +158,9 @@ export const ModalEditNumbers = observer(
         <div className="relative flex flex-1 items-center my-4">
           <div className="relative flex items-center justify-start w-1/2 h-20 pr-1 pl-px">
             <div className="absolute top-0 left-0 flex justify-start w-1/2 truncate">
-              {minValue}
+              {dtreeStore.isFiltersLoading
+                ? t('dtree.loading')
+                : formatValue(minValue)}
             </div>
 
             <div className="flex w-full flex-col h-8">
@@ -182,9 +186,9 @@ export const ModalEditNumbers = observer(
                   'flex items-center justify-center w-3/5 h-full rounded',
                   {
                     'bg-blue-medium text-blue-bright':
-                      valueFrom && !isVisibleLeftError,
+                      valueFrom >= 0 && !isVisibleLeftError,
                     'bg-grey-light text-grey-blue':
-                      !valueFrom || isVisibleLeftError,
+                      (!valueFrom && valueFrom !== 0) || isVisibleLeftError,
                   },
                 )}
               >
@@ -210,7 +214,9 @@ export const ModalEditNumbers = observer(
 
           <div className="relative flex items-center justify-end h-20 w-1/2 pl-1 pr-px">
             <div className="absolute top-0 right-0 w-1/2 flex justify-end truncate">
-              {maxValue}
+              {dtreeStore.isFiltersLoading
+                ? t('dtree.loading')
+                : formatValue(maxValue)}
             </div>
 
             <div className="flex items-center w-12 p-1 mr-2 shadow-dark rounded">
@@ -219,9 +225,9 @@ export const ModalEditNumbers = observer(
                   'flex items-center justify-center w-3/5 h-full rounded',
                   {
                     'bg-blue-medium text-blue-bright':
-                      valueTo && !isVisibleRightError,
+                      valueTo >= 0 && !isVisibleRightError,
                     'bg-grey-light text-grey-blue':
-                      !valueTo || isVisibleRightError,
+                      (!valueTo && valueTo !== 0) || isVisibleRightError,
                   },
                 )}
               >
@@ -271,7 +277,7 @@ export const ModalEditNumbers = observer(
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          disabled={!valueFrom && !valueTo}
+          disabled={!valueFrom && valueFrom !== 0 && !valueTo && valueTo !== 0}
         />
       </ModalBase>
     )

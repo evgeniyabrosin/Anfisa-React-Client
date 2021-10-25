@@ -52,6 +52,7 @@ export const QueryBuilderSubgroup = observer(
               'hover:text-blue-dark': isModal,
               'text-blue-dark': isModal && isVisibleSubGroup,
             })}
+            onClick={onClick}
           >
             {groupName}
           </span>
@@ -59,6 +60,7 @@ export const QueryBuilderSubgroup = observer(
           <ExpandContentButton
             isVisible={isVisibleSubGroup}
             isModal={isModal}
+            expandContent={onClick}
           />
         </div>
         {isVisibleSubGroup &&

@@ -16,6 +16,7 @@ export const ModalSelectFilters = observer(
     const ref = useRef(null)
 
     useOutsideClick(ref, () => dtreeStore.closeModalSelectFilter())
+
     const index = dtreeStore.currentStepIndex
     const currentGroup = dtreeStore.stepData[index].groups
     const groupName = dtreeStore.groupNameToChange
@@ -28,10 +29,10 @@ export const ModalSelectFilters = observer(
       }
     }
 
-    const handleAddAttribute = (subGroupName: string) => {
-      addAttributeToStep(subGroupName, 'POINT', 'INSERT')
+    const handleAddAttribute = () => {
+      addAttributeToStep('INSERT', 'enum')
 
-      dtreeStore.addStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
     }
 
@@ -46,8 +47,8 @@ export const ModalSelectFilters = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    const handleReplace = (subGroupName: string) => {
-      dtreeStore.replaceStepData(subGroupName, 'enum')
+    const handleReplace = () => {
+      addAttributeToStep('REPLACE', 'enum')
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectFilter()
     }

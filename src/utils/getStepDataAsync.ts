@@ -33,6 +33,7 @@ export const getStepDataAsync = async (): Promise<IStepData[]> => {
       groups: item,
       excluded: !stepCodes[index].result,
       isActive: false,
+      isReturnedVariantsActive: false,
       startFilterCounts: '...',
       finishFilterCounts: '...',
       difference: '...',
@@ -56,7 +57,9 @@ export const getStepDataAsync = async (): Promise<IStepData[]> => {
     })
   })
 
-  localStepData[localStepData.length - 1].isActive = true
+  if (localStepData[localStepData.length - 1]) {
+    localStepData[localStepData.length - 1].isActive = true
+  }
 
   return localStepData
 }

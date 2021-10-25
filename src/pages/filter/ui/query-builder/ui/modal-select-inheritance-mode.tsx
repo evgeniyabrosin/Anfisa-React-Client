@@ -3,31 +3,22 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
-import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
-import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { InheritanceModeContent } from './inheritance-mode-content'
 import { ModalBase } from './modal-base'
+import { SelectModalButtons } from './select-modal-buttons'
 
-export const ModalEditInheritanceMode = observer(
+export const ModalSelectInheritanceMode = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalEditInheritanceMode())
+    useOutsideClick(ref, () => dtreeStore.closeModalSelectInheritanceMode())
 
     const currentStepIndex = dtreeStore.currentStepIndex
-    const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
     const groupName = dtreeStore.groupNameToChange
-
-    const selectedGroupsAmount =
-      currentGroup && currentGroup.length > 0 ? dtreeStore.selectedFilters : []
-
-    const currentGroupLength =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].length
 
     let attrData: any
 
@@ -41,24 +32,11 @@ export const ModalEditInheritanceMode = observer(
       })
     })
 
-    const problemGroup =
-      Object.keys(currentGroup[currentGroup.length - 1]).length > 0
-        ? Object.values(currentGroup[currentGroup.length - 1])[0]
-        : attrData.affected
+    const problemGroup = attrData.affected
 
     const [problemGroupData, setProblemGroupData] = useState<string[]>(
       problemGroup,
     )
-
-    useEffect(() => {
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
-        .find((elem: any) => Array.isArray(elem))
-        .map((item: string) => dtreeStore.addSelectedFilter(item))
-
-      return () => {
-        dtreeStore.resetSelectedFilters()
-      }
-    }, [currentGroupIndex, currentGroupLength, currentStepIndex])
 
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
@@ -76,19 +54,13 @@ export const ModalEditInheritanceMode = observer(
 
       initAsync()
 
+      return () => dtreeStore.resetSelectedFilters()
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleClose = () => {
-      dtreeStore.closeModalEditInheritanceMode()
-    }
-
-    const handleSaveChanges = () => {
-      const params = { problem_group: problemGroupData }
-
-      changeFunctionalStep(params, true)
-      dtreeStore.closeModalEditInheritanceMode()
-      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectInheritanceMode()
     }
 
     const handleProblemGroup = (checked: boolean, value: string) => {
@@ -135,6 +107,30 @@ export const ModalEditInheritanceMode = observer(
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
 
+    const handleModals = () => {
+      dtreeStore.closeModalSelectInheritanceMode()
+      dtreeStore.openModalAttribute(currentStepIndex)
+      dtreeStore.resetSelectedFilters()
+    }
+
+    // TODO:fix
+    const handleReplace = () => {
+      // dtreeStore.replaceStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectInheritanceMode()
+    }
+
+    const handleModalJoin = () => {
+      dtreeStore.openModalJoin()
+    }
+
+    const handleAddAttribute = () => {
+      // addAttributeToStep('func', subGroupName)
+
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectInheritanceMode()
+    }
+
     return (
       <ModalBase refer={ref} minHeight={340}>
         <HeaderModal
@@ -149,13 +145,14 @@ export const ModalEditInheritanceMode = observer(
           handleReset={handleReset}
         />
 
-        <EditModalButtons
+        <SelectModalButtons
+          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
-          disabled={
-            selectedGroupsAmount.length === 0 ||
-            (problemGroupData && problemGroupData.length === 0)
-          }
+          handleModals={handleModals}
+          handleModalJoin={handleModalJoin}
+          handleReplace={handleReplace}
+          disabled={dtreeStore.selectedFilters.length === 0}
+          currentGroup={currentGroup}
         />
       </ModalBase>
     )

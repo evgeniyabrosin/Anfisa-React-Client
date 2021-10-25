@@ -8,7 +8,7 @@ class PresetStore {
     makeAutoObservable(this)
   }
 
-  async loadPresetAsync(filter: string) {
+  async loadPresetAsync(filter: string, source?: string) {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       filter,
@@ -24,7 +24,11 @@ class PresetStore {
 
     const result = await response.json()
 
-    datasetStore.updatePresetLoad(result)
+    runInAction(() => {
+      source === 'refiner'
+        ? datasetStore.updatePresetLoad(result)
+        : (datasetStore.dsStat = result)
+    })
   }
 
   async deletePresetAsync(presetName: string) {

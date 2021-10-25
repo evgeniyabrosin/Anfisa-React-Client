@@ -1,4 +1,5 @@
 import { Fragment, ReactElement } from 'react'
+import { toast } from 'react-toastify'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -28,6 +29,49 @@ export const QueryBuilderGroups = observer(
       }
     }
 
+    const checkIfCurrentStepIsEmpty = (): boolean => {
+      const currentActiveStepIndex = dtreeStore.stepData.findIndex(
+        step => step.isActive === true,
+      )
+
+      if (dtreeStore.stepData[currentActiveStepIndex]) {
+        return !dtreeStore.stepData[currentActiveStepIndex].groups
+      }
+
+      return false
+    }
+
+    const createStep = () => {
+      const currentActiveStepIndex = dtreeStore.stepData.findIndex(
+        step => step.isActive === true,
+      )
+
+      if (currentActiveStepIndex === -1) {
+        toast.error(t('dtree.chooseActiveStep'), {
+          position: 'bottom-right',
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+        })
+
+        return
+      }
+
+      const code = dtreeStore.dtreeCode
+
+      dtreeStore.insertStep('AFTER', currentActiveStepIndex)
+
+      const indexForApi = dtreeStore.getStepIndexForApi(
+        currentActiveStepIndex + 1,
+      )
+
+      dtreeStore.setCurrentStepIndexForApi(indexForApi)
+      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+    }
+
     return (
       <Fragment>
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -48,7 +92,8 @@ export const QueryBuilderGroups = observer(
               className="hover:bg-blue-bright"
               text={t('dtree.addStep')}
               hasBackground={false}
-              disabled={true}
+              disabled={checkIfCurrentStepIsEmpty()}
+              onClick={createStep}
             />
           </div>
 

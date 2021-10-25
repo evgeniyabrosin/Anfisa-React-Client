@@ -2,13 +2,20 @@ import { difference } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
+import zoneStore from '@store/filterZone'
 import datasetStore from './dataset'
+
+const ADD = true
 
 class ZoneStore {
   selectedGenes: string[] = []
   selectedGenesList: string[] = []
   selectedSamples: string[] = []
   selectedTags: string[] = []
+
+  isFather: boolean | undefined = false
+  isMother: boolean | undefined = false
+  isProband: boolean | undefined = false
 
   isModeNOT = false
   isModeWithNotes = false
@@ -30,6 +37,8 @@ class ZoneStore {
 
   unselectAllGenes() {
     this.selectedGenes = []
+    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
+    datasetStore.fetchWsListAsync()
   }
 
   addGenesList(gene: string) {
@@ -47,6 +56,8 @@ class ZoneStore {
 
   unselectAllGenesList() {
     this.selectedGenesList = []
+    datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
+    datasetStore.fetchWsListAsync()
   }
 
   addSample(sample: string) {
@@ -62,8 +73,29 @@ class ZoneStore {
     datasetStore.fetchWsListAsync()
   }
 
-  unselectAllSamples() {
+  paintSelectedSamples() {
+    this.selectedSamples.map(sample => this.checkSampleType(sample, ADD))
+  }
+
+  checkSampleType(sample: string, isAdding = false) {
+    const type = sample.slice(0, 7).trim()
+
+    if (type === 'father') {
+      this.isFather = isAdding
+    } else if (type === 'mother') {
+      this.isMother = isAdding
+    } else if (type === 'proband') {
+      this.isProband = isAdding
+    }
+  }
+
+  unselectAllSamples = () => {
     this.selectedSamples = []
+    this.isFather = false
+    this.isMother = false
+    this.isProband = false
+    datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
+    datasetStore.fetchWsListAsync()
   }
 
   addTag(tagName: string) {
@@ -85,6 +117,7 @@ class ZoneStore {
     this.selectedTags = []
     this.resetModeNOT()
     this.resetModeWithNotes()
+    this.fetchTagSelectAsync()
   }
 
   resetAllSelectedItems() {

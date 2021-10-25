@@ -3,6 +3,8 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { ModalSources } from '@core/enum/modal-sources'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
@@ -27,31 +29,68 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeStore.addSelectedGroup(filterGroup)
     }
 
-    const handleModal = (group: StatList) => {
+    const handleAttrClick = (group: StatList) => {
+      const source = isModal ? ModalSources.TreeStep : ModalSources.TreeStat
+
       addSelectedGroup()
       dtreeStore.closeModalAttribute()
 
-      group.variants
-        ? dtreeStore.openModalSelectFilter(groupName)
-        : dtreeStore.openModalSelectNumbers(groupName)
+      if (group.kind === 'enum') {
+        dtreeStore.openModalSelectFilter(group.name, source)
+      }
+
+      if (group.kind === 'numeric') {
+        dtreeStore.openModalSelectNumbers(group.name, source)
+      }
+
+      if (group.kind === 'func') {
+        group.name === FuncStepTypesEnum.InheritanceMode &&
+          dtreeStore.openModalSelectInheritanceMode(
+            group.name,
+            dtreeStore.currentStepIndex,
+            source,
+          )
+
+        group.name === FuncStepTypesEnum.CustomInheritanceMode &&
+          dtreeStore.openModalSelectCustomInheritanceMode(
+            group.name,
+            dtreeStore.currentStepIndex,
+            source,
+          )
+
+        group.name === FuncStepTypesEnum.CompoundHet &&
+          dtreeStore.openModalSelectCompoundHet(
+            group.name,
+            dtreeStore.currentStepIndex,
+            source,
+          )
+
+        group.name === FuncStepTypesEnum.CompoundRequest &&
+          dtreeStore.openModalSelectCompoundRequest(
+            group.name,
+            dtreeStore.currentStepIndex,
+            source,
+          )
+
+        group.name === FuncStepTypesEnum.GeneRegion &&
+          dtreeStore.openModalSelectGeneRegion(
+            group.name,
+            dtreeStore.currentStepIndex,
+            source,
+          )
+      }
     }
 
     return (
       <div key={subGroupItem.name} className="pl-2 mb-2">
         <div className="flex items-center justify-between mb-2">
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => {
-              isModal ? handleModal(subGroupItem) : expandContent()
-            }}
-          >
+          <div className="flex items-center cursor-pointer">
             <Icon
               name="Add"
+              fill={true}
               stroke={false}
-              className="-mt-0.5"
-              onClick={() => {
-                isModal ? handleModal(subGroupItem) : expandContent()
-              }}
+              className="-mt-0.5 text-blue-bright hover:text-blue-dark"
+              onClick={() => handleAttrClick(subGroupItem)}
             />
 
             <span
@@ -63,6 +102,9 @@ export const QueryBuilderSubgroupItem = observer(
                 'hover:text-blue-dark': isModal,
                 'text-blue-dark': isModal && isVisibleSubGroupItem,
               })}
+              onClick={() => {
+                isModal ? handleAttrClick(subGroupItem) : expandContent()
+              }}
             >
               {subGroupItem.name}
             </span>

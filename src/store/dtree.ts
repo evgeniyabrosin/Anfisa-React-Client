@@ -14,7 +14,8 @@ export type IStepData = {
   groups?: any
   negate?: boolean
   excluded: boolean
-  isActive?: boolean
+  isActive: boolean
+  isReturnedVariantsActive: boolean
   startFilterCounts: FilterCountsType
   finishFilterCounts: FilterCountsType
   difference: FilterCountsType
@@ -67,16 +68,7 @@ class DtreeStore {
   searchFieldResults = ''
   filteredCounts = 0
 
-  stepData: IStepData[] = [
-    {
-      step: 1,
-      excluded: true,
-      isActive: true,
-      startFilterCounts: 0,
-      finishFilterCounts: 0,
-      difference: 0,
-    },
-  ]
+  stepData: IStepData[] = []
   stepAmout = 0
 
   isModalAttributeVisible = false
@@ -94,6 +86,12 @@ class DtreeStore {
   isModalEditCompoundRequestVisible = false
   isModalEditGeneRegionVisible = false
 
+  isModalSelectInheritanceModeVisible = false
+  isModalSelectCustomInheritanceModeVisible = false
+  isModalSelectCompoundHetVisible = false
+  isModalSelectCompoundRequestVisible = false
+  isModalSelectGeneRegionVisible = false
+
   isTableModalVisible = false
   tableModalIndexNumber: null | number = null
 
@@ -105,32 +103,13 @@ class DtreeStore {
 
   requestData: IRequestData[] = []
 
+  modalSource = ''
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  // functions to load / draw / edit decision trees
-
-  async fetchDtreeListAsync() {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      code: 'return False',
-    })
-
-    const response = await fetch(getApiUrl(`dtree_set`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dtreeList = result['dtree-list']
-    })
-  }
+  // 1. Functions to load / draw / edit decision trees
 
   async fetchDtreeAsync(name: string) {
     this.activeTree = name
@@ -159,21 +138,40 @@ class DtreeStore {
   }
 
   async drawDecesionTreeAsync() {
-    const localStepData = await getStepDataAsync()
+    const computedStepData = await getStepDataAsync()
+
+    const initialStepData = [
+      {
+        step: 1,
+        excluded: true,
+        isActive: true,
+        isReturnedVariantsActive: false,
+        startFilterCounts: null,
+        finishFilterCounts: null,
+        difference: null,
+      },
+    ]
+
+    const newStepData =
+      computedStepData.length === 0 ? initialStepData : computedStepData
 
     runInAction(() => {
-      this.stepData = [...localStepData]
+      this.stepData = [...newStepData]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
     })
 
     const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
     const finalStepCount = 2
-    const indexForApi = lastIndex + finalStepCount
+    const calculatedIndex = +lastIndex + finalStepCount
+
+    const indexForApi = this.dtreeStepIndices.length === 0 ? 0 : calculatedIndex
 
     this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
+    this.setIsFiltersLoading()
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       no,
@@ -226,15 +224,22 @@ class DtreeStore {
     )
 
     const currentIndex = lastIndexValue + 2
+    const lastIndex = Number.isNaN(lastIndexValue) ? 0 : currentIndex
 
-    return currentIndex
+    return lastIndex
   }
 
   getStepIndexForApi = (index: number) => {
     const currentIndex = Number(this.dtreeStepIndices[index])
+    const stepIndex = this.dtreeStepIndices.length === 0 ? 0 : currentIndex
 
-    return currentIndex
+    const lastIndex = this.getLastStepIndexForApi()
+
+    const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
+
+    return stepIndexForApi
   }
+
   setCurrentStepIndexForApi = (index: number) => {
     runInAction(() => {
       this.currentStepIndexForApi = index
@@ -259,6 +264,7 @@ class DtreeStore {
     runInAction(() => {
       this.dtree = result
       this.dtreeCode = newCode
+      this.dtreeList = result['dtree-list']
     })
 
     this.drawDecesionTreeAsync()
@@ -295,7 +301,7 @@ class DtreeStore {
     })
   }
 
-  // UI functions to display adding / deleting / editing steps
+  // 2. UI functions to display adding / deleting / editing steps
 
   addStep(index: number) {
     if (this.stepData.length === 0) {
@@ -304,6 +310,7 @@ class DtreeStore {
           step: 1,
           excluded: true,
           isActive: true,
+          isReturnedVariantsActive: false,
           startFilterCounts: 0,
           finishFilterCounts: 0,
           difference: 0,
@@ -314,18 +321,61 @@ class DtreeStore {
 
       const startFilterCounts = this.stepData[index].finishFilterCounts
 
+      this.stepData.map(step => (step.isActive = false))
+
       this.stepData = [
         ...this.stepData,
         {
           step: this.stepData.length + 1,
           excluded: true,
           isActive: true,
+          isReturnedVariantsActive: false,
           startFilterCounts,
           finishFilterCounts: startFilterCounts,
           difference: 0,
         },
       ]
     }
+  }
+
+  insertStep(type: string, index: number) {
+    this.stepData.forEach(element => {
+      element.isActive = false
+
+      return element
+    })
+
+    if (type === 'BEFORE') {
+      const startFilterCounts = this.stepData[index - 1].finishFilterCounts
+
+      this.stepData.splice(index, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        isReturnedVariantsActive: false,
+        startFilterCounts,
+        finishFilterCounts: startFilterCounts,
+        difference: 0,
+      })
+    } else {
+      this.currentStepIndex = index + 1
+
+      const startFilterCounts = this.stepData[index].finishFilterCounts
+
+      this.stepData.splice(index + 1, 0, {
+        step: index,
+        excluded: true,
+        isActive: true,
+        isReturnedVariantsActive: false,
+        startFilterCounts,
+        finishFilterCounts: startFilterCounts,
+        difference: 0,
+      })
+    }
+
+    this.stepData.map((item, currNo: number) => {
+      item.step = currNo + 1
+    })
   }
 
   duplicateStep(index: number) {
@@ -367,65 +417,13 @@ class DtreeStore {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
   }
 
-  addStepData(subGroupName: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    if (!currentStep.groups || currentStep.groups.length === 0) {
-      currentStep.groups = [[typeOfAttr, this.selectedGroups[1]]]
-    } else if (!currentStep.groups.join().includes(this.selectedGroups[1])) {
-      currentStep.groups = [...currentStep.groups, this.selectedGroups]
-    }
-
-    currentStep.groups.map((item: string, index: number) => {
-      if (item[1] === subGroupName) {
-        numericData
-          ? (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = numericData)
-          : (currentStep.groups[index][
-              currentStep.groups[index].length
-            ] = this.selectedFilters)
-      }
-    })
-
-    this.selectedFilters = []
-  }
-
-  joinStepData(typeOfJoin: string, typeOfAttr: string, numericData?: any[]) {
-    const currentStep = this.stepData[this.currentStepIndex]
-
-    numericData
-      ? (currentStep.groups = [
-          ...currentStep.groups,
-          [typeOfAttr, this.selectedGroups[1], typeOfJoin, numericData],
-        ])
-      : (currentStep.groups = [
-          ...currentStep.groups,
-          [
-            typeOfAttr,
-            this.selectedGroups[1],
-            typeOfJoin,
-            this.selectedFilters,
-          ],
-        ])
-
-    this.selectedFilters = []
-  }
-
-  replaceStepData(
-    subGroupName: string,
-    typeOfAttr: string,
-    numericData?: any[],
-  ) {
-    this.stepData[this.currentStepIndex].groups = []
-    this.addStepData(subGroupName, typeOfAttr, numericData)
-  }
-
   resetSelectedFilters() {
     this.selectedFilters = []
   }
 
-  // modals control block
+  // 3. Modals control block
+
+  // 3.1 Modals for creation brand new tree
 
   openModalAttribute(index: number) {
     this.isModalAttributeVisible = true
@@ -437,7 +435,19 @@ class DtreeStore {
     this.isModalAttributeVisible = false
   }
 
-  openModalSelectFilter(groupName: string) {
+  openModalJoin() {
+    this.isModalJoinVisible = true
+  }
+
+  closeModalJoin() {
+    this.isModalJoinVisible = false
+  }
+
+  // 3.1.1 Modal for enum attr
+
+  openModalSelectFilter(groupName: string, source: string) {
+    this.modalSource = source
+
     this.isModalSelectFilterVisible = true
     this.groupNameToChange = groupName
   }
@@ -445,6 +455,114 @@ class DtreeStore {
   closeModalSelectFilter() {
     this.isModalSelectFilterVisible = false
   }
+
+  // 3.1.2 Modal for numeric attr
+
+  openModalSelectNumbers(groupName: string, source: string) {
+    this.modalSource = source
+
+    this.isModalSelectNumbersVisible = true
+    this.groupNameToChange = groupName
+  }
+
+  closeModalSelectNumbers() {
+    this.isModalSelectNumbersVisible = false
+  }
+
+  // 3.1.3 Modals for func attr
+
+  openModalSelectInheritanceMode(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
+    this.isModalSelectInheritanceModeVisible = true
+
+    this.groupNameToChange = groupName
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalSelectInheritanceMode() {
+    this.isModalSelectInheritanceModeVisible = false
+  }
+
+  openModalSelectCustomInheritanceMode(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
+    this.isModalSelectCustomInheritanceModeVisible = true
+
+    this.groupNameToChange = groupName
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalSelectCustomInheritanceMode() {
+    this.isModalSelectCustomInheritanceModeVisible = false
+  }
+
+  openModalSelectCompoundHet(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
+    this.isModalSelectCompoundHetVisible = true
+
+    this.groupNameToChange = groupName
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalSelectCompoundHet() {
+    this.isModalSelectCompoundHetVisible = false
+  }
+
+  openModalSelectCompoundRequest(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
+    this.isModalSelectCompoundRequestVisible = true
+
+    this.groupNameToChange = groupName
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalSelectCompoundRequest() {
+    this.isModalSelectCompoundRequestVisible = false
+  }
+
+  openModalSelectGeneRegion(
+    groupName: string,
+    stepIndex: number,
+    source: string,
+  ) {
+    this.modalSource = source
+
+    this.isModalSelectGeneRegionVisible = true
+    this.groupNameToChange = groupName
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalSelectGeneRegion() {
+    this.isModalSelectGeneRegionVisible = false
+  }
+
+  // 3.2 Modals for editing loaded tree
+
+  // 3.2.1 Modal for enum attr
 
   openModalEditFilters(
     groupName: string,
@@ -463,13 +581,7 @@ class DtreeStore {
     this.selectedFilters = []
   }
 
-  openModalJoin() {
-    this.isModalJoinVisible = true
-  }
-
-  closeModalJoin() {
-    this.isModalJoinVisible = false
-  }
+  // 3.2.2 Modal for numeric attr
 
   openModalEditNumbers(
     groupName: string,
@@ -487,14 +599,7 @@ class DtreeStore {
     this.isModalEditNumbersVisible = false
   }
 
-  openModalSelectNumbers(groupName: string) {
-    this.isModalSelectNumbersVisible = true
-    this.groupNameToChange = groupName
-  }
-
-  closeModalSelectNumbers() {
-    this.isModalSelectNumbersVisible = false
-  }
+  // 3.2.3 Modals for func attr
 
   openModalEditInheritanceMode(
     groupName: string,
@@ -502,7 +607,9 @@ class DtreeStore {
     groupIndex: number,
   ) {
     this.isModalEditInheritanceModeVisible = true
+
     this.groupNameToChange = groupName
+
     this.groupIndexToChange = groupIndex
 
     this.currentStepIndex = stepIndex
@@ -543,37 +650,70 @@ class DtreeStore {
   closeModalEditCompoundHet() {
     this.isModalEditCompoundHetVisible = false
   }
-  insertStep(type: string, index: number) {
-    this.stepData.forEach(element => {
-      element.isActive = false
 
-      return element
-    })
+  openModalEditCompoundRequest(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCompoundRequestVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
 
-    if (type === 'BEFORE') {
-      this.stepData.splice(index, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    } else {
-      this.stepData.splice(index + 1, 0, {
-        step: index,
-        excluded: true,
-        isActive: true,
-        startFilterCounts: 0,
-        finishFilterCounts: 0,
-        difference: 0,
-      })
-    }
-
-    this.stepData.map((item, currNo: number) => {
-      item.step = currNo + 1
-    })
+    this.currentStepIndex = stepIndex
   }
+
+  openModalEditCustomInheritanceModeFunc(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditCompoundRequestVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditCompoundRequest() {
+    this.isModalEditCompoundRequestVisible = false
+  }
+
+  openModalEditGeneRegion(
+    groupName: string,
+    stepIndex: number,
+    groupIndex: number,
+  ) {
+    this.isModalEditGeneRegionVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex
+
+    this.currentStepIndex = stepIndex
+  }
+
+  closeModalEditGeneRegion() {
+    this.isModalEditGeneRegionVisible = false
+  }
+
+  // 3.3 Modal for editing dtree code (new / loaded)
+
+  openModalTextEditor() {
+    this.isModalTextEditorVisible = true
+  }
+
+  closeModalTextEditor() {
+    this.isModalTextEditorVisible = false
+  }
+
+  setNextDtreeCode(code: string) {
+    this.dtreeCode = code
+  }
+
+  setStartDtreeCode() {
+    this.startDtreeCode = this.dtreeCode
+  }
+
+  // 4. Other UI control functions
 
   setJobStatus(jobStatus: any) {
     runInAction(() => {
@@ -648,59 +788,6 @@ class DtreeStore {
     })
   }
 
-  openModalEditCompoundRequest(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditCompoundRequestVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  openModalEditCustomInheritanceModeFunc(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditCompoundRequestVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  closeModalEditCompoundRequest() {
-    this.isModalEditCompoundRequestVisible = false
-  }
-
-  openModalEditGeneRegion(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditGeneRegionVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  closeModalEditGeneRegion() {
-    this.isModalEditGeneRegionVisible = false
-  }
-
-  openModalTextEditor() {
-    this.isModalTextEditorVisible = true
-  }
-
-  closeModalTextEditor() {
-    this.isModalTextEditorVisible = false
-  }
-  // other UI control functions
-
   expandFilterContent() {
     this.isFilterContentExpanded = true
     this.filterChangeIndicator++
@@ -749,29 +836,30 @@ class DtreeStore {
     this.stepData[index].excluded = !this.stepData[index].excluded
   }
 
-  setStepActive = (index: number) => {
+  setStepActive = (
+    index: number,
+    option: 'isActive' | 'isReturnedVariantsActive',
+  ) => {
     this.stepData.forEach(element => {
       element.isActive = false
+      element.isReturnedVariantsActive = false
     })
 
-    this.stepData[index].isActive = !this.stepData[index].isActive
+    this.stepData[index][option] = !this.stepData[index][option]
   }
+
   openTableModal(index: number) {
     this.isTableModalVisible = true
     this.tableModalIndexNumber = index
   }
+
   closeTableModal() {
     this.isTableModalVisible = false
     this.tableModalIndexNumber = null
   }
-  // Text editor control functions
 
-  setNextDtreeCode(code: string) {
-    this.dtreeCode = code
-  }
-
-  setStartDtreeCode() {
-    this.startDtreeCode = this.dtreeCode
+  resetStatFuncData() {
+    this.statFuncData = []
   }
 }
 

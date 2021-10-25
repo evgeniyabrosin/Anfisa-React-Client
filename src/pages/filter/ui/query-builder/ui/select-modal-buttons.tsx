@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { ModalSources } from '@core/enum/modal-sources'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
@@ -9,10 +11,10 @@ import { ModalJoin } from './modal-join'
 
 interface IProps {
   handleModals: () => void
-  handleReplace: (value: string) => void
+  handleReplace: () => void
   handleClose: () => void
   handleModalJoin: () => void
-  handleAddAttribute: (attr: string) => void
+  handleAddAttribute: () => void
   currentGroup: string
   getNumericData?: () => any[]
   disabled: any
@@ -30,13 +32,20 @@ export const SelectModalButtons = observer(
     disabled,
   }: IProps) => {
     return (
-      <div className="flex mt-1 justify-between items-center">
-        <div
-          className="text-14 text-blue-bright font-medium cursor-pointer"
-          onClick={handleModals}
-        >
-          {t('dtree.backToAttribute')}
-        </div>
+      <div
+        className={cn('flex mt-1 items-center', {
+          'justify-end': dtreeStore.modalSource === ModalSources.TreeStat,
+          'justify-between': dtreeStore.modalSource === ModalSources.TreeStep,
+        })}
+      >
+        {dtreeStore.modalSource === ModalSources.TreeStep && (
+          <div
+            className="text-14 text-blue-bright font-medium cursor-pointer"
+            onClick={handleModals}
+          >
+            {t('dtree.backToAttribute')}
+          </div>
+        )}
 
         <div className="flex">
           <Button
@@ -51,7 +60,7 @@ export const SelectModalButtons = observer(
                 disabled={disabled}
                 text={t('dtree.replace')}
                 className="mr-2 cursor-pointer"
-                onClick={() => handleReplace(dtreeStore.selectedGroups[1])}
+                onClick={handleReplace}
               />
 
               <div className="relative">
@@ -74,7 +83,7 @@ export const SelectModalButtons = observer(
           ) : (
             <Button
               text={t('dtree.addNewAttribute')}
-              onClick={() => handleAddAttribute(dtreeStore.selectedGroups[1])}
+              onClick={handleAddAttribute}
               disabled={disabled}
             />
           )}

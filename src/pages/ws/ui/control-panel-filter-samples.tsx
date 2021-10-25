@@ -57,6 +57,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     datasetStore.fetchFilteredTabReportAsync()
+    zoneStore.paintSelectedSamples()
     close()
   }
 
@@ -84,7 +85,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 export const FilterItemSamples = observer(
   ({ title }: FilterItemProps): ReactElement => {
     return (
-      <div>
+      <div style={{ minWidth: 75 }}>
         <ControlPanelTitle title={title}>
           {zoneStore.selectedSamples.length > 0 && (
             <PopperButton
@@ -107,7 +108,8 @@ export const FilterItemSamples = observer(
           style={{
             maxHeight: '70%',
             width: 'auto',
-            minWidth: '50px',
+            maxWidth: 101,
+            minWidth: 50,
           }}
           className="flex justify-between mt-0.4"
         >

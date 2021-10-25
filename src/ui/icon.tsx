@@ -21,7 +21,6 @@ import Lines from '@icons/lines'
 import Loupe from '@icons/loupe'
 import Options from '@icons/options'
 import Rect from '@icons/rect'
-import Ring from '@icons/ring'
 import Settings from '@icons/settings'
 import SettingsFat from '@icons/settings-fat'
 import Sort from '@icons/sort'
@@ -56,7 +55,6 @@ const iconItems: { [key: string]: IconItem } = {
   Loupe,
   Options,
   Rect,
-  Ring,
   Settings,
   SettingsFat,
   Sort,

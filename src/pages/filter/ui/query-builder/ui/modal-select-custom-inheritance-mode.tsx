@@ -5,27 +5,25 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
-import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
-import { getFuncParams } from '@utils/getFuncParams'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
-import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+import { SelectModalButtons } from './select-modal-buttons'
 
 export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
 
-export const ModalEditCustomInheritanceMode = observer(
+export const ModalSelectCustomInheritanceMode = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalEditCustomInheritanceMode())
+    useOutsideClick(ref, () =>
+      dtreeStore.closeModalSelectCustomInheritanceMode(),
+    )
 
     const currentStepIndex = dtreeStore.currentStepIndex
-    const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
     const groupName = dtreeStore.groupNameToChange
 
@@ -51,14 +49,7 @@ export const ModalEditCustomInheritanceMode = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const scenarioString = getFuncParams(
-        groupName,
-        currentGroup[currentGroup.length - 1],
-      )
-        .slice(10)
-        .replace(/\s+/g, '')
-
-      const params = `{"scenario":${scenarioString}}`
+      const params = `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -67,17 +58,11 @@ export const ModalEditCustomInheritanceMode = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const [firstSelectValue, setFirstSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[0]),
-    )
+    const [firstSelectValue, setFirstSelectValue] = useState<string>('2')
 
-    const [secondSelectValue, setSecondSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[1]),
-    )
+    const [secondSelectValue, setSecondSelectValue] = useState<string>('0-1')
 
-    const [thirdSelectValue, setThirdSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[2]),
-    )
+    const [thirdSelectValue, setThirdSelectValue] = useState<string>('0-1')
 
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
 
@@ -129,22 +114,6 @@ export const ModalEditCustomInheritanceMode = observer(
         setThirdSelectValue(value)
         sendRequest('third', value)
       }
-    }
-
-    function getSelectedValue(group: string): any {
-      const data: any[] = Object.entries(
-        currentGroup[currentGroup.length - 1].scenario,
-      )
-
-      let value = '--'
-
-      data?.map((item, index) => {
-        if (group && item[1].includes(group)) {
-          value = data[index][0]
-        }
-      })
-
-      return value
     }
 
     const handleReset = (name: string) => {
@@ -209,14 +178,31 @@ export const ModalEditCustomInheritanceMode = observer(
     }
 
     const handleClose = () => {
-      dtreeStore.closeModalEditCustomInheritanceMode()
+      dtreeStore.closeModalSelectCustomInheritanceMode()
     }
 
-    const handleSaveChanges = () => {
-      const params = { scenario: dtreeStore.scenario }
+    const handleModals = () => {
+      dtreeStore.closeModalSelectCustomInheritanceMode()
+      dtreeStore.openModalAttribute(currentStepIndex)
+      dtreeStore.resetSelectedFilters()
+    }
 
-      changeFunctionalStep(params)
-      dtreeStore.closeModalEditCustomInheritanceMode()
+    // TODO:fix
+    const handleReplace = () => {
+      // dtreeStore.replaceStepData(subGroupName, 'enum')
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectInheritanceMode()
+    }
+
+    const handleModalJoin = () => {
+      dtreeStore.openModalJoin()
+    }
+
+    const handleAddAttribute = () => {
+      // addAttributeToStep('func', subGroupName)
+
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.closeModalSelectCustomInheritanceMode()
     }
 
     return (
@@ -234,10 +220,14 @@ export const ModalEditCustomInheritanceMode = observer(
           handleReset={handleReset}
         />
 
-        <EditModalButtons
+        <SelectModalButtons
+          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
+          handleModals={handleModals}
+          handleModalJoin={handleModalJoin}
+          handleReplace={handleReplace}
           disabled={!variants}
+          currentGroup={currentGroup}
         />
       </ModalBase>
     )
