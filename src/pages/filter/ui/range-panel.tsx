@@ -17,7 +17,7 @@ export const RangePanel = observer(
 
     const handleAddConditionsAsync = async () => {
       const arrayNo = await datasetStore.setConditionsAsync([
-        [FilterKindEnum.numeric, selectedFilter.name, [+min, true, +max, true]],
+        [FilterKindEnum.Numeric, selectedFilter.name, [+min, true, +max, true]],
       ])
 
       filterStore.addSelectedFilterGroup(

@@ -3,10 +3,12 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { FnLabel } from '@components/fn-label'
 import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
 
 interface IProps {
@@ -35,15 +37,15 @@ export const QueryBuilderSubgroupItem = observer(
       addSelectedGroup()
       dtreeStore.closeModalAttribute()
 
-      if (group.kind === 'enum') {
+      if (group.kind === FilterKindEnum.Enum) {
         dtreeStore.openModalSelectFilter(group.name, source)
       }
 
-      if (group.kind === 'numeric') {
+      if (group.kind === FilterKindEnum.Numeric) {
         dtreeStore.openModalSelectNumbers(group.name, source)
       }
 
-      if (group.kind === 'func') {
+      if (group.kind === FilterKindEnum.Func) {
         group.name === FuncStepTypesEnum.InheritanceMode &&
           dtreeStore.openModalSelectInheritanceMode(
             group.name,
@@ -89,12 +91,16 @@ export const QueryBuilderSubgroupItem = observer(
               name="Add"
               fill={true}
               stroke={false}
-              className="-mt-0.5 text-blue-bright hover:text-blue-dark"
+              className="-mt-0.5 mr-1.5 text-blue-bright hover:text-blue-dark"
               onClick={() => handleAttrClick(subGroupItem)}
             />
 
+            {subGroupItem.kind === FilterKindEnum.Func && (
+              <FnLabel subGroup={true} />
+            )}
+
             <span
-              className={cn('text-14 ml-1.5', {
+              className={cn('text-14', {
                 'text-black': !isVisibleSubGroupItem,
                 'text-grey-blue': !isVisibleSubGroupItem && !isModal,
                 'text-white': isVisibleSubGroupItem && !isModal,

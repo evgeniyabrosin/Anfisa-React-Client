@@ -11,6 +11,7 @@ import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
+import { FnLabel } from '@components/fn-label'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { makeStepActive } from '@utils/makeStepActive'
@@ -144,18 +145,7 @@ export const NextStepContentItem = observer(
 
             <div className="flex items-center text-14 font-medium mr-2">
               {group.includes(StepTypeEnum.Func) && (
-                <div
-                  style={{ width: 18, height: 18 }}
-                  className={cn(
-                    'flex items-center justify-center mr-1 text-12 shadow-dark rounded-sm font-mono',
-                    {
-                      'text-green-secondary bg-green-light': !currentStep.isActive,
-                      'text-blue-bright bg-blue-medium': currentStep.isActive,
-                    },
-                  )}
-                >
-                  {t('dtree.fn')}
-                </div>
+                <FnLabel currentStep={currentStep} />
               )}
               {`${group[1]}`}
             </div>
