@@ -53,10 +53,10 @@ export const Header = observer(
     const handleChangeDataset = (arg: Option) => {
       ds !== arg.value && history.push(`${Routes.WS}?ds=${arg.value}`)
 
-      const dsName = params.get('ds') || ''
+      const dsName = arg.value
 
       if (dsName && !variantStore.dsName) {
-        variantStore.setDsName(params.get('ds') ?? '')
+        variantStore.setDsName(arg.value)
       }
 
       datasetStore.initDatasetAsync(dsName)
