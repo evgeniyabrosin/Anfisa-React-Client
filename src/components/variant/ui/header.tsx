@@ -1,5 +1,6 @@
 import { Dispatch, ReactElement, SetStateAction } from 'react'
 import get from 'lodash/get'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useKeydown } from '@core/hooks/use-keydown'
@@ -18,23 +19,21 @@ interface Props {
 
 export const VariantHeader = observer(
   ({ setLayout }: Props): ReactElement => {
-    const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
-    const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
+    const genInfo = get(
+      toJS(variantStore.variant),
+      '[0].rows[0].cells[0][0]',
+      '',
+    )
+
+    const hg19 = get(toJS(variantStore.variant), '[0].rows[1].cells[0][0]', '')
+    const filteredNo = toJS(datasetStore.filteredNo)
 
     const canGetPrevVariant = (): boolean => {
-      return !(
-        datasetStore.filteredNo[
-          datasetStore.filteredNo.indexOf(variantStore.index) - 1
-        ] >= 0
-      )
+      return !(filteredNo[filteredNo.indexOf(variantStore.index) - 1] >= 0)
     }
 
     const canGetNextVariant = (): boolean => {
-      return !(
-        datasetStore.filteredNo[
-          datasetStore.filteredNo.indexOf(variantStore.index) + 1
-        ] >= 0
-      )
+      return !(filteredNo[filteredNo.indexOf(variantStore.index) + 1] >= 0)
     }
 
     const { setVariantIndex } = useVariantIndex()

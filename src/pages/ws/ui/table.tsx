@@ -3,6 +3,7 @@ import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import cn from 'classnames'
 import debounce from 'lodash/debounce'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
@@ -38,17 +39,20 @@ export const Table = observer(
     const [ref, setRef] = useState<any>(null)
 
     const defaultColumn = {
-      width: variantStore.drawerVisible
+      width: toJS(variantStore.drawerVisible)
         ? 190
         : (window.innerWidth ||
             document.documentElement.clientWidth ||
             document.body.clientWidth) / 8,
     }
 
+    const variantIndex = toJS(variantStore.index)
+    const drawerVisible = toJS(variantStore.drawerVisible)
+
     useEffect(() => {
-      ref?.scrollToItem(variantStore.index)
+      ref?.scrollToItem(variantIndex)
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ref, variantStore.index])
+    }, [ref, variantIndex])
 
     useEffect(() => {
       const handleResize = debounce(() => {
@@ -86,24 +90,23 @@ export const Table = observer(
     const handleOpenVariant = useCallback(({ index }: PropsRow) => {
       if (window.getSelection()?.toString() || datasetStore.isXL) return
 
-      const variantIndex =
-        datasetStore.filteredNo.length === 0
-          ? index
-          : datasetStore.filteredNo[index]
+      const filteredNo = toJS(datasetStore.filteredNo)
 
-      if (!variantStore.drawerVisible) {
+      const idx = filteredNo.length === 0 ? index : filteredNo[index]
+
+      if (!drawerVisible) {
         columnsStore.setColumns(['Gene', 'Variant'])
         columnsStore.showColumns()
         variantStore.setDsName(params.get('ds') ?? '')
       }
 
-      variantStore.setIndex(variantIndex)
+      variantStore.setIndex(idx)
 
       variantStore.setIsActiveVariant()
 
       variantStore.fetchVarinatInfoAsync()
 
-      if (!variantStore.drawerVisible) {
+      if (!drawerVisible) {
         variantStore.setDrawerVisible(true)
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,8 +133,7 @@ export const Table = observer(
             })}
             className={cn(
               'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible &&
-                isRowSelected(row.index, variantStore.index)
+              variantStore.drawerVisible && isRowSelected(row.index, index)
                 ? 'bg-blue-bright text-white'
                 : 'text-black hover:bg-blue-light',
             )}
@@ -163,14 +165,14 @@ export const Table = observer(
         )
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [handleOpenVariant, prepareRow, rows, variantStore.index],
+      [handleOpenVariant, prepareRow, rows, variantIndex],
     )
 
     const handleScrollAsync = async () => {
-      if (
-        datasetStore.filteredNo.length > 0 &&
-        datasetStore.indexFilteredNo < datasetStore.filteredNo.length
-      ) {
+      const filteredNo = toJS(datasetStore.filteredNo)
+      const indexFilteredNo = toJS(datasetStore.indexFilteredNo)
+
+      if (filteredNo.length > 0 && indexFilteredNo < filteredNo.length) {
         await datasetStore.fetchFilteredTabReportAsync()
 
         return

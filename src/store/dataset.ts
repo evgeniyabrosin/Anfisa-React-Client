@@ -16,6 +16,7 @@ const INCREASE_INDEX = 50
 
 class DatasetStore {
   dsStat: DsStatType = {}
+  variantsAmount = 0
   tabReport: TabReportType[] = []
   wsTags: WsTagsType = {}
   genes: string[] = []
@@ -42,6 +43,8 @@ class DatasetStore {
   isLoadingDsStat = false
   isFilterDisabled = false
 
+  reportsLoaded = false
+
   searchField = ''
 
   constructor() {
@@ -53,7 +56,9 @@ class DatasetStore {
   }
 
   setTableOffest(value: number) {
-    this.offset = value
+    runInAction(() => {
+      this.offset = value
+    })
   }
 
   setIsFilterDisabled(value: boolean) {
@@ -237,7 +242,7 @@ class DatasetStore {
 
   async fetchDsStatAsync() {
     this.isLoadingDsStat = true
-    this.isLoadingTabReport = true
+    this.setIsLoadingTabReport(true)
 
     const body = new URLSearchParams({
       ds: this.datasetName,
@@ -262,6 +267,7 @@ class DatasetStore {
 
     runInAction(() => {
       this.dsStat = result
+      this.variantsAmount = result['total-counts']['0']
       this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
@@ -293,19 +299,18 @@ class DatasetStore {
   }
 
   async fetchTabReportAsync() {
-    const variantsAmount = get(this, 'dsStat.total-counts.0', 0)
-
-    if (this.indexTabReport === 0) {
-      this.isLoadingTabReport = true
-    }
-
-    if (this.indexTabReport !== 0 && this.indexTabReport < variantsAmount) {
+    if (
+      this.indexTabReport !== 0 &&
+      this.indexTabReport < this.variantsAmount
+    ) {
       this.isFetchingMore = true
     }
 
-    if (variantsAmount > this.indexTabReport) {
+    if (this.variantsAmount > this.indexTabReport) {
       const arrayLength =
-        variantsAmount < INCREASE_INDEX ? variantsAmount : INCREASE_INDEX
+        this.variantsAmount < INCREASE_INDEX
+          ? this.variantsAmount
+          : INCREASE_INDEX
 
       const seq = Array.from(
         { length: arrayLength },
@@ -322,31 +327,37 @@ class DatasetStore {
 
   async _fetchTabReportAsync(dsName: string, seq: number[]) {
     if (seq.length === 0) {
-      this.isLoadingTabReport = false
+      this.setIsLoadingTabReport(false)
       this.isFetchingMore = false
 
       return
     }
 
-    const response = await fetch(getApiUrl(`tab_report`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        ds: String(dsName),
-        schema: 'xbr',
-        seq: JSON.stringify(seq),
-      }),
-    })
+    const response = !this.reportsLoaded
+      ? await fetch(getApiUrl(`tab_report`), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            ds: String(dsName),
+            schema: 'xbr',
+            seq: JSON.stringify(seq),
+          }),
+        })
+      : null
 
-    const result = await response.json()
+    if (response) {
+      const result = await response.json()
 
-    runInAction(() => {
-      this.tabReport = [...this.tabReport, ...result]
-      this.isLoadingTabReport = false
-      this.isFetchingMore = false
-    })
+      runInAction(() => {
+        if (!this.reportsLoaded) this.tabReport = [...this.tabReport, ...result]
+        this.reportsLoaded = this.tabReport.length === this.variantsAmount
+        this.isFetchingMore = false
+      })
+
+      this.setIsLoadingTabReport(false)
+    }
   }
 
   async fetchFilteredTabReportAsync() {
@@ -356,7 +367,7 @@ class DatasetStore {
     )
 
     if (this.indexFilteredNo === 0) {
-      this.isLoadingTabReport = true
+      this.setIsLoadingTabReport(true)
       this.tabReport = []
     } else {
       this.isFetchingMore = true
