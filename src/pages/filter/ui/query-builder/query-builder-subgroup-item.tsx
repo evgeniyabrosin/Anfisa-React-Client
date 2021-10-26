@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import cn from 'classnames'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
@@ -115,10 +116,10 @@ export const QueryBuilderSubgroupItem = observer(
           !isModal &&
           subGroupItem.variants &&
           subGroupItem.variants.length > 0 && (
-            <QueryBuilderSubgroupChart variants={subGroupItem.variants} />
+            <QueryBuilderSubgroupChart variants={toJS(subGroupItem.variants)} />
           )}
         {isVisibleSubGroupItem && !isModal && subGroupItem.max > 0 && (
-          <QueryBuilderSubgroupChart histogram={subGroupItem.histogram} />
+          <QueryBuilderSubgroupChart histogram={toJS(subGroupItem.histogram)} />
         )}
       </div>
     )

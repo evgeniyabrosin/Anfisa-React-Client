@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { cloneDeep } from 'lodash'
 import get from 'lodash/get'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
@@ -230,8 +230,9 @@ class DtreeStore {
   }
 
   getStepIndexForApi = (index: number) => {
-    const currentIndex = Number(this.dtreeStepIndices[index])
-    const stepIndex = this.dtreeStepIndices.length === 0 ? 0 : currentIndex
+    const indexes = toJS(this.dtreeStepIndices)
+    const currentIndex = Number(indexes[index])
+    const stepIndex = indexes.length === 0 ? 0 : currentIndex
 
     const lastIndex = this.getLastStepIndexForApi()
 
@@ -751,24 +752,26 @@ class DtreeStore {
     localStepData.forEach((element, index) => {
       const startCountsIndex = this.getStepIndexForApi(index)
 
+      const counts = toJS(pointCounts)
+
       const startCounts =
-        pointCounts[startCountsIndex] === null
+        counts[startCountsIndex] === null
           ? '...'
-          : pointCounts[startCountsIndex]?.[0]
+          : counts[startCountsIndex]?.[0]
 
       const diferenceCountsIndex = this.getStepIndexForApi(index) + 1
 
       const diferenceCounts =
-        pointCounts[diferenceCountsIndex] === null
+        counts[diferenceCountsIndex] === null
           ? '...'
-          : pointCounts[diferenceCountsIndex]?.[0]
+          : counts[diferenceCountsIndex]?.[0]
 
       const finishCountsIndex = this.getStepIndexForApi(index) + 2
 
       const finishCounts =
-        pointCounts[finishCountsIndex] === null
+        counts[finishCountsIndex] === null
           ? '...'
-          : pointCounts[finishCountsIndex]?.[0]
+          : counts[finishCountsIndex]?.[0]
 
       element.startFilterCounts = startCounts
       element.difference = diferenceCounts
