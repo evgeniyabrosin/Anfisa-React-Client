@@ -1,4 +1,4 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement, useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
@@ -7,6 +7,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { QueryBuilderSearch } from '../query-builder-search'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { ModsDivider } from './mods-divider'
@@ -52,9 +53,25 @@ export const ModalSelectFilters = observer(
       dtreeStore.openModalJoin()
     }
 
+    const [searchValue, setSearchValue] = useState('')
+
+    const handleChange = (value: string) => {
+      setSearchValue(value)
+    }
+
     return (
       <ModalBase refer={ref} minHeight={260}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
+
+        {dtreeStore.selectedGroups[2].length > 15 && (
+          <div className="flex mt-3">
+            <QueryBuilderSearch
+              value={searchValue}
+              onChange={handleChange}
+              isSubgroupItemSearch
+            />
+          </div>
+        )}
 
         <div className="flex justify-between w-full mt-4 text-14">
           <div className="text-grey-blue">
@@ -79,26 +96,35 @@ export const ModalSelectFilters = observer(
 
         <div className="flex-1 mt-4 overflow-y-auto">
           {dtreeStore.selectedGroups[2] ? (
-            dtreeStore.selectedGroups[2].map(
-              (variant: any) =>
-                variant[1] !== 0 && (
-                  <div key={variant} className="flex items-center mb-2 text-14">
-                    <Checkbox
-                      checked={dtreeStore.selectedFilters.includes(variant[0])}
-                      className="-mt-0.5 mr-1 cursor-pointer"
-                      onChange={e =>
-                        handleCheckGroupItem(e.target.checked, variant[0])
-                      }
-                    />
+            dtreeStore.selectedGroups[2]
+              .filter((variant: [string, number]) =>
+                variant[0].toLocaleLowerCase().startsWith(searchValue),
+              )
+              .map(
+                (variant: [string, number]) =>
+                  variant[1] !== 0 && (
+                    <div
+                      key={Math.random()}
+                      className="flex items-center mb-2 text-14"
+                    >
+                      <Checkbox
+                        checked={dtreeStore.selectedFilters.includes(
+                          variant[0],
+                        )}
+                        className="-mt-0.5 mr-1 cursor-pointer"
+                        onChange={e =>
+                          handleCheckGroupItem(e.target.checked, variant[0])
+                        }
+                      />
 
-                    <span className="text-black">{variant[0]}</span>
+                      <span className="text-black">{variant[0]}</span>
 
-                    <span className="text-grey-blue ml-2">
-                      {variant[1]} {t('dtree.variants')}
-                    </span>
-                  </div>
-                ),
-            )
+                      <span className="text-grey-blue ml-2">
+                        {variant[1]} {t('dtree.variants')}
+                      </span>
+                    </div>
+                  ),
+              )
           ) : (
             <div className="flex justify-center items-center text-14 text-grey-blue">
               {t('dtree.noFilters')}

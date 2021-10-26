@@ -11,10 +11,17 @@ interface IProps {
   onChange: (item: string) => void
   isFilter?: boolean
   isModal?: boolean
+  isSubgroupItemSearch?: boolean
 }
 
 export const QueryBuilderSearch = observer(
-  ({ value, onChange, isFilter, isModal }: IProps): ReactElement => {
+  ({
+    value,
+    onChange,
+    isFilter,
+    isModal,
+    isSubgroupItemSearch,
+  }: IProps): ReactElement => {
     const handleClick = (operation: string) => {
       if (isFilter || isModal) {
         operation === 'expand' && dtreeStore.expandFilterContent()
@@ -37,25 +44,27 @@ export const QueryBuilderSearch = observer(
           }}
         />
 
-        <div className="flex items-center justify-between pl-2 text-grey-blue">
-          <div className="mr-1">
-            <Icon
-              name="Expand"
-              size={20}
-              className="cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick('collapse')}
-            />
-          </div>
+        {!isSubgroupItemSearch && (
+          <div className="flex items-center justify-between pl-2 text-grey-blue">
+            <div className="mr-1">
+              <Icon
+                name="Expand"
+                size={20}
+                className="cursor-pointer hover:text-blue-bright"
+                onClick={() => handleClick('collapse')}
+              />
+            </div>
 
-          <div>
-            <Icon
-              name="Collapse"
-              size={20}
-              className="cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick('expand')}
-            />
+            <div>
+              <Icon
+                name="Collapse"
+                size={20}
+                className="cursor-pointer hover:text-blue-bright"
+                onClick={() => handleClick('expand')}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </Fragment>
     )
   },

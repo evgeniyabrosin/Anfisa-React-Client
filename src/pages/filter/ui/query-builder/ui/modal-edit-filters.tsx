@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useRef } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
+import { QueryBuilderSearch } from '../query-builder-search'
 import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
@@ -75,9 +76,25 @@ export const ModalEditFilters = observer(
       dtreeStore.resetSelectedFilters()
     }
 
+    const [searchValue, setSearchValue] = useState('')
+
+    const handleChange = (value: string) => {
+      setSearchValue(value)
+    }
+
     return (
       <ModalBase refer={ref} minHeight={200}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
+
+        {attrData.length > 15 && (
+          <div className="flex mt-3">
+            <QueryBuilderSearch
+              value={searchValue}
+              onChange={handleChange}
+              isSubgroupItemSearch
+            />
+          </div>
+        )}
 
         <div className="flex justify-between items-center w-full mt-4 text-14">
           <div className="text-14 text-grey-blue">
@@ -102,27 +119,31 @@ export const ModalEditFilters = observer(
         </div>
 
         <div className="flex-1 overflow-y-auto my-4 text-14">
-          {attrData.map((variant: any) => (
-            <div key={variant} className="flex items-center mb-2">
-              <Checkbox
-                checked={
-                  currentGroup.length > 0
-                    ? dtreeStore.selectedFilters.includes(variant[0])
-                    : false
-                }
-                className="-mt-0.5 mr-1"
-                onChange={e =>
-                  handleCheckGroupItem(e.target.checked, variant[0])
-                }
-              />
+          {attrData
+            .filter((attr: any) =>
+              attr[0].toLocaleLowerCase().startsWith(searchValue),
+            )
+            .map((variant: any) => (
+              <div key={variant} className="flex items-center mb-2">
+                <Checkbox
+                  checked={
+                    currentGroup.length > 0
+                      ? dtreeStore.selectedFilters.includes(variant[0])
+                      : false
+                  }
+                  className="-mt-0.5 mr-1"
+                  onChange={e =>
+                    handleCheckGroupItem(e.target.checked, variant[0])
+                  }
+                />
 
-              <p className="text-black">{variant[0]}</p>
+                <p className="text-black">{variant[0]}</p>
 
-              <p className="text-grey-blue ml-2">
-                {variant[1]} {t('dtree.variants')}
-              </p>
-            </div>
-          ))}
+                <p className="text-grey-blue ml-2">
+                  {variant[1]} {t('dtree.variants')}
+                </p>
+              </div>
+            ))}
         </div>
 
         <EditModalButtons
