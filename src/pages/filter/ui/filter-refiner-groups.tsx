@@ -35,7 +35,7 @@ export const FilterRefinerGroups = observer(
 
         datasetStore.setConditionsAsync([
           [
-            FilterKindEnum.enum,
+            FilterKindEnum.Enum,
             name,
             '',
             filterItemVariants.map(item => item[0]),
@@ -69,7 +69,7 @@ export const FilterRefinerGroups = observer(
 
             {values[index].map((item: StatList) => {
               const numericAmount =
-                item.kind === FilterKindEnum.numeric
+                item.kind === FilterKindEnum.Numeric
                   ? get(datasetStore, 'dsStat.total-counts.0', 0)
                   : 0
 
@@ -81,8 +81,8 @@ export const FilterRefinerGroups = observer(
                   }
                   {...item}
                   key={item.name}
-                  isFunc={item.kind === FilterKindEnum.func}
-                  isNumeric={item.kind === FilterKindEnum.numeric}
+                  isFunc={item.kind === FilterKindEnum.Func}
+                  isNumeric={item.kind === FilterKindEnum.Numeric}
                   amount={
                     item.variants
                       ? item.variants.reduce((prev, cur) => prev + cur[1], 0)

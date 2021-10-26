@@ -15,14 +15,19 @@ export const QueryBuilderTotalNumbers = observer(
       [],
     )
 
+    const stepData = dtreeStore.stepData
+
+    const stepIndex = stepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
+
+    const returnedVariants = stepData[stepIndex]?.difference
+    const startVariants = stepData[stepIndex]?.startFilterCounts
+    const hasReturnedVariants = Boolean(returnedVariants)
+    const hasStartVariants = Boolean(startVariants)
+
     const openTableModal = (isReturnedVariants = true) => {
-      const stepData = dtreeStore.stepData
-
-      const index = stepData.findIndex(
-        element => element.isActive || element.isReturnedVariantsActive,
-      )
-
-      const indexForApi = dtreeStore.getStepIndexForApi(index)
+      const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
       const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
 
       dtreeStore.openTableModal(nextStepIndex)
@@ -58,18 +63,23 @@ export const QueryBuilderTotalNumbers = observer(
           )}
         </div>
         <div className="flex">
-          <Button
-            onClick={() => openTableModal(true)}
-            text="View returned variants"
-            hasBackground={false}
-            className="ml-auto hover:bg-blue-bright"
-          />
-          <Button
-            onClick={() => openTableModal(false)}
-            text="View variants"
-            hasBackground={false}
-            className="ml-5 hover:bg-blue-bright"
-          />
+          {hasReturnedVariants && (
+            <Button
+              onClick={() => openTableModal(true)}
+              text="View returned variants"
+              hasBackground={false}
+              className="ml-auto hover:bg-blue-bright"
+            />
+          )}
+
+          {hasStartVariants && (
+            <Button
+              onClick={() => openTableModal(false)}
+              text="View variants"
+              hasBackground={false}
+              className="ml-5 hover:bg-blue-bright"
+            />
+          )}
         </div>
       </div>
     )

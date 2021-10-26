@@ -154,7 +154,7 @@ class DatasetStore {
 
     const conditionKind = cloneConditions.find(item => item[1] === subGroup)[0]
 
-    if (conditionKind === FilterKindEnum.enum) {
+    if (conditionKind === FilterKindEnum.Enum) {
       const filteredItems = cloneConditions[subGroupIndex][3].filter(
         (item: string) => item !== itemName,
       )
@@ -278,7 +278,7 @@ class DatasetStore {
         (item: any) => item.name === name,
       )
 
-      if (condition[0] === FilterKindEnum.enum) {
+      if (condition[0] === FilterKindEnum.Enum) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
             group: filterItem.vgroup,

@@ -1,8 +1,10 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
@@ -74,20 +76,15 @@ export const ModalSelectGeneRegion = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    // TODO:fix
-    const handleReplace = () => {
-      // dtreeStore.replaceStepData(subGroupName, 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectGeneRegion()
-    }
-
     const handleModalJoin = () => {
       dtreeStore.openModalJoin()
     }
 
-    const handleAddAttribute = () => {
-      // addAttributeToStep('func', subGroupName)
+    const handleAddAttribute = (action: ActionType) => {
+      dtreeStore.addSelectedFilter(variants[0][0])
+      const params = { locus: locusCondition }
 
+      addAttributeToStep(action, 'func', null, params)
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectGeneRegion()
     }
@@ -108,11 +105,10 @@ export const ModalSelectGeneRegion = observer(
         />
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
+          handleAddAttribute={handleAddAttribute}
           disabled={isErrorVisible}
           currentGroup={currentGroup}
         />

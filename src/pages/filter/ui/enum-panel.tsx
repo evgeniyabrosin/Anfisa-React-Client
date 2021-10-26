@@ -27,7 +27,7 @@ export const EnumPanel = observer(
 
         datasetStore.setConditionsAsync([
           [
-            FilterKindEnum.enum,
+            FilterKindEnum.Enum,
             filterStore.selectedGroupItem.name,
             '',
             enumValues,

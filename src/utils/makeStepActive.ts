@@ -8,11 +8,15 @@ export const makeStepActive = (
     element => element[option] === true,
   )
 
-  if (currentActiveIndex === index) return
+  const isReturnedVariants = option === 'isReturnedVariantsActive'
+
+  const currentVariants = isReturnedVariants
+    ? dtreeStore.stepData[index].difference
+    : dtreeStore.stepData[index].startFilterCounts
+
+  if (currentActiveIndex === index || currentVariants === 0) return
 
   dtreeStore.setStepActive(index, option)
-
-  const isReturnedVariants = option === 'isReturnedVariantsActive'
 
   const indexForApi = isReturnedVariants
     ? dtreeStore.getStepIndexForApi(index) + 1

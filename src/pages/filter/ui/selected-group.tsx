@@ -24,13 +24,13 @@ export const SelectedGroup = observer(
 
         <div className="bg-white h-px w-full mt-4" />
 
-        {filterStore.selectedGroupItem.kind === FilterKindEnum.enum && (
+        {filterStore.selectedGroupItem.kind === FilterKindEnum.Enum && (
           <EnumPanel />
         )}
-        {filterStore.selectedGroupItem.kind === FilterKindEnum.func && (
+        {filterStore.selectedGroupItem.kind === FilterKindEnum.Func && (
           <FunctionPanel />
         )}
-        {filterStore.selectedGroupItem.kind === FilterKindEnum.numeric && (
+        {filterStore.selectedGroupItem.kind === FilterKindEnum.Numeric && (
           <RangePanel />
         )}
       </div>

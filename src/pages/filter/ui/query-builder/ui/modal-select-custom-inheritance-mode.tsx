@@ -1,10 +1,12 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
 import { HeaderModal } from './header-modal'
@@ -187,20 +189,15 @@ export const ModalSelectCustomInheritanceMode = observer(
       dtreeStore.resetSelectedFilters()
     }
 
-    // TODO:fix
-    const handleReplace = () => {
-      // dtreeStore.replaceStepData(subGroupName, 'enum')
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectInheritanceMode()
-    }
-
     const handleModalJoin = () => {
       dtreeStore.openModalJoin()
     }
 
-    const handleAddAttribute = () => {
-      // addAttributeToStep('func', subGroupName)
+    const handleAddAttribute = (action: ActionType) => {
+      dtreeStore.addSelectedFilter(variants[0][0])
+      const params = { scenario: dtreeStore.scenario }
 
+      addAttributeToStep(action, 'func', [null], params)
       dtreeStore.resetSelectedFilters()
       dtreeStore.closeModalSelectCustomInheritanceMode()
     }
@@ -221,11 +218,10 @@ export const ModalSelectCustomInheritanceMode = observer(
         />
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
+          handleAddAttribute={handleAddAttribute}
           disabled={!variants}
           currentGroup={currentGroup}
         />

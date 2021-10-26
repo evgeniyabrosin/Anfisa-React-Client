@@ -129,6 +129,7 @@ export const FilterControlRefiner = observer(
               className="text-white mt-auto ml-2 rounded-full"
               onClick={() => {
                 setActivePreset('')
+                setCreatePresetName('')
                 filterStore.setActionName()
               }}
             />

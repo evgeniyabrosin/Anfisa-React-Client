@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { ModalSources } from '@core/enum/modal-sources'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
@@ -11,25 +12,21 @@ import { ModalJoin } from './modal-join'
 
 interface IProps {
   handleModals: () => void
-  handleReplace: () => void
   handleClose: () => void
   handleModalJoin: () => void
-  handleAddAttribute: () => void
   currentGroup: string
-  getNumericData?: () => any[]
   disabled: any
+  handleAddAttribute: (action: ActionType) => void
 }
 
 export const SelectModalButtons = observer(
   ({
     handleModals,
-    handleReplace,
     handleClose,
     handleModalJoin,
-    handleAddAttribute,
     currentGroup,
-    getNumericData,
     disabled,
+    handleAddAttribute,
   }: IProps) => {
     return (
       <div
@@ -60,7 +57,7 @@ export const SelectModalButtons = observer(
                 disabled={disabled}
                 text={t('dtree.replace')}
                 className="mr-2 cursor-pointer"
-                onClick={handleReplace}
+                onClick={() => handleAddAttribute('REPLACE')}
               />
 
               <div className="relative">
@@ -72,18 +69,15 @@ export const SelectModalButtons = observer(
                   icon={<Icon name="Arrow" className="transform -rotate-90" />}
                 />
 
-                {dtreeStore.isModalJoinVisible &&
-                  (getNumericData ? (
-                    <ModalJoin numericData={getNumericData()} />
-                  ) : (
-                    <ModalJoin />
-                  ))}
+                {dtreeStore.isModalJoinVisible && (
+                  <ModalJoin handleAddAttribute={handleAddAttribute} />
+                )}
               </div>
             </Fragment>
           ) : (
             <Button
               text={t('dtree.addNewAttribute')}
-              onClick={handleAddAttribute}
+              onClick={() => handleAddAttribute('INSERT')}
               disabled={disabled}
             />
           )}

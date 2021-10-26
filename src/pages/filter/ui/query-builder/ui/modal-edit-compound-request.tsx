@@ -21,14 +21,8 @@ import { EditModalButtons } from './edit-modal-buttons'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+import { IParams } from './modal-edit-compound-het'
 import { selectOptions } from './modal-edit-custom-inheritance-mode'
-
-interface IParams {
-  approx: any
-  state?: string[] | null
-  default?: string
-  request?: any[]
-}
 
 export const ModalEditCompoundRequest = observer(
   (): ReactElement => {

@@ -2,6 +2,7 @@ import { Fragment, ReactElement } from 'react'
 import cn from 'classnames'
 import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
+import Tooltip from 'rc-tooltip'
 import styled from 'styled-components'
 
 import { FilterCountsType } from '@declarations'
@@ -131,6 +132,11 @@ export const NextStepRoute = observer(
       : alternativeCounts
 
     const isDifferenceActive = currentStep.isReturnedVariantsActive
+    const shouldTooltipAppear = Boolean(currentStep.difference)
+
+    const tooltipConent = `Show ${
+      currentStep.excluded ? 'excluded' : 'included'
+    } varants for step ${index}`
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
@@ -167,23 +173,28 @@ export const NextStepRoute = observer(
                   className="absolute w-full right-4 flex justify-end items-center"
                   style={{ top: 48 }}
                 >
-                  <ExcludeAmount
-                    isIncluded={isIncluded}
-                    onClick={() =>
-                      makeStepActive(index, 'isReturnedVariantsActive')
-                    }
+                  <Tooltip
+                    overlay={tooltipConent}
+                    trigger={shouldTooltipAppear ? ['hover'] : []}
                   >
-                    <span>
-                      {isIncluded ? `+` : `-`}
-                      {isDifferenceActive ? (
-                        <DifferenceCounts isIncluded={isIncluded}>
-                          {currentStep.difference}
-                        </DifferenceCounts>
-                      ) : (
-                        <span>{currentStep.difference}</span>
-                      )}
-                    </span>
-                  </ExcludeAmount>
+                    <ExcludeAmount
+                      isIncluded={isIncluded}
+                      onClick={() =>
+                        makeStepActive(index, 'isReturnedVariantsActive')
+                      }
+                    >
+                      <span>
+                        {isIncluded ? `+` : `-`}
+                        {isDifferenceActive ? (
+                          <DifferenceCounts isIncluded={isIncluded}>
+                            {currentStep.difference}
+                          </DifferenceCounts>
+                        ) : (
+                          <span>{currentStep.difference}</span>
+                        )}
+                      </span>
+                    </ExcludeAmount>
+                  </Tooltip>
 
                   <div className="ml-1">
                     {isIncluded ? (

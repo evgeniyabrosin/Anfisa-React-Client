@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
@@ -99,25 +100,14 @@ export const ModalSelectNumbers = observer(
       return numericData
     }
 
-    const handleReplace = () => {
+    const handleAddAttribute = (action: ActionType) => {
       if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
         return
       }
 
       const numericData = getNumericData()
 
-      addAttributeToStep('REPLACE', 'numeric', numericData)
-      dtreeStore.closeModalSelectNumbers()
-    }
-
-    const handleAddAttribute = () => {
-      if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
-        return
-      }
-
-      const numericData = getNumericData()
-
-      addAttributeToStep('INSERT', 'numeric', numericData)
+      addAttributeToStep(action, 'numeric', numericData)
 
       dtreeStore.closeModalSelectNumbers()
     }
@@ -274,14 +264,12 @@ export const ModalSelectNumbers = observer(
         </div>
 
         <SelectModalButtons
-          handleAddAttribute={handleAddAttribute}
           handleClose={handleClose}
           handleModals={handleModals}
           handleModalJoin={handleModalJoin}
-          handleReplace={handleReplace}
           disabled={!valueFrom && !valueTo}
           currentGroup={currentGroup}
-          getNumericData={getNumericData}
+          handleAddAttribute={handleAddAttribute}
         />
       </ModalBase>
     )

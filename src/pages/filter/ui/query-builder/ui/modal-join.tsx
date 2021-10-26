@@ -1,25 +1,23 @@
 import { ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { addAttributeToStep } from '@utils/addAttributeToStep'
 
 interface IProps {
-  numericData?: any[]
+  handleAddAttribute: (action: ActionType) => void
 }
 
 export const ModalJoin = observer(
-  ({ numericData }: IProps): ReactElement => {
+  ({ handleAddAttribute }: IProps): ReactElement => {
     const ref = useRef(null)
 
     useOutsideClick(ref, () => dtreeStore.closeModalJoin())
 
     const handleJoin = (typeOfJoin: 'JOIN-AND' | 'JOIN-OR') => {
-      numericData
-        ? addAttributeToStep(typeOfJoin, 'numeric', numericData)
-        : addAttributeToStep(typeOfJoin, 'enum')
+      handleAddAttribute(typeOfJoin)
 
       dtreeStore.closeModalJoin()
       dtreeStore.closeModalSelectFilter()
