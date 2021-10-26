@@ -246,8 +246,6 @@ class DtreeStore {
   }
 
   async fetchDtreeSetAsync(body: URLSearchParams) {
-    this.setIsFiltersLoading()
-
     const response = await fetch(getApiUrl(`dtree_set`), {
       method: 'POST',
       headers: {
@@ -270,8 +268,6 @@ class DtreeStore {
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
-    this.setIsFiltersLoading()
-
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       no: this.currentStepIndexForApi.toString(),
