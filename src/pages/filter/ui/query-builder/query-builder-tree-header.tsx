@@ -30,8 +30,8 @@ export const QueryBuilderTreeHeader = observer(
           <div className="font-medium mr-3">{t('dtree.algorithm')}</div>
 
           <QueryBuilderSearch
-            value={dtreeStore.searchFieldResults}
-            onChange={dtreeStore.addSearchFieldResults}
+            value={dtreeStore.algorithmFilterValue}
+            onChange={(e: string) => dtreeStore.setAlgorithmFilterValue(e)}
           />
         </ResultsHeader>
       </div>

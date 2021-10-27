@@ -49,7 +49,7 @@ export const NextStep = observer(
       setIsExpanded(prev => !prev)
     }
 
-    const currentStep = dtreeStore.stepData[index]
+    const currentStep = dtreeStore.getStepData[index]
     const code = dtreeStore.dtreeCode
 
     const createStep = (stepIndex: number) => {
@@ -75,7 +75,7 @@ export const NextStep = observer(
         <div className="flex">
           <TreeView
             className={cn(
-              'justify-end items-start pr-3',
+              'pr-3',
               currentStep.isReturnedVariantsActive ? 'bg-green-light' : '',
             )}
           >
@@ -83,7 +83,7 @@ export const NextStep = observer(
               isExpanded={isExpanded}
               index={index}
               length={length}
-              isIncluded={!dtreeStore.stepData[index].excluded}
+              isIncluded={!dtreeStore.getStepData[index].excluded}
             />
           </TreeView>
 
@@ -98,14 +98,14 @@ export const NextStep = observer(
               isExpanded={isExpanded}
               expandContent={expandContent}
               index={index}
-              isExcluded={dtreeStore.stepData[index].excluded}
+              isExcluded={dtreeStore.getStepData[index].excluded}
             />
 
             {isExpanded && <NextStepContent index={index} />}
 
             {length - index < 2 && (
               <Button
-                disabled={!dtreeStore.stepData[index].groups}
+                disabled={!dtreeStore.getStepData[index].groups}
                 text={t('dtree.addStep')}
                 className="absolute -bottom-9 z-1000 left-0"
                 onClick={() => createStep(index)}

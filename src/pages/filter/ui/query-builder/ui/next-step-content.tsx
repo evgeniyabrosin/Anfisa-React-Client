@@ -24,9 +24,9 @@ const ContentEditor = styled.div`
 
 export const NextStepContent = observer(
   ({ index }: IProps): ReactElement => {
-    const groups = dtreeStore.stepData[index].groups
+    const groups = dtreeStore.getStepData[index].groups
 
-    const currentStepData = dtreeStore.stepData[index]
+    const currentStepData = dtreeStore.getStepData[index]
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 

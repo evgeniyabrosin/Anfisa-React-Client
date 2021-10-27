@@ -56,7 +56,7 @@ export const NextStepContentItem = observer(
       setIsVisible(prev => !prev)
     }
 
-    const currentStep = dtreeStore.stepData[index]
+    const currentStep = dtreeStore.getStepData[index]
 
     const handleModals = () => {
       makeStepActive(index)

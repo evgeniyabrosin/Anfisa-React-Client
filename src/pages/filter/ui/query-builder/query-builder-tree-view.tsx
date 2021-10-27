@@ -8,6 +8,12 @@ export const QueryBuilderTreeView = observer(
   (): ReactElement => {
     const poitnCounts = dtreeStore.pointCounts
 
+    const stepData = dtreeStore.getStepData
+
+    const stepDataLength = dtreeStore.algorithmFilterValue
+      ? stepData.length
+      : dtreeStore.stepData.length
+
     useEffect(() => {
       dtreeStore.updatePointCounts(poitnCounts)
       dtreeStore.setAcceptedVariants()
@@ -15,7 +21,7 @@ export const QueryBuilderTreeView = observer(
 
     return (
       <div id="parent" className="flex flex-col overflow-auto h-full">
-        {dtreeStore.stepData.map((element, index: number) => {
+        {stepData.map((element, index: number) => {
           const key = element.groups
             ? JSON.stringify(element.groups) +
               element.finishFilterCounts +
@@ -26,7 +32,7 @@ export const QueryBuilderTreeView = observer(
             <NextStep
               key={key}
               index={index}
-              length={dtreeStore.stepData.length}
+              length={stepDataLength}
               changeIndicator={dtreeStore.resultsChangeIndicator}
               isContentExpanded={dtreeStore.isResultsContentExpanded}
             />

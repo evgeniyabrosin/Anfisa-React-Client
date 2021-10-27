@@ -31,8 +31,8 @@ export const ModalSelectAttribute = observer(
 
         <div className="flex w-full mt-4">
           <QueryBuilderSearch
-            value={dtreeStore.searchFieldFilterList}
-            onChange={dtreeStore.addSearchFieldFilterList}
+            value={dtreeStore.filterValue}
+            onChange={(e: string) => dtreeStore.setFilterValue(e)}
             isModal
           />
         </div>

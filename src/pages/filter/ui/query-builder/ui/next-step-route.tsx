@@ -113,9 +113,9 @@ export const NextStepRoute = observer(
       [],
     )
 
-    const startFilterCounts = dtreeStore.stepData[index].startFilterCounts
-    const finishFilterCounts = dtreeStore.stepData[index].finishFilterCounts
-    const currentStep = dtreeStore.stepData[index]
+    const startFilterCounts = dtreeStore.getStepData[index].startFilterCounts
+    const finishFilterCounts = dtreeStore.getStepData[index].finishFilterCounts
+    const currentStep = dtreeStore.getStepData[index]
 
     const changedStartCounts = startFilterCounts
       ? getNumberWithCommas(startFilterCounts)
@@ -136,7 +136,7 @@ export const NextStepRoute = observer(
 
     const tooltipConent = `Show ${
       currentStep.excluded ? 'excluded' : 'included'
-    } varants for step ${index}`
+    } varants for step ${index + 1}`
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">

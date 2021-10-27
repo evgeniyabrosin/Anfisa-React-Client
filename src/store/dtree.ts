@@ -66,8 +66,8 @@ class DtreeStore {
   isResultsContentExpanded = false
   resultsChangeIndicator = 0
 
-  searchFieldFilterList = ''
-  searchFieldResults = ''
+  filterValue = ''
+  algorithmFilterValue = ''
   filteredCounts = 0
 
   stepData: IStepData[] = []
@@ -181,7 +181,7 @@ class DtreeStore {
           (item.title || item.name) &&
           (item.title || item.name)
             .toLocaleLowerCase()
-            .includes(this.searchFieldFilterList.toLocaleLowerCase())
+            .includes(this.filterValue.toLocaleLowerCase())
         ) {
           if (groups[item.vgroup]) {
             groups[item.vgroup] = [...groups[item.vgroup], item]
@@ -283,6 +283,27 @@ class DtreeStore {
   }
 
   // 2. UI functions to display adding / deleting / editing steps
+
+  get getStepData() {
+    let stepData = cloneDeep(this.stepData)
+    let data: any[] = []
+
+    if (stepData[0] && stepData[0].groups && this.algorithmFilterValue) {
+      stepData = stepData.filter((item, currNo: number) =>
+        item.groups.map((subItem: any[]) => {
+          if (
+            subItem[1]
+              .toLocaleLowerCase()
+              .startsWith(this.algorithmFilterValue.toLocaleLowerCase())
+          ) {
+            return (data = [...data, stepData[currNo]])
+          }
+        }),
+      )
+    }
+
+    return this.algorithmFilterValue ? data : stepData
+  }
 
   addStep(index: number) {
     if (this.stepData.length === 0) {
@@ -799,12 +820,12 @@ class DtreeStore {
     this.resultsChangeIndicator = 0
   }
 
-  addSearchFieldFilterList(item: string) {
-    this.searchFieldFilterList = item
+  setFilterValue(item: string) {
+    this.filterValue = item
   }
 
-  addSearchFieldResults(item: string) {
-    this.searchFieldResults = item
+  setAlgorithmFilterValue(item: string) {
+    this.algorithmFilterValue = item
   }
 
   setIsFiltersLoading() {

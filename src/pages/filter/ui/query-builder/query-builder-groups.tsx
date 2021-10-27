@@ -77,8 +77,8 @@ export const QueryBuilderGroups = observer(
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
           <div id="input" className="flex mb-3 w-full static">
             <QueryBuilderSearch
-              value={dtreeStore.searchFieldFilterList}
-              onChange={dtreeStore.addSearchFieldFilterList}
+              value={dtreeStore.filterValue}
+              onChange={(e: string) => dtreeStore.setFilterValue(e)}
               isFilter
             />
           </div>
