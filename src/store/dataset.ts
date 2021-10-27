@@ -345,6 +345,7 @@ class DatasetStore {
         seq: JSON.stringify(seq),
       }),
     })
+
     const result = await response.json()
 
     runInAction(() => {
