@@ -98,7 +98,9 @@ export const ModalSelectFilters = observer(
           {dtreeStore.selectedGroups[2] ? (
             dtreeStore.selectedGroups[2]
               .filter((variant: [string, number]) =>
-                variant[0].toLocaleLowerCase().startsWith(searchValue),
+                variant[0]
+                  .toLocaleLowerCase()
+                  .startsWith(searchValue.toLocaleLowerCase()),
               )
               .map(
                 (variant: [string, number]) =>

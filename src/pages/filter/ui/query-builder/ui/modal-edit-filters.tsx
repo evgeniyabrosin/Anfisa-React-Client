@@ -121,7 +121,9 @@ export const ModalEditFilters = observer(
         <div className="flex-1 overflow-y-auto my-4 text-14">
           {attrData
             .filter((attr: any) =>
-              attr[0].toLocaleLowerCase().startsWith(searchValue),
+              attr[0]
+                .toLocaleLowerCase()
+                .startsWith(searchValue.toLocaleLowerCase()),
             )
             .map((variant: any) => (
               <div key={variant} className="flex items-center mb-2">
