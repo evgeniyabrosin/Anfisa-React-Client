@@ -6,6 +6,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
+import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import datasetStore from './dataset'
 
@@ -148,10 +149,12 @@ class DtreeStore {
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
     this.setIsFiltersLoading()
 
+    // use tm: "0" for xl dataset
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       no,
       code,
+      tm: '0',
     })
 
     const response = await fetch(getApiUrl(`dtree_stat`), {
@@ -163,6 +166,11 @@ class DtreeStore {
     })
 
     const result = await response.json()
+
+    const statList = result['stat-list']
+    const requestId = result['rq-id']
+
+    fetchStatunitsAsync(statList, requestId, no)
 
     runInAction(() => {
       this.dtreeStat = result
@@ -884,6 +892,12 @@ class DtreeStore {
 
   resetPrevDtreeName() {
     this.previousDtreeName = ''
+  }
+
+  setDtreeStat(changedDtreeStat: any) {
+    runInAction(() => {
+      this.dtreeStat = changedDtreeStat
+    })
   }
 }
 

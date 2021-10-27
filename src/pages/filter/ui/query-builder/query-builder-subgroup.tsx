@@ -38,7 +38,7 @@ export const QueryBuilderSubgroup = observer(
     }, [isContentExpanded, changeIndicator])
 
     return (
-      <div key={groupName}>
+      <div>
         <div
           className="flex items-center justify-between mb-3 cursor-pointer"
           onClick={onClick}
@@ -64,10 +64,10 @@ export const QueryBuilderSubgroup = observer(
           />
         </div>
         {isVisibleSubGroup &&
-          subGroupData.map(subGroupItem => (
+          subGroupData.map((subGroupItem, index) => (
             <QueryBuilderSubgroupItem
               subGroupItem={subGroupItem}
-              key={Math.random()}
+              key={index}
               isModal={isModal}
               groupName={groupName}
             />

@@ -139,8 +139,14 @@ export const QueryBuilderSubgroupChart: FC<Props> = ({
       },
     }
 
-    new Chart(ref.current, config)
-  }, [variants, histogram])
+    const myChart = new Chart(ref.current, config)
+
+    return () => {
+      myChart.destroy()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="rounded-md bg-blue-secondary p-2 mr-5">

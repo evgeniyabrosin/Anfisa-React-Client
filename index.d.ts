@@ -139,6 +139,7 @@ export interface StatList {
   labels: any[]
   render: string
   histogram?: any[][]
+  incomplete?: boolean
 }
 
 export type StatListType = StatList | Record<string, any>

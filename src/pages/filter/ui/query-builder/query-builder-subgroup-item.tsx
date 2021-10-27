@@ -85,7 +85,7 @@ export const QueryBuilderSubgroupItem = observer(
     }
 
     return (
-      <div key={subGroupItem.name} className="pl-2 mb-2">
+      <div className="pl-2 mb-2">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center cursor-pointer">
             <Icon
@@ -118,10 +118,12 @@ export const QueryBuilderSubgroupItem = observer(
           </div>
         </div>
 
+        {/* TODO: if varaintas length > 100  add antoher visualisation*/}
         {isVisibleSubGroupItem &&
           !isModal &&
           subGroupItem.variants &&
-          subGroupItem.variants.length > 0 && (
+          subGroupItem.variants.length > 0 &&
+          subGroupItem.variants.length < 100 && (
             <QueryBuilderSubgroupChart variants={toJS(subGroupItem.variants)} />
           )}
         {isVisibleSubGroupItem && !isModal && subGroupItem.max > 0 && (
