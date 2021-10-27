@@ -334,33 +334,27 @@ class DatasetStore {
       return
     }
 
-    const response = !this.reportsLoaded
-      ? await fetch(getApiUrl(`tab_report`), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            ds: String(dsName),
-            schema: 'xbr',
-            seq: JSON.stringify(seq),
-          }),
-        })
-      : null
+    const response = await fetch(getApiUrl(`tab_report`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        ds: String(dsName),
+        schema: 'xbr',
+        seq: JSON.stringify(seq),
+      }),
+    })
+    const result = await response.json()
 
-    if (response) {
-      const result = await response.json()
+    runInAction(() => {
+      this.tabReport = [...this.tabReport, ...result]
+      this.reportsLoaded = this.tabReport.length === this.variantsAmount
+      this.isFetchingMore = false
+    })
 
-      runInAction(() => {
-        if (!this.reportsLoaded) this.tabReport = [...this.tabReport, ...result]
-        this.reportsLoaded = this.tabReport.length === this.variantsAmount
-        this.isFetchingMore = false
-      })
-
-      this.setIsLoadingTabReport(false)
-    }
+    this.setIsLoadingTabReport(false)
   }
-
   async fetchFilteredTabReportAsync() {
     const seq = this.filteredNo.slice(
       this.indexFilteredNo,
