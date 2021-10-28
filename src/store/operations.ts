@@ -63,17 +63,21 @@ class OperationsStore {
   async exportReportAsync(exportType?: ExportTypeEnum) {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      conditions: JSON.stringify(datasetStore.conditions),
-      zone:
-        datasetStore.zone.length > 0
-          ? `[["${
-              datasetStore.zone[datasetStore.zone[0].length - 1][0]
-            }",["${datasetStore.zone[datasetStore.zone[0].length - 1][1]
-              .toString()
-              .split(',')
-              .join('","')}"]]]`
-          : `[]`,
     })
+
+    if (datasetStore.activePreset) {
+      body.append('filter', datasetStore.activePreset)
+    } else {
+      body.append('conditions', `[]`)
+    }
+
+    if (datasetStore.zone.length > 0) {
+      const zone = `[["${
+        datasetStore.zone[0][0]
+      }",["${datasetStore.zone[0][1].toString().split(',').join('","')}"]]]`
+
+      body.append('zone', zone)
+    }
 
     if (exportType === ExportTypeEnum.Excel) {
       const response = await fetch(getApiUrl(`export`), {
