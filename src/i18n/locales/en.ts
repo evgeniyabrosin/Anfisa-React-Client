@@ -17,6 +17,7 @@ export const en = {
     showLess: 'Show less',
     delete: 'Delete',
     total: 'Total',
+    closeWindow: 'Close window',
   },
   home: {
     title: 'Home',
@@ -176,5 +177,7 @@ export const en = {
     noChanges: 'There are no changes in the tree',
     chooseAnyTree: 'Choose any tree from the left list first',
     cantDeleteModifyDefaultTree: 'You can not delete or modify default trees',
+    confirmClosing: 'Do you really want to close the window?',
+    changesWontBeSaved: 'This will drop all your changes',
   },
 }

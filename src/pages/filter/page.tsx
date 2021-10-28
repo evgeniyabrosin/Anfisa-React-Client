@@ -11,6 +11,7 @@ import { FilterHeader } from './filter-header'
 import { FilterRefiner } from './ui/filter-refiner'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
 import { QueryBuilder } from './ui/query-builder/query-builder'
+import { ModalConfirm } from './ui/query-builder/ui/modal-confirm'
 import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-het'
 import { ModalEditCompoundRequest } from './ui/query-builder/ui/modal-edit-compound-request'
 import { ModalEditCustomInheritanceMode } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode'
@@ -93,6 +94,7 @@ export const FilterPage = observer(
 
         {dtreeStore.isTableModalVisible && <TableModal />}
         {dtreeStore.isModalTextEditorVisible && <ModalTextEditor />}
+        {dtreeStore.isModalConfirmVisible && <ModalConfirm />}
 
         <div className="overflow-hidden">
           <FilterHeader />

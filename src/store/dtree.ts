@@ -82,6 +82,7 @@ class DtreeStore {
   isModalSelectNumbersVisible = false
 
   isModalTextEditorVisible = false
+  isModalConfirmVisible = false
 
   isModalEditInheritanceModeVisible = false
   isModalEditCustomInheritanceModeVisible = false
@@ -721,6 +722,16 @@ class DtreeStore {
 
   setStartDtreeCode() {
     this.startDtreeCode = this.dtreeCode
+  }
+
+  // 3.4 Other UI/UX modals
+
+  openModalConfirm() {
+    this.isModalConfirmVisible = true
+  }
+
+  closeModalConfirm() {
+    this.isModalConfirmVisible = false
   }
 
   // 4. Other UI control functions
