@@ -18,6 +18,7 @@ export const en = {
     delete: 'Delete',
     total: 'Total',
     closeWindow: 'Close window',
+    creaitionIsInProcess: 'Dataset creation is not finished yet',
   },
   home: {
     title: 'Home',

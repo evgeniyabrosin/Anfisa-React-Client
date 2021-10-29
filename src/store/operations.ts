@@ -9,6 +9,7 @@ import variantStore from './variant'
 
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
+  isCreationOver = true
 
   constructor() {
     makeAutoObservable(this)
@@ -130,15 +131,19 @@ class OperationsStore {
   async saveDatasetAsync(
     wsName: string,
   ): Promise<{ ok: boolean; message?: string }> {
+    this.resetIsCreationOver()
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       ws: wsName,
       code: dtreeStore.dtreeCode,
     })
 
-    const compareValue = dtreeStore.acceptedVariants
+    const compareValue = datasetStore.statAmount[0]
 
     if (!(compareValue > 0 && compareValue < 9000)) {
+      this.setIsCreationOver()
+
       return {
         ok: false,
         message: 'Too many variants',
@@ -163,6 +168,8 @@ class OperationsStore {
       return { ok: false, message: jobStatusResponse?.message }
     }
 
+    this.setIsCreationOver()
+
     datasetStore.setIsLoadingTabReport(false)
 
     return { ok: true }
@@ -174,16 +181,32 @@ class OperationsStore {
     const result = await response.json()
 
     if (result[0] === null) {
+      this.setIsCreationOver()
+
       return { ok: false, message: result[1] }
     }
 
     runInAction(() => {
       this.savingStatus = result
+
+      if (this.savingStatus[1] === 'Done') this.setIsCreationOver()
     })
 
     return !result[0]
       ? setTimeout(async () => await this.getJobStatusAsync(taskId), 1000)
       : { ok: true, data: result }
+  }
+
+  setIsCreationOver() {
+    this.isCreationOver = true
+  }
+
+  resetIsCreationOver() {
+    this.isCreationOver = false
+  }
+
+  resetSavingStatus() {
+    this.savingStatus = [false, '']
   }
 }
 
