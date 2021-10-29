@@ -165,6 +165,16 @@ class DirInfoStore {
 
     datasetStore.setIsXL(result?.kind === 'xl')
   }
+
+  resetData() {
+    this.dirinfo = {}
+    this.selectedDirinfoName = ''
+    this.dsinfo = {}
+    this.filterValue = ''
+    this.infoFrameLink = ''
+    this.iframeInfoFullscreen = false
+    this.activeInfoName = ''
+  }
 }
 
 export default new DirInfoStore()

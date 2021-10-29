@@ -196,6 +196,7 @@ class DatasetStore {
   }
 
   resetData() {
+    this.datasetName = ''
     this.indexTabReport = 0
     this.indexFilteredNo = 0
     this.tabReport = []

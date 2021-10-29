@@ -1,19 +1,14 @@
-import { ReactElement } from 'react'
-import get from 'lodash/get'
+import { Fragment, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 
 export const QueryBuilderTotalNumbers = observer(
   (): ReactElement => {
-    const [allVariants, transcribedVariants, allTranscripts] = get(
-      datasetStore,
-      'statAmount',
-      [],
-    )
+    const variants = dirinfoStore.dsinfo.total
 
     const stepData = dtreeStore.stepData
 
@@ -33,6 +28,20 @@ export const QueryBuilderTotalNumbers = observer(
       dtreeStore.openTableModal(nextStepIndex)
     }
 
+    const getDerivedVariants = (type: string) => {
+      if (!dtreeStore.isCountsReceived) return '...'
+
+      const acceptedVariants = dtreeStore.stepData
+        .map(step => !step.excluded && step.difference)
+        .reduce((prev: any, curr: any) => prev + curr)
+
+      const rejectedVariants = dtreeStore.stepData
+        .map(step => step.excluded && step.difference)
+        .reduce((prev: any, curr: any) => prev + curr)
+
+      return type === 'excluded' ? rejectedVariants : acceptedVariants
+    }
+
     return (
       <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark justify-between">
         <div className="flex flex-wrap">
@@ -41,25 +50,24 @@ export const QueryBuilderTotalNumbers = observer(
           </span>
 
           <span className="text-12 leading-14px text-grey-blue mt-2">
-            {t('filter.variants', {
-              all: allVariants,
-            })}
+            {t('ds.totalVariants')}
+            {variants}
           </span>
 
-          {transcribedVariants && (
-            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
-              {t('filter.transcribedVariants', {
-                all: transcribedVariants,
-              })}
-            </span>
-          )}
+          {dtreeStore.stepData.length > 0 && (
+            <Fragment>
+              <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
+                <span>{t('dtree.acceptedVariants')}</span>
 
-          {allTranscripts && (
-            <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
-              {t('filter.transcripts', {
-                all: allTranscripts,
-              })}
-            </span>
+                <span>{getDerivedVariants('included') || 0}</span>
+              </div>
+
+              <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
+                <span>{t('dtree.rejectedVariants')}</span>
+
+                <span>{getDerivedVariants('excluded') || 0}</span>
+              </div>
+            </Fragment>
           )}
         </div>
         <div className="flex">

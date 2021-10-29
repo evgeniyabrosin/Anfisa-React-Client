@@ -50,6 +50,8 @@ export const FilterPage = observer(
 
       return () => {
         dtreeStore.resetFilterChangeIndicator()
+        dirinfoStore.resetData()
+        datasetStore.resetData()
       }
     }, [])
 

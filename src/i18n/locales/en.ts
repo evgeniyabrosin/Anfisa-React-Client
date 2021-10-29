@@ -38,7 +38,7 @@ export const en = {
     preset: 'Preset',
     filters: 'Filters',
     results: 'Results',
-    variants: 'Variants: ',
+    totalVariants: 'Total variants: ',
     resultsFound: '{0} results found',
     tableVisualization: 'Table Visualization',
     grid: 'Grid',
@@ -180,5 +180,7 @@ export const en = {
     cantDeleteModifyDefaultTree: 'You can not delete or modify default trees',
     confirmClosing: 'Do you really want to close the window?',
     changesWontBeSaved: 'This will drop all your changes',
+    acceptedVariants: 'Accepted variants: ',
+    rejectedVariants: 'Rejected variants: ',
   },
 }
