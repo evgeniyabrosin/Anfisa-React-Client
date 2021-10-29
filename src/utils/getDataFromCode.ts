@@ -14,7 +14,9 @@ export const getDataFromCode = (code: string) => {
 
     const condition = fullCondition.exec(element)?.[0] ?? ''
 
-    const changedElement = element.replace(/\r\n|\r|\n/g, ' ')
+    const changedElement = element
+      .replace(/\r\n|\r|\n/g, ' ')
+      .replace(/"([^"]*)"/g, '')
 
     const words = changedElement.split(' ')
 

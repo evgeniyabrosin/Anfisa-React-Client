@@ -34,9 +34,18 @@ export const NextStepContent = observer(
 
     const getWords = (text: string | null) => {
       if (!text) return []
-      const textList = text.split(' ')
 
-      const words = textList.map((word, wordIndex: number) => {
+      const textList = text.split(/{|}/)
+
+      const changedTextList = textList.map(element => {
+        if (element.includes(`"`)) return `{${element}}`
+
+        return element.split(' ')
+      })
+
+      const flatedTextList = changedTextList.flat()
+
+      const words = flatedTextList.map((word, wordIndex: number) => {
         const changedWord = word.trim()
 
         switch (changedWord) {
