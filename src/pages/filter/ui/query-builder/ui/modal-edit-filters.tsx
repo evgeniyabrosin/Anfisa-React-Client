@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
@@ -15,8 +14,6 @@ import { ModsDivider } from './mods-divider'
 export const ModalEditFilters = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalEditFilters())
 
     const currentGroup =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[

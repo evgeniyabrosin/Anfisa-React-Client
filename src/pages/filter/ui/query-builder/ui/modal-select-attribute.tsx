@@ -1,7 +1,6 @@
 import { ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { QueryBuilderSearch } from '../query-builder-search'
@@ -15,8 +14,6 @@ export const ModalSelectAttribute = observer(
     const subGroupData = Object.values(dtreeStore.getQueryBuilder)
 
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalAttribute())
 
     const handleClose = () => {
       dtreeStore.closeModalAttribute()

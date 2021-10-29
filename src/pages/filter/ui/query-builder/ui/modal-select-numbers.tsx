@@ -3,7 +3,6 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
@@ -17,8 +16,6 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectNumbers = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectNumbers())
 
     const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
 

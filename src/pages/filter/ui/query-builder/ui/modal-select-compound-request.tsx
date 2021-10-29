@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
@@ -28,8 +27,6 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectCompoundRequest = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectCompoundRequest())
 
     useEffect(() => {
       return () => dtreeStore.resetStatFuncData()

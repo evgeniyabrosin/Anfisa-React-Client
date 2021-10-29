@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
@@ -16,8 +15,6 @@ import { ModalBase } from './modal-base'
 export const ModalEditNumbers = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalEditNumbers())
 
     const groupName = dtreeStore.groupNameToChange
 

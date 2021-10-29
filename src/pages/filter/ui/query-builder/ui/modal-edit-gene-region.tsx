@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { EditModalButtons } from './edit-modal-buttons'
@@ -13,8 +12,6 @@ import { ModalBase } from './modal-base'
 export const ModalEditGeneRegion = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalEditGeneRegion())
 
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange

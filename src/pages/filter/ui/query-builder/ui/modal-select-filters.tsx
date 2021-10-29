@@ -3,7 +3,6 @@ import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
@@ -16,8 +15,6 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectFilters = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectFilter())
 
     const index = dtreeStore.currentStepIndex
     const currentGroup = dtreeStore.stepData[index].groups

@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { GeneRegionContent } from './gene-region-content'
@@ -17,8 +16,6 @@ export const ModalSelectGeneRegion = observer(
     useEffect(() => {
       return () => dtreeStore.resetStatFuncData()
     }, [])
-
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectGeneRegion())
 
     const currentStepIndex = dtreeStore.currentStepIndex
 

@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { AllNotModalMods } from './all-not-modal-mods'
@@ -16,8 +15,6 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectCompoundHet = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalSelectCompoundHet())
 
     const currentStepIndex = dtreeStore.currentStepIndex
 

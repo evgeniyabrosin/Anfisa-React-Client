@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
@@ -18,8 +17,6 @@ export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
 export const ModalEditCustomInheritanceMode = observer(
   (): ReactElement => {
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalEditCustomInheritanceMode())
 
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
