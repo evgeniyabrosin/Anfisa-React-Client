@@ -4,7 +4,6 @@ import dtreeStore from '@store/dtree'
 
 export const fetchStatunitsAsync = async (
   statList: any[],
-  requestId: string,
   stepIndex: string,
 ) => {
   const incompletePropertyList: string[] = []
@@ -15,9 +14,15 @@ export const fetchStatunitsAsync = async (
     }
   })
 
-  if (incompletePropertyList.length === 0) return
+  if (incompletePropertyList.length === 0) {
+    dtreeStore.setIsStatRecieved(true)
+    dtreeStore.clearStatRequestId()
 
-  // get no from store or from args
+    return
+  }
+
+  const requestId = dtreeStore.statRequestId
+
   const body = new URLSearchParams({
     ds: datasetStore.datasetName,
     no: stepIndex,
@@ -56,5 +61,5 @@ export const fetchStatunitsAsync = async (
 
   dtreeStore.setDtreeStat(changedDtreeStat)
 
-  fetchStatunitsAsync(newStatList, requestId, stepIndex)
+  fetchStatunitsAsync(newStatList, stepIndex)
 }

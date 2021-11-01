@@ -48,6 +48,8 @@ class DtreeStore {
 
   dtreeStat: DtreeStatType = {}
   statAmount: number[] = []
+  isStatRecieved = false
+  statRequestId = ''
 
   selectedGroups: any = []
   selectedFilters: string[] = []
@@ -149,8 +151,9 @@ class DtreeStore {
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
     this.setIsFiltersLoading()
+    this.setIsStatRecieved(false)
+    this.clearStatRequestId()
 
-    // use tm: "0" for xl dataset
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       no,
@@ -169,15 +172,14 @@ class DtreeStore {
     const result = await response.json()
 
     const statList = result['stat-list']
-    const requestId = result['rq-id']
-
-    fetchStatunitsAsync(statList, requestId, no)
 
     runInAction(() => {
       this.dtreeStat = result
       this.statAmount = get(result, 'filtered-counts', [])
       this.filteredCounts = this.statAmount[1]
+      this.statRequestId = result['rq-id']
     })
+    fetchStatunitsAsync(statList, no)
     this.resetIsFiltersLoading()
   }
 
@@ -910,6 +912,18 @@ class DtreeStore {
   setDtreeStat(changedDtreeStat: any) {
     runInAction(() => {
       this.dtreeStat = changedDtreeStat
+    })
+  }
+
+  setIsStatRecieved(isRecieved: boolean) {
+    runInAction(() => {
+      this.isStatRecieved = isRecieved
+    })
+  }
+
+  clearStatRequestId() {
+    runInAction(() => {
+      this.statRequestId = ''
     })
   }
 }
