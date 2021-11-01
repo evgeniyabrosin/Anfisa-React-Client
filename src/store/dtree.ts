@@ -35,6 +35,7 @@ interface IRequestData {
 class DtreeStore {
   dtreeList: any
   dtree: any
+  isCountsReceived = false
   dtreeCode = ''
   startDtreeCode = ''
   activeTree = ''
@@ -48,7 +49,6 @@ class DtreeStore {
 
   dtreeStat: DtreeStatType = {}
   statAmount: number[] = []
-  isStatRecieved = false
   statRequestId = ''
 
   selectedGroups: any = []
@@ -151,7 +151,6 @@ class DtreeStore {
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
     this.setIsFiltersLoading()
-    this.setIsStatRecieved(false)
     this.clearStatRequestId()
 
     const body = new URLSearchParams({
@@ -235,6 +234,8 @@ class DtreeStore {
   }
 
   async fetchDtreeSetAsync(body: URLSearchParams) {
+    this.setIsCountsReceived(false)
+
     const response = await fetch(getApiUrl(`dtree_set`), {
       method: 'POST',
       headers: {
@@ -244,7 +245,6 @@ class DtreeStore {
     })
 
     const result = await response.json()
-
     const newCode = result.code
 
     runInAction(() => {
@@ -915,15 +915,15 @@ class DtreeStore {
     })
   }
 
-  setIsStatRecieved(isRecieved: boolean) {
-    runInAction(() => {
-      this.isStatRecieved = isRecieved
-    })
-  }
-
   clearStatRequestId() {
     runInAction(() => {
       this.statRequestId = ''
+    })
+  }
+
+  setIsCountsReceived(isReceived: boolean) {
+    runInAction(() => {
+      this.isCountsReceived = isReceived
     })
   }
 }

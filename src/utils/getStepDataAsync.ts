@@ -10,12 +10,13 @@ export const getStepDataAsync = async (): Promise<IStepData[]> => {
   const isXlDataset = dtreeStore.dtree.kind === 'xl'
 
   if (isXlDataset) {
-    const requestId = dtreeStore.dtree['rq-id']
     const code = dtreeStore.dtreeCode
     const stepCount = pointCountsFromDtreeSet.length
 
-    fetchDtreeCountsAsync(code, requestId, stepCount)
+    fetchDtreeCountsAsync(code, stepCount)
   } else {
+    dtreeStore.setIsCountsReceived(true)
+
     const pointCounts = pointCountsFromDtreeSet.map(element =>
       element.filter((_element, index) => index === 0),
     )

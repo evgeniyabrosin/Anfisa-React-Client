@@ -4,13 +4,12 @@ import dtreeStore from '@store/dtree'
 
 export const fetchDtreeCountsAsync = async (
   code: string,
-  requestId: string,
   stepCount: number,
   startIndex = 0,
-  // eslint-disable-next-line max-params
 ) => {
   const points = [...new Array(stepCount - startIndex).keys()]
   const correctedPoints = points.map((element: number) => element + startIndex)
+  const requestId = dtreeStore.dtree['rq-id']
 
   const body = new URLSearchParams({
     ds: datasetStore.datasetName,
@@ -36,10 +35,14 @@ export const fetchDtreeCountsAsync = async (
 
   const filteredPointCounts = pointCounts.filter(element => element !== null)
 
-  if (pointCounts.length === filteredPointCounts.length) return
+  if (pointCounts.length === filteredPointCounts.length) {
+    dtreeStore.setIsCountsReceived(true)
+
+    return
+  }
 
   const lastDownloadedIndex = filteredPointCounts.length - 1
   const newStartIndex = lastDownloadedIndex + 1
 
-  fetchDtreeCountsAsync(code, requestId, stepCount, newStartIndex)
+  fetchDtreeCountsAsync(code, stepCount, newStartIndex)
 }

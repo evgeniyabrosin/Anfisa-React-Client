@@ -15,7 +15,6 @@ export const fetchStatunitsAsync = async (
   })
 
   if (incompletePropertyList.length === 0) {
-    dtreeStore.setIsStatRecieved(true)
     dtreeStore.clearStatRequestId()
 
     return
