@@ -139,7 +139,7 @@ class OperationsStore {
       code: dtreeStore.dtreeCode,
     })
 
-    const compareValue = datasetStore.statAmount[0]
+    const compareValue = dtreeStore.acceptedVariants
 
     if (!(compareValue > 0 && compareValue < 9000)) {
       this.setIsCreationOver()
