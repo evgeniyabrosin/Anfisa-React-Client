@@ -99,6 +99,8 @@ export const ModalEditCompoundRequest = observer(
       if (type === 'approx') {
         if (approx === null) return 'transcript'
 
+        if (!approx) return 'transcript'
+
         return `${approx}`
       }
 
@@ -117,6 +119,8 @@ export const ModalEditCompoundRequest = observer(
       if (type === 'approx') {
         setApproxCondition(value)
 
+        const approx = value === 'transcript' ? null : `"${value}"`
+
         const request = getFuncParams(groupName, {
           approx: value,
           request: requestCondition,
@@ -124,7 +128,7 @@ export const ModalEditCompoundRequest = observer(
           .slice(10)
           .replace(/\s+/g, '')
 
-        const params = `{"approx":"${value}","state":${
+        const params = `{"approx":${approx},"state":${
           stateCondition !== '-current-' ? `"${stateCondition}"` : null
         },"request":${request}}`
 
@@ -136,7 +140,10 @@ export const ModalEditCompoundRequest = observer(
       if (type === 'state') {
         setStateCondition(value)
 
-        const params = `{"approx":"${approxCondition}","state":${
+        const approx =
+          approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
+        const params = `{"approx":${approx},"state":${
           value !== '-current-' ? `"${value}"` : null
         }}`
 
@@ -257,6 +264,9 @@ export const ModalEditCompoundRequest = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
       const requestString = getFuncParams(
         groupName,
         currentGroup[currentGroup.length - 1],
@@ -264,7 +274,7 @@ export const ModalEditCompoundRequest = observer(
         .slice(10)
         .replace(/\s+/g, '')
 
-      const params = `{"approx":"${approxCondition}","state":${
+      const params = `{"approx":${approx},"state":${
         stateCondition === '-current-' || !stateCondition
           ? null
           : `"${stateCondition}"`
@@ -286,8 +296,11 @@ export const ModalEditCompoundRequest = observer(
     }
 
     const handleSaveChanges = () => {
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
       const params: IParams = {
-        approx: approxCondition,
+        approx,
       }
 
       if (stateCondition) {

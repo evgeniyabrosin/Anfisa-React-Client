@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getSortedArray } from '@utils/getSortedArray'
@@ -46,7 +47,9 @@ export const ModalSelectCustomInheritanceMode = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
+      const params = datasetStore.isXL
+        ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}`
+        : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 

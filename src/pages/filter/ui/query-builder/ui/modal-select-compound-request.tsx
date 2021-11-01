@@ -90,7 +90,9 @@ export const ModalSelectCompoundRequest = observer(
           .slice(10)
           .replace(/\s+/g, '')
 
-        const params = `{"approx":"${value}","state":${
+        const approx = value === 'transcript' ? null : `"${value}"`
+
+        const params = `{"approx":${approx},"state":${
           stateCondition !== '-current-' ? `"${stateCondition}"` : null
         },"request":${request}}`
 
@@ -102,7 +104,10 @@ export const ModalSelectCompoundRequest = observer(
       if (type === 'state') {
         setStateCondition(value)
 
-        const params = `{"approx":"${approxCondition}","state":${
+        const approx =
+          approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
+        const params = `{"approx":${approx},"state":${
           value !== '-current-' ? `"${value}"` : null
         }}`
 
@@ -235,7 +240,10 @@ export const ModalSelectCompoundRequest = observer(
         .slice(10)
         .replace(/\s+/g, '')
 
-      const params = `{"approx":"${approxCondition}","state":${
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
+      const params = `{"approx":${approx},"state":${
         stateCondition === '-current-' || !stateCondition
           ? null
           : `"${stateCondition}"`
@@ -257,8 +265,11 @@ export const ModalSelectCompoundRequest = observer(
     }
 
     const handleAddAttribute = (action: ActionType) => {
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
+
       const params: IParams = {
-        approx: approxCondition,
+        approx,
       }
 
       if (stateCondition) {
