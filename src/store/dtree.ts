@@ -299,7 +299,7 @@ class DtreeStore {
 
     if (stepData[0] && stepData[0].groups && this.algorithmFilterValue) {
       stepData = stepData.filter((item, currNo: number) =>
-        item.groups.map((subItem: any[]) => {
+        item.groups.find((subItem: any[]) => {
           if (
             subItem[1]
               .toLocaleLowerCase()
@@ -319,6 +319,7 @@ class DtreeStore {
       this.stepData = [
         {
           step: 1,
+          groups: [],
           excluded: true,
           isActive: true,
           isReturnedVariantsActive: false,
@@ -338,6 +339,7 @@ class DtreeStore {
         ...this.stepData,
         {
           step: this.stepData.length + 1,
+          groups: [],
           excluded: true,
           isActive: true,
           isReturnedVariantsActive: false,

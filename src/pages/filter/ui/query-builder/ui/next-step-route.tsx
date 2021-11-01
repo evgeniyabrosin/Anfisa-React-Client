@@ -166,7 +166,7 @@ export const NextStepRoute = observer(
             className={cn('bg-blue-bright', { 'mt-4': index === 0 })}
           />
 
-          {isExpanded && currentStep.groups && (
+          {isExpanded && currentStep.groups && currentStep.groups.length > 0 && (
             <Fragment>
               <ExcludeTurn isIncluded={isIncluded}>
                 <div
