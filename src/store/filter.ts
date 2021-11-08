@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable } from 'mobx'
 
-import { StatListType } from '@declarations'
+import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
@@ -146,7 +146,7 @@ class FilterStore {
       body,
     })
 
-    const result = await response.json()
+    const result: IStatFuncData = await response.json()
 
     return result
   }

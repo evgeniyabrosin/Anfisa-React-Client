@@ -22,11 +22,11 @@ export const InheritanceMode = observer(
         param || {},
       )
 
-      setVariants(
-        statFuncData?.variants?.filter(
-          (item: [string, number]) => item[1] > 0,
-        ) || [],
+      const filteredVaraints = statFuncData?.variants?.filter(
+        item => item[1] > 0,
       )
+
+      setVariants(filteredVaraints || ([] as any))
     }
 
     const handleChangeAsync = async (
@@ -90,7 +90,7 @@ export const InheritanceMode = observer(
 
         <div className="flex items-center justify-between">
           <p className="text-14 leading-14px text-grey-blue">
-            {values.variants.length} Selected
+            {values.variants?.length} Selected
           </p>
 
           <p

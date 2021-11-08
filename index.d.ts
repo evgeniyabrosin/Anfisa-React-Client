@@ -287,3 +287,24 @@ export type FilterCountsType = number | '...' | null
 export type ActionType = 'INSERT' | 'REPLACE' | 'JOIN-AND' | 'JOIN-OR'
 
 export type AttributeType = 'enum' | 'numeric' | 'func'
+
+export interface IStatFuncData {
+  name: string
+  kind: AttributeType
+  vgroup: string
+  title?: string
+  'sub-kind'?: string
+  'render-mode'?: string
+  tooltip?: string
+  incomplete?: true
+  detailed?: true
+  classes: any[]
+  min?: number
+  max?: number
+  counts?: number[]
+  histogram?: any[]
+  variants?: any[]
+  err?: string
+  'rq-id'?: string
+  no?: string
+}
