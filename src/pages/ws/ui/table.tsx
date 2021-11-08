@@ -25,7 +25,6 @@ interface PropsRow {
 
 const offsetSize = 2800
 const offsetSizeToLoad = (offsetSize / 100) * 60
-const filteredNo = toJS(datasetStore.filteredNo)
 
 export const isRowSelected = (
   rowIndex: number,
@@ -38,7 +37,6 @@ export const Table = observer(
   ({ columns, data }: Props): ReactElement => {
     const params = useParams()
     const [ref, setRef] = useState<any>(null)
-    const tabReport = toJS(datasetStore.tabReport)
 
     const defaultColumn = {
       width: variantStore.drawerVisible
