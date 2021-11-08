@@ -150,6 +150,14 @@ class FilterStore {
 
     return result
   }
+
+  resetData() {
+    this.method = FilterMethodEnum.DecisionTree
+    this.selectedGroupItem = {}
+    this.dtreeSet = {}
+    this.selectedFilters = {}
+    this.activePreset = ''
+  }
 }
 
 export default new FilterStore()

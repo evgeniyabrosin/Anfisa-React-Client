@@ -121,10 +121,13 @@ class ZoneStore {
   }
 
   resetAllSelectedItems() {
-    this.unselectAllGenes()
-    this.unselectAllGenesList()
-    this.unselectAllSamples()
-    this.unselectAllTags()
+    this.selectedGenes = []
+    this.selectedGenesList = []
+    this.selectedSamples = []
+    this.selectedTags = []
+    this.isFather = false
+    this.isMother = false
+    this.isProband = false
   }
 
   async fetchTagSelectAsync() {

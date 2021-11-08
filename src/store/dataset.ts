@@ -8,9 +8,7 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import dirinfoStore from './dirinfo'
-import zoneStore from './filterZone'
 import operations from './operations'
-import columnsStore from './wsColumns'
 
 const INCREASE_INDEX = 50
 
@@ -197,14 +195,7 @@ class DatasetStore {
 
   resetData() {
     this.datasetName = ''
-    this.indexTabReport = 0
-    this.indexFilteredNo = 0
-    this.tabReport = []
-    this.wsTags = {}
-    this.dsStat = {}
-    this.filteredNo = []
-    zoneStore.selectedTags = []
-    columnsStore.searchColumnValue = ''
+    this.zone = []
   }
 
   async initDatasetAsync(datasetName: string) {
