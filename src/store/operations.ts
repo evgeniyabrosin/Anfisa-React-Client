@@ -73,9 +73,12 @@ class OperationsStore {
     }
 
     if (datasetStore.zone.length > 0) {
-      const zone = `[["${
-        datasetStore.zone[0][0]
-      }",["${datasetStore.zone[0][1].toString().split(',').join('","')}"]]]`
+      const zoneParams = datasetStore.zone.map(
+        item =>
+          `["${item[0]}",["${item[1].toString().split(',').join('","')}"]]`,
+      )
+
+      const zone = `[${zoneParams}]`
 
       body.append('zone', zone)
     }
