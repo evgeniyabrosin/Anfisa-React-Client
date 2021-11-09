@@ -72,6 +72,14 @@ export const QueryBuilderGroups = observer(
       dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
     }
 
+    const activeStep = dtreeStore.stepData.find(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
+
+    const returnedVariantsPrompt = activeStep?.excluded
+      ? ` (${t('dtree.excludedVariants')})`
+      : ` (${t('dtree.includedVariants')})`
+
     return (
       <Fragment>
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -85,7 +93,8 @@ export const QueryBuilderGroups = observer(
 
           <div className="flex items-center justify-between w-full h-8 mb-2">
             <div className="text-blue-bright font-medium">
-              {t('dtree.showingResultsForStep')} {dtreeStore.stepData.length}
+              {t('dtree.showingResultsForStep')} {activeStep?.step}
+              {activeStep?.isReturnedVariantsActive && returnedVariantsPrompt}
             </div>
 
             <Button

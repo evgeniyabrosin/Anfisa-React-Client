@@ -117,6 +117,8 @@ export const en = {
     results: 'Results',
     tree: 'Tree',
     showingResultsForStep: 'Showing results for step',
+    excludedVariants: 'Excluded Variants',
+    includedVariants: 'Included Variants',
     logScale: 'Log scale',
     step: 'Step',
     include: 'Include',

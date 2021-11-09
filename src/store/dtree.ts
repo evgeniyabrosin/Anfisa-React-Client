@@ -12,7 +12,7 @@ import { getStepDataAsync } from '@utils/getStepDataAsync'
 import datasetStore from './dataset'
 
 export type IStepData = {
-  step?: number
+  step: number
   groups?: any
   negate?: boolean
   excluded: boolean
