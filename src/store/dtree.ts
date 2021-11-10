@@ -192,8 +192,7 @@ class DtreeStore {
     this.dtreeStat['stat-list'] &&
       this.dtreeStat['stat-list'].forEach((item: StatList) => {
         if (
-          (item.title || item.name) &&
-          (item.title || item.name)
+          item.name
             .toLocaleLowerCase()
             .includes(this.filterValue.toLocaleLowerCase())
         ) {
