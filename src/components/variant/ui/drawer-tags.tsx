@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import filterStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
@@ -68,11 +67,12 @@ const DrawerTagModal = observer(({ close }: any) => {
       })
     } else {
       variantStore.updateGeneralTags(customTag)
+      variantStore.updateTagsWithNotes([customTag, true])
       setCustomTag('')
     }
   }
 
-  const handleSaveTags = () => {
+  const handleSaveTagsAsync = async () => {
     let params = ''
 
     Object.entries(variantStore.tagsWithNotes).map((tagData, index) => {
@@ -85,10 +85,10 @@ const DrawerTagModal = observer(({ close }: any) => {
       }
     })
 
-    variantStore.fetchSelectedTagsAsync(params)
-    filterStore.fetchTagSelectAsync()
-    datasetStore.fetchWsTagsAsync()
     datasetStore.fetchWsListAsync()
+    variantStore.fetchSelectedTagsAsync(params)
+    datasetStore.fetchWsTagsAsync()
+
     close()
   }
 
@@ -118,7 +118,10 @@ const DrawerTagModal = observer(({ close }: any) => {
         {tags.map(tag => (
           <div key={tag} className="flex items-center mb-4">
             <Checkbox
-              checked={checkedTags.includes(tag)}
+              checked={
+                checkedTags.includes(tag) ||
+                Object.keys(variantStore.tagsWithNotes).includes(tag)
+              }
               className="w-4 h-4"
               onChange={e => handleCheck(e.target.checked, tag)}
             />
@@ -164,7 +167,7 @@ const DrawerTagModal = observer(({ close }: any) => {
           text="Save tags"
           hasBackground={false}
           className="text-black hover:bg-blue-bright hover:text-white"
-          onClick={handleSaveTags}
+          onClick={handleSaveTagsAsync}
         />
       </div>
     </div>
