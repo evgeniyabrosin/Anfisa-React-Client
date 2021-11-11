@@ -41,5 +41,6 @@ export const editStepAttribute = (
     JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
   )
 
+  dtreeStore.resetLocalDtreeCode()
   dtreeStore.fetchDtreeSetAsync(body)
 }

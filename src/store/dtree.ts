@@ -40,6 +40,7 @@ class DtreeStore {
   isCountsReceived = false
   dtreeCode = ''
   startDtreeCode = ''
+  localDtreeCode = ''
   activeTree = ''
   currentDtreeName = ''
   previousDtreeName = ''
@@ -370,6 +371,8 @@ class DtreeStore {
         },
       ]
     }
+
+    this.resetLocalDtreeCode()
   }
 
   insertStep(type: string, index: number) {
@@ -414,6 +417,7 @@ class DtreeStore {
     this.stepData.map((item, currNo: number) => {
       item.step = currNo + 1
     })
+    this.resetLocalDtreeCode()
   }
 
   duplicateStep(index: number) {
@@ -424,6 +428,7 @@ class DtreeStore {
     this.stepData.map((item, currNo: number) => {
       item.step = currNo + 1
     })
+    this.resetLocalDtreeCode()
   }
 
   removeStep(index: number) {
@@ -433,6 +438,8 @@ class DtreeStore {
       item.step = currNo + 1
     })
     makeStepActive(this.stepData.length - 1)
+
+    this.resetLocalDtreeCode()
   }
 
   negateStep(index: number) {
@@ -441,19 +448,24 @@ class DtreeStore {
     } else {
       this.stepData[index].negate = !this.stepData[index].negate
     }
+
+    this.resetLocalDtreeCode()
   }
 
   addSelectedGroup(group: any) {
     this.selectedGroups = []
     this.selectedGroups = group
+    this.resetLocalDtreeCode()
   }
 
   addSelectedFilter(filter: string) {
     this.selectedFilters = [...this.selectedFilters, filter]
+    this.resetLocalDtreeCode()
   }
 
   removeSelectedFilter(filter: string) {
     this.selectedFilters = this.selectedFilters.filter(item => item !== filter)
+    this.resetLocalDtreeCode()
   }
 
   resetSelectedFilters() {
@@ -752,6 +764,14 @@ class DtreeStore {
     this.startDtreeCode = this.dtreeCode
   }
 
+  setLocalDtreeCode(code: string) {
+    this.localDtreeCode = code
+  }
+
+  resetLocalDtreeCode() {
+    this.localDtreeCode = ''
+  }
+
   // 3.4 Other UI/UX modals
 
   openModalSaveDataset() {
@@ -885,6 +905,7 @@ class DtreeStore {
 
   toggleIsExcluded(index: number) {
     this.stepData[index].excluded = !this.stepData[index].excluded
+    this.resetLocalDtreeCode()
   }
 
   setStepActive = (

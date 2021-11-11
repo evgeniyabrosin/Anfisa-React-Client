@@ -1,4 +1,4 @@
-import { ReactElement, useRef, useState } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -45,9 +45,15 @@ export const ModalTextEditor = observer(
 
     const [code, setCode] = useState(dtreeStore.dtreeCode)
 
-    if (!dtreeStore.startDtreeCode) {
-      dtreeStore.setStartDtreeCode()
-    }
+    useEffect(() => {
+      if (dtreeStore.localDtreeCode) {
+        dtreeStore.setNextDtreeCode(dtreeStore.localDtreeCode)
+        setCode(dtreeStore.localDtreeCode)
+        dtreeStore.resetLocalDtreeCode()
+      } else {
+        dtreeStore.setStartDtreeCode()
+      }
+    }, [])
 
     const [theme, setTheme] = useState('light')
 
@@ -100,7 +106,10 @@ export const ModalTextEditor = observer(
     }
 
     const handleDone = () => {
-      dtreeStore.setNextDtreeCode(code)
+      if (code !== dtreeStore.dtreeCode) {
+        dtreeStore.setLocalDtreeCode(code)
+      }
+
       dtreeStore.closeModalTextEditor()
     }
 

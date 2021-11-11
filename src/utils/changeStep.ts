@@ -23,5 +23,6 @@ export const changeStep = (
 
   body.append('instr', JSON.stringify(['INSTR', action, location]))
 
+  dtreeStore.resetLocalDtreeCode()
   dtreeStore.fetchDtreeSetAsync(body)
 }

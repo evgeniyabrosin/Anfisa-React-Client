@@ -36,5 +36,6 @@ export const addAttributeToStep = (
 
   body.append('instr', JSON.stringify(instruction))
 
+  dtreeStore.resetLocalDtreeCode()
   dtreeStore.fetchDtreeSetAsync(body)
 }
