@@ -33,6 +33,7 @@ export const en = {
     pickDataset: 'Pick a dataset',
     table: 'Main Table',
     filter: 'Decision Tree Panel',
+    refiner: 'Filter Refiner',
   },
   ds: {
     preset: 'Preset',

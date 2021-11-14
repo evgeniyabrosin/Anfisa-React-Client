@@ -17,6 +17,7 @@ export const RouterBase = (): ReactElement => (
       <Route path={Routes.Root} exact component={MainPage} />
       <Route path={Routes.WS} exact component={WSPage} />
       <Route path={Routes.Filter} exact component={FilterPage} />
+      <Route path={Routes.Refiner} exact component={FilterPage} />
     </Switch>
   </Router>
 )

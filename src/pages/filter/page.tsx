@@ -1,4 +1,5 @@
-import { Fragment, ReactElement, useEffect } from 'react'
+import { Fragment, ReactElement, useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -11,6 +12,7 @@ import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import { Routes } from '@router/routes.enum'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
@@ -39,9 +41,12 @@ import { TableModal } from './ui/TableModal'
 
 export const FilterPage = observer(
   (): ReactElement => {
+    const history = useHistory()
+
     useDatasetName()
     const params = useParams()
     const dsName = params.get('ds') || ''
+    const [fetched, setInit] = useState(false)
 
     useEffect(() => {
       const initAsync = async () => {
@@ -60,10 +65,16 @@ export const FilterPage = observer(
         await datasetStore.initDatasetAsync(dsName)
         await dirinfoStore.fetchDsinfoAsync(dsName)
 
-        await dtreeStore.fetchDtreeSetAsync(body)
+        if (history.location.pathname === Routes.Refiner) {
+          filterStore.setMethod(FilterMethodEnum.Refiner)
+        } else {
+          await dtreeStore.fetchDtreeSetAsync(body)
+        }
       }
 
       initAsync()
+        .then(() => setInit(true))
+        .catch(() => null)
 
       return () => {
         dtreeStore.resetFilterChangeIndicator()
@@ -151,7 +162,7 @@ export const FilterPage = observer(
             </div>
           </Header>
           <FilterControl />
-          {filterStore.method === FilterMethodEnum.DecisionTree && (
+          {filterStore.method === FilterMethodEnum.DecisionTree && fetched && (
             <QueryBuilder />
           )}
           {filterStore.method === FilterMethodEnum.Refiner && <FilterRefiner />}
