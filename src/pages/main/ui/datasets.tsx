@@ -5,6 +5,7 @@ import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { FilterDatasetDataCy } from '@components/data-testid/dataset-page.cy'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 
@@ -27,19 +28,21 @@ export const Datasets = (): ReactElement => {
         className={cn('flex justify-between mb-3', isOpen ? 'pr-4' : 'pr-2')}
       >
         {isOpen && (
-          <div className="font-bold text-white text-20 leading-6">
+          <div
+            data-testid={FilterDatasetDataCy.leftPanelHeader}
+            className="font-bold text-white text-20 leading-6"
+          >
             {t('home.datasets')}
           </div>
         )}
-
         <Button
+          dataTestId={FilterDatasetDataCy.leftPanelArrowButton}
           size="sm"
           icon={<Icon name="Arrow" />}
           className={cn('bg-blue-dark transform', { 'rotate-180': !isOpen })}
           onClick={isOpen ? close : open}
         />
       </div>
-
       {isOpen && (
         <React.Fragment>
           <FilterSortDatasets />

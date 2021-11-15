@@ -12,6 +12,7 @@ export interface ButtonProps {
   prepend?: ReactElement
   icon?: ReactElement
   refEl?: any
+  dataTestId?: string
 }
 
 export const Button = ({
@@ -25,6 +26,7 @@ export const Button = ({
   prepend,
   icon,
   refEl,
+  dataTestId,
 }: ButtonProps): ReactElement => {
   let padding = ''
   const rounding = icon ? 'rounded' : 'rounded-full'
@@ -65,6 +67,7 @@ export const Button = ({
 
   return (
     <button
+      data-testid={dataTestId}
       disabled={disabled}
       className={cnButton}
       ref={refEl}
