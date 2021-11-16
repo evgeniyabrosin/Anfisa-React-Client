@@ -65,7 +65,7 @@ export const InheritanceMode = observer(
           </p>
 
           <p
-            className="text-12 leading-14px text-grey-blue cursor-pointer"
+            className="text-12 text-blue-bright leading-14px cursor-pointer"
             onClick={() => {
               setFieldValue('variants', [])
               setFieldValue('problemGroups', [])
