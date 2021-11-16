@@ -1,26 +1,14 @@
 export class BasePage {
-  visit(url?: string | null, username?: string | null, password?: string | null): Cypress.Chainable<Cypress.AUTWindow> {
-    const defaultUrl = url ?? Cypress.env("host");
+  visit(baseUrl?: string | null, username?: string | null, password?: string | null): Cypress.Chainable<Cypress.AUTWindow> {
+    const defaultUrl = baseUrl ?? Cypress.env("baseUrl");
 
     return cy.visit(defaultUrl, {
       auth: {
-        username: username ?? Cypress.env("username"),
-        password: password ?? Cypress.env("password"),
+        username: username ?? Cypress.env("basic_username"),
+        password: password ?? Cypress.env("basic_password"),
       },
       failOnStatusCode: false
     }
     );
-  }
-
-  castomCredsVisit(url: string, usrname: string, pswrd: string): Cypress.Chainable<Cypress.AUTWindow> {
-    const defaultUrl = url ?? "";
-    const login = usrname;
-    const pass = pswrd
-
-    return cy.visit(defaultUrl, {auth: {
-      username: login,
-      password: pass
-    },
-    })
   }
 }

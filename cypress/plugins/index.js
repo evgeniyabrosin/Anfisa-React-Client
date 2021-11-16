@@ -12,11 +12,13 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-/**
- * @type {Cypress.PluginConfig}
- */
-// eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+const dotenv = require('dotenv')
+
+export default (on, config) => {
+  dotenv.config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+
+  config.env.basic_username = process.env.BASIC_AUTH_USERNAME
+  config.env.basic_password = process.env.BASIC_AUTH_PASSWORD
+
+  return config
 }
