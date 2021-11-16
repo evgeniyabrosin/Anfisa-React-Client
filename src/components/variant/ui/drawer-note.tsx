@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import filterStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -56,9 +55,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
     })
 
     variantStore.fetchSelectedTagsAsync(params)
-    filterStore.fetchTagSelectAsync()
     datasetStore.fetchWsTagsAsync()
-    datasetStore.fetchWsListAsync()
   }
 
   const handleSaveNoteAsync = async () => {

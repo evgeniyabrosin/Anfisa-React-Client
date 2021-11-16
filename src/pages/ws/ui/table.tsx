@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useState } from 'react'
+import { ReactElement, useCallback, useEffect } from 'react'
 import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import cn from 'classnames'
@@ -36,7 +36,6 @@ export const isRowSelected = (
 export const Table = observer(
   ({ columns, data }: Props): ReactElement => {
     const params = useParams()
-    const [ref, setRef] = useState<any>(null)
 
     const defaultColumn = {
       width: variantStore.drawerVisible
@@ -46,10 +45,11 @@ export const Table = observer(
             document.body.clientWidth) / 8,
     }
 
-    useEffect(() => {
-      ref?.scrollToItem(variantStore.index)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ref, variantStore.index])
+    // TODO: dont delete strings below
+    // useEffect(() => {
+    //   ref?.scrollToItem(variantStore.index)
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [ref, variantStore.index])
 
     useEffect(() => {
       const handleResize = debounce(() => {
@@ -99,6 +99,7 @@ export const Table = observer(
       }
 
       variantStore.setIndex(idx)
+      variantStore.setChoosedIndex(index)
 
       variantStore.setIsActiveVariant()
 
@@ -113,7 +114,7 @@ export const Table = observer(
     useEffect(() => {
       variantStore.isActiveVariant &&
         handleOpenVariant({
-          index: 0,
+          index: variantStore.choosedIndex || 0,
         })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -224,7 +225,6 @@ export const Table = observer(
         {toJS(datasetStore.tabReport).length > 0 && (
           <div {...getTableBodyProps()} className="text-12 tbody">
             <FixedSizeList
-              ref={setRef}
               height={
                 (window.innerHeight ||
                   document.documentElement.clientHeight ||

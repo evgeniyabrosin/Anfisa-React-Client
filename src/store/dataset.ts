@@ -7,6 +7,7 @@ import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
+import variantStore from '@store/variant'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -380,7 +381,7 @@ class DatasetStore {
     if (this.isXL) return
 
     const response = await fetch(
-      getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${0}`),
+      getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${variantStore.index}`),
       {
         method: 'POST',
       },

@@ -10,6 +10,7 @@ export class VariantStore {
   variant: ReccntCommon[] = []
   recordsDisplayConfig: any = {}
   index = 0
+  choosedIndex = 0
   dsName = ''
   generalTags: string[] = []
   optionalTags: string[] = []
@@ -96,15 +97,13 @@ export class VariantStore {
   }
 
   setIndex(index: number) {
-    const oldIndex = this.index
-
     this.index = index
 
-    if (oldIndex !== index) {
-      this.fetchVarinatInfoAsync()
-    }
-
     this.fetchVarinatInfoAsync()
+  }
+
+  setChoosedIndex(index: number) {
+    this.choosedIndex = index
   }
 
   setDsName(dsName: string) {
