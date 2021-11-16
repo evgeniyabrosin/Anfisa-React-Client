@@ -146,7 +146,7 @@ export const QueryBuilderSubgroupChart: FC<Props> = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [variants])
+  }, [])
 
   return (
     <div className="rounded-md bg-blue-secondary p-2 mr-5">

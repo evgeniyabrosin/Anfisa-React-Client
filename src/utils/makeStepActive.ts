@@ -24,8 +24,5 @@ export const makeStepActive = (
 
   const code = dtreeStore.dtreeCode
 
-  dtreeStore
-    .fetchDtreeStatAsync(code, String(indexForApi))
-    .then(() => dtreeStore.setQueryBuilderRenderKey(Date.now()))
-    .catch(() => null)
+  dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
 }

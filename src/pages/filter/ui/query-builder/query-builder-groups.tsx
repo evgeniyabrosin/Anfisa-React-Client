@@ -106,16 +106,13 @@ export const QueryBuilderGroups = observer(
             />
           </div>
 
-          <div
-            className="h-full overflow-y-auto"
-            key={dtreeStore.queryBuilderRenderKey}
-          >
+          <div className="h-full overflow-y-auto">
             <DeferRender chunkSize={chunkSize} renderId={decrement}>
               {groupNames.map((groupName, index) => (
                 <QueryBuilderSubgroup
                   groupName={groupName}
                   subGroupData={subGroupData[index]}
-                  key={groupName}
+                  key={groupName + dtreeStore.queryBuilderRenderKey}
                   changeIndicator={dtreeStore.filterChangeIndicator}
                   isContentExpanded={dtreeStore.isFilterContentExpanded}
                 />
