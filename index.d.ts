@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-let requestIdleCallback = window.requestIdleCallback
+const requestIdleCallback = window.requestIdleCallback
 
 export interface DsDistItem {
   name: string
@@ -233,8 +233,6 @@ export interface WsTagsI {
   filters: string[]
   'tags-state': number
 }
-
-export type WsTagsType = WsTagsI | Record<string, unknown>
 
 export interface ReccntRow {
   name: string

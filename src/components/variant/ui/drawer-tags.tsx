@@ -88,7 +88,6 @@ const DrawerTagModal = observer(({ close }: any) => {
     datasetStore.fetchWsListAsync()
     variantStore.fetchSelectedTagsAsync(params)
     datasetStore.fetchWsTagsAsync()
-
     close()
   }
 

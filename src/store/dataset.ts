@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, StatList, TabReportType, WsTagsType } from '@declarations'
+import { DsStatType, StatList, TabReportType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
@@ -17,7 +17,6 @@ class DatasetStore {
   dsStat: DsStatType = {}
   variantsAmount = 0
   tabReport: TabReportType[] = []
-  wsTags: WsTagsType = {}
   genes: string[] = []
   genesList: string[] = []
   tags: string[] = []
@@ -377,6 +376,23 @@ class DatasetStore {
     this.isFetchingMore = false
   }
 
+  async fetchTagSelectAsync() {
+    if (this.isXL) return
+
+    const response = await fetch(
+      getApiUrl(`tag_select?ds=${this.datasetName}`),
+      {
+        method: 'POST',
+      },
+    )
+
+    const result = await response.json()
+
+    runInAction(() => {
+      this.tags = [...result['tag-list']].filter(item => item !== '_note')
+    })
+  }
+
   async fetchWsTagsAsync() {
     if (this.isXL) return
 
@@ -390,7 +406,6 @@ class DatasetStore {
     const result = await response.json()
 
     runInAction(() => {
-      this.wsTags = result
       this.tags = [...result['op-tags'], ...result['check-tags']].filter(
         item => item !== '_note',
       )

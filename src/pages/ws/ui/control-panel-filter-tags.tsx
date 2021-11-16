@@ -47,7 +47,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
-    datasetStore.tags.length <= 0 && datasetStore.fetchWsTagsAsync()
+    datasetStore.fetchTagSelectAsync()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -59,8 +59,6 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
     datasetStore.fetchFilteredTabReportAsync()
 
     close()
-
-    // TODO: removed fetchTagSelectAsync()
   }
 
   return (
