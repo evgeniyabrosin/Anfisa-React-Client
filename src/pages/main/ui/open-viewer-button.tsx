@@ -10,8 +10,8 @@ import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { PopperButton } from '@components/popper-button'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
+import { PopperButton } from '@components/popper-button'
 
 interface PropsButton {
   isOpen?: boolean

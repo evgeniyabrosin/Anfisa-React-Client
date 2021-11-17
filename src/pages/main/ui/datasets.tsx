@@ -5,7 +5,7 @@ import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { FilterDatasetDataCy } from '@components/data-testid/dataset-page.cy'
+import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 
