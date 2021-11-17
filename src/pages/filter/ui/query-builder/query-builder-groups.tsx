@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { createEmptyStep } from '@utils/createEmptyStep'
 import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from './query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
@@ -29,24 +30,15 @@ export const QueryBuilderGroups = observer(
       }
     }
 
-    const checkIfCurrentStepIsEmpty = (): boolean => {
-      const currentActiveStepIndex = dtreeStore.stepData.findIndex(
-        step => step.isActive === true,
-      )
+    const activeStepIndex = dtreeStore.stepData.findIndex(
+      step => step.isActive || step.isReturnedVariantsActive,
+    )
 
-      if (dtreeStore.stepData[currentActiveStepIndex]) {
-        return !dtreeStore.stepData[currentActiveStepIndex].groups
-      }
-
-      return false
-    }
+    const activeStep = dtreeStore.stepData[activeStepIndex]
+    const isDisabled = activeStep.groups.length === 0 && !activeStep.isFinalStep
 
     const createStep = () => {
-      const currentActiveStepIndex = dtreeStore.stepData.findIndex(
-        step => step.isActive === true,
-      )
-
-      if (currentActiveStepIndex === -1) {
+      if (activeStepIndex === -1) {
         toast.error(t('dtree.chooseActiveStep'), {
           position: 'bottom-right',
           autoClose: 2000,
@@ -60,25 +52,20 @@ export const QueryBuilderGroups = observer(
         return
       }
 
-      const code = dtreeStore.dtreeCode
+      const currentStepIndex = activeStep.isFinalStep
+        ? activeStepIndex - 1
+        : activeStepIndex
 
-      dtreeStore.insertStep('AFTER', currentActiveStepIndex)
-
-      const indexForApi = dtreeStore.getStepIndexForApi(
-        currentActiveStepIndex + 1,
-      )
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+      createEmptyStep(currentStepIndex, 'AFTER')
     }
-
-    const activeStep = dtreeStore.stepData.find(
-      element => element.isActive || element.isReturnedVariantsActive,
-    )
 
     const returnedVariantsPrompt = activeStep?.excluded
       ? ` (${t('dtree.excludedVariants')})`
       : ` (${t('dtree.includedVariants')})`
+
+    const shouldShowVariantsPrompt = Boolean(
+      activeStep?.isReturnedVariantsActive || activeStep?.isFinalStep,
+    )
 
     return (
       <Fragment>
@@ -93,15 +80,19 @@ export const QueryBuilderGroups = observer(
 
           <div className="flex items-center justify-between w-full h-8 mb-2">
             <div className="text-blue-bright font-medium">
-              {t('dtree.showingResultsForStep')} {activeStep?.step}
-              {activeStep?.isReturnedVariantsActive && returnedVariantsPrompt}
+              {activeStep &&
+                (activeStep.isFinalStep
+                  ? t('dtree.showingResultsForFinalStep')
+                  : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
+
+              {shouldShowVariantsPrompt && returnedVariantsPrompt}
             </div>
 
             <Button
               className="hover:bg-blue-bright"
               text={t('dtree.addStep')}
               hasBackground={false}
-              disabled={checkIfCurrentStepIsEmpty()}
+              disabled={isDisabled}
               onClick={createStep}
             />
           </div>

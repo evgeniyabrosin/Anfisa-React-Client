@@ -2,6 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
+import { FinalStep } from './ui/final-step'
 import { NextStep } from './ui/next-step'
 
 export const QueryBuilderTreeView = observer(
@@ -9,10 +10,6 @@ export const QueryBuilderTreeView = observer(
     const poitnCounts = dtreeStore.pointCounts
 
     const stepData = dtreeStore.getStepData
-
-    const stepDataLength = dtreeStore.algorithmFilterValue
-      ? stepData.length
-      : dtreeStore.stepData.length
 
     useEffect(() => {
       dtreeStore.updatePointCounts(poitnCounts)
@@ -28,11 +25,12 @@ export const QueryBuilderTreeView = observer(
               index
             : index
 
-          return (
+          return element.isFinalStep ? (
+            <FinalStep key={key} index={index} />
+          ) : (
             <NextStep
               key={key}
               index={index}
-              length={stepDataLength}
               changeIndicator={dtreeStore.resultsChangeIndicator}
               isContentExpanded={dtreeStore.isResultsContentExpanded}
             />

@@ -1,6 +1,7 @@
 import { ActionType, AttributeType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import datasetStore from '../store/dataset'
+import { getCurrentStepIndexForApi } from './getCurrentStepIndexForApi'
 
 export const addAttributeToStep = (
   action: ActionType,
@@ -31,8 +32,8 @@ export const addAttributeToStep = (
 
   if (params) attribute.push(params)
 
-  const index = dtreeStore.getLastStepIndexForApi()
-  const instruction = ['POINT', action, index, attribute]
+  const stepIndexForApi = getCurrentStepIndexForApi()
+  const instruction = ['POINT', action, stepIndexForApi, attribute]
 
   body.append('instr', JSON.stringify(instruction))
 

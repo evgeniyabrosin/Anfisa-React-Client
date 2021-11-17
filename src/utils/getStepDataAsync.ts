@@ -58,9 +58,5 @@ export const getStepDataAsync = async (): Promise<IStepData[]> => {
     })
   })
 
-  if (localStepData[localStepData.length - 1]) {
-    localStepData[localStepData.length - 1].isActive = true
-  }
-
   return localStepData
 }

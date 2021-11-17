@@ -6,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { changeStep } from '@utils/changeStep'
+import { createEmptyStep } from '@utils/createEmptyStep'
 
 interface IProps {
   hideModal: () => void
@@ -18,16 +19,8 @@ export const ModalOperation = observer(
 
     useOutsideClick(ref, hideModal)
 
-    const code = dtreeStore.dtreeCode
-
     const createStep = (stepIndex: number, position: 'BEFORE' | 'AFTER') => {
-      dtreeStore.insertStep(position, stepIndex)
-
-      const currentIndex = position === 'BEFORE' ? stepIndex : stepIndex + 1
-      const indexForApi = dtreeStore.getStepIndexForApi(currentIndex)
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-      dtreeStore.fetchDtreeStatAsync(code, String(indexForApi))
+      createEmptyStep(stepIndex, position)
 
       hideModal()
     }
@@ -52,7 +45,7 @@ export const ModalOperation = observer(
     const currentStep = dtreeStore.stepData[index]
 
     const isFirstStep = index === 0
-    const isEmptyStep = !currentStep.groups
+    const isEmptyStep = currentStep.groups.length === 0
 
     const hasMoreThanOneAttribute = currentStep.groups?.length > 1
     const isNegateStep = currentStep.negate

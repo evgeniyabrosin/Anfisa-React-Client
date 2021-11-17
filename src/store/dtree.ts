@@ -8,6 +8,8 @@ import { getApiUrl } from '@core/get-api-url'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
+import { getCurrentStepIndexForApi } from '@utils/getCurrentStepIndexForApi'
+import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { makeStepActive } from '@utils/makeStepActive'
 import datasetStore from './dataset'
@@ -24,6 +26,7 @@ export type IStepData = {
   difference: FilterCountsType
   comment?: string
   condition?: string
+  isFinalStep?: boolean
 }
 
 interface IRequestData {
@@ -125,12 +128,12 @@ class DtreeStore {
   async drawDecesionTreeAsync() {
     const computedStepData = await getStepDataAsync()
 
-    const initialStepData = [
+    const initialStepData: IStepData[] = [
       {
         step: 1,
         groups: [],
         excluded: true,
-        isActive: true,
+        isActive: false,
         isReturnedVariantsActive: false,
         startFilterCounts: null,
         finishFilterCounts: null,
@@ -141,8 +144,22 @@ class DtreeStore {
     const newStepData =
       computedStepData.length === 0 ? initialStepData : computedStepData
 
+    const stepCodes = getDataFromCode(this.dtreeCode)
+
+    const finalStep = {
+      step: newStepData.length,
+      groups: [],
+      excluded: !stepCodes[stepCodes.length - 1]?.result,
+      isActive: true,
+      isReturnedVariantsActive: false,
+      startFilterCounts: null,
+      finishFilterCounts: null,
+      difference: null,
+      isFinalStep: true,
+    }
+
     runInAction(() => {
-      this.stepData = [...newStepData]
+      this.stepData = [...newStepData, finalStep]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
     })
 
@@ -211,25 +228,22 @@ class DtreeStore {
     return groups
   }
 
-  getLastStepIndexForApi = () => {
-    const lastIndexValue = Number(
-      this.dtreeStepIndices[this.currentStepIndex - 1],
-    )
-
-    const currentIndex = lastIndexValue + 2
-    const lastIndex = Number.isNaN(lastIndexValue) ? 0 : currentIndex
-
-    return lastIndex
-  }
-
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
-    const currentIndex = Number(indexes[index])
-    const stepIndex = indexes.length === 0 ? 0 : currentIndex
+    const isFinalStepIndex = index === indexes.length
 
-    const lastIndex = this.getLastStepIndexForApi()
+    const correctIndex = isFinalStepIndex
+      ? +indexes[index - 1] + 1
+      : +indexes[index]
 
-    const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
+    const isEmptyStep =
+      this.stepData[index].groups.length === 0 &&
+      !this.stepData[index].isFinalStep
+
+    const stepIndex = indexes.length === 0 ? 0 : correctIndex
+    const nextStepIndex = getCurrentStepIndexForApi(index)
+    const fixedIndex = Number.isNaN(stepIndex) ? nextStepIndex : stepIndex
+    const stepIndexForApi = isEmptyStep ? nextStepIndex : fixedIndex
 
     return stepIndexForApi
   }
@@ -318,7 +332,7 @@ class DtreeStore {
 
   get getStepData() {
     let stepData = cloneDeep(this.stepData)
-    let data: any[] = []
+    let data: IStepData[] = []
 
     if (stepData[0] && stepData[0].groups && this.algorithmFilterValue) {
       stepData = stepData.filter((item, currNo: number) =>
@@ -337,47 +351,10 @@ class DtreeStore {
     return this.algorithmFilterValue ? data : stepData
   }
 
-  addStep(index: number) {
-    if (this.stepData.length === 0) {
-      this.stepData = [
-        {
-          step: 1,
-          groups: [],
-          excluded: true,
-          isActive: true,
-          isReturnedVariantsActive: false,
-          startFilterCounts: 0,
-          finishFilterCounts: 0,
-          difference: 0,
-        },
-      ]
-    } else {
-      this.currentStepIndex = index + 1
-
-      const startFilterCounts = this.stepData[index].finishFilterCounts
-
-      this.stepData.map(step => (step.isActive = false))
-
-      this.stepData = [
-        ...this.stepData,
-        {
-          step: this.stepData.length + 1,
-          groups: [],
-          excluded: true,
-          isActive: true,
-          isReturnedVariantsActive: false,
-          startFilterCounts,
-          finishFilterCounts: startFilterCounts,
-          difference: 0,
-        },
-      ]
-    }
-
-    this.resetLocalDtreeCode()
-  }
-
   insertStep(type: string, index: number) {
-    this.stepData.forEach(element => {
+    const localStepData = [...this.stepData]
+
+    localStepData.forEach(element => {
       element.isActive = false
 
       return element
@@ -385,10 +362,10 @@ class DtreeStore {
 
     if (type === 'BEFORE') {
       const startFilterCounts =
-        this.stepData[index - 1]?.finishFilterCounts ??
-        this.stepData[index]?.finishFilterCounts
+        localStepData[index - 1]?.finishFilterCounts ??
+        localStepData[index]?.finishFilterCounts
 
-      this.stepData.splice(index, 0, {
+      localStepData.splice(index, 0, {
         step: index,
         groups: [],
         excluded: true,
@@ -401,9 +378,9 @@ class DtreeStore {
     } else {
       this.currentStepIndex = index + 1
 
-      const startFilterCounts = this.stepData[index].finishFilterCounts
+      const startFilterCounts = localStepData[index].finishFilterCounts
 
-      this.stepData.splice(index + 1, 0, {
+      localStepData.splice(index + 1, 0, {
         step: index,
         groups: [],
         excluded: true,
@@ -415,9 +392,14 @@ class DtreeStore {
       })
     }
 
-    this.stepData.map((item, currNo: number) => {
+    localStepData.forEach((item, currNo: number) => {
       item.step = currNo + 1
     })
+
+    runInAction(() => {
+      this.stepData = [...localStepData]
+    })
+
     this.resetLocalDtreeCode()
   }
 
@@ -820,31 +802,26 @@ class DtreeStore {
 
     localStepData.forEach((element, index) => {
       const startCountsIndex = this.getStepIndexForApi(index)
-
       const counts = toJS(pointCounts)
+      const indexes = toJS(this.dtreeStepIndices)
+      const isFinalStepIndex = index === indexes.length
+
+      const currentCount = isFinalStepIndex
+        ? counts[counts.length - 1]?.[0]
+        : counts[startCountsIndex]?.[0]
 
       const startCounts =
-        counts[startCountsIndex] === null
-          ? '...'
-          : counts[startCountsIndex]?.[0]
+        counts[startCountsIndex] === null ? '...' : currentCount
 
-      const diferenceCountsIndex = this.getStepIndexForApi(index) + 1
+      const diferenceCountsIndex = startCountsIndex + 1
 
       const diferenceCounts =
         counts[diferenceCountsIndex] === null
           ? '...'
           : counts[diferenceCountsIndex]?.[0]
 
-      const finishCountsIndex = this.getStepIndexForApi(index) + 2
-
-      const finishCounts =
-        counts[finishCountsIndex] === null
-          ? '...'
-          : counts[finishCountsIndex]?.[0]
-
       element.startFilterCounts = startCounts
       element.difference = diferenceCounts
-      element.finishFilterCounts = finishCounts
     })
 
     runInAction(() => {

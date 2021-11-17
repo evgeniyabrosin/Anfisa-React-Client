@@ -119,6 +119,7 @@ export const en = {
     results: 'Results',
     tree: 'Tree',
     showingResultsForStep: 'Showing results for step',
+    showingResultsForFinalStep: 'Showing results for Final Step',
     excludedVariants: 'Excluded Variants',
     includedVariants: 'Included Variants',
     logScale: 'Log scale',
@@ -186,5 +187,7 @@ export const en = {
     changesWontBeSaved: 'This will drop all your changes',
     acceptedVariants: 'Accepted variants: ',
     rejectedVariants: 'Rejected variants: ',
+    finalStep: 'Final Step',
+    initialStep: 'Initial Step',
   },
 }

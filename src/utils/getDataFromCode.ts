@@ -42,7 +42,6 @@ export const getDataFromCode = (code: string) => {
   })
 
   data.pop()
-  data.pop()
 
   return data
 }

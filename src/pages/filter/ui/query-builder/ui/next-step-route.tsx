@@ -28,17 +28,6 @@ const CircleStartThread = styled.div`
   border-radius: 1000px;
 `
 
-const CircleEndThread = styled.div`
-  position: absolute;
-  bottom: -1px;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100px;
-`
-
 const SubCircleThread = styled.div`
   width: 8px;
   height: 8px;
@@ -95,7 +84,6 @@ const DifferenceCounts = styled.span<{
 interface IProps {
   isExpanded: boolean
   index: number
-  length: number
   isIncluded: boolean
 }
 
@@ -106,7 +94,7 @@ export function getNumberWithCommas(value: FilterCountsType) {
 }
 
 export const NextStepRoute = observer(
-  ({ isExpanded, index, length, isIncluded }: IProps): ReactElement => {
+  ({ isExpanded, index, isIncluded }: IProps): ReactElement => {
     const [allVariants, transcribedVariants] = get(
       datasetStore,
       'statAmount',
@@ -114,7 +102,6 @@ export const NextStepRoute = observer(
     )
 
     const startFilterCounts = dtreeStore.getStepData[index].startFilterCounts
-    const finishFilterCounts = dtreeStore.getStepData[index].finishFilterCounts
     const currentStep = dtreeStore.getStepData[index]
 
     const changedStartCounts = startFilterCounts
@@ -146,15 +133,6 @@ export const NextStepRoute = observer(
               ? firstStepValue
               : getNumberWithCommas(startFilterCounts)}
           </div>
-
-          {length - index < 2 && (
-            <div style={{ marginBottom: -3 }}>
-              {(finishFilterCounts &&
-                finishFilterCounts > 0 &&
-                getNumberWithCommas(finishFilterCounts)) ||
-                getNumberWithCommas(startFilterCounts)}
-            </div>
-          )}
         </StartAmount>
 
         <div className="flex flex-col items-center w-1/6">
@@ -210,14 +188,6 @@ export const NextStepRoute = observer(
               </ExcludeTurn>
             </Fragment>
           )}
-
-          <Fragment>
-            {length - index < 2 && (
-              <CircleEndThread className="bg-blue-bright">
-                <SubCircleThread />
-              </CircleEndThread>
-            )}
-          </Fragment>
         </div>
       </div>
     )

@@ -14,12 +14,12 @@ import { ModalOperation } from './modal-operation'
 import { getNumberWithCommas } from './next-step-route'
 import { StepDivider } from './step-divider'
 
-const Operation = styled.div`
+export const Operation = styled.div`
   font-size: 15px;
   font-weight: 400;
 `
 
-const Step = styled.div`
+export const Step = styled.div`
   font-size: 17px;
   font-weight: 500;
 `
