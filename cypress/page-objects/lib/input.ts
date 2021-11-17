@@ -10,6 +10,6 @@ export class Input extends UIElement {
   }
 
   clearAndType(value: string): void {
-    this.getElement().clear().type(value)
+    this.getElement().clear().type(value);
   }
 }

@@ -32,6 +32,6 @@ export class UIElement {
   }
 
   haveText(value: string) {
-    this.getElement().should('have.text', value)
+    this.getElement().should('have.text', value);
   }
 }

@@ -1,12 +1,13 @@
-import { BasePage } from "../lib/basePage";
+import { BasePage } from "../lib/base-page";
 import { LeftPanelWidget } from "./widgets/left-panel.widget";
-import { DatasetInfoDataCy, FilterDatasetDataCy } from "../../../src/components/data-testid/dataset-page.cy";
-import { DatasetInfoWidget } from './widgets/dataset-info.widget'
+import { FilterDatasetDataCy } from "../../../src/components/data-testid/filter-dataset.cy";
+import { DatasetInfoDataCy } from "../../../src/components/data-testid/dataset-info.cy";
+import { DatasetInfoWidget } from './widgets/dataset-info.widget';
 
 
 class DatasetPage extends BasePage {
   readonly leftPanel: LeftPanelWidget;
-  readonly datasetInfo: DatasetInfoWidget
+  readonly datasetInfo: DatasetInfoWidget;
   constructor() {
     super();
     this.leftPanel = new LeftPanelWidget({
@@ -26,8 +27,7 @@ class DatasetPage extends BasePage {
     })
   }
   getDataset(name: string) {
-    return cy.get(".flex.items-center.relative.w-full.cursor-pointer").contains(name); //name = "xl_PGP3140_wgs_NIST-4_2"
-    //selector is changed to data-testid = search-dataset
+    return cy.get('[data-testid="search-dataset"]').contains(name);
   }
 }
 

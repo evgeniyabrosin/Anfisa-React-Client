@@ -13,8 +13,8 @@ export interface LeftPanelLabels {
 }
 
 export class LeftPanelWidget extends UIWidget {
-    readonly searchInput: Input
-    readonly leftPanelHeader: Label
+    readonly searchInput: Input;
+    readonly leftPanelHeader: Label;
 
     constructor(options: { selectors: LeftPanelSelectors, labels: LeftPanelLabels }) {
         super(options);
@@ -22,8 +22,8 @@ export class LeftPanelWidget extends UIWidget {
         const selectors = options.selectors;
         const labels = options.labels;
 
-        this.searchInput = new Input(selectors.searchInput)
-        this.leftPanelHeader = new Label(selectors.leftPanelHeader, labels.leftPanelHeader)
+        this.searchInput = new Input(selectors.searchInput);
+        this.leftPanelHeader = new Label(selectors.leftPanelHeader, labels.leftPanelHeader);
     }
 
 }

@@ -1,6 +1,6 @@
 import { UIWidget } from "../../lib/ui-widget";
 import { Label } from "../../lib/label";
-import { UIElement } from "../../lib/ui-elements";
+import { Button } from "../../lib/button";
 
 export interface DatasetInfoSelectors {
     openInViewer: string;
@@ -13,9 +13,9 @@ export interface DatasetInfoLabels {
 }
 
 export class DatasetInfoWidget extends UIWidget {
-    readonly openInViewer: UIElement
-    readonly decTreePanel: UIElement
-    readonly datasetHeader: Label
+    readonly openInViewer: Button;
+    readonly decTreePanel: Button;
+    readonly datasetHeader: Label;
 
     constructor(options: { selectors: DatasetInfoSelectors, labels: DatasetInfoLabels }) {
         super(options);
@@ -23,9 +23,9 @@ export class DatasetInfoWidget extends UIWidget {
         const selectors = options.selectors;
         const labels = options.labels;
 
-        this.openInViewer = new UIElement(selectors.openInViewer)
-        this.decTreePanel = new UIElement(selectors.decTreePanel)
+        this.openInViewer = new Button(selectors.openInViewer);
+        this.decTreePanel = new Button(selectors.decTreePanel);
 
-        this.datasetHeader = new Label(selectors.datasetHeader, labels.datasetHeader)
+        this.datasetHeader = new Label(selectors.datasetHeader, labels.datasetHeader);
     }
 }

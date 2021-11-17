@@ -1,5 +1,6 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
+import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
 
 interface CardProps {
   children?: ReactElement | ReactNode
@@ -26,5 +27,5 @@ export const CardTitle = ({
       ? 'text-xl text-blue-dark leading-24px font-bold'
       : 'text-sm leading-16px mb-3'
 
-  return <div className={cn(sizeClass, className)}>{text}</div>
+  return <div data-testid={DatasetInfoDataCy.datasetHeader} className={cn(sizeClass, className)}> {text} </div>
 }
