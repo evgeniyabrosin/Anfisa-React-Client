@@ -1,12 +1,16 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
+import { DatasetCreationErrorsEnum } from '@core/enum/dataset-creation-errors-enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
+import filterZone from '@store/filterZone'
 import operations from '@store/operations'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
@@ -20,12 +24,36 @@ export const ModalSaveDataset = observer(() => {
   const history = useHistory()
   const [value, setValue] = useState<string>('')
   const [error, setError] = useState<string>('')
-
+  const startDatasetName = toJS(datasetStore.datasetName)
   const pathName = history.location.pathname
 
   const isDone = operations.savingStatus[1] === 'Done'
 
-  const handleClickAsync = async () => {
+  useEffect(() => {
+    if (pathName === PatnNameEnum.Filter && dtreeStore.acceptedVariants === 0) {
+      setError(DatasetCreationErrorsEnum.EmptyDataset)
+    }
+
+    if (pathName === PatnNameEnum.Ws && datasetStore.statAmount[0] === 0) {
+      setError(DatasetCreationErrorsEnum.EmptyDataset)
+    }
+
+    if (
+      pathName === PatnNameEnum.Ws &&
+      !datasetStore.activePreset &&
+      datasetStore.conditions.length === 0
+    ) {
+      setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
+    }
+  }, [pathName])
+
+  const saveDatasetAsync = async () => {
+    if (toJS(dirinfoStore.dsDistKeys).includes(value)) {
+      setError(DatasetCreationErrorsEnum.DatasetExists)
+
+      return
+    }
+
     const result = await operations.saveDatasetAsync(value, pathName)
 
     if (!result.ok && result.message) {
@@ -34,11 +62,13 @@ export const ModalSaveDataset = observer(() => {
       return
     }
 
+    filterZone.resetAllSelectedItems()
+    datasetStore.resetActivePreset()
     isDone && history.push(`${Routes.WS}?ds=${value}`)
   }
 
   const handleClose = () => {
-    if (!value) {
+    if (!value || !isDone) {
       dtreeStore.closeModalSaveDataset()
       operations.resetSavingStatus()
 
@@ -49,7 +79,7 @@ export const ModalSaveDataset = observer(() => {
       dtreeStore.closeModalSaveDataset()
 
       if (pathName === PatnNameEnum.Ws) {
-        datasetStore.initDatasetAsync(value)
+        datasetStore.initDatasetAsync(startDatasetName)
       }
 
       operations.resetSavingStatus()
@@ -68,10 +98,34 @@ export const ModalSaveDataset = observer(() => {
 
   const handleOpenDataset = () => {
     isDone && history.push(`${Routes.WS}?ds=${value}`)
-    dtreeStore.closeModalSaveDataset()
-    datasetStore.initDatasetAsync(value)
 
+    dtreeStore.closeModalSaveDataset()
+    pathName === PatnNameEnum.Ws && datasetStore.initDatasetAsync(value)
     operations.resetSavingStatus()
+  }
+
+  const handleChange = (name: string) => {
+    const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
+    const noFirstNumberPattern = /^[\d_]/
+
+    if (
+      error === DatasetCreationErrorsEnum.EmptyDataset ||
+      error === DatasetCreationErrorsEnum.ChooseAnyFilter
+    ) {
+      return
+    }
+
+    if (
+      noSymbolPattern.test(name) ||
+      noFirstNumberPattern.test(name) ||
+      name.length > 250
+    ) {
+      setError(DatasetCreationErrorsEnum.IncorrectName)
+    } else {
+      setError('')
+    }
+
+    setValue(name)
   }
 
   return (
@@ -87,25 +141,27 @@ export const ModalSaveDataset = observer(() => {
 
           <Input
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => handleChange(e.target.value)}
             className="mt-1"
           />
 
-          <span className="text-red-secondary mt-2">{error}</span>
+          <span className="text-12 text-red-secondary mt-2">{error}</span>
         </div>
 
-        <p className="mt-5 flex items-center">
-          <Attention className="mr-2" />
+        {!isDone && pathName !== PatnNameEnum.Filter && (
+          <div className="mt-5 flex items-center">
+            <Attention className="mr-2" />
 
-          <span>{t('dsCreation.attention')}</span>
-        </p>
+            <span className="text-12">{t('dsCreation.attention')}</span>
+          </div>
+        )}
 
-        <span className="mt-2">
+        <span className="mt-2 text-14">
           {operations.savingStatus[1]}
 
           {isDone && (
             <span
-              className="ml-2 text-blue-bright cursor-pointer"
+              className="ml-2 mt-1 text-14 text-blue-bright cursor-pointer"
               onClick={handleOpenDataset}
             >
               Open It
@@ -124,9 +180,9 @@ export const ModalSaveDataset = observer(() => {
           <Button
             text={t('dsCreation.addDataset')}
             className="ml-4 text-black hover:bg-blue-bright hover:text-white"
-            disabled={!value.trim()}
+            disabled={!value.trim() || error.length > 0}
             hasBackground={false}
-            onClick={handleClickAsync}
+            onClick={saveDatasetAsync}
           />
         </div>
       </div>

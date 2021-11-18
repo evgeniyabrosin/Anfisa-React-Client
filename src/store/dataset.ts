@@ -77,6 +77,10 @@ class DatasetStore {
     this.activePreset = value
   }
 
+  resetActivePreset() {
+    this.activePreset = ''
+  }
+
   setIsLoadingTabReport(value: boolean) {
     this.isLoadingTabReport = value
   }

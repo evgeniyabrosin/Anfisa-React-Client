@@ -69,7 +69,7 @@ export const en = {
     addDatasetTitle: 'Add new dataset',
     label: 'Dataset Name:',
     attention:
-      'Attention: Once a dataset has been added, the filters will be cleared.',
+      'Attention: Zone filters (Gene, Gene List, Sample, Tags) do not participate in dataset creation',
     addDataset: 'Add Dataset',
   },
   variant: {
