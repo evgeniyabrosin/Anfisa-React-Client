@@ -45,12 +45,6 @@ export const Table = observer(
             document.body.clientWidth) / 8,
     }
 
-    // TODO: dont delete strings below
-    // useEffect(() => {
-    //   ref?.scrollToItem(variantStore.index)
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [ref, variantStore.index])
-
     useEffect(() => {
       const handleResize = debounce(() => {
         datasetStore.setIsLoadingTabReport(true)
@@ -111,10 +105,16 @@ export const Table = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const getCurrentVariantIndex = () => {
+      return datasetStore.filteredNo[variantStore.choosedIndex]
+        ? variantStore.choosedIndex
+        : 0
+    }
+
     useEffect(() => {
       variantStore.isActiveVariant &&
         handleOpenVariant({
-          index: variantStore.choosedIndex || 0,
+          index: getCurrentVariantIndex(),
         })
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
