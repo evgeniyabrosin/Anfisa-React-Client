@@ -41,7 +41,6 @@ class DtreeStore {
   dtreeCode = ''
   startDtreeCode = ''
   localDtreeCode = ''
-  activeTree = ''
   currentDtreeName = ''
   previousDtreeName = ''
 

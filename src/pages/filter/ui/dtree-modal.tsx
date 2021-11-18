@@ -5,7 +5,6 @@ import cn from 'classnames'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 
@@ -13,44 +12,13 @@ interface Props {
   close: () => void
 }
 
-const actions = [
-  ActionFilterEnum.Load,
-  ActionFilterEnum.Modify,
-  ActionFilterEnum.Delete,
-]
+const actions = [ActionFilterEnum.Modify, ActionFilterEnum.Delete]
 
 export const DtreeModal = ({ close }: Props): ReactElement => {
   const ref = useRef(null)
 
-  const currentTreeName = dtreeStore.currentDtreeName
-  const prevTreeName = dtreeStore.previousDtreeName
-
   const handleClick = (action: ActionFilterEnum) => {
     let notification
-
-    if (action === ActionFilterEnum.Load) {
-      if (!currentTreeName) {
-        notification = t('dtree.chooseAnyTree')
-      }
-
-      if (
-        dtreeStore.dtreeCode.length > 13 &&
-        dtreeStore.startDtreeCode === dtreeStore.dtreeCode &&
-        currentTreeName === prevTreeName
-      ) {
-        notification = t('dtree.noChanges')
-      }
-
-      if (!notification) {
-        const body = new URLSearchParams({
-          ds: datasetStore.datasetName,
-          dtree: currentTreeName,
-        })
-
-        dtreeStore.fetchDtreeSetAsync(body)
-        dtreeStore.setQueryBuilderRenderKey(Date.now())
-      }
-    }
 
     if (action === ActionFilterEnum.Delete) {
       if (dtreeStore.dtreeCode.length < 13) {

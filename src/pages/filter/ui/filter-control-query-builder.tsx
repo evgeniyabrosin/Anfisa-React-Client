@@ -34,7 +34,24 @@ export const FilterControlQueryBuilder = observer(
 
       dtreeStore.setDtreeName(value)
 
-      filterStore.resetActionName()
+      const currentTreeName = dtreeStore.currentDtreeName
+      const prevTreeName = dtreeStore.previousDtreeName
+
+      if (
+        dtreeStore.dtreeCode.length > 13 &&
+        dtreeStore.startDtreeCode === dtreeStore.dtreeCode &&
+        currentTreeName === prevTreeName
+      ) {
+        return
+      }
+
+      const body = new URLSearchParams({
+        ds: datasetStore.datasetName,
+        dtree: value,
+      })
+
+      dtreeStore.fetchDtreeSetAsync(body)
+      dtreeStore.setQueryBuilderRenderKey(Date.now())
     }
 
     const handleCreateTree = () => {
