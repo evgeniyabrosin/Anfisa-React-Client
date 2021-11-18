@@ -7,4 +7,7 @@ export class Button extends UIElement {
     checkButtonText(text: string) {
         return this.getElement().should('have.text', text);
     }
+    getButtonByText(text: string) {
+        return this.getElement().contains(text);
+    }
 }

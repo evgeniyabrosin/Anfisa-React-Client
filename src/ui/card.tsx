@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
+import { DatasetCard } from '@components/data-testid/card.cy'
 
 interface CardProps {
   children?: ReactElement | ReactNode
@@ -30,11 +30,10 @@ export const CardTitle = ({
 
   return (
     <div
-      data-testid={DatasetInfoDataCy.datasetHeader}
+      data-testid={DatasetCard.datasetHeader}
       className={cn(sizeClass, className)}
     >
-      {' '}
-      {text}{' '}
+      {text}
     </div>
   )
 }
