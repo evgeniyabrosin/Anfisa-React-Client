@@ -11,7 +11,9 @@
     @apply text-black;
   }
 
-  html, body, #root {
+  html,
+  body,
+  #root {
     @apply h-full;
   }
 
@@ -48,4 +50,8 @@
 
 .step-menu-btn {
   @apply rounded-tr-none rounded-tl-none rounded-bl-md rounded-br-md rounded-md font-normal py-2 px-2 hover:bg-grey-light;
+}
+
+.header-variants-info {
+  @apply text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold;
 }

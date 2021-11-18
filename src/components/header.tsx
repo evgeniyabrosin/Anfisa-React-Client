@@ -51,7 +51,9 @@ export const Header = observer(
     }, [ds])
 
     const handleChangeDataset = (arg: Option) => {
-      ds !== arg.value && history.push(`${Routes.WS}?ds=${arg.value}`)
+      ds !== arg.value &&
+        history.push(`${history.location.pathname}?ds=${arg.value}`)
+      datasetStore.setDatasetName(history.location.pathname)
 
       const dsName = arg.value
 
@@ -64,7 +66,7 @@ export const Header = observer(
 
     const copyLink = () => {
       copyToClipboard(
-        `${window.origin}${Routes.WS}?ds=${ds}${
+        `${window.origin}${history.location.pathname}?ds=${ds}${
           variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''
         }`,
       )
