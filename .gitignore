@@ -28,3 +28,4 @@ yarn-error.log*
 
 #cypress
 package-lock.json
+.env.dev
