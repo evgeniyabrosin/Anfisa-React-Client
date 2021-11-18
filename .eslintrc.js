@@ -42,6 +42,7 @@ module.exports = {
     //react
     'react/jsx-no-literals': 'off',
     'react/react-in-jsx-scope': 'off',
+    'jest/expect-expect': 'off',
     //prettier
     'prettier/prettier': [
       'error',

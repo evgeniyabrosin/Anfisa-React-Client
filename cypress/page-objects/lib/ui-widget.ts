@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
+
 export interface UIWidgetSelectors {}
 export interface UIWidgetLabels {}
 
@@ -14,6 +16,6 @@ export class UIWidget {
   }) {
     this.selectors = options.selectors
 
-    this.labels = options.labels ?? {} // eslint-disable-line no-use-before-define
+    this.labels = options.labels ?? {}
   }
 }
