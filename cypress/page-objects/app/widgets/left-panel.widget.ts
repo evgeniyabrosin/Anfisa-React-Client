@@ -1,34 +1,38 @@
-import { UIWidget } from "../../lib/ui-widget";
-import { Label } from "../../lib/label";
-import { Input } from "../../lib/input";
-import { Button } from "../../lib/button";
-
+import { Button } from '../../lib/button'
+import { Input } from '../../lib/input'
+import { Label } from '../../lib/label'
+import { UIWidget } from '../../lib/ui-widget'
 
 export interface LeftPanelSelectors {
-    searchInput: string;
-    leftPanelHeader: string;
-    datasetsListElem: string;
+  searchInput: string
+  leftPanelHeader: string
+  datasetsListElem: string
 }
 
 export interface LeftPanelLabels {
-    leftPanelHeader: string;
-    // TODO datasetsListElem: string;
+  leftPanelHeader: string
+  // TODO datasetsListElem: string;
 }
 
 export class LeftPanelWidget extends UIWidget {
-    readonly searchInput: Input;
-    readonly leftPanelHeader: Label;
-    readonly datasetsListElem: Button;
+  readonly searchInput: Input
+  readonly leftPanelHeader: Label
+  readonly datasetsListElem: Button
 
-    constructor(options: { selectors: LeftPanelSelectors, labels: LeftPanelLabels }) {
-        super(options);
+  constructor(options: {
+    selectors: LeftPanelSelectors
+    labels: LeftPanelLabels
+  }) {
+    super(options)
 
-        const selectors = options.selectors;
-        const labels = options.labels;
+    const selectors = options.selectors
+    const labels = options.labels
 
-        this.searchInput = new Input(selectors.searchInput);
-        this.leftPanelHeader = new Label(selectors.leftPanelHeader, labels.leftPanelHeader);
-        this.datasetsListElem = new Button(selectors.datasetsListElem);
-    }
-
+    this.searchInput = new Input(selectors.searchInput)
+    this.leftPanelHeader = new Label(
+      selectors.leftPanelHeader,
+      labels.leftPanelHeader,
+    )
+    this.datasetsListElem = new Button(selectors.datasetsListElem)
+  }
 }

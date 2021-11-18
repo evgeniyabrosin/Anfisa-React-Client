@@ -1,17 +1,19 @@
-export interface UIWidgetSelectors { }
-export interface UIWidgetLabels { }
+export interface UIWidgetSelectors {}
+export interface UIWidgetLabels {}
 
 /**
  * Base ui widget class. Widget combines several UIElements.
  */
 export class UIWidget {
-    readonly selectors: UIWidgetSelectors;
-    readonly labels: UIWidgetLabels;
+  readonly selectors: UIWidgetSelectors
+  readonly labels: UIWidgetLabels
 
-    constructor(options: { selectors: UIWidgetSelectors, labels?: UIWidgetLabels }) {
-        this.selectors = options.selectors;
+  constructor(options: {
+    selectors: UIWidgetSelectors
+    labels?: UIWidgetLabels
+  }) {
+    this.selectors = options.selectors
 
-        this.labels = options.labels ?? {};
-    }
-
+    this.labels = options.labels ?? {} // eslint-disable-line no-use-before-define
+  }
 }
