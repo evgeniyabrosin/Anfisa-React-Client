@@ -62,9 +62,6 @@ export const FilterPage = observer(
 
         await dirinfoStore.fetchDsinfoAsync(dsName)
 
-        await datasetStore.initDatasetAsync(dsName)
-        await dirinfoStore.fetchDsinfoAsync(dsName)
-
         if (history.location.pathname === Routes.Refiner) {
           filterStore.setMethod(FilterMethodEnum.Refiner)
         } else {
