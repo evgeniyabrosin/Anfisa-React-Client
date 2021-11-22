@@ -1,8 +1,6 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { DatasetCard } from '@components/data-testid/card.cy'
-
 interface CardProps {
   children?: ReactElement | ReactNode
   className?: Argument
@@ -12,6 +10,7 @@ interface CardTitleProps {
   text: string
   size?: 'md' | 'sm'
   className?: Argument
+  dataTestId?: string
 }
 
 export const Card = ({ children, className }: CardProps): ReactElement => (
@@ -22,6 +21,7 @@ export const CardTitle = ({
   text,
   className,
   size = 'md',
+  dataTestId,
 }: CardTitleProps): ReactElement => {
   const sizeClass =
     size === 'md'
@@ -29,10 +29,7 @@ export const CardTitle = ({
       : 'text-sm leading-16px mb-3'
 
   return (
-    <div
-      data-testid={DatasetCard.datasetHeader}
-      className={cn(sizeClass, className)}
-    >
+    <div data-testid={dataTestId} className={cn(sizeClass, className)}>
       {text}
     </div>
   )
