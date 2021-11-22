@@ -133,9 +133,13 @@ export const TableModal = observer(() => {
           jobStatus[1]
         ) : (
           <Fragment>
-            <h1 className="text-center">
-              {variantList[variantIndex]?.lb ?? ''}
-            </h1>
+            <div
+              className="flex w-full justify-center text-16 font-semibold"
+              dangerouslySetInnerHTML={{
+                __html: variantList[variantIndex]?.lb ?? '',
+              }}
+            />
+
             <div className="flex">
               <div className="p-5">
                 <div className="flex flex-col">
