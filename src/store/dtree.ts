@@ -801,8 +801,9 @@ class DtreeStore {
     const localStepData = [...this.stepData]
 
     localStepData.forEach((element, index) => {
-      const startCountsIndex = this.getStepIndexForApi(index)
       const counts = toJS(pointCounts)
+
+      const startCountsIndex = this.getStepIndexForApi(index)
       const indexes = toJS(this.dtreeStepIndices)
       const isFinalStepIndex = index === indexes.length
 
@@ -820,8 +821,12 @@ class DtreeStore {
           ? '...'
           : counts[diferenceCountsIndex]?.[0]
 
+      const isEmptyTree = counts.length === 1
+      const isFinalStep = Boolean(localStepData[index].isFinalStep)
+      const shouldSetAllVariants = isEmptyTree && isFinalStep
+
       element.startFilterCounts = startCounts
-      element.difference = diferenceCounts
+      element.difference = shouldSetAllVariants ? counts[0][0] : diferenceCounts
     })
 
     runInAction(() => {
