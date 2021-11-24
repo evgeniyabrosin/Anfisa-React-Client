@@ -50,14 +50,23 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   useEffect(() => {
     datasetStore.genes.length <= 0 && datasetStore.fetchZoneListAsync('Symbol')
 
+    if (zoneStore.selectedGenes.length > 0) {
+      zoneStore.syncSelectedAndLocalFilters('isGenes')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleApplyAsync = async () => {
+    close()
+
+    zoneStore.createSelectedZoneFilter('isGenes')
     datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
+  }
 
-    close()
+  const onClearAll = () => {
+    zoneStore.unselectAllGenes()
+    handleApplyAsync()
   }
 
   return (
@@ -67,6 +76,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       onClose={close}
       searchValue={searchValue}
       onApply={handleApplyAsync}
+      onClearAll={onClearAll}
       onChange={setSearchValue}
       className="mt-7"
       isGenes={true}

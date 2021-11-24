@@ -17,10 +17,10 @@ type Props = {
 export const FilterTags = observer(
   ({ data, isGenes, isGenesList, isSamples, isTags }: Props) => {
     const deleteTag = (item: string) => {
-      isGenes && zoneStore.removeGene(item)
-      isGenesList && zoneStore.removeGenesList(item)
-      isSamples && zoneStore.removeSample(item)
-      isTags && zoneStore.removeTag(item)
+      isGenes && zoneStore.removeGene(item, 'fast')
+      isGenesList && zoneStore.removeGenesList(item, 'fast')
+      isSamples && zoneStore.removeSample(item, 'fast')
+      isTags && zoneStore.removeLocalTag(item, 'fast')
       datasetStore.fetchWsListAsync()
     }
 

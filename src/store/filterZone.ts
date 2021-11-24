@@ -2,16 +2,18 @@ import { difference } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
-import zoneStore from '@store/filterZone'
 import datasetStore from './dataset'
-
-const ADD = true
 
 class ZoneStore {
   selectedGenes: string[] = []
   selectedGenesList: string[] = []
   selectedSamples: string[] = []
   selectedTags: string[] = []
+
+  localGenes: string[] = []
+  localGenesList: string[] = []
+  localSamples: string[] = []
+  localTags: string[] = []
 
   isFather: boolean | undefined = false
   isMother: boolean | undefined = false
@@ -25,90 +27,135 @@ class ZoneStore {
   }
 
   addGene(gene: string) {
-    this.selectedGenes = [...this.selectedGenes, gene]
+    this.localGenes = [...this.localGenes, gene]
   }
 
-  removeGene(geneName: string) {
-    this.selectedGenes = this.selectedGenes.filter(gene => geneName !== gene)
+  removeGene(geneName: string, type: string) {
+    this.localGenes = this.localGenes.filter(gene => geneName !== gene)
 
-    datasetStore.removeZone(['Symbol', this.selectedGenes])
-  }
+    if (type === 'fast') {
+      this.createSelectedZoneFilter('isGenes')
 
-  unselectAllGenes() {
-    this.selectedGenes = []
-    datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
-  }
-
-  addGenesList(gene: string) {
-    this.selectedGenesList = [...this.selectedGenesList, gene]
-  }
-
-  removeGenesList(geneName: string) {
-    this.selectedGenesList = this.selectedGenesList.filter(
-      genesList => geneName !== genesList,
-    )
-
-    datasetStore.removeZone(['Panels', this.selectedGenesList])
-  }
-
-  unselectAllGenesList() {
-    this.selectedGenesList = []
-    datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
-  }
-
-  addSample(sample: string) {
-    this.selectedSamples = [...this.selectedSamples, sample]
-  }
-
-  removeSample(sample: string) {
-    this.selectedSamples = this.selectedSamples.filter(
-      sampleItem => sampleItem !== sample,
-    )
-
-    datasetStore.removeZone(['Has_Variant', this.selectedSamples])
-  }
-
-  paintSelectedSamples() {
-    this.selectedSamples.map(sample => this.checkSampleType(sample, ADD))
-  }
-
-  checkSampleType(sample: string, isAdding = false) {
-    const type = sample.slice(0, 7).trim()
-
-    if (type === 'father') {
-      this.isFather = isAdding
-    } else if (type === 'mother') {
-      this.isMother = isAdding
-    } else if (type === 'proband') {
-      this.isProband = isAdding
+      datasetStore.removeZone(['Symbol', this.selectedGenes])
     }
   }
 
-  unselectAllSamples = () => {
-    this.selectedSamples = []
-    this.isFather = false
-    this.isMother = false
-    this.isProband = false
-    datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
+  unselectAllGenes() {
+    this.localGenes = []
   }
 
-  addTag(tagName: string) {
-    this.selectedTags = [...this.selectedTags, tagName]
+  addGenesList(gene: string) {
+    this.localGenesList = [...this.localGenesList, gene]
   }
 
-  removeTag(tagName: string) {
-    this.selectedTags = this.selectedTags.filter(tag => tag !== tagName)
+  removeGenesList(geneName: string, type: string) {
+    this.localGenesList = this.localGenesList.filter(
+      genesList => geneName !== genesList,
+    )
+
+    if (type === 'fast') {
+      this.createSelectedZoneFilter('isGenesList')
+
+      datasetStore.removeZone(['Panels', this.selectedGenesList])
+    }
+  }
+
+  unselectAllGenesList() {
+    this.localGenesList = []
+  }
+
+  addSample(sample: string) {
+    this.localSamples = [...this.localSamples, sample]
+  }
+
+  removeSample(sample: string, type: string) {
+    this.localSamples = this.localSamples.filter(
+      sampleItem => sampleItem !== sample,
+    )
+
+    if (type === 'fast') {
+      this.createSelectedZoneFilter('isSamples')
+
+      datasetStore.removeZone(['Has_Variant', this.selectedSamples])
+    }
+
+    this.paintSelectedSamples()
+  }
+
+  paintSelectedSamples() {
+    const sampleTypes = new Set(
+      this.selectedSamples.map(sample => sample.slice(0, 7).trim()),
+    )
+
+    if (sampleTypes.has('proband')) {
+      this.isProband = true
+    } else {
+      this.isProband = false
+    }
+
+    if (sampleTypes.has('mother')) {
+      this.isMother = true
+    } else {
+      this.isMother = false
+    }
+
+    if (sampleTypes.has('father')) {
+      this.isFather = true
+    } else {
+      this.isFather = false
+    }
+  }
+
+  unselectAllSamples = (type?: string) => {
+    this.localSamples = []
+
+    if (type === 'clearAll') {
+      this.isFather = false
+      this.isMother = false
+      this.isProband = false
+    }
+  }
+
+  addLocalTag(tagName: string) {
+    this.localTags = [...this.localTags, tagName]
+  }
+
+  removeLocalTag(tagName: string, type: string) {
+    this.localTags = this.localTags.filter(tag => tag !== tagName)
 
     tagName === '_note' && this.resetModeWithNotes()
 
-    datasetStore.removeZone(['_tags', this.selectedTags])
+    if (type === 'fast') {
+      this.createSelectedZoneFilter('isTags')
+
+      datasetStore.removeZone(['_tags', this.selectedTags])
+    }
   }
 
   unselectAllTags() {
-    this.selectedTags = []
+    this.localTags = []
     this.resetModeNOT()
     this.resetModeWithNotes()
-    this.fetchTagSelectAsync()
+  }
+
+  createSelectedZoneFilter(type: string) {
+    if (type === 'isGenes') this.selectedGenes = this.localGenes
+
+    if (type === 'isGenesList') this.selectedGenesList = this.localGenesList
+
+    if (type === 'isSamples') this.selectedSamples = this.localSamples
+
+    if (type === 'isTags') this.selectedTags = this.localTags
+  }
+
+  syncSelectedAndLocalFilters(type: string) {
+    if (type === 'isGenes') this.localGenes = this.selectedGenes
+
+    if (type === 'isGenesList') this.localGenesList = this.selectedGenesList
+
+    if (type === 'isSamples') this.localSamples = this.selectedSamples
+
+    if (type === 'isTags') this.localTags = this.selectedTags
   }
 
   resetAllSelectedItems() {
@@ -116,6 +163,10 @@ class ZoneStore {
     this.selectedGenesList = []
     this.selectedSamples = []
     this.selectedTags = []
+    this.localGenes = []
+    this.localGenesList = []
+    this.localSamples = []
+    this.localTags = []
     this.isFather = false
     this.isMother = false
     this.isProband = false

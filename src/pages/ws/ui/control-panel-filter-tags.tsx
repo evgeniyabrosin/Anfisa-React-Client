@@ -49,16 +49,26 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   useEffect(() => {
     datasetStore.fetchTagSelectAsync()
 
+    if (zoneStore.selectedTags.length > 0) {
+      zoneStore.syncSelectedAndLocalFilters('isTags')
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleApplyAsync = async () => {
+    close()
+
+    zoneStore.createSelectedZoneFilter('isTags')
     datasetStore.addZone(['_tags', zoneStore.selectedTags])
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     datasetStore.fetchFilteredTabReportAsync()
+  }
 
-    close()
+  const onClearAll = () => {
+    zoneStore.unselectAllTags()
+    handleApplyAsync()
   }
 
   return (
@@ -69,6 +79,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       searchValue={searchValue}
       onApply={handleApplyAsync}
       onChange={setSearchValue}
+      onClearAll={onClearAll}
       className="mt-7"
       isTags={true}
     >
