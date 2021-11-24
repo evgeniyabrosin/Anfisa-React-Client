@@ -7,6 +7,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 
 interface Props {
   close: () => void
@@ -78,6 +79,7 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
             { 'rounded-t': index === 0 },
             { 'rounded-b': index === actions.length - 1 },
           )}
+          data-testid={DecisionTreesMenuDataCy.selectDropdownElem}
         >
           {action}
         </span>

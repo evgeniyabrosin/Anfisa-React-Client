@@ -73,7 +73,6 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
     <div
       className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col"
       ref={ref}
-      data-testid={DatasetInfoDataCy.decTreePanel}
     >
       {dirinfoStore.dsinfo.kind === 'ws' && (
         <span
@@ -87,6 +86,7 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
       <span
         className="py-1 px-3 rounded hover:bg-blue-light"
         onClick={goToFilter}
+        data-testid={DatasetInfoDataCy.decTreePanel}
       >
         {t('home.filter')}
       </span>

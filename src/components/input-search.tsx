@@ -3,6 +3,7 @@ import cn, { Argument } from 'classnames'
 
 import { Icon } from '@ui/icon'
 import { Input } from '@ui/input'
+import { DecisionTreesResultsDataCy } from '../../src/components/data-testid/decision-tree-results.cy'
 
 interface Props {
   placeholder?: string
@@ -18,6 +19,7 @@ export const InputSearch = ({ ...rest }: Props): ReactElement => {
   return (
     <div className={cn('relative', className)}>
       <Input
+        data-testid={DecisionTreesResultsDataCy.searchGraphResults}
         className={cn({
           'outline-none rounded-2xl': filter,
         })}

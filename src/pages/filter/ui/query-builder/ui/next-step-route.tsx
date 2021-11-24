@@ -10,6 +10,7 @@ import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { makeStepActive } from '@utils/makeStepActive'
 
 const StartAmount = styled.div`
@@ -160,6 +161,7 @@ export const NextStepRoute = observer(
                       onClick={() =>
                         makeStepActive(index, 'isReturnedVariantsActive')
                       }
+                      data-testid={DecisionTreesResultsDataCy.excludeInfo}
                     >
                       <span>
                         {isIncluded ? `+` : `-`}

@@ -13,4 +13,11 @@ export class Label extends UIElement {
 
     return this.getElement().should('have.text', defaultText)
   }
+
+  findStepAndExclude(text?: string) {
+    return this.getElement().contains(text!).parents('[data-testid="step-card"]').within(() => { cy.get('[data-testid="exclude-info"]').click() })
+  }
+
+  // within(elem: string) {
+  //   return this.getElement().within((elem: string) => {
 }
