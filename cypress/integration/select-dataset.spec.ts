@@ -26,5 +26,19 @@ describe('XL Dataset should be opened in decision tree', () => {
     //Somehow check that hearing loss was loaded
   })
 
-  it('should exclude 3 variants | Test #3', () => {})
+  it.only('should exclude 3 variants | Test #3', () => {
+    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
+    decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
+      '⏚Hearing Loss, v.5',
+    )
+    decisionTreesPage.decisionTreeMenu.decisionActions.click()
+    decisionTreesPage.decisionTreeMenu.selectDropdownElem
+      .getButtonByText('Load')
+      .click()
+    cy.wait(1000)
+    //decisionTreesPage.decisionTreeResults.stepCard.findByText('Step 5').parents('[data-testid="step-card"]').scrollIntoView().children('[data-testid="exclude-info"]').click()
+    decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
+    decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains()
+  })
 })

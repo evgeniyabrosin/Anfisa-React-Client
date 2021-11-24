@@ -1,3 +1,4 @@
+import { Button } from '../../lib/button'
 import { Input } from '../../lib/input'
 import { Label } from '../../lib/label'
 import { UIWidget } from '../../lib/ui-widget'
@@ -8,6 +9,7 @@ export interface DecisionTreeResultsSelectors {
   searchStepsResults: string
   groupGraphHeaders: string
   stepCard: string
+  excludeInfo: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -22,6 +24,7 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly searchStepsResults: Input
   readonly groupGraphHeaders: Label
   readonly stepCard: Label
+  readonly excludeInfo: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -43,5 +46,6 @@ export class DecisionTreeResultsWidget extends UIWidget {
       labels.groupGraphHeaders,
     )
     this.stepCard = new Label(selectors.stepCard, labels.stepCard)
+    this.excludeInfo = new Button(selectors.excludeInfo)
   }
 }

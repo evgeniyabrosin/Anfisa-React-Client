@@ -40,4 +40,8 @@ export class UIElement {
   first() {
     return this.getElement().first()
   }
+
+  eq(num: number) {
+    return this.getElement().eq(num)
+  }
 }

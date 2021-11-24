@@ -4,4 +4,5 @@ export const DecisionTreesResultsDataCy = {
   groupGraphHeaders: 'graph-groups',
   graphHeaders: 'graph-headers',
   stepCard: 'step-card',
+  excludeInfo: 'exclude-info',
 }

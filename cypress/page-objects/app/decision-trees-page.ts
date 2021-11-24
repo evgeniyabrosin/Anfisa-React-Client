@@ -21,13 +21,14 @@ class DecisionTreesPage extends BasePage {
       selectors: {
         searchGraphResults: `[data-testid = ]`,
         searchStepsResults: `[data-testid = ]`,
-        groupGraphHeaders: `[data-testid = ]`,
+        groupGraphHeaders: `[data-testid = "group-header" ]`,
         graphHeaders: `[data-testid = ]`,
-        stepCard: `[data-testid = ]`,
+        stepCard: `[data-testid = "step-card"]`,
+        excludeInfo: `[data-testid = "exclude-info"]`,
       },
       labels: {
-        graphHeaders: 'header1',
-        groupGraphHeaders: 'header2',
+        graphHeaders: '',
+        groupGraphHeaders: 'Variant',
         stepCard: 'header3',
       },
     })
