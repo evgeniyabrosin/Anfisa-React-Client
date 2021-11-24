@@ -42,7 +42,27 @@ const DrawerTagModal = observer(({ close }: any) => {
     variantStore.checkedTags,
   )
 
+  const [error, setError] = useState<string>('')
+
   const [customTag, setCustomTag] = useState<string>('')
+
+  const tags = [...variantStore.generalTags, ...variantStore.optionalTags]
+
+  const handleChange = (value: string) => {
+    if (
+      tags
+        .map(tag => tag.toLocaleLowerCase())
+        .includes(value.toLocaleLowerCase())
+    ) {
+      setError('Tag is already exists')
+    } else {
+      setError('')
+    }
+
+    if (value.length > 30) setError('Tag name is too long')
+
+    setCustomTag(value)
+  }
 
   const handleCheck = (checked: boolean, item: string) => {
     if (checked) {
@@ -96,8 +116,6 @@ const DrawerTagModal = observer(({ close }: any) => {
     variantStore.setCurrentTag(tag)
   }
 
-  const tags = [...variantStore.generalTags, ...variantStore.optionalTags]
-
   return (
     <div
       ref={ref}
@@ -140,17 +158,25 @@ const DrawerTagModal = observer(({ close }: any) => {
       <div className="mt-2 h-auto">
         <Input
           value={customTag}
-          onChange={(e: any) => setCustomTag(e.target.value)}
+          onChange={(e: any) => handleChange(e.target.value)}
         />
 
-        <div className="flex justify-end">
-          <Button
-            text="Add custom tag"
-            disabled={!customTag.trim()}
-            hasBackground={false}
-            className="text-black mt-2 hover:bg-blue-bright hover:text-white"
-            onClick={handleSetCustomTag}
-          />
+        <div className="flex justify-between">
+          {error && (
+            <div className="mt-px w-full text-12 text-red-secondary">
+              {error}
+            </div>
+          )}
+
+          <div className="flex justify-end w-full">
+            <Button
+              text="Add custom tag"
+              disabled={!customTag.trim() || !!error}
+              hasBackground={false}
+              className="text-black mt-2 hover:bg-blue-bright hover:text-white"
+              onClick={handleSetCustomTag}
+            />
+          </div>
         </div>
       </div>
 
