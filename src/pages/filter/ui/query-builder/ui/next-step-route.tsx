@@ -171,7 +171,7 @@ export const NextStepRoute = observer(
                           </DifferenceCounts>
                         ) : (
                           <span>{currentStep.difference}</span>
-                        )}
+                        )}{' '}
                       </span>
                     </ExcludeAmount>
                   </Tooltip>
