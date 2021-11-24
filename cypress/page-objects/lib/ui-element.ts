@@ -32,4 +32,12 @@ export class UIElement {
   haveText(value: string) {
     this.getElement().should('have.text', value)
   }
+
+  getFilter(text: string) {
+    return cy.get('.Dropdown-option').contains(text).click()
+  }
+
+  first() {
+    return this.getElement().first()
+  }
 }
