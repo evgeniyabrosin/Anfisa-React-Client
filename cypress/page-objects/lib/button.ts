@@ -10,4 +10,10 @@ export class Button extends UIElement {
   getButtonByText(text: string) {
     return this.getElement().contains(text)
   }
+  getChildren() {
+    return this.getElement().children()
+  }
+  length(num: number) {
+    return this.getElement().should('have.length', num)
+  }
 }

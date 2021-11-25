@@ -15,6 +15,10 @@ class DecisionTreesPage extends BasePage {
         decisionActions: `[data-testid = "${DecisionTreesMenuDataCy.decisionActions}"]`,
         loadDecision: `[data-testid = "${DecisionTreesMenuDataCy.loadDecision}"]`,
         selectDropdownElem: `[data-testid = "${DecisionTreesMenuDataCy.selectDropdownElem}"]`,
+        saveDataset: `[data-testid = "${DecisionTreesMenuDataCy.saveDataset}"]`,
+        datasetNameInput: `[data-testid = "${DecisionTreesMenuDataCy.datasetNameInput}"]`,
+        addNewDataset: `[data-testid = "${DecisionTreesMenuDataCy.addNewDataset}"]`,
+        cancelAddNewDataset: `[data-testid = "${DecisionTreesMenuDataCy.cancelAddNewDataset}"]`,
       },
       labels: {},
     })

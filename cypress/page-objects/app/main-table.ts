@@ -9,7 +9,7 @@ class MainTablePage extends BasePage {
     this.mainTable = new MainTableWidget({
       selectors: {
         sampleButton: `[data-testid = "${MainTableDataCy.sampleButton}"]`,
-        tableSection: `[#parent]`,
+        tableSection: `[data-grid="[object Object]"]`,
         mainTableHeader: `[data-testid = "${MainTableDataCy.mainTableHeader}"]`,
       },
       labels: {

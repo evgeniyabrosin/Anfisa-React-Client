@@ -26,7 +26,7 @@ describe('XL Dataset should be opened in decision tree', () => {
     //Somehow check that hearing loss was loaded
   })
 
-  it('should exclude 3 variants | Test #3', () => {
+  it('should exclude 3 variants | Test #3/1', () => {
     datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
@@ -39,7 +39,7 @@ describe('XL Dataset should be opened in decision tree', () => {
       .scrollIntoView()
   })
 
-  it('should find Most_Severe_Consequence | Test #4', () => {
+  it('should find Most_Severe_Consequence | Test #3/2', () => {
     datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
@@ -53,7 +53,7 @@ describe('XL Dataset should be opened in decision tree', () => {
       .scrollIntoView()
   })
 
-  it('should find Presence_in_Databases | Test #5', () => {
+  it('should find Presence_in_Databases | Test #3/3', () => {
     datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
@@ -72,7 +72,7 @@ describe('XL Dataset should be opened in decision tree', () => {
     )
   })
 
-  it.only('should find masked_repeats in "Region_Canonical" | Test #6', () => {
+  it('should find masked_repeats in "Region_Canonical" | Test #3/4', () => {
     datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
@@ -89,16 +89,5 @@ describe('XL Dataset should be opened in decision tree', () => {
     decisionTreesPage.decisionTreeResults.graphHeaders.contains(
       'Region_Canonical',
     )
-  })
-
-  it('should find masked_repeats in "Region_Canonical" | Test #6', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
-    decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
-      '⏚Hearing Loss, v.5',
-    )
-    cy.wait(1000)
-    decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
-    decisionTreesPage.decisionTreeResults.viewReturnedVariants.click()
   })
 })
