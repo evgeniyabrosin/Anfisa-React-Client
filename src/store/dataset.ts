@@ -208,7 +208,11 @@ class DatasetStore {
 
   resetData() {
     this.datasetName = ''
-    this.zone = []
+    this.genes = []
+    this.genesList = []
+    this.samples = []
+    this.tags = []
+    this.clearZone()
   }
 
   async initDatasetAsync(datasetName: string) {
