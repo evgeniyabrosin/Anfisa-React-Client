@@ -32,12 +32,11 @@ describe('XL Dataset should be opened in decision tree', () => {
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
     )
-    decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    decisionTreesPage.decisionTreeMenu.selectDropdownElem
-      .getButtonByText('Load')
-      .click()
+    //decisionTreesPage.decisionTreeMenu.decisionActions.click()
+    // decisionTreesPage.decisionTreeMenu.selectDropdownElem
+    //   .getButtonByText('Load')
+    //   .click()
     cy.wait(1000)
-    //decisionTreesPage.decisionTreeResults.stepCard.findByText('Step 5').parents('[data-testid="step-card"]').scrollIntoView().children('[data-testid="exclude-info"]').click()
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains()
   })
