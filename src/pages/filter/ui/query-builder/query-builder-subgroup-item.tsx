@@ -9,6 +9,7 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
 import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
 
@@ -112,6 +113,7 @@ export const QueryBuilderSubgroupItem = observer(
               onClick={() => {
                 isModal ? handleAttrClick(subGroupItem) : expandContent()
               }}
+              data-testid={DecisionTreesResultsDataCy.graphHeaders}
             >
               {subGroupItem.name}
             </span>

@@ -15,9 +15,18 @@ export class Label extends UIElement {
   }
 
   findStepAndExclude(text?: string) {
-    return this.getElement().contains(text!).parents('[data-testid="step-card"]').within(() => { cy.get('[data-testid="exclude-info"]').click() })
+    return this.getElement()
+      .contains(text!)
+      .parents('[data-testid="step-card"]')
+      .within(() => {
+        cy.get('[data-testid="exclude-info"]').click()
+      })
   }
 
-  // within(elem: string) {
-  //   return this.getElement().within((elem: string) => {
+  findLabel(selector: string, text?: string) {
+    return this.getElement().find(selector).contains(text!)
+  }
+  beVisible() {
+    return this.getElement().should('be.visible')
+  }
 }

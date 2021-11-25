@@ -5,4 +5,5 @@ export const DecisionTreesResultsDataCy = {
   graphHeaders: 'graph-headers',
   stepCard: 'step-card',
   excludeInfo: 'exclude-info',
+  viewReturnedVars: 'view-returned-variants',
 }

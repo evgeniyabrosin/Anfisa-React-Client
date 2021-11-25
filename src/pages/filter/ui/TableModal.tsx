@@ -7,6 +7,7 @@ import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { defaultLayout } from '@components/variant/drawer'
 import { VariantBody } from '@components/variant/ui/body'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
@@ -135,6 +136,7 @@ export const TableModal = observer(() => {
           <Fragment>
             <div
               className="flex w-full justify-center text-16 font-semibold"
+              data-testid={MainTableDataCy.mainTableHeader}
               dangerouslySetInnerHTML={{
                 __html: variantList[variantIndex]?.lb ?? '',
               }}
@@ -169,6 +171,7 @@ export const TableModal = observer(() => {
                   <div
                     key={index}
                     className="shadow-dark p-1 mb-5 cursor-pointer"
+                    data-testid={MainTableDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
                       N - {index + 1}

@@ -10,6 +10,7 @@ export interface DecisionTreeResultsSelectors {
   groupGraphHeaders: string
   stepCard: string
   excludeInfo: string
+  viewReturnedVariants: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -25,6 +26,7 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly groupGraphHeaders: Label
   readonly stepCard: Label
   readonly excludeInfo: Button
+  readonly viewReturnedVariants: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -47,5 +49,6 @@ export class DecisionTreeResultsWidget extends UIWidget {
     )
     this.stepCard = new Label(selectors.stepCard, labels.stepCard)
     this.excludeInfo = new Button(selectors.excludeInfo)
+    this.viewReturnedVariants = new Button(selectors.viewReturnedVariants)
   }
 }

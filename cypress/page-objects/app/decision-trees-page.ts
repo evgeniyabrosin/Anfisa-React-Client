@@ -1,4 +1,5 @@
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
+import { DecisionTreesResultsDataCy } from '../../../src/components/data-testid/decision-tree-results.cy'
 import { BasePage } from '../lib/base-page'
 import { DecisionTreeWidget } from './widgets/decision-tree-menu.widget'
 import { DecisionTreeResultsWidget } from './widgets/decision-tree-results.widget'
@@ -19,12 +20,13 @@ class DecisionTreesPage extends BasePage {
     })
     this.decisionTreeResults = new DecisionTreeResultsWidget({
       selectors: {
-        searchGraphResults: `[data-testid = ]`,
-        searchStepsResults: `[data-testid = ]`,
-        groupGraphHeaders: `[data-testid = "group-header" ]`,
-        graphHeaders: `[data-testid = ]`,
-        stepCard: `[data-testid = "step-card"]`,
-        excludeInfo: `[data-testid = "exclude-info"]`,
+        searchGraphResults: `[data-testid = "${DecisionTreesResultsDataCy.searchGraphResults}"]`,
+        searchStepsResults: `[data-testid = "${DecisionTreesResultsDataCy.searchStepsResults}"]`,
+        groupGraphHeaders: `[data-testid = "${DecisionTreesResultsDataCy.groupGraphHeaders}" ]`,
+        graphHeaders: `[data-testid = "${DecisionTreesResultsDataCy.graphHeaders}"]`,
+        stepCard: `[data-testid = "${DecisionTreesResultsDataCy.stepCard}"]`,
+        excludeInfo: `[data-testid = "${DecisionTreesResultsDataCy.excludeInfo}"]`,
+        viewReturnedVariants: `[data-testid = "${DecisionTreesResultsDataCy.viewReturnedVars}"]`,
       },
       labels: {
         graphHeaders: '',

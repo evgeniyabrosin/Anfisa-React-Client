@@ -7,14 +7,14 @@ export class UIElement {
     this.isTextSelector = isTextSelector
   }
 
-  contains() {
-    return cy.contains(this._selector)
-  }
-
   protected getElement() {
     return this.isTextSelector
       ? cy.contains(this._selector)
       : cy.get(this._selector)
+  }
+
+  contains(text: string) {
+    return this.getElement().contains(text)
   }
 
   click() {
