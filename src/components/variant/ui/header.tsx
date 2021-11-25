@@ -57,6 +57,9 @@ export const VariantHeader = observer(
 
     const handleCloseDrawer = () => {
       setVariantIndex()
+      variantStore.resetIsActiveVariant()
+      datasetStore.fetchWsListAsync()
+      datasetStore.fetchWsTagsAsync()
 
       closeHandler()
     }
