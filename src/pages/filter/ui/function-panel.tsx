@@ -8,12 +8,14 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { CompundHet } from './compound-het'
+import { CustomInheritanceMode } from './custom-inheritance-mode'
 import { GeneRegion } from './gene-region'
 import { InheritanceMode } from './inheritance-mode'
 
 const functionsMap: Record<string, any> = {
   GeneRegion,
   Inheritance_Mode: InheritanceMode,
+  Custom_Inheritance_Mode: CustomInheritanceMode,
   Compound_Het: CompundHet,
 }
 
@@ -23,6 +25,10 @@ const initialStateMap: Record<string, any> = {
   },
   Inheritance_Mode: {
     problemGroups: [],
+    variants: [],
+  },
+  Custom_Inheritance_Mode: {
+    scenario: [],
     variants: [],
   },
   Compound_Het: {

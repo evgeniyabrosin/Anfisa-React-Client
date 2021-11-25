@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { EditModalVariants } from './edit-modal-variants'
@@ -25,7 +26,8 @@ export const CustomInheritanceModeContent = observer(
     selectStates,
     handleReset,
   }: IProps) => {
-    const variants = dtreeStore.statFuncData.variants
+    const variants =
+      dtreeStore.statFuncData.variants ?? filterStore.statFuncData?.variants
 
     return (
       <Fragment>

@@ -14,7 +14,7 @@ interface IProps {
 export const EditModalVariants = observer(
   ({ variants, disabled, handleCheckGroupItem }: IProps) => (
     <div className="flex-1 my-4 text-14">
-      {variants ? (
+      {variants?.length > 0 ? (
         variants.map((variant: any) => (
           <div key={variant} className="flex items-center mb-2">
             {disabled ? (

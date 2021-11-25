@@ -26,6 +26,7 @@ class FilterStore {
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
   activePreset = ''
+  statFuncData: any
 
   constructor() {
     makeAutoObservable(this)
@@ -130,13 +131,16 @@ class FilterStore {
   async fetchStatFuncAsync(
     unit: string,
     param?: Record<string, string | string[]>,
+    conditions?: [],
   ) {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       unit,
+      rq_id: String(Date.now()),
     })
 
     param && body.append('param', JSON.stringify(param))
+    conditions && body.append('conditions', JSON.stringify(conditions))
 
     const response = await fetch(getApiUrl(`statfunc`), {
       method: 'POST',
@@ -147,6 +151,8 @@ class FilterStore {
     })
 
     const result: IStatFuncData = await response.json()
+
+    if (result.variants) this.statFuncData = result
 
     return result
   }

@@ -3,13 +3,14 @@ import { cloneDeep } from 'lodash'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
+import { DtreeStatType, FilterCountsType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getCurrentStepIndexForApi } from '@utils/getCurrentStepIndexForApi'
 import { getDataFromCode } from '@utils/getDataFromCode'
+import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { makeStepActive } from '@utils/makeStepActive'
 import datasetStore from './dataset'
@@ -208,24 +209,7 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    const groups: Record<string, StatList[]> = {}
-
-    this.dtreeStat['stat-list'] &&
-      this.dtreeStat['stat-list'].forEach((item: StatList) => {
-        if (
-          item.name
-            .toLocaleLowerCase()
-            .includes(this.filterValue.toLocaleLowerCase())
-        ) {
-          if (groups[item.vgroup]) {
-            groups[item.vgroup] = [...groups[item.vgroup], item]
-          } else {
-            groups[item.vgroup] = [item]
-          }
-        }
-      })
-
-    return groups
+    return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
   }
 
   getStepIndexForApi = (index: number) => {
