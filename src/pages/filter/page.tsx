@@ -1,6 +1,6 @@
-import { Fragment, ReactElement, useEffect, useState } from 'react'
+import React, { Fragment, ReactElement, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import get from 'lodash/get'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
@@ -11,7 +11,6 @@ import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
@@ -42,6 +41,7 @@ import { TableModal } from './ui/TableModal'
 export const FilterPage = observer(
   (): ReactElement => {
     const history = useHistory()
+    const isXL = datasetStore.isXL
 
     useDatasetName()
     const params = useParams()
@@ -56,12 +56,7 @@ export const FilterPage = observer(
           code: 'return False',
         })
 
-        if (dsName && !variantStore.dsName) {
-          variantStore.setDsName(dsName)
-        }
-
         await dirinfoStore.fetchDsinfoAsync(dsName)
-        await datasetStore.fetchDsStatAsync()
 
         if (history.location.pathname === Routes.Refiner) {
           filterStore.setMethod(FilterMethodEnum.Refiner)
@@ -76,18 +71,13 @@ export const FilterPage = observer(
 
       return () => {
         dtreeStore.resetFilterChangeIndicator()
+        dtreeStore.resetData()
         dirinfoStore.resetData()
         datasetStore.resetData()
         filterStore.resetData()
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dsName])
-
-    const [allVariants, transcribedVariants, allTranscripts] = get(
-      datasetStore,
-      'statAmount',
-      [],
-    )
 
     return (
       <Fragment>
@@ -133,33 +123,48 @@ export const FilterPage = observer(
         {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
         <div className="overflow-hidden">
-          <Header>
+          <Header source="filter">
             <div className="text-white flex-grow flex justify-end pr-6">
               <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
                 {t('filter.variants', {
-                  all: allVariants,
+                  all: isXL
+                    ? toJS(dirinfoStore.dsinfo.total)
+                    : toJS(dtreeStore.statAmount[0]) ||
+                      toJS(datasetStore.statAmount[0]),
                 })}
               </span>
 
-              <span className="header-variants-info">
-                {t('filter.transcribedVariants', {
-                  all: transcribedVariants,
-                })}
-              </span>
+              {!isXL && (
+                <React.Fragment>
+                  <span className="header-variants-info">
+                    {t('filter.transcribedVariants', {
+                      all:
+                        toJS(dtreeStore.statAmount[1]) ||
+                        toJS(datasetStore.statAmount[1]),
+                    })}
+                  </span>
 
-              <span className="header-variants-info mr-6">
-                {t('filter.transcripts', {
-                  all: allTranscripts,
-                })}
-              </span>
+                  <span className="header-variants-info">
+                    {t('filter.transcripts', {
+                      all:
+                        toJS(dtreeStore.statAmount[2]) ||
+                        toJS(datasetStore.statAmount[2]),
+                    })}
+                  </span>
+                </React.Fragment>
+              )}
 
-              <PopperButton
-                ButtonElement={ExportReportButton}
-                ModalElement={ExportPanel}
-              />
+              <div className="ml-2">
+                <PopperButton
+                  ButtonElement={ExportReportButton}
+                  ModalElement={ExportPanel}
+                />
+              </div>
             </div>
           </Header>
+
           <FilterControl />
+
           {filterStore.method === FilterMethodEnum.DecisionTree && fetched && (
             <QueryBuilder />
           )}

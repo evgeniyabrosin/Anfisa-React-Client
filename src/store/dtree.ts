@@ -917,6 +917,13 @@ class DtreeStore {
     this.statFuncData = []
   }
 
+  resetData() {
+    this.dtreeStat = {}
+    this.statAmount = []
+    this.filteredCounts = 0
+    this.statRequestId = ''
+  }
+
   setDtreeName(name: string) {
     if (this.currentDtreeName) {
       this.setPrevDtreeName(this.currentDtreeName)

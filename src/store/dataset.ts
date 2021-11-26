@@ -213,6 +213,9 @@ class DatasetStore {
     this.samples = []
     this.tags = []
     this.clearZone()
+    this.dsStat = {}
+    this.variantsAmount = 0
+    this.statAmount = []
   }
 
   async initDatasetAsync(datasetName: string) {
