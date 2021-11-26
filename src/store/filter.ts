@@ -128,19 +128,17 @@ class FilterStore {
     return Object.keys(get(dsInfo, 'meta.samples', {}))
   }
 
-  async fetchStatFuncAsync(
-    unit: string,
-    param?: Record<string, string | string[]>,
-    conditions?: [],
-  ) {
+  async fetchStatFuncAsync(unit: string, param?: any) {
+    const conditions = JSON.stringify(datasetStore.conditions)
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       unit,
       rq_id: String(Date.now()),
+      conditions,
     })
 
     param && body.append('param', JSON.stringify(param))
-    conditions && body.append('conditions', JSON.stringify(conditions))
 
     const response = await fetch(getApiUrl(`statfunc`), {
       method: 'POST',

@@ -28,7 +28,7 @@ const initialStateMap: Record<string, any> = {
     variants: [],
   },
   Custom_Inheritance_Mode: {
-    scenario: [],
+    scenario: {},
     variants: [],
   },
   Compound_Het: {
@@ -73,6 +73,24 @@ export const FunctionPanel = observer(
           'Inheritance',
           FilterFunctionEnum.InheritanceMode,
           [[FilterFunctionEnum.InheritanceMode, noArray.length]],
+        )
+      }
+
+      if (selectedFilter.name === FilterFunctionEnum.CustomInheritanceMode) {
+        const condition = [
+          'func',
+          FilterFunctionEnum.CustomInheritanceMode,
+          '',
+          values.variants,
+          { scenario: values.scenario },
+        ]
+
+        const noArray = await datasetStore.setConditionsAsync(condition)
+
+        filterStore.addSelectedFilterGroup(
+          'Inheritance',
+          FilterFunctionEnum.CustomInheritanceMode,
+          [[FilterFunctionEnum.CustomInheritanceMode, noArray.length]],
         )
       }
 
