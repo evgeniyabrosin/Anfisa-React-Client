@@ -1,6 +1,6 @@
 import { datasetPage } from '../page-objects/app/datasets-page'
 import { decisionTreesPage } from '../page-objects/app/decision-trees-page'
-import { mainTablePage } from '../page-objects/app/main-table'
+import { returnedVariantsPage } from '../page-objects/app/returned-variants-page'
 
 describe('Test on main table of returned variants', () => {
   it('should open main table | test #4', () => {
@@ -17,23 +17,23 @@ describe('Test on main table of returned variants', () => {
     cy.intercept(
       'POST',
       '/app/reccnt?ds=xl_PGP3140_wgs_NIST-4_2&rec=2823765',
-    ).as('mainTable')
+    ).as('returnedVariantsTable')
     decisionTreesPage.decisionTreeResults.viewReturnedVariants.click()
-    cy.wait('@mainTable', { timeout: 10000 })
-    mainTablePage.mainTable.sampleButton.length(3)
-    mainTablePage.mainTable.mainTableHeader.haveText(
+    cy.wait('@returnedVariantsTable', { timeout: 10000 })
+    returnedVariantsPage.returnedVariantsTable.sampleButton.length(3)
+    returnedVariantsPage.returnedVariantsTable.returnedVariantsHeader.haveText(
       '[None] chr8:12712859-12712858 insertion',
     )
-    mainTablePage.mainTable.sampleButton.contains('N - 2').click()
-    mainTablePage.mainTable.mainTableHeader.haveText(
+    returnedVariantsPage.returnedVariantsTable.sampleButton.contains('N - 2').click()
+    returnedVariantsPage.returnedVariantsTable.returnedVariantsHeader.haveText(
       '[ANO3] chr11:26589499 deletion',
     )
-    mainTablePage.mainTable.tableSection
+    returnedVariantsPage.returnedVariantsTable.tableSection
       .getChildren()
       .contains('Quality')
       .click({ force: true })
     //?? Quality dropdown does not open and click happens not on the quality field
-    mainTablePage.mainTable.sampleButton.contains('N - 3').click()
+    returnedVariantsPage.returnedVariantsTable.sampleButton.contains('N - 3').click()
   })
 
   it('Add dataset and open it in Main Table | test #5', () => {

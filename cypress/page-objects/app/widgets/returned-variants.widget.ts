@@ -2,24 +2,24 @@ import { Button } from '../../lib/button'
 import { Label } from '../../lib/label'
 import { UIWidget } from '../../lib/ui-widget'
 
-export interface MainTableSelectors {
-  mainTableHeader: string
+export interface ReturnedVariantSelectors {
+  returnedVariantsHeader: string
   sampleButton: string
   tableSection: string
 }
 
-export interface MainTableLabels {
-  mainTableHeader: string
+export interface ReturnedVariantLabels {
+  returnedVariantsHeader: string
 }
 
-export class MainTableWidget extends UIWidget {
+export class ReturnedVariantWidget extends UIWidget {
   readonly sampleButton: Button
   readonly tableSection: Button
-  readonly mainTableHeader: Label
+  readonly returnedVariantsHeader: Label
 
   constructor(options: {
-    selectors: MainTableSelectors
-    labels: MainTableLabels
+    selectors: ReturnedVariantSelectors
+    labels: ReturnedVariantLabels
   }) {
     super(options)
 
@@ -28,9 +28,9 @@ export class MainTableWidget extends UIWidget {
 
     this.tableSection = new Button(selectors.tableSection)
     this.sampleButton = new Button(selectors.sampleButton)
-    this.mainTableHeader = new Label(
-      selectors.mainTableHeader,
-      labels.mainTableHeader,
+    this.returnedVariantsHeader = new Label(
+      selectors.returnedVariantsHeader,
+      labels.returnedVariantsHeader,
     )
   }
 }
