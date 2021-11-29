@@ -4,7 +4,7 @@ import { returnedVariantsPage } from '../page-objects/app/returned-variants-page
 
 describe('Test on main table of returned variants', () => {
   it('should open main table | test #4', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', '/app/dtree_set').as('selectList')
     cy.wait('@selectList')
@@ -24,7 +24,9 @@ describe('Test on main table of returned variants', () => {
     returnedVariantsPage.returnedVariantsTable.returnedVariantsHeader.haveText(
       '[None] chr8:12712859-12712858 insertion',
     )
-    returnedVariantsPage.returnedVariantsTable.sampleButton.contains('N - 2').click()
+    returnedVariantsPage.returnedVariantsTable.sampleButton
+      .contains('N - 2')
+      .click()
     returnedVariantsPage.returnedVariantsTable.returnedVariantsHeader.haveText(
       '[ANO3] chr11:26589499 deletion',
     )
@@ -33,11 +35,13 @@ describe('Test on main table of returned variants', () => {
       .contains('Quality')
       .click({ force: true })
     //?? Quality dropdown does not open and click happens not on the quality field
-    returnedVariantsPage.returnedVariantsTable.sampleButton.contains('N - 3').click()
+    returnedVariantsPage.returnedVariantsTable.sampleButton
+      .contains('N - 3')
+      .click()
   })
 
   it('Add dataset and open it in Main Table | test #5', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', '/app/dtree_set').as('selectList')
     cy.wait('@selectList')

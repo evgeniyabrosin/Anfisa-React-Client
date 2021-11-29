@@ -14,20 +14,16 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should open decision tree and choose Hearing Loss v.5 filter | Test #2', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
-    )
-    decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    decisionTreesPage.decisionTreeMenu.selectDropdownElem.getButtonByText(
-      'Load',
     )
     //Somehow check that hearing loss was loaded
   })
 
   it('should exclude 3 variants | Test #3/1', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
@@ -40,7 +36,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find Most_Severe_Consequence | Test #3/2', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
@@ -54,7 +50,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find Presence_in_Databases | Test #3/3', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
@@ -73,7 +69,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find masked_repeats in "Region_Canonical" | Test #3/4', () => {
-    datasetPage.visit('http://localhost:3000/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.visit('filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       '⏚Hearing Loss, v.5',
