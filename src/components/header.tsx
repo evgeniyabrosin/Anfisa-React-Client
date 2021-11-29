@@ -19,10 +19,11 @@ import userIcon from '@images/thomas-hunt.jpg'
 
 interface Props {
   children?: ReactElement | ReactNode
+  source?: string
 }
 
 export const Header = observer(
-  ({ children }: Props): ReactElement => {
+  ({ children, source }: Props): ReactElement => {
     const [datasets, setDatasets] = useState([])
     const [xlDatasetName, setXlDatasetName] = useState('')
     const params = useParams()
@@ -47,8 +48,8 @@ export const Header = observer(
         )
       }
 
-      initAsync()
-    }, [ds])
+      source !== 'filter' && initAsync()
+    }, [ds, source])
 
     const handleChangeDataset = (arg: Option) => {
       ds !== arg.value &&

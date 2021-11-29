@@ -32,13 +32,20 @@ export const QueryBuilderTotalNumbers = observer(
     const getDerivedVariants = (type: string) => {
       if (!dtreeStore.isCountsReceived) return '...'
 
+      const sum = (prevElement: any, currElement: any) => {
+        const prevNumber = Number.isInteger(prevElement) ? prevElement : 0
+        const currNumber = Number.isInteger(currElement) ? currElement : 0
+
+        return prevNumber + currNumber
+      }
+
       const acceptedVariants = dtreeStore.stepData
         .map(step => !step.excluded && step.difference)
-        .reduce((prev: any, curr: any) => prev + curr)
+        .reduce(sum)
 
       const rejectedVariants = dtreeStore.stepData
         .map(step => step.excluded && step.difference)
-        .reduce((prev: any, curr: any) => prev + curr)
+        .reduce(sum)
 
       return type === 'excluded' ? rejectedVariants : acceptedVariants
     }

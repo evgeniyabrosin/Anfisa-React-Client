@@ -50,14 +50,23 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
     datasetStore.genesList.length <= 0 &&
       datasetStore.fetchZoneListAsync('Panels')
 
+    if (zoneStore.selectedGenesList.length > 0) {
+      zoneStore.syncSelectedAndLocalFilters('isGenesList')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleApplyAsync = async () => {
+    close()
+
+    zoneStore.createSelectedZoneFilter('isGenesList')
     datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
+  }
 
-    close()
+  const onClearAll = () => {
+    zoneStore.unselectAllGenesList()
+    handleApplyAsync()
   }
 
   return (
@@ -67,6 +76,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       onClose={close}
       searchValue={searchValue}
       onApply={handleApplyAsync}
+      onClearAll={onClearAll}
       onChange={setSearchValue}
       className="mt-7"
       isGenesList={true}

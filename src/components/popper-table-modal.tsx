@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { InputSearch } from '@components/input-search'
@@ -63,7 +62,6 @@ export const PopperTableModal = observer(
       isGenesList && zoneStore.unselectAllGenesList()
       isSamples && zoneStore.unselectAllSamples()
       isTags && zoneStore.unselectAllTags()
-      datasetStore.fetchWsListAsync()
     }
 
     const defintSelectedAmount = () => {
@@ -114,15 +112,9 @@ export const PopperTableModal = observer(
                   {t('general.selectAll')}
                 </span>
               )}
-              {viewType ? (
-                <span className="cursor-pointer" onClick={onClearAll}>
-                  {t('general.clearAll')}
-                </span>
-              ) : (
-                <span className="cursor-pointer" onClick={handleClose}>
-                  {t('general.clearAll')}
-                </span>
-              )}
+              <span className="cursor-pointer" onClick={onClearAll}>
+                {t('general.clearAll')}
+              </span>
             </span>
           </div>
 
@@ -132,7 +124,12 @@ export const PopperTableModal = observer(
         <div className="w-full pl-4">{children}</div>
 
         <div className="flex justify-end pb-4 px-4 mt-4">
-          <Button text={t('general.cancel')} onClick={handleClose} />
+          <Button
+            text={t('general.cancel')}
+            hasBackground={false}
+            className="text-black"
+            onClick={handleClose}
+          />
 
           <Button
             text={t('general.apply')}

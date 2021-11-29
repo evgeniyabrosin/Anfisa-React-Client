@@ -49,16 +49,26 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
   useEffect(() => {
     datasetStore.samples.length <= 0 && datasetStore.fetchSamplesZoneAsync()
 
+    if (zoneStore.selectedSamples.length > 0) {
+      zoneStore.syncSelectedAndLocalFilters('isSamples')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleApplyAsync = async () => {
+    close()
+
+    zoneStore.createSelectedZoneFilter('isSamples')
     datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     datasetStore.fetchFilteredTabReportAsync()
     zoneStore.paintSelectedSamples()
-    close()
+  }
+
+  const onClearAll = () => {
+    zoneStore.unselectAllSamples('clearAll')
+    handleApplyAsync()
   }
 
   return (
@@ -69,6 +79,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       searchValue={searchValue}
       onApply={handleApplyAsync}
       onChange={setSearchValue}
+      onClearAll={onClearAll}
       className="mt-7"
       isSamples={true}
     >

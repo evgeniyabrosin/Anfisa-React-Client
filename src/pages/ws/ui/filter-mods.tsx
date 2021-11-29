@@ -17,7 +17,7 @@ export const FilterMods = (): ReactElement => {
     } else if (name) {
       name === FilterModsEnum.NOTMode && zoneStore.resetModeNOT()
       name === FilterModsEnum.VariantsWithNotesOnly &&
-        zoneStore.removeTag('_note')
+        zoneStore.removeLocalTag('_note', 'slow')
     }
   }
 
