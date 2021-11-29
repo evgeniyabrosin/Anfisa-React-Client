@@ -13,7 +13,7 @@ class ReturnedVariantsPage extends BasePage {
         returnedVariantsHeader: `[data-testid = "${ReturnedVariantsDataCy.returnedVariantsHeader}"]`,
       },
       labels: {
-        returnedVariantsHeader: 'MainTableHeader',
+        returnedVariantsHeader: 'returnedVariantsHeader',
       },
     })
   }
