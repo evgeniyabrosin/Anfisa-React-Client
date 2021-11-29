@@ -45,7 +45,6 @@ describe('XL Dataset should be opened in decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.graphHeaders
       .contains('Most_Severe_Consequence')
-      //.beVisible()
       .scrollIntoView()
   })
 
