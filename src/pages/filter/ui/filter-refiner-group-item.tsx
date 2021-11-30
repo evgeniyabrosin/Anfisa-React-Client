@@ -85,7 +85,7 @@ export const FilterRefinerGroupItem = observer(
               'font-bold': checked,
             })}
           >
-            {title || name}
+            {name || title}
           </p>
 
           {amount !== 0 && (

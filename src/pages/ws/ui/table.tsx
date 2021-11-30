@@ -87,7 +87,7 @@ export const Table = observer(
           : toJS(datasetStore.filteredNo)[index]
 
       if (!variantStore.drawerVisible) {
-        columnsStore.setColumns(['Gene', 'Variant'])
+        columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
         columnsStore.showColumns()
         variantStore.setDsName(params.get('ds') ?? '')
       }

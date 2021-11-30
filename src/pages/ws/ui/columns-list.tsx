@@ -7,56 +7,47 @@ import {
 } from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
 
+import { IColumns } from '@declarations'
 import columnsStore from '@store/wsColumns'
 import { ColumnNameItem } from './column-name-item'
 
-const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+const getItemStyle = (draggableStyle: any) => ({
   userSelect: 'none',
   ...draggableStyle,
   left: '0px !important',
   top: draggableStyle.top - 130 || 600,
 })
 
-const reorder = (
-  list: string[],
-  startIndex: number,
-  endIndex: number,
-): string[] => {
-  const result = Array.from(list)
-  const [removed] = result.splice(startIndex, 1)
-
-  result.splice(endIndex, 0, removed)
-
-  return result
-}
-
 export const ColumnsList = observer(
   (): ReactElement => {
-    const [columns, setColumns] = useState<string[]>(columnsStore.getColumns)
+    const [columns, setColumns] = useState<IColumns[]>(
+      columnsStore.getExtendedColumns,
+    )
 
     useEffect(() => {
-      setColumns(columnsStore.getColumns)
+      setColumns(columnsStore.getExtendedColumns)
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [columnsStore.searchColumnValue])
+    }, [columnsStore.searchColumnValue, columnsStore.columns])
 
     const onDragEnd = (result: DropResult) => {
-      if (!result.destination) {
-        return
+      const items = Array.from(columns)
+
+      const [reorderItem] = items.splice(result.source.index, 1)
+
+      if (result.destination) {
+        items.splice(result.destination.index, 0, reorderItem)
       }
 
-      const items = reorder(
-        columns,
-        result.source.index,
-        result.destination.index,
-      )
-
-      const activeColumns = items.filter(item =>
-        columnsStore.columns.includes(item),
-      )
-
-      columnsStore.setColumns(activeColumns)
+      columnsStore.setColumns(items)
       setColumns(items)
     }
+
+    const filteredColumns = columns.filter(item =>
+      item.title
+        .toLocaleLowerCase()
+        .includes(columnsStore.searchColumnValue.toLocaleLowerCase()),
+    )
 
     return (
       <div className="mt-3 w-64 pr-4">
@@ -64,24 +55,28 @@ export const ColumnsList = observer(
           <Droppable droppableId="droppable">
             {provided => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {columns.map((item, index) => (
+                {filteredColumns.map((item, index) => (
                   <Draggable
-                    key={item}
-                    draggableId={item}
+                    key={item.title}
+                    draggableId={item.title}
                     index={index}
                     isDragDisabled={!!columnsStore.searchColumnValue}
                   >
-                    {(providedDraggable, snapshot) => (
+                    {providedDraggable => (
                       <div
                         ref={providedDraggable.innerRef}
                         {...providedDraggable.draggableProps}
                         {...providedDraggable.dragHandleProps}
                         style={getItemStyle(
-                          snapshot.isDragging,
                           providedDraggable.draggableProps.style,
                         )}
                       >
-                        <ColumnNameItem name={item} />
+                        <ColumnNameItem
+                          name={item.title}
+                          setColumns={setColumns}
+                          columns={columns}
+                          index={index}
+                        />
                       </div>
                     )}
                   </Draggable>
