@@ -106,11 +106,12 @@ export const NextStepContentItem = observer(
               {group.includes('and') && 'AND'}
             </JoinType>
 
-            <ExpandContentButton
+            {/* TODO: this feature has not yet been implemented on the backend  */}
+            {/* <ExpandContentButton
               isDropDown
               isVisible={isVisible}
               expandContent={toggleVisible}
-            />
+            /> */}
 
             {isVisible && (
               <DropDownJoin

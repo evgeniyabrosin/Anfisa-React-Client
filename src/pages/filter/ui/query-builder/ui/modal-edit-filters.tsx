@@ -28,15 +28,11 @@ export const ModalEditFilters = observer(
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    let attrData: (string | number)[][] = []
+    const currentStatList = subGroups.find(subGroup =>
+      subGroup.find(element => element.name === groupName),
+    )
 
-    subGroups.map(subGroup => {
-      subGroup.map((item, index) => {
-        if (item.name === groupName) {
-          attrData = subGroup[index].variants
-        }
-      })
-    })
+    const attrData: (string | number)[][] = currentStatList?.[0].variants ?? []
 
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[

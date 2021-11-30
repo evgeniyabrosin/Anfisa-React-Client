@@ -47,6 +47,10 @@ export const NextStepHeader = observer(
       changeStep(stepIndex, action)
     }
 
+    const isEmptyStep = currentStep.groups.length === 0
+    const isFirstStep = index === 0
+    const isEmptyFirstStep = isEmptyStep && isFirstStep
+
     return (
       <Fragment>
         <div
@@ -54,12 +58,14 @@ export const NextStepHeader = observer(
           className="flex w-full justify-between items-center mt-1 step-content-area"
         >
           <div className="relative flex items-center">
-            <Icon
-              name="Options"
-              className="cursor-pointer text-blue-bright"
-              stroke={false}
-              onClick={showModal}
-            />
+            {!isEmptyFirstStep && (
+              <Icon
+                name="Options"
+                className="cursor-pointer text-blue-bright"
+                stroke={false}
+                onClick={showModal}
+              />
+            )}
 
             <Step>
               {t('dtree.step')}{' '}
