@@ -16,7 +16,6 @@ import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { makeStepActive } from '@utils/makeStepActive'
 import { DropDownJoin } from './dropdown-join'
-import { ExpandContentButton } from './expand-content-button'
 
 const ContentControl = styled.div`
   display: flex;
@@ -52,9 +51,9 @@ export const NextStepContentItem = observer(
 
     const [isVisible, setIsVisible] = useState(false)
 
-    const toggleVisible = () => {
-      setIsVisible(prev => !prev)
-    }
+    // const toggleVisible = () => {
+    //   setIsVisible(prev => !prev)
+    // }
 
     const currentStep = dtreeStore.getStepData[index]
 
