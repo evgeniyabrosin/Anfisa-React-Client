@@ -43,9 +43,7 @@ export const QuerySelected = observer(
             draggable: true,
             progress: 0,
           })
-        : history.push(`${Routes.WS}?ds=${params.get('ds')}`, {
-            from: 'filter',
-          })
+        : history.push(`${Routes.WS}?ds=${params.get('ds')}`)
     }
 
     return (

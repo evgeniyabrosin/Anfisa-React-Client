@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
+import { GlbPagesNames } from '@glb/glb-names'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
 class OperationsStore {
@@ -124,7 +124,7 @@ class OperationsStore {
       ws: wsName,
     })
 
-    const isRefiner = filterStore.method === FilterMethodEnum.Refiner
+    const isRefiner = filterStore.method === GlbPagesNames.Refiner
     const isMainTable = pathName === Routes.WS
 
     let compareValue = 0

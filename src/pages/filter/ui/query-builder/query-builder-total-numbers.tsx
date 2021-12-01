@@ -1,4 +1,5 @@
 import { Fragment, ReactElement } from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -9,9 +10,9 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 
 export const QueryBuilderTotalNumbers = observer(
   (): ReactElement => {
-    const variants = dirinfoStore.dsinfo.total
+    const variants = toJS(dirinfoStore.dsinfo).total
 
-    const stepData = dtreeStore.stepData
+    const stepData = toJS(dtreeStore.stepData)
 
     const stepIndex = stepData.findIndex(
       element => element.isActive || element.isReturnedVariantsActive,
@@ -62,7 +63,7 @@ export const QueryBuilderTotalNumbers = observer(
             {variants}
           </span>
 
-          {dtreeStore.stepData.length > 0 && (
+          {toJS(dtreeStore.stepData).length > 0 && (
             <Fragment>
               <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
                 <span>{t('dtree.acceptedVariants')}</span>

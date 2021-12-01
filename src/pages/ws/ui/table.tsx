@@ -1,5 +1,6 @@
 import { ReactElement, useCallback, useEffect } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import cn from 'classnames'
@@ -13,6 +14,7 @@ import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
+import { Routes } from '@router/routes.enum'
 import { NoResultsFound } from '@components/no-results-found'
 
 interface Props {
@@ -42,6 +44,9 @@ export const isRowSelected = (
 export const Table = observer(
   ({ columns, data }: Props): ReactElement => {
     const params = useParams()
+    const location = useLocation()
+    const history = useHistory()
+    const alreadyOpened = !!params.get('variant')
 
     const defaultColumn = {
       width: variantStore.drawerVisible
@@ -84,38 +89,46 @@ export const Table = observer(
       useBlockLayout,
     )
 
-    const handleOpenVariant = useCallback(({ index }: PropsRow) => {
-      if (window.getSelection()?.toString() || datasetStore.isXL) return
+    const routeToVariant = (variant: number) => {
+      let search = location.search
 
-      const idx =
-        toJS(datasetStore.filteredNo).length === 0
-          ? index
-          : toJS(datasetStore.filteredNo)[index]
+      alreadyOpened && (search = location.search.split('&variant')[0])
+      history.push(`${Routes.WS + search}&variant=${variant}`)
+    }
 
-      if (!variantStore.drawerVisible) {
-        columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
-        columnsStore.showColumns()
-        variantStore.setDsName(params.get('ds') ?? '')
-      }
+    const isFiltered = (): boolean => {
+      return toJS(datasetStore.filteredNo).length > 0
+    }
 
-      variantStore.setIndex(idx)
-      variantStore.setChoosedIndex(index)
+    const handleOpenVariant = useCallback(
+      ({ index }: PropsRow) => {
+        if (window.getSelection()?.toString() || datasetStore.isXL) return
 
-      variantStore.setIsActiveVariant()
+        if (!variantStore.drawerVisible) {
+          columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
+          columnsStore.showColumns()
+          variantStore.setDsName(params.get('ds') ?? '')
+          variantStore.setDrawerVisible(true)
+        }
 
-      variantStore.fetchVarinatInfoAsync()
+        const idx = isFiltered() ? toJS(datasetStore.filteredNo)[index] : index
 
-      if (!variantStore.drawerVisible) {
-        variantStore.setDrawerVisible(true)
-      }
+        variantStore.setIndex(idx)
+
+        variantStore.fetchVarinatInfoAsync()
+
+        routeToVariant(idx)
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+      [],
+    )
 
     useEffect(() => {
-      variantStore.isActiveVariant &&
+      alreadyOpened &&
         handleOpenVariant({
-          index: 0,
+          index: isFiltered() ? 0 : Number(params.get('variant')),
         })
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -136,6 +149,7 @@ export const Table = observer(
             {...row.getRowProps({
               style,
             })}
+            onClick={() => handleOpenVariant(row)}
             className={cn(
               'cursor-pointer flex items-center tr',
               variantStore.drawerVisible &&
@@ -143,7 +157,6 @@ export const Table = observer(
                 ? 'bg-blue-bright text-white'
                 : 'text-black hover:bg-blue-light',
             )}
-            onClick={() => handleOpenVariant(row)}
           >
             {row.cells.map((cell: any) => {
               const isSampleColumn = cell?.column?.Header === 'Samples'

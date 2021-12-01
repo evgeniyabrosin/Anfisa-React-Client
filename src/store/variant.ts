@@ -32,16 +32,16 @@ export class VariantStore {
     makeAutoObservable(this)
   }
 
+  setNoteText(value: string) {
+    this.noteText = value
+  }
+
   setIsActiveVariant() {
     this.isActiveVariant = true
   }
 
   resetIsActiveVariant() {
     this.isActiveVariant = false
-  }
-
-  setNoteText(value: string) {
-    this.noteText = value
   }
 
   prevVariant() {
@@ -103,13 +103,10 @@ export class VariantStore {
   }
 
   setIndex(index: number) {
-    this.index = index
-
-    this.fetchVarinatInfoAsync()
-  }
-
-  setChoosedIndex(index: number) {
-    this.choosedIndex = index
+    runInAction(() => {
+      this.index = index
+      this.fetchVarinatInfoAsync()
+    })
   }
 
   setDsName(dsName: string) {

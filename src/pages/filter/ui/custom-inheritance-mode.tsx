@@ -3,11 +3,11 @@ import { FormikProps } from 'formik'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './query-builder/ui/custom-inheritance-mode-content'
@@ -124,8 +124,7 @@ export const CustomInheritanceMode = observer(
 
       const params = `{"scenario":{${scenarioString}}}`
 
-      // GlbPagesNames.Refiner &&
-      filterStore.method === FilterMethodEnum.Refiner &&
+      filterStore.method === GlbPagesNames.Refiner &&
         setFieldValue('scenario', Object.fromEntries(newScenario))
       filterStore.fetchStatFuncAsync('Custom_Inheritance_Mode', params)
     }

@@ -5,7 +5,6 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { DatasetCreationErrorsEnum } from '@core/enum/dataset-creation-errors-enum'
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -19,6 +18,7 @@ import { Button } from '@ui/button'
 import { Attention } from '@ui/icons/attention'
 import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
+import { GlbPagesNames } from '@glb/glb-names'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
@@ -38,7 +38,7 @@ export const ModalSaveDataset = observer(() => {
   useEffect(() => {
     if (
       pathName === PatnNameEnum.Filter &&
-      filterStore.method === FilterMethodEnum.DecisionTree &&
+      filterStore.method === GlbPagesNames.Filter &&
       dtreeStore.acceptedVariants === 0
     ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
@@ -46,7 +46,7 @@ export const ModalSaveDataset = observer(() => {
 
     if (
       pathName === PatnNameEnum.Filter &&
-      filterStore.method === FilterMethodEnum.Refiner &&
+      filterStore.method === GlbPagesNames.Refiner &&
       datasetStore.statAmount[0] === 0
     ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
@@ -172,13 +172,15 @@ export const ModalSaveDataset = observer(() => {
           <span className="text-12 text-red-secondary mt-2">{error}</span>
         </div>
 
-        {!isDone && pathName !== PatnNameEnum.Filter && (
-          <div className="mt-5 flex items-center">
-            <Attention className="mr-2" />
+        {!isDone &&
+          pathName !== PatnNameEnum.Filter &&
+          filterStore.method !== GlbPagesNames.Refiner && (
+            <div className="mt-5 flex items-center">
+              <Attention className="mr-2" />
 
-            <span className="text-12">{t('dsCreation.attention')}</span>
-          </div>
-        )}
+              <span className="text-12">{t('dsCreation.attention')}</span>
+            </div>
+          )}
 
         <span className="mt-2 text-14">
           {operations.savingStatus[1]}
