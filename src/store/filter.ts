@@ -4,8 +4,9 @@ import { makeAutoObservable } from 'mobx'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
+import { GlbPagesNames } from '@glb/glb-names'
+import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
@@ -20,7 +21,7 @@ interface AddSelectedFiltersI {
 }
 
 class FilterStore {
-  method: FilterMethodEnum = FilterMethodEnum.DecisionTree
+  method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
@@ -40,7 +41,7 @@ class FilterStore {
     this.actionName = undefined
   }
 
-  setMethod(method: FilterMethodEnum) {
+  setMethod(method: GlbPagesNames | FilterControlOptions) {
     this.method = method
   }
 
@@ -156,7 +157,7 @@ class FilterStore {
   }
 
   resetData() {
-    this.method = FilterMethodEnum.DecisionTree
+    this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
     this.dtreeSet = {}
     this.selectedFilters = {}

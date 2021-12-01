@@ -19,6 +19,7 @@ export class VariantStore {
   currentTag = ''
   noteText = ''
   isActiveVariant = false
+  hasInitialConditions = false
 
   isModalNotesVisible = false
 
@@ -32,6 +33,10 @@ export class VariantStore {
 
   resetIsActiveVariant() {
     this.isActiveVariant = false
+  }
+
+  setInitialConditions(state: boolean) {
+    this.hasInitialConditions = state
   }
 
   setNoteText(value: string) {

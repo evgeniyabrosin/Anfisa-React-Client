@@ -2,34 +2,53 @@ import { Fragment, ReactElement } from 'react'
 import { useHistory } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
+import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { getPageRoute } from '@router/router.const'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
+import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
+import {
+  FilterControlOptions,
+  FilterControlOptionsNames,
+} from './filter-control.const'
 import { FilterControlQueryBuilder } from './filter-control-query-builder'
 import { FilterControlRefiner } from './filter-control-refiner'
+import { toJS } from 'mobx'
 
 export const FilterControl = observer(
   (): ReactElement => {
     const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0
 
     const isLastActionHistoryIndex =
-      dtreeStore.actionHistoryIndex + 1 === dtreeStore.actionHistory.length
+      dtreeStore.actionHistoryIndex + 1 ===
+      toJS(dtreeStore.actionHistory).length
 
     const isUndoLocked = isFirstActionHistoryIndex
     const isRedoLocked = isLastActionHistoryIndex
     const history = useHistory()
     const handleClose = () => history.goBack()
+    const params = useParams()
+    const dsName = params.get('ds') || ''
+    const page: FilterControlOptions = filterStore.method as FilterControlOptions
+    const pageName: FilterControlOptionsNames = FilterControlOptionsNames[page]
+
+    const goToPage = (pageName: FilterControlOptions) => {
+      const route = getPageRoute(pageName)
+      filterStore.setMethod(pageName)
+
+      history.push(`${route}?ds=${dsName}`)
+    }
 
     return (
       <Fragment>
         <div className="flex flex-wrap justify-end bg-blue-dark pt-7 pr-6 pb-4 pl-6">
           <div className="flex items-center w-full mt-5">
-            {filterStore.method === 'Filter Refiner' ? (
+            {page === GlbPagesNames.Refiner ? (
               <FilterControlRefiner />
             ) : (
               <FilterControlQueryBuilder />
@@ -43,17 +62,14 @@ export const FilterControl = observer(
               </span>
 
               <DropDown
-                options={[
-                  FilterMethodEnum.DecisionTree,
-                  FilterMethodEnum.Refiner,
-                ]}
-                value={filterStore.method}
-                onSelect={args =>
-                  filterStore.setMethod(args.value as FilterMethodEnum)
-                }
+                options={FilterControlOptions}
+                value={pageName}
+                onSelect={args => {
+                  goToPage(args.value as FilterControlOptions)
+                }}
               />
 
-              {filterStore.method === FilterMethodEnum.DecisionTree && (
+              {page === GlbPagesNames.Filter && (
                 <Button
                   text="Text editor"
                   className="ml-2 hover:bg-blue-bright"

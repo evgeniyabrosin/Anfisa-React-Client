@@ -5,6 +5,7 @@
       "@images/*": ["./assets/images/*"],
       "@components/*": ["./components/*"],
       "@core/*": ["./core/*"],
+      "@glb/*": ["./glb/*"],
       "@pages/*": ["./pages/*"],
       "@router/*": ["./router/*"],
       "@store/*": ["./store/*"],

@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -10,6 +9,7 @@ import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
+import { GlbPagesNames } from '@glb/glb-names'
 import { ControlPanelTitle } from './control-panel-title'
 export const EditFilter = observer(
   (): ReactElement => {
@@ -18,7 +18,7 @@ export const EditFilter = observer(
 
     const handleClick = () => {
       histroy.push(`${Routes.Filter}?ds=${params.get('ds')}`)
-      filterStore.setMethod(FilterMethodEnum.Refiner)
+      filterStore.setMethod(GlbPagesNames.Refiner)
     }
 
     const switchHandler = (checked: boolean) => {

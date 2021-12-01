@@ -9,6 +9,10 @@ import { Loader } from '@components/loader'
 import { variantColumnTable } from '../columns'
 import { Table } from './table'
 
+interface Props {
+  variant: number | undefined
+}
+
 const Styles = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
@@ -43,7 +47,7 @@ const Styles = styled.div`
 `
 
 export const TableVariants = observer(
-  (): ReactElement => {
+  ({ variant }: Props): ReactElement => {
     const columns = columnsStore.selectedColumns.map(column =>
       variantColumnTable.find(item => item.Header === column),
     )
@@ -52,7 +56,11 @@ export const TableVariants = observer(
 
     return (
       <Styles className="flex-1 overflow-auto">
-        <Table columns={columns} data={datasetStore.tabReport} />
+        <Table
+          openedVariant={variant}
+          columns={columns}
+          data={datasetStore.tabReport}
+        />
       </Styles>
     )
   },

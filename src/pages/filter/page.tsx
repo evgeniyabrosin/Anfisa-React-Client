@@ -1,23 +1,18 @@
-import React, { Fragment, ReactElement, useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
+import React, { Fragment, ReactElement, useEffect } from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
-import { Routes } from '@router/routes.enum'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { FilterControl } from './ui/filter-control'
-import { FilterRefiner } from './ui/filter-refiner'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
 import { QueryBuilder } from './ui/query-builder/query-builder'
 import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-het'
@@ -37,16 +32,17 @@ import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-r
 import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
 import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 import { TableModal } from './ui/TableModal'
+import filterStore from '@store/filter'
 
 export const FilterPage = observer(
   (): ReactElement => {
-    const history = useHistory()
     const isXL = datasetStore.isXL
 
     useDatasetName()
     const params = useParams()
     const dsName = params.get('ds') || ''
-    const [fetched, setInit] = useState(false)
+    const dtreeStatAmount = toJS(dtreeStore.statAmount)
+    const dataSetStatAmount = toJS(datasetStore.statAmount)
 
     useEffect(() => {
       const initAsync = async () => {
@@ -58,16 +54,10 @@ export const FilterPage = observer(
 
         await dirinfoStore.fetchDsinfoAsync(dsName)
 
-        if (history.location.pathname === Routes.Refiner) {
-          filterStore.setMethod(FilterMethodEnum.Refiner)
-        } else {
-          await dtreeStore.fetchDtreeSetAsync(body)
-        }
+        await dtreeStore.fetchDtreeSetAsync(body)
       }
 
       initAsync()
-        .then(() => setInit(true))
-        .catch(() => null)
 
       return () => {
         dtreeStore.resetFilterChangeIndicator()
@@ -77,7 +67,7 @@ export const FilterPage = observer(
         filterStore.resetData()
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dsName])
+    }, [dsName, history])
 
     return (
       <Fragment>
@@ -128,9 +118,8 @@ export const FilterPage = observer(
               <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
                 {t('filter.variants', {
                   all: isXL
-                    ? toJS(dirinfoStore.dsinfo.total)
-                    : toJS(dtreeStore.statAmount[0]) ||
-                      toJS(datasetStore.statAmount[0]),
+                    ? toJS(dirinfoStore.dsinfo).total
+                    : dtreeStatAmount[0] || dataSetStatAmount[0],
                 })}
               </span>
 
@@ -138,17 +127,13 @@ export const FilterPage = observer(
                 <React.Fragment>
                   <span className="header-variants-info">
                     {t('filter.transcribedVariants', {
-                      all:
-                        toJS(dtreeStore.statAmount[1]) ||
-                        toJS(datasetStore.statAmount[1]),
+                      all: dtreeStatAmount[1] || dataSetStatAmount[1],
                     })}
                   </span>
 
                   <span className="header-variants-info">
                     {t('filter.transcripts', {
-                      all:
-                        toJS(dtreeStore.statAmount[2]) ||
-                        toJS(datasetStore.statAmount[2]),
+                      all: dtreeStatAmount[2] || dataSetStatAmount[2],
                     })}
                   </span>
                 </React.Fragment>
@@ -164,11 +149,7 @@ export const FilterPage = observer(
           </Header>
 
           <FilterControl />
-
-          {filterStore.method === FilterMethodEnum.DecisionTree && fetched && (
-            <QueryBuilder />
-          )}
-          {filterStore.method === FilterMethodEnum.Refiner && <FilterRefiner />}
+          <QueryBuilder />
         </div>
       </Fragment>
     )

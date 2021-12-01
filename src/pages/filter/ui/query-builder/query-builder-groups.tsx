@@ -34,8 +34,10 @@ export const QueryBuilderGroups = observer(
       step => step.isActive || step.isReturnedVariantsActive,
     )
 
+    // const activeStep = dtreeStore.stepData[activeStepIndex]
     const activeStep = dtreeStore.stepData[activeStepIndex]
-    const isDisabled = activeStep.groups.length === 0 && !activeStep.isFinalStep
+    // const isDisabled = activeStep.groups.length === 0 && !activeStep.isFinalStep
+    const isDisabled = true
 
     const createStep = () => {
       if (activeStepIndex === -1) {

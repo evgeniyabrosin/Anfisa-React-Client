@@ -1,4 +1,5 @@
 import { ReactElement, useCallback, useEffect } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import cn from 'classnames'
@@ -12,11 +13,13 @@ import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
+import { Routes } from '@router/routes.enum'
 import { NoResultsFound } from '@components/no-results-found'
 
 interface Props {
   columns: any[]
   data: any[]
+  openedVariant: number | undefined
 }
 
 interface PropsRow {
@@ -34,8 +37,11 @@ export const isRowSelected = (
 }
 
 export const Table = observer(
-  ({ columns, data }: Props): ReactElement => {
+  ({ columns, data, openedVariant }: Props): ReactElement => {
     const params = useParams()
+    const location = useLocation()
+    const history = useHistory()
+    const hasOpenedVariant = openedVariant !== undefined
 
     const defaultColumn = {
       width: variantStore.drawerVisible
@@ -78,38 +84,59 @@ export const Table = observer(
       useBlockLayout,
     )
 
-    const handleOpenVariant = useCallback(({ index }: PropsRow) => {
-      if (window.getSelection()?.toString() || datasetStore.isXL) return
+    const handleOpenVariant = useCallback(
+      ({ index }: PropsRow, withRoute: boolean) => {
+        if (window.getSelection()?.toString() || datasetStore.isXL) return
 
-      const idx =
-        toJS(datasetStore.filteredNo).length === 0
-          ? index
-          : toJS(datasetStore.filteredNo)[index]
+        const idx =
+          toJS(datasetStore.filteredNo).length === 0
+            ? index
+            : toJS(datasetStore.filteredNo)[index]
 
-      if (!variantStore.drawerVisible) {
-        columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
-        columnsStore.showColumns()
-        variantStore.setDsName(params.get('ds') ?? '')
-      }
+        if (!variantStore.drawerVisible) {
+          columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
+          columnsStore.showColumns()
+          variantStore.setDsName(params.get('ds') ?? '')
+        }
 
-      variantStore.setIndex(idx)
-      variantStore.setChoosedIndex(index)
+        variantStore.setIndex(idx)
+        variantStore.setChoosedIndex(index)
 
-      variantStore.setIsActiveVariant()
+        variantStore.setIsActiveVariant()
 
-      variantStore.fetchVarinatInfoAsync()
+        variantStore.fetchVarinatInfoAsync()
 
-      if (!variantStore.drawerVisible) {
-        variantStore.setDrawerVisible(true)
-      }
+        if (!variantStore.drawerVisible) {
+          variantStore.setDrawerVisible(true)
+        }
+
+        if (variantStore.drawerVisible && index !== openedVariant) {
+          const previousLocation = location.search.split('&variant')[0]
+
+          history.push(`${Routes.WS + previousLocation}&variant=${index}`)
+
+          return
+        }
+
+        withRoute &&
+          history.push(`${Routes.WS + location.search}&variant=${index}`)
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+      [],
+    )
 
     useEffect(() => {
       variantStore.isActiveVariant &&
-        handleOpenVariant({
-          index: 0,
-        })
+        handleOpenVariant(
+          {
+            index: 0,
+          },
+          true,
+        )
+
+      if (hasOpenedVariant) {
+        handleOpenVariant({ index: openedVariant as number }, false)
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -131,7 +158,7 @@ export const Table = observer(
                 ? 'bg-blue-bright text-white'
                 : 'text-black hover:bg-blue-light',
             )}
-            onClick={() => handleOpenVariant(row)}
+            onClick={() => handleOpenVariant(row, !hasOpenedVariant)}
           >
             {row.cells.map((cell: any) => {
               return (

@@ -7,11 +7,13 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
-import { Routes } from '@router/routes.enum'
+import filterStore from '@store/filter'
+import { getPageRoute } from '@router/router.const'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
 import { PopperButton } from '@components/popper-button'
+import { GlbPagesNames } from '@glb/glb-names'
 
 interface PropsButton {
   isOpen?: boolean
@@ -52,19 +54,12 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
   const ref = useRef<any>(null)
   const history = useHistory()
 
-  const goToWs = () => {
-    datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
-    history.push(`${Routes.WS}?ds=${dirinfoStore.selectedDirinfoName}`)
-  }
+  // todo: might be replaced to shared source
+  const goToPage = (name: GlbPagesNames) => {
+    const route = getPageRoute(name)
 
-  const goToFilter = () => {
-    datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
-    history.push(`${Routes.Filter}?ds=${dirinfoStore.selectedDirinfoName}`)
-  }
-
-  const goToRefiner = () => {
-    datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
-    history.push(`${Routes.Refiner}?ds=${dirinfoStore.selectedDirinfoName}`)
+    history.push(`${route}?ds=${dirinfoStore.selectedDirinfoName}`)
+    filterStore.setMethod(name)
   }
 
   useOutsideClick(ref, close)
@@ -75,28 +70,22 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
       ref={ref}
       data-testid={DatasetInfoDataCy.decTreePanel}
     >
-      {dirinfoStore.dsinfo.kind === 'ws' && (
-        <span
-          className="py-1 px-3 rounded hover:bg-blue-light"
-          onClick={goToWs}
-        >
-          {t('home.table')}
-        </span>
-      )}
-
-      <span
-        className="py-1 px-3 rounded hover:bg-blue-light"
-        onClick={goToFilter}
-      >
-        {t('home.filter')}
-      </span>
-
-      <span
-        className="py-1 px-3 rounded hover:bg-blue-light"
-        onClick={goToRefiner}
-      >
-        {t('home.refiner')}
-      </span>
+      {Object.values(GlbPagesNames)
+        .filter(name => name !== GlbPagesNames.Root)
+        .map((pageName, index) => {
+          return (
+            <span
+              className="py-1 px-3 rounded hover:bg-blue-light"
+              key={index}
+              onClick={() => {
+                datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
+                goToPage(pageName)
+              }}
+            >
+              {t(`home.${pageName}`)}
+            </span>
+          )
+        })}
     </div>
   )
 }

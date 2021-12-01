@@ -3,6 +3,7 @@ import { Option } from 'react-dropdown'
 import { Link, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import get from 'lodash/get'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
@@ -11,11 +12,13 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
-import { Routes } from '@router/routes.enum'
+import { PageRoute, RouteNames, Routes } from '@router/routes.enum'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { Logo } from '@components/logo'
 import userIcon from '@images/thomas-hunt.jpg'
+import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -30,21 +33,27 @@ export const Header = observer(
     const ds = params.get('ds') || ''
     const history = useHistory()
     const isHomepage = window.location.pathname === Routes.Root
+    const path: PageRoute = window.location.pathname as PageRoute
+
+    useEffect(() => {
+      const page: GlbPagesNames = RouteNames[path]
+      filterStore.setMethod(page)
+    }, [path])
 
     useEffect(() => {
       const initAsync = async () => {
         await dirinfoStore.fetchDirInfoAsync()
 
         const xlName = get(
-          dirinfoStore,
-          `dirinfo['ds-dict'][${ds}].ancestors[0][0]`,
+          toJS(dirinfoStore.dirinfo),
+          `['ds-dict'][${ds}].ancestors[0][0]`,
           '',
         )
 
         setXlDatasetName(xlName)
 
         setDatasets(
-          get(dirinfoStore, `dirinfo.ds-dict.${xlName}.secondary`, []),
+          get(toJS(dirinfoStore.dirinfo), `ds-dict.${xlName}.secondary`, []),
         )
       }
 
@@ -91,7 +100,7 @@ export const Header = observer(
               <Logo mode="white" className="mr-4" />
 
               <span className="text-grey-blue">
-                {dirinfoStore.dirinfo.version as string}
+                {toJS(dirinfoStore.dirinfo).version as string}
               </span>
             </div>
           </Link>
