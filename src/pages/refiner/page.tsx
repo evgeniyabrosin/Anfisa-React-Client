@@ -33,9 +33,9 @@ export const RefinerPage = observer(
           await dirinfoStore
             .fetchDsinfoAsync(datasetStore.datasetName)
             .then(() => {
-              if (!isXL) {
-                return datasetStore.fetchWsListAsync(datasetStore.isXL)
-              }
+              return !isXL
+                ? datasetStore.fetchWsListAsync(datasetStore.isXL)
+                : undefined
             })
         } else {
           if (!isXL) {
