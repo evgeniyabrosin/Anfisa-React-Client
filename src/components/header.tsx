@@ -11,14 +11,14 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { PageRoute, RouteNames, Routes } from '@router/routes.enum'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { Logo } from '@components/logo'
-import userIcon from '@images/thomas-hunt.jpg'
-import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
+import userIcon from '@images/thomas-hunt.jpg'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -37,6 +37,7 @@ export const Header = observer(
 
     useEffect(() => {
       const page: GlbPagesNames = RouteNames[path]
+
       filterStore.setMethod(page)
     }, [path])
 

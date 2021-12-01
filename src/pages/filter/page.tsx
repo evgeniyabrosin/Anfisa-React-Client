@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
@@ -32,7 +33,6 @@ import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-r
 import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
 import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 import { TableModal } from './ui/TableModal'
-import filterStore from '@store/filter'
 
 export const FilterPage = observer(
   (): ReactElement => {

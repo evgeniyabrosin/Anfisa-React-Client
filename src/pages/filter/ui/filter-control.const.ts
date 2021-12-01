@@ -1,6 +1,5 @@
 import { Glb } from '@glb/glb'
 import { GlbPagesNames } from '@glb/glb-names'
-import { Routes } from '@router/routes.enum'
 
 export type FilterControlOptions = Exclude<GlbPagesNames, 'table' | 'root'>
 

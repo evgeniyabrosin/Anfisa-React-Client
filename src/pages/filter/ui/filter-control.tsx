@@ -1,5 +1,6 @@
 import { Fragment, ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
@@ -18,7 +19,6 @@ import {
 } from './filter-control.const'
 import { FilterControlQueryBuilder } from './filter-control-query-builder'
 import { FilterControlRefiner } from './filter-control-refiner'
-import { toJS } from 'mobx'
 
 export const FilterControl = observer(
   (): ReactElement => {
@@ -37,9 +37,10 @@ export const FilterControl = observer(
     const page: FilterControlOptions = filterStore.method as FilterControlOptions
     const pageName: FilterControlOptionsNames = FilterControlOptionsNames[page]
 
-    const goToPage = (pageName: FilterControlOptions) => {
-      const route = getPageRoute(pageName)
-      filterStore.setMethod(pageName)
+    const goToPage = (name: FilterControlOptions) => {
+      const route = getPageRoute(name)
+
+      filterStore.setMethod(name)
 
       history.push(`${route}?ds=${dsName}`)
     }
