@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import datasetStore from '@store/dataset'
-import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './query-builder/ui/custom-inheritance-mode-content'
@@ -19,18 +19,32 @@ export const CustomInheritanceMode = observer(
     const [thirdSelectValue, setThirdSelectValue] = useState<string>('0-1')
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
 
-    const variants =
-      dtreeStore.statFuncData.variants ?? filterStore.statFuncData?.variants
+    const variants = filterStore.statFuncData.variants
 
     useEffect(() => {
-      const paramsConent = datasetStore.isXL
+      if (
+        firstSelectValue === '--' &&
+        secondSelectValue === '--' &&
+        thirdSelectValue === '--'
+      ) {
+        filterStore.setError('Out of choice')
+      } else {
+        filterStore.setError('')
+      }
+    }, [firstSelectValue, secondSelectValue, thirdSelectValue])
+
+    useEffect(() => {
+      const params = datasetStore.isXL
+        ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}`
+        : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
+
+      const scenario = datasetStore.isXL
         ? { '2': ['HG002'], '0-1': ['HG003', 'HG004'] }
         : { '2': ['NA24385'], '0-1': ['NA24143', 'NA24149'] }
 
-      const params = { scenario: paramsConent }
-
       filterStore.fetchStatFuncAsync('Custom_Inheritance_Mode', params)
-      setFieldValue('scenario', paramsConent)
+      setFieldValue('scenario', scenario)
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -71,12 +85,24 @@ export const CustomInheritanceMode = observer(
         ]
       }
 
+      let scenarioString = ''
+
       const newScenario = getSortedArray(multiData || selectedData)
 
-      const params = Object.fromEntries(newScenario)
+      newScenario.map((item, index) => {
+        scenarioString += `"${item[0]}":["${item[1]
+          .toString()
+          .split(',')
+          .join('","')}"]`
 
-      setFieldValue('scenario', params)
-      filterStore.fetchStatFuncAsync('Custom_Inheritance_Mode', params || {})
+        if (newScenario[index + 1]) scenarioString += `,`
+      })
+
+      const params = `{"scenario":{${scenarioString}}}`
+
+      GlbPagesNames.Refiner &&
+        setFieldValue('scenario', Object.fromEntries(newScenario))
+      filterStore.fetchStatFuncAsync('Custom_Inheritance_Mode', params)
     }
 
     const handleSetScenario = (group: string, value: string) => {

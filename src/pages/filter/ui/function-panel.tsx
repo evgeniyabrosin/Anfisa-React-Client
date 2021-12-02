@@ -1,13 +1,16 @@
-import { Fragment, FunctionComponent, ReactElement, useState } from 'react'
+import { Fragment, FunctionComponent, ReactElement } from 'react'
+import { toast } from 'react-toastify'
 import { Formik } from 'formik'
+import { isArray } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
-import { FilterFunctionEnum } from '@core/enum/filter-function.enum'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { CompundHet } from './compound-het'
+import { CompoundRequest } from './compound-request'
 import { CustomInheritanceMode } from './custom-inheritance-mode'
 import { GeneRegion } from './gene-region'
 import { InheritanceMode } from './inheritance-mode'
@@ -17,6 +20,7 @@ const functionsMap: Record<string, any> = {
   Inheritance_Mode: InheritanceMode,
   Custom_Inheritance_Mode: CustomInheritanceMode,
   Compound_Het: CompundHet,
+  Compound_Request: CompoundRequest,
 }
 
 const initialStateMap: Record<string, any> = {
@@ -36,50 +40,65 @@ const initialStateMap: Record<string, any> = {
     approx: '',
     state: null,
   },
+  Compound_Request: {
+    variants: [],
+    approx: '',
+    state: null,
+    request: [],
+  },
 }
 
 export const FunctionPanel = observer(
   (): ReactElement => {
-    const [error, setError] = useState('')
     const selectedFilter = filterStore.selectedGroupItem
 
     const Component: FunctionComponent<Record<string, any>> =
       functionsMap[selectedFilter.name]
 
-    const onSubmitAsync = async (values: any) => {
-      const { err } = await filterStore.fetchStatFuncAsync(
-        selectedFilter.name,
-        values,
-      )
+    const isSubmitDisabled = !!filterStore.error
 
-      if (err) {
-        setError(err)
+    const onSubmitAsync = async (values: any) => {
+      if (isSubmitDisabled) return
+
+      if (isArray(values.variants) && values.variants.length === 0) {
+        toast.warning(t('filter.chooseProblemGroup'), {
+          position: 'bottom-right',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+        })
 
         return
       }
 
-      if (selectedFilter.name === FilterFunctionEnum.InheritanceMode) {
+      if (selectedFilter.name === FuncStepTypesEnum.InheritanceMode) {
         const noArray = await datasetStore.setConditionsAsync([
           [
             'func',
             selectedFilter.name,
             '',
             values.variants,
-            { problem_group: values.problemGroups },
+            {
+              problem_group:
+                values.problemGroups.length > 0 ? values.problemGroups : null,
+            },
           ],
         ])
 
         filterStore.addSelectedFilterGroup(
           'Inheritance',
-          FilterFunctionEnum.InheritanceMode,
-          [[FilterFunctionEnum.InheritanceMode, noArray.length]],
+          FuncStepTypesEnum.InheritanceMode,
+          [[FuncStepTypesEnum.InheritanceMode, noArray.length]],
         )
       }
 
-      if (selectedFilter.name === FilterFunctionEnum.CustomInheritanceMode) {
+      if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
         const condition = [
           'func',
-          FilterFunctionEnum.CustomInheritanceMode,
+          FuncStepTypesEnum.CustomInheritanceMode,
           '',
           values.variants,
           { scenario: values.scenario },
@@ -89,24 +108,24 @@ export const FunctionPanel = observer(
 
         filterStore.addSelectedFilterGroup(
           'Inheritance',
-          FilterFunctionEnum.CustomInheritanceMode,
-          [[FilterFunctionEnum.CustomInheritanceMode, noArray.length]],
+          FuncStepTypesEnum.CustomInheritanceMode,
+          [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]],
         )
       }
 
-      if (selectedFilter.name === FilterFunctionEnum.GeneRegion) {
+      if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
         const noArray = await datasetStore.setConditionsAsync([
           ['func', selectedFilter.name, '', ['True'], values],
         ])
 
         filterStore.addSelectedFilterGroup(
           'Coordinates',
-          FilterFunctionEnum.GeneRegion,
-          [[FilterFunctionEnum.GeneRegion, noArray.length]],
+          FuncStepTypesEnum.GeneRegion,
+          [[FuncStepTypesEnum.GeneRegion, noArray.length]],
         )
       }
 
-      if (selectedFilter.name === FilterFunctionEnum.CompoundHet) {
+      if (selectedFilter.name === FuncStepTypesEnum.CompoundHet) {
         const noArray = await datasetStore.setConditionsAsync([
           [
             'func',
@@ -119,8 +138,30 @@ export const FunctionPanel = observer(
 
         filterStore.addSelectedFilterGroup(
           'Inheritance',
-          FilterFunctionEnum.CompoundHet,
-          [[FilterFunctionEnum.CompoundHet, noArray.length]],
+          FuncStepTypesEnum.CompoundHet,
+          [[FuncStepTypesEnum.CompoundHet, noArray.length]],
+        )
+      }
+
+      if (selectedFilter.name === FuncStepTypesEnum.CompoundRequest) {
+        const noArray = await datasetStore.setConditionsAsync([
+          [
+            'func',
+            selectedFilter.name,
+            '',
+            [values.variants[0][0]],
+            {
+              approx: values.approx || null,
+              state: values.state || null,
+              request: values.request || null,
+            },
+          ],
+        ])
+
+        filterStore.addSelectedFilterGroup(
+          'Inheritance',
+          FuncStepTypesEnum.CompoundRequest,
+          [[FuncStepTypesEnum.CompoundRequest, noArray.length]],
         )
       }
     }
@@ -150,12 +191,6 @@ export const FunctionPanel = observer(
             <div>
               <Component {...props} />
 
-              {selectedFilter.name === FilterFunctionEnum.GeneRegion && (
-                <span className="text-red-secondary text-14 leading-16px">
-                  {error}
-                </span>
-              )}
-
               <div className="flex items-center justify-between mt-5">
                 <Button
                   text={t('general.clear')}
@@ -165,7 +200,11 @@ export const FunctionPanel = observer(
                   }}
                 />
 
-                <Button text={t('general.add')} onClick={props.submitForm} />
+                <Button
+                  text={t('general.add')}
+                  onClick={props.submitForm}
+                  disabled={isSubmitDisabled}
+                />
               </div>
             </div>
           )}

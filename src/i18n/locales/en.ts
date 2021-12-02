@@ -112,6 +112,7 @@ export const en = {
     decisionTrees: 'Decision Trees',
     tooMuchVariants: 'Number of variants is more than 2600!',
     prohibitToOpen: 'You cant open xl-dataset on Filter Refiner',
+    chooseProblemGroup: 'Choose any problem group first',
   },
   dtree: {
     variants: 'variants',
