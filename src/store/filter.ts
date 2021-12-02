@@ -29,6 +29,8 @@ class FilterStore {
   statFuncData: any = []
   error = ''
 
+  selectedFiltersHistory: SelectedFiltersType[] = []
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -168,6 +170,13 @@ class FilterStore {
     this.dtreeSet = {}
     this.selectedFilters = {}
     this.activePreset = ''
+  }
+
+  setSelectedFilters(filters: SelectedFiltersType) {
+    this.selectedFilters = JSON.parse(JSON.stringify(filters))
+  }
+  setSelectedFiltersHistory(history: SelectedFiltersType[]) {
+    this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
   }
 }
 
