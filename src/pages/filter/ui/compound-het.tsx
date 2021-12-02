@@ -26,7 +26,7 @@ export const CompundHet = ({ setFieldValue }: Props): ReactElement => {
   ) => {
     const statFuncData = await filterStore.fetchStatFuncAsync(
       'Compound_Het',
-      param || {},
+      JSON.stringify(param) || {},
     )
 
     const nameList = statFuncData.variants?.map(variant => variant?.[0])

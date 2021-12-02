@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -26,7 +26,8 @@ class FilterStore {
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
   activePreset = ''
-  statFuncData: any
+  statFuncData: any = []
+  error = ''
 
   constructor() {
     makeAutoObservable(this)
@@ -133,12 +134,12 @@ class FilterStore {
 
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      unit,
-      rq_id: String(Date.now()),
       conditions,
+      rq_id: String(Date.now()),
+      unit,
     })
 
-    param && body.append('param', JSON.stringify(param))
+    param && body.append('param', param)
 
     const response = await fetch(getApiUrl(`statfunc`), {
       method: 'POST',
@@ -150,9 +151,15 @@ class FilterStore {
 
     const result: IStatFuncData = await response.json()
 
-    if (result.variants) this.statFuncData = result
+    runInAction(() => {
+      this.statFuncData = result
+    })
 
     return result
+  }
+
+  setError(value: string) {
+    this.error = value
   }
 
   resetData() {

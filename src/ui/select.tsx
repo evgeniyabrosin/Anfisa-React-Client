@@ -7,7 +7,7 @@ import { t } from '@i18n'
 interface Props {
   placeholder?: string
   className?: Argument
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void
+  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void
   options?: string[]
   reset?: boolean
   value?: any
