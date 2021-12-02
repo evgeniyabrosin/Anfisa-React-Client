@@ -16,6 +16,10 @@ import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
+import {
+  noFirstNumberPattern,
+  noSymbolPattern,
+} from './query-builder/ui/modal-save-dataset'
 
 export const FilterControlRefiner = observer(
   (): ReactElement => {
@@ -50,6 +54,24 @@ export const FilterControlRefiner = observer(
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
+        if (
+          noSymbolPattern.test(createPresetName) ||
+          noFirstNumberPattern.test(createPresetName) ||
+          createPresetName.length > 50
+        ) {
+          toast.error(t('filter.notValidName'), {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+          })
+
+          return
+        }
+
         createPresetName && presetStore.updatePresetAsync(createPresetName)
 
         toast.info(t('general.presetCreated'), {

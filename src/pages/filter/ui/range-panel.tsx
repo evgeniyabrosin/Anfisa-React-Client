@@ -43,13 +43,18 @@ export const RangePanel = observer(
     return (
       <div>
         <span>Min {selectedFilter.min}</span>
+
         <Input value={min} onChange={e => setMin(e.target.value)} />
 
         <span>Max {selectedFilter.max}</span>
+
         <Input value={max} onChange={e => setMax(e.target.value)} />
 
-        <Button text={t('general.add')} onClick={handleAddConditionsAsync} />
-        <Button text={t('general.clear')} onClick={handleClear} />
+        <div className="flex items-center justify-between mt-5">
+          <Button text={t('general.clear')} onClick={handleClear} />
+
+          <Button text={t('general.add')} onClick={handleAddConditionsAsync} />
+        </div>
       </div>
     )
   },
