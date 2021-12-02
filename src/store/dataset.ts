@@ -8,6 +8,7 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import { addToActionHistory } from '@utils/addToActionHistory'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -257,20 +258,29 @@ class DatasetStore {
     return groups
   }
 
-  async fetchDsStatAsync() {
+  async fetchDsStatAsync(
+    shouldSaveInHistory = true,
+    bodyFromHistory?: URLSearchParams,
+  ) {
     this.isLoadingDsStat = true
     this.setIsLoadingTabReport(true)
 
-    const body = new URLSearchParams({
+    const localBody = new URLSearchParams({
       ds: this.datasetName,
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', JSON.stringify(this.conditions))
-      body.append('zone', JSON.stringify(this.zone))
+      localBody.append('conditions', JSON.stringify(this.conditions))
+      localBody.append('zone', JSON.stringify(this.zone))
     }
 
-    this.activePreset && body.append('filter', this.activePreset)
+    this.activePreset && localBody.append('filter', this.activePreset)
+
+    if (shouldSaveInHistory) {
+      addToActionHistory(localBody, true)
+    }
+
+    const body = shouldSaveInHistory ? localBody : bodyFromHistory
 
     const response = await fetch(getApiUrl(`ds_stat`), {
       method: 'POST',
@@ -281,6 +291,12 @@ class DatasetStore {
     })
 
     const result = await response.json()
+
+    const conditionFromHistory = bodyFromHistory?.get('conditions')
+
+    if (conditionFromHistory) {
+      this.conditions = JSON.parse(conditionFromHistory)
+    }
 
     runInAction(() => {
       this.dsStat = result
