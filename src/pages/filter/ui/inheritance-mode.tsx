@@ -19,12 +19,18 @@ export const InheritanceMode = observer(
     ) => {
       const statFuncData = await filterStore.fetchStatFuncAsync(
         'Inheritance_Mode',
-        param || {},
+        JSON.stringify(param) || JSON.stringify({ problem_group: [] }),
       )
 
       const filteredVaraints = statFuncData?.variants?.filter(
         item => item[1] > 0,
       )
+
+      if (!statFuncData.variants || statFuncData.variants.length === 0) {
+        filterStore.setError('out of choice')
+      } else {
+        filterStore.setError('')
+      }
 
       setVariants(filteredVaraints || ([] as any))
     }
@@ -57,6 +63,12 @@ export const InheritanceMode = observer(
       initAsync()
     }, [])
 
+    const handleSetFieldValueAsync = async () => {
+      setFieldValue('problemGroups', [])
+
+      await fetchStatFuncAsync()
+    }
+
     return (
       <Form>
         <div className="flex items-center justify-between">
@@ -66,10 +78,7 @@ export const InheritanceMode = observer(
 
           <p
             className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={() => {
-              setFieldValue('variants', [])
-              setFieldValue('problemGroups', [])
-            }}
+            onClick={handleSetFieldValueAsync}
           >
             Reset
           </p>
@@ -123,6 +132,12 @@ export const InheritanceMode = observer(
             </div>
           )
         })}
+
+        {variants.length === 0 && (
+          <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
+            Out of choice. Select problem group.
+          </div>
+        )}
       </Form>
     )
   },

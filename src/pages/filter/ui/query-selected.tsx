@@ -9,6 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
+import { Loader } from '@components/loader'
 import { QueryResults } from './query-results'
 
 export const QuerySelected = observer(
@@ -81,7 +82,7 @@ export const QuerySelected = observer(
           />
         </div>
 
-        <QueryResults />
+        {datasetStore.isLoadingDsStat ? <Loader /> : <QueryResults />}
       </div>
     )
   },
