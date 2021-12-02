@@ -19,6 +19,9 @@ import { Input } from '@ui/input'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
+export const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
+export const noFirstNumberPattern = /^[\d_]/
+
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)
   const history = useHistory()
@@ -105,9 +108,6 @@ export const ModalSaveDataset = observer(() => {
   }
 
   const handleChange = (name: string) => {
-    const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
-    const noFirstNumberPattern = /^[\d_]/
-
     if (
       error === DatasetCreationErrorsEnum.EmptyDataset ||
       error === DatasetCreationErrorsEnum.ChooseAnyFilter
