@@ -32,12 +32,15 @@ export const ColumnsList = observer(
 
     const onDragEnd = (result: DropResult) => {
       const items = Array.from(columns)
+      const startItemsLength = items.length
 
       const [reorderItem] = items.splice(result.source.index, 1)
 
       if (result.destination) {
         items.splice(result.destination.index, 0, reorderItem)
       }
+
+      if (items.length !== startItemsLength) return
 
       columnsStore.setColumns(items)
       setColumns(items)
