@@ -1,8 +1,13 @@
 import { ReactElement, useRef } from 'react'
+import { toast } from 'react-toastify'
+import { toJS } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
+import dtreeStore from '@store/dtree'
 import operationsStore from '@store/operations'
 
 interface Props {
@@ -11,8 +16,31 @@ interface Props {
 
 export const ExportPanel = ({ close }: Props): ReactElement => {
   const ref = useRef<any>(null)
+  const isXL = datasetStore.isXL
+
+  const dtreeStatAmount = toJS(dtreeStore.statAmount)
+  const dataSetStatAmount = toJS(datasetStore.statAmount)
+
+  const variantsAmount = isXL
+    ? toJS(dirinfoStore.dsinfo).total
+    : dtreeStatAmount[0] || dataSetStatAmount[0]
 
   const handleDownload = (type: ExportTypeEnum) => {
+    if (typeof variantsAmount === 'number' && variantsAmount > 300) {
+      toast.error(t('ds.tooMuchVariants'), {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      })
+      close()
+
+      return
+    }
+
     operationsStore.exportReportAsync(type)
     close()
   }
