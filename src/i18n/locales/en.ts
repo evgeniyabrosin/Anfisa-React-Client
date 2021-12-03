@@ -62,6 +62,7 @@ export const en = {
     edit: 'Edit',
     notMode: 'NOT Mode',
     variantsWithNotesOnly: 'Variants with notes only',
+    tooMuchVariants: 'Too many variants for export. Maximum 300 is allowed',
   },
   dsCreation: {
     saveDataset: 'Save Dataset',
