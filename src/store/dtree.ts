@@ -126,9 +126,7 @@ class DtreeStore {
 
   // 1. Functions to load / draw / edit decision trees
 
-  async drawDecesionTreeAsync() {
-    const computedStepData = await getStepDataAsync()
-
+  async drawDecesionTreeAsync(isLoadingNewTree: boolean) {
     const initialStepData: IStepData[] = [
       {
         step: 1,
@@ -142,16 +140,28 @@ class DtreeStore {
       },
     ]
 
+    const activeStepIndex = this.stepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
+
+    const currentStepIndex = isLoadingNewTree ? -1 : activeStepIndex
+
+    const computedStepData = await getStepDataAsync(currentStepIndex)
+
     const newStepData =
       computedStepData.length === 0 ? initialStepData : computedStepData
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
+    const newActiveStepIndex = newStepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
+
     const finalStep = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
-      isActive: true,
+      isActive: newActiveStepIndex === -1,
       isReturnedVariantsActive: false,
       startFilterCounts: null,
       finishFilterCounts: null,
@@ -268,7 +278,9 @@ class DtreeStore {
       this.dtreeList = result['dtree-list']
     })
 
-    this.drawDecesionTreeAsync()
+    const isLoadingNewTree = !body.has('code')
+
+    this.drawDecesionTreeAsync(isLoadingNewTree)
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
