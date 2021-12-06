@@ -325,11 +325,17 @@ export const ModalEditCompoundRequest = observer(
         .slice(10)
         .replace(/\s+/g, '')
 
-      const params = `{"approx":"${approxCondition}","state":${
+      const approx =
+        approxCondition === 'transcript' || !approxCondition
+          ? null
+          : `"${approxCondition}"`
+
+      const state =
         stateCondition === '-current-' || !stateCondition
           ? null
           : `"${stateCondition}"`
-      },"request":${requestString}}`
+
+      const params = `{"approx":${approx},"state":${state},"request":${requestString}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
