@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import get from 'lodash/get'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import filterStore from '@store/filter'
@@ -15,13 +16,21 @@ export const SelectedGroupItem = observer(
   ({ name, amount, handleSelect }: Props): ReactElement => {
     const checked = get(
       filterStore,
-      `selectedFilters[${filterStore.selectedGroupItem.vgroup}][${filterStore.selectedGroupItem.name}][${name}]`,
+      `selectedFilters[${filterStore.selectedGroupItem.vgroup}][${filterStore.selectedGroupItem.name}]`,
     )
+
+    const getIsChecked = () => {
+      if (checked) {
+        return Object.keys(toJS(checked)).includes(name)
+      }
+
+      return false
+    }
 
     return (
       <div className="flex items-center mb-3 text-14  leading-16px">
         <Checkbox
-          checked={Number.isInteger(checked)}
+          checked={getIsChecked()}
           style={{ cursor: 'pointer' }}
           indeterminate={filterStore.selectedGroupItem.name === name}
           onChange={event => {
