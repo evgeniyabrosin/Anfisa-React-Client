@@ -8,7 +8,6 @@ import { getApiUrl } from '@core/get-api-url'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { getCurrentStepIndexForApi } from '@utils/getCurrentStepIndexForApi'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
@@ -121,6 +120,8 @@ class DtreeStore {
   actionHistory: URLSearchParams[] = []
   actionHistoryIndex = -1
 
+  activeStepIndex = -1
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -141,11 +142,7 @@ class DtreeStore {
       },
     ]
 
-    const activeStepIndex = this.stepData.findIndex(
-      element => element.isActive || element.isReturnedVariantsActive,
-    )
-
-    const currentStepIndex = isLoadingNewTree ? -1 : activeStepIndex
+    const currentStepIndex = isLoadingNewTree ? -1 : this.activeStepIndex
 
     const computedStepData = await getStepDataAsync(currentStepIndex)
 
@@ -173,15 +170,12 @@ class DtreeStore {
     runInAction(() => {
       this.stepData = [...newStepData, finalStep]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
+      this.activeStepIndex = newActiveStepIndex
     })
 
-    const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
-    const finalStepCount = 2
-    const calculatedIndex = +lastIndex + finalStepCount
+    const stepIndexForApi = this.getStepIndexForApi(newActiveStepIndex)
 
-    const indexForApi = this.dtreeStepIndices.length === 0 ? 0 : calculatedIndex
-
-    this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
+    this.fetchDtreeStatAsync(this.dtreeCode, String(stepIndexForApi))
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
@@ -227,20 +221,13 @@ class DtreeStore {
 
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
-    const isFinalStepIndex = index === indexes.length
+    const currentIndex = Number(indexes[index])
+    const stepIndex = indexes.length === 0 ? 0 : currentIndex
 
-    const correctIndex = isFinalStepIndex
-      ? +indexes[index - 1] + 1
-      : +indexes[index]
+    const pointsIndexes = Object.keys(this.dtree?.points)
+    const lastIndex = +pointsIndexes[pointsIndexes.length - 1]
 
-    const isEmptyStep =
-      this.stepData[index].groups.length === 0 &&
-      !this.stepData[index].isFinalStep
-
-    const stepIndex = indexes.length === 0 ? 0 : correctIndex
-    const nextStepIndex = getCurrentStepIndexForApi(index)
-    const fixedIndex = Number.isNaN(stepIndex) ? nextStepIndex : stepIndex
-    const stepIndexForApi = isEmptyStep ? nextStepIndex : fixedIndex
+    const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
 
     return stepIndexForApi
   }
@@ -900,6 +887,7 @@ class DtreeStore {
     })
 
     this.stepData[index][option] = !this.stepData[index][option]
+    this.activeStepIndex = index
   }
 
   openTableModal(index?: number) {
