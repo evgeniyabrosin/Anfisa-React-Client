@@ -218,6 +218,10 @@ class DatasetStore {
     this.statAmount = []
   }
 
+  resetConditions() {
+    this.conditions = []
+  }
+
   async initDatasetAsync(datasetName: string) {
     this.resetData()
     this.datasetName = datasetName
