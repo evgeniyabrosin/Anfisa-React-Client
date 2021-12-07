@@ -12,6 +12,7 @@
     "md5": "2.3.0",
     "mobx": "6.2.0",
     "mobx-react-lite": "3.2.0",
+    "progress-bar-webpack-plugin": "2.1.0",
     "rc-tooltip": "5.1.1",
     "react": "17.0.2",
     "react-beautiful-dnd": "13.1.0",
@@ -74,7 +75,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
     "build": "craco build",

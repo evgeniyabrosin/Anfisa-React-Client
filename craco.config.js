@@ -1,5 +1,6 @@
 const { config } = require('dotenv-cra')
 const CracoAlias = require('craco-alias')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 config()
 
@@ -27,6 +28,11 @@ module.exports = {
   style: {
     postcss: {
       plugins: [require('tailwindcss'), require('autoprefixer')],
+    },
+  },
+  webpack: {
+    plugins: {
+      add: [ProgressBarPlugin()],
     },
   },
 }
