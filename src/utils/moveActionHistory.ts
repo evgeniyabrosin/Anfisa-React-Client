@@ -1,3 +1,4 @@
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -9,7 +10,8 @@ export const moveActionHistory = (value: 1 | -1) => {
 
   const body = dtreeStore.actionHistory[updatedIndex]
 
-  const isFilterRefiner = filterStore.method === 'refiner'
+  // const isFilterRefiner = filterStore.method === 'refiner'
+  const isFilterRefiner = filterStore.method === FilterMethodEnum.Refiner
 
   if (isFilterRefiner) {
     const filters = filterStore.selectedFiltersHistory[updatedIndex]
