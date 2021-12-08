@@ -1,12 +1,14 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
+import { Routes } from '@router/routes.enum'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
-
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true
@@ -128,10 +130,18 @@ class OperationsStore {
         ? dtreeStore.acceptedVariants
         : datasetStore.statAmount[0]
 
-    if (pathName === PatnNameEnum.Filter) {
-      body.append('code', dtreeStore.dtreeCode)
+    const isRefiner = filterStore.method === FilterMethodEnum.Refiner
+    const isMainTable = pathName === Routes.WS
+
+    if (isRefiner || isMainTable) {
+      const activePreset = datasetStore.activePreset
+      const conditions = JSON.stringify(datasetStore.conditions)
+
+      activePreset && body.append('filter', activePreset)
+
+      conditions && body.append('conditions', conditions)
     } else {
-      body.append('filter', datasetStore.activePreset)
+      body.append('code', dtreeStore.dtreeCode)
     }
 
     if (!(compareValue > 0 && compareValue < 9000)) {
