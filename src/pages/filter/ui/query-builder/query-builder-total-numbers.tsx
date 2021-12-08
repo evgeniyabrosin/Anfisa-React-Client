@@ -81,7 +81,7 @@ export const QueryBuilderTotalNumbers = observer(
           {hasReturnedVariants && (
             <Button
               onClick={() => openTableModal(true)}
-              text="View returned variants"
+              text={t('dtree.viewReturnedVariants')}
               hasBackground={false}
               className="ml-auto hover:bg-blue-bright"
             />
@@ -90,7 +90,7 @@ export const QueryBuilderTotalNumbers = observer(
           {hasStartVariants && (
             <Button
               onClick={() => openTableModal(false)}
-              text="View variants"
+              text={t('dtree.viewVariants')}
               hasBackground={false}
               className="ml-5 hover:bg-blue-bright"
             />

@@ -899,9 +899,10 @@ class DtreeStore {
     this.stepData[index][option] = !this.stepData[index][option]
   }
 
-  openTableModal(index: number) {
+  openTableModal(index?: number) {
     this.isTableModalVisible = true
-    this.tableModalIndexNumber = index
+
+    if (index) this.tableModalIndexNumber = index
   }
 
   closeTableModal() {

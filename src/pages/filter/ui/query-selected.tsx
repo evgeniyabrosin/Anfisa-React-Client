@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import dtreeStore from '@store/dtree'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
@@ -73,13 +74,21 @@ export const QuerySelected = observer(
             )}
           </div>
 
-          <Button
-            className="ml-auto"
-            text={t('general.apply', {
-              amount: selectedVariants,
-            })}
-            onClick={handleClick}
-          />
+          {datasetStore.isXL ? (
+            <Button
+              className="ml-auto"
+              onClick={() => dtreeStore.openTableModal()}
+              text={t('dtree.viewVariants')}
+            />
+          ) : (
+            <Button
+              className="ml-auto"
+              text={t('general.apply', {
+                amount: selectedVariants,
+              })}
+              onClick={handleClick}
+            />
+          )}
         </div>
 
         {datasetStore.isLoadingDsStat ? <Loader /> : <QueryResults />}

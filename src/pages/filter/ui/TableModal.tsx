@@ -2,9 +2,11 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
 import { defaultLayout } from '@components/variant/drawer'
@@ -39,15 +41,19 @@ export const TableModal = observer(() => {
   const [variantSize, setVariantSize] = useState<VariantsSize>()
   const ref = useRef(null)
 
-  const stepIndex = dtreeStore.tableModalIndexNumber
+  const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
 
   useEffect(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      if (stepIndex === null) return
+      const isRefiner = filterStore.method === FilterMethodEnum.Refiner
 
-      const result = await fetchDsListAsync(stepIndex)
+      const conditions = datasetStore.conditions
+
+      const requestValue = isRefiner ? conditions : stepIndex
+
+      const result = await fetchDsListAsync(requestValue)
 
       fetchJobStatusAsync(result.task_id)
     }

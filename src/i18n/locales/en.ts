@@ -192,5 +192,7 @@ export const en = {
     rejectedVariants: 'Rejected variants: ',
     finalStep: 'Final Step',
     initialStep: 'Initial Step',
+    viewVariants: 'View variants',
+    viewReturnedVariants: 'View returned variants',
   },
 }
