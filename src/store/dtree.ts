@@ -10,6 +10,7 @@ import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getCurrentStepIndexForApi } from '@utils/getCurrentStepIndexForApi'
 import { getDataFromCode } from '@utils/getDataFromCode'
+import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { makeStepActive } from '@utils/makeStepActive'
@@ -219,7 +220,13 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
+    let filteredAttrsList = []
+
+    if (this.dtreeStat['stat-list']) {
+      filteredAttrsList = getFilteredAttrsList(this.dtreeStat['stat-list'])
+    }
+
+    return getQueryBuilder(filteredAttrsList)
   }
 
   getStepIndexForApi = (index: number) => {

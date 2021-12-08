@@ -9,6 +9,7 @@ import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { addToActionHistory } from '@utils/addToActionHistory'
+import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -238,22 +239,26 @@ class DatasetStore {
 
   get getFilterRefiner() {
     const groups: Record<string, StatList[]> = {}
+    let filteredList = []
 
-    this.dsStat['stat-list'] &&
-      this.dsStat['stat-list'].forEach((item: StatList) => {
-        if (
-          (item.title || item.name) &&
-          (item.title || item.name)
-            .toLocaleLowerCase()
-            .includes(this.searchField.toLocaleLowerCase())
-        ) {
-          if (groups[item.vgroup]) {
-            groups[item.vgroup] = [...groups[item.vgroup], item]
-          } else {
-            groups[item.vgroup] = [item]
-          }
+    if (this.dsStat['stat-list']) {
+      filteredList = getFilteredAttrsList(this.dsStat['stat-list'])
+    }
+
+    filteredList.forEach((item: StatList) => {
+      if (
+        (item.title || item.name) &&
+        (item.title || item.name)
+          .toLocaleLowerCase()
+          .includes(this.searchField.toLocaleLowerCase())
+      ) {
+        if (groups[item.vgroup]) {
+          groups[item.vgroup] = [...groups[item.vgroup], item]
+        } else {
+          groups[item.vgroup] = [item]
         }
-      })
+      }
+    })
 
     return groups
   }
