@@ -13,7 +13,7 @@ export const FilterRefiner = (): ReactElement => {
   return (
     <div
       className="flex overflow-y-hidden"
-      style={{ maxHeight: 'calc(100vh - 158px)' }}
+      style={{ maxHeight: 'calc(100vh - 201px)' }}
     >
       <FilterRefinerGroups />
 

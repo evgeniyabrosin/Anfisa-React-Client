@@ -27,7 +27,7 @@ export const FilterControl = observer(
 
     return (
       <Fragment>
-        <div className="flex flex-wrap justify-end bg-blue-dark pt-7 pr-6 pb-4 pl-6">
+        <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
           <div className="flex items-center w-full mt-5">
             {filterStore.method === 'Filter Refiner' ? (
               <FilterControlRefiner />
