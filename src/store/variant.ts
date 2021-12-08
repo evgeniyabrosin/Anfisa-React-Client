@@ -22,6 +22,21 @@ export class VariantStore {
 
   isModalNotesVisible = false
 
+  defaultVariantLayout: any[] = [
+    { y: 0, x: 0, w: 6, h: 1, i: 'view_gen' },
+    { y: 1, x: 0, w: 6, h: 1, i: 'view_transcripts' },
+    { y: 2, x: 0, w: 6, h: 1, i: 'view_qsamples' },
+    { y: 3, x: 0, w: 6, h: 1, i: 'view_gnomAD' },
+    { y: 4, x: 0, w: 6, h: 1, i: 'view_db' },
+    { y: 5, x: 0, w: 6, h: 1, i: 'view_pred' },
+    { y: 6, x: 0, w: 6, h: 1, i: 'view_pharmagkb' },
+    { y: 7, x: 0, w: 6, h: 1, i: 'view_genetics' },
+    { y: 8, x: 0, w: 6, h: 1, i: '_main' },
+    { y: 9, x: 0, w: 6, h: 1, i: 'transcripts' },
+    { y: 10, x: 0, w: 6, h: 1, i: 'colocated_v' },
+    { y: 11, x: 0, w: 6, h: 1, i: 'input' },
+  ]
+
   constructor() {
     makeAutoObservable(this)
   }

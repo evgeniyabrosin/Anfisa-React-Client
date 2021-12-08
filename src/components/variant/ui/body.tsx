@@ -42,63 +42,69 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
 
   return (
     <div>
-      <table className="min-w-full">
-        {colhead && colhead.length > 0 && (
-          <thead>
-            <tr className="text-blue-bright border-b border-blue-lighter">
-              <td />
-              {colheadData.map((th, i) => (
-                <td key={i} className="py-3 pr-4">
-                  {th}
+      {rows?.length === 0 ? (
+        <div className="flex justify-center text-center w-full">
+          No data to show
+        </div>
+      ) : (
+        <table className="min-w-full">
+          {colhead && colhead.length > 0 && (
+            <thead>
+              <tr className="text-blue-bright border-b border-blue-lighter">
+                <td />
+                {colheadData.map((th, i) => (
+                  <td key={i} className="py-3 pr-4">
+                    {th}
 
-                  {th === t('variant.showSelectionOnly') && (
-                    <Checkbox
-                      checked={filterSelection !== normClass}
-                      className="ml-1"
-                      onChange={(e: any) => handleSelection(e.target.checked)}
-                    />
-                  )}
-                </td>
-              ))}
-            </tr>
-          </thead>
-        )}
-        <tbody>
-          {rows?.map((row, i) => {
-            if (!row) return <tr key={i} />
-
-            return (
-              <tr
-                key={row.name}
-                className="border-b last:border-0 border-blue-lighter"
-              >
-                <Tooltip
-                  overlay={row.tooltip}
-                  placement="bottomLeft"
-                  trigger={row.tooltip ? ['hover'] : []}
-                >
-                  <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
-                    {row.title}
+                    {th === t('variant.showSelectionOnly') && (
+                      <Checkbox
+                        checked={filterSelection !== normClass}
+                        className="ml-1"
+                        onChange={(e: any) => handleSelection(e.target.checked)}
+                      />
+                    )}
                   </td>
-                </Tooltip>
-
-                {row.cells
-                  .filter(cell => cell[1]?.includes(filterSelection))
-                  .map((cell, cIndex) => (
-                    <td
-                      key={cIndex}
-                      className={cn(
-                        'py-3 pr-3 font-medium',
-                        !cell[1]?.includes(noTrHitClass) && 'text-white',
-                      )}
-                      dangerouslySetInnerHTML={{ __html: cell[0] }}
-                    />
-                  ))}
+                ))}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
+            </thead>
+          )}
+          <tbody>
+            {rows?.map((row, i) => {
+              if (!row) return <tr key={i} />
+
+              return (
+                <tr
+                  key={row.name}
+                  className="border-b last:border-0 border-blue-lighter"
+                >
+                  <Tooltip
+                    overlay={row.tooltip}
+                    placement="bottomLeft"
+                    trigger={row.tooltip ? ['hover'] : []}
+                  >
+                    <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
+                      {row.title}
+                    </td>
+                  </Tooltip>
+
+                  {row.cells
+                    .filter(cell => cell[1]?.includes(filterSelection))
+                    .map((cell, cIndex) => (
+                      <td
+                        key={cIndex}
+                        className={cn(
+                          'py-3 pr-3 font-medium',
+                          !cell[1]?.includes(noTrHitClass) && 'text-white',
+                        )}
+                        dangerouslySetInnerHTML={{ __html: cell[0] }}
+                      />
+                    ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
@@ -111,9 +117,7 @@ interface Props {
 
 export const VariantBody = observer(
   ({ drawerWidth, layout, setLayout }: Props): ReactElement => {
-    const filtered = variantStore.variant.filter(
-      (aspect: ReccntCommon) => !(aspect.rows && aspect.rows.length === 0),
-    )
+    const filtered = variantStore.variant
 
     // important variable to prevent variant block compression after first render
     let indicator = 0

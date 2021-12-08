@@ -9,7 +9,6 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
-import { defaultLayout } from '@components/variant/drawer'
 import { VariantBody } from '@components/variant/ui/body'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
@@ -34,7 +33,7 @@ const ModalContent = styled.div`
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
 export const TableModal = observer(() => {
-  const [layout, setLayout] = useState(defaultLayout)
+  const [layout, setLayout] = useState(variantStore.defaultVariantLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
