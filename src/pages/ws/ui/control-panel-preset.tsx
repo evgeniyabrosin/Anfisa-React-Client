@@ -16,12 +16,15 @@ export const Preset = observer(
       (preset: FilterList) => preset.name,
     )
 
-    const onSelectAsync = async (arg: Option) => {
-      filterPresetStore.loadPresetAsync(arg.value)
+    const onSelectAsync = async (arg: Option, reset?: string) => {
+      filterPresetStore.loadPresetAsync(arg.value, 'ws')
       datasetStore.setActivePreset(arg.value)
 
-      datasetStore.fetchWsListAsync(false)
+      datasetStore.fetchWsListAsync(false, 'reset')
       datasetStore.setIsLoadingTabReport(true)
+
+      reset && datasetStore.resetActivePreset()
+      reset && datasetStore.resetHasPreset()
     }
 
     return (
@@ -31,7 +34,9 @@ export const Preset = observer(
 
           {datasetStore.activePreset && (
             <span
-              onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
+              onClick={() =>
+                onSelectAsync({ value: '', label: '' } as Option, 'reset')
+              }
               className="text-14 text-blue-bright cursor-pointer"
             >
               {t('general.clear')}

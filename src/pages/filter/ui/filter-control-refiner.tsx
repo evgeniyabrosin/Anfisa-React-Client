@@ -23,7 +23,7 @@ import {
 
 export const FilterControlRefiner = observer(
   (): ReactElement => {
-    const [activePreset, setActivePreset] = useState('')
+    const [activePreset, setActivePreset] = useState(datasetStore.activePreset)
     const [createPresetName, setCreatePresetName] = useState('')
 
     const presets: string[] = get(datasetStore, 'dsStat.filter-list', [])
@@ -42,6 +42,9 @@ export const FilterControlRefiner = observer(
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
         presetStore.loadPresetAsync(activePreset, 'refiner')
+        datasetStore.setActivePreset(activePreset)
+        filterStore.resetActionName()
+        datasetStore.fetchWsListAsync()
       }
 
       if (filterStore.actionName === ActionFilterEnum.Delete) {

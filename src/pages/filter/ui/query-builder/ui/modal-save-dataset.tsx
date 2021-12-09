@@ -119,6 +119,14 @@ export const ModalSaveDataset = observer(() => {
     dtreeStore.closeModalSaveDataset()
     pathName === PatnNameEnum.Ws && datasetStore.initDatasetAsync(value)
     operations.resetSavingStatus()
+
+    datasetStore.setActivePreset('')
+    datasetStore.resetData()
+    datasetStore.clearZone()
+    datasetStore.resetConditions()
+    filterStore.resetData()
+    dtreeStore.resetData()
+    filterZone.resetAllSelectedItems()
   }
 
   const handleChange = (name: string) => {

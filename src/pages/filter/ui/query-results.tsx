@@ -47,6 +47,8 @@ export const QueryResults = observer(
                       subGroup: title,
                       itemName,
                     })
+
+                    datasetStore.fetchWsListAsync()
                   }}
                 />
               ),

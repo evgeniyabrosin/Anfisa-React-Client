@@ -4,6 +4,10 @@ import { withErrorBoundary } from 'react-error-boundary'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
+import filterZone from '@store/filterZone'
+import variantStore from '@store/variant'
 import { Header } from '@components/header'
 import { ErrorPage } from '@pages/error/error'
 import { Datasets } from './ui/datasets'
@@ -22,6 +26,13 @@ const MainPage = (): ReactElement => {
 
       dirinfoStore.setSelectedDirinfoName(dsName)
       datasetStore.setActivePreset('')
+      datasetStore.resetData()
+      datasetStore.clearZone()
+      datasetStore.resetConditions()
+      filterStore.resetData()
+      dtreeStore.resetData()
+      filterZone.resetAllSelectedItems()
+      variantStore.resetIsActiveVariant()
     }
 
     handlerAsync()

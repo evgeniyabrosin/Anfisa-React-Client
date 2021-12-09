@@ -1,6 +1,8 @@
 import { ReactElement } from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
+import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
@@ -33,6 +35,8 @@ export const EnumPanel = observer(
             enumValues,
           ],
         ])
+
+        datasetStore.fetchWsListAsync()
       } else {
         filterStore.removeSelectedFilters({
           group: filterStore.selectedGroupItem.vgroup,
@@ -45,12 +49,21 @@ export const EnumPanel = observer(
           itemName: variant[0],
         })
       }
+
+      datasetStore.fetchWsListAsync()
     }
+
+    const variantsList: StatList[] = toJS(datasetStore.dsStat['stat-list'])
+
+    const currentGroup: StatList | undefined = variantsList.find(
+      (item: any) => item.name === filterStore.selectedGroupItem.name,
+    )
 
     return (
       <div className="mt-4">
-        {filterStore.selectedGroupItem.variants &&
-          filterStore.selectedGroupItem.variants.map((variant: any) => (
+        {currentGroup?.variants
+          .filter(variant => variant[1] !== 0)
+          .map((variant: any) => (
             <SelectedGroupItem
               key={variant[0]}
               name={variant[0]}

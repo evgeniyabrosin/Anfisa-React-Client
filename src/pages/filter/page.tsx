@@ -1,5 +1,6 @@
 import React, { Fragment, ReactElement, useEffect, useState } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
+import { useHistory } from 'react-router-dom'
 // import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -43,8 +44,11 @@ import { TableModal } from './ui/TableModal'
 
 const FilterPage = observer(
   (): ReactElement => {
-    // const history = useHistory()
     const isXL = datasetStore.isXL
+
+    const history = useHistory()
+
+    const locationState = history.location.state
 
     useDatasetName()
     const params = useParams()
@@ -79,13 +83,45 @@ const FilterPage = observer(
         datasetStore.removeSearchField()
         dtreeStore.resetData()
         dirinfoStore.resetData()
-        datasetStore.resetData()
-        filterStore.resetData()
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dsName])
 
     const isRefiner = filterStore.method === FilterMethodEnum.Refiner
+
+    const getFiltersValue = (type: string) => {
+      if (type === 'all') {
+        if (isXL) return toJS(dirinfoStore.dsinfo.total)
+
+        if (filterStore.method === FilterMethodEnum.DecisionTree) {
+          return toJS(dtreeStore.statAmount[0])
+        }
+
+        if (filterStore.method === FilterMethodEnum.Refiner) {
+          return toJS(datasetStore.statAmount[0])
+        }
+      }
+
+      if (type === 'transcribedVariants') {
+        if (filterStore.method === FilterMethodEnum.DecisionTree) {
+          return toJS(dtreeStore.statAmount[1])
+        }
+
+        if (filterStore.method === FilterMethodEnum.Refiner) {
+          return toJS(datasetStore.statAmount[1])
+        }
+      }
+
+      if (type === 'transcripts') {
+        if (filterStore.method === FilterMethodEnum.DecisionTree) {
+          return toJS(dtreeStore.statAmount[2])
+        }
+
+        if (filterStore.method === FilterMethodEnum.Refiner) {
+          return toJS(datasetStore.statAmount[2])
+        }
+      }
+    }
 
     return (
       <Fragment>
@@ -135,10 +171,7 @@ const FilterPage = observer(
             <div className="text-white flex-grow flex justify-end pr-6">
               <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
                 {t('filter.variants', {
-                  all: isXL
-                    ? toJS(dirinfoStore.dsinfo.total)
-                    : toJS(dtreeStore.statAmount[0]) ||
-                      toJS(datasetStore.statAmount[0]),
+                  all: getFiltersValue('all'),
                 })}
               </span>
 
@@ -146,17 +179,13 @@ const FilterPage = observer(
                 <React.Fragment>
                   <span className="header-variants-info">
                     {t('filter.transcribedVariants', {
-                      all:
-                        toJS(dtreeStore.statAmount[1]) ||
-                        toJS(datasetStore.statAmount[1]),
+                      all: getFiltersValue('transcribedVariants'),
                     })}
                   </span>
 
                   <span className="header-variants-info">
                     {t('filter.transcripts', {
-                      all:
-                        toJS(dtreeStore.statAmount[2]) ||
-                        toJS(datasetStore.statAmount[2]),
+                      all: getFiltersValue('transcripts'),
                     })}
                   </span>
                 </React.Fragment>
@@ -178,7 +207,7 @@ const FilterPage = observer(
           {filterStore.method === FilterMethodEnum.DecisionTree && fetched && (
             <QueryBuilder />
           )}
-          {isRefiner && <FilterRefiner />}
+          {isRefiner && <FilterRefiner locationState={locationState} />}
         </div>
       </Fragment>
     )

@@ -31,6 +31,7 @@ class DatasetStore {
 
   datasetName = ''
   activePreset = ''
+  prevPreset = ''
   conditions: any[] = []
   zone: any[] = []
   statAmount: number[] = []
@@ -209,16 +210,20 @@ class DatasetStore {
     this.fetchDsStatAsync()
   }
 
+  resetHasPreset() {
+    this.prevPreset = ''
+  }
+
   resetData() {
     this.datasetName = ''
     this.genes = []
     this.genesList = []
     this.samples = []
     this.tags = []
-    this.clearZone()
     this.dsStat = {}
     this.variantsAmount = 0
     this.statAmount = []
+    this.prevPreset = ''
   }
 
   resetConditions() {
@@ -226,7 +231,6 @@ class DatasetStore {
   }
 
   async initDatasetAsync(datasetName: string) {
-    this.resetData()
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
@@ -275,8 +279,6 @@ class DatasetStore {
     if (!this.isFilterDisabled) {
       this.conditions.length > 0 &&
         localBody.append('conditions', JSON.stringify(this.conditions))
-      this.zone.length > 0 &&
-        localBody.append('zone', JSON.stringify(this.zone))
     }
 
     this.activePreset && localBody.append('filter', this.activePreset)
@@ -312,12 +314,14 @@ class DatasetStore {
     runInAction(() => {
       this.dsStat = result
       this.variantsAmount = result['total-counts']['0']
-      this.statAmount = get(result, 'filtered-counts', [])
+
+      // TODO: do not delete
+      // this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
   }
 
-  updatePresetLoad(dsStatData: any) {
+  updatePresetLoad(dsStatData: any, source?: string) {
     this.conditions = dsStatData.conditions
     filterStore.selectedFilters = {}
 
@@ -339,7 +343,7 @@ class DatasetStore {
       }
     })
 
-    this.fetchDsStatAsync()
+    !source && this.fetchDsStatAsync()
   }
 
   async fetchTabReportAsync() {
@@ -454,17 +458,20 @@ class DatasetStore {
     })
   }
 
-  async fetchWsListAsync(isXL?: boolean) {
+  async fetchWsListAsync(isXL?: boolean, kind?: string) {
     const body = new URLSearchParams({
       ds: this.datasetName,
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', JSON.stringify(this.conditions))
+      body.append('conditions', kind ? '[]' : JSON.stringify(this.conditions))
       body.append('zone', JSON.stringify(this.zone))
     }
 
-    this.activePreset && body.append('filter', this.activePreset)
+    if (!this.prevPreset || this.prevPreset !== this.activePreset) {
+      body.append('filter', this.activePreset)
+      this.prevPreset = this.activePreset
+    }
 
     const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
       method: 'POST',

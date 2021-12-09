@@ -8,7 +8,6 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
-import filterZone from '@store/filterZone'
 import variantStore from '@store/variant'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
@@ -38,13 +37,6 @@ const WSPage = observer(
       }
 
       initAsync()
-
-      return () => {
-        filterZone.resetAllSelectedItems()
-        variantStore.resetIsActiveVariant()
-        dirinfoStore.resetData()
-        // datasetStore.resetData()
-      }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

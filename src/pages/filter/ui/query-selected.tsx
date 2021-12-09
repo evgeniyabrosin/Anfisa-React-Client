@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
@@ -17,6 +18,8 @@ export const QuerySelected = observer(
   (): ReactElement => {
     const history = useHistory()
     const params = useParams()
+
+    const variants: any = dirinfoStore.dsinfo.total || 0
 
     const [allVariants, transcribedVariants, allTranscripts] = get(
       datasetStore,
@@ -40,33 +43,38 @@ export const QuerySelected = observer(
             draggable: true,
             progress: 0,
           })
-        : history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+        : history.push(`${Routes.WS}?ds=${params.get('ds')}`, {
+            from: 'filter',
+          })
     }
 
     return (
       <div className="w-1/3">
-        <div className="flex items-center p-4 border-b border-grey-light bg-blue-lighter">
+        <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark">
           <div className="flex flex-wrap">
-            <span className="font-bold text-20 leading-20 text-white w-full">
-              {t('general.total')}
+            <span className="font-bold text-16 text-blue-bright w-full">
+              {t('dtree.results')}
+              <span className="font-normal text-grey-blue ml-2">
+                ({variants})
+              </span>
             </span>
 
-            <span className="text-12 leading-14px text-grey-blue mt-2">
+            <span className="text-12 leading-14px text-white mt-2">
               {t('filter.variants', {
                 all: allVariants,
               })}
             </span>
 
-            {transcribedVariants && (
-              <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+            {transcribedVariants > 0 && (
+              <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
                 {t('filter.transcribedVariants', {
                   all: transcribedVariants,
                 })}
               </span>
             )}
 
-            {allTranscripts && (
-              <span className="text-12 leading-14px text-grey-blue border-l-2 mt-2 ml-2 pl-2">
+            {allTranscripts > 0 && (
+              <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
                 {t('filter.transcripts', {
                   all: allTranscripts,
                 })}

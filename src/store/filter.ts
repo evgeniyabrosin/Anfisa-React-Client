@@ -25,7 +25,6 @@ class FilterStore {
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
-  activePreset = ''
   statFuncData: any = []
   error = ''
 
@@ -169,12 +168,12 @@ class FilterStore {
     this.selectedGroupItem = {}
     this.dtreeSet = {}
     this.selectedFilters = {}
-    this.activePreset = ''
   }
 
   setSelectedFilters(filters: SelectedFiltersType) {
     this.selectedFilters = JSON.parse(JSON.stringify(filters))
   }
+
   setSelectedFiltersHistory(history: SelectedFiltersType[]) {
     this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
   }

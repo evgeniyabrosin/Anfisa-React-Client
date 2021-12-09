@@ -48,9 +48,7 @@ class OperationsStore {
       ds: datasetStore.datasetName,
     })
 
-    if (datasetStore.activePreset) {
-      body.append('filter', datasetStore.activePreset)
-    } else {
+    if (datasetStore.conditions) {
       const condtitions = JSON.stringify(datasetStore.conditions)
 
       body.append('conditions', condtitions)
@@ -137,10 +135,7 @@ class OperationsStore {
         : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {
-      const activePreset = datasetStore.activePreset
       const conditions = JSON.stringify(datasetStore.conditions)
-
-      activePreset && body.append('filter', activePreset)
 
       conditions && body.append('conditions', conditions)
     } else {
