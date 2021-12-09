@@ -12,6 +12,8 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
 import { PopperButton } from '@components/popper-button'
+import filterStore from '@store/filter'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 
 interface PropsButton {
   isOpen?: boolean
@@ -64,7 +66,9 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
 
   const goToRefiner = () => {
     datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
-    history.push(`${Routes.Refiner}?ds=${dirinfoStore.selectedDirinfoName}`)
+    // history.push(`${Routes.Refiner}?ds=${dirinfoStore.selectedDirinfoName}`)
+    history.push(`${Routes.Filter}?ds=${dirinfoStore.selectedDirinfoName}`)
+    filterStore.setMethod(FilterMethodEnum.Refiner)
   }
 
   useOutsideClick(ref, close)

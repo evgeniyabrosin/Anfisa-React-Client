@@ -4,8 +4,10 @@ import datasetStore from '@store/dataset'
 import { FilterRefinerGroups } from './filter-refiner-groups'
 import { QuerySelected } from './query-selected'
 import { SelectedGroup } from './selected-group'
+import { useDatasetName } from '@core/hooks/use-dataset-name'
 
 export const FilterRefiner = (): ReactElement => {
+  useDatasetName()
   useEffect(() => {
     datasetStore.fetchDsStatAsync()
   }, [])

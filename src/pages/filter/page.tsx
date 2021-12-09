@@ -40,7 +40,7 @@ import { TableModal } from './ui/TableModal'
 
 export const FilterPage = observer(
   (): ReactElement => {
-    const history = useHistory()
+    // const history = useHistory()
     const isXL = datasetStore.isXL
 
     useDatasetName()
@@ -58,11 +58,12 @@ export const FilterPage = observer(
 
         await dirinfoStore.fetchDsinfoAsync(dsName)
 
-        if (history.location.pathname === Routes.Refiner) {
-          filterStore.setMethod(FilterMethodEnum.Refiner)
-        } else {
-          await dtreeStore.fetchDtreeSetAsync(body)
-        }
+        // if (history.location.pathname === Routes.Refiner) {
+        //   filterStore.setMethod(FilterMethodEnum.Refiner)
+        // } else {
+        //   await dtreeStore.fetchDtreeSetAsync(body)
+        // }
+        await dtreeStore.fetchDtreeSetAsync(body)
       }
 
       initAsync()
