@@ -2,7 +2,6 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
-import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -125,13 +124,15 @@ class OperationsStore {
       ws: wsName,
     })
 
-    const compareValue =
-      pathName === PatnNameEnum.Filter
-        ? dtreeStore.acceptedVariants
-        : datasetStore.statAmount[0]
-
     const isRefiner = filterStore.method === FilterMethodEnum.Refiner
     const isMainTable = pathName === Routes.WS
+
+    let compareValue = 0
+
+    compareValue =
+      isRefiner || isMainTable
+        ? datasetStore.statAmount[0]
+        : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {
       const activePreset = datasetStore.activePreset

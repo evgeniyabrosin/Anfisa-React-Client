@@ -5,11 +5,13 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { DatasetCreationErrorsEnum } from '@core/enum/dataset-creation-errors-enum'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import filterZone from '@store/filterZone'
 import operations from '@store/operations'
 import { Routes } from '@router/routes.enum'
@@ -33,7 +35,19 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
-    if (pathName === PatnNameEnum.Filter && dtreeStore.acceptedVariants === 0) {
+    if (
+      pathName === PatnNameEnum.Filter &&
+      filterStore.method === FilterMethodEnum.DecisionTree &&
+      dtreeStore.acceptedVariants === 0
+    ) {
+      setError(DatasetCreationErrorsEnum.EmptyDataset)
+    }
+
+    if (
+      pathName === PatnNameEnum.Filter &&
+      filterStore.method === FilterMethodEnum.Refiner &&
+      datasetStore.statAmount[0] === 0
+    ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
