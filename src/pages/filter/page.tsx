@@ -37,6 +37,7 @@ import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-r
 import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
 import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 import { TableModal } from './ui/TableModal'
+// import { Routes } from '@router/routes.enum'
 
 export const FilterPage = observer(
   (): ReactElement => {
