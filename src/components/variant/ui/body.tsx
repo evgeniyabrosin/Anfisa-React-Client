@@ -145,7 +145,10 @@ export const VariantBody = observer(
           })
 
           variantStore.checkRecodsDisplaying()
-          window.localStorage.setItem('gridLayout', JSON.stringify(layoutData))
+          window.sessionStorage.setItem(
+            'gridLayout',
+            JSON.stringify(layoutData),
+          )
 
           setLayout(layoutData)
         }}
@@ -161,7 +164,7 @@ export const VariantBody = observer(
             })
 
             variantStore.checkRecodsDisplaying()
-            window.localStorage.setItem(
+            window.sessionStorage.setItem(
               'gridLayout',
               JSON.stringify(layoutData),
             )
@@ -234,7 +237,7 @@ export const VariantBody = observer(
                       },
                     )
 
-                    window.localStorage.setItem(
+                    window.sessionStorage.setItem(
                       'gridLayout',
                       JSON.stringify(reflowLayout),
                     )

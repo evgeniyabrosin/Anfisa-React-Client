@@ -119,7 +119,7 @@ export const VariantHeader = observer(
                       y: index,
                     }))
 
-                    window.localStorage.setItem(
+                    window.sessionStorage.setItem(
                       'gridLayout',
                       JSON.stringify(newLayout),
                     )
@@ -140,7 +140,7 @@ export const VariantHeader = observer(
                       h: 1,
                     }))
 
-                    window.localStorage.setItem(
+                    window.sessionStorage.setItem(
                       'gridLayout',
                       JSON.stringify(newLayout),
                     )

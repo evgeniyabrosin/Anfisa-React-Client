@@ -19,7 +19,7 @@ export const closeHandler = () => {
 export const VariantDrawer = observer(
   (): ReactElement => {
     const drawerWidth = window.innerWidth - 380
-    const localStorageData = window.localStorage.getItem('gridLayout')
+    const localStorageData = window.sessionStorage.getItem('gridLayout')
     const currentGridLayout = localStorageData && JSON.parse(localStorageData)
 
     const [layout, setLayout] = useState(
