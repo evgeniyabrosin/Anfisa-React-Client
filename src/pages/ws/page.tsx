@@ -41,7 +41,7 @@ export const WSPage = observer(
         filterZone.resetAllSelectedItems()
         variantStore.resetIsActiveVariant()
         dirinfoStore.resetData()
-        datasetStore.resetData()
+        // datasetStore.resetData()
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
