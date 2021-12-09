@@ -23,14 +23,16 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
   let colheadData: string[] = []
 
   if (colhead) {
-    colheadData = [colhead[0][0]]
+    colheadData = [colhead?.[0]?.[0]]
 
-    const endOfString = colheadData[0].indexOf(']')
+    if (colheadData[0]) {
+      const endOfString = colheadData[0].indexOf(']')
 
-    colheadData[0] = colheadData[0].slice(0, endOfString + 1)
+      colheadData[0] = colheadData[0].slice(0, endOfString + 1)
 
-    if (name === 'view_transcripts') {
-      colheadData.push(t('variant.showSelectionOnly'))
+      if (name === 'view_transcripts') {
+        colheadData.push(t('variant.showSelectionOnly'))
+      }
     }
   }
 
