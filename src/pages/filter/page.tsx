@@ -1,4 +1,5 @@
 import React, { Fragment, ReactElement, useEffect, useState } from 'react'
+import { withErrorBoundary } from 'react-error-boundary'
 // import { useHistory } from 'react-router'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -16,6 +17,7 @@ import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
+import { ErrorPage } from '../error/error'
 import { FilterControl } from './ui/filter-control'
 import { FilterRefiner } from './ui/filter-refiner'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
@@ -39,7 +41,7 @@ import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 import { TableModal } from './ui/TableModal'
 // import { Routes } from '@router/routes.enum'
 
-export const FilterPage = observer(
+const FilterPage = observer(
   (): ReactElement => {
     // const history = useHistory()
     const isXL = datasetStore.isXL
@@ -178,3 +180,7 @@ export const FilterPage = observer(
     )
   },
 )
+
+export default withErrorBoundary(FilterPage, {
+  fallback: <ErrorPage />,
+})

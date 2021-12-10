@@ -195,4 +195,8 @@ export const en = {
     viewVariants: 'View variants',
     viewReturnedVariants: 'View returned variants',
   },
+  error: {
+    getBack: 'Get back to start page',
+    smthWentWrong: 'Sorry, something went wrong...',
+  },
 }

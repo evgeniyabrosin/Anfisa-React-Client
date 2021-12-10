@@ -1,4 +1,5 @@
 import { Fragment, ReactElement, useEffect } from 'react'
+import { withErrorBoundary } from 'react-error-boundary'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -14,12 +15,13 @@ import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
+import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
 
-export const WSPage = observer(
+const WSPage = observer(
   (): ReactElement => {
     const params = useParams()
 
@@ -99,3 +101,7 @@ export const WSPage = observer(
     )
   },
 )
+
+export default withErrorBoundary(WSPage, {
+  fallback: <ErrorPage />,
+})

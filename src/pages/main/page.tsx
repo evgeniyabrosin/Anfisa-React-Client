@@ -1,13 +1,15 @@
 import { ReactElement, useEffect } from 'react'
+import { withErrorBoundary } from 'react-error-boundary'
 
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Header } from '@components/header'
+import { ErrorPage } from '@pages/error/error'
 import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 
-export const MainPage = (): ReactElement => {
+const MainPage = (): ReactElement => {
   const params = useParams()
 
   useEffect(() => {
@@ -28,7 +30,6 @@ export const MainPage = (): ReactElement => {
   return (
     <div className="min-h-full flex flex-col">
       <Header />
-
       <div className="flex flex-row flex-grow">
         <Datasets />
 
@@ -37,3 +38,7 @@ export const MainPage = (): ReactElement => {
     </div>
   )
 }
+
+export default withErrorBoundary(MainPage, {
+  fallback: <ErrorPage />,
+})
