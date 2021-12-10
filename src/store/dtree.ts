@@ -205,6 +205,8 @@ class DtreeStore {
 
     const result = await response.json()
 
+    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
+
     const statList = result['stat-list']
 
     runInAction(() => {
@@ -220,13 +222,7 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    let filteredAttrsList = []
-
-    if (this.dtreeStat['stat-list']) {
-      filteredAttrsList = getFilteredAttrsList(this.dtreeStat['stat-list'])
-    }
-
-    return getQueryBuilder(filteredAttrsList)
+    return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
   }
 
   getStepIndexForApi = (index: number) => {

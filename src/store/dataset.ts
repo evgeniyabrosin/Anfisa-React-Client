@@ -239,26 +239,22 @@ class DatasetStore {
 
   get getFilterRefiner() {
     const groups: Record<string, StatList[]> = {}
-    let filteredList = []
 
-    if (this.dsStat['stat-list']) {
-      filteredList = getFilteredAttrsList(this.dsStat['stat-list'])
-    }
-
-    filteredList.forEach((item: StatList) => {
-      if (
-        (item.title || item.name) &&
-        (item.title || item.name)
-          .toLocaleLowerCase()
-          .includes(this.searchField.toLocaleLowerCase())
-      ) {
-        if (groups[item.vgroup]) {
-          groups[item.vgroup] = [...groups[item.vgroup], item]
-        } else {
-          groups[item.vgroup] = [item]
+    this.dsStat['stat-list'] &&
+      this.dsStat['stat-list'].forEach((item: StatList) => {
+        if (
+          (item.title || item.name) &&
+          (item.title || item.name)
+            .toLocaleLowerCase()
+            .includes(this.searchField.toLocaleLowerCase())
+        ) {
+          if (groups[item.vgroup]) {
+            groups[item.vgroup] = [...groups[item.vgroup], item]
+          } else {
+            groups[item.vgroup] = [item]
+          }
         }
-      }
-    })
+      })
 
     return groups
   }
@@ -296,6 +292,8 @@ class DatasetStore {
     })
 
     const result = await response.json()
+
+    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
     const conditionFromHistory = bodyFromHistory?.get('conditions')
 
