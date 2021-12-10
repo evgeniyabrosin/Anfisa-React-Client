@@ -1,10 +1,13 @@
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { getApiUrl } from '@core/get-api-url'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
+import { getFilteredAttrsList } from './getFilteredAttrsList'
 
 export const fetchStatunitsAsync = async (
   statList: any[],
-  stepIndex: string,
+  stepIndex?: string,
 ) => {
   const incompletePropertyList: string[] = []
 
@@ -24,12 +27,21 @@ export const fetchStatunitsAsync = async (
 
   const body = new URLSearchParams({
     ds: datasetStore.datasetName,
-    no: stepIndex,
-    code: dtreeStore.dtreeCode,
     rq_id: requestId,
     tm: '1',
     units: JSON.stringify(incompletePropertyList),
   })
+
+  const isRefiner = filterStore.method === FilterMethodEnum.Refiner
+
+  if (isRefiner) {
+    const conditions = JSON.stringify(datasetStore.conditions)
+
+    body.append('conditions', conditions)
+  } else {
+    stepIndex && body.append('no', stepIndex)
+    dtreeStore.dtreeCode && body.append('code', dtreeStore.dtreeCode)
+  }
 
   const response = await fetch(getApiUrl(`statunits`), {
     method: 'POST',
@@ -54,11 +66,21 @@ export const fetchStatunitsAsync = async (
     return element
   })
 
-  const changedDtreeStat = JSON.parse(JSON.stringify(dtreeStore.dtreeStat))
+  const filteredStatList = getFilteredAttrsList(newStatList)
 
-  changedDtreeStat['stat-list'] = newStatList
+  if (isRefiner) {
+    const changedDtreeStat = JSON.parse(JSON.stringify(datasetStore.dsStat))
 
-  dtreeStore.setDtreeStat(changedDtreeStat)
+    changedDtreeStat['stat-list'] = filteredStatList
+
+    datasetStore.setDsStat(changedDtreeStat)
+  } else {
+    const changedDtreeStat = JSON.parse(JSON.stringify(dtreeStore.dtreeStat))
+
+    changedDtreeStat['stat-list'] = filteredStatList
+
+    dtreeStore.setDtreeStat(changedDtreeStat)
+  }
 
   fetchStatunitsAsync(newStatList, stepIndex)
 }

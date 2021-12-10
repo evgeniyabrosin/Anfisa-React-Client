@@ -9,6 +9,7 @@ import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { addToActionHistory } from '@utils/addToActionHistory'
+import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
@@ -268,11 +269,14 @@ class DatasetStore {
 
     const localBody = new URLSearchParams({
       ds: this.datasetName,
+      tm: '0',
     })
 
     if (!this.isFilterDisabled) {
-      localBody.append('conditions', JSON.stringify(this.conditions))
-      localBody.append('zone', JSON.stringify(this.zone))
+      this.conditions.length > 0 &&
+        localBody.append('conditions', JSON.stringify(this.conditions))
+      this.zone.length > 0 &&
+        localBody.append('zone', JSON.stringify(this.zone))
     }
 
     this.activePreset && localBody.append('filter', this.activePreset)
@@ -300,6 +304,10 @@ class DatasetStore {
     if (conditionFromHistory) {
       this.conditions = JSON.parse(conditionFromHistory)
     }
+
+    const statList = result['stat-list']
+
+    fetchStatunitsAsync(statList)
 
     runInAction(() => {
       this.dsStat = result
@@ -543,6 +551,10 @@ class DatasetStore {
 
   removeSearchField() {
     this.searchField = ''
+  }
+
+  setDsStat(newDsStat: DsStatType) {
+    this.dsStat = newDsStat
   }
 }
 
