@@ -6,6 +6,7 @@ import Tooltip from 'rc-tooltip'
 import styled from 'styled-components'
 
 import { FilterCountsType } from '@declarations'
+import { t } from '@i18n'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
@@ -121,9 +122,10 @@ export const NextStepRoute = observer(
     const isDifferenceActive = currentStep.isReturnedVariantsActive
     const shouldTooltipAppear = Boolean(currentStep.difference)
 
-    const tooltipConent = `Show ${
-      currentStep.excluded ? 'excluded' : 'included'
-    } varants for step ${index + 1}`
+    const tooltipConent = t('dtree.showReturnedVariantsForStep', {
+      returnValue: currentStep.excluded ? 'excluded' : 'included',
+      index: index + 1,
+    })
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">

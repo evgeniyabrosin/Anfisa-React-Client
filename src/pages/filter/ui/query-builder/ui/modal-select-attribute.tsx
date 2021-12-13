@@ -24,7 +24,7 @@ export const ModalSelectAttribute = observer(
     return (
       <ModalBase refer={ref} minHeight={340}>
         <HeaderModal
-          groupName={t('dtree.selectAnAttribute')}
+          groupName={t('dtree.selectAttribute')}
           handleClose={handleClose}
         />
 

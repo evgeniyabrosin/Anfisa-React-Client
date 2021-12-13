@@ -63,7 +63,7 @@ export const SelectModalButtons = observer(
               <div className="relative">
                 <Button
                   disabled={disabled}
-                  text={t('dtree.addByJoin')}
+                  text={t('dtree.addByJoining')}
                   className="cursor-pointer rounded-full"
                   onClick={handleModalJoin}
                   icon={<Icon name="Arrow" className="transform -rotate-90" />}
