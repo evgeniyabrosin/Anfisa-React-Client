@@ -78,7 +78,7 @@ export const ModalEditNumbers = observer(
       setIsVisibleRightDrop(prev => !prev)
     }
 
-    const validateValues = (value: number | string, type: string) => {
+    const validateValues = (value: string, type: string) => {
       if (type === 'from') {
         value <= minValue || value > maxValue || value === '-0'
           ? setIsVisibleLeftError(true)
