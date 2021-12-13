@@ -17,6 +17,7 @@ import File from '@icons/file'
 import Filter from '@icons/filter'
 import Folder from '@icons/folder'
 import FullScreen from '@icons/full-screen'
+import Info from '@icons/info'
 import Lines from '@icons/lines'
 import Loupe from '@icons/loupe'
 import Options from '@icons/options'
@@ -26,6 +27,7 @@ import SettingsFat from '@icons/settings-fat'
 import Sort from '@icons/sort'
 import ThreadAdd from '@icons/thread-add'
 import ThreadClose from '@icons/thread-close'
+
 interface IconItem {
   size: number
   viewBox: { w: number; h: number }
@@ -51,6 +53,7 @@ const iconItems: { [key: string]: IconItem } = {
   Filter,
   Folder,
   FullScreen,
+  Info,
   Lines,
   Loupe,
   Options,
