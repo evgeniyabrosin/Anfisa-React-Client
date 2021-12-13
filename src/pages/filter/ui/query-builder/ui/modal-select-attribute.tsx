@@ -10,13 +10,15 @@ import { ModalBase } from './modal-base'
 
 export const ModalSelectAttribute = observer(
   (): ReactElement => {
-    const groupNames = Object.keys(dtreeStore.getQueryBuilder)
-    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
+    const groupNames = Object.keys(dtreeStore.getModalQueryBuilder)
+
+    const subGroupData = Object.values(dtreeStore.getModalQueryBuilder)
 
     const ref = useRef(null)
 
     const handleClose = () => {
       dtreeStore.closeModalAttribute()
+      dtreeStore.resetFilterModalValue()
     }
 
     return (
@@ -28,8 +30,8 @@ export const ModalSelectAttribute = observer(
 
         <div className="flex w-full mt-4">
           <QueryBuilderSearch
-            value={dtreeStore.filterValue}
-            onChange={(e: string) => dtreeStore.setFilterValue(e)}
+            value={dtreeStore.filterModalValue}
+            onChange={(e: string) => dtreeStore.setFilterModalValue(e)}
             isModal
           />
         </div>
@@ -45,8 +47,8 @@ export const ModalSelectAttribute = observer(
                 groupName={groupName}
                 subGroupData={subGroupData[index]}
                 key={groupName}
-                changeIndicator={dtreeStore.filterChangeIndicator}
-                isContentExpanded={dtreeStore.isFilterContentExpanded}
+                changeIndicator={dtreeStore.filterModalChangeIndicator}
+                isContentExpanded={dtreeStore.isFilterModalContentExpanded}
                 isModal
               />
             ))

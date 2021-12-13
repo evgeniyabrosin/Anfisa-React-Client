@@ -23,10 +23,17 @@ export const QueryBuilderSearch = observer(
     isSubgroupItemSearch,
   }: IProps): ReactElement => {
     const handleClick = (operation: string) => {
-      if (isFilter || isModal) {
+      if (isFilter) {
         operation === 'expand' && dtreeStore.expandFilterContent()
         operation === 'collapse' && dtreeStore.collapseFilterContent()
-      } else {
+      }
+
+      if (isModal) {
+        operation === 'expand' && dtreeStore.expandFilterModalContent()
+        operation === 'collapse' && dtreeStore.collapseFilterModalContent()
+      }
+
+      if (!isModal && !isFilter) {
         operation === 'expand' && dtreeStore.expandResultsContent()
         operation === 'collapse' && dtreeStore.collapseResultsContent()
       }

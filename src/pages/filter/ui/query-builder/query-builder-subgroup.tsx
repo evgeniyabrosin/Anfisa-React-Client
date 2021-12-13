@@ -39,10 +39,7 @@ export const QueryBuilderSubgroup = observer(
 
     return (
       <div>
-        <div
-          className="flex items-center justify-between mb-3 cursor-pointer"
-          onClick={onClick}
-        >
+        <div className="flex items-center justify-between mb-3 cursor-pointer">
           <span
             className={cn('text-16 font-500', {
               'text-black': !isVisibleSubGroup,

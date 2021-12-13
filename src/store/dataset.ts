@@ -537,8 +537,12 @@ class DatasetStore {
     })
   }
 
-  addSearchField = (item: string) => {
+  addSearchField(item: string) {
     this.searchField = item
+  }
+
+  removeSearchField() {
+    this.searchField = ''
   }
 }
 

@@ -69,6 +69,10 @@ class DtreeStore {
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
+
+  isFilterModalContentExpanded = false
+  filterModalChangeIndicator = 0
+
   isFiltersLoading = false
   isDtreeLoading = false
 
@@ -76,6 +80,7 @@ class DtreeStore {
   resultsChangeIndicator = 0
 
   filterValue = ''
+  filterModalValue = ''
   algorithmFilterValue = ''
   filteredCounts = 0
 
@@ -217,6 +222,10 @@ class DtreeStore {
 
   get getQueryBuilder() {
     return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
+  }
+
+  get getModalQueryBuilder() {
+    return getQueryBuilder(toJS(this.dtreeStat['stat-list']), 'modal')
   }
 
   getStepIndexForApi = (index: number) => {
@@ -838,8 +847,14 @@ class DtreeStore {
     this.filterChangeIndicator--
   }
 
-  resetFilterChangeIndicator() {
-    this.filterChangeIndicator = 0
+  expandFilterModalContent() {
+    this.isFilterModalContentExpanded = true
+    this.filterModalChangeIndicator++
+  }
+
+  collapseFilterModalContent() {
+    this.isFilterModalContentExpanded = false
+    this.filterModalChangeIndicator--
   }
 
   expandResultsContent() {
@@ -852,16 +867,28 @@ class DtreeStore {
     this.resultsChangeIndicator--
   }
 
-  resetResultsChangeIndicator() {
-    this.resultsChangeIndicator = 0
-  }
-
   setFilterValue(item: string) {
     this.filterValue = item
   }
 
+  resetFilterValue() {
+    this.filterValue = ''
+  }
+
+  setFilterModalValue(item: string) {
+    this.filterModalValue = item
+  }
+
+  resetFilterModalValue() {
+    this.filterModalValue = ''
+  }
+
   setAlgorithmFilterValue(item: string) {
     this.algorithmFilterValue = item
+  }
+
+  resetAlgorithmFilterValue() {
+    this.algorithmFilterValue = ''
   }
 
   setIsFiltersLoading() {

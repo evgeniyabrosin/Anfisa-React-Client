@@ -72,7 +72,9 @@ export const FilterPage = observer(
         .catch(() => null)
 
       return () => {
-        dtreeStore.resetFilterChangeIndicator()
+        dtreeStore.resetFilterValue()
+        dtreeStore.resetAlgorithmFilterValue()
+        datasetStore.removeSearchField()
         dtreeStore.resetData()
         dirinfoStore.resetData()
         datasetStore.resetData()
