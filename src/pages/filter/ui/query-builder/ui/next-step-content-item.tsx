@@ -149,10 +149,10 @@ export const NextStepContentItem = observer(
               )}
               {`${group[1]}`}
             </div>
-
-            <div className="pt-1.5">
+            {/* TODO: add switch to step after implementation in backend */}
+            {/* <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
-            </div>
+            </div> */}
             {!isNumeric && (
               <label className="pl-4">
                 <Checkbox
