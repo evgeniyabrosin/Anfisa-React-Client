@@ -3,7 +3,6 @@ import cn from 'classnames'
 import { cloneDeep, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
@@ -13,7 +12,9 @@ import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalSte
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
+import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { EditModalButtons } from './edit-modal-buttons'
@@ -21,7 +22,7 @@ import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { IParams } from './modal-edit-compound-het'
-import { selectOptions } from './modal-edit-custom-inheritance-mode'
+import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 export const ModalEditCompoundRequest = observer(
   (): ReactElement => {
@@ -43,7 +44,6 @@ export const ModalEditCompoundRequest = observer(
     const approxOptions: string[] = []
 
     let attrData: any
-    let resetData: any
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -52,14 +52,12 @@ export const ModalEditCompoundRequest = observer(
         if (item.name === groupName) {
           attrData = subGroup[currNo]
         }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
-        }
       })
     })
 
     // approx-condition & state-condition & request-condition functions
+
+    const [resetValue, setResetValue] = useState('')
 
     attrData['approx-modes'].map((mode: string[]) => {
       approxOptions.push(mode[1])
@@ -165,6 +163,10 @@ export const ModalEditCompoundRequest = observer(
       if (shouldMakeActive) {
         setActiveRequestIndex(requestBlockIndex)
       }
+
+      const currentRequest = requestCondition[requestBlockIndex]
+
+      setResetValue(getResetType(currentRequest[1]))
     }
 
     const handleRequestBlocksAmount = (type: string) => {
@@ -174,6 +176,7 @@ export const ModalEditCompoundRequest = observer(
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
+        setResetValue('')
       } else {
         const newRequestCondition = cloneDeep(requestCondition).filter(
           (_item: any[], index: number) => index !== activeRequestIndex,
@@ -183,6 +186,10 @@ export const ModalEditCompoundRequest = observer(
         setActiveRequestIndex(newRequestCondition.length - 1)
 
         sendRequest(newRequestCondition)
+
+        setResetValue(
+          getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
+        )
       }
     }
 
@@ -239,6 +246,8 @@ export const ModalEditCompoundRequest = observer(
       setRequestCondition(newRequestCondition)
 
       sendRequest(newRequestCondition)
+
+      setResetValue('')
     }
 
     const handleReset = (name: string) => {
@@ -257,6 +266,8 @@ export const ModalEditCompoundRequest = observer(
       setRequestCondition(newRequestCondition)
 
       sendRequest(newRequestCondition)
+
+      setResetValue(name)
     }
 
     // get start variants
@@ -273,6 +284,14 @@ export const ModalEditCompoundRequest = observer(
       )
         .slice(10)
         .replace(/\s+/g, '')
+
+      setResetValue(
+        getResetType(
+          currentGroup[currentGroup.length - 1].request[
+            currentGroup[currentGroup.length - 1].request.length - 1
+          ][1],
+        ),
+      )
 
       const params = `{"approx":${approx},"state":${
         stateCondition === '-current-' || !stateCondition
@@ -435,7 +454,8 @@ export const ModalEditCompoundRequest = observer(
             <span>{t('dtree.reset')}</span>
 
             <Select
-              options={resetData.available}
+              options={resetOptions}
+              value={resetValue}
               onChange={(e: any) => handleReset(e.target.value)}
               className="w-full ml-2"
               reset

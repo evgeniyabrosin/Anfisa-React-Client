@@ -2,7 +2,6 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
@@ -28,7 +27,6 @@ export const ModalSelectCustomInheritanceMode = observer(
     const variants = dtreeStore.statFuncData.variants
 
     let attrData: any
-    let resetData: any
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -36,10 +34,6 @@ export const ModalSelectCustomInheritanceMode = observer(
       subGroup.map((item, currNo) => {
         if (item.name === groupName) {
           attrData = subGroup[currNo]
-        }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
         }
       })
     })
@@ -65,6 +59,8 @@ export const ModalSelectCustomInheritanceMode = observer(
     const [thirdSelectValue, setThirdSelectValue] = useState<string>('0-1')
 
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
+
+    const [resetValue, setResetValue] = useState('')
 
     const sendRequest = (type: string, value: string, multiData?: any[]) => {
       let selectedData: any[] = []
@@ -114,13 +110,12 @@ export const ModalSelectCustomInheritanceMode = observer(
         setThirdSelectValue(value)
         sendRequest('third', value)
       }
+
+      setResetValue('')
     }
 
     const handleReset = (name: string) => {
-      if (
-        name === InheritanceModeEnum.HomozygousRecessive ||
-        name === InheritanceModeEnum.XLinked
-      ) {
+      if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
         setFirstSelectValue('2')
         setSecondSelectValue('0-1')
         setThirdSelectValue('0-1')
@@ -175,6 +170,8 @@ export const ModalSelectCustomInheritanceMode = observer(
 
         sendRequest('', '', multiData)
       }
+
+      setResetValue(name)
     }
 
     const handleClose = () => {
@@ -209,10 +206,10 @@ export const ModalSelectCustomInheritanceMode = observer(
 
         <CustomInheritanceModeContent
           attrData={attrData}
-          resetData={resetData}
           handleSetScenario={handleSetScenario}
           selectStates={selectStates}
           handleReset={handleReset}
+          resetValue={resetValue}
         />
 
         <SelectModalButtons

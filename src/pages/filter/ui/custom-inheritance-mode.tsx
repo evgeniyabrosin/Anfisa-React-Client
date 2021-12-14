@@ -18,7 +18,7 @@ export const CustomInheritanceMode = observer(
     const [secondSelectValue, setSecondSelectValue] = useState<string>('0-1')
     const [thirdSelectValue, setThirdSelectValue] = useState<string>('0-1')
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
-
+    const [resetValue, setResetValue] = useState('')
     const variants = filterStore.statFuncData.variants
 
     useEffect(() => {
@@ -53,7 +53,6 @@ export const CustomInheritanceMode = observer(
     }, [setFieldValue, variants])
 
     let attrData: any
-    let resetData: any
 
     const statList = toJS(datasetStore.dsStat['stat-list'])
     const subGroups = Object.values(getQueryBuilder(statList))
@@ -62,10 +61,6 @@ export const CustomInheritanceMode = observer(
       subGroup.map((item, currNo) => {
         if (item.name === FuncStepTypesEnum.CustomInheritanceMode) {
           attrData = subGroup[currNo]
-        }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
         }
       })
     })
@@ -121,13 +116,12 @@ export const CustomInheritanceMode = observer(
         setThirdSelectValue(value)
         sendRequestAsync('third', value)
       }
+
+      setResetValue('')
     }
 
     const handleReset = (name: string) => {
-      if (
-        name === InheritanceModeEnum.HomozygousRecessive ||
-        name === InheritanceModeEnum.XLinked
-      ) {
+      if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
         setFirstSelectValue('2')
         setSecondSelectValue('0-1')
         setThirdSelectValue('0-1')
@@ -182,15 +176,17 @@ export const CustomInheritanceMode = observer(
 
         sendRequestAsync('', '', multiData)
       }
+
+      setResetValue(name)
     }
 
     return (
       <CustomInheritanceModeContent
         attrData={attrData}
-        resetData={resetData}
         handleSetScenario={handleSetScenario}
         selectStates={selectStates}
         handleReset={handleReset}
+        resetValue={resetValue}
       />
     )
   },

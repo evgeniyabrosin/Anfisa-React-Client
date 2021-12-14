@@ -15,16 +15,22 @@ import { getFuncParams } from '@utils/getFuncParams'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
+import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
 import { AllNotModalMods } from './query-builder/ui/all-not-modal-mods'
 import { EditModalVariants } from './query-builder/ui/edit-modal-variants'
+import { selectOptions } from './query-builder/ui/modal-select-custom-inheritance-mode'
 
-const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
-
-const options = [
+const approxOptions = [
   'shared transcript',
   'shared gene',
   'non-intersecting transcripts',
+]
+
+export const resetOptions = [
+  'Homozygous Recessive/X-linked',
+  'Autosomal Dominant',
+  'Compensational',
 ]
 
 interface IProps {
@@ -37,9 +43,9 @@ interface IProps {
 export const CompoundRequest = observer(
   ({ setFieldValue }: IProps): ReactElement => {
     const [requestCondition, setRequestCondition] = useState([[1, {}]])
+    const [resetValue, setResetValue] = useState('')
 
     let attrData: any
-    let resetData: any
     const variants = filterStore.statFuncData.variants
 
     const statList = toJS(datasetStore.dsStat['stat-list'])
@@ -49,10 +55,6 @@ export const CompoundRequest = observer(
       subGroup.map((item, currNo) => {
         if (item.name === FuncStepTypesEnum.CustomInheritanceMode) {
           attrData = subGroup[currNo]
-        }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
         }
       })
     })
@@ -92,6 +94,8 @@ export const CompoundRequest = observer(
       sendRequestAsync(newRequestCondition)
 
       setFieldValue('request', newRequestCondition)
+
+      setResetValue('')
     }
 
     async function sendRequestAsync(newRequestCondition: any[]) {
@@ -117,6 +121,7 @@ export const CompoundRequest = observer(
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
+        setResetValue('')
       } else {
         const newRequestCondition = cloneDeep(requestCondition).filter(
           (_item: any[], index: number) => index !== activeRequestIndex,
@@ -124,6 +129,10 @@ export const CompoundRequest = observer(
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
+
+        setResetValue(
+          getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
+        )
 
         sendRequestAsync(newRequestCondition)
       }
@@ -156,6 +165,10 @@ export const CompoundRequest = observer(
       if (shouldMakeActive) {
         setActiveRequestIndex(requestBlockIndex)
       }
+
+      const currentRequest = requestCondition[requestBlockIndex]
+
+      setResetValue(getResetType(currentRequest[1]))
     }
 
     function getSelectedValue(group: string, index: number): any {
@@ -190,6 +203,8 @@ export const CompoundRequest = observer(
       sendRequestAsync(newRequestCondition)
 
       setFieldValue('request', newRequestCondition)
+
+      setResetValue(name)
     }
 
     return (
@@ -199,7 +214,11 @@ export const CompoundRequest = observer(
             <div className="flex items-center">
               <span className="mr-2 text-18 leading-14px">Approx:</span>
 
-              <Select value={options[2]} options={options} disabled={true} />
+              <Select
+                value={approxOptions[2]}
+                options={approxOptions}
+                disabled={true}
+              />
             </div>
 
             <div className="flex items-center ml-3">
@@ -290,9 +309,10 @@ export const CompoundRequest = observer(
             <span>{t('dtree.reset')}</span>
 
             <Select
-              options={resetData.available}
+              options={resetOptions}
               onChange={(e: any) => handleReset(e.target.value)}
               className="w-full ml-2"
+              value={resetValue}
               reset
             />
           </div>

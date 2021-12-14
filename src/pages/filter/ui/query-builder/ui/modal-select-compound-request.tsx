@@ -4,7 +4,6 @@ import { cloneDeep } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
@@ -14,14 +13,16 @@ import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
+import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { IParams } from './modal-edit-compound-het'
-import { selectOptions } from './modal-edit-custom-inheritance-mode'
+import { selectOptions } from './modal-select-custom-inheritance-mode'
 import { SelectModalButtons } from './select-modal-buttons'
 
 export const ModalSelectCompoundRequest = observer(
@@ -46,7 +47,6 @@ export const ModalSelectCompoundRequest = observer(
     const approxOptions: string[] = []
 
     let attrData: any
-    let resetData: any
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -54,10 +54,6 @@ export const ModalSelectCompoundRequest = observer(
       subGroup.map((item, currNo) => {
         if (item.name === groupName) {
           attrData = subGroup[currNo]
-        }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
         }
       })
     })
@@ -74,6 +70,8 @@ export const ModalSelectCompoundRequest = observer(
     const [stateCondition, setStateCondition] = useState('-current-')
 
     const [approxCondition, setApproxCondition] = useState('transcript')
+
+    const [resetValue, setResetValue] = useState('')
 
     const stateOptions: string[] = [stateCondition]
 
@@ -131,6 +129,10 @@ export const ModalSelectCompoundRequest = observer(
       if (shouldMakeActive) {
         setActiveRequestIndex(requestBlockIndex)
       }
+
+      const currentRequest = requestCondition[requestBlockIndex]
+
+      setResetValue(getResetType(currentRequest[1]))
     }
 
     const handleRequestBlocksAmount = (type: string) => {
@@ -140,6 +142,7 @@ export const ModalSelectCompoundRequest = observer(
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
+        setResetValue('')
       } else {
         const newRequestCondition = cloneDeep(requestCondition).filter(
           (_item: any[], index: number) => index !== activeRequestIndex,
@@ -149,6 +152,10 @@ export const ModalSelectCompoundRequest = observer(
         setActiveRequestIndex(newRequestCondition.length - 1)
 
         sendRequest(newRequestCondition)
+
+        setResetValue(
+          getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
+        )
       }
     }
 
@@ -205,6 +212,8 @@ export const ModalSelectCompoundRequest = observer(
       setRequestCondition(newRequestCondition)
 
       sendRequest(newRequestCondition)
+
+      setResetValue('')
     }
 
     const handleReset = (name: string) => {
@@ -223,6 +232,8 @@ export const ModalSelectCompoundRequest = observer(
       setRequestCondition(newRequestCondition)
 
       sendRequest(newRequestCondition)
+
+      setResetValue(name)
     }
 
     // common UI functions
@@ -379,7 +390,8 @@ export const ModalSelectCompoundRequest = observer(
             <span>{t('dtree.reset')}</span>
 
             <Select
-              options={resetData.available}
+              options={resetOptions}
+              value={resetValue}
               onChange={(e: any) => handleReset(e.target.value)}
               className="w-full ml-2"
               reset
