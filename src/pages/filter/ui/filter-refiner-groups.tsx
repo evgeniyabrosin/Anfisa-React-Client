@@ -48,52 +48,54 @@ export const FilterRefinerGroups = observer(
     }
 
     return (
-      <div
-        className="pt-4 w-1/3 overflow-y-scroll border-gre"
-        style={{ maxHeight: 'calc(100vh - 170px)' }}
-      >
-        <div id="input" className="mx-4 mb-3">
-          <InputSearch
-            placeholder={t('filter.searchForAField')}
-            value={datasetStore.searchField}
-            filter
-            onChange={e => {
-              datasetStore.addSearchField(e.target.value)
-            }}
-          />
+      <div className="pt-4 w-1/3 ">
+        <InputSearch
+          placeholder={t('filter.searchForAField')}
+          value={datasetStore.searchField}
+          filter
+          onChange={e => {
+            datasetStore.addSearchField(e.target.value)
+          }}
+        />
+
+        <div
+          className="overflow-y-scroll border-gre"
+          style={{ maxHeight: 'calc(100vh - 250px)' }}
+        >
+          <div id="input" className="mx-4 mb-3" />
+
+          {keys.map((group, index) => (
+            <div key={group}>
+              <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
+
+              {values[index].map((item: StatList) => {
+                const numericAmount =
+                  item.kind === FilterKindEnum.Numeric
+                    ? get(datasetStore, 'dsStat.total-counts.0', 0)
+                    : 0
+
+                return (
+                  <FilterRefinerGroupItem
+                    className="pl-4"
+                    onChange={checked =>
+                      handleCheckGroupItem(checked, group, item.name)
+                    }
+                    {...item}
+                    key={item.name}
+                    isFunc={item.kind === FilterKindEnum.Func}
+                    isNumeric={item.kind === FilterKindEnum.Numeric}
+                    amount={
+                      item.variants
+                        ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
+                        : numericAmount
+                    }
+                    group={group}
+                  />
+                )
+              })}
+            </div>
+          ))}
         </div>
-
-        {keys.map((group, index) => (
-          <div key={group}>
-            <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
-
-            {values[index].map((item: StatList) => {
-              const numericAmount =
-                item.kind === FilterKindEnum.Numeric
-                  ? get(datasetStore, 'dsStat.total-counts.0', 0)
-                  : 0
-
-              return (
-                <FilterRefinerGroupItem
-                  className="pl-4"
-                  onChange={checked =>
-                    handleCheckGroupItem(checked, group, item.name)
-                  }
-                  {...item}
-                  key={item.name}
-                  isFunc={item.kind === FilterKindEnum.Func}
-                  isNumeric={item.kind === FilterKindEnum.Numeric}
-                  amount={
-                    item.variants
-                      ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
-                      : numericAmount
-                  }
-                  group={group}
-                />
-              )
-            })}
-          </div>
-        ))}
       </div>
     )
   },
