@@ -19,6 +19,7 @@ import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
+import { ModalRefiner } from './ui/modal-refiner'
 import { TableVariants } from './ui/table-variants'
 
 const WSPage = observer(
@@ -60,6 +61,8 @@ const WSPage = observer(
         {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
         {variantStore.isModalNotesVisible && <ModalNotes />}
+
+        {datasetStore.isModalRefinerVisible && <ModalRefiner />}
 
         <div className="h-full flex flex-col">
           <Header>

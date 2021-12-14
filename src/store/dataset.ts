@@ -47,6 +47,8 @@ class DatasetStore {
 
   searchField = ''
 
+  isModalRefinerVisible = false
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -543,6 +545,14 @@ class DatasetStore {
 
   removeSearchField() {
     this.searchField = ''
+  }
+
+  showModalRefiner() {
+    this.isModalRefinerVisible = true
+  }
+
+  hideModalRefiner() {
+    this.isModalRefinerVisible = false
   }
 }
 

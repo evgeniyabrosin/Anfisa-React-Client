@@ -21,8 +21,12 @@ import {
   noSymbolPattern,
 } from './query-builder/ui/modal-save-dataset'
 
+interface IProps {
+  source?: string
+}
+
 export const FilterControlRefiner = observer(
-  (): ReactElement => {
+  ({ source }: IProps): ReactElement => {
     const [activePreset, setActivePreset] = useState('')
     const [createPresetName, setCreatePresetName] = useState('')
 
@@ -168,7 +172,7 @@ export const FilterControlRefiner = observer(
           )}
         </div>
 
-        <DatasetCreationButton />
+        {!source && <DatasetCreationButton />}
       </Fragment>
     )
   },

@@ -9,16 +9,20 @@ import { FunctionPanel } from './function-panel'
 import { RangePanel } from './range-panel'
 import { SelectedGroupHeader } from './selected-group-header'
 
+interface IProps {
+  style?: any
+}
+
 export const SelectedGroup = observer(
-  (): ReactElement => {
+  ({ style }: IProps): ReactElement => {
     if (!filterStore.selectedGroupItem.name) {
-      return <EmptySelectedGroup />
+      return <EmptySelectedGroup style={style} />
     }
 
     return (
       <div
         className="bg-blue-light pt-5 px-4 w-1/3 overflow-y-auto"
-        style={{ height: 'calc(100vh - 158px)' }}
+        style={style || { height: 'calc(100vh - 158px)' }}
       >
         <SelectedGroupHeader />
 

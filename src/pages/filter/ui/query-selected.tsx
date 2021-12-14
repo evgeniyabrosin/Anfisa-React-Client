@@ -13,8 +13,12 @@ import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
 import { QueryResults } from './query-results'
 
+interface IProps {
+  style?: any
+}
+
 export const QuerySelected = observer(
-  (): ReactElement => {
+  ({ style }: IProps): ReactElement => {
     const history = useHistory()
     const params = useParams()
 
@@ -44,7 +48,7 @@ export const QuerySelected = observer(
     }
 
     return (
-      <div className="w-1/3">
+      <div className="w-1/3" style={style}>
         <div className="flex items-center p-4 border-b border-grey-light bg-blue-lighter">
           <div className="flex flex-wrap">
             <span className="font-bold text-20 leading-20 text-white w-full">

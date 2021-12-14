@@ -10,8 +10,12 @@ import filterStore from '@store/filter'
 import { InputSearch } from '@components/input-search'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
+interface IProps {
+  style?: any
+}
+
 export const FilterRefinerGroups = observer(
-  (): ReactElement => {
+  ({ style }: IProps): ReactElement => {
     const keys = Object.keys(datasetStore.getFilterRefiner)
 
     const values = Object.values(datasetStore.getFilterRefiner)
@@ -49,8 +53,8 @@ export const FilterRefinerGroups = observer(
 
     return (
       <div
-        className="pt-4 w-1/3 overflow-y-scroll border-gre"
-        style={{ maxHeight: 'calc(100vh - 170px)' }}
+        className="pt-4 w-1/3 overflow-y-scroll"
+        style={style || { maxHeight: 'calc(100vh - 99px)' }}
       >
         <div id="input" className="mx-4 mb-3">
           <InputSearch
