@@ -10,7 +10,6 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
-import { Switch } from '@ui/switch'
 import { FnLabel } from '@components/fn-label'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
@@ -43,11 +42,11 @@ interface IProps {
 
 export const NextStepContentItem = observer(
   ({ group, index, currNo }: IProps): ReactElement => {
-    const [isChecked, setIsChecked] = useState(true)
+    // const [isChecked, setIsChecked] = useState(true)
 
-    const toggleChecked = () => {
-      setIsChecked(prev => !prev)
-    }
+    // const toggleChecked = () => {
+    //   setIsChecked(prev => !prev)
+    // }
 
     const [isVisible, setIsVisible] = useState(false)
 

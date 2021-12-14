@@ -63,7 +63,10 @@ export const QueryBuilderGroups = observer(
             </div>
           </div>
 
-          <div className="h-full overflow-y-auto">
+          <div
+            className="overflow-y-auto"
+            style={{ maxHeight: 'calc(100vh - 300px)' }}
+          >
             <DeferRender chunkSize={chunkSize} renderId={decrement}>
               {groupNames.map((groupName, index) => (
                 <QueryBuilderSubgroup
