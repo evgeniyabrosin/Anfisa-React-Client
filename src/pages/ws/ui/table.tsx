@@ -1,4 +1,5 @@
 import { ReactElement, useCallback, useEffect } from 'react'
+import ScrollContainer from 'react-indiana-drag-scroll'
 import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import cn from 'classnames'
@@ -113,6 +114,12 @@ export const Table = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const stopPropagation = (event: any) => {
+      event.preventDefault()
+      event.stopPropagation()
+      event.nativeEvent.stopImmediatePropagation()
+    }
+
     const RenderRow = useCallback(
       ({ index, style }) => {
         const row = rows[index]
@@ -134,6 +141,9 @@ export const Table = observer(
             onClick={() => handleOpenVariant(row)}
           >
             {row.cells.map((cell: any) => {
+              const isSampleColumn = cell?.column?.Header === 'Samples'
+              const valueNumber = Object.keys(cell.value).length
+
               return (
                 <div
                   {...cell.getCellProps()}
@@ -151,7 +161,19 @@ export const Table = observer(
                     'px-4': cell.column.Header !== tableColumnMap.samples,
                   })}
                 >
-                  {cell.render('Cell')}
+                  {isSampleColumn ? (
+                    <div onClick={stopPropagation}>
+                      <ScrollContainer
+                        style={{
+                          cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
+                        }}
+                      >
+                        {cell.render('Cell')}
+                      </ScrollContainer>
+                    </div>
+                  ) : (
+                    cell.render('Cell')
+                  )}
                 </div>
               )
             })}
