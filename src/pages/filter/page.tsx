@@ -85,6 +85,8 @@ const FilterPage = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dsName])
 
+    const isRefiner = filterStore.method === FilterMethodEnum.Refiner
+
     return (
       <Fragment>
         {dtreeStore.isModalAttributeVisible && <ModalSelectAttribute />}
@@ -161,10 +163,12 @@ const FilterPage = observer(
               )}
 
               <div className="ml-2">
-                <PopperButton
-                  ButtonElement={ExportReportButton}
-                  ModalElement={ExportPanel}
-                />
+                {isRefiner && (
+                  <PopperButton
+                    ButtonElement={ExportReportButton}
+                    ModalElement={ExportPanel}
+                  />
+                )}
               </div>
             </div>
           </Header>
@@ -174,7 +178,7 @@ const FilterPage = observer(
           {filterStore.method === FilterMethodEnum.DecisionTree && fetched && (
             <QueryBuilder />
           )}
-          {filterStore.method === FilterMethodEnum.Refiner && <FilterRefiner />}
+          {isRefiner && <FilterRefiner />}
         </div>
       </Fragment>
     )

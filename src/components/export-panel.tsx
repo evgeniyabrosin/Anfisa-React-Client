@@ -6,8 +6,6 @@ import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import dirinfoStore from '@store/dirinfo'
-import dtreeStore from '@store/dtree'
 import operationsStore from '@store/operations'
 
 interface Props {
@@ -16,14 +14,10 @@ interface Props {
 
 export const ExportPanel = ({ close }: Props): ReactElement => {
   const ref = useRef<any>(null)
-  const isXL = datasetStore.isXL
 
-  const dtreeStatAmount = toJS(dtreeStore.statAmount)
   const dataSetStatAmount = toJS(datasetStore.statAmount)
 
-  const variantsAmount = isXL
-    ? toJS(dirinfoStore.dsinfo).total
-    : dtreeStatAmount[0] || dataSetStatAmount[0]
+  const variantsAmount = dataSetStatAmount[0]
 
   const handleDownload = (type: ExportTypeEnum) => {
     if (typeof variantsAmount === 'number' && variantsAmount > 300) {

@@ -51,7 +51,9 @@ class OperationsStore {
     if (datasetStore.activePreset) {
       body.append('filter', datasetStore.activePreset)
     } else {
-      body.append('conditions', `[]`)
+      const condtitions = JSON.stringify(datasetStore.conditions)
+
+      body.append('conditions', condtitions)
     }
 
     if (datasetStore.zone.length > 0) {
