@@ -53,7 +53,7 @@ const DrawerTagModal = observer(({ close }: any) => {
         .map(tag => tag.toLocaleLowerCase())
         .includes(value.toLocaleLowerCase())
     ) {
-      setError('Tag is already exists')
+      setError(t('variant.tagExists'))
     } else {
       setError('')
     }

@@ -11,7 +11,7 @@ export const en = {
     apply: 'Apply',
     clear: 'Clear',
     add: 'Add',
-    selectAnOption: 'Select preset',
+    selectAnOption: 'Select...',
     filter: '+ Filter',
     presetCreated: 'Preset has been created',
     showLess: 'Show less',
