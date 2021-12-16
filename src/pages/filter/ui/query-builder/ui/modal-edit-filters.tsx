@@ -4,7 +4,9 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { Pagintaion } from '@components/pagintaion'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
+import { createChunks } from '@utils/createChunks'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
@@ -31,8 +33,6 @@ export const ModalEditFilters = observer(
     const currentStatList = subGroups.find(subGroup =>
       subGroup.find(element => element.name === groupName),
     )
-
-    const attrData: (string | number)[][] = currentStatList?.[0].variants ?? []
 
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
@@ -70,16 +70,33 @@ export const ModalEditFilters = observer(
     }
 
     const [searchValue, setSearchValue] = useState('')
+    const [currentPage, setCurrentPage] = useState(0)
 
     const handleChange = (value: string) => {
       setSearchValue(value)
+
+      if (currentPage === 0) return
+
+      setCurrentPage(0)
     }
+
+    const originGroupList: any[] = currentStatList?.[0].variants ?? []
+
+    const filteredGroupList = originGroupList.filter(
+      (variant: [string, number]) =>
+        variant[0]
+          .toLocaleLowerCase()
+          .startsWith(searchValue.toLocaleLowerCase()),
+    )
+
+    const groupsPerPage = 100
+    const chunks = createChunks(filteredGroupList, groupsPerPage)
 
     return (
       <ModalBase refer={ref} minHeight={200}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
 
-        {attrData.length > 15 && (
+        {originGroupList.length > 15 && (
           <div className="flex mt-3">
             <QueryBuilderSearch
               value={searchValue}
@@ -111,34 +128,48 @@ export const ModalEditFilters = observer(
           </div>
         </div>
 
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
+
         <div className="flex-1 overflow-y-auto my-4 text-14">
-          {attrData
-            .filter((attr: any) =>
-              attr[0]
-                .toLocaleLowerCase()
-                .startsWith(searchValue.toLocaleLowerCase()),
-            )
-            .map((variant: any) => (
-              <div key={variant} className="flex items-center mb-2">
-                <Checkbox
-                  checked={
-                    currentGroup.length > 0
-                      ? dtreeStore.selectedFilters.includes(variant[0])
-                      : false
-                  }
-                  className="-mt-0.5 mr-1"
-                  onChange={e =>
-                    handleCheckGroupItem(e.target.checked, variant[0])
-                  }
-                />
+          {chunks[currentPage] ? (
+            chunks[currentPage].map((variant: [string, number]) => {
+              const variantName = variant[0]
+              const variantNumbers = variant[1]
 
-                <p className="text-black">{variant[0]}</p>
+              return (
+                variantNumbers !== 0 && (
+                  <div
+                    key={variantName}
+                    className="flex items-center mb-2 text-14"
+                  >
+                    <Checkbox
+                      checked={dtreeStore.selectedFilters.includes(variantName)}
+                      className="-mt-0.5 mr-1 cursor-pointer"
+                      onChange={e =>
+                        handleCheckGroupItem(e.target.checked, variantName)
+                      }
+                    />
 
-                <p className="text-grey-blue ml-2">
-                  {variant[1]} {t('dtree.variants')}
-                </p>
-              </div>
-            ))}
+                    <span className="text-black">{variantName}</span>
+
+                    <span className="text-grey-blue ml-2">
+                      {variantNumbers} {t('dtree.variants')}
+                    </span>
+                  </div>
+                )
+              )
+            })
+          ) : (
+            <div className="flex justify-center items-center text-14 text-grey-blue">
+              {t('dtree.noFilters')}
+            </div>
+          )}
         </div>
 
         <EditModalButtons
