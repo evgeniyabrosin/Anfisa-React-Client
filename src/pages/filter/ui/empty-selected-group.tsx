@@ -1,6 +1,8 @@
 import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
+import { t } from '@i18n'
+
 type Props = {
   className?: Argument
 }
@@ -11,7 +13,7 @@ export const EmptySelectedGroup = ({ className }: Props): ReactElement => (
       style={{ height: 'calc(100vh - 100px)' }}
     >
       <p className="leading-16px text-grey-blue align-center">
-        Select a filter
+        {t('dtree.selectAttribute')}
       </p>
     </div>
   </div>
