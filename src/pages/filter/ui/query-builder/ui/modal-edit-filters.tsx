@@ -28,12 +28,6 @@ export const ModalEditFilters = observer(
     const selectedGroupsAmount =
       currentGroup.length > 0 ? dtreeStore.selectedFilters : []
 
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
-
-    const currentStatList = subGroups.find(subGroup =>
-      subGroup.find(element => element.name === groupName),
-    )
-
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
         indexOfCurrentGroup
@@ -80,7 +74,13 @@ export const ModalEditFilters = observer(
       setCurrentPage(0)
     }
 
-    const originGroupList: any[] = currentStatList?.[0].variants ?? []
+    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+
+    const selectedGroup = subGroups
+      .find(subGroup => subGroup.find(element => element.name === groupName))
+      ?.find(element => element.name === groupName)
+
+    const originGroupList: any[] = selectedGroup?.variants ?? []
 
     const filteredGroupList = originGroupList.filter(
       (variant: [string, number]) =>
