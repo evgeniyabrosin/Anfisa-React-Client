@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
@@ -12,9 +13,15 @@ import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 export const FilterRefinerGroups = observer(
   (): ReactElement => {
-    const keys = Object.keys(datasetStore.getFilterRefiner)
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
 
-    const values = Object.values(datasetStore.getFilterRefiner)
+    const keys = Object.keys(filteredQueryBuilder)
+
+    const values = Object.values(filteredQueryBuilder)
 
     const handleCheckGroupItem = (
       checked: boolean,
@@ -23,8 +30,8 @@ export const FilterRefinerGroups = observer(
     ) => {
       if (checked) {
         const filterItem =
-          datasetStore.getFilterRefiner[group] &&
-          datasetStore.getFilterRefiner[group].find(item => item.name === name)
+          filteredQueryBuilder[group] &&
+          filteredQueryBuilder[group].find(item => item.name === name)
 
         const filterItemVariants = get(filterItem, 'variants', []) as [
           string,
@@ -51,10 +58,10 @@ export const FilterRefinerGroups = observer(
       <div className="pt-4 w-1/3 ">
         <InputSearch
           placeholder={t('filter.searchForAField')}
-          value={datasetStore.searchField}
+          value={filterValue}
           filter
-          onChange={e => {
-            datasetStore.addSearchField(e.target.value)
+          onChange={event => {
+            setFilterValue(event.target.value)
           }}
         />
 

@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, StatList, TabReportType } from '@declarations'
+import { DsStatType, TabReportType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
@@ -46,8 +46,6 @@ class DatasetStore {
   isFilterDisabled = false
 
   reportsLoaded = false
-
-  searchField = ''
 
   constructor() {
     makeAutoObservable(this)
@@ -240,28 +238,6 @@ class DatasetStore {
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
       : await this.fetchFilteredTabReportAsync()
-  }
-
-  get getFilterRefiner() {
-    const groups: Record<string, StatList[]> = {}
-
-    this.dsStat['stat-list'] &&
-      this.dsStat['stat-list'].forEach((item: StatList) => {
-        if (
-          (item.title || item.name) &&
-          (item.title || item.name)
-            .toLocaleLowerCase()
-            .includes(this.searchField.toLocaleLowerCase())
-        ) {
-          if (groups[item.vgroup]) {
-            groups[item.vgroup] = [...groups[item.vgroup], item]
-          } else {
-            groups[item.vgroup] = [item]
-          }
-        }
-      })
-
-    return groups
   }
 
   async fetchDsStatAsync(
@@ -550,14 +526,6 @@ class DatasetStore {
     runInAction(() => {
       this.samples = result.variants
     })
-  }
-
-  addSearchField(item: string) {
-    this.searchField = item
-  }
-
-  removeSearchField() {
-    this.searchField = ''
   }
 
   setDsStat(newDsStat: DsStatType) {

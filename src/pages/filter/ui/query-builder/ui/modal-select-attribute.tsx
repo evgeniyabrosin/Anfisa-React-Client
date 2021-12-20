@@ -1,6 +1,7 @@
 import { ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { QueryBuilderSearch } from '../query-builder-search'
@@ -10,9 +11,15 @@ import { ModalBase } from './modal-base'
 
 export const ModalSelectAttribute = observer(
   (): ReactElement => {
-    const groupNames = Object.keys(dtreeStore.getModalQueryBuilder)
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
 
-    const subGroupData = Object.values(dtreeStore.getModalQueryBuilder)
+    const groupNames = Object.keys(filteredQueryBuilder)
+
+    const subGroupData = Object.values(filteredQueryBuilder)
 
     const ref = useRef(null)
 
@@ -30,8 +37,8 @@ export const ModalSelectAttribute = observer(
 
         <div className="flex w-full mt-4">
           <QueryBuilderSearch
-            value={dtreeStore.filterModalValue}
-            onChange={(e: string) => dtreeStore.setFilterModalValue(e)}
+            value={filterValue}
+            onChange={(value: string) => setFilterValue(value)}
             isModal
           />
         </div>

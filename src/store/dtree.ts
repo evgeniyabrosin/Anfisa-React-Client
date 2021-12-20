@@ -224,10 +224,6 @@ class DtreeStore {
     return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
   }
 
-  get getModalQueryBuilder() {
-    return getQueryBuilder(toJS(this.dtreeStat['stat-list']), 'modal')
-  }
-
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
     const currentIndex = Number(indexes[index])

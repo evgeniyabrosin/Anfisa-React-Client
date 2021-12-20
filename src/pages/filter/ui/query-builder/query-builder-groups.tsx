@@ -1,6 +1,7 @@
 import { Fragment, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { DeferRender } from '@utils/deferRender'
@@ -9,8 +10,15 @@ import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer(
   (): ReactElement => {
-    const groupNames = Object.keys(dtreeStore.getQueryBuilder)
-    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
+
+    const groupNames = Object.keys(filteredQueryBuilder)
+    const subGroupData = Object.values(filteredQueryBuilder)
+
     const chunkSize = 2
     let groupsCount = Math.trunc(groupNames.length / 2)
     let requestIdleCallbackIds: number[] = []
@@ -46,8 +54,8 @@ export const QueryBuilderGroups = observer(
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
           <div id="input" className="flex mb-3 w-full static">
             <QueryBuilderSearch
-              value={dtreeStore.filterValue}
-              onChange={(e: string) => dtreeStore.setFilterValue(e)}
+              value={filterValue}
+              onChange={(value: string) => setFilterValue(value)}
               isFilter
             />
           </div>

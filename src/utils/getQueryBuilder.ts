@@ -1,25 +1,14 @@
 import { StatList } from '@declarations'
-import dtreeStore from '@store/dtree'
 
-export const getQueryBuilder = (statList: StatList[], source?: string) => {
+export const getQueryBuilder = (statList: StatList[]) => {
   const groups: Record<string, StatList[]> = {}
 
   statList &&
     statList.forEach(item => {
-      if (
-        item.name
-          .toLocaleLowerCase()
-          .includes(
-            source
-              ? dtreeStore.filterModalValue.toLocaleLowerCase()
-              : dtreeStore.filterValue.toLocaleLowerCase(),
-          )
-      ) {
-        if (groups[item.vgroup]) {
-          groups[item.vgroup] = [...groups[item.vgroup], item]
-        } else {
-          groups[item.vgroup] = [item]
-        }
+      if (groups[item.vgroup]) {
+        groups[item.vgroup] = [...groups[item.vgroup], item]
+      } else {
+        groups[item.vgroup] = [item]
       }
     })
 
