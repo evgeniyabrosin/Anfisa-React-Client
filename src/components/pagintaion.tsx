@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
+import styled from 'styled-components'
 
+import { theme } from '@theme'
 import { Icon } from '@ui/icon'
 
 enum Actions {
@@ -15,6 +17,19 @@ interface IProps {
   currentPage: number
   setPageNumber: Dispatch<SetStateAction<number>>
 }
+
+const Panel = styled.div`
+  border: 1px solid ${theme('colors.blue.light')};
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+`
+
+const Separator = styled.div`
+  background: ${theme('colors.blue.light')};
+  height: 12px;
+  width: 1px;
+`
 
 export const Pagintaion = observer(
   ({ pagesNumbers, currentPage, setPageNumber }: IProps) => {
@@ -51,28 +66,40 @@ export const Pagintaion = observer(
 
     return (
       <div className="flex justify-center">
-        {/* <div onClick={() => changePage(Actions.first)}>first</div> */}
-        <div onClick={() => changePage(Actions.prev)}>
-          <Icon
-            name="Arrow"
-            size={22}
-            className={cn(
-              `${!isFirstPage && 'text-blue-bright cursor-pointer'}`,
-            )}
-          />
-        </div>
-        <span className="px-2">{testPage}</span>
-        <div onClick={() => changePage(Actions.next)}>
-          <Icon
-            name="Arrow"
-            size={22}
-            className={cn(
-              'transform -rotate-180',
-              `${!isLastPage && 'text-blue-bright cursor-pointer'}`,
-            )}
-          />
-        </div>
-        {/* <div onClick={() => changePage(Actions.last)}>last</div> */}
+        <Panel>
+          <div onClick={() => changePage(Actions.prev)}>
+            <Icon
+              name="Arrow"
+              size={22}
+              className={cn(
+                `${
+                  !isFirstPage
+                    ? 'text-blue-bright cursor-pointer'
+                    : 'text-grey-blue'
+                }`,
+              )}
+            />
+          </div>
+
+          <Separator />
+          <span className="px-2">{testPage + '/' + pagesNumbers}</span>
+          <Separator />
+
+          <div onClick={() => changePage(Actions.next)}>
+            <Icon
+              name="Arrow"
+              size={22}
+              className={cn(
+                'transform -rotate-180',
+                `${
+                  !isLastPage
+                    ? 'text-blue-bright cursor-pointer'
+                    : 'text-grey-blue'
+                }`,
+              )}
+            />
+          </div>
+        </Panel>
       </div>
     )
   },

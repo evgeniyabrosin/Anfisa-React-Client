@@ -128,14 +128,6 @@ export const ModalEditFilters = observer(
           </div>
         </div>
 
-        {filteredGroupList.length > groupsPerPage && (
-          <Pagintaion
-            pagesNumbers={chunks.length}
-            currentPage={currentPage}
-            setPageNumber={setCurrentPage}
-          />
-        )}
-
         <div className="flex-1 overflow-y-auto my-4 text-14">
           {chunks[currentPage] ? (
             chunks[currentPage].map((variant: [string, number]) => {
@@ -171,6 +163,14 @@ export const ModalEditFilters = observer(
             </div>
           )}
         </div>
+
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
 
         <EditModalButtons
           handleClose={handleClose}

@@ -111,13 +111,6 @@ export const ModalSelectFilters = observer(
           </div>
         </div>
 
-        {filteredGroupList.length > groupsPerPage && (
-          <Pagintaion
-            pagesNumbers={chunks.length}
-            currentPage={currentPage}
-            setPageNumber={setCurrentPage}
-          />
-        )}
         <div className="flex-1 mt-4 overflow-y-auto">
           {chunks[currentPage] ? (
             chunks[currentPage].map((variant: [string, number]) => {
@@ -153,6 +146,14 @@ export const ModalSelectFilters = observer(
             </div>
           )}
         </div>
+
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
 
         <SelectModalButtons
           handleClose={handleClose}
