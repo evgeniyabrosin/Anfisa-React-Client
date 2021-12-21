@@ -62,8 +62,8 @@ export const EnumPanel = observer(
     return (
       <div className="mt-4">
         {currentGroup?.variants
-          .filter(variant => variant[1] !== 0)
-          .map((variant: any) => (
+          ?.filter(variant => variant[1] !== 0)
+          ?.map((variant: any) => (
             <SelectedGroupItem
               key={variant[0]}
               name={variant[0]}
