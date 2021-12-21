@@ -127,7 +127,12 @@ export const ModalSelectFilters = observer(
 
             <ModsDivider />
 
-            <div className="text-blue-bright">{t('general.clearAll')}</div>
+            <div
+              className="cursor-pointer text-blue-bright"
+              onClick={() => handleCheckAll(false)}
+            >
+              {t('general.clearAll')}
+            </div>
           </div>
         </div>
 
