@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import zoneStore from '@store/filterZone'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { PopperButton } from '@components/popper-button'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { FilterItemList } from './control-panel-filter-item-list'
@@ -40,6 +41,7 @@ const ButtonElementAdd = ({ refEl, onClick }: any) => (
       noIcon={true}
       specialIcon={true}
       className="inline-flex items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg"
+      dataTestId={MainTableDataCy.addGene}
     />
   </Fragment>
 )

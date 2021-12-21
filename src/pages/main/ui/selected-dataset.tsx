@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { Card, CardTitle } from '@ui/card'
+import { DatasetCard } from '@components/data-testid/dataset-card.cy'
 import { DatasetsFieldsList } from './dataset-fileds-list'
 import { DatasetGeneral } from './dataset-general'
 import { OpenViewerButton } from './open-viewer-button'
@@ -22,6 +23,7 @@ export const SelectedDataset = observer(
           <div className="flex items-center justify-between flex-wrap">
             <CardTitle
               text={dirinfoStore.selectedDirinfoName}
+              dataTestId={DatasetCard.datasetHeader}
               className="mb-3 mr-3"
             />
 

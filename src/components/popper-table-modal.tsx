@@ -12,6 +12,7 @@ import { Button } from '@ui/button'
 import { InputSearch } from '@components/input-search'
 import { ViewTypeTable } from '@components/view-type-table'
 import { FilterMods } from '@pages/ws/ui/filter-mods'
+import { MainTableDataCy } from './data-testid/main-table.cy'
 
 interface Props {
   title?: string
@@ -135,6 +136,7 @@ export const PopperTableModal = observer(
             text={t('general.apply')}
             className="ml-3"
             onClick={onApply}
+            dataTestId={MainTableDataCy.applyButton}
           />
         </div>
       </div>

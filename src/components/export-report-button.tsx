@@ -4,6 +4,7 @@ import cn, { Argument } from 'classnames'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { MainTableDataCy } from './data-testid/main-table.cy'
 
 interface Props {
   isOpen?: boolean
@@ -20,6 +21,7 @@ export const ExportReportButton = ({
 }: Props): ReactElement => (
   <Button
     text={t('general.exportReport')}
+    dataTestId={MainTableDataCy.exportReport}
     refEl={refEl}
     size="sm"
     prepend={<Icon name="Export" />}

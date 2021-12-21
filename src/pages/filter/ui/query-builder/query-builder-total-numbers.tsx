@@ -5,6 +5,7 @@ import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 
 export const QueryBuilderTotalNumbers = observer(
   (): ReactElement => {
@@ -80,6 +81,7 @@ export const QueryBuilderTotalNumbers = observer(
         <div className="flex">
           {hasReturnedVariants && (
             <Button
+              dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
               onClick={() => openTableModal(true)}
               text={t('dtree.viewReturnedVariants')}
               hasBackground={false}

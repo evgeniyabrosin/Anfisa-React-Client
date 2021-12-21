@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { makeStepActive } from '@utils/makeStepActive'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
@@ -54,7 +55,10 @@ export const NextStep = observer(
     }
 
     return (
-      <div className="flex flex-col mb-2">
+      <div
+        className="flex flex-col mb-2"
+        data-testid={DecisionTreesResultsDataCy.stepCard}
+      >
         <div className="flex">
           <TreeView
             className={cn(

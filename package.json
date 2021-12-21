@@ -64,6 +64,7 @@
     "craco-alias": "3.0.1",
     "cypress": "9.0.0",
     "cypress-dotenv": "2.0.0",
+    "cypress-wait-until": "1.7.2",
     "dotenv": "10.0.0",
     "dotenv-cra": "2.0.2",
     "eslint": "7.24.0",
@@ -81,7 +82,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "cypress": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "husky": {
     "hooks": {

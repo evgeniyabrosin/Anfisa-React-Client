@@ -1,8 +1,15 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["es6", "dom"],
-    "types": ["cypress", "node"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "node",
+      "cypress-wait-until"
+    ],
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -16,5 +23,7 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts"
+  ]
 }

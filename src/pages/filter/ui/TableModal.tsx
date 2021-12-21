@@ -140,6 +140,7 @@ export const TableModal = observer(() => {
           <Fragment>
             <div
               className="flex w-full justify-center text-16 font-semibold"
+              data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
               dangerouslySetInnerHTML={{
                 __html: variantList[variantIndex]?.lb ?? '',
               }}
@@ -174,6 +175,7 @@ export const TableModal = observer(() => {
                   <div
                     key={index}
                     className="shadow-dark p-1 mb-5 cursor-pointer"
+                    data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
                       N - {index + 1}

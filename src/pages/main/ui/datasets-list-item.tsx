@@ -10,6 +10,7 @@ import { formatDate } from '@core/format-date'
 import { useParams } from '@core/hooks/use-params'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
+import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { DatasetType } from './dataset-type'
 interface Props {
   item: DsDistItem
@@ -56,6 +57,7 @@ const DatasetName = ({
           isChild ? 'absolute top-0 left-0' : 'relative ml-2 pr-7',
           className,
         )}
+        data-testid={FilterDatasetDataCy.datasetsListElem}
       >
         {dsName}
       </div>

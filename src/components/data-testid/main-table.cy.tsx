@@ -1,0 +1,15 @@
+export const MainTableDataCy = {
+  selectPreset: 'select-preset',
+  addSample: 'add-sample',
+  applyButton: 'apply',
+  cancelButton: 'cancel',
+  addTag: 'add-tag',
+  addGene: 'add-gene',
+  searchFilter: 'search-input',
+  numVariants: 'variants-number',
+  exportReport: 'export-report',
+  exportExcel: 'export-in-excel',
+  customizeTable: 'customize-table',
+  searchColumn: 'search-input',
+  checkboxListElement: 'checkbox-list-element',
+}

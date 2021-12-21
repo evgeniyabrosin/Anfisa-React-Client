@@ -11,6 +11,7 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
+import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
 import { TagsContainer } from './tags-container'
 
@@ -23,6 +24,7 @@ const DrawerTagButton = observer(({ refEl, onClick }: any) => {
       size="xs"
       hasBackground={false}
       onClick={onClick}
+      dataTestId={VariantDrawerDataCy.addTag}
     />
   )
 })
@@ -170,6 +172,7 @@ const DrawerTagModal = observer(({ close }: any) => {
               hasBackground={false}
               className="text-black mt-2 hover:bg-blue-bright hover:text-white"
               onClick={handleSetCustomTag}
+              dataTestId={VariantDrawerDataCy.addCustomTag}
             />
           </div>
         </div>
@@ -188,6 +191,7 @@ const DrawerTagModal = observer(({ close }: any) => {
           hasBackground={false}
           className="text-black hover:bg-blue-bright hover:text-white"
           onClick={handleSaveTagsAsync}
+          dataTestId={VariantDrawerDataCy.saveTags}
         />
       </div>
     </div>

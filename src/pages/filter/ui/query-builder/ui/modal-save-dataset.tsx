@@ -18,6 +18,7 @@ import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Attention } from '@ui/icons/attention'
 import { Input } from '@ui/input'
+import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
@@ -165,6 +166,7 @@ export const ModalSaveDataset = observer(() => {
             value={value}
             onChange={e => handleChange(e.target.value)}
             className="mt-1"
+            data-testid={DecisionTreesMenuDataCy.datasetNameInput}
           />
 
           <span className="text-12 text-red-secondary mt-2">{error}</span>
@@ -197,6 +199,7 @@ export const ModalSaveDataset = observer(() => {
             hasBackground={false}
             className="text-black border-grey-light hover:bg-grey-light"
             onClick={handleClose}
+            dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
           />
 
           <Button
@@ -205,6 +208,7 @@ export const ModalSaveDataset = observer(() => {
             disabled={!value.trim() || error.length > 0}
             hasBackground={false}
             onClick={saveDatasetAsync}
+            dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />
         </div>
       </div>

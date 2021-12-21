@@ -10,6 +10,7 @@ import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
@@ -24,6 +25,7 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
       icon={variantStore.noteText ? <Icon name="File" /> : undefined}
       hasBackground={false}
       onClick={onClick}
+      dataTestId={VariantDrawerDataCy.addNote}
     />
   )
 })
@@ -117,6 +119,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
           <Button
             text="Save note"
+            dataTestId={VariantDrawerDataCy.saveNote}
             disabled={!value || !value.trim()}
             hasBackground={false}
             className="ml-4 text-black hover:bg-blue-bright hover:text-white"

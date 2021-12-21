@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { QueryBuilderSubgroupItem } from './query-builder-subgroup-item'
 import { ExpandContentButton } from './ui/expand-content-button'
 
@@ -50,6 +51,7 @@ export const QueryBuilderSubgroup = observer(
               'text-blue-dark': isModal && isVisibleSubGroup,
             })}
             onClick={onClick}
+            data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}
           >
             {groupName}
           </span>

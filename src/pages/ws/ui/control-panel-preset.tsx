@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterPresetStore from '@store/filterPreset'
 import { DropDown } from '@ui/dropdown'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelTitle } from './control-panel-title'
 
 export const Preset = observer(
@@ -44,12 +45,14 @@ export const Preset = observer(
           )}
         </div>
 
-        <DropDown
-          options={presets}
-          value={datasetStore.activePreset}
-          onSelect={onSelectAsync}
-          placeholder={t('general.selectAnOption')}
-        />
+        <div data-testid={MainTableDataCy.selectPreset}>
+          <DropDown
+            options={presets}
+            value={datasetStore.activePreset}
+            onSelect={onSelectAsync}
+            placeholder={t('general.selectAnOption')}
+          />
+        </div>
       </div>
     )
   },
