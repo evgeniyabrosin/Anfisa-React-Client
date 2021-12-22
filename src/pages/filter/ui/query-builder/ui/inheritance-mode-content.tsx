@@ -54,7 +54,8 @@ export const InheritanceModeContent = observer(
             onClick={handleReset}
             text="Reset"
             hasBackground={false}
-            className="text-black h-4/5"
+            isBlackText
+            className="h-4/5 hover:bg-blue-bright hover:text-white"
           />
         </div>
 

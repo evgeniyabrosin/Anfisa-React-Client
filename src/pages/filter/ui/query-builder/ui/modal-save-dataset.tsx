@@ -197,16 +197,18 @@ export const ModalSaveDataset = observer(() => {
           <Button
             text={t('general.cancel')}
             hasBackground={false}
-            className="text-black border-grey-light hover:bg-grey-light"
+            isBlackText
+            className="border-grey-light hover:bg-grey-light"
             onClick={handleClose}
             dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
           />
 
           <Button
             text={t('dsCreation.addDataset')}
-            className="ml-4 text-black hover:bg-blue-bright hover:text-white"
+            className="ml-4 hover:bg-blue-bright hover:text-white"
             disabled={!value.trim() || error.length > 0}
             hasBackground={false}
+            isBlackText
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />

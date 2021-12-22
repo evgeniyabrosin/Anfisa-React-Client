@@ -48,7 +48,8 @@ export const SelectModalButtons = observer(
           <Button
             text={t('general.cancel')}
             hasBackground={false}
-            className="mr-2 text-black hover:bg-blue-bright hover:text-white"
+            isBlackText
+            className="mr-2 hover:bg-blue-bright hover:text-white"
             onClick={() => handleClose()}
           />
           {currentGroup && currentGroup.length > 0 ? (

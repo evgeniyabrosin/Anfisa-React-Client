@@ -433,9 +433,8 @@ export const ModalEditCompoundRequest = observer(
               onClick={() => handleRequestBlocksAmount('ADD')}
               text="Add"
               hasBackground={false}
-              className={cn(
-                'text-black hover:text-white hover:bg-blue-bright mr-4',
-              )}
+              isBlackText
+              className={cn('hover:text-white hover:bg-blue-bright mr-4')}
               disabled={requestCondition.length === 5}
             />
 
@@ -443,8 +442,9 @@ export const ModalEditCompoundRequest = observer(
               onClick={() => handleRequestBlocksAmount('REMOVE')}
               text="Remove"
               hasBackground={false}
+              isBlackText
               className={cn(
-                'text-black border-red-secondary hover:text-white hover:bg-red-secondary',
+                'border-red-secondary hover:text-white hover:bg-red-secondary',
               )}
               disabled={requestCondition.length === 1}
             />

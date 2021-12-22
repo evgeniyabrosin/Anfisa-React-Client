@@ -6,6 +6,7 @@ export interface ButtonProps {
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   hasBackground?: boolean
+  isBlackText?: boolean
   className?: Argument
   onClick?: () => void
   append?: ReactElement
@@ -20,6 +21,7 @@ export const Button = ({
   size = 'md',
   disabled = false,
   hasBackground = true,
+  isBlackText,
   onClick,
   className,
   append,
@@ -52,7 +54,7 @@ export const Button = ({
     padding,
     rounding,
     {
-      'text-white': true,
+      'text-white': !isBlackText,
       'bg-blue-bright': !disabled && hasBackground && isDefaultBackground,
       'border-2 border-blue-bright': !hasBackground,
       'cursor-not-allowed': disabled,

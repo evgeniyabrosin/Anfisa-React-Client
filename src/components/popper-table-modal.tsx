@@ -128,7 +128,7 @@ export const PopperTableModal = observer(
           <Button
             text={t('general.cancel')}
             hasBackground={false}
-            className="text-black"
+            isBlackText
             onClick={handleClose}
           />
 

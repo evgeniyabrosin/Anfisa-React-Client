@@ -170,7 +170,8 @@ const DrawerTagModal = observer(({ close }: any) => {
               text="Add custom tag"
               disabled={!customTag.trim() || !!error}
               hasBackground={false}
-              className="text-black mt-2 hover:bg-blue-bright hover:text-white"
+              isBlackText
+              className="mt-2 hover:bg-blue-bright hover:text-white"
               onClick={handleSetCustomTag}
               dataTestId={VariantDrawerDataCy.addCustomTag}
             />
@@ -183,13 +184,15 @@ const DrawerTagModal = observer(({ close }: any) => {
           text={t('general.cancel')}
           onClick={close}
           hasBackground={false}
-          className="text-black mr-3 ml-auto hover:bg-blue-bright hover:text-white"
+          isBlackText
+          className="mr-3 ml-auto hover:bg-blue-bright hover:text-white"
         />
 
         <Button
           text="Save tags"
           hasBackground={false}
-          className="text-black hover:bg-blue-bright hover:text-white"
+          isBlackText
+          className="hover:bg-blue-bright hover:text-white"
           onClick={handleSaveTagsAsync}
           dataTestId={VariantDrawerDataCy.saveTags}
         />
