@@ -131,8 +131,7 @@ export const RangePanel = observer(
 
         <div className="flex items-center justify-between mt-1">
           <Button
-            className="text-black hover:bg-blue-bright hover:text-white"
-            hasBackground={false}
+            variant={'secondary'}
             text={t('general.clear')}
             onClick={handleClear}
           />

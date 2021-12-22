@@ -61,22 +61,22 @@ export const FilterControl = observer(
               {filterStore.method === FilterMethodEnum.DecisionTree && (
                 <Button
                   text="Text editor"
-                  className="ml-2 hover:bg-blue-bright"
-                  hasBackground={false}
+                  className="ml-2"
+                  variant={'secondary-dark'}
                   onClick={() => dtreeStore.openModalTextEditor()}
                 />
               )}
               <Button
                 text="Undo"
-                className="ml-2 hover:bg-blue-bright"
-                hasBackground={false}
+                className="ml-2"
+                variant={'secondary-dark'}
                 disabled={isUndoLocked}
                 onClick={() => moveActionHistory(-1)}
               />
               <Button
                 text="Redo"
-                className="ml-2 hover:bg-blue-bright"
-                hasBackground={false}
+                className="ml-2"
+                variant={'secondary-dark'}
                 disabled={isRedoLocked}
                 onClick={() => moveActionHistory(1)}
               />

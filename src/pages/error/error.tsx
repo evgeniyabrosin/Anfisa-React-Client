@@ -13,8 +13,8 @@ export const ErrorPage = () => {
 
       <Button
         text={t('error.getBack')}
-        className="mt-3 hover:bg-blue-bright"
-        hasBackground={false}
+        className="mt-3"
+        variant={'secondary-dark'}
         onClick={() => history.push(Routes.Root)}
       />
     </div>

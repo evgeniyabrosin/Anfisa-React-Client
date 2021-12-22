@@ -23,8 +23,8 @@ export const TableProperiesButton = ({
     refEl={refEl}
     onClick={onClick}
     text={t('ds.customizeTable')}
-    hasBackground={false}
-    prepend={<Icon name="Settings" className="text-blue-bright" />}
+    variant={'secondary-dark'}
+    prepend={<Icon name="Settings" />}
     append={
       <Icon
         name="Arrow"

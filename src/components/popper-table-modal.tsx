@@ -127,8 +127,7 @@ export const PopperTableModal = observer(
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            isBlackText
+            variant={'secondary'}
             onClick={handleClose}
           />
 

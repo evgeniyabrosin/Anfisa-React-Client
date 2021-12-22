@@ -150,8 +150,8 @@ export const FilterControlRefiner = observer(
             <Button
               text={t('general.cancel')}
               size="md"
-              hasBackground={false}
-              className="text-white mt-auto ml-2 rounded-full"
+              variant={'secondary-dark'}
+              className="mt-auto ml-2"
               onClick={() => {
                 setActivePreset('')
                 setCreatePresetName('')

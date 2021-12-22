@@ -176,10 +176,8 @@ export const FilterControlQueryBuilder = observer(
             <Button
               text={t('general.cancel')}
               size="md"
-              hasBackground={false}
-              className={cn(
-                'text-white mt-auto ml-2 rounded-full hover:bg-blue-bright',
-              )}
+              variant={'secondary-dark'}
+              className={cn('mt-auto ml-2')}
               onClick={() => {
                 filterStore.setActionName()
                 setCreateTreeName('')

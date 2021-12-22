@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { toast } from 'react-toastify'
-import classNames from 'classnames'
 import get from 'lodash/get'
 import isBoolean from 'lodash/isBoolean'
 import { observer } from 'mobx-react-lite'
@@ -20,9 +19,8 @@ const DrawerTagButton = observer(({ refEl, onClick }: any) => {
     <Button
       refEl={refEl}
       text={'+ Add'}
-      className={classNames('text-white hover:bg-blue-bright')}
       size="xs"
-      hasBackground={false}
+      variant={'secondary-dark'}
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addTag}
     />
@@ -169,8 +167,7 @@ const DrawerTagModal = observer(({ close }: any) => {
             <Button
               text="Add custom tag"
               disabled={!customTag.trim() || !!error}
-              hasBackground={false}
-              isBlackText
+              variant={'secondary'}
               className="mt-2 hover:bg-blue-bright hover:text-white"
               onClick={handleSetCustomTag}
               dataTestId={VariantDrawerDataCy.addCustomTag}
@@ -183,15 +180,13 @@ const DrawerTagModal = observer(({ close }: any) => {
         <Button
           text={t('general.cancel')}
           onClick={close}
-          hasBackground={false}
-          isBlackText
+          variant={'secondary'}
           className="mr-3 ml-auto hover:bg-blue-bright hover:text-white"
         />
 
         <Button
           text="Save tags"
-          hasBackground={false}
-          isBlackText
+          variant={'secondary'}
           className="hover:bg-blue-bright hover:text-white"
           onClick={handleSaveTagsAsync}
           dataTestId={VariantDrawerDataCy.saveTags}

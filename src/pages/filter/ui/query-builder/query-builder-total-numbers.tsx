@@ -84,8 +84,8 @@ export const QueryBuilderTotalNumbers = observer(
               dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
               onClick={() => openTableModal(true)}
               text={t('dtree.viewReturnedVariants')}
-              hasBackground={false}
-              className="ml-auto hover:bg-blue-bright"
+              variant={'secondary-dark'}
+              className="ml-auto"
             />
           )}
 
@@ -93,8 +93,8 @@ export const QueryBuilderTotalNumbers = observer(
             <Button
               onClick={() => openTableModal(false)}
               text={t('dtree.viewVariants')}
-              hasBackground={false}
-              className="ml-5 hover:bg-blue-bright"
+              variant={'secondary-dark'}
+              className="ml-5"
             />
           )}
         </div>

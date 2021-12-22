@@ -19,11 +19,8 @@ export const FilterButton = observer(
       refEl={refEl}
       size="md"
       icon={<Icon name="Arrow" className="transform -rotate-90" />}
-      hasBackground={false}
-      className={cn(
-        'text-white mt-auto ml-2 rounded-full hover:bg-blue-bright',
-        className,
-      )}
+      variant={'secondary-dark'}
+      className={cn('mt-auto ml-2', className)}
       dataTestId={DecisionTreesMenuDataCy.decisionActions}
       onClick={rest.onClick}
     />

@@ -196,8 +196,7 @@ export const ModalSaveDataset = observer(() => {
         <div className="flex ml-auto mt-6">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            isBlackText
+            variant={'secondary'}
             className="border-grey-light hover:bg-grey-light"
             onClick={handleClose}
             dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
@@ -205,10 +204,9 @@ export const ModalSaveDataset = observer(() => {
 
           <Button
             text={t('dsCreation.addDataset')}
-            className="ml-4 hover:bg-blue-bright hover:text-white"
+            className="ml-4"
             disabled={!value.trim() || error.length > 0}
-            hasBackground={false}
-            isBlackText
+            variant={'secondary'}
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />

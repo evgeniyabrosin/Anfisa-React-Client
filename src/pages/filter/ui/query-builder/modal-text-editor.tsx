@@ -175,11 +175,8 @@ export const ModalTextEditor = observer(
             text="Drop changes"
             size="md"
             onClick={handleDrop}
-            hasBackground={false}
-            className={cn(
-              'hover:bg-blue-bright hover:text-white',
-              theme === 'light' ? 'text-black' : 'text-white',
-            )}
+            variant={'secondary-dark'}
+            className={cn(theme === 'light' ? 'text-black' : 'text-white')}
           />
 
           <Button
@@ -187,9 +184,9 @@ export const ModalTextEditor = observer(
             size="md"
             disabled={!checked || hasError(error)}
             onClick={handleDone}
-            hasBackground={false}
+            variant={'secondary-dark'}
             className={cn(
-              'mx-2 hover:bg-blue-bright hover:text-white',
+              'mx-2',
               theme === 'light' ? 'text-black' : 'text-white',
             )}
           />
@@ -199,11 +196,8 @@ export const ModalTextEditor = observer(
             size="md"
             disabled={!checked || hasError(error)}
             onClick={handleSave}
-            hasBackground={false}
-            className={cn(
-              'hover:bg-blue-bright hover:text-white',
-              theme === 'light' ? 'text-black' : 'text-white',
-            )}
+            variant={'secondary-dark'}
+            className={cn(theme === 'light' ? 'text-black' : 'text-white')}
           />
         </div>
       </ModalBase>

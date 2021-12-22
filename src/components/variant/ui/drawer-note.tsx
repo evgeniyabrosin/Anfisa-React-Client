@@ -18,12 +18,12 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
     <Button
       refEl={refEl}
       text={variantStore.noteText ? undefined : '+ Add'}
-      className={classNames('text-white hover:bg-blue-bright', {
+      className={classNames({
         'bg-blue-bright': !!variantStore.noteText,
       })}
       size="xs"
       icon={variantStore.noteText ? <Icon name="File" /> : undefined}
-      hasBackground={false}
+      variant={'secondary-dark'}
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addNote}
     />
@@ -103,8 +103,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             <Button
               text={t('general.delete')}
               onClick={deleteNoteAsync}
-              hasBackground={false}
-              isBlackText
+              variant={'secondary'}
               className="border-red-secondary hover:text-white hover:bg-red-secondary"
             />
           )}
@@ -114,8 +113,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
           <Button
             text={t('general.cancel')}
             onClick={close}
-            hasBackground={false}
-            isBlackText
+            variant={'secondary'}
             className="ml-4 hover:bg-blue-bright hover:text-white"
           />
 
@@ -123,8 +121,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             text="Save note"
             dataTestId={VariantDrawerDataCy.saveNote}
             disabled={!value || !value.trim()}
-            hasBackground={false}
-            isBlackText
+            variant={'secondary'}
             className="ml-4 hover:bg-blue-bright hover:text-white"
             onClick={handleSaveNoteAsync}
           />

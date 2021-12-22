@@ -194,6 +194,7 @@ export const FunctionPanel = observer(
               <div className="flex items-center justify-between mt-5">
                 <Button
                   text={t('general.clear')}
+                  variant={'secondary'}
                   onClick={() => {
                     handleClear()
                     props.resetForm()
