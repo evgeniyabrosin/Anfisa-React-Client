@@ -955,10 +955,8 @@ class DtreeStore {
     this.previousDtreeName = ''
   }
 
-  setDtreeStat(changedDtreeStat: any) {
-    runInAction(() => {
-      this.dtreeStat = changedDtreeStat
-    })
+  setStatList(statList: any[]) {
+    this.dtreeStat['stat-list'] = statList
   }
 
   clearStatRequestId() {

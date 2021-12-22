@@ -529,8 +529,8 @@ class DatasetStore {
     })
   }
 
-  setDsStat(newDsStat: DsStatType) {
-    this.dsStat = newDsStat
+  setStatList(statList: DsStatType) {
+    this.dsStat['stat-list'] = statList
   }
 }
 

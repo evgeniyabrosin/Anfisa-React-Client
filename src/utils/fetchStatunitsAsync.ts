@@ -68,19 +68,9 @@ export const fetchStatunitsAsync = async (
 
   const filteredStatList = getFilteredAttrsList(newStatList)
 
-  if (isRefiner) {
-    const changedDtreeStat = JSON.parse(JSON.stringify(datasetStore.dsStat))
-
-    changedDtreeStat['stat-list'] = filteredStatList
-
-    datasetStore.setDsStat(changedDtreeStat)
-  } else {
-    const changedDtreeStat = JSON.parse(JSON.stringify(dtreeStore.dtreeStat))
-
-    changedDtreeStat['stat-list'] = filteredStatList
-
-    dtreeStore.setDtreeStat(changedDtreeStat)
-  }
+  isRefiner
+    ? datasetStore.setStatList(filteredStatList)
+    : dtreeStore.setStatList(filteredStatList)
 
   fetchStatunitsAsync(newStatList, stepIndex)
 }
