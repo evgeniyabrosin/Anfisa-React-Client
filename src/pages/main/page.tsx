@@ -25,18 +25,22 @@ const MainPage = (): ReactElement => {
       }
 
       dirinfoStore.setSelectedDirinfoName(dsName)
-      datasetStore.setActivePreset('')
-      datasetStore.resetData()
-      datasetStore.clearZone()
-      datasetStore.resetConditions()
-      filterStore.resetData()
-      dtreeStore.resetData()
-      filterZone.resetAllSelectedItems()
-      variantStore.resetIsActiveVariant()
     }
 
     handlerAsync()
   }, [params])
+
+  useEffect(() => {
+    datasetStore.setActivePreset('')
+    datasetStore.resetData()
+    datasetStore.clearZone()
+    datasetStore.resetConditions()
+    filterStore.resetData()
+    dtreeStore.resetData()
+    filterZone.resetAllSelectedItems()
+    variantStore.resetIsActiveVariant()
+    variantStore.resetData()
+  }, [])
 
   return (
     <div className="min-h-full flex flex-col">

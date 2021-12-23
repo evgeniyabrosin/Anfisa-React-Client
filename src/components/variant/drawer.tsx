@@ -23,7 +23,7 @@ export const VariantDrawer = observer(
     const currentGridLayout = localStorageData && JSON.parse(localStorageData)
 
     const [layout, setLayout] = useState(
-      currentGridLayout || variantStore.defaultVariantLayout,
+      currentGridLayout || variantStore.wsDrawerVariantsLayout,
     )
 
     useEffect(() => {

@@ -5,10 +5,16 @@ import { ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import datasetStore from './dataset'
 
+const DRAWER_DEFAULT_WIDTH = 6
+const DRAWER_DEFAULT_HEIGHT = 1
+const DRAWER_DEFAULT_X = 0
+
 export class VariantStore {
   drawerVisible = false
   variant: ReccntCommon[] = []
   recordsDisplayConfig: any = {}
+  wsDrawerVariantsLayout: any[] = []
+  modalDrawerVariantsLayout: any[] = []
   index = 0
   choosedIndex = 0
   dsName = ''
@@ -21,21 +27,6 @@ export class VariantStore {
   isActiveVariant = false
 
   isModalNotesVisible = false
-
-  defaultVariantLayout: any[] = [
-    { y: 0, x: 0, w: 6, h: 1, i: 'view_gen' },
-    { y: 1, x: 0, w: 6, h: 1, i: 'view_transcripts' },
-    { y: 2, x: 0, w: 6, h: 1, i: 'view_qsamples' },
-    { y: 3, x: 0, w: 6, h: 1, i: 'view_gnomAD' },
-    { y: 4, x: 0, w: 6, h: 1, i: 'view_db' },
-    { y: 5, x: 0, w: 6, h: 1, i: 'view_pred' },
-    { y: 6, x: 0, w: 6, h: 1, i: 'view_pharmagkb' },
-    { y: 7, x: 0, w: 6, h: 1, i: 'view_genetics' },
-    { y: 8, x: 0, w: 6, h: 1, i: '_main' },
-    { y: 9, x: 0, w: 6, h: 1, i: 'transcripts' },
-    { y: 10, x: 0, w: 6, h: 1, i: 'colocated_v' },
-    { y: 11, x: 0, w: 6, h: 1, i: 'input' },
-  ]
 
   constructor() {
     makeAutoObservable(this)
@@ -177,6 +168,10 @@ export class VariantStore {
       this.tagsWithNotes = get(tagsData, 'rec-tags')
       this.noteText = tagsData['rec-tags']['_note']
       this.initRecordsDisplayConfig()
+
+      if (this.wsDrawerVariantsLayout.length === 0) {
+        this.createDrawerVariantsLayout(variant)
+      }
     })
   }
 
@@ -225,8 +220,42 @@ export class VariantStore {
 
     runInAction(() => {
       this.variant = variant
-      this.initRecordsDisplayConfig()
+
+      if (this.modalDrawerVariantsLayout.length === 0) {
+        this.initRecordsDisplayConfig()
+
+        this.createDrawerVariantsLayout(variant, 'modal')
+      }
     })
+  }
+
+  createDrawerVariantsLayout(data: any[], source?: string) {
+    if (source === 'modal') {
+      data.map((item, index) =>
+        this.modalDrawerVariantsLayout.push({
+          y: index,
+          x: DRAWER_DEFAULT_X,
+          w: DRAWER_DEFAULT_WIDTH,
+          h: DRAWER_DEFAULT_HEIGHT,
+          i: item.name,
+        }),
+      )
+    } else {
+      data.map((item, index) =>
+        this.wsDrawerVariantsLayout.push({
+          y: index,
+          x: DRAWER_DEFAULT_X,
+          w: DRAWER_DEFAULT_WIDTH,
+          h: DRAWER_DEFAULT_HEIGHT,
+          i: item.name,
+        }),
+      )
+
+      window.sessionStorage.setItem(
+        'gridLayout',
+        JSON.stringify(this.wsDrawerVariantsLayout),
+      )
+    }
   }
 
   updateTagsWithNotes(tagWithNote: any[], operation = 'add') {
@@ -257,6 +286,13 @@ export class VariantStore {
 
   setCurrentTag(tag: string) {
     this.currentTag = tag
+  }
+
+  resetData() {
+    this.dsName = ''
+    this.wsDrawerVariantsLayout = []
+    this.modalDrawerVariantsLayout = []
+    this.recordsDisplayConfig = ''
   }
 }
 

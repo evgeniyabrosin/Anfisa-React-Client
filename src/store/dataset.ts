@@ -222,6 +222,7 @@ class DatasetStore {
     this.variantsAmount = 0
     this.statAmount = []
     this.prevPreset = ''
+    this.wsRecords = []
   }
 
   resetConditions() {

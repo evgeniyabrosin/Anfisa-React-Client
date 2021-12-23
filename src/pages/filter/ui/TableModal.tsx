@@ -33,12 +33,16 @@ const ModalContent = styled.div`
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
 export const TableModal = observer(() => {
-  const [layout, setLayout] = useState(variantStore.defaultVariantLayout)
+  const [layout, setLayout] = useState(variantStore.modalDrawerVariantsLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
   const ref = useRef(null)
+
+  useEffect(() => {
+    variantStore.fetchVarinatInfoForModalAsync(datasetStore.datasetName, 0)
+  }, [])
 
   const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
 
