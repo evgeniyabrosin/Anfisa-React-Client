@@ -25,8 +25,8 @@ export const QueryResults = observer(
 
     return (
       <div
-        className="overflow-y-auto"
-        style={{ height: 'calc(100vh - 223px)' }}
+        className="overflow-y-scroll"
+        style={{ height: 'calc(100vh - 280px)' }}
       >
         {keys.map(subGroupKey => (
           <div key={subGroupKey} className="flex flex-col">
