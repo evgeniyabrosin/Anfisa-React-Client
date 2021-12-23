@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { makeStepActive } from '@utils/makeStepActive'
 import { NextStepContentItem } from './next-step-content-item'
 
@@ -115,6 +116,7 @@ export const NextStepContent = observer(
         </Content>
 
         <div
+          data-testid={DecisionTreesResultsDataCy.addAttrbute}
           className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark"
           onClick={openModal}
         >

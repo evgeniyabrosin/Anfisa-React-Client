@@ -5,8 +5,10 @@
   "dependencies": {
     "@monaco-editor/react": "4.3.1",
     "@popperjs/core": "2.9.2",
+    "@types/faker": "5.5.9",
     "chart.js": "3.5.1",
     "date-fns": "2.21.1",
+    "faker": "5.5.3",
     "formik": "2.2.8",
     "lodash": "4.17.21",
     "md5": "2.3.0",

@@ -1,3 +1,4 @@
 {
-    "supportFile": "cypress/support/commands.js"
+    "supportFile": "cypress/support/commands.js",
+    "trashAssetsBeforeRuns": true
 }

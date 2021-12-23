@@ -8,4 +8,13 @@ export const DecisionTreesResultsDataCy = {
   viewReturnedVariants: 'view-returned-variants',
   addAttrbute: 'add-attribute',
   searchForAttr: 'search-input',
+  selectAllFromAttribute: 'select-all',
+  clearAllFromAttribute: 'clear-all',
+  addSelectedAttributes: 'add-selected',
+  addByJoin: 'add-by-joining',
+  joinByAnd: 'join-by-and',
+  joinByOr: 'join-by-or',
+  joinByLabel: 'join-by',
+  optionsMenu: 'options-menu',
+  addStepAfter: 'add-step-after',
 }

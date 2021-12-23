@@ -5,6 +5,7 @@ import { ChangeStepActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { changeStep } from '@utils/changeStep'
 import { createEmptyStep } from '@utils/createEmptyStep'
 
@@ -64,6 +65,7 @@ export const ModalOperation = observer(
             <div
               onClick={() => createStep(index, 'AFTER')}
               className="font-normal py-2 px-2 hover:bg-grey-light"
+              data-testId={DecisionTreesResultsDataCy.addStepAfter}
             >
               {t('dtree.addStepAfter')}
             </div>

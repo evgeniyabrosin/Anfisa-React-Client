@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { changeStep } from '@utils/changeStep'
 import { ExpandContentButton } from './expand-content-button'
 import { ModalOperation } from './modal-operation'
@@ -60,6 +61,7 @@ export const NextStepHeader = observer(
           <div className="relative flex items-center">
             {!isEmptyFirstStep && (
               <Icon
+                dataTestId={DecisionTreesResultsDataCy.optionsMenu}
                 name="Options"
                 className="cursor-pointer text-blue-bright"
                 stroke={false}

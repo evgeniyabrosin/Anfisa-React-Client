@@ -4,9 +4,9 @@ import { UIWidget } from '../../lib/ui-widget'
 
 export interface DatasetInfoSelectors {
   openInViewer: string
-  decTreePanel: string
+  viewerOption: string
   datasetHeader: string
-  mainTable: string
+  //mainTable: string
 }
 
 export interface DatasetInfoLabels {
@@ -15,9 +15,8 @@ export interface DatasetInfoLabels {
 
 export class DatasetInfoWidget extends UIWidget {
   readonly openInViewer: Button
-  readonly decTreePanel: Button
+  readonly viewerOption: Button
   readonly datasetHeader: Label
-  readonly mainTable: Button
 
   constructor(options: {
     selectors: DatasetInfoSelectors
@@ -29,8 +28,7 @@ export class DatasetInfoWidget extends UIWidget {
     const labels = options.labels
 
     this.openInViewer = new Button(selectors.openInViewer)
-    this.decTreePanel = new Button(selectors.decTreePanel)
-    this.mainTable = new Button(selectors.mainTable)
+    this.viewerOption = new Button(selectors.viewerOption)
 
     this.datasetHeader = new Label(
       selectors.datasetHeader,

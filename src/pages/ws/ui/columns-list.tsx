@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 
 import { IColumns } from '@declarations'
 import columnsStore from '@store/wsColumns'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ColumnNameItem } from './column-name-item'
 
 const getItemStyle = (draggableStyle: any) => ({
@@ -73,6 +74,7 @@ export const ColumnsList = observer(
                         style={getItemStyle(
                           providedDraggable.draggableProps.style,
                         )}
+                        data-testid={MainTableDataCy.customizeTableList}
                       >
                         <ColumnNameItem
                           name={item.title}

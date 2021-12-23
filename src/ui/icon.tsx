@@ -72,6 +72,7 @@ interface IconProps {
   fill?: boolean
   className?: Argument
   onClick?: (event: any) => void
+  dataTestId?: string
 }
 
 export const Icon = ({
@@ -81,6 +82,7 @@ export const Icon = ({
   fill,
   className,
   onClick,
+  dataTestId,
 }: IconProps): ReactElement => {
   const icon: IconItem = iconItems[name]
 
@@ -108,6 +110,7 @@ export const Icon = ({
 
   return (
     <svg
+      data-testid={dataTestId}
       width={width}
       height={height}
       viewBox={`0 0 ${icon.viewBox.w} ${icon.viewBox.h}`}

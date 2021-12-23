@@ -9,7 +9,9 @@ export const MainTableDataCy = {
   numVariants: 'variants-number',
   exportReport: 'export-report',
   exportExcel: 'export-in-excel',
+  exportCsv: 'export-in-csv',
   customizeTable: 'customize-table',
   searchColumn: 'search-input',
   checkboxListElement: 'checkbox-list-element',
+  customizeTableList: 'draggable-list-element',
 }

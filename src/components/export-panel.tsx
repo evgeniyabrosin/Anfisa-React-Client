@@ -58,6 +58,7 @@ export const ExportPanel = ({ close }: Props): ReactElement => {
       <span
         className="py-1 px-2 rounded hover:bg-blue-light"
         onClick={() => handleDownload(ExportTypeEnum.CSV)}
+        data-testid={MainTableDataCy.exportCsv}
       >
         {t('general.csv')}
       </span>

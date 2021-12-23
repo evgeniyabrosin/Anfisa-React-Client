@@ -6,7 +6,6 @@ export const CommonSelectors = {
   columnSwitch: '.react-switch-bg',
   fillSpace: 'textarea[placeholder="Enter text"]',
   tagInput: '[type="text"]',
-  selectAll: '.text-blue-bright',
   preset: '.Dropdown-option',
   checkBoxList: 'div.mt-5.h-60.overflow-y-scroll',
   checkBoxListInDrawer: 'div.mt-4.h-auto.overflow-auto',

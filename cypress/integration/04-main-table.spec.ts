@@ -35,7 +35,7 @@ describe('Open saved dataset in MainTable', () => {
       }),
     )
     datasetPage.datasetInfo.openInViewer.click()
-    datasetPage.datasetInfo.mainTable.click()
+    datasetPage.datasetInfo.viewerOption.contains('Main Table').click()
     cy.url().should('include', '/ws?ds=Dataset_from_autotests')
   })
 
@@ -465,6 +465,9 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.exportReport.click()
     mainTablePage.mainTable.exportExcel.click()
     cy.wait('@reportDownload')
+    cy.readFile('./cypress/downloads/Dataset_from_autotests.xlsx').should(
+      'exist',
+    )
   })
 
   function loginWithPreset() {

@@ -1,6 +1,7 @@
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { VariantDrawerDataCy } from '../../../src/components/data-testid/variant-drawer.cy'
 import { BasePage } from '../lib/base-page'
+import { Helper } from '../lib/helpers'
 import { VariantDrawerWidget } from './widgets/variant-drawer.widget'
 
 class VariantDrawerPage extends BasePage {
@@ -9,15 +10,15 @@ class VariantDrawerPage extends BasePage {
     super()
     this.variantDrawer = new VariantDrawerWidget({
       selectors: {
-        addTag: `[data-testid = "${VariantDrawerDataCy.addTag}"]`,
+        addTag: Helper.getDataId(VariantDrawerDataCy.addTag),
         tagInput: `${CommonSelectors.tagInput}`,
-        addCustomTag: `[data-testid = "${VariantDrawerDataCy.addCustomTag}"]`,
+        addCustomTag: Helper.getDataId(VariantDrawerDataCy.addCustomTag),
         tagCheckbox: `${CommonSelectors.checkbox}`,
-        saveTags: `[data-testid = "${VariantDrawerDataCy.saveTags}"]`,
-        addNote: `[data-testid = "${VariantDrawerDataCy.addNote}"]`,
+        saveTags: Helper.getDataId(VariantDrawerDataCy.saveTags),
+        addNote: Helper.getDataId(VariantDrawerDataCy.addNote),
         fillSpace: `${CommonSelectors.fillSpace}`,
-        saveNote: `[data-testid = "${VariantDrawerDataCy.saveNote}"]`,
-        addedTag: `[data-testid = "${VariantDrawerDataCy.addedTag}"]`,
+        saveNote: Helper.getDataId(VariantDrawerDataCy.saveNote),
+        addedTag: Helper.getDataId(VariantDrawerDataCy.addedTag),
       },
       labels: {
         addedTag: '',

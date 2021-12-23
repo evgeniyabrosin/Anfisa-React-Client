@@ -11,7 +11,7 @@ describe('XL Dataset should be opened in decision tree', () => {
     datasetPage.leftPanel.datasetsListElem.getButtonByText(datasetName).click()
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
-    datasetPage.datasetInfo.decTreePanel.click()
+    datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
     cy.url().should('include', `/filter?ds=${datasetName}`)
   })
 

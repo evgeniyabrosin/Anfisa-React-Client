@@ -2,6 +2,7 @@ import { DatasetCard } from '../../../src/components/data-testid/dataset-card.cy
 import { DatasetInfoDataCy } from '../../../src/components/data-testid/dataset-info.cy'
 import { FilterDatasetDataCy } from '../../../src/components/data-testid/filter-dataset.cy'
 import { BasePage } from '../lib/base-page'
+import { Helper } from '../lib/helpers'
 import { DatasetInfoWidget } from './widgets/dataset-info.widget'
 import { LeftPanelWidget } from './widgets/left-panel.widget'
 
@@ -12,18 +13,19 @@ class DatasetPage extends BasePage {
     super()
     this.leftPanel = new LeftPanelWidget({
       selectors: {
-        searchInput: `[data-testid = "${FilterDatasetDataCy.searchInput}"]`,
-        leftPanelHeader: `[data-testid = "${FilterDatasetDataCy.leftPanelHeader}"]`,
-        datasetsListElem: `[data-testid = "${FilterDatasetDataCy.datasetsListElem}"]`,
+        searchInput: Helper.getDataId(FilterDatasetDataCy.searchInput),
+        leftPanelHeader: Helper.getDataId(FilterDatasetDataCy.leftPanelHeader),
+        datasetsListElem: Helper.getDataId(
+          FilterDatasetDataCy.datasetsListElem,
+        ),
       },
       labels: { leftPanelHeader: 'Datasets' },
     })
     this.datasetInfo = new DatasetInfoWidget({
       selectors: {
-        openInViewer: `[data-testid = "${DatasetInfoDataCy.openInViewer}"]`,
-        decTreePanel: `[data-testid = "${DatasetInfoDataCy.decTreePanel}"]`,
-        datasetHeader: `[data-testid = "${DatasetCard.datasetHeader}"]`,
-        mainTable: `[data-testid = "${DatasetInfoDataCy.mainTable}"]`,
+        openInViewer: Helper.getDataId(DatasetInfoDataCy.openInViewer),
+        viewerOption: Helper.getDataId(DatasetInfoDataCy.viewerOption),
+        datasetHeader: Helper.getDataId(DatasetCard.datasetHeader),
       },
       labels: {
         datasetHeader: 'xl_PGP3140_wgs_NIST-4_2',

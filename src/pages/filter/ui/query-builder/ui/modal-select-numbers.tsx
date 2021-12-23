@@ -6,6 +6,7 @@ import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { DecisionTreeMinGQ } from '@components/data-testid/min-gq.cy'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { DropDownSelectSign } from './dropdown-select-sign'
 import { ExpandContentButton } from './expand-content-button'
@@ -153,6 +154,7 @@ export const ModalSelectNumbers = observer(
 
             <div className="flex w-full flex-col h-8">
               <InputNumber
+                data-testId={DecisionTreeMinGQ.leftInput}
                 value={valueFrom}
                 onChange={(e: any) => {
                   setValueFrom(e.target.value)
@@ -235,6 +237,7 @@ export const ModalSelectNumbers = observer(
             </div>
             <div className="flex flex-col w-full h-8">
               <InputNumber
+                data-testId={DecisionTreeMinGQ.rightInput}
                 value={valueTo}
                 onChange={(e: any) => {
                   setValueTo(e.target.value)

@@ -2,6 +2,7 @@ import { CommonSelectors } from '../../../src/components/data-testid/common-sele
 import { MainTableDataCy } from '../../../src/components/data-testid/main-table.cy'
 import { BasePage } from '../lib/base-page'
 import { Button } from '../lib/button'
+import { Helper } from '../lib/helpers'
 import { Input } from '../lib/input'
 import { Label } from '../lib/label'
 import { MainTableCheckbox } from '../lib/main-table-checkbox'
@@ -22,16 +23,19 @@ export interface MainTableSelectors {
   numVariants: string
   exportReport: string
   exportExcel: string
+  exportCsv: string
   customizeTable: string
   columnSwitch: string
   searchColumn: string
   columnHeader: string
   checkboxListElement: string
+  customizeTableList: string
 }
 export interface MainTableLables {
   numVariants: string
   columnHeader?: string
   checkboxListElement?: string
+  customizeTableList: string
 }
 
 export class MainTableWidget extends UIWidget {
@@ -49,11 +53,13 @@ export class MainTableWidget extends UIWidget {
   readonly numVariants: Label
   readonly exportReport: Button
   readonly exportExcel: Button
+  readonly exportCsv: Button
   readonly customizeTable: Button
   readonly columnSwitch: Button
   readonly searchColumn: Input
   readonly columnHeader: Label
   readonly checkboxListElement: Label
+  readonly customizeTableList: Label
 
   constructor(options: {
     selectors: MainTableSelectors
@@ -86,6 +92,11 @@ export class MainTableWidget extends UIWidget {
       selectors.checkboxListElement,
       labels.checkboxListElement!,
     )
+    this.customizeTableList = new Label(
+      selectors.customizeTableList,
+      labels.customizeTableList,
+    )
+    this.exportCsv = new Button(selectors.exportCsv)
   }
 }
 class MainTablePage extends BasePage {
@@ -94,30 +105,37 @@ class MainTablePage extends BasePage {
     super()
     this.mainTable = new MainTableWidget({
       selectors: {
-        selectPreset: `[data-testid = "${MainTableDataCy.selectPreset}"]`,
+        selectPreset: Helper.getDataId(MainTableDataCy.selectPreset),
         preset: `${CommonSelectors.preset}`,
-        addSample: `[data-testid = "${MainTableDataCy.addSample}"]`,
-        addTag: `[data-testid = "${MainTableDataCy.addTag}"]`,
-        applyButton: `[data-testid = "${MainTableDataCy.applyButton}"]`,
-        cancelButton: `[data-testid = "${MainTableDataCy.cancelButton}"]`,
+        addSample: Helper.getDataId(MainTableDataCy.addSample),
+        addTag: Helper.getDataId(MainTableDataCy.addTag),
+        applyButton: Helper.getDataId(MainTableDataCy.applyButton),
+        cancelButton: Helper.getDataId(MainTableDataCy.cancelButton),
         checkbox: `${CommonSelectors.checkbox}`,
         tableRow: `${CommonSelectors.tableRow}`,
-        addGene: `[data-testid = "${MainTableDataCy.addGene}"]`,
+        addGene: Helper.getDataId(MainTableDataCy.addGene),
         geneCheckbox: `${CommonSelectors.checkbox}`,
-        searchFilter: `[data-testid = "${MainTableDataCy.searchFilter}"]`,
-        numVariants: `[data-testid = "${MainTableDataCy.numVariants}"]`,
-        exportReport: `[data-testid = "${MainTableDataCy.exportReport}"]`,
-        exportExcel: `[data-testid = "${MainTableDataCy.exportExcel}"]`,
-        customizeTable: `[data-testid = "${MainTableDataCy.customizeTable}"]`,
+        searchFilter: Helper.getDataId(MainTableDataCy.searchFilter),
+        numVariants: Helper.getDataId(MainTableDataCy.numVariants),
+        exportReport: Helper.getDataId(MainTableDataCy.exportReport),
+        exportExcel: Helper.getDataId(MainTableDataCy.exportExcel),
+        exportCsv: Helper.getDataId(MainTableDataCy.exportCsv),
+        customizeTable: Helper.getDataId(MainTableDataCy.customizeTable),
         columnSwitch: `${CommonSelectors.columnSwitch}`,
-        searchColumn: `[data-testid = "${MainTableDataCy.searchColumn}"]`,
+        searchColumn: Helper.getDataId(MainTableDataCy.searchColumn),
         columnHeader: `${CommonSelectors.columnHeader}`,
-        checkboxListElement: `[data-testid = "${MainTableDataCy.checkboxListElement}"]`,
+        checkboxListElement: Helper.getDataId(
+          MainTableDataCy.checkboxListElement,
+        ),
+        customizeTableList: Helper.getDataId(
+          MainTableDataCy.customizeTableList,
+        ),
       },
       labels: {
         numVariants: 'number-of-variants',
         columnHeader: labelContent,
         checkboxListElement: labelContent,
+        customizeTableList: 'In-Silico',
       },
     })
   }

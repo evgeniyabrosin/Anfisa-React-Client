@@ -81,7 +81,7 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
           <span
             className="py-1 px-3 rounded hover:bg-blue-light"
             key={index}
-            data-testid={DatasetInfoDataCy.decTreePanel}
+            data-testid={DatasetInfoDataCy.viewerOption}
             onClick={() => {
               datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
               goToPage(pageName)

@@ -14,8 +14,11 @@ export interface DecisionTreeResultsSelectors {
   viewReturnedVariants: string
   treeTooltip: string
   addAttribute: string
-  searchForAttr: string
-  selectAll: string
+  joinByLabel: string
+  optionsMenu: string
+  addStepAfter: string
+  leftInput: string
+  rightInput: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -23,6 +26,7 @@ export interface DecisionTreeResultsLabels {
   groupGraphHeaders: string
   stepCard: string
   treeTooltip: string
+  joinByLabel: string
 }
 
 export class DecisionTreeResultsWidget extends UIWidget {
@@ -35,8 +39,11 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly viewReturnedVariants: Button
   readonly treeToolptip: Label
   readonly addAttribute: Button
-  readonly searchForAttr: Input
-  readonly selectAll: Button
+  readonly joinByLabel: Label
+  readonly optionsMenu: Button
+  readonly addStepAfter: Button
+  readonly leftInput: Input
+  readonly rightInput: Input
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -62,7 +69,10 @@ export class DecisionTreeResultsWidget extends UIWidget {
     this.viewReturnedVariants = new Button(selectors.viewReturnedVariants)
     this.treeToolptip = new Label(selectors.treeTooltip, labels.treeTooltip)
     this.addAttribute = new Button(selectors.addAttribute)
-    this.searchForAttr = new Input(selectors.searchForAttr)
-    this.selectAll = new Button(selectors.selectAll)
+    this.joinByLabel = new Label(selectors.joinByLabel, labels.joinByLabel)
+    this.optionsMenu = new Button(selectors.optionsMenu)
+    this.addStepAfter = new Button(selectors.addStepAfter)
+    this.leftInput = new Input(selectors.leftInput)
+    this.rightInput = new Input(selectors.rightInput)
   }
 }
