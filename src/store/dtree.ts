@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { DtreeStatType, FilterCountsType } from '@declarations'
+import { DtreeStatType, FilterCountsType, StatListType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
@@ -221,7 +221,10 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    return getQueryBuilder(toJS(this.dtreeStat['stat-list']))
+    const statList =
+      this.dtreeStat['stat-list'] ?? datasetStore.dsStat['stat-list']
+
+    return getQueryBuilder(toJS(statList))
   }
 
   getStepIndexForApi = (index: number) => {
@@ -955,8 +958,12 @@ class DtreeStore {
     this.previousDtreeName = ''
   }
 
-  setStatList(statList: any[]) {
+  setStatList(statList: StatListType) {
     this.dtreeStat['stat-list'] = statList
+  }
+
+  setStatRequestId(id: string) {
+    this.statRequestId = id
   }
 
   clearStatRequestId() {

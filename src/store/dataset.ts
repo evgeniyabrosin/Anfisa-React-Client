@@ -3,9 +3,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, TabReportType } from '@declarations'
+import { DsStatType, StatListType, TabReportType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
+import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -276,6 +277,7 @@ class DatasetStore {
 
     const result = await response.json()
 
+    dtreeStore.setStatRequestId(result['rq-id'])
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
     const conditionFromHistory = bodyFromHistory?.get('conditions')
@@ -529,7 +531,7 @@ class DatasetStore {
     })
   }
 
-  setStatList(statList: DsStatType) {
+  setStatList(statList: StatListType) {
     this.dsStat['stat-list'] = statList
   }
 }
