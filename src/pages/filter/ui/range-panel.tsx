@@ -2,22 +2,35 @@ import { ReactElement, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { SessionStoreManager } from '@core/session-store-manager'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
+import { SessionStoreDataProvider } from './session-store-data-provider'
+
+export interface IRangePanelFormValues {
+  min: string
+  max: string
+}
 
 export const RangePanel = observer(
   (): ReactElement => {
-    const [min, setMin] = useState('')
-    const [max, setMax] = useState('')
+    const selectedFilter = filterStore.selectedGroupItem
+
+    const savedValues = SessionStoreManager.read<IRangePanelFormValues>(
+      selectedFilter.name,
+      FILTER_REFINER_PREFIX,
+    )
+
+    const [min, setMin] = useState(savedValues?.min || '')
+    const [max, setMax] = useState(savedValues?.max || '')
 
     const [isVisibleMinError, setIsVisibleMinError] = useState(false)
     const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
     const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
-
-    const selectedFilter = filterStore.selectedGroupItem
 
     const handleAddConditionsAsync = async () => {
       const arrayNo = await datasetStore.setConditionsAsync([
@@ -83,71 +96,77 @@ export const RangePanel = observer(
     }, [min, max])
 
     return (
-      <div>
-        <div className="flex justify-between items-end w-full">
-          <span>Min {selectedFilter.min}</span>
+      <SessionStoreDataProvider<IRangePanelFormValues>
+        storeKey={selectedFilter.name}
+        values={{ min, max }}
+        storePrefix={FILTER_REFINER_PREFIX}
+      >
+        <div>
+          <div className="flex justify-between items-end w-full">
+            <span>Min {selectedFilter.min}</span>
 
-          {isVisibleMinError && (
-            <span className="text-12 text-red-secondary">
-              {t('dtree.lowerBoundError')}
-            </span>
-          )}
-        </div>
+            {isVisibleMinError && (
+              <span className="text-12 text-red-secondary">
+                {t('dtree.lowerBoundError')}
+              </span>
+            )}
+          </div>
 
-        <InputNumber
-          className="w-full"
-          value={min}
-          onChange={e => {
-            setMin(e.target.value)
-            validateMin(e.target.value)
-          }}
-        />
-
-        <div className="flex justify-between items-end w-full">
-          <span>Max {selectedFilter.max}</span>
-
-          {isVisibleMaxError && (
-            <span className="text-12 text-red-secondary">
-              {t('dtree.upperBoundError')}
-            </span>
-          )}
-        </div>
-
-        <div className="relative h-14">
           <InputNumber
             className="w-full"
-            value={max}
+            value={min}
             onChange={e => {
-              setMax(e.target.value)
-              validateMax(e.target.value)
+              setMin(e.target.value)
+              validateMin(e.target.value)
             }}
           />
-          {isVisibleMixedError && (
-            <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
-              {t('dtree.conditionError')}
-            </div>
-          )}
-        </div>
 
-        <div className="flex items-center justify-between mt-1">
-          <Button
-            variant={'secondary'}
-            text={t('general.clear')}
-            onClick={handleClear}
-          />
+          <div className="flex justify-between items-end w-full">
+            <span>Max {selectedFilter.max}</span>
 
-          <Button
-            text={t('general.add')}
-            onClick={handleAddConditionsAsync}
-            disabled={
-              isVisibleMinError ||
-              isVisibleMaxError ||
-              isVisibleMixedError ||
-              (!max && !min)
-            }
-          />
+            {isVisibleMaxError && (
+              <span className="text-12 text-red-secondary">
+                {t('dtree.upperBoundError')}
+              </span>
+            )}
+          </div>
+
+          <div className="relative h-14">
+            <InputNumber
+              className="w-full"
+              value={max}
+              onChange={e => {
+                setMax(e.target.value)
+                validateMax(e.target.value)
+              }}
+            />
+            {isVisibleMixedError && (
+              <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
+                {t('dtree.conditionError')}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between mt-1">
+            <Button
+              variant={'secondary'}
+              text={t('general.clear')}
+              onClick={handleClear}
+            />
+
+            <Button
+              text={t('general.add')}
+              onClick={handleAddConditionsAsync}
+              disabled={
+                isVisibleMinError ||
+                isVisibleMaxError ||
+                isVisibleMixedError ||
+                (!max && !min)
+              }
+            />
+          </div>
         </div>
-      </div>
+      </SessionStoreDataProvider>
     )
   },
 )

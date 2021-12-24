@@ -1,10 +1,12 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { cloneDeep } from 'lodash'
+import { FormikProps } from 'formik'
+import cloneDeep from 'lodash/cloneDeep'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { SessionStoreManager } from '@core/session-store-manager'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
@@ -17,9 +19,25 @@ import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
 import { AllNotModalMods } from './query-builder/ui/all-not-modal-mods'
 import { EditModalVariants } from './query-builder/ui/edit-modal-variants'
 import { selectOptions } from './query-builder/ui/modal-select-custom-inheritance-mode'
+export interface ICompoundRequestFormValues {
+  requestCondition: TRequestCondition[]
+  reset: string
+}
+
+export type TRequestCondition = [number, TSelectValues]
+
+export type TSelectValues = {
+  [key: string]: string[]
+}
+export interface ICompoundRequestProps {
+  variants: string[]
+  approx: string | null
+  state: string | null
+}
 
 const approxOptions = [
   'shared transcript',
@@ -33,17 +51,22 @@ export const resetOptions = [
   'Compensational',
 ]
 
-interface IProps {
-  setFieldValue: (field: string, item: any) => void
-  variants: string[]
-  approx: string | null
-  state: string | null
+const COMPOUND_REQUEST = 'Compound_Request'
+
+const getSavedValues = () => {
+  return SessionStoreManager.read<ICompoundRequestFormValues>(
+    COMPOUND_REQUEST,
+    FILTER_REFINER_PREFIX,
+  )
 }
 
 export const CompoundRequest = observer(
-  ({ setFieldValue }: IProps): ReactElement => {
-    const [requestCondition, setRequestCondition] = useState([[1, {}]])
-    const [resetValue, setResetValue] = useState('')
+  ({ setFieldValue }: FormikProps<ICompoundRequestProps>): ReactElement => {
+    const [requestCondition, setRequestCondition] = useState(
+      getSavedValues()?.requestCondition || [[1, {}]],
+    )
+
+    const [resetValue, setResetValue] = useState(getSavedValues()?.reset || '')
 
     let attrData: any
     const variants = filterStore.statFuncData.variants
@@ -65,12 +88,20 @@ export const CompoundRequest = observer(
 
     useEffect(() => {
       filterStore.fetchStatFuncAsync(
-        'Compound_Request',
+        COMPOUND_REQUEST,
         JSON.stringify({ request: [] }),
       )
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+      SessionStoreManager.write(
+        COMPOUND_REQUEST,
+        { ...(getSavedValues() || {}), requestCondition },
+        FILTER_REFINER_PREFIX,
+      )
+    }, [requestCondition])
 
     const handleRequestCondition = (
       requestBlockIndex: number,
@@ -198,6 +229,12 @@ export const CompoundRequest = observer(
         }
       })
 
+      SessionStoreManager.write(
+        COMPOUND_REQUEST,
+        { ...(getSavedValues() || {}), reset: name },
+        FILTER_REFINER_PREFIX,
+      )
+
       setRequestCondition(newRequestCondition)
 
       sendRequestAsync(newRequestCondition)
@@ -207,35 +244,8 @@ export const CompoundRequest = observer(
       setResetValue(name)
     }
 
-    return (
-      <React.Fragment>
-        <div className="flex justify-between items-center w-full mt-4 text-14">
-          <div className="flex">
-            <div className="flex items-center">
-              <span className="mr-2 text-18 leading-14px">Approx:</span>
-
-              <Select
-                value={approxOptions[2]}
-                options={approxOptions}
-                disabled={true}
-              />
-            </div>
-
-            <div className="flex items-center ml-3">
-              <span>{t('dtree.state')}</span>
-
-              <Select
-                options={['-current-']}
-                value={'-current-'}
-                className="w-full ml-2"
-                disabled={true}
-              />
-            </div>
-          </div>
-
-          <AllNotModalMods />
-        </div>
-
+    const renderConditions = (): JSX.Element => {
+      return (
         <div className="flex flex-col w-full mt-4 text-14">
           {requestCondition.map((item: any[], index: number) => (
             <div
@@ -243,7 +253,7 @@ export const CompoundRequest = observer(
                 'flex justify-between w-full shadow-dark py-2 my-2 px-2 cursor-pointer step-content-area',
                 index === activeRequestIndex ? ' bg-white' : 'bg-blue-medium',
               )}
-              key={Math.random()}
+              key={index}
               onClick={(e: any) => handleActiveRequest(index, e)}
             >
               <div className="flex cursor-pointer step-content-area">
@@ -281,6 +291,39 @@ export const CompoundRequest = observer(
             </div>
           ))}
         </div>
+      )
+    }
+
+    return (
+      <React.Fragment>
+        <div className="flex justify-between items-center w-full mt-4 text-14">
+          <div className="flex">
+            <div className="flex items-center">
+              <span className="mr-2 text-18 leading-14px">Approx:</span>
+
+              <Select
+                value={approxOptions[2]}
+                options={approxOptions}
+                disabled={true}
+              />
+            </div>
+
+            <div className="flex items-center ml-3">
+              <span>{t('dtree.state')}</span>
+
+              <Select
+                options={['-current-']}
+                value={'-current-'}
+                className="w-full ml-2"
+                disabled={true}
+              />
+            </div>
+          </div>
+
+          <AllNotModalMods />
+        </div>
+
+        {renderConditions()}
 
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div className="flex">

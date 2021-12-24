@@ -1,24 +1,49 @@
 import { Form, FormikProps } from 'formik'
 
+import { SessionStoreManager } from '@core/session-store-manager'
 import { Input } from '@ui//input'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
+import { SessionStoreDataProvider } from './session-store-data-provider'
 
-type Props = FormikProps<any>
+export interface IGeneRegionFormValues {
+  locus: string
+}
 
-export const GeneRegion = ({ values, setFieldValue }: Props) => {
+const GENE_REGION = 'Gene_Region'
+
+const getSavedValues = () => {
+  return SessionStoreManager.read<IGeneRegionFormValues>(
+    GENE_REGION,
+    FILTER_REFINER_PREFIX,
+  )
+}
+
+export const GeneRegion = ({
+  values: { locus },
+  setFieldValue,
+}: FormikProps<IGeneRegionFormValues>) => {
+  const locusValue = locus || getSavedValues()?.locus || ''
+
   return (
-    <Form>
-      <div className="mt-4">
-        <span className="text-14 leading-16px text-grey-blue font-bold">
-          Locus
-        </span>
+    <SessionStoreDataProvider<IGeneRegionFormValues>
+      storeKey={GENE_REGION}
+      values={{ locus: locusValue }}
+      storePrefix={FILTER_REFINER_PREFIX}
+    >
+      <Form>
+        <div className="mt-4">
+          <span className="text-14 leading-16px text-grey-blue font-bold">
+            Locus
+          </span>
 
-        <Input
-          value={values.locus}
-          onChange={e => {
-            setFieldValue('locus', e.target.value)
-          }}
-        />
-      </div>
-    </Form>
+          <Input
+            value={locusValue}
+            onChange={e => {
+              setFieldValue('locus', e.target.value)
+            }}
+          />
+        </div>
+      </Form>
+    </SessionStoreDataProvider>
   )
 }

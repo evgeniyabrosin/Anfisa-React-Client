@@ -6,19 +6,53 @@ import { observer } from 'mobx-react-lite'
 import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
+import { SessionStoreManager } from '@core/session-store-manager'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
 import { CustomInheritanceModeContent } from './query-builder/ui/custom-inheritance-mode-content'
 
+export interface ICustomInheritanceModeProps {
+  scenario: any
+  variants: string[]
+}
+
+export interface ICustomInheritanceSessionValues {
+  first: string
+  second: string
+  third: string
+  reset: string
+}
+
+const CUSTOM_INHERITANCE = 'Custom_Inheritance_Mode'
+
+const getSavedValues = () => {
+  return SessionStoreManager.read<ICustomInheritanceSessionValues>(
+    CUSTOM_INHERITANCE,
+    FILTER_REFINER_PREFIX,
+  )
+}
+
 export const CustomInheritanceMode = observer(
-  ({ setFieldValue }: FormikProps<{ scenario: any; variants: string[] }>) => {
-    const [firstSelectValue, setFirstSelectValue] = useState<string>('2')
-    const [secondSelectValue, setSecondSelectValue] = useState<string>('0-1')
-    const [thirdSelectValue, setThirdSelectValue] = useState<string>('0-1')
+  ({ setFieldValue }: FormikProps<ICustomInheritanceModeProps>) => {
+    const values = getSavedValues()
+
+    const [firstSelectValue, setFirstSelectValue] = useState<string>(
+      values?.first || '2',
+    )
+
+    const [secondSelectValue, setSecondSelectValue] = useState<string>(
+      values?.second || '0-1',
+    )
+
+    const [thirdSelectValue, setThirdSelectValue] = useState<string>(
+      values?.third || '0-1',
+    )
+
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
-    const [resetValue, setResetValue] = useState('')
+    const [resetValue, setResetValue] = useState(values?.reset || '')
     const variants = filterStore.statFuncData.variants
 
     useEffect(() => {
@@ -31,7 +65,20 @@ export const CustomInheritanceMode = observer(
       } else {
         filterStore.setError('')
       }
-    }, [firstSelectValue, secondSelectValue, thirdSelectValue])
+
+      const newValues: ICustomInheritanceSessionValues = {
+        first: firstSelectValue,
+        second: secondSelectValue,
+        third: thirdSelectValue,
+        reset: resetValue,
+      }
+
+      SessionStoreManager.write(
+        CUSTOM_INHERITANCE,
+        newValues,
+        FILTER_REFINER_PREFIX,
+      )
+    }, [firstSelectValue, secondSelectValue, thirdSelectValue, resetValue])
 
     useEffect(() => {
       const params = datasetStore.isXL

@@ -5,6 +5,7 @@ import { isArray } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { SessionStoreManager } from '@core/session-store-manager'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
@@ -12,6 +13,7 @@ import { Button } from '@ui/button'
 import { CompundHet } from './compound-het'
 import { CompoundRequest } from './compound-request'
 import { CustomInheritanceMode } from './custom-inheritance-mode'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
 import { GeneRegion } from './gene-region'
 import { InheritanceMode } from './inheritance-mode'
 
@@ -46,6 +48,12 @@ const initialStateMap: Record<string, any> = {
     state: null,
     request: [],
   },
+}
+
+const getInitialValues = (): Record<string, any> => {
+  const memoizedValues = SessionStoreManager.read(FILTER_REFINER_PREFIX)
+
+  return { ...initialStateMap, ...memoizedValues }
 }
 
 export const FunctionPanel = observer(
@@ -183,7 +191,7 @@ export const FunctionPanel = observer(
     return (
       <div>
         <Formik
-          initialValues={initialStateMap[selectedFilter.name]}
+          initialValues={getInitialValues()[selectedFilter.name]}
           enableReinitialize
           onSubmit={onSubmitAsync}
         >

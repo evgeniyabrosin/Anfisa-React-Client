@@ -3,22 +3,41 @@ import Checkbox from 'react-three-state-checkbox'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 
+import { SessionStoreManager } from '@core/session-store-manager'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
+import { FILTER_REFINER_PREFIX } from './filter-refiner'
+import { SessionStoreDataProvider } from './session-store-data-provider'
+
+export interface IInheritanceFormValues {
+  problemGroups: string[]
+  variants: string[]
+}
+
+const INHERITANCE = 'Inheritance_Mode'
+
+const getSavedValues = () => {
+  return SessionStoreManager.read<IInheritanceFormValues>(
+    INHERITANCE,
+    FILTER_REFINER_PREFIX,
+  )
+}
 
 export const InheritanceMode = observer(
-  ({
-    values,
-    setFieldValue,
-  }: FormikProps<{ problemGroups: string[]; variants: string[] }>) => {
+  ({ values, setFieldValue }: FormikProps<IInheritanceFormValues>) => {
     const [variants, setVariants] = useState([])
     const [problemGroups, setProblemGroups] = useState<string[]>([])
+
+    const [problemGroupValues, variantsValues] = [
+      getSavedValues()?.problemGroups || values.problemGroups,
+      getSavedValues()?.variants || values.variants,
+    ]
 
     const fetchStatFuncAsync = async (
       param?: Record<string, string | string[]>,
     ) => {
       const statFuncData = await filterStore.fetchStatFuncAsync(
-        'Inheritance_Mode',
+        INHERITANCE,
         JSON.stringify(param) || JSON.stringify({ problem_group: [] }),
       )
 
@@ -43,9 +62,6 @@ export const InheritanceMode = observer(
         ? [...values.problemGroups, problemGroup]
         : values.problemGroups.filter(group => group !== problemGroup)
 
-      await fetchStatFuncAsync({
-        problem_group: value,
-      })
       setFieldValue('variants', [])
       setFieldValue('problemGroups', value)
     }
@@ -63,6 +79,12 @@ export const InheritanceMode = observer(
       initAsync()
     }, [])
 
+    useEffect(() => {
+      fetchStatFuncAsync({
+        problem_group: problemGroupValues,
+      })
+    }, [problemGroupValues])
+
     const handleSetFieldValueAsync = async () => {
       setFieldValue('problemGroups', [])
 
@@ -70,75 +92,86 @@ export const InheritanceMode = observer(
     }
 
     return (
-      <Form>
-        <div className="flex items-center justify-between">
-          <p className="text-14 leading-16px font-bold text-grey-blue mt-4">
-            Problem group
-          </p>
+      <SessionStoreDataProvider<IInheritanceFormValues>
+        storeKey={INHERITANCE}
+        values={{
+          problemGroups: values.problemGroups,
+          variants: values.variants,
+        }}
+        storePrefix={FILTER_REFINER_PREFIX}
+      >
+        <Form>
+          <div className="flex items-center justify-between">
+            <p className="text-14 leading-16px font-bold text-grey-blue mt-4">
+              Problem group
+            </p>
 
-          <p
-            className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={handleSetFieldValueAsync}
-          >
-            Reset
-          </p>
-        </div>
-        <div className="flex items-center justify-between mt-4">
-          {problemGroups.map(problemGroup => (
-            <div key={problemGroup} className="flex items-center">
-              <Checkbox
-                checked={values.problemGroups.includes(problemGroup)}
-                onChange={e => handleChangeAsync(e, problemGroup)}
-              />
-              <span className="text-14 leading-16px ml-2">{problemGroup}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="h-px w-full bg-white my-4" />
-
-        <div className="flex items-center justify-between">
-          <p className="text-14 leading-14px text-grey-blue">
-            {values.variants?.length} Selected
-          </p>
-
-          <p
-            className="text-12 leading-14px text-blue-bright cursor-pointer"
-            onClick={() => setFieldValue('variants', [])}
-          >
-            {t('general.clearAll')}
-          </p>
-        </div>
-
-        {variants.map(variant => {
-          if (variant[1] === 0) {
-            return <Fragment />
-          }
-
-          return (
-            <div key={variant[0]} className="flex items-center mt-4">
-              <Checkbox
-                checked={values.variants.includes(variant[0])}
-                onChange={e => {
-                  const value = e.target.checked
-                    ? [...values.variants, variant[0]]
-                    : values.variants.filter(item => item !== variant[0])
-
-                  setFieldValue('variants', value)
-                }}
-              />
-              <span className="text-14 leading-16px ml-2">{variant[0]}</span>
-              <span className="text-14 leading-16px text-grey-blue ml-1">{`(${variant[1]})`}</span>
-            </div>
-          )
-        })}
-
-        {variants.length === 0 && (
-          <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
-            Out of choice. Select problem group.
+            <p
+              className="text-12 text-blue-bright leading-14px cursor-pointer"
+              onClick={handleSetFieldValueAsync}
+            >
+              Reset
+            </p>
           </div>
-        )}
-      </Form>
+          <div className="flex items-center justify-between mt-4">
+            {problemGroups.map(problemGroup => (
+              <div key={problemGroup} className="flex items-center">
+                <Checkbox
+                  checked={problemGroupValues.includes(problemGroup)}
+                  onChange={e => handleChangeAsync(e, problemGroup)}
+                />
+                <span className="text-14 leading-16px ml-2">
+                  {problemGroup}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="h-px w-full bg-white my-4" />
+
+          <div className="flex items-center justify-between">
+            <p className="text-14 leading-14px text-grey-blue">
+              {variantsValues?.length} Selected
+            </p>
+
+            <p
+              className="text-12 leading-14px text-blue-bright cursor-pointer"
+              onClick={() => setFieldValue('variants', [])}
+            >
+              {t('general.clearAll')}
+            </p>
+          </div>
+
+          {variants.map(variant => {
+            if (variant[1] === 0) {
+              return <Fragment />
+            }
+
+            return (
+              <div key={variant[0]} className="flex items-center mt-4">
+                <Checkbox
+                  checked={variantsValues.includes(variant[0])}
+                  onChange={e => {
+                    const value = e.target.checked
+                      ? [...variantsValues, variant[0]]
+                      : variantsValues.filter(item => item !== variant[0])
+
+                    setFieldValue('variants', value)
+                  }}
+                />
+                <span className="text-14 leading-16px ml-2">{variant[0]}</span>
+                <span className="text-14 leading-16px text-grey-blue ml-1">{`(${variant[1]})`}</span>
+              </div>
+            )
+          })}
+
+          {variants.length === 0 && (
+            <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
+              Out of choice. Select problem group.
+            </div>
+          )}
+        </Form>
+      </SessionStoreDataProvider>
     )
   },
 )
