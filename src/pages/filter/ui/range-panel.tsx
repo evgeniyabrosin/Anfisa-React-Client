@@ -16,17 +16,19 @@ export interface IRangePanelFormValues {
   max: string
 }
 
+const getSavedValues = () => {
+  return SessionStoreManager.read<IRangePanelFormValues>(
+    filterStore.selectedGroupItem.name,
+    FILTER_REFINER_PREFIX,
+  )
+}
+
 export const RangePanel = observer(
   (): ReactElement => {
     const selectedFilter = filterStore.selectedGroupItem
 
-    const savedValues = SessionStoreManager.read<IRangePanelFormValues>(
-      selectedFilter.name,
-      FILTER_REFINER_PREFIX,
-    )
-
-    const [min, setMin] = useState(savedValues?.min || '')
-    const [max, setMax] = useState(savedValues?.max || '')
+    const [min, setMin] = useState(getSavedValues()?.min || '')
+    const [max, setMax] = useState(getSavedValues()?.max || '')
 
     const [isVisibleMinError, setIsVisibleMinError] = useState(false)
     const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
