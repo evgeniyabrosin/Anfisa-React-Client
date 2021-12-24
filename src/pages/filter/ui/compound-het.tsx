@@ -6,8 +6,8 @@ import { IStatFuncData } from '@declarations'
 import { SessionStoreManager } from '@core/session-store-manager'
 import filterStore from '@store/filter'
 import { DropDown } from '@ui/dropdown'
+import { SessionStoreDataProvider } from '../../../components/session-store-data-provider'
 import { FILTER_REFINER_PREFIX } from './filter-refiner'
-import { SessionStoreDataProvider } from './session-store-data-provider'
 
 export interface ICompoundHetFormValues {
   variants: string[]

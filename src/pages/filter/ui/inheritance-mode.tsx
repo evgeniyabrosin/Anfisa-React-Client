@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite'
 import { SessionStoreManager } from '@core/session-store-manager'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
+import { SessionStoreDataProvider } from '../../../components/session-store-data-provider'
 import { FILTER_REFINER_PREFIX } from './filter-refiner'
-import { SessionStoreDataProvider } from './session-store-data-provider'
 
 export interface IInheritanceFormValues {
   problemGroups: string[]

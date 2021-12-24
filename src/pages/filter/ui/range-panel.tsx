@@ -8,8 +8,8 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { SessionStoreDataProvider } from '../../../components/session-store-data-provider'
 import { FILTER_REFINER_PREFIX } from './filter-refiner'
-import { SessionStoreDataProvider } from './session-store-data-provider'
 
 export interface IRangePanelFormValues {
   min: string

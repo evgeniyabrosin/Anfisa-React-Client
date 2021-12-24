@@ -2,8 +2,8 @@ import { Form, FormikProps } from 'formik'
 
 import { SessionStoreManager } from '@core/session-store-manager'
 import { Input } from '@ui//input'
+import { SessionStoreDataProvider } from '../../../components/session-store-data-provider'
 import { FILTER_REFINER_PREFIX } from './filter-refiner'
-import { SessionStoreDataProvider } from './session-store-data-provider'
 
 export interface IGeneRegionFormValues {
   locus: string
