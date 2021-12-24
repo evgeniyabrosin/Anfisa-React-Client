@@ -1,10 +1,32 @@
+import { useEffect } from 'react'
 import { Form, FormikProps } from 'formik'
 
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import filterStore from '@store/filter'
 import { Input } from '@ui//input'
+export interface IGeneRegionFormValues {
+  locus: string
+}
 
-type Props = FormikProps<any>
+export const GeneRegion = ({
+  values: { locus },
+  setFieldValue,
+}: FormikProps<IGeneRegionFormValues>) => {
+  const cachedValues = filterStore.readFilterCondition<IGeneRegionFormValues>(
+    FuncStepTypesEnum.GeneRegion,
+  )
 
-export const GeneRegion = ({ values, setFieldValue }: Props) => {
+  const locusValue = cachedValues?.locus || locus
+
+  useEffect(() => {
+    filterStore.setFilterCondition<IGeneRegionFormValues>(
+      FuncStepTypesEnum.GeneRegion,
+      {
+        locus,
+      },
+    )
+  }, [locus])
+
   return (
     <Form>
       <div className="mt-4">
@@ -13,7 +35,7 @@ export const GeneRegion = ({ values, setFieldValue }: Props) => {
         </span>
 
         <Input
-          value={values.locus}
+          value={locusValue}
           onChange={e => {
             setFieldValue('locus', e.target.value)
           }}

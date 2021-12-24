@@ -8,16 +8,25 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 
+export interface IRangePanelFormValues {
+  min: string
+  max: string
+}
+
 export const RangePanel = observer(
   (): ReactElement => {
-    const [min, setMin] = useState('')
-    const [max, setMax] = useState('')
+    const selectedFilter = filterStore.selectedGroupItem
+
+    const cachedValues = filterStore.readFilterCondition<IRangePanelFormValues>(
+      selectedFilter.name,
+    )
+
+    const [min, setMin] = useState(cachedValues?.min || '')
+    const [max, setMax] = useState(cachedValues?.max || '')
 
     const [isVisibleMinError, setIsVisibleMinError] = useState(false)
     const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
     const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
-
-    const selectedFilter = filterStore.selectedGroupItem
 
     const handleAddConditionsAsync = async () => {
       const arrayNo = await datasetStore.setConditionsAsync([
@@ -80,6 +89,14 @@ export const RangePanel = observer(
       } else {
         setIsVisibleMixedError(false)
       }
+
+      filterStore.setFilterCondition<IRangePanelFormValues>(
+        filterStore.selectedGroupItem.name,
+        {
+          min,
+          max,
+        },
+      )
     }, [min, max])
 
     return (

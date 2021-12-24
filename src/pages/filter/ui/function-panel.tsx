@@ -2,7 +2,6 @@ import { Fragment, FunctionComponent, ReactElement } from 'react'
 import { toast } from 'react-toastify'
 import { Formik } from 'formik'
 import { isArray } from 'lodash'
-import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
@@ -48,169 +47,169 @@ const initialStateMap: Record<string, any> = {
   },
 }
 
-export const FunctionPanel = observer(
-  (): ReactElement => {
-    const selectedFilter = filterStore.selectedGroupItem
+export const FunctionPanel = (): ReactElement => {
+  const selectedFilter = filterStore.selectedGroupItem
 
-    const Component: FunctionComponent<Record<string, any>> =
-      functionsMap[selectedFilter.name]
+  const Component: FunctionComponent<Record<string, any>> =
+    functionsMap[selectedFilter.name]
 
-    const isSubmitDisabled = !!filterStore.error
+  const isSubmitDisabled = !!filterStore.error
 
-    const onSubmitAsync = async (values: any) => {
-      if (isSubmitDisabled) return
+  const onSubmitAsync = async (values: any) => {
+    if (isSubmitDisabled) return
 
-      if (isArray(values.variants) && values.variants.length === 0) {
-        toast.warning(t('filter.chooseProblemGroup'), {
-          position: 'bottom-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        })
+    if (isArray(values.variants) && values.variants.length === 0) {
+      toast.warning(t('filter.chooseProblemGroup'), {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+      })
 
-        return
-      }
+      return
+    }
 
-      if (selectedFilter.name === FuncStepTypesEnum.InheritanceMode) {
-        const noArray = await datasetStore.setConditionsAsync([
-          [
-            'func',
-            selectedFilter.name,
-            '',
-            values.variants,
-            {
-              problem_group:
-                values.problemGroups.length > 0 ? values.problemGroups : null,
-            },
-          ],
-        ])
-
-        filterStore.addSelectedFilterGroup(
-          'Inheritance',
-          FuncStepTypesEnum.InheritanceMode,
-          [[FuncStepTypesEnum.InheritanceMode, noArray.length]],
-        )
-      }
-
-      if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
-        const condition = [
+    if (selectedFilter.name === FuncStepTypesEnum.InheritanceMode) {
+      const noArray = await datasetStore.setConditionsAsync([
+        [
           'func',
-          FuncStepTypesEnum.CustomInheritanceMode,
+          selectedFilter.name,
           '',
           values.variants,
-          { scenario: values.scenario },
-        ]
+          {
+            problem_group:
+              values.problemGroups.length > 0 ? values.problemGroups : null,
+          },
+        ],
+      ])
 
-        const noArray = await datasetStore.setConditionsAsync(condition)
-
-        filterStore.addSelectedFilterGroup(
-          'Inheritance',
-          FuncStepTypesEnum.CustomInheritanceMode,
-          [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]],
-        )
-      }
-
-      if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
-        const noArray = await datasetStore.setConditionsAsync([
-          ['func', selectedFilter.name, '', ['True'], values],
-        ])
-
-        filterStore.addSelectedFilterGroup(
-          'Coordinates',
-          FuncStepTypesEnum.GeneRegion,
-          [[FuncStepTypesEnum.GeneRegion, noArray.length]],
-        )
-      }
-
-      if (selectedFilter.name === FuncStepTypesEnum.CompoundHet) {
-        const noArray = await datasetStore.setConditionsAsync([
-          [
-            'func',
-            selectedFilter.name,
-            '',
-            values.variants,
-            { approx: values.approx || null, state: values.state || null },
-          ],
-        ])
-
-        filterStore.addSelectedFilterGroup(
-          'Inheritance',
-          FuncStepTypesEnum.CompoundHet,
-          [[FuncStepTypesEnum.CompoundHet, noArray.length]],
-        )
-      }
-
-      if (selectedFilter.name === FuncStepTypesEnum.CompoundRequest) {
-        const noArray = await datasetStore.setConditionsAsync([
-          [
-            'func',
-            selectedFilter.name,
-            '',
-            [values.variants[0][0]],
-            {
-              approx: values.approx || null,
-              state: values.state || null,
-              request: values.request || null,
-            },
-          ],
-        ])
-
-        filterStore.addSelectedFilterGroup(
-          'Inheritance',
-          FuncStepTypesEnum.CompoundRequest,
-          [[FuncStepTypesEnum.CompoundRequest, noArray.length]],
-        )
-      }
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.InheritanceMode,
+        [[FuncStepTypesEnum.InheritanceMode, noArray.length]],
+      )
     }
 
-    const handleClear = () => {
-      datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+    if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
+      const condition = [
+        'func',
+        FuncStepTypesEnum.CustomInheritanceMode,
+        '',
+        values.variants,
+        { scenario: values.scenario },
+      ]
 
-      filterStore.removeSelectedFilters({
-        group: selectedFilter.vgroup,
-        groupItemName: selectedFilter.name,
-        variant: [selectedFilter.name, 0],
-      })
+      const noArray = await datasetStore.setConditionsAsync(condition)
+
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CustomInheritanceMode,
+        [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]],
+      )
     }
 
-    if (!Component) {
-      return <Fragment />
+    if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
+      const noArray = await datasetStore.setConditionsAsync([
+        ['func', selectedFilter.name, '', ['True'], values],
+      ])
+
+      filterStore.addSelectedFilterGroup(
+        'Coordinates',
+        FuncStepTypesEnum.GeneRegion,
+        [[FuncStepTypesEnum.GeneRegion, noArray.length]],
+      )
     }
 
-    return (
-      <div>
-        <Formik
-          initialValues={initialStateMap[selectedFilter.name]}
-          enableReinitialize
-          onSubmit={onSubmitAsync}
-        >
-          {props => (
-            <div>
-              <Component {...props} />
+    if (selectedFilter.name === FuncStepTypesEnum.CompoundHet) {
+      const noArray = await datasetStore.setConditionsAsync([
+        [
+          'func',
+          selectedFilter.name,
+          '',
+          values.variants,
+          { approx: values.approx || null, state: values.state || null },
+        ],
+      ])
 
-              <div className="flex items-center justify-between mt-5">
-                <Button
-                  text={t('general.clear')}
-                  variant={'secondary'}
-                  onClick={() => {
-                    handleClear()
-                    props.resetForm()
-                  }}
-                />
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CompoundHet,
+        [[FuncStepTypesEnum.CompoundHet, noArray.length]],
+      )
+    }
 
-                <Button
-                  text={t('general.add')}
-                  onClick={props.submitForm}
-                  disabled={isSubmitDisabled}
-                />
-              </div>
+    if (selectedFilter.name === FuncStepTypesEnum.CompoundRequest) {
+      const noArray = await datasetStore.setConditionsAsync([
+        [
+          'func',
+          selectedFilter.name,
+          '',
+          [values.variants[0][0]],
+          {
+            approx: values.approx || null,
+            state: values.state || null,
+            request: values.request || null,
+          },
+        ],
+      ])
+
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CompoundRequest,
+        [[FuncStepTypesEnum.CompoundRequest, noArray.length]],
+      )
+    }
+  }
+
+  const handleClear = () => {
+    datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+
+    filterStore.removeSelectedFilters({
+      group: selectedFilter.vgroup,
+      groupItemName: selectedFilter.name,
+      variant: [selectedFilter.name, 0],
+    })
+  }
+
+  if (!Component) {
+    return <Fragment />
+  }
+
+  const initialValues = { ...initialStateMap, ...filterStore.filterCondition }
+
+  return (
+    <div>
+      <Formik
+        initialValues={initialValues[selectedFilter.name]}
+        enableReinitialize
+        onSubmit={onSubmitAsync}
+      >
+        {props => (
+          <div>
+            <Component {...props} />
+
+            <div className="flex items-center justify-between mt-5">
+              <Button
+                text={t('general.clear')}
+                variant={'secondary'}
+                onClick={() => {
+                  handleClear()
+                  props.resetForm()
+                }}
+              />
+
+              <Button
+                text={t('general.add')}
+                onClick={props.submitForm}
+                disabled={isSubmitDisabled}
+              />
             </div>
-          )}
-        </Formik>
-      </div>
-    )
-  },
-)
+          </div>
+        )}
+      </Formik>
+    </div>
+  )
+}
