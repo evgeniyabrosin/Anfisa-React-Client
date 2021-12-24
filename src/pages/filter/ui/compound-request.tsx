@@ -13,6 +13,7 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
+import { SessionStoreDataProvider } from '@components/session-store-data-provider'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getRequestData } from '@utils/getRequestData'
@@ -63,7 +64,7 @@ const getSavedValues = () => {
 export const CompoundRequest = observer(
   ({ setFieldValue }: FormikProps<ICompoundRequestProps>): ReactElement => {
     const [requestCondition, setRequestCondition] = useState(
-      getSavedValues()?.requestCondition || [[1, {}]],
+      getSavedValues()?.requestCondition || [[1, {}] as TRequestCondition],
     )
 
     const [resetValue, setResetValue] = useState(getSavedValues()?.reset || '')
@@ -94,14 +95,6 @@ export const CompoundRequest = observer(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    useEffect(() => {
-      SessionStoreManager.write(
-        COMPOUND_REQUEST,
-        { ...(getSavedValues() || {}), requestCondition },
-        FILTER_REFINER_PREFIX,
-      )
-    }, [requestCondition])
 
     const handleRequestCondition = (
       requestBlockIndex: number,
@@ -229,12 +222,6 @@ export const CompoundRequest = observer(
         }
       })
 
-      SessionStoreManager.write(
-        COMPOUND_REQUEST,
-        { ...(getSavedValues() || {}), reset: name },
-        FILTER_REFINER_PREFIX,
-      )
-
       setRequestCondition(newRequestCondition)
 
       sendRequestAsync(newRequestCondition)
@@ -295,72 +282,81 @@ export const CompoundRequest = observer(
     }
 
     return (
-      <React.Fragment>
-        <div className="flex justify-between items-center w-full mt-4 text-14">
-          <div className="flex">
-            <div className="flex items-center">
-              <span className="mr-2 text-18 leading-14px">Approx:</span>
+      <SessionStoreDataProvider<ICompoundRequestFormValues>
+        storeKey={COMPOUND_REQUEST}
+        values={{
+          requestCondition,
+          reset: resetValue,
+        }}
+        storePrefix={FILTER_REFINER_PREFIX}
+      >
+        <React.Fragment>
+          <div className="flex justify-between items-center w-full mt-4 text-14">
+            <div className="flex">
+              <div className="flex items-center">
+                <span className="mr-2 text-18 leading-14px">Approx:</span>
 
-              <Select
-                value={approxOptions[2]}
-                options={approxOptions}
-                disabled={true}
+                <Select
+                  value={approxOptions[2]}
+                  options={approxOptions}
+                  disabled={true}
+                />
+              </div>
+
+              <div className="flex items-center ml-3">
+                <span>{t('dtree.state')}</span>
+
+                <Select
+                  options={['-current-']}
+                  value={'-current-'}
+                  className="w-full ml-2"
+                  disabled={true}
+                />
+              </div>
+            </div>
+
+            <AllNotModalMods />
+          </div>
+
+          {renderConditions()}
+
+          <div className="flex items-center justify-between w-full mt-4 text-14">
+            <div className="flex">
+              <Button
+                onClick={() => handleRequestBlocksAmount('ADD')}
+                text="Add"
+                variant={'secondary'}
+                className={cn('mr-4')}
+                disabled={requestCondition.length === 5}
+              />
+
+              <Button
+                onClick={() => handleRequestBlocksAmount('REMOVE')}
+                text="Remove"
+                variant={'secondary'}
+                className={cn(
+                  'border-red-secondary hover:text-white hover:bg-red-secondary',
+                )}
+                disabled={requestCondition.length === 1}
               />
             </div>
 
-            <div className="flex items-center ml-3">
-              <span>{t('dtree.state')}</span>
+            <div className="flex w-1/2">
+              <span>{t('dtree.reset')}</span>
 
               <Select
-                options={['-current-']}
-                value={'-current-'}
+                options={resetOptions}
+                onChange={(e: any) => handleReset(e.target.value)}
                 className="w-full ml-2"
-                disabled={true}
+                value={resetValue}
+                reset
               />
             </div>
           </div>
 
-          <AllNotModalMods />
-        </div>
-
-        {renderConditions()}
-
-        <div className="flex items-center justify-between w-full mt-4 text-14">
-          <div className="flex">
-            <Button
-              onClick={() => handleRequestBlocksAmount('ADD')}
-              text="Add"
-              variant={'secondary'}
-              className={cn('mr-4')}
-              disabled={requestCondition.length === 5}
-            />
-
-            <Button
-              onClick={() => handleRequestBlocksAmount('REMOVE')}
-              text="Remove"
-              variant={'secondary'}
-              className={cn(
-                'border-red-secondary hover:text-white hover:bg-red-secondary',
-              )}
-              disabled={requestCondition.length === 1}
-            />
-          </div>
-
-          <div className="flex w-1/2">
-            <span>{t('dtree.reset')}</span>
-
-            <Select
-              options={resetOptions}
-              onChange={(e: any) => handleReset(e.target.value)}
-              className="w-full ml-2"
-              value={resetValue}
-              reset
-            />
-          </div>
-        </div>
-
-        <EditModalVariants variants={variants} disabled={true} />
-      </React.Fragment>
+          <EditModalVariants variants={variants} disabled={true} />
+        </React.Fragment>
+      </SessionStoreDataProvider>
     )
   },
 )
