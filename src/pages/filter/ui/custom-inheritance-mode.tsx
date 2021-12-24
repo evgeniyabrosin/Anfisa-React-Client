@@ -9,6 +9,7 @@ import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { SessionStoreManager } from '@core/session-store-manager'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
+import { SessionStoreDataProvider } from '@components/session-store-data-provider'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
 import { FILTER_REFINER_PREFIX } from './filter-refiner'
@@ -65,20 +66,7 @@ export const CustomInheritanceMode = observer(
       } else {
         filterStore.setError('')
       }
-
-      const newValues: ICustomInheritanceSessionValues = {
-        first: firstSelectValue,
-        second: secondSelectValue,
-        third: thirdSelectValue,
-        reset: resetValue,
-      }
-
-      SessionStoreManager.write(
-        CUSTOM_INHERITANCE,
-        newValues,
-        FILTER_REFINER_PREFIX,
-      )
-    }, [firstSelectValue, secondSelectValue, thirdSelectValue, resetValue])
+    }, [firstSelectValue, secondSelectValue, thirdSelectValue])
 
     useEffect(() => {
       const params = datasetStore.isXL
@@ -228,13 +216,24 @@ export const CustomInheritanceMode = observer(
     }
 
     return (
-      <CustomInheritanceModeContent
-        attrData={attrData}
-        handleSetScenario={handleSetScenario}
-        selectStates={selectStates}
-        handleReset={handleReset}
-        resetValue={resetValue}
-      />
+      <SessionStoreDataProvider<ICustomInheritanceSessionValues>
+        storeKey={CUSTOM_INHERITANCE}
+        values={{
+          first: firstSelectValue,
+          second: secondSelectValue,
+          third: thirdSelectValue,
+          reset: resetValue,
+        }}
+        storePrefix={FILTER_REFINER_PREFIX}
+      >
+        <CustomInheritanceModeContent
+          attrData={attrData}
+          handleSetScenario={handleSetScenario}
+          selectStates={selectStates}
+          handleReset={handleReset}
+          resetValue={resetValue}
+        />
+      </SessionStoreDataProvider>
     )
   },
 )
