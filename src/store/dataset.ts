@@ -3,7 +3,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, StatListType, TabReportType } from '@declarations'
+import {
+  DsStatType,
+  IRemoveConditionItem,
+  StatListType,
+  TabReportType,
+} from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
@@ -159,13 +164,10 @@ class DatasetStore {
     await this.fetchDsStatAsync()
   }
 
-  removeCondition({
-    subGroup,
-    itemName,
-  }: {
-    subGroup: string
-    itemName: string
-  }) {
+  removeCondition(
+    { subGroup, itemName }: IRemoveConditionItem,
+    shouldSendDsStat = true,
+  ) {
     const cloneConditions = cloneDeep(this.conditions)
 
     const subGroupIndex = cloneConditions.findIndex(
@@ -190,7 +192,7 @@ class DatasetStore {
 
     this.conditions = cloneConditions
 
-    this.fetchDsStatAsync()
+    shouldSendDsStat && this.fetchDsStatAsync()
   }
 
   removeConditionGroup({ subGroup }: { subGroup: string }) {
@@ -294,8 +296,7 @@ class DatasetStore {
       this.dsStat = result
       this.variantsAmount = result['total-counts']['0']
 
-      // TODO: do not delete
-      // this.statAmount = get(result, 'filtered-counts', [])
+      this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
   }
