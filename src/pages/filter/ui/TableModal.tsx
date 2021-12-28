@@ -9,11 +9,6 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
-<<<<<<< HEAD
-import { ReturnedVariantsDataCy } from '@components/data-testid/returned-variants'
-import { defaultLayout } from '@components/variant/drawer'
-=======
->>>>>>> main
 import { VariantBody } from '@components/variant/ui/body'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'

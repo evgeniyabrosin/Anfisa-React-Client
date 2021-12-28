@@ -44,33 +44,4 @@ describe('Test on table of returned variants', () => {
       .contains('N - 3')
       .click()
   })
-
-  it('Add dataset and open it in Main Table | test #5', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
-    decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.wait('@selectList', {
-      timeout: Timeouts.TenSecondsTimeout,
-    })
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
-    decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
-    cy.wait('@decTreeUpload', {
-      timeout: Timeouts.TenSecondsTimeout,
-    })
-    decisionTreesPage.decisionTreeMenu.saveDataset.click()
-    decisionTreesPage.decisionTreeMenu.datasetNameInput.type(
-      'Dataset_from_autotests',
-    )
-    decisionTreesPage.decisionTreeMenu.addNewDataset.click()
-    datasetPage.visit()
-    cy.reload()
-    datasetPage.leftPanel.leftPanelHeader.checkLabelText('Datasets')
-    datasetPage.leftPanel.datasetsListElem
-      .getButtonByText('xl_PGP3140_wgs_NIST-4_2')
-      .click()
-    datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
-    datasetPage.leftPanel.datasetsListElem
-      .getButtonByText('Dataset_from_autotests')
-      .should('exist')
-  })
 })
