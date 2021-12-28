@@ -5,11 +5,13 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { DatasetCreationErrorsEnum } from '@core/enum/dataset-creation-errors-enum'
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import filterZone from '@store/filterZone'
 import operations from '@store/operations'
 import { Routes } from '@router/routes.enum'
@@ -19,6 +21,9 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
+
+export const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
+export const noFirstNumberPattern = /^[\d_]/
 
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)
@@ -31,7 +36,19 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
-    if (pathName === PatnNameEnum.Filter && dtreeStore.acceptedVariants === 0) {
+    if (
+      pathName === PatnNameEnum.Filter &&
+      filterStore.method === FilterMethodEnum.DecisionTree &&
+      dtreeStore.acceptedVariants === 0
+    ) {
+      setError(DatasetCreationErrorsEnum.EmptyDataset)
+    }
+
+    if (
+      pathName === PatnNameEnum.Filter &&
+      filterStore.method === FilterMethodEnum.Refiner &&
+      datasetStore.statAmount[0] === 0
+    ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
@@ -103,12 +120,17 @@ export const ModalSaveDataset = observer(() => {
     dtreeStore.closeModalSaveDataset()
     pathName === PatnNameEnum.Ws && datasetStore.initDatasetAsync(value)
     operations.resetSavingStatus()
+
+    datasetStore.setActivePreset('')
+    datasetStore.resetData()
+    datasetStore.clearZone()
+    datasetStore.resetConditions()
+    filterStore.resetData()
+    dtreeStore.resetData()
+    filterZone.resetAllSelectedItems()
   }
 
   const handleChange = (name: string) => {
-    const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
-    const noFirstNumberPattern = /^[\d_]/
-
     if (
       error === DatasetCreationErrorsEnum.EmptyDataset ||
       error === DatasetCreationErrorsEnum.ChooseAnyFilter
@@ -174,17 +196,17 @@ export const ModalSaveDataset = observer(() => {
         <div className="flex ml-auto mt-6">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            className="text-black border-grey-light hover:bg-grey-light"
+            variant={'secondary'}
+            className="border-grey-light hover:bg-grey-light"
             onClick={handleClose}
             dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
           />
 
           <Button
             text={t('dsCreation.addDataset')}
-            className="ml-4 text-black hover:bg-blue-bright hover:text-white"
+            className="ml-4"
             disabled={!value.trim() || error.length > 0}
-            hasBackground={false}
+            variant={'secondary'}
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />

@@ -5,7 +5,7 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
 
 class ColumnsStore {
-  columns: string[] = Object.values(tableColumnMap)
+  columns: any[] = Object.values(tableColumnMap)
   viewType: ViewTypeEnum = ViewTypeEnum.Cozy
   selectedColumns: string[] = Object.values(tableColumnMap)
   searchColumnValue = ''
@@ -18,48 +18,82 @@ class ColumnsStore {
     this.searchColumnValue = value
   }
 
+  resetSearchColumnValue() {
+    this.searchColumnValue = ''
+  }
+
   setViewType(viewType: ViewTypeEnum) {
     this.viewType = viewType
   }
 
-  removeColumn(name: string) {
-    this.columns = this.columns.filter(column => column !== name)
+  selectAllColumns() {
+    const clearedColumns =
+      typeof this.columns[0] !== 'string'
+        ? this.columns.map(column => ({
+            title: column.title,
+            hidden: false,
+          }))
+        : this.columns.map(column => ({
+            title: column,
+            hidden: false,
+          }))
+
+    this.setColumns(clearedColumns)
   }
 
-  addColumn(name: string) {
-    this.columns.push(name)
+  clearAllColumns() {
+    const clearedColumns =
+      typeof this.columns[0] !== 'string'
+        ? this.columns.map(column => ({
+            title: column.title,
+            hidden: true,
+          }))
+        : this.columns.map(column => ({
+            title: column,
+            hidden: true,
+          }))
+
+    this.setColumns(clearedColumns)
   }
 
-  clearColumn() {
-    this.columns = []
-  }
-
-  setAllColumn() {
-    this.columns = Object.values(tableColumnMap)
-  }
-
-  setColumns(columns: string[]) {
+  setColumns(columns: any[]) {
     this.columns = columns
   }
 
+  resetColumnsToDefault() {
+    const defaultColumns = Object.values(tableColumnMap).map(column => ({
+      title: column,
+      hidden: false,
+    }))
+
+    this.setColumns(defaultColumns)
+  }
+
   showColumns() {
-    this.selectedColumns = this.columns.slice()
+    this.selectedColumns = this.columns
+      .filter(column => !column.hidden)
+      .map(column => column.title)
   }
 
-  cancelColumns() {
-    this.columns = this.selectedColumns.slice()
+  getColumnsForOpenDrawer() {
+    const columnsForOpenDrawer = this.getExtendedColumns
+      .filter(column => !column.hidden)
+      .splice(0, 2)
+
+    return columnsForOpenDrawer
   }
 
-  get getColumns() {
-    if (this.searchColumnValue) {
-      return Object.values(tableColumnMap).filter(key =>
-        key
-          .toLocaleLowerCase()
-          .includes(this.searchColumnValue.toLocaleLowerCase()),
-      )
+  get getExtendedColumns() {
+    if (typeof this.columns[0] !== 'string') {
+      return this.columns
     }
 
-    return Object.values(tableColumnMap)
+    const extendedColumns = this.columns.map(column => ({
+      title: column,
+      hidden: false,
+    }))
+
+    return extendedColumns
   }
 }
 

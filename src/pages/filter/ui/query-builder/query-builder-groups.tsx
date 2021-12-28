@@ -1,19 +1,24 @@
 import { Fragment, ReactElement } from 'react'
-import { toast } from 'react-toastify'
 import { observer } from 'mobx-react-lite'
 
+import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
-import { createEmptyStep } from '@utils/createEmptyStep'
 import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from './query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer(
   (): ReactElement => {
-    const groupNames = Object.keys(dtreeStore.getQueryBuilder)
-    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
+
+    const groupNames = Object.keys(filteredQueryBuilder)
+    const subGroupData = Object.values(filteredQueryBuilder)
+
     const chunkSize = 2
     let groupsCount = Math.trunc(groupNames.length / 2)
     let requestIdleCallbackIds: number[] = []
@@ -35,29 +40,6 @@ export const QueryBuilderGroups = observer(
     )
 
     const activeStep = dtreeStore.stepData[activeStepIndex]
-    const isDisabled = activeStep.groups.length === 0 && !activeStep.isFinalStep
-
-    const createStep = () => {
-      if (activeStepIndex === -1) {
-        toast.error(t('dtree.chooseActiveStep'), {
-          position: 'bottom-right',
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        })
-
-        return
-      }
-
-      const currentStepIndex = activeStep.isFinalStep
-        ? activeStepIndex - 1
-        : activeStepIndex
-
-      createEmptyStep(currentStepIndex, 'AFTER')
-    }
 
     const returnedVariantsPrompt = activeStep?.excluded
       ? ` (${t('dtree.excludedVariants')})`
@@ -72,8 +54,8 @@ export const QueryBuilderGroups = observer(
         <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
           <div id="input" className="flex mb-3 w-full static">
             <QueryBuilderSearch
-              value={dtreeStore.filterValue}
-              onChange={(e: string) => dtreeStore.setFilterValue(e)}
+              value={filterValue}
+              onChange={(value: string) => setFilterValue(value)}
               isFilter
             />
           </div>
@@ -87,17 +69,12 @@ export const QueryBuilderGroups = observer(
 
               {shouldShowVariantsPrompt && returnedVariantsPrompt}
             </div>
-
-            <Button
-              className="hover:bg-blue-bright"
-              text={t('dtree.addStep')}
-              hasBackground={false}
-              disabled={isDisabled}
-              onClick={createStep}
-            />
           </div>
 
-          <div className="h-full overflow-y-auto">
+          <div
+            className="overflow-y-auto"
+            style={{ maxHeight: 'calc(100vh - 300px)' }}
+          >
             <DeferRender chunkSize={chunkSize} renderId={decrement}>
               {groupNames.map((groupName, index) => (
                 <QueryBuilderSubgroup

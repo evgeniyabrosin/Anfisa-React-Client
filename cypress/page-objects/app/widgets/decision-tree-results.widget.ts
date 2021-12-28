@@ -1,6 +1,7 @@
 import { Button } from '../../lib/button'
 import { Input } from '../../lib/input'
 import { Label } from '../../lib/label'
+import { StepLabel } from '../../lib/stepLabel'
 import { UIWidget } from '../../lib/ui-widget'
 
 export interface DecisionTreeResultsSelectors {
@@ -11,12 +12,17 @@ export interface DecisionTreeResultsSelectors {
   stepCard: string
   excludeInfo: string
   viewReturnedVariants: string
+  treeTooltip: string
+  addAttribute: string
+  searchForAttr: string
+  selectAll: string
 }
 
 export interface DecisionTreeResultsLabels {
   graphHeaders: string
   groupGraphHeaders: string
   stepCard: string
+  treeTooltip: string
 }
 
 export class DecisionTreeResultsWidget extends UIWidget {
@@ -24,9 +30,13 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly graphHeaders: Label
   readonly searchStepsResults: Input
   readonly groupGraphHeaders: Label
-  readonly stepCard: Label
+  readonly stepCard: StepLabel
   readonly excludeInfo: Button
   readonly viewReturnedVariants: Button
+  readonly treeToolptip: Label
+  readonly addAttribute: Button
+  readonly searchForAttr: Input
+  readonly selectAll: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -47,8 +57,12 @@ export class DecisionTreeResultsWidget extends UIWidget {
       selectors.graphHeaders,
       labels.groupGraphHeaders,
     )
-    this.stepCard = new Label(selectors.stepCard, labels.stepCard)
+    this.stepCard = new StepLabel(selectors.stepCard, labels.stepCard)
     this.excludeInfo = new Button(selectors.excludeInfo)
     this.viewReturnedVariants = new Button(selectors.viewReturnedVariants)
+    this.treeToolptip = new Label(selectors.treeTooltip, labels.treeTooltip)
+    this.addAttribute = new Button(selectors.addAttribute)
+    this.searchForAttr = new Input(selectors.searchForAttr)
+    this.selectAll = new Button(selectors.selectAll)
   }
 }

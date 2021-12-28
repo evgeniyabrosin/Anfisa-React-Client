@@ -1,6 +1,7 @@
 import { ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { QueryBuilderSearch } from '../query-builder-search'
@@ -10,26 +11,34 @@ import { ModalBase } from './modal-base'
 
 export const ModalSelectAttribute = observer(
   (): ReactElement => {
-    const groupNames = Object.keys(dtreeStore.getQueryBuilder)
-    const subGroupData = Object.values(dtreeStore.getQueryBuilder)
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
+
+    const groupNames = Object.keys(filteredQueryBuilder)
+
+    const subGroupData = Object.values(filteredQueryBuilder)
 
     const ref = useRef(null)
 
     const handleClose = () => {
       dtreeStore.closeModalAttribute()
+      dtreeStore.resetFilterModalValue()
     }
 
     return (
       <ModalBase refer={ref} minHeight={340}>
         <HeaderModal
-          groupName={t('dtree.selectAnAttribute')}
+          groupName={t('dtree.selectAttribute')}
           handleClose={handleClose}
         />
 
         <div className="flex w-full mt-4">
           <QueryBuilderSearch
-            value={dtreeStore.filterValue}
-            onChange={(e: string) => dtreeStore.setFilterValue(e)}
+            value={filterValue}
+            onChange={(value: string) => setFilterValue(value)}
             isModal
           />
         </div>
@@ -45,8 +54,8 @@ export const ModalSelectAttribute = observer(
                 groupName={groupName}
                 subGroupData={subGroupData[index]}
                 key={groupName}
-                changeIndicator={dtreeStore.filterChangeIndicator}
-                isContentExpanded={dtreeStore.isFilterContentExpanded}
+                changeIndicator={dtreeStore.filterModalChangeIndicator}
+                isContentExpanded={dtreeStore.isFilterModalContentExpanded}
                 isModal
               />
             ))

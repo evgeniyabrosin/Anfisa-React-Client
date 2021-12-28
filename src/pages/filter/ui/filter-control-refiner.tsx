@@ -16,10 +16,14 @@ import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
+import {
+  noFirstNumberPattern,
+  noSymbolPattern,
+} from './query-builder/ui/modal-save-dataset'
 
 export const FilterControlRefiner = observer(
   (): ReactElement => {
-    const [activePreset, setActivePreset] = useState('')
+    const [activePreset, setActivePreset] = useState(datasetStore.activePreset)
     const [createPresetName, setCreatePresetName] = useState('')
 
     const presets: string[] = get(datasetStore, 'dsStat.filter-list', [])
@@ -38,6 +42,9 @@ export const FilterControlRefiner = observer(
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
         presetStore.loadPresetAsync(activePreset, 'refiner')
+        datasetStore.setActivePreset(activePreset)
+        filterStore.resetActionName()
+        datasetStore.fetchWsListAsync()
       }
 
       if (filterStore.actionName === ActionFilterEnum.Delete) {
@@ -50,6 +57,24 @@ export const FilterControlRefiner = observer(
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
+        if (
+          noSymbolPattern.test(createPresetName) ||
+          noFirstNumberPattern.test(createPresetName) ||
+          createPresetName.length > 50
+        ) {
+          toast.error(t('filter.notValidName'), {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+          })
+
+          return
+        }
+
         createPresetName && presetStore.updatePresetAsync(createPresetName)
 
         toast.info(t('general.presetCreated'), {
@@ -125,8 +150,8 @@ export const FilterControlRefiner = observer(
             <Button
               text={t('general.cancel')}
               size="md"
-              hasBackground={false}
-              className="text-white mt-auto ml-2 rounded-full"
+              variant={'secondary-dark'}
+              className="mt-auto ml-2"
               onClick={() => {
                 setActivePreset('')
                 setCreatePresetName('')

@@ -1,24 +1,26 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { IColumns } from '@declarations'
 import columnsStore from '@store/wsColumns'
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
 
 interface Props {
   name: string
+  setColumns: (columns: IColumns[]) => void
+  index: number
+  columns: IColumns[]
 }
 
 export const ColumnNameItem = observer(
-  ({ name }: Props): ReactElement => {
-    const handleChange = (checked: boolean) => {
-      if (!checked) {
-        columnsStore.removeColumn(name)
-      }
+  ({ name, setColumns, index, columns }: Props): ReactElement => {
+    const handleHiddenClick = () => {
+      const copy = JSON.parse(JSON.stringify(columns))
 
-      if (checked) {
-        columnsStore.addColumn(name)
-      }
+      copy[index].hidden = !copy[index].hidden
+      columnsStore.setColumns(copy)
+      setColumns(copy)
     }
 
     return (
@@ -29,8 +31,8 @@ export const ColumnNameItem = observer(
         </div>
 
         <Switch
-          onChange={handleChange}
-          isChecked={columnsStore.columns.includes(name)}
+          onChange={handleHiddenClick}
+          isChecked={!columns[index].hidden}
         />
       </div>
     )

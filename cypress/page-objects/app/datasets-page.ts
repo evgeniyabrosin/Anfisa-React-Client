@@ -1,4 +1,4 @@
-import { DatasetCard } from '../../../src/components/data-testid/card.cy'
+import { DatasetCard } from '../../../src/components/data-testid/dataset-card.cy'
 import { DatasetInfoDataCy } from '../../../src/components/data-testid/dataset-info.cy'
 import { FilterDatasetDataCy } from '../../../src/components/data-testid/filter-dataset.cy'
 import { BasePage } from '../lib/base-page'
@@ -23,6 +23,7 @@ class DatasetPage extends BasePage {
         openInViewer: `[data-testid = "${DatasetInfoDataCy.openInViewer}"]`,
         decTreePanel: `[data-testid = "${DatasetInfoDataCy.decTreePanel}"]`,
         datasetHeader: `[data-testid = "${DatasetCard.datasetHeader}"]`,
+        mainTable: `[data-testid = "${DatasetInfoDataCy.mainTable}"]`,
       },
       labels: {
         datasetHeader: 'xl_PGP3140_wgs_NIST-4_2',

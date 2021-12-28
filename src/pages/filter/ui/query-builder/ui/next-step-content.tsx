@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { makeStepActive } from '@utils/makeStepActive'
 import { NextStepContentItem } from './next-step-content-item'
 
 interface IProps {
@@ -67,6 +68,11 @@ export const NextStepContent = observer(
 
     const wordList = getWords(condition)
 
+    const openModal = () => {
+      makeStepActive(index)
+      dtreeStore.openModalAttribute(index)
+    }
+
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
@@ -110,7 +116,7 @@ export const NextStepContent = observer(
 
         <div
           className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark"
-          onClick={() => dtreeStore.openModalAttribute(index)}
+          onClick={openModal}
         >
           {t('dtree.addAttribute')}
         </div>

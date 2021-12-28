@@ -14,8 +14,6 @@ import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
-import { ControlPanelDivider } from '@pages/ws/ui/control-panel-divider'
-import { EditFilter } from '@pages/ws/ui/control-panel-edit-filter'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { DtreeModal } from './dtree-modal'
 import { FilterButton } from './filter-button'
@@ -178,10 +176,8 @@ export const FilterControlQueryBuilder = observer(
             <Button
               text={t('general.cancel')}
               size="md"
-              hasBackground={false}
-              className={cn(
-                'text-white mt-auto ml-2 rounded-full hover:bg-blue-bright',
-              )}
+              variant={'secondary-dark'}
+              className={cn('mt-auto ml-2')}
               onClick={() => {
                 filterStore.setActionName()
                 setCreateTreeName('')
@@ -201,8 +197,6 @@ export const FilterControlQueryBuilder = observer(
             />
           )}
         </div>
-        <ControlPanelDivider />
-        <EditFilter />
         <DatasetCreationButton />
       </Fragment>
     )

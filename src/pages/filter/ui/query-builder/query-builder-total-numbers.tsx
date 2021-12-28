@@ -81,20 +81,20 @@ export const QueryBuilderTotalNumbers = observer(
         <div className="flex">
           {hasReturnedVariants && (
             <Button
-              dataTestId={DecisionTreesResultsDataCy.viewReturnedVars}
+              dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
               onClick={() => openTableModal(true)}
-              text="View returned variants"
-              hasBackground={false}
-              className="ml-auto hover:bg-blue-bright"
+              text={t('dtree.viewReturnedVariants')}
+              variant={'secondary-dark'}
+              className="ml-auto"
             />
           )}
 
           {hasStartVariants && (
             <Button
               onClick={() => openTableModal(false)}
-              text="View variants"
-              hasBackground={false}
-              className="ml-5 hover:bg-blue-bright"
+              text={t('dtree.viewVariants')}
+              variant={'secondary-dark'}
+              className="ml-5"
             />
           )}
         </div>

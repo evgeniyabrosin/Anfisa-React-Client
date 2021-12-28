@@ -3,28 +3,46 @@ import Checkbox from 'react-three-state-checkbox'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 
+export interface IInheritanceFormValues {
+  problemGroups: string[]
+  variants: string[]
+}
+
 export const InheritanceMode = observer(
-  ({
-    values,
-    setFieldValue,
-  }: FormikProps<{ problemGroups: string[]; variants: string[] }>) => {
+  ({ values, setFieldValue }: FormikProps<IInheritanceFormValues>) => {
+    const cachedValues = filterStore.readFilterCondition<IInheritanceFormValues>(
+      FuncStepTypesEnum.InheritanceMode,
+    )
+
     const [variants, setVariants] = useState([])
     const [problemGroups, setProblemGroups] = useState<string[]>([])
+
+    const [problemGroupValues, variantsValues] = [
+      cachedValues?.problemGroups || values.problemGroups,
+      cachedValues?.variants || values.variants,
+    ]
 
     const fetchStatFuncAsync = async (
       param?: Record<string, string | string[]>,
     ) => {
       const statFuncData = await filterStore.fetchStatFuncAsync(
-        'Inheritance_Mode',
-        param || {},
+        FuncStepTypesEnum.InheritanceMode,
+        JSON.stringify(param) || JSON.stringify({ problem_group: [] }),
       )
 
       const filteredVaraints = statFuncData?.variants?.filter(
         item => item[1] > 0,
       )
+
+      if (!statFuncData.variants || statFuncData.variants.length === 0) {
+        filterStore.setError('out of choice')
+      } else {
+        filterStore.setError('')
+      }
 
       setVariants(filteredVaraints || ([] as any))
     }
@@ -37,9 +55,6 @@ export const InheritanceMode = observer(
         ? [...values.problemGroups, problemGroup]
         : values.problemGroups.filter(group => group !== problemGroup)
 
-      await fetchStatFuncAsync({
-        problem_group: value,
-      })
       setFieldValue('variants', [])
       setFieldValue('problemGroups', value)
     }
@@ -57,6 +72,28 @@ export const InheritanceMode = observer(
       initAsync()
     }, [])
 
+    useEffect(() => {
+      fetchStatFuncAsync({
+        problem_group: problemGroupValues,
+      })
+    }, [problemGroupValues])
+
+    useEffect(() => {
+      filterStore.setFilterCondition<IInheritanceFormValues>(
+        FuncStepTypesEnum.InheritanceMode,
+        {
+          problemGroups: values.problemGroups,
+          variants: values.variants,
+        },
+      )
+    }, [values.problemGroups, values.variants])
+
+    const handleSetFieldValueAsync = async () => {
+      setFieldValue('problemGroups', [])
+
+      await fetchStatFuncAsync()
+    }
+
     return (
       <Form>
         <div className="flex items-center justify-between">
@@ -66,10 +103,7 @@ export const InheritanceMode = observer(
 
           <p
             className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={() => {
-              setFieldValue('variants', [])
-              setFieldValue('problemGroups', [])
-            }}
+            onClick={handleSetFieldValueAsync}
           >
             Reset
           </p>
@@ -78,7 +112,7 @@ export const InheritanceMode = observer(
           {problemGroups.map(problemGroup => (
             <div key={problemGroup} className="flex items-center">
               <Checkbox
-                checked={values.problemGroups.includes(problemGroup)}
+                checked={problemGroupValues.includes(problemGroup)}
                 onChange={e => handleChangeAsync(e, problemGroup)}
               />
               <span className="text-14 leading-16px ml-2">{problemGroup}</span>
@@ -90,7 +124,7 @@ export const InheritanceMode = observer(
 
         <div className="flex items-center justify-between">
           <p className="text-14 leading-14px text-grey-blue">
-            {values.variants?.length} Selected
+            {variantsValues?.length} Selected
           </p>
 
           <p
@@ -109,11 +143,11 @@ export const InheritanceMode = observer(
           return (
             <div key={variant[0]} className="flex items-center mt-4">
               <Checkbox
-                checked={values.variants.includes(variant[0])}
+                checked={variantsValues.includes(variant[0])}
                 onChange={e => {
                   const value = e.target.checked
-                    ? [...values.variants, variant[0]]
-                    : values.variants.filter(item => item !== variant[0])
+                    ? [...variantsValues, variant[0]]
+                    : variantsValues.filter(item => item !== variant[0])
 
                   setFieldValue('variants', value)
                 }}
@@ -123,6 +157,12 @@ export const InheritanceMode = observer(
             </div>
           )
         })}
+
+        {variants.length === 0 && (
+          <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
+            Out of choice. Select problem group.
+          </div>
+        )}
       </Form>
     )
   },

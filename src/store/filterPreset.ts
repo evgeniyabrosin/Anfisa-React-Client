@@ -25,9 +25,8 @@ class PresetStore {
     const result = await response.json()
 
     runInAction(() => {
-      source === 'refiner'
-        ? datasetStore.updatePresetLoad(result)
-        : (datasetStore.dsStat = result)
+      datasetStore.updatePresetLoad(result, source)
+      datasetStore.dsStat = result
     })
   }
 

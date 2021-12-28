@@ -16,10 +16,7 @@ export const SelectedGroup = observer(
     }
 
     return (
-      <div
-        className="bg-blue-light pt-5 px-4 w-1/3 overflow-y-auto"
-        style={{ height: 'calc(100vh - 158px)' }}
-      >
+      <div className="bg-blue-light pt-5 px-4 w-1/3 overflow-y-auto">
         <SelectedGroupHeader />
 
         <div className="bg-white h-px w-full mt-4" />

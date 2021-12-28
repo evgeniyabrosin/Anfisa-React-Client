@@ -1,3 +1,4 @@
+import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
 import { DecisionTreesResultsDataCy } from '../../../src/components/data-testid/decision-tree-results.cy'
 import { BasePage } from '../lib/base-page'
@@ -30,12 +31,17 @@ class DecisionTreesPage extends BasePage {
         graphHeaders: `[data-testid = "${DecisionTreesResultsDataCy.graphHeaders}"]`,
         stepCard: `[data-testid = "${DecisionTreesResultsDataCy.stepCard}"]`,
         excludeInfo: `[data-testid = "${DecisionTreesResultsDataCy.excludeInfo}"]`,
-        viewReturnedVariants: `[data-testid = "${DecisionTreesResultsDataCy.viewReturnedVars}"]`,
+        viewReturnedVariants: `[data-testid = "${DecisionTreesResultsDataCy.viewReturnedVariants}"]`,
+        treeTooltip: `${CommonSelectors.treeTooltip}`,
+        addAttribute: `[data-testid = "${DecisionTreesResultsDataCy.addAttrbute}"]`,
+        searchForAttr: `[data-testid = "${DecisionTreesResultsDataCy.searchForAttr}"]`,
+        selectAll: `${CommonSelectors.selectAll}`,
       },
       labels: {
         graphHeaders: '',
         groupGraphHeaders: 'Variant',
         stepCard: 'header3',
+        treeTooltip: 'Show excluded varants for step 5',
       },
     })
   }

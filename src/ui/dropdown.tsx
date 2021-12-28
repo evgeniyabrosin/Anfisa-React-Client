@@ -13,6 +13,7 @@ export enum DropdownVariantEnum {
 
 interface Props {
   options: any[]
+  dataTestId?: string
   placeholder?: string
   value?: string
   variant?: DropdownVariantEnum

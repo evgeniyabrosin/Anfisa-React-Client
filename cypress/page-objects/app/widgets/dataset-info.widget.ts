@@ -6,6 +6,7 @@ export interface DatasetInfoSelectors {
   openInViewer: string
   decTreePanel: string
   datasetHeader: string
+  mainTable: string
 }
 
 export interface DatasetInfoLabels {
@@ -16,6 +17,7 @@ export class DatasetInfoWidget extends UIWidget {
   readonly openInViewer: Button
   readonly decTreePanel: Button
   readonly datasetHeader: Label
+  readonly mainTable: Button
 
   constructor(options: {
     selectors: DatasetInfoSelectors
@@ -28,6 +30,7 @@ export class DatasetInfoWidget extends UIWidget {
 
     this.openInViewer = new Button(selectors.openInViewer)
     this.decTreePanel = new Button(selectors.decTreePanel)
+    this.mainTable = new Button(selectors.mainTable)
 
     this.datasetHeader = new Label(
       selectors.datasetHeader,

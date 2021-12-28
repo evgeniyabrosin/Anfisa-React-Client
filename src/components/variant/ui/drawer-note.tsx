@@ -10,6 +10,7 @@ import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
@@ -17,13 +18,14 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
     <Button
       refEl={refEl}
       text={variantStore.noteText ? undefined : '+ Add'}
-      className={classNames('text-white hover:bg-blue-bright', {
+      className={classNames({
         'bg-blue-bright': !!variantStore.noteText,
       })}
       size="xs"
       icon={variantStore.noteText ? <Icon name="File" /> : undefined}
-      hasBackground={false}
+      variant={'secondary-dark'}
       onClick={onClick}
+      dataTestId={VariantDrawerDataCy.addNote}
     />
   )
 })
@@ -101,8 +103,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
             <Button
               text={t('general.delete')}
               onClick={deleteNoteAsync}
-              hasBackground={false}
-              className="text-black border-red-secondary hover:text-white hover:bg-red-secondary"
+              variant={'secondary'}
+              className="border-red-secondary hover:text-white hover:bg-red-secondary"
             />
           )}
         </div>
@@ -111,15 +113,16 @@ const DrawerNoteModal = observer(({ close }: any) => {
           <Button
             text={t('general.cancel')}
             onClick={close}
-            hasBackground={false}
-            className="ml-4 text-black hover:bg-blue-bright hover:text-white"
+            variant={'secondary'}
+            className="ml-4 hover:bg-blue-bright hover:text-white"
           />
 
           <Button
             text="Save note"
+            dataTestId={VariantDrawerDataCy.saveNote}
             disabled={!value || !value.trim()}
-            hasBackground={false}
-            className="ml-4 text-black hover:bg-blue-bright hover:text-white"
+            variant={'secondary'}
+            className="ml-4 hover:bg-blue-bright hover:text-white"
             onClick={handleSaveNoteAsync}
           />
         </div>

@@ -33,7 +33,6 @@ export class DecisionTreeWidget extends UIWidget {
     super(options)
 
     const selectors = options.selectors
-    //conts labels = options.labels
 
     this.selectDecision = new Button(selectors.selectDecision)
     this.decisionActions = new Button(selectors.decisionActions)

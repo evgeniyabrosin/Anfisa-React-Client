@@ -3,13 +3,14 @@ import { cloneDeep } from 'lodash'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { DtreeStatType, FilterCountsType, StatList } from '@declarations'
+import { DtreeStatType, FilterCountsType, StatListType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { getCurrentStepIndexForApi } from '@utils/getCurrentStepIndexForApi'
 import { getDataFromCode } from '@utils/getDataFromCode'
+import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
+import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { makeStepActive } from '@utils/makeStepActive'
 import datasetStore from './dataset'
@@ -68,6 +69,10 @@ class DtreeStore {
 
   isFilterContentExpanded = false
   filterChangeIndicator = 0
+
+  isFilterModalContentExpanded = false
+  filterModalChangeIndicator = 0
+
   isFiltersLoading = false
   isDtreeLoading = false
 
@@ -75,6 +80,7 @@ class DtreeStore {
   resultsChangeIndicator = 0
 
   filterValue = ''
+  filterModalValue = ''
   algorithmFilterValue = ''
   filteredCounts = 0
 
@@ -119,15 +125,15 @@ class DtreeStore {
   actionHistory: URLSearchParams[] = []
   actionHistoryIndex = -1
 
+  activeStepIndex = -1
+
   constructor() {
     makeAutoObservable(this)
   }
 
   // 1. Functions to load / draw / edit decision trees
 
-  async drawDecesionTreeAsync() {
-    const computedStepData = await getStepDataAsync()
-
+  async drawDecesionTreeAsync(isLoadingNewTree: boolean) {
     const initialStepData: IStepData[] = [
       {
         step: 1,
@@ -141,16 +147,24 @@ class DtreeStore {
       },
     ]
 
+    const currentStepIndex = isLoadingNewTree ? -1 : this.activeStepIndex
+
+    const computedStepData = await getStepDataAsync(currentStepIndex)
+
     const newStepData =
       computedStepData.length === 0 ? initialStepData : computedStepData
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
+    const newActiveStepIndex = newStepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
+
     const finalStep = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
-      isActive: true,
+      isActive: newActiveStepIndex === -1,
       isReturnedVariantsActive: false,
       startFilterCounts: null,
       finishFilterCounts: null,
@@ -161,15 +175,12 @@ class DtreeStore {
     runInAction(() => {
       this.stepData = [...newStepData, finalStep]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
+      this.activeStepIndex = newActiveStepIndex
     })
 
-    const lastIndex = +this.dtreeStepIndices[this.dtreeStepIndices.length - 1]
-    const finalStepCount = 2
-    const calculatedIndex = +lastIndex + finalStepCount
+    const stepIndexForApi = this.getStepIndexForApi(newActiveStepIndex)
 
-    const indexForApi = this.dtreeStepIndices.length === 0 ? 0 : calculatedIndex
-
-    this.fetchDtreeStatAsync(this.dtreeCode, String(indexForApi))
+    this.fetchDtreeStatAsync(this.dtreeCode, String(stepIndexForApi))
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
@@ -193,6 +204,8 @@ class DtreeStore {
 
     const result = await response.json()
 
+    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
+
     const statList = result['stat-list']
 
     runInAction(() => {
@@ -208,42 +221,21 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    const groups: Record<string, StatList[]> = {}
+    const statList =
+      this.dtreeStat['stat-list'] ?? datasetStore.dsStat['stat-list']
 
-    this.dtreeStat['stat-list'] &&
-      this.dtreeStat['stat-list'].forEach((item: StatList) => {
-        if (
-          item.name
-            .toLocaleLowerCase()
-            .includes(this.filterValue.toLocaleLowerCase())
-        ) {
-          if (groups[item.vgroup]) {
-            groups[item.vgroup] = [...groups[item.vgroup], item]
-          } else {
-            groups[item.vgroup] = [item]
-          }
-        }
-      })
-
-    return groups
+    return getQueryBuilder(toJS(statList))
   }
 
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
-    const isFinalStepIndex = index === indexes.length
+    const currentIndex = Number(indexes[index])
+    const stepIndex = indexes.length === 0 ? 0 : currentIndex
 
-    const correctIndex = isFinalStepIndex
-      ? +indexes[index - 1] + 1
-      : +indexes[index]
+    const pointsIndexes = Object.keys(this.dtree?.points)
+    const lastIndex = +pointsIndexes[pointsIndexes.length - 1]
 
-    const isEmptyStep =
-      this.stepData[index].groups.length === 0 &&
-      !this.stepData[index].isFinalStep
-
-    const stepIndex = indexes.length === 0 ? 0 : correctIndex
-    const nextStepIndex = getCurrentStepIndexForApi(index)
-    const fixedIndex = Number.isNaN(stepIndex) ? nextStepIndex : stepIndex
-    const stepIndexForApi = isEmptyStep ? nextStepIndex : fixedIndex
+    const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
 
     return stepIndexForApi
   }
@@ -284,7 +276,9 @@ class DtreeStore {
       this.dtreeList = result['dtree-list']
     })
 
-    this.drawDecesionTreeAsync()
+    const isLoadingNewTree = !body.has('code')
+
+    this.drawDecesionTreeAsync(isLoadingNewTree)
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
@@ -852,8 +846,14 @@ class DtreeStore {
     this.filterChangeIndicator--
   }
 
-  resetFilterChangeIndicator() {
-    this.filterChangeIndicator = 0
+  expandFilterModalContent() {
+    this.isFilterModalContentExpanded = true
+    this.filterModalChangeIndicator++
+  }
+
+  collapseFilterModalContent() {
+    this.isFilterModalContentExpanded = false
+    this.filterModalChangeIndicator--
   }
 
   expandResultsContent() {
@@ -866,16 +866,28 @@ class DtreeStore {
     this.resultsChangeIndicator--
   }
 
-  resetResultsChangeIndicator() {
-    this.resultsChangeIndicator = 0
-  }
-
   setFilterValue(item: string) {
     this.filterValue = item
   }
 
+  resetFilterValue() {
+    this.filterValue = ''
+  }
+
+  setFilterModalValue(item: string) {
+    this.filterModalValue = item
+  }
+
+  resetFilterModalValue() {
+    this.filterModalValue = ''
+  }
+
   setAlgorithmFilterValue(item: string) {
     this.algorithmFilterValue = item
+  }
+
+  resetAlgorithmFilterValue() {
+    this.algorithmFilterValue = ''
   }
 
   setIsFiltersLoading() {
@@ -901,11 +913,13 @@ class DtreeStore {
     })
 
     this.stepData[index][option] = !this.stepData[index][option]
+    this.activeStepIndex = index
   }
 
-  openTableModal(index: number) {
+  openTableModal(index?: number) {
     this.isTableModalVisible = true
-    this.tableModalIndexNumber = index
+
+    if (index) this.tableModalIndexNumber = index
   }
 
   closeTableModal() {
@@ -944,10 +958,12 @@ class DtreeStore {
     this.previousDtreeName = ''
   }
 
-  setDtreeStat(changedDtreeStat: any) {
-    runInAction(() => {
-      this.dtreeStat = changedDtreeStat
-    })
+  setStatList(statList: StatListType) {
+    this.dtreeStat['stat-list'] = statList
+  }
+
+  setStatRequestId(id: string) {
+    this.statRequestId = id
   }
 
   clearStatRequestId() {

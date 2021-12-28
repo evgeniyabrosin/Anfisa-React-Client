@@ -10,13 +10,11 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
-import { Switch } from '@ui/switch'
 import { FnLabel } from '@components/fn-label'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getExpression } from '@utils/getExpression'
 import { makeStepActive } from '@utils/makeStepActive'
 import { DropDownJoin } from './dropdown-join'
-import { ExpandContentButton } from './expand-content-button'
 
 const ContentControl = styled.div`
   display: flex;
@@ -44,17 +42,17 @@ interface IProps {
 
 export const NextStepContentItem = observer(
   ({ group, index, currNo }: IProps): ReactElement => {
-    const [isChecked, setIsChecked] = useState(true)
+    // const [isChecked, setIsChecked] = useState(true)
 
-    const toggleChecked = () => {
-      setIsChecked(prev => !prev)
-    }
+    // const toggleChecked = () => {
+    //   setIsChecked(prev => !prev)
+    // }
 
     const [isVisible, setIsVisible] = useState(false)
 
-    const toggleVisible = () => {
-      setIsVisible(prev => !prev)
-    }
+    // const toggleVisible = () => {
+    //   setIsVisible(prev => !prev)
+    // }
 
     const currentStep = dtreeStore.getStepData[index]
 
@@ -106,11 +104,12 @@ export const NextStepContentItem = observer(
               {group.includes('and') && 'AND'}
             </JoinType>
 
-            <ExpandContentButton
+            {/* TODO: this feature has not yet been implemented on the backend  */}
+            {/* <ExpandContentButton
               isDropDown
               isVisible={isVisible}
               expandContent={toggleVisible}
-            />
+            /> */}
 
             {isVisible && (
               <DropDownJoin
@@ -149,10 +148,10 @@ export const NextStepContentItem = observer(
               )}
               {`${group[1]}`}
             </div>
-
-            <div className="pt-1.5">
+            {/* TODO: add switch to step after implementation in backend */}
+            {/* <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
-            </div>
+            </div> */}
             {!isNumeric && (
               <label className="pl-4">
                 <Checkbox

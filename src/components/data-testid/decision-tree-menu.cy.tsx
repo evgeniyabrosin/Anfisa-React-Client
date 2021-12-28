@@ -1,5 +1,9 @@
 export const DecisionTreesMenuDataCy = {
+<<<<<<< HEAD
   selectDecision: 'listbox', //TODO
+=======
+  selectDecision: 'listbox',
+>>>>>>> main
   decisionActions: 'actions',
   loadDecision: 'load',
   selectDropdownElem: 'dropdown-element',

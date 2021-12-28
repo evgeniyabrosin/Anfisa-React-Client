@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { Icon } from '@ui/icon'
+import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 
 interface Props {
   text: string
@@ -21,6 +22,7 @@ export const Tag = observer(
     onRemove,
   }: Props): ReactElement => (
     <div
+      data-testid={VariantDrawerDataCy.addedTag}
       className={cn([
         'rounded-full',
         'py-0.5',

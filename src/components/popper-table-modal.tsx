@@ -12,6 +12,7 @@ import { Button } from '@ui/button'
 import { InputSearch } from '@components/input-search'
 import { ViewTypeTable } from '@components/view-type-table'
 import { FilterMods } from '@pages/ws/ui/filter-mods'
+import { MainTableDataCy } from './data-testid/main-table.cy'
 
 interface Props {
   title?: string
@@ -65,13 +66,13 @@ export const PopperTableModal = observer(
     }
 
     const defintSelectedAmount = () => {
-      if (isGenes) return toJS(zoneStore.selectedGenes).length
+      if (isGenes) return toJS(zoneStore.localGenes).length
 
-      if (isGenesList) return toJS(zoneStore.selectedGenesList).length
+      if (isGenesList) return toJS(zoneStore.localGenesList).length
 
-      if (isSamples) return toJS(zoneStore.selectedSamples).length
+      if (isSamples) return toJS(zoneStore.localSamples).length
 
-      if (isTags) return toJS(zoneStore.selectedTags).length
+      if (isTags) return toJS(zoneStore.localTags).length
     }
 
     const handleClose = () => {
@@ -126,8 +127,7 @@ export const PopperTableModal = observer(
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            className="text-black"
+            variant={'secondary'}
             onClick={handleClose}
           />
 
@@ -135,6 +135,7 @@ export const PopperTableModal = observer(
             text={t('general.apply')}
             className="ml-3"
             onClick={onApply}
+            dataTestId={MainTableDataCy.applyButton}
           />
         </div>
       </div>

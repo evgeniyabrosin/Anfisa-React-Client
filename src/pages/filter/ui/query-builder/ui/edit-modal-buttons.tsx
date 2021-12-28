@@ -21,16 +21,16 @@ export const EditModalButtons = observer(
       <div className="flex justify-between items-center">
         <Button
           text={t('dtree.deleteAttribute')}
-          hasBackground={false}
-          className="text-black border-red-secondary hover:text-white hover:bg-red-secondary"
+          variant={'secondary'}
+          className="border-red-secondary hover:text-white hover:bg-red-secondary"
           onClick={handleDeleteAttribute}
         />
 
         <div className="flex">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            className="mr-2 text-black hover:bg-blue-bright hover:text-white"
+            variant={'secondary'}
+            className="mr-2"
             onClick={handleClose}
           />
 

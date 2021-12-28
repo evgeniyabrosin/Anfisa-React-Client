@@ -6,6 +6,7 @@ import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
@@ -23,11 +24,14 @@ export const FilterControl = observer(
     const isUndoLocked = isFirstActionHistoryIndex
     const isRedoLocked = isLastActionHistoryIndex
     const history = useHistory()
-    const handleClose = () => history.goBack()
+
+    const handleClose = () => {
+      history.push(`${Routes.Root}`)
+    }
 
     return (
       <Fragment>
-        <div className="flex flex-wrap justify-end bg-blue-dark pt-7 pr-6 pb-4 pl-6">
+        <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
           <div className="flex items-center w-full mt-5">
             {filterStore.method === 'Filter Refiner' ? (
               <FilterControlRefiner />
@@ -48,30 +52,31 @@ export const FilterControl = observer(
                   FilterMethodEnum.Refiner,
                 ]}
                 value={filterStore.method}
-                onSelect={args =>
+                onSelect={args => {
                   filterStore.setMethod(args.value as FilterMethodEnum)
-                }
+                  filterStore.resetActionName()
+                }}
               />
 
               {filterStore.method === FilterMethodEnum.DecisionTree && (
                 <Button
                   text="Text editor"
-                  className="ml-2 hover:bg-blue-bright"
-                  hasBackground={false}
+                  className="ml-2"
+                  variant={'secondary-dark'}
                   onClick={() => dtreeStore.openModalTextEditor()}
                 />
               )}
               <Button
                 text="Undo"
-                className="ml-2 hover:bg-blue-bright"
-                hasBackground={false}
+                className="ml-2"
+                variant={'secondary-dark'}
                 disabled={isUndoLocked}
                 onClick={() => moveActionHistory(-1)}
               />
               <Button
                 text="Redo"
-                className="ml-2 hover:bg-blue-bright"
-                hasBackground={false}
+                className="ml-2"
+                variant={'secondary-dark'}
                 disabled={isRedoLocked}
                 onClick={() => moveActionHistory(1)}
               />

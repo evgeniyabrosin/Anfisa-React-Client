@@ -3,11 +3,15 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, StatList, TabReportType } from '@declarations'
+import { DsStatType, StatListType, TabReportType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
+import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import { addToActionHistory } from '@utils/addToActionHistory'
+import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
+import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -28,6 +32,7 @@ class DatasetStore {
 
   datasetName = ''
   activePreset = ''
+  prevPreset = ''
   conditions: any[] = []
   zone: any[] = []
   statAmount: number[] = []
@@ -42,8 +47,6 @@ class DatasetStore {
   isFilterDisabled = false
 
   reportsLoaded = false
-
-  searchField = ''
 
   constructor() {
     makeAutoObservable(this)
@@ -206,20 +209,28 @@ class DatasetStore {
     this.fetchDsStatAsync()
   }
 
+  resetHasPreset() {
+    this.prevPreset = ''
+  }
+
   resetData() {
     this.datasetName = ''
     this.genes = []
     this.genesList = []
     this.samples = []
     this.tags = []
-    this.clearZone()
     this.dsStat = {}
     this.variantsAmount = 0
     this.statAmount = []
+    this.prevPreset = ''
+    this.wsRecords = []
+  }
+
+  resetConditions() {
+    this.conditions = []
   }
 
   async initDatasetAsync(datasetName: string) {
-    this.resetData()
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
@@ -231,42 +242,30 @@ class DatasetStore {
       : await this.fetchFilteredTabReportAsync()
   }
 
-  get getFilterRefiner() {
-    const groups: Record<string, StatList[]> = {}
-
-    this.dsStat['stat-list'] &&
-      this.dsStat['stat-list'].forEach((item: StatList) => {
-        if (
-          (item.title || item.name) &&
-          (item.title || item.name)
-            .toLocaleLowerCase()
-            .includes(this.searchField.toLocaleLowerCase())
-        ) {
-          if (groups[item.vgroup]) {
-            groups[item.vgroup] = [...groups[item.vgroup], item]
-          } else {
-            groups[item.vgroup] = [item]
-          }
-        }
-      })
-
-    return groups
-  }
-
-  async fetchDsStatAsync() {
+  async fetchDsStatAsync(
+    shouldSaveInHistory = true,
+    bodyFromHistory?: URLSearchParams,
+  ) {
     this.isLoadingDsStat = true
     this.setIsLoadingTabReport(true)
 
-    const body = new URLSearchParams({
+    const localBody = new URLSearchParams({
       ds: this.datasetName,
+      tm: '0',
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', JSON.stringify(this.conditions))
-      body.append('zone', JSON.stringify(this.zone))
+      this.conditions.length > 0 &&
+        localBody.append('conditions', JSON.stringify(this.conditions))
     }
 
-    this.activePreset && body.append('filter', this.activePreset)
+    this.activePreset && localBody.append('filter', this.activePreset)
+
+    if (shouldSaveInHistory) {
+      addToActionHistory(localBody, true)
+    }
+
+    const body = shouldSaveInHistory ? localBody : bodyFromHistory
 
     const response = await fetch(getApiUrl(`ds_stat`), {
       method: 'POST',
@@ -278,15 +277,30 @@ class DatasetStore {
 
     const result = await response.json()
 
+    dtreeStore.setStatRequestId(result['rq-id'])
+    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
+
+    const conditionFromHistory = bodyFromHistory?.get('conditions')
+
+    if (conditionFromHistory) {
+      this.conditions = JSON.parse(conditionFromHistory)
+    }
+
+    const statList = result['stat-list']
+
+    fetchStatunitsAsync(statList)
+
     runInAction(() => {
       this.dsStat = result
       this.variantsAmount = result['total-counts']['0']
-      this.statAmount = get(result, 'filtered-counts', [])
+
+      // TODO: do not delete
+      // this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
   }
 
-  updatePresetLoad(dsStatData: any) {
+  updatePresetLoad(dsStatData: any, source?: string) {
     this.conditions = dsStatData.conditions
     filterStore.selectedFilters = {}
 
@@ -308,7 +322,7 @@ class DatasetStore {
       }
     })
 
-    this.fetchDsStatAsync()
+    !source && this.fetchDsStatAsync()
   }
 
   async fetchTabReportAsync() {
@@ -423,17 +437,20 @@ class DatasetStore {
     })
   }
 
-  async fetchWsListAsync(isXL?: boolean) {
+  async fetchWsListAsync(isXL?: boolean, kind?: string) {
     const body = new URLSearchParams({
       ds: this.datasetName,
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', JSON.stringify(this.conditions))
+      body.append('conditions', kind ? '[]' : JSON.stringify(this.conditions))
       body.append('zone', JSON.stringify(this.zone))
     }
 
-    this.activePreset && body.append('filter', this.activePreset)
+    if (!this.prevPreset || this.prevPreset !== this.activePreset) {
+      body.append('filter', this.activePreset)
+      this.prevPreset = this.activePreset
+    }
 
     const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
       method: 'POST',
@@ -514,8 +531,8 @@ class DatasetStore {
     })
   }
 
-  addSearchField = (item: string) => {
-    this.searchField = item
+  setStatList(statList: StatListType) {
+    this.dsStat['stat-list'] = statList
   }
 }
 

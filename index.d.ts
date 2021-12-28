@@ -306,3 +306,8 @@ export interface IStatFuncData {
   'rq-id'?: string
   no?: string
 }
+
+export interface IColumns {
+  title: string
+  hidden: boolean
+}

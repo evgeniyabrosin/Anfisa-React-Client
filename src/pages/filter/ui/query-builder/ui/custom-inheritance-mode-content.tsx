@@ -4,28 +4,31 @@ import { observer } from 'mobx-react-lite'
 import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import { Select } from '@ui/select'
+import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { EditModalVariants } from './edit-modal-variants'
-import { selectOptions } from './modal-edit-custom-inheritance-mode'
+import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
   attrData: StatListType
-  resetData: StatListType
   handleSetScenario: (group: string, e: string) => void
   selectStates: string[]
   handleReset: (e: string) => void
+  resetValue?: string
 }
 
 export const CustomInheritanceModeContent = observer(
   ({
     attrData,
-    resetData,
     handleSetScenario,
     selectStates,
     handleReset,
+    resetValue,
   }: IProps) => {
-    const variants = dtreeStore.statFuncData.variants
+    const variants =
+      dtreeStore.statFuncData.variants ?? filterStore.statFuncData?.variants
 
     return (
       <Fragment>
@@ -51,9 +54,10 @@ export const CustomInheritanceModeContent = observer(
             <span>{t('dtree.reset')}</span>
 
             <Select
-              options={resetData.available}
               onChange={(e: any) => handleReset(e.target.value)}
               className="w-full ml-2"
+              options={resetOptions}
+              value={resetValue}
               reset
             />
           </div>

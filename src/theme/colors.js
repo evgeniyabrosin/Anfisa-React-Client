@@ -8,6 +8,8 @@ module.exports = {
     light: '#e7f4ff',
     secondary: '#2a4567',
     medium: '#d9ecff',
+    hover: '#0089e5',
+    active: '#0068ae',
   },
   green: {
     light: '#ddf3d9',
@@ -18,6 +20,7 @@ module.exports = {
     blue: '#9fb1c0',
     light: '#e4e4e4',
     lighter: '#fafafa',
+    disabled: '#e2e7ec',
   },
   yellow: {
     bright: '#ffff00',

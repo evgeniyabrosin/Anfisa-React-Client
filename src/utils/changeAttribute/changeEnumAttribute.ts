@@ -17,19 +17,20 @@ export const changeEnumAttribute = () => {
 
   const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
 
-  const filteredAttribute = attribute.map(element => {
-    switch (element) {
-      case 'and':
-      case 'OR':
-      case 'NOT':
-        return ''
+  const filteredAttribute: any[] = []
 
-      default:
-        return element
+  attribute.forEach((element, index) => {
+    if (index <= 1) {
+      filteredAttribute.push(element)
+    } else if (index === 2) {
+      const isNotNegate = element === 'and' || element === 'OR'
+      const negateValue = isNotNegate ? '' : 'NOT'
+
+      filteredAttribute.push(negateValue)
     }
   })
 
-  filteredAttribute[filteredAttribute.length - 1] = dtreeStore.selectedFilters
+  filteredAttribute.push(dtreeStore.selectedFilters)
 
   body.append(
     'instr',

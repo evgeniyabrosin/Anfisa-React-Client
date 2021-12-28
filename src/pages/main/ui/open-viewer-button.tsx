@@ -3,10 +3,12 @@ import { useHistory } from 'react-router-dom'
 import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -63,8 +65,11 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
   }
 
   const goToRefiner = () => {
+    datasetStore.setDatasetName(dirinfoStore.selectedDirinfoName)
     datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
-    history.push(`${Routes.Refiner}?ds=${dirinfoStore.selectedDirinfoName}`)
+    // history.push(`${Routes.Refiner}?ds=${dirinfoStore.selectedDirinfoName}`)
+    history.push(`${Routes.Filter}?ds=${dirinfoStore.selectedDirinfoName}`)
+    filterStore.setMethod(FilterMethodEnum.Refiner)
   }
 
   useOutsideClick(ref, close)
@@ -78,6 +83,7 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
         <span
           className="py-1 px-3 rounded hover:bg-blue-light"
           onClick={goToWs}
+          data-testid={DatasetInfoDataCy.mainTable}
         >
           {t('home.table')}
         </span>

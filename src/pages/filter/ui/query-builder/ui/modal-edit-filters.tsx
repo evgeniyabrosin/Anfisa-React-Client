@@ -4,7 +4,9 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { Pagintaion } from '@components/pagintaion'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
+import { createChunks } from '@utils/createChunks'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
@@ -25,18 +27,6 @@ export const ModalEditFilters = observer(
 
     const selectedGroupsAmount =
       currentGroup.length > 0 ? dtreeStore.selectedFilters : []
-
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
-
-    let attrData: (string | number)[][] = []
-
-    subGroups.map(subGroup => {
-      subGroup.map((item, index) => {
-        if (item.name === groupName) {
-          attrData = subGroup[index].variants
-        }
-      })
-    })
 
     const currentGroupLength =
       dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
@@ -74,16 +64,55 @@ export const ModalEditFilters = observer(
     }
 
     const [searchValue, setSearchValue] = useState('')
+    const [currentPage, setCurrentPage] = useState(0)
+
+    const [isAllFiltersChecked, setIsAllFiltersChecked] = useState(false)
+
+    const handleCheckAll = (checked: boolean) => {
+      if (checked && isAllFiltersChecked) return
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      chunks[currentPage]?.forEach(([variantName]: [string, number]) => {
+        if (checked) {
+          dtreeStore.addSelectedFilter(variantName)
+        } else {
+          dtreeStore.removeSelectedFilter(variantName)
+        }
+
+        setIsAllFiltersChecked(checked)
+      })
+    }
 
     const handleChange = (value: string) => {
       setSearchValue(value)
+
+      if (currentPage === 0) return
+
+      setCurrentPage(0)
     }
+
+    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+
+    const selectedGroup = subGroups
+      .find(subGroup => subGroup.find(element => element.name === groupName))
+      ?.find(element => element.name === groupName)
+
+    const originGroupList: any[] = selectedGroup?.variants ?? []
+
+    const filteredGroupList = originGroupList.filter(
+      (variant: [string, number]) =>
+        variant[0]
+          .toLocaleLowerCase()
+          .startsWith(searchValue.toLocaleLowerCase()),
+    )
+
+    const groupsPerPage = 100
+    const chunks = createChunks(filteredGroupList, groupsPerPage)
 
     return (
       <ModalBase refer={ref} minHeight={200}>
         <HeaderModal groupName={groupName} handleClose={handleClose} />
 
-        {attrData.length > 15 && (
+        {originGroupList.length > 15 && (
           <div className="flex mt-3">
             <QueryBuilderSearch
               value={searchValue}
@@ -107,43 +136,67 @@ export const ModalEditFilters = observer(
 
             <ModsDivider />
 
-            <div className="text-blue-bright">{t('general.selectAll')}</div>
+            <div
+              className="cursor-pointer text-blue-bright"
+              onClick={() => handleCheckAll(true)}
+            >
+              {t('general.selectAll')}
+            </div>
 
             <ModsDivider />
 
-            <div className="text-blue-bright">{t('general.clearAll')}</div>
+            <div
+              className="cursor-pointer text-blue-bright"
+              onClick={() => handleCheckAll(false)}
+            >
+              {t('general.clearAll')}
+            </div>
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto my-4 text-14">
-          {attrData
-            .filter((attr: any) =>
-              attr[0]
-                .toLocaleLowerCase()
-                .startsWith(searchValue.toLocaleLowerCase()),
-            )
-            .map((variant: any) => (
-              <div key={variant} className="flex items-center mb-2">
-                <Checkbox
-                  checked={
-                    currentGroup.length > 0
-                      ? dtreeStore.selectedFilters.includes(variant[0])
-                      : false
-                  }
-                  className="-mt-0.5 mr-1"
-                  onChange={e =>
-                    handleCheckGroupItem(e.target.checked, variant[0])
-                  }
-                />
+          {chunks[currentPage] ? (
+            chunks[currentPage].map((variant: [string, number]) => {
+              const variantName = variant[0]
+              const variantNumbers = variant[1]
 
-                <p className="text-black">{variant[0]}</p>
+              return (
+                variantNumbers !== 0 && (
+                  <div
+                    key={variantName}
+                    className="flex items-center mb-2 text-14"
+                  >
+                    <Checkbox
+                      checked={dtreeStore.selectedFilters.includes(variantName)}
+                      className="-mt-0.5 mr-1 cursor-pointer"
+                      onChange={e =>
+                        handleCheckGroupItem(e.target.checked, variantName)
+                      }
+                    />
 
-                <p className="text-grey-blue ml-2">
-                  {variant[1]} {t('dtree.variants')}
-                </p>
-              </div>
-            ))}
+                    <span className="text-black">{variantName}</span>
+
+                    <span className="text-grey-blue ml-2">
+                      {variantNumbers} {t('dtree.variants')}
+                    </span>
+                  </div>
+                )
+              )
+            })
+          ) : (
+            <div className="flex justify-center items-center text-14 text-grey-blue">
+              {t('dtree.noFilters')}
+            </div>
+          )}
         </div>
+
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
 
         <EditModalButtons
           handleClose={handleClose}

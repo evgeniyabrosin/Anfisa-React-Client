@@ -1,6 +1,7 @@
+import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -25,7 +26,11 @@ class FilterStore {
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
-  activePreset = ''
+  statFuncData: any = []
+  error = ''
+  filterCondition: Record<string, any> = {}
+
+  selectedFiltersHistory: SelectedFiltersType[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -127,16 +132,17 @@ class FilterStore {
     return Object.keys(get(dsInfo, 'meta.samples', {}))
   }
 
-  async fetchStatFuncAsync(
-    unit: string,
-    param?: Record<string, string | string[]>,
-  ) {
+  async fetchStatFuncAsync(unit: string, param?: any) {
+    const conditions = JSON.stringify(datasetStore.conditions)
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
+      conditions,
+      rq_id: String(Date.now()),
       unit,
     })
 
-    param && body.append('param', JSON.stringify(param))
+    param && body.append('param', param)
 
     const response = await fetch(getApiUrl(`statfunc`), {
       method: 'POST',
@@ -148,7 +154,15 @@ class FilterStore {
 
     const result: IStatFuncData = await response.json()
 
+    runInAction(() => {
+      this.statFuncData = result
+    })
+
     return result
+  }
+
+  setError(value: string) {
+    this.error = value
   }
 
   resetData() {
@@ -156,7 +170,24 @@ class FilterStore {
     this.selectedGroupItem = {}
     this.dtreeSet = {}
     this.selectedFilters = {}
-    this.activePreset = ''
+  }
+
+  setSelectedFilters(filters: SelectedFiltersType) {
+    this.selectedFilters = JSON.parse(JSON.stringify(filters))
+  }
+
+  setSelectedFiltersHistory(history: SelectedFiltersType[]) {
+    this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
+  }
+
+  setFilterCondition<T = any>(filterName: string, values: T) {
+    this.filterCondition[filterName] = cloneDeep(values)
+  }
+
+  readFilterCondition<T = any>(filterName: string) {
+    return this.filterCondition[filterName]
+      ? (this.filterCondition[filterName] as T)
+      : undefined
   }
 }
 

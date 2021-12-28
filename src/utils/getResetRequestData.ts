@@ -3,10 +3,7 @@ import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 export const getResetRequestData = (name: string, attrData: any) => {
   let resetData: any[] = []
 
-  if (
-    name === InheritanceModeEnum.HomozygousRecessive ||
-    name === InheritanceModeEnum.XLinked
-  ) {
+  if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
     resetData = [
       ['2', attrData.family[0]],
       ['0-1', attrData.family[1]],

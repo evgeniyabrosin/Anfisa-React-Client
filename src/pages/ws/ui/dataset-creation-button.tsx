@@ -23,8 +23,8 @@ export const DatasetCreationButton = () => {
         <Button
           text={t('dsCreation.saveDataset')}
           size="md"
-          hasBackground={false}
-          className="w-full bg-blue-bright cursor-pointer hover:bg-blue-dark"
+          variant={'secondary-dark'}
+          className="w-full"
           onClick={handleClick}
           dataTestId={DecisionTreesMenuDataCy.saveDataset}
         />

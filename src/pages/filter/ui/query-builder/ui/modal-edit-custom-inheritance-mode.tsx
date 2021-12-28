@@ -1,22 +1,22 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
+import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
 import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
-export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
-
 export const ModalEditCustomInheritanceMode = observer(
   (): ReactElement => {
     const ref = useRef(null)
+
+    const [resetValue, setResetValue] = useState('')
 
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
@@ -29,7 +29,6 @@ export const ModalEditCustomInheritanceMode = observer(
     const variants = dtreeStore.statFuncData.variants
 
     let attrData: any
-    let resetData: any
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
@@ -37,10 +36,6 @@ export const ModalEditCustomInheritanceMode = observer(
       subGroup.map((item, currNo) => {
         if (item.name === groupName) {
           attrData = subGroup[currNo]
-        }
-
-        if (item.name === FuncStepTypesEnum.InheritanceMode) {
-          resetData = subGroup[currNo]
         }
       })
     })
@@ -54,6 +49,10 @@ export const ModalEditCustomInheritanceMode = observer(
       )
         .slice(10)
         .replace(/\s+/g, '')
+
+      setResetValue(
+        getResetType(currentGroup[currentGroup.length - 1].scenario),
+      )
 
       const params = `{"scenario":${scenarioString}}`
 
@@ -126,6 +125,8 @@ export const ModalEditCustomInheritanceMode = observer(
         setThirdSelectValue(value)
         sendRequest('third', value)
       }
+
+      setResetValue('')
     }
 
     function getSelectedValue(group: string): any {
@@ -145,10 +146,7 @@ export const ModalEditCustomInheritanceMode = observer(
     }
 
     const handleReset = (name: string) => {
-      if (
-        name === InheritanceModeEnum.HomozygousRecessive ||
-        name === InheritanceModeEnum.XLinked
-      ) {
+      if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
         setFirstSelectValue('2')
         setSecondSelectValue('0-1')
         setThirdSelectValue('0-1')
@@ -203,6 +201,8 @@ export const ModalEditCustomInheritanceMode = observer(
 
         sendRequest('', '', multiData)
       }
+
+      setResetValue(name)
     }
 
     const handleClose = () => {
@@ -225,10 +225,10 @@ export const ModalEditCustomInheritanceMode = observer(
 
         <CustomInheritanceModeContent
           attrData={attrData}
-          resetData={resetData}
           handleSetScenario={handleSetScenario}
           selectStates={selectStates}
           handleReset={handleReset}
+          resetValue={resetValue}
         />
 
         <EditModalButtons

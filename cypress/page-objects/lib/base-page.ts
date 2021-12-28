@@ -2,12 +2,12 @@ let defaultUrl = Cypress.env('baseUrl')
 
 export class BasePage {
   visit(
-    baseUrl?: string | null,
+    customUrl?: string | null,
     username?: string | null,
     password?: string | null,
   ): Cypress.Chainable<Cypress.AUTWindow> {
-    defaultUrl = baseUrl
-      ? Cypress.env('baseUrl') + baseUrl
+    defaultUrl = customUrl
+      ? Cypress.env('baseUrl') + customUrl
       : Cypress.env('baseUrl')
 
     return cy.visit(defaultUrl, {

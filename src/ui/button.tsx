@@ -5,7 +5,7 @@ export interface ButtonProps {
   text?: string
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
-  hasBackground?: boolean
+  variant?: 'primary' | 'secondary' | 'secondary-dark' | 'primary-dark'
   className?: Argument
   onClick?: () => void
   append?: ReactElement
@@ -19,7 +19,7 @@ export const Button = ({
   text,
   size = 'md',
   disabled = false,
-  hasBackground = true,
+  variant = 'primary',
   onClick,
   className,
   append,
@@ -31,6 +31,10 @@ export const Button = ({
   let padding = ''
   const rounding = icon ? 'rounded' : 'rounded-full'
   const classNameString: string = cn(className)
+  const isPrimary = variant === 'primary'
+  const isSecondary = variant === 'secondary'
+  const isPrimaryDark = variant === 'primary-dark'
+  const isSecondaryDark = variant === 'secondary-dark'
 
   const isDefaultBackground: boolean =
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
@@ -43,7 +47,7 @@ export const Button = ({
       padding = 'py-1 ' + (text ? 'px-2' : 'px-1')
       break
     case 'md':
-      padding = 'px-2 ' + (hasBackground ? 'py-2' : 'py-1.5')
+      padding = 'px-2 ' + (isPrimary || isPrimaryDark ? 'py-2' : 'py-1.5')
       break
   }
 
@@ -52,11 +56,32 @@ export const Button = ({
     padding,
     rounding,
     {
-      'text-white': true,
-      'bg-blue-bright': !disabled && hasBackground && isDefaultBackground,
-      'border-2 border-blue-bright': !hasBackground,
+      //default primary
+      'bg-blue-bright':
+        !disabled && (isPrimary || isPrimaryDark) && isDefaultBackground,
+      'text-white': isPrimary || isSecondaryDark || isPrimaryDark,
+      //hover primary
+      'hover:bg-blue-hover': isPrimary || isPrimaryDark,
+      'active:bg-blue-active': isPrimary || isPrimaryDark,
+      //default secondary
+      'border-2 border-blue-bright': isSecondary || isSecondaryDark,
+      'text-black': isSecondary,
+      //hover secondary
+      'hover:border-blue-hover': isSecondary || isSecondaryDark,
+      'active:border-blue-active': isSecondary || isSecondaryDark,
+      //disabled general
       'cursor-not-allowed': disabled,
-      'bg-grey-light': disabled && hasBackground,
+      'text-grey-blue': disabled,
+      //disabled primary
+      'bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
+      'hover:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
+      'active:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
+      //disabled secondary
+      'border-grey-disabled': disabled && (isSecondary || isSecondaryDark),
+      'hover:border-grey-disabled':
+        disabled && (isSecondary || isSecondaryDark),
+      'active:border-grey-disabled':
+        disabled && (isSecondary || isSecondaryDark),
     },
     className,
   )

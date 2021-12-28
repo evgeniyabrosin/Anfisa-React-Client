@@ -1,6 +1,5 @@
 export enum InheritanceModeEnum {
-  HomozygousRecessive = 'Homozygous Recessive',
-  XLinked = 'X-linked',
+  HomozygousRecessive_XLinked = 'Homozygous Recessive/X-linked',
   AutosomalDominant = 'Autosomal Dominant',
   Compensational = 'Compensational',
 }

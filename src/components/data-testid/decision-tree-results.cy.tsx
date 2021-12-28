@@ -1,9 +1,11 @@
 export const DecisionTreesResultsDataCy = {
-  searchGraphResults: 'search-for-graph',
+  searchGraphResults: 'search-input',
   searchStepsResults: 'search-step',
   groupGraphHeaders: 'graph-groups',
   graphHeaders: 'graph-headers',
   stepCard: 'step-card',
   excludeInfo: 'exclude-info',
-  viewReturnedVars: 'view-returned-variants',
+  viewReturnedVariants: 'view-returned-variants',
+  addAttrbute: 'add-attribute',
+  searchForAttr: 'search-input',
 }

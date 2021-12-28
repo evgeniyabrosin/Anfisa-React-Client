@@ -20,23 +20,26 @@ export const changeFunctionalStep = (
 
   const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
 
-  const filteredAttribute = attribute.map(element => {
-    switch (element) {
-      case 'and':
-      case 'OR':
-      case 'NOT':
-        return ''
+  const filteredAttribute: any[] = []
 
-      default:
-        return element
+  const filtersIndex = attribute.findIndex(element => Array.isArray(element))
+
+  attribute.forEach((element, index) => {
+    if (index <= 1 || index === filtersIndex) {
+      filteredAttribute.push(element)
+    } else if (index === 2) {
+      const isNotNegate = element === 'and' || element === 'OR'
+      const negateValue = isNotNegate ? '' : 'NOT'
+
+      filteredAttribute.push(negateValue)
     }
   })
 
-  filteredAttribute[filteredAttribute.length - 1] = params
-
   if (isInheritanceMode) {
-    filteredAttribute[filteredAttribute.length - 2] = dtreeStore.selectedFilters
+    filteredAttribute[filteredAttribute.length - 1] = dtreeStore.selectedFilters
   }
+
+  filteredAttribute.push(params)
 
   body.append(
     'instr',

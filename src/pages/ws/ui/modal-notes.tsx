@@ -53,15 +53,15 @@ export const ModalNotes = observer(() => {
           <div className="flex items-center">
             <Button
               text={t('general.cancel')}
-              hasBackground={false}
-              className="text-black border-grey-light hover:bg-grey-light"
+              variant={'secondary-dark'}
+              className="border-grey-light hover:bg-grey-light"
               onClick={handleClose}
             />
 
             <Button
               text={t('variant.saveNote')}
-              className="ml-4 text-black hover:bg-blue-bright hover:text-white"
-              hasBackground={false}
+              className="ml-4 text-black"
+              variant={'secondary-dark'}
               onClick={handleSaveNote}
             />
           </div>

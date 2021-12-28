@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { toast } from 'react-toastify'
-import classNames from 'classnames'
 import get from 'lodash/get'
 import isBoolean from 'lodash/isBoolean'
 import { observer } from 'mobx-react-lite'
@@ -11,6 +10,7 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Input } from '@ui/input'
+import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
 import { TagsContainer } from './tags-container'
 
@@ -19,10 +19,10 @@ const DrawerTagButton = observer(({ refEl, onClick }: any) => {
     <Button
       refEl={refEl}
       text={'+ Add'}
-      className={classNames('text-white hover:bg-blue-bright')}
       size="xs"
-      hasBackground={false}
+      variant={'secondary-dark'}
       onClick={onClick}
+      dataTestId={VariantDrawerDataCy.addTag}
     />
   )
 })
@@ -53,7 +53,7 @@ const DrawerTagModal = observer(({ close }: any) => {
         .map(tag => tag.toLocaleLowerCase())
         .includes(value.toLocaleLowerCase())
     ) {
-      setError('Tag is already exists')
+      setError(t('variant.tagExists'))
     } else {
       setError('')
     }
@@ -167,9 +167,10 @@ const DrawerTagModal = observer(({ close }: any) => {
             <Button
               text="Add custom tag"
               disabled={!customTag.trim() || !!error}
-              hasBackground={false}
-              className="text-black mt-2 hover:bg-blue-bright hover:text-white"
+              variant={'secondary'}
+              className="mt-2 hover:bg-blue-bright hover:text-white"
               onClick={handleSetCustomTag}
+              dataTestId={VariantDrawerDataCy.addCustomTag}
             />
           </div>
         </div>
@@ -179,15 +180,16 @@ const DrawerTagModal = observer(({ close }: any) => {
         <Button
           text={t('general.cancel')}
           onClick={close}
-          hasBackground={false}
-          className="text-black mr-3 ml-auto hover:bg-blue-bright hover:text-white"
+          variant={'secondary'}
+          className="mr-3 ml-auto hover:bg-blue-bright hover:text-white"
         />
 
         <Button
           text="Save tags"
-          hasBackground={false}
-          className="text-black hover:bg-blue-bright hover:text-white"
+          variant={'secondary'}
+          className="hover:bg-blue-bright hover:text-white"
           onClick={handleSaveTagsAsync}
+          dataTestId={VariantDrawerDataCy.saveTags}
         />
       </div>
     </div>

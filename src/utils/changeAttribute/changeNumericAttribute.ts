@@ -17,12 +17,13 @@ export const changeNumericAttribute = (numericData: any[]) => {
 
   const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
 
-  const filteredAttribute = attribute.filter(
-    (element: any) =>
-      element !== 'OR' && element !== 'and' && element !== 'NOT',
-  )
+  const filteredAttribute: any[] = []
 
-  filteredAttribute[filteredAttribute.length - 1] = numericData
+  attribute.forEach((element, index) => {
+    if (index <= 1) filteredAttribute.push(element)
+  })
+
+  filteredAttribute.push(numericData)
 
   body.append(
     'instr',

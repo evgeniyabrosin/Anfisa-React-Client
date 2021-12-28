@@ -2,13 +2,18 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { FilterMethodEnum } from '@core/enum/filter-method.enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
+<<<<<<< HEAD
 import { ReturnedVariantsDataCy } from '@components/data-testid/returned-variants'
 import { defaultLayout } from '@components/variant/drawer'
+=======
+>>>>>>> main
 import { VariantBody } from '@components/variant/ui/body'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
@@ -33,22 +38,30 @@ const ModalContent = styled.div`
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
 export const TableModal = observer(() => {
-  const [layout, setLayout] = useState(defaultLayout)
+  const [layout, setLayout] = useState(variantStore.modalDrawerVariantsLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
   const ref = useRef(null)
 
-  const stepIndex = dtreeStore.tableModalIndexNumber
+  useEffect(() => {
+    variantStore.fetchVarinatInfoForModalAsync(datasetStore.datasetName, 0)
+  }, [])
+
+  const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
 
   useEffect(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      if (stepIndex === null) return
+      const isRefiner = filterStore.method === FilterMethodEnum.Refiner
 
-      const result = await fetchDsListAsync(stepIndex)
+      const conditions = datasetStore.conditions
+
+      const requestValue = isRefiner ? conditions : stepIndex
+
+      const result = await fetchDsListAsync(requestValue)
 
       fetchJobStatusAsync(result.task_id)
     }
@@ -136,7 +149,7 @@ export const TableModal = observer(() => {
           <Fragment>
             <div
               className="flex w-full justify-center text-16 font-semibold"
-              data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
+              // data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
               dangerouslySetInnerHTML={{
                 __html: variantList[variantIndex]?.lb ?? '',
               }}
@@ -171,7 +184,7 @@ export const TableModal = observer(() => {
                   <div
                     key={index}
                     className="shadow-dark p-1 mb-5 cursor-pointer"
-                    data-testid={ReturnedVariantsDataCy.sampleButton}
+                    // data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
                       N - {index + 1}

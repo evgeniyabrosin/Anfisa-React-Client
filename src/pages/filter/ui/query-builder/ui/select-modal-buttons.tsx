@@ -47,8 +47,8 @@ export const SelectModalButtons = observer(
         <div className="flex">
           <Button
             text={t('general.cancel')}
-            hasBackground={false}
-            className="mr-2 text-black hover:bg-blue-bright hover:text-white"
+            variant={'secondary'}
+            className={'mr-2'}
             onClick={() => handleClose()}
           />
           {currentGroup && currentGroup.length > 0 ? (
@@ -56,15 +56,13 @@ export const SelectModalButtons = observer(
               <Button
                 disabled={disabled}
                 text={t('dtree.replace')}
-                className="mr-2 cursor-pointer"
                 onClick={() => handleAddAttribute('REPLACE')}
               />
 
               <div className="relative">
                 <Button
                   disabled={disabled}
-                  text={t('dtree.addByJoin')}
-                  className="cursor-pointer rounded-full"
+                  text={t('dtree.addByJoining')}
                   onClick={handleModalJoin}
                   icon={<Icon name="Arrow" className="transform -rotate-90" />}
                 />

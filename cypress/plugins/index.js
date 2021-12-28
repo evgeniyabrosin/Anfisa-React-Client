@@ -9,6 +9,7 @@ export default (on, config) => {
 
   config.env.basic_username = process.env.BASIC_AUTH_USERNAME
   config.env.basic_password = process.env.BASIC_AUTH_PASSWORD
+  config.env.baseUrl = process.env.BASE_URL
 
   return config
 }

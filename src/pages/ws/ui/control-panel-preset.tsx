@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterPresetStore from '@store/filterPreset'
 import { DropDown } from '@ui/dropdown'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelTitle } from './control-panel-title'
 
 export const Preset = observer(
@@ -16,12 +17,15 @@ export const Preset = observer(
       (preset: FilterList) => preset.name,
     )
 
-    const onSelectAsync = async (arg: Option) => {
-      filterPresetStore.loadPresetAsync(arg.value)
+    const onSelectAsync = async (arg: Option, reset?: string) => {
+      filterPresetStore.loadPresetAsync(arg.value, 'ws')
       datasetStore.setActivePreset(arg.value)
 
-      datasetStore.fetchWsListAsync(false)
+      datasetStore.fetchWsListAsync(false, 'reset')
       datasetStore.setIsLoadingTabReport(true)
+
+      reset && datasetStore.resetActivePreset()
+      reset && datasetStore.resetHasPreset()
     }
 
     return (
@@ -31,7 +35,9 @@ export const Preset = observer(
 
           {datasetStore.activePreset && (
             <span
-              onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
+              onClick={() =>
+                onSelectAsync({ value: '', label: '' } as Option, 'reset')
+              }
               className="text-14 text-blue-bright cursor-pointer"
             >
               {t('general.clear')}
@@ -39,12 +45,14 @@ export const Preset = observer(
           )}
         </div>
 
-        <DropDown
-          options={presets}
-          value={datasetStore.activePreset}
-          onSelect={onSelectAsync}
-          placeholder={t('general.selectAnOption')}
-        />
+        <div data-testid={MainTableDataCy.selectPreset}>
+          <DropDown
+            options={presets}
+            value={datasetStore.activePreset}
+            onSelect={onSelectAsync}
+            placeholder={t('general.selectAnOption')}
+          />
+        </div>
       </div>
     )
   },

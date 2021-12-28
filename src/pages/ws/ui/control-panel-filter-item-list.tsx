@@ -2,6 +2,7 @@ import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import zoneStore from '@store/filterZone'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 
 interface Props {
   items: string[]
@@ -60,7 +61,12 @@ export const FilterItemList = observer(
               />
             )}
 
-            <span className="text-12 ml-1">{item}</span>
+            <span
+              className="text-12 ml-1"
+              data-testid={MainTableDataCy.checkboxListElement}
+            >
+              {item}
+            </span>
           </div>
         ))}
       </div>

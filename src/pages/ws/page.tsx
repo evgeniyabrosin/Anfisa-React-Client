@@ -1,4 +1,5 @@
 import { Fragment, ReactElement, useEffect } from 'react'
+import { withErrorBoundary } from 'react-error-boundary'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -7,19 +8,20 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
-import filterZone from '@store/filterZone'
 import variantStore from '@store/variant'
+import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ExportPanel } from '@components/export-panel'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
+import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
 
-export const WSPage = observer(
+const WSPage = observer(
   (): ReactElement => {
     const params = useParams()
 
@@ -36,13 +38,6 @@ export const WSPage = observer(
       }
 
       initAsync()
-
-      return () => {
-        filterZone.resetAllSelectedItems()
-        variantStore.resetIsActiveVariant()
-        dirinfoStore.resetData()
-        datasetStore.resetData()
-      }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -62,7 +57,10 @@ export const WSPage = observer(
         <div className="h-full flex flex-col">
           <Header>
             <div className="text-white flex-grow flex justify-end pr-6">
-              <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
+              <span
+                className="text-12 leading-14px text-white mt-2 ml-auto font-bold"
+                data-testid={MainTableDataCy.numVariants}
+              >
                 {t('filter.variants', {
                   all: allVariants,
                 })}
@@ -99,3 +97,7 @@ export const WSPage = observer(
     )
   },
 )
+
+export default withErrorBoundary(WSPage, {
+  fallback: <ErrorPage />,
+})
