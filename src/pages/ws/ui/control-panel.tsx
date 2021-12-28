@@ -1,4 +1,6 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { reaction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -16,6 +18,26 @@ import { DatasetCreationButton } from './dataset-creation-button'
 export const ControlPanel = observer(
   (): ReactElement => {
     const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
+
+    useEffect(() => {
+      const dispose = reaction(
+        () => datasetStore.wsRecords,
+        () => {
+          if (datasetStore.wsRecords.length === 0) {
+            toast(
+              'Some zones are overlapping each other. Please clear any of them to get more results',
+              {
+                autoClose: 6000,
+                position: 'top-center',
+                type: 'warning',
+              },
+            )
+          }
+        },
+      )
+
+      return () => dispose()
+    }, [])
 
     return (
       <div className="w-auto flex pb-3 px-4 bg-blue-dark">
