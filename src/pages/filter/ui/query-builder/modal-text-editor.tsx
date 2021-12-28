@@ -1,5 +1,6 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
+import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 
 import { getApiUrl } from '@core/get-api-url'
@@ -10,6 +11,7 @@ import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import Editor from '@monaco-editor/react'
+import { getMessageFromError } from '@utils/http/getMessageFromError'
 import { HeaderModal } from './ui/header-modal'
 import { ModalBase } from './ui/modal-base'
 
@@ -63,7 +65,7 @@ export const ModalTextEditor = observer(
 
     const [error, setError] = useState(emptyError)
 
-    const handleDtreeCheckAsync = async (codeToCheck: string) => {
+    const handleDtreeCheckAsync = debounce(async (codeToCheck: string) => {
       setChecked(false)
 
       setCode(codeToCheck)
@@ -83,20 +85,31 @@ export const ModalTextEditor = observer(
           : emptyError,
       )
 
-      const result = await response.json()
+      if (response.ok) {
+        const result = await response.json()
 
-      setError(
-        result.error
-          ? {
-              error: result.error,
-              line: result.line as number,
-              pos: result.pos as number,
-            }
-          : emptyError,
-      )
+        setError(
+          result.error
+            ? {
+                error: result.error,
+                line: result.line as number,
+                pos: result.pos as number,
+              }
+            : emptyError,
+        )
+      } else {
+        const errorText = await response.text()
+        const errorNormalized = getMessageFromError(errorText, response.status)
+
+        setError({
+          error: errorNormalized.message,
+          line: 0,
+          pos: 0,
+        })
+      }
 
       setChecked(true)
-    }
+    }, 300)
 
     const handleDrop = () => {
       dtreeStore.setNextDtreeCode(dtreeStore.startDtreeCode)
@@ -175,8 +188,7 @@ export const ModalTextEditor = observer(
             text="Drop changes"
             size="md"
             onClick={handleDrop}
-            variant={'secondary-dark'}
-            className={cn(theme === 'light' ? 'text-black' : 'text-white')}
+            variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
           />
 
           <Button
@@ -184,11 +196,8 @@ export const ModalTextEditor = observer(
             size="md"
             disabled={!checked || hasError(error)}
             onClick={handleDone}
-            variant={'secondary-dark'}
-            className={cn(
-              'mx-2',
-              theme === 'light' ? 'text-black' : 'text-white',
-            )}
+            variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
+            className={cn('mx-2')}
           />
 
           <Button
@@ -196,8 +205,7 @@ export const ModalTextEditor = observer(
             size="md"
             disabled={!checked || hasError(error)}
             onClick={handleSave}
-            variant={'secondary-dark'}
-            className={cn(theme === 'light' ? 'text-black' : 'text-white')}
+            variant={theme === 'light' ? 'primary' : 'primary-dark'}
           />
         </div>
       </ModalBase>
