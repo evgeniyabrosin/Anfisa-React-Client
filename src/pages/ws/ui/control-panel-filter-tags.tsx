@@ -62,7 +62,13 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
     close()
 
     zoneStore.createSelectedZoneFilter('isTags')
-    datasetStore.addZone(['_tags', zoneStore.selectedTags])
+
+    if (zoneStore.isModeNOT) {
+      datasetStore.addZone(['_tags', zoneStore.selectedTags, false])
+    } else {
+      datasetStore.addZone(['_tags', zoneStore.selectedTags])
+    }
+
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     datasetStore.fetchFilteredTabReportAsync()

@@ -101,7 +101,7 @@ class DatasetStore {
     this.datasetName = datasetName
   }
 
-  addZone(zone: [string, string[]]) {
+  addZone(zone: [string, string[], false?]) {
     if (zone[1].length === 0) {
       this.zone = this.zone.filter(item => item[0] !== zone[0])
 
