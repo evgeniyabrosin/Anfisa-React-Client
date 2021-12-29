@@ -24,6 +24,11 @@ interface PropsRow {
   index: number
 }
 
+export enum RowHeight {
+  Compact = 60,
+  Basic = 80,
+}
+
 const offsetSize = 2800
 const offsetSizeToLoad = (offsetSize / 100) * 60
 
@@ -249,7 +254,9 @@ export const Table = observer(
               itemCount={rows.length}
               initialScrollOffset={datasetStore.offset}
               itemSize={
-                columnsStore.viewType === ViewTypeEnum.Compact ? 60 : 80
+                columnsStore.viewType === ViewTypeEnum.Compact
+                  ? RowHeight.Compact
+                  : RowHeight.Basic
               }
               onScroll={debounce(props => {
                 if (

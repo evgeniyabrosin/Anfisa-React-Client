@@ -3,16 +3,25 @@ import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { geneColorMap } from '@core/gene-color-map'
 import datasetStore from '@store/dataset'
+import columnsStore from '@store/wsColumns'
 import { CellI } from './cell-interfaces'
 import { PlusIcon } from './plus-icon'
+import { RowHeight } from './table'
+
 export const CellGene = observer(
   ({ cell }: CellI): ReactElement => {
     const value = get(cell, 'value[0]', []) as string[]
     const rowIndex = get(cell, 'row.index', -1)
 
     const iconColor = datasetStore?.wsRecords?.[rowIndex]?.cl.split('-')[0]
+
+    const geneCellHeight =
+      columnsStore.viewType === ViewTypeEnum.Compact
+        ? RowHeight.Compact
+        : RowHeight.Basic
 
     return (
       <div className="flex items-center">
@@ -36,7 +45,10 @@ export const CellGene = observer(
           </Fragment>
         )}
 
-        <div>
+        <div
+          className="flex flex-col flex-wrap w-full"
+          style={{ maxHeight: `${geneCellHeight}px` }}
+        >
           {value.map(gene => (
             <div className="text-14 leading-18px" key={gene}>
               {gene}
