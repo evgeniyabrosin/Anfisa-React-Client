@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react'
+import { reaction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
@@ -13,16 +14,18 @@ export interface IRangePanelFormValues {
   max: string
 }
 
+const getCachedValues = () => {
+  return filterStore.readFilterCondition<IRangePanelFormValues>(
+    filterStore.selectedGroupItem.name,
+  )
+}
+
 export const RangePanel = observer(
   (): ReactElement => {
     const selectedFilter = filterStore.selectedGroupItem
 
-    const cachedValues = filterStore.readFilterCondition<IRangePanelFormValues>(
-      selectedFilter.name,
-    )
-
-    const [min, setMin] = useState(cachedValues?.min || '')
-    const [max, setMax] = useState(cachedValues?.max || '')
+    const [min, setMin] = useState(getCachedValues()?.min || '')
+    const [max, setMax] = useState(getCachedValues()?.max || '')
 
     const [isVisibleMinError, setIsVisibleMinError] = useState(false)
     const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
@@ -98,6 +101,19 @@ export const RangePanel = observer(
         },
       )
     }, [min, max])
+
+    useEffect(() => {
+      const dispose = reaction(
+        () => filterStore.selectedGroupItem.name,
+        () => {
+          setMin(getCachedValues()?.min || '')
+          setMax(getCachedValues()?.max || '')
+        },
+      )
+
+      return () => dispose()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
       <div>
