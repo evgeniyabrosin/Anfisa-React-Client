@@ -36,7 +36,9 @@ export const getDataFromCode = (code: string) => {
   })
 
   scriptList.forEach((element, index) => {
-    if (element.includes('True') && data[index - 1]) {
+    const fixedElement = element.replace(/{.+}/, '')
+
+    if (fixedElement.includes('True') && data[index - 1]) {
       data[index - 1].result = true
     }
   })
