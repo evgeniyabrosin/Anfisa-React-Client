@@ -72,7 +72,7 @@ class ColumnsStore {
   showColumns() {
     this.selectedColumns = this.columns
       .filter(column => !column.hidden)
-      .map(column => column.title)
+      .map(column => column.title ?? column)
   }
 
   getColumnsForOpenDrawer() {
