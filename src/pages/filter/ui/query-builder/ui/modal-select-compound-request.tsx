@@ -18,7 +18,7 @@ import { getSortedArray } from '@utils/getSortedArray'
 import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
-import { EditModalVariants } from './edit-modal-variants'
+import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { IParams } from './modal-edit-compound-het'
@@ -397,7 +397,7 @@ export const ModalSelectCompoundRequest = observer(
           </div>
         </div>
 
-        <EditModalVariants variants={variants} disabled={true} />
+        <DisabledVariantsAmount variants={variants} disabled={true} />
 
         <SelectModalButtons
           handleClose={handleClose}

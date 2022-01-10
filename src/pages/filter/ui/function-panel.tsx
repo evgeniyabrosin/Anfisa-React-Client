@@ -53,10 +53,8 @@ export const FunctionPanel = (): ReactElement => {
   const Component: FunctionComponent<Record<string, any>> =
     functionsMap[selectedFilter.name]
 
-  const isSubmitDisabled = !!filterStore.error
-
   const onSubmitAsync = async (values: any) => {
-    if (isSubmitDisabled) return
+    if (filterStore.error) return
 
     if (isArray(values.variants) && values.variants.length === 0) {
       toast.warning(t('filter.chooseProblemGroup'), {
@@ -172,6 +170,8 @@ export const FunctionPanel = (): ReactElement => {
       groupItemName: selectedFilter.name,
       variant: [selectedFilter.name, 0],
     })
+
+    filterStore.resetStatFuncData()
   }
 
   if (!Component) {
@@ -204,7 +204,7 @@ export const FunctionPanel = (): ReactElement => {
               <Button
                 text={t('general.add')}
                 onClick={props.submitForm}
-                disabled={isSubmitDisabled}
+                disabled={!!filterStore.error}
               />
             </div>
           </div>

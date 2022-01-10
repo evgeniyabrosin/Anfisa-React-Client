@@ -8,7 +8,7 @@ import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
-import { EditModalVariants } from './edit-modal-variants'
+import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
@@ -65,7 +65,7 @@ export const CustomInheritanceModeContent = observer(
           <AllNotModalMods />
         </div>
 
-        <EditModalVariants variants={variants} disabled={true} />
+        <DisabledVariantsAmount variants={variants} disabled={true} />
       </Fragment>
     )
   },

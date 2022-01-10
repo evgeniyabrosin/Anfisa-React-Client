@@ -19,8 +19,9 @@ import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
 import { AllNotModalMods } from './query-builder/ui/all-not-modal-mods'
-import { EditModalVariants } from './query-builder/ui/edit-modal-variants'
+import { DisabledVariantsAmount } from './query-builder/ui/disabled-variants-amount'
 import { selectOptions } from './query-builder/ui/modal-select-custom-inheritance-mode'
+
 export interface ICompoundRequestFormValues {
   requestCondition: TRequestCondition[]
   reset: string
@@ -348,7 +349,7 @@ export const CompoundRequest = observer(
           </div>
         </div>
 
-        <EditModalVariants variants={variants} disabled={true} />
+        <DisabledVariantsAmount variants={variants} disabled={true} />
       </React.Fragment>
     )
   },

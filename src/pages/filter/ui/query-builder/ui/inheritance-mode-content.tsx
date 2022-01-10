@@ -6,7 +6,7 @@ import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
-import { EditModalVariants } from './edit-modal-variants'
+import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { ModsDivider } from './mods-divider'
 
 interface IProps {
@@ -82,7 +82,7 @@ export const InheritanceModeContent = observer(
           </div>
         </div>
 
-        <EditModalVariants
+        <DisabledVariantsAmount
           variants={variants}
           disabled={false}
           handleCheckGroupItem={handleCheckGroupItem}
