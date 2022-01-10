@@ -34,28 +34,28 @@ export const FilterItemList = observer(
           <div key={item} className="flex items-center mb-4">
             {isGenes && (
               <Checkbox
-                checked={zoneStore.selectedGenes.includes(item)}
+                checked={zoneStore.localGenes.includes(item)}
                 className="w-4 h-4"
                 onChange={e => handleCheck(e.target.checked, item)}
               />
             )}
             {isGenesList && (
               <Checkbox
-                checked={zoneStore.selectedGenesList.includes(item)}
+                checked={zoneStore.localGenesList.includes(item)}
                 className="w-4 h-4"
                 onChange={e => handleCheck(e.target.checked, item)}
               />
             )}
             {isSamples && (
               <Checkbox
-                checked={zoneStore.selectedSamples.includes(item)}
+                checked={zoneStore.localSamples.includes(item)}
                 className="w-4 h-4"
                 onChange={e => handleCheck(e.target.checked, item)}
               />
             )}
             {isTags && (
               <Checkbox
-                checked={zoneStore.selectedTags.includes(item)}
+                checked={zoneStore.localTags.includes(item)}
                 className="w-4 h-4"
                 onChange={e => handleCheck(e.target.checked, item)}
               />
