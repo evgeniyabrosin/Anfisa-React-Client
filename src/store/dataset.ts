@@ -164,10 +164,7 @@ class DatasetStore {
     await this.fetchDsStatAsync()
   }
 
-  removeCondition(
-    { subGroup, itemName }: IRemoveConditionItem,
-    shouldSendDsStat = true,
-  ) {
+  removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
     const cloneConditions = cloneDeep(this.conditions)
 
     const subGroupIndex = cloneConditions.findIndex(
@@ -192,7 +189,7 @@ class DatasetStore {
 
     this.conditions = cloneConditions
 
-    shouldSendDsStat && this.fetchDsStatAsync()
+    this.fetchDsStatAsync()
   }
 
   removeConditionGroup({ subGroup }: { subGroup: string }) {
