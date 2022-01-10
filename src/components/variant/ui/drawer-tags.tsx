@@ -160,7 +160,9 @@ const DrawerTagModal = observer(({ close }: any) => {
 
         <div className="flex justify-between">
           {error && (
-            <div className="mt-px text-12 text-red-secondary">{error}</div>
+            <div className="mt-px text-12 text-red-secondary whitespace-nowrap">
+              {error}
+            </div>
           )}
 
           <div className="flex justify-end w-full">
