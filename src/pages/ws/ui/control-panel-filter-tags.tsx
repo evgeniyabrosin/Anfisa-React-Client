@@ -69,6 +69,10 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       datasetStore.addZone(['_tags', zoneStore.selectedTags])
     }
 
+    if (zoneStore.isModeWithNotes) {
+      datasetStore.addZone(['_tags', [...zoneStore.selectedTags, '_note']])
+    }
+
     await datasetStore.fetchWsListAsync(datasetStore.isXL)
 
     datasetStore.fetchFilteredTabReportAsync()
