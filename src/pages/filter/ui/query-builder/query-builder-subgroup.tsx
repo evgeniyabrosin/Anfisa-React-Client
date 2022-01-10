@@ -40,19 +40,21 @@ export const QueryBuilderSubgroup = observer(
 
     return (
       <div>
-        <div className="flex items-center justify-between mb-3 cursor-pointer">
-          <span
-            className={cn('text-16 font-500', {
+        <div
+          onClick={onClick}
+          className={cn(
+            'flex items-center justify-between mb-3 text-16 cursor-pointer',
+            {
               'text-black': !isVisibleSubGroup,
               'text-grey-blue': !isVisibleSubGroup && !isModal,
               'text-white': isVisibleSubGroup && !isModal,
               'hover:text-white': !isModal,
               'hover:text-blue-dark': isModal,
               'text-blue-dark': isModal && isVisibleSubGroup,
-            })}
-            onClick={onClick}
-            data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}
-          >
+            },
+          )}
+        >
+          <span data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}>
             {groupName}
           </span>
 
@@ -62,6 +64,7 @@ export const QueryBuilderSubgroup = observer(
             expandContent={onClick}
           />
         </div>
+
         {isVisibleSubGroup &&
           subGroupData.map((subGroupItem, index) => (
             <QueryBuilderSubgroupItem
