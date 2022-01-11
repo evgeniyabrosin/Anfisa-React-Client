@@ -229,7 +229,7 @@ class DatasetStore {
     this.conditions = []
   }
 
-  async initDatasetAsync(datasetName: string) {
+  async initDatasetAsync(datasetName: string = this.datasetName) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)

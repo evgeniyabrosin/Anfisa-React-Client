@@ -5,6 +5,9 @@ export const en = {
     excel: 'Excel',
     csv: 'Csv',
     noResultsFound: 'No results found',
+    noResultsFoundByFilters:
+      'There are no results. Try to clear filters and try again',
+    cleanFilters: 'Clean filters',
     selectAll: 'Select All',
     clearAll: 'Clear All',
     cancel: 'Cancel',

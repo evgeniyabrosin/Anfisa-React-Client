@@ -11,7 +11,10 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import { tableColumnMap } from '@core/table-column-map'
+import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
+import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
@@ -47,6 +50,15 @@ export const Table = observer(
     const location = useLocation()
     const history = useHistory()
     const alreadyOpened = !!params.get('variant')
+
+    const { selectedFilters } = filterStore
+
+    const {
+      selectedGenes,
+      selectedGenesList,
+      selectedSamples,
+      selectedTags,
+    } = zoneStore
 
     const defaultColumn = {
       width: variantStore.drawerVisible
@@ -137,6 +149,45 @@ export const Table = observer(
       event.stopPropagation()
       event.nativeEvent.stopImmediatePropagation()
     }
+
+    const resetTableToInitial = () => {
+      filterStore.resetData()
+      zoneStore.resetAllSelectedItems()
+      datasetStore.clearZone()
+      datasetStore.initDatasetAsync()
+    }
+
+    const renderNoResults = useCallback(() => {
+      const isFiltersSelected =
+        Object.keys(selectedFilters).length > 0 ||
+        selectedGenes.length > 0 ||
+        selectedGenesList.length > 0 ||
+        selectedSamples.length > 0 ||
+        selectedTags.length > 0
+
+      if (datasetStore.tabReport.length === 0) {
+        return isFiltersSelected ? (
+          <NoResultsFound
+            text={t('general.noResultsFoundByFilters')}
+            className="text-black font-bold"
+            action={{
+              text: t('general.cleanFilters'),
+              handler: resetTableToInitial,
+            }}
+          />
+        ) : (
+          <NoResultsFound text={t('general.noResultsFound')} />
+        )
+      } else {
+        return null
+      }
+    }, [
+      selectedFilters,
+      selectedGenes,
+      selectedGenesList,
+      selectedSamples,
+      selectedTags,
+    ])
 
     const RenderRow = useCallback(
       ({ index, style }) => {
@@ -254,7 +305,7 @@ export const Table = observer(
           })}
         </div>
 
-        {toJS(datasetStore.tabReport).length === 0 && <NoResultsFound />}
+        {renderNoResults()}
 
         {toJS(datasetStore.tabReport).length > 0 && (
           <div {...getTableBodyProps()} className="text-12 tbody">
