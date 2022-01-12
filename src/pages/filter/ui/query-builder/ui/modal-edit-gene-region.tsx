@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { validateLocusCondition } from '@utils/validateLocusCondition'
 import { EditModalButtons } from './edit-modal-buttons'
 import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
@@ -38,33 +39,12 @@ export const ModalEditGeneRegion = observer(
     }
 
     const validateValue = (value: string) => {
-      let numberValue = value[3]
-      let lastIndexOfName = 3
-
-      if (+value[4] && value.length > 4) numberValue = value.slice(3, 5)
-
-      if (numberValue) lastIndexOfName = 2 + numberValue.length
-
-      if (
-        value.slice(0, 3) !== 'chr' ||
-        !+numberValue ||
-        +numberValue > 23 ||
-        value[lastIndexOfName + 1] !== ':' ||
-        (!+value.slice(lastIndexOfName + 2) &&
-          value.slice(lastIndexOfName + 2) !== '')
-      ) {
-        setIsErrorVisible(true)
-      } else {
-        setIsErrorVisible(false)
-
-        const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-        const params = `{"locus":"${value}"}`
-
-        dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
-        dtreeStore.fetchStatFuncAsync(groupName, params)
-      }
+      validateLocusCondition({
+        value,
+        setIsErrorVisible,
+        groupName,
+        currentStepIndex,
+      })
     }
 
     useEffect(() => {

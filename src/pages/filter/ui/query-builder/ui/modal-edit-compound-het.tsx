@@ -6,8 +6,8 @@ import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
+import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { EditModalButtons } from './edit-modal-buttons'
-import { EditModalVariants } from './edit-modal-variants'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
@@ -179,7 +179,7 @@ export const ModalEditCompoundHet = observer(
           <AllNotModalMods />
         </div>
 
-        <EditModalVariants variants={variants} disabled={true} />
+        <DisabledVariantsAmount variants={variants} disabled={true} />
 
         <EditModalButtons
           handleClose={handleClose}

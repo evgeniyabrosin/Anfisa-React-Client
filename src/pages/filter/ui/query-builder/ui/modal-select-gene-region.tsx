@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { validateLocusCondition } from '@utils/validateLocusCondition'
 import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
@@ -34,33 +35,12 @@ export const ModalSelectGeneRegion = observer(
     }
 
     const validateValue = (value: string) => {
-      let numberValue = value[3]
-      let lastIndexOfName = 3
-
-      if (+value[4] && value.length > 4) numberValue = value.slice(3, 5)
-
-      if (numberValue) lastIndexOfName = 2 + numberValue.length
-
-      if (
-        value.slice(0, 3) !== 'chr' ||
-        !+numberValue ||
-        +numberValue > 23 ||
-        value[lastIndexOfName + 1] !== ':' ||
-        (!+value.slice(lastIndexOfName + 2) &&
-          value.slice(lastIndexOfName + 2) !== '')
-      ) {
-        setIsErrorVisible(true)
-      } else {
-        setIsErrorVisible(false)
-
-        const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-        const params = `{"locus":"${value}"}`
-
-        dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
-        dtreeStore.fetchStatFuncAsync(groupName, params)
-      }
+      validateLocusCondition({
+        value,
+        setIsErrorVisible,
+        groupName,
+        currentStepIndex,
+      })
     }
 
     const handleClose = () => {

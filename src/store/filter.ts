@@ -173,6 +173,10 @@ class FilterStore {
     this.selectedFilters = {}
   }
 
+  resetStatFuncData() {
+    this.statFuncData = []
+  }
+
   setSelectedFilters(filters: SelectedFiltersType) {
     this.selectedFilters = JSON.parse(JSON.stringify(filters))
   }

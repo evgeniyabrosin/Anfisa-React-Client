@@ -312,11 +312,6 @@ export interface IColumns {
   hidden: boolean
 }
 
-export interface IVariantList {
-  variant: [string, number]
-  isChecked: boolean
-}
-
 export interface IRemoveConditionItem {
   subGroup: string
   itemName: string

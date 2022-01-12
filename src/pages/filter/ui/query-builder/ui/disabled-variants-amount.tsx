@@ -7,16 +7,17 @@ import dtreeStore from '@store/dtree'
 interface IProps {
   variants: any[]
   disabled: boolean
+  isErrorVisible?: boolean
   handleCheckGroupItem?: (event: any, variant: string) => void
   inheritanceMode?: boolean
 }
 
-export const EditModalVariants = observer(
-  ({ variants, disabled, handleCheckGroupItem }: IProps) => (
-    <div className="flex-1 my-4 text-14">
-      {variants?.length > 0 ? (
+export const DisabledVariantsAmount = observer(
+  ({ variants, disabled, isErrorVisible, handleCheckGroupItem }: IProps) => (
+    <div className="my-5 text-14">
+      {variants?.length > 0 && !isErrorVisible ? (
         variants.map((variant: any) => (
-          <div key={variant} className="flex items-center mb-2">
+          <div key={variant} className="flex items-center">
             {disabled ? (
               <Checkbox
                 checked={true}

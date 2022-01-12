@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import { Input } from '@ui/input'
 import { AllNotModalMods } from './all-not-modal-mods'
-import { EditModalVariants } from './edit-modal-variants'
+import { DisabledVariantsAmount } from './disabled-variants-amount'
 
 interface IProps {
   locusCondition: string
@@ -25,10 +25,10 @@ export const GeneRegionContent = observer(
     return (
       <Fragment>
         <div className="flex justify-between w-full mt-4 text-14">
-          <div className="flex h-9">
+          <div className="flex">
             <span>{t('dtree.locus')}</span>
 
-            <div className="relative flex h-9 ml-2">
+            <div className="relative flex ml-2">
               <Input
                 value={locusCondition}
                 onChange={(e: any) => {
@@ -39,7 +39,7 @@ export const GeneRegionContent = observer(
               />
 
               {isErrorVisible && (
-                <div className="absolute bottom-0 flex items-center h-3 text-10 text-red-secondary">
+                <div className="absolute -bottom-3 flex items-center mt-1 h-3 text-10 text-red-secondary">
                   {t('dtree.chromosomeNameIsNotCorrect')}
                 </div>
               )}
@@ -49,7 +49,11 @@ export const GeneRegionContent = observer(
           <AllNotModalMods />
         </div>
 
-        <EditModalVariants variants={variants} disabled={true} />
+        <DisabledVariantsAmount
+          variants={variants}
+          disabled={true}
+          isErrorVisible={isErrorVisible}
+        />
       </Fragment>
     )
   },

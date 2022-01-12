@@ -7,7 +7,7 @@ import { GlobalStyle } from '@theme'
 import { Routes } from '@router/routes.enum'
 import FilterPage from '@pages/filter/page'
 import MainPage from '@pages/main/page'
-import { RefinerPage } from '@pages/refiner/page'
+import RefinerPage from '@pages/refiner/page'
 import WSPage from '@pages/ws/page'
 
 export const RouterBase = (): ReactElement => (

@@ -70,7 +70,6 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 
   const onClearAll = () => {
     zoneStore.unselectAllSamples('clearAll')
-    handleApplyAsync()
   }
 
   return (

@@ -66,7 +66,6 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 
   const onClearAll = () => {
     zoneStore.unselectAllGenesList()
-    handleApplyAsync()
   }
 
   return (

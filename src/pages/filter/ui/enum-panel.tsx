@@ -1,8 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react'
+import cloneDeep from 'lodash/cloneDeep'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { IVariantList, StatList } from '@declarations'
+import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -10,7 +11,8 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
 import { createChunks } from '@utils/createChunks'
-import { SelectedGroupItems } from './selected-group-items'
+import { QueryBuilderSearch } from './query-builder/query-builder-search'
+import { SelectedGroupItem } from './selected-group-item'
 
 export const EnumPanel = observer(
   (): ReactElement => {
@@ -20,124 +22,158 @@ export const EnumPanel = observer(
       (item: any) => item.name === filterStore.selectedGroupItem.name,
     )
 
-    const vgroup = filterStore.selectedGroupItem.vgroup
-    const groupItemName = filterStore.selectedGroupItem.name
+    const variants = currentStatList?.variants ?? []
 
-    const variants =
-      currentStatList?.variants?.map(
-        (variant: any): IVariantList => {
-          const variantQuantity =
-            filterStore.selectedFilters?.[`${vgroup}`]?.[`${groupItemName}`]?.[
-              `${variant[0]}`
-            ]
+    const [selectedVariants, setSelectedVariants] = useState<
+      [string, number][]
+    >([])
 
-          const isChecked = Boolean(variantQuantity)
-
-          return { variant, isChecked }
-        },
-      ) ?? []
-
-    const [variantList, setVariantList] = useState(variants)
+    const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
 
-    const groupsPerPage = 20
-    const chunks = createChunks(variantList, groupsPerPage)
+    const filteredVariants = variants.filter((variant: any[]) =>
+      variant[0]
+        .toLocaleLowerCase()
+        .startsWith(searchValue.toLocaleLowerCase()),
+    )
 
-    const handleSelect = (index: number, checked: boolean) => {
-      const localVariantList = [...variantList]
+    const groupsPerPage = 12
+    const chunks = createChunks(filteredVariants, groupsPerPage)
 
-      const currentIndex = currentPage * groupsPerPage + index
+    const handleCheckGroupItem = (
+      checked: boolean,
+      variant: [string, number],
+    ) => {
+      if (checked) {
+        const localVariantNameList = [...selectedVariants, variant]
 
-      localVariantList[currentIndex].isChecked = checked
+        setSelectedVariants(localVariantNameList)
+      } else {
+        const localVariantNameList = selectedVariants.filter(
+          element => element[0] !== variant[0],
+        )
 
-      setVariantList(localVariantList)
+        setSelectedVariants(localVariantNameList)
+      }
     }
 
-    const stringedVariants = JSON.stringify(variants)
+    const group = filterStore.selectedGroupItem.vgroup
+    const groupItemName: string = filterStore.selectedGroupItem.name
 
     useEffect(() => {
-      setVariantList(variants)
+      setSearchValue('')
+      setCurrentPage(0)
+    }, [groupItemName])
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [stringedVariants])
-
-    const updateSubattributes = (
-      shouldAddSubattributes?: boolean,
-    ): string[] => {
-      const checkedVariantNames: string[] = []
-
-      variantList.forEach(element => {
-        const { variant, isChecked } = element
-
-        if (shouldAddSubattributes && isChecked) {
-          filterStore.addSelectedFilters({
-            group: filterStore.selectedGroupItem.vgroup,
-            groupItemName: filterStore.selectedGroupItem.name,
-            variant,
-          })
-
-          checkedVariantNames.push(variant[0])
-        } else {
-          const variantQuantity =
-            filterStore.selectedFilters?.[`${vgroup}`]?.[`${groupItemName}`]?.[
-              `${variant[0]}`
-            ]
-
-          const isVariantChecked = Boolean(variantQuantity)
-
-          if (!isVariantChecked) return
-
-          filterStore.removeSelectedFilters({
-            group: filterStore.selectedGroupItem.vgroup,
-            groupItemName: filterStore.selectedGroupItem.name,
-            variant,
-          })
-
-          datasetStore.removeCondition(
-            {
-              subGroup: filterStore.selectedGroupItem.name,
-              itemName: variant[0],
-            },
-            false,
-          )
-        }
-      })
-
-      return checkedVariantNames
-    }
+    const [shouldClear, setShouldClear] = useState(false)
 
     const handleClear = () => {
-      updateSubattributes()
-      datasetStore.fetchDsStatAsync()
+      const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
+
+      if (localSelectedFilters[group]?.[groupItemName]) {
+        delete localSelectedFilters[group][groupItemName]
+      }
+
+      filterStore.setSelectedFilters(localSelectedFilters)
+
+      datasetStore.removeConditionGroup({ subGroup: groupItemName })
+
+      setCurrentPage(0)
+      setShouldClear(true)
     }
 
     const handleAddConditions = () => {
-      const variantNameList: string[] = updateSubattributes(true)
+      if (selectedVariants.length === 0) return
 
-      if (variantNameList.length === 0) return
+      const nameVariantList = selectedVariants.map(element => element[0])
 
       datasetStore.setConditionsAsync([
         [
           FilterKindEnum.Enum,
           filterStore.selectedGroupItem.name,
           'OR',
-          variantNameList,
+          nameVariantList,
         ],
       ])
+      setCurrentPage(0)
+
+      const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
+
+      if (!localSelectedFilters[group]) {
+        localSelectedFilters[group] = {}
+      }
+
+      if (!localSelectedFilters[group][groupItemName]) {
+        localSelectedFilters[group][groupItemName] = {}
+      }
+
+      const selectedSubAttributes: any = {}
+
+      selectedVariants.forEach(element => {
+        selectedSubAttributes[element[0]] = element[1]
+      })
+      localSelectedFilters[group][groupItemName] = selectedSubAttributes
+
+      filterStore.setSelectedFilters(localSelectedFilters)
+      setSelectedVariants([])
+    }
+
+    const handleChange = (value: string) => {
+      setSearchValue(value)
+
+      if (currentPage === 0) return
 
       setCurrentPage(0)
     }
 
-    const isBlockAddBtn = !variantList.some(element => element.isChecked)
+    const { conditions } = datasetStore
+
+    const currentCondition: any[] | undefined = conditions.find(
+      (element: any[]) => element[1] === groupItemName,
+    )
+
+    const attributeList: string[] | undefined = currentCondition?.[3]
+
+    const isBlockAddBtn = selectedVariants.length === 0
 
     return (
       <div>
-        <SelectedGroupItems
-          subattributeList={chunks[currentPage]}
-          handleSelect={handleSelect}
-        />
+        <div className="flex mt-3">
+          <QueryBuilderSearch
+            value={searchValue}
+            onChange={handleChange}
+            isSubgroupItemSearch
+          />
+        </div>
 
-        {variantList.length > groupsPerPage && (
+        <div className="mt-4">
+          <div className="flex-1 mt-4 overflow-y-auto">
+            {chunks[currentPage] ? (
+              chunks[currentPage].map((variant: [string, number]) => {
+                const isAdded = Boolean(attributeList?.includes(variant[0]))
+
+                return (
+                  variant[1] !== 0 && (
+                    <SelectedGroupItem
+                      key={variant[0]}
+                      setShouldClear={setShouldClear}
+                      shouldClear={shouldClear}
+                      isAdded={isAdded}
+                      variant={variant}
+                      handleCheckGroupItem={handleCheckGroupItem}
+                    />
+                  )
+                )
+              })
+            ) : (
+              <div className="flex justify-center items-center text-14 text-grey-blue">
+                {t('dtree.noFilters')}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {filteredVariants.length > groupsPerPage && (
           <Pagintaion
             pagesNumbers={chunks.length}
             currentPage={currentPage}

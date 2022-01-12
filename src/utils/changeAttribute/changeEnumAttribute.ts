@@ -1,3 +1,5 @@
+import uniq from 'lodash/uniq'
+
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 
@@ -30,7 +32,7 @@ export const changeEnumAttribute = () => {
     }
   })
 
-  filteredAttribute.push(dtreeStore.selectedFilters)
+  filteredAttribute.push(uniq(dtreeStore.selectedFilters))
 
   body.append(
     'instr',
