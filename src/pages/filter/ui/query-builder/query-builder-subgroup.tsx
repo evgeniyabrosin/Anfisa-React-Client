@@ -61,7 +61,6 @@ export const QueryBuilderSubgroup = observer(
           <ExpandContentButton
             isVisible={isVisibleSubGroup}
             isModal={isModal}
-            expandContent={onClick}
           />
         </div>
 

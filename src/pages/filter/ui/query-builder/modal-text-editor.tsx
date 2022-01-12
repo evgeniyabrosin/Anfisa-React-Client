@@ -4,7 +4,6 @@ import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 
 import { getApiUrl } from '@core/get-api-url'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -60,8 +59,6 @@ export const ModalTextEditor = observer(
     const [theme, setTheme] = useState('light')
 
     const ref = useRef(null)
-
-    useOutsideClick(ref, () => dtreeStore.closeModalTextEditor())
 
     const [error, setError] = useState(emptyError)
 
