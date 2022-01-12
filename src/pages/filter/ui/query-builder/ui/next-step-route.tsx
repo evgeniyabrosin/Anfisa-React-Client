@@ -128,6 +128,8 @@ export const NextStepRoute = observer(
       index: index + 1,
     })
 
+    const differenceWithCommas = getNumberWithCommas(currentStep.difference)
+
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
@@ -169,10 +171,10 @@ export const NextStepRoute = observer(
                         {isIncluded ? `+` : `-`}
                         {isDifferenceActive ? (
                           <DifferenceCounts isIncluded={isIncluded}>
-                            {currentStep.difference}
+                            {differenceWithCommas}
                           </DifferenceCounts>
                         ) : (
-                          <span>{currentStep.difference}</span>
+                          <span>{differenceWithCommas}</span>
                         )}
                       </span>
                     </ExcludeAmount>
