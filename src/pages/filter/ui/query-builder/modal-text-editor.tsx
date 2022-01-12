@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { getApiUrl } from '@core/get-api-url'
 import { useParams } from '@core/hooks/use-params'
+import { LocalStoreManager } from '@core/storage-management/local-store-manager'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
@@ -13,6 +14,10 @@ import Editor from '@monaco-editor/react'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
 import { HeaderModal } from './ui/header-modal'
 import { ModalBase } from './ui/modal-base'
+
+const TEXT_EDITOR_THEME = 'textEditorTheme'
+
+type TEditorTheme = 'light' | 'dark'
 
 const fetchDtreeCheckAsync = async function (dsName: string, code: string) {
   const response = await fetch(getApiUrl(`dtree_check`), {
@@ -56,7 +61,9 @@ export const ModalTextEditor = observer(
       }
     }, [])
 
-    const [theme, setTheme] = useState('light')
+    const [theme, setTheme] = useState<TEditorTheme>(
+      LocalStoreManager.read<TEditorTheme>(TEXT_EDITOR_THEME) || 'light',
+    )
 
     const ref = useRef(null)
 
@@ -138,9 +145,11 @@ export const ModalTextEditor = observer(
 
     const handleChangeTheme = () => {
       setTheme(prev => {
-        if (prev === 'light') return 'dark'
+        const themeToChange: TEditorTheme = prev === 'light' ? 'dark' : 'light'
 
-        return 'light'
+        LocalStoreManager.write(TEXT_EDITOR_THEME, themeToChange)
+
+        return themeToChange
       })
     }
 

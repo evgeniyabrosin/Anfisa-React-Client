@@ -1,14 +1,16 @@
 /* eslint-disable unicorn/no-useless-undefined */
-export class SessionStoreManager {
+export class StoreManager {
+  protected static storage: Storage
+
   public static read<T = any>(key: string, prefix?: string) {
     if (prefix) {
-      const value = sessionStorage.getItem(prefix)
+      const value = this.storage.getItem(prefix)
 
       if (!value) return undefined
 
       return (JSON.parse(value) || {})[key] as T
     } else {
-      const value = sessionStorage.getItem(key)
+      const value = this.storage.getItem(key)
 
       if (!value) return undefined
 
@@ -23,13 +25,13 @@ export class SessionStoreManager {
       if (savedData) {
         savedData[key] = data
 
-        return sessionStorage.setItem(prefix, JSON.stringify(savedData))
+        return this.storage.setItem(prefix, JSON.stringify(savedData))
       } else {
-        return sessionStorage.setItem(prefix, JSON.stringify({ [key]: data }))
+        return this.storage.setItem(prefix, JSON.stringify({ [key]: data }))
       }
     }
 
-    return sessionStorage.setItem(key, JSON.stringify(data))
+    return this.storage.setItem(key, JSON.stringify(data))
   }
 
   public static delete(key: string, prefix?: string) {
@@ -45,6 +47,6 @@ export class SessionStoreManager {
       }
     }
 
-    return sessionStorage.removeItem(key)
+    return this.storage.removeItem(key)
   }
 }
