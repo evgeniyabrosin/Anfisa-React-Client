@@ -1,7 +1,7 @@
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
+import { DecisionTreeModal } from '../../../src/components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '../../../src/components/data-testid/decision-tree-results.cy'
-import { DecisionTreeMinGQ } from '../../../src/components/data-testid/min-gq.cy'
 import { BasePage } from '../lib/base-page'
 import { Helper } from '../lib/helpers'
 import { AttributesListWidget } from './widgets/attributes-list.widget'
@@ -57,8 +57,13 @@ class DecisionTreesPage extends BasePage {
         joinByLabel: Helper.getDataId(DecisionTreesResultsDataCy.joinByLabel),
         optionsMenu: Helper.getDataId(DecisionTreesResultsDataCy.optionsMenu),
         addStepAfter: Helper.getDataId(DecisionTreesResultsDataCy.addStepAfter),
-        leftInput: Helper.getDataId(DecisionTreeMinGQ.leftInput),
-        rightInput: Helper.getDataId(DecisionTreeMinGQ.rightInput),
+        deleteStep: Helper.getDataId(DecisionTreesResultsDataCy.deleteStep),
+        leftInput: Helper.getDataId(DecisionTreeModal.leftInput),
+        rightInput: Helper.getDataId(DecisionTreeModal.rightInput),
+        selectReset: Helper.getDataId(DecisionTreeModal.selectReset),
+        addButton: Helper.getDataId(DecisionTreeModal.addButton),
+        removeButton: Helper.getDataId(DecisionTreeModal.removeButton),
+        numberInput: Helper.getDataId(CommonSelectors.numberInput),
       },
       labels: {
         graphHeaders: '',
@@ -83,6 +88,7 @@ class DecisionTreesPage extends BasePage {
         problemGroup: CommonSelectors.checkbox,
         joinByAnd: Helper.getDataId(DecisionTreesResultsDataCy.joinByAnd),
         joinByOr: Helper.getDataId(DecisionTreesResultsDataCy.joinByOr),
+        replaceButton: Helper.getDataId(DecisionTreeModal.replaceButton),
       },
     })
   }

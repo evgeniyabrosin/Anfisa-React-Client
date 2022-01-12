@@ -11,6 +11,7 @@ export interface AttributesListSelectors {
   problemGroup: string
   joinByAnd: string
   joinByOr: string
+  replaceButton: string
 }
 export class AttributesListWidget extends UIWidget {
   readonly searchForAttr: Input
@@ -20,6 +21,7 @@ export class AttributesListWidget extends UIWidget {
   readonly problemGroup: Checkbox
   readonly joinByAnd: Button
   readonly joinByOr: Button
+  readonly replaceButton: Button
 
   constructor(options: { selectors: AttributesListSelectors }) {
     super(options)
@@ -33,5 +35,6 @@ export class AttributesListWidget extends UIWidget {
     this.problemGroup = new Checkbox(selectors.problemGroup)
     this.joinByAnd = new Button(selectors.joinByAnd)
     this.joinByOr = new Button(selectors.joinByOr)
+    this.replaceButton = new Button(selectors.replaceButton)
   }
 }

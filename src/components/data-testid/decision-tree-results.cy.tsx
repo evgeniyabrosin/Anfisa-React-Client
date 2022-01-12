@@ -17,4 +17,5 @@ export const DecisionTreesResultsDataCy = {
   joinByLabel: 'join-by',
   optionsMenu: 'options-menu',
   addStepAfter: 'add-step-after',
+  deleteStep: 'delete-step',
 }

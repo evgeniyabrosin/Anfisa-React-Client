@@ -1,6 +1,7 @@
 import { Button } from '../../lib/button'
 import { Input } from '../../lib/input'
 import { Label } from '../../lib/label'
+import { Select } from '../../lib/select'
 import { StepLabel } from '../../lib/stepLabel'
 import { UIWidget } from '../../lib/ui-widget'
 
@@ -19,6 +20,11 @@ export interface DecisionTreeResultsSelectors {
   addStepAfter: string
   leftInput: string
   rightInput: string
+  deleteStep: string
+  numberInput: string
+  selectReset: string
+  addButton: string
+  removeButton: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -44,6 +50,11 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly addStepAfter: Button
   readonly leftInput: Input
   readonly rightInput: Input
+  readonly deleteStep: Button
+  readonly numberInput: Input
+  readonly selectReset: Select
+  readonly addButton: Button
+  readonly removeButton: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -74,5 +85,10 @@ export class DecisionTreeResultsWidget extends UIWidget {
     this.addStepAfter = new Button(selectors.addStepAfter)
     this.leftInput = new Input(selectors.leftInput)
     this.rightInput = new Input(selectors.rightInput)
+    this.deleteStep = new Button(selectors.deleteStep)
+    this.numberInput = new Input(selectors.numberInput)
+    this.selectReset = new Select(selectors.selectReset)
+    this.addButton = new Button(selectors.addButton)
+    this.removeButton = new Button(selectors.removeButton)
   }
 }

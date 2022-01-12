@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { ModalJoin } from './modal-join'
 
@@ -58,6 +59,7 @@ export const SelectModalButtons = observer(
                 disabled={disabled}
                 text={t('dtree.replace')}
                 onClick={() => handleAddAttribute('REPLACE')}
+                dataTestId={DecisionTreeModal.replaceButton}
               />
 
               <div className="relative">
