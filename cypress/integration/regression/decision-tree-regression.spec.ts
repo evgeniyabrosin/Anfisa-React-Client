@@ -426,5 +426,10 @@ describe('Regression test of the decision tree', () => {
       'Autosomal Dominant',
     )
     decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    decisionTreesPage.decisionTreeResults.gearButton.click()
+    decisionTreesPage.decisionTreeResults.addButton.click()
+    decisionTreesPage.decisionTreeResults.selectReset.select('Compensational')
+    decisionTreesPage.decisionTreeResults.cancelButton.click()
   })
 })
