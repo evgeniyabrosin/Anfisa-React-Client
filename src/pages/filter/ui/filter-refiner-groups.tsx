@@ -81,6 +81,8 @@ export const FilterRefinerGroups = observer(
                     ? get(datasetStore, 'dsStat.total-counts.0', 0)
                     : 0
 
+                const incomplete = item?.incomplete ?? false
+
                 return (
                   <FilterRefinerGroupItem
                     className="pl-4"
@@ -91,12 +93,8 @@ export const FilterRefinerGroups = observer(
                     key={item.name}
                     isFunc={item.kind === FilterKindEnum.Func}
                     isNumeric={item.kind === FilterKindEnum.Numeric}
-                    amount={
-                      item.variants
-                        ? item.variants.reduce((prev, cur) => prev + cur[1], 0)
-                        : numericAmount
-                    }
                     group={group}
+                    incomplete={incomplete}
                   />
                 )
               })}

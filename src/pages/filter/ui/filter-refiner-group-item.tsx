@@ -12,10 +12,10 @@ import { Icon } from '@ui/icon'
 type Props = StatListType & {
   onChange?: (checked: boolean) => void
   className?: Argument
-  amount?: number
   group?: string
   isFunc?: boolean
   isNumeric?: boolean
+  incomplete?: boolean
 }
 
 export const FilterRefinerGroupItem = observer(
@@ -23,12 +23,12 @@ export const FilterRefinerGroupItem = observer(
     name,
     onChange,
     className,
-    amount,
     group,
     isFunc,
     isNumeric,
     title,
     tooltip,
+    incomplete = false,
     ...rest
   }: Props): ReactElement => {
     const checked = get(
@@ -37,17 +37,16 @@ export const FilterRefinerGroupItem = observer(
       false,
     )
 
-    const selectedAmounts: number[] = Object.values(
-      get(filterStore, `selectedFilters[${group}][${name}]`, {}),
-    )
-
-    const selectedSum = selectedAmounts.reduce((prev, cur) => prev + cur, 0)
-
     const isIndeterminate = filterStore.selectedGroupItem.name === name
 
     const handleSelect = () => {
       filterStore.setSelectedGroupItem({ name, ...rest })
     }
+
+    const isNotEnum = isFunc || isNumeric
+    const disabled = (isNotEnum && !checked) || incomplete
+
+    const status = incomplete ? '...' : ''
 
     return (
       <div
@@ -63,7 +62,7 @@ export const FilterRefinerGroupItem = observer(
           className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
           checked={checked}
           indeterminate={isIndeterminate}
-          disabled={(isFunc || isNumeric) && !checked}
+          disabled={disabled}
           onChange={event => onChange && onChange(event.target.checked)}
         />
 
@@ -83,15 +82,7 @@ export const FilterRefinerGroupItem = observer(
           {name || title}
         </p>
 
-        {amount !== 0 && (
-          <span className="text-14 text-grey-blue ml-1">
-            {'('}
-            {selectedSum !== 0 && (
-              <span className="text-14 text-blue-bright">{`${selectedSum}/`}</span>
-            )}
-            {`${amount})`}
-          </span>
-        )}
+        <span className="text-14 text-blue-bright">{`${status}`}</span>
 
         {tooltip && (
           <Tooltip
