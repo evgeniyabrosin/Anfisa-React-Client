@@ -27,6 +27,9 @@ export interface DecisionTreeResultsSelectors {
   removeButton: string
   cancelButton: string
   gearButton: string
+  contentEditor: string
+  collapseAll: string
+  expandAll: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -35,6 +38,7 @@ export interface DecisionTreeResultsLabels {
   stepCard: string
   treeTooltip: string
   joinByLabel: string
+  contentEditor: string
 }
 
 export class DecisionTreeResultsWidget extends UIWidget {
@@ -59,6 +63,9 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly removeButton: Button
   readonly cancelButton: Button
   readonly gearButton: Button
+  readonly contentEditor: Label
+  readonly collapseAll: Button
+  readonly expandAll: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -96,5 +103,11 @@ export class DecisionTreeResultsWidget extends UIWidget {
     this.removeButton = new Button(selectors.removeButton)
     this.cancelButton = new Button(selectors.cancelButton)
     this.gearButton = new Button(selectors.gearButton)
+    this.contentEditor = new Label(
+      selectors.contentEditor,
+      labels.contentEditor,
+    )
+    this.expandAll = new Button(selectors.expandAll)
+    this.collapseAll = new Button(selectors.collapseAll)
   }
 }

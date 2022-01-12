@@ -12,4 +12,7 @@ export const DecisionTreesResultsDataCy = {
   addStepAfter: 'add-step-after',
   deleteStep: 'delete-step',
   gearButton: 'gear-button',
+  contentEditor: 'content-editor',
+  expandAll: 'expand-all',
+  collapseAll: 'collapse-all',
 }

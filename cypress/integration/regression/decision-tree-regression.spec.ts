@@ -5,6 +5,9 @@ import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
 describe('Regression test of the decision tree', () => {
   const includedVariants = '+5041176'
 
+  const text =
+    ' \nif Compound_Request(request = [[1,  {"0": ["HG003", "HG004"], "1-2": ["HG002"]} ]]) in   :\n     return true'
+
   it('should open decision tree for XL dataset', () => {
     datasetPage.visit()
     datasetPage.leftPanel.leftPanelHeader.haveText('Datasets')
@@ -122,7 +125,7 @@ describe('Regression test of the decision tree', () => {
       .contains('OR')
   })
 
-  it('Add step after | step 6', () => {
+  it('should add step after | step 6', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -141,7 +144,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
   })
 
-  it('Add Min_GQ attributes to the second step | step 7', () => {
+  it('should add Min_GQ attributes to the second step | step 7', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -166,7 +169,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.attributesList.addSelectedAttributes.click()
   })
 
-  it('Add Max_GQ attributes to the second step | step 8', () => {
+  it('should add Max_GQ attributes to the second step | step 8', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -210,7 +213,7 @@ describe('Regression test of the decision tree', () => {
       .contains('Max_GQ')
   })
 
-  it('Add third step | step 9', () => {
+  it('should add third step | step 9', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -241,7 +244,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('Add attributes to step 3 | step 10', () => {
+  it.skip('should add attributes to step 3 | step 10', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -278,7 +281,7 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
   })
 
-  it('Delete step | step 12', () => {
+  it('should delete step | step 12', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -307,7 +310,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.countElements(1)
   })
 
-  it('Add attribute to third step | step 13', () => {
+  it('should add attribute to third step | step 13', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -350,7 +353,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.countElements(1)
   })
 
-  it('Not add attribute if press cancel | step 14', () => {
+  it('should not add attribute if press cancel | step 14', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -389,7 +392,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.countElements(0)
   })
 
-  it('Not change attributes if cancel button is pressed | step 15', () => {
+  it('should not change attributes if cancel button is pressed | step 15', () => {
     decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
@@ -427,9 +430,60 @@ describe('Regression test of the decision tree', () => {
     )
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
-    decisionTreesPage.decisionTreeResults.gearButton.click()
+    cy.wait(1000)
+    decisionTreesPage.decisionTreeResults.gearButton.eq(2).click()
+    cy.wait(1000)
     decisionTreesPage.decisionTreeResults.addButton.click()
     decisionTreesPage.decisionTreeResults.selectReset.select('Compensational')
     decisionTreesPage.decisionTreeResults.cancelButton.click()
+    //cy.get('button').contains('Save changes').click()
+    cy.wait('@applyAttributes')
+    decisionTreesPage.decisionTreeResults.contentEditor
+      .eq(2)
+      .should('have.text', text)
+  })
+
+  it('should collapse decision tree panel | step 17', () => {
+    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.decisionTreeResults.addAttribute.click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    decisionTreesPage.decisionTreeResults.excludeInfo
+      .first()
+      .should('have.text', includedVariants)
+    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    decisionTreesPage.decisionTreeResults.optionsMenu.click()
+    decisionTreesPage.decisionTreeResults.addStepAfter.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
+    decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.decisionTreeResults.leftInput.type('10')
+    decisionTreesPage.decisionTreeResults.rightInput.type('100')
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.decisionTreeResults.optionsMenu.eq(1).click()
+    decisionTreesPage.decisionTreeResults.addStepAfter.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
+    decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
+    decisionTreesPage.attributesList.searchForAttr
+      .eq(0)
+      .type('Compound_Request')
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.decisionTreeResults.selectReset.select(
+      'Autosomal Dominant',
+    )
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes')
+    decisionTreesPage.decisionTreeResults.collapseAll.eq(1).click()
+    decisionTreesPage.decisionTreeResults.contentEditor.element.should(
+      'not.exist',
+    )
   })
 })

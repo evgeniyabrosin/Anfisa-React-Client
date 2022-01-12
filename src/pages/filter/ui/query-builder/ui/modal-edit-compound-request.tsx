@@ -8,6 +8,7 @@ import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
+import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
@@ -435,6 +436,7 @@ export const ModalEditCompoundRequest = observer(
               variant={'secondary'}
               className={cn('mr-4')}
               disabled={requestCondition.length === 5}
+              dataTestId={DecisionTreeModal.addButton}
             />
 
             <Button
@@ -445,6 +447,7 @@ export const ModalEditCompoundRequest = observer(
                 'border-red-secondary hover:text-white hover:bg-red-secondary',
               )}
               disabled={requestCondition.length === 1}
+              dataTestId={DecisionTreeModal.removeButton}
             />
           </div>
 
@@ -457,6 +460,7 @@ export const ModalEditCompoundRequest = observer(
               onChange={(e: any) => handleReset(e.target.value)}
               className="w-full ml-2"
               reset
+              data-testid={DecisionTreeModal.selectReset}
             />
           </div>
         </div>
