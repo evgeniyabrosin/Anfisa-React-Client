@@ -369,7 +369,7 @@ export const ModalSelectCompoundRequest = observer(
             <Button
               onClick={() => handleRequestBlocksAmount('ADD')}
               text="Add"
-              data-testid={DecisionTreeModal.addButton}
+              dataTestId={DecisionTreeModal.addButton}
               variant={'secondary'}
               className={cn('mr-4')}
               disabled={requestCondition.length === 5}
@@ -378,6 +378,7 @@ export const ModalSelectCompoundRequest = observer(
             <Button
               onClick={() => handleRequestBlocksAmount('REMOVE')}
               text="Remove"
+              dataTestId={DecisionTreeModal.removeButton}
               variant={'secondary'}
               className={cn(
                 'border-red-secondary hover:text-white hover:bg-red-secondary',

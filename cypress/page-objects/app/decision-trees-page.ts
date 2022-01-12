@@ -54,7 +54,7 @@ class DecisionTreesPage extends BasePage {
         ),
         treeTooltip: `${CommonSelectors.treeTooltip}`,
         addAttribute: Helper.getDataId(DecisionTreesResultsDataCy.addAttrbute),
-        joinByLabel: Helper.getDataId(DecisionTreesResultsDataCy.joinByLabel),
+        joinByLabel: Helper.getDataId(DecisionTreeModal.joinByLabel),
         optionsMenu: Helper.getDataId(DecisionTreesResultsDataCy.optionsMenu),
         addStepAfter: Helper.getDataId(DecisionTreesResultsDataCy.addStepAfter),
         deleteStep: Helper.getDataId(DecisionTreesResultsDataCy.deleteStep),
@@ -64,6 +64,8 @@ class DecisionTreesPage extends BasePage {
         addButton: Helper.getDataId(DecisionTreeModal.addButton),
         removeButton: Helper.getDataId(DecisionTreeModal.removeButton),
         numberInput: Helper.getDataId(CommonSelectors.numberInput),
+        cancelButton: Helper.getDataId(DecisionTreeModal.cancelButton),
+        gearButton: Helper.getDataId(DecisionTreesResultsDataCy.gearButton),
       },
       labels: {
         graphHeaders: '',
@@ -78,16 +80,14 @@ class DecisionTreesPage extends BasePage {
         searchForAttr: Helper.getDataId(
           DecisionTreesResultsDataCy.searchForAttr,
         ),
-        selectAll: Helper.getDataId(
-          DecisionTreesResultsDataCy.selectAllFromAttribute,
-        ),
+        selectAll: Helper.getDataId(DecisionTreeModal.selectAllFromAttribute),
         addSelectedAttributes: Helper.getDataId(
-          DecisionTreesResultsDataCy.addSelectedAttributes,
+          DecisionTreeModal.addSelectedAttributes,
         ),
-        addByJoin: Helper.getDataId(DecisionTreesResultsDataCy.addByJoin),
+        addByJoin: Helper.getDataId(DecisionTreeModal.addByJoin),
         problemGroup: CommonSelectors.checkbox,
-        joinByAnd: Helper.getDataId(DecisionTreesResultsDataCy.joinByAnd),
-        joinByOr: Helper.getDataId(DecisionTreesResultsDataCy.joinByOr),
+        joinByAnd: Helper.getDataId(DecisionTreeModal.joinByAnd),
+        joinByOr: Helper.getDataId(DecisionTreeModal.joinByOr),
         replaceButton: Helper.getDataId(DecisionTreeModal.replaceButton),
       },
     })

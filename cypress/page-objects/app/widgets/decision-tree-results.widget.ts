@@ -25,6 +25,8 @@ export interface DecisionTreeResultsSelectors {
   selectReset: string
   addButton: string
   removeButton: string
+  cancelButton: string
+  gearButton: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -55,6 +57,8 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly selectReset: Select
   readonly addButton: Button
   readonly removeButton: Button
+  readonly cancelButton: Button
+  readonly gearButton: Button
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -90,5 +94,7 @@ export class DecisionTreeResultsWidget extends UIWidget {
     this.selectReset = new Select(selectors.selectReset)
     this.addButton = new Button(selectors.addButton)
     this.removeButton = new Button(selectors.removeButton)
+    this.cancelButton = new Button(selectors.cancelButton)
+    this.gearButton = new Button(selectors.gearButton)
   }
 }
