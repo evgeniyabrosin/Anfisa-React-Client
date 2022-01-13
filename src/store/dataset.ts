@@ -233,9 +233,10 @@ class DatasetStore {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
-    await this.fetchDsStatAsync()
     await this.fetchWsTagsAsync()
     await this.fetchWsListAsync(this.isXL)
+    this.fetchDsStatAsync()
+
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
       : await this.fetchFilteredTabReportAsync()
