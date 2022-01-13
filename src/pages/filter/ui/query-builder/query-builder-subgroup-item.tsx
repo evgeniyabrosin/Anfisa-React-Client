@@ -7,6 +7,7 @@ import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
+import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
@@ -23,6 +24,11 @@ export const QueryBuilderSubgroupItem = observer(
   ({ subGroupItem, isModal, groupName }: IProps) => {
     const [isVisibleSubGroupItem, setIsVisibleSubGroupItem] = useState(true)
 
+    const [, writeScrollPosition] = useScrollPosition({
+      elem: '#attributes-container',
+      storageId: 'attributesModalScrollPos',
+    })
+
     const expandContent = () => {
       setIsVisibleSubGroupItem(prev => !prev)
     }
@@ -36,6 +42,7 @@ export const QueryBuilderSubgroupItem = observer(
     const handleAttrClick = (group: StatList) => {
       const source = isModal ? ModalSources.TreeStep : ModalSources.TreeStat
 
+      writeScrollPosition()
       addSelectedGroup()
       dtreeStore.closeModalAttribute()
 
