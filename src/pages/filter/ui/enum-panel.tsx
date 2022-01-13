@@ -32,9 +32,7 @@ export const EnumPanel = observer(
     const [currentPage, setCurrentPage] = useState(0)
 
     const filteredVariants = variants.filter((variant: any[]) =>
-      variant[0]
-        .toLocaleLowerCase()
-        .startsWith(searchValue.toLocaleLowerCase()),
+      variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
     )
 
     const groupsPerPage = 12
