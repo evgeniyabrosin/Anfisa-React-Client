@@ -293,8 +293,6 @@ class DatasetStore {
     runInAction(() => {
       this.dsStat = result
       this.variantsAmount = result['total-counts']['0']
-
-      this.statAmount = get(result, 'filtered-counts', [])
       this.isLoadingDsStat = false
     })
   }
