@@ -445,10 +445,8 @@ class DatasetStore {
       body.append('zone', JSON.stringify(this.zone))
     }
 
-    if (!this.prevPreset || this.prevPreset !== this.activePreset) {
-      body.append('filter', this.activePreset)
-      this.prevPreset = this.activePreset
-    }
+    this.prevPreset = this.activePreset
+    body.append('filter', this.activePreset)
 
     const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
       method: 'POST',
