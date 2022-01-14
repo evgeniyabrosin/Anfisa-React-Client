@@ -264,7 +264,9 @@ class DatasetStore {
         localBody.append('conditions', JSON.stringify(this.conditions))
     }
 
-    this.activePreset && localBody.append('filter', this.activePreset)
+    this.activePreset &&
+      this.conditions.length === 0 &&
+      localBody.append('filter', this.activePreset)
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
