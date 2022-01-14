@@ -76,11 +76,6 @@ export const FilterRefinerGroups = observer(
               <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
 
               {values[index].map((item: StatList) => {
-                const numericAmount =
-                  item.kind === FilterKindEnum.Numeric
-                    ? get(datasetStore, 'dsStat.total-counts.0', 0)
-                    : 0
-
                 const incomplete = item?.incomplete ?? false
 
                 return (
