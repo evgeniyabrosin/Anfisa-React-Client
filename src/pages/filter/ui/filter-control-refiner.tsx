@@ -41,10 +41,14 @@ export const FilterControlRefiner = observer(
 
     const handleClick = () => {
       if (filterStore.actionName === ActionFilterEnum.Load) {
-        presetStore.loadPresetAsync(activePreset, 'refiner')
         datasetStore.setActivePreset(activePreset)
+
+        if (datasetStore.prevPreset !== datasetStore.activePreset) {
+          presetStore.loadPresetAsync(activePreset, 'refiner')
+          datasetStore.fetchWsListAsync()
+        }
+
         filterStore.resetActionName()
-        datasetStore.fetchWsListAsync()
       }
 
       if (filterStore.actionName === ActionFilterEnum.Delete) {

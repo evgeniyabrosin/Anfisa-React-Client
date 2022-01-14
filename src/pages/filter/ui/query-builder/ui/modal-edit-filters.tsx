@@ -102,7 +102,7 @@ export const ModalEditFilters = observer(
       (variant: [string, number]) =>
         variant[0]
           .toLocaleLowerCase()
-          .startsWith(searchValue.toLocaleLowerCase()),
+          .includes(searchValue.toLocaleLowerCase()),
     )
 
     const groupsPerPage = 100

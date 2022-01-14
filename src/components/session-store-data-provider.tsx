@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { SessionStoreManager } from '../core/session-store-manager'
+import { SessionStoreManager } from '../core/storage-management/session-store-manager'
 
 export interface ISessionStoreDataProviderProps<T = any> {
   storeKey: string

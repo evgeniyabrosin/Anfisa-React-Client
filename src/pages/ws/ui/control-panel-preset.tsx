@@ -18,14 +18,17 @@ export const Preset = observer(
     )
 
     const onSelectAsync = async (arg: Option, reset?: string) => {
-      filterPresetStore.loadPresetAsync(arg.value, 'ws')
       datasetStore.setActivePreset(arg.value)
 
-      datasetStore.fetchWsListAsync(false, 'reset')
-      datasetStore.setIsLoadingTabReport(true)
+      if (datasetStore.prevPreset !== datasetStore.activePreset) {
+        filterPresetStore.loadPresetAsync(arg.value, 'ws')
 
-      reset && datasetStore.resetActivePreset()
-      reset && datasetStore.resetHasPreset()
+        datasetStore.fetchWsListAsync(false, 'reset')
+        datasetStore.setIsLoadingTabReport(true)
+
+        reset && datasetStore.resetActivePreset()
+        reset && datasetStore.resetHasPreset()
+      }
     }
 
     return (

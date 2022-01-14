@@ -229,13 +229,14 @@ class DatasetStore {
     this.conditions = []
   }
 
-  async initDatasetAsync(datasetName: string) {
+  async initDatasetAsync(datasetName: string = this.datasetName) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
-    await this.fetchDsStatAsync()
     await this.fetchWsTagsAsync()
     await this.fetchWsListAsync(this.isXL)
+    this.fetchDsStatAsync()
+
     this.filteredNo.length === 0
       ? await this.fetchTabReportAsync()
       : await this.fetchFilteredTabReportAsync()
@@ -445,10 +446,8 @@ class DatasetStore {
       body.append('zone', JSON.stringify(this.zone))
     }
 
-    if (!this.prevPreset || this.prevPreset !== this.activePreset) {
-      body.append('filter', this.activePreset)
-      this.prevPreset = this.activePreset
-    }
+    this.prevPreset = this.activePreset
+    body.append('filter', this.activePreset)
 
     const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
       method: 'POST',
