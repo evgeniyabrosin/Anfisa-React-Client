@@ -13,4 +13,5 @@ export const DecisionTreeModal = {
   addButton: 'add-button',
   removeButton: 'remove-button',
   cancelButton: 'cancel-button',
+  modalHeader: 'modal-header',
 }

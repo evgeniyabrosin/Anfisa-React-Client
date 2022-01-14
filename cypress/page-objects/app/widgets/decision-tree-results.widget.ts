@@ -30,6 +30,8 @@ export interface DecisionTreeResultsSelectors {
   contentEditor: string
   collapseAll: string
   expandAll: string
+  modalHeader: string
+  anyChangeAlert: string
 }
 
 export interface DecisionTreeResultsLabels {
@@ -39,6 +41,8 @@ export interface DecisionTreeResultsLabels {
   treeTooltip: string
   joinByLabel: string
   contentEditor: string
+  modalHeader: string
+  anyChangeAlert: string
 }
 
 export class DecisionTreeResultsWidget extends UIWidget {
@@ -66,6 +70,8 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly contentEditor: Label
   readonly collapseAll: Button
   readonly expandAll: Button
+  readonly modalHeader: Label
+  readonly anyChangeAlert: Label
 
   constructor(options: {
     selectors: DecisionTreeResultsSelectors
@@ -109,5 +115,10 @@ export class DecisionTreeResultsWidget extends UIWidget {
     )
     this.expandAll = new Button(selectors.expandAll)
     this.collapseAll = new Button(selectors.collapseAll)
+    this.modalHeader = new Label(selectors.modalHeader, labels.modalHeader)
+    this.anyChangeAlert = new Label(
+      selectors.anyChangeAlert,
+      labels.anyChangeAlert,
+    )
   }
 }

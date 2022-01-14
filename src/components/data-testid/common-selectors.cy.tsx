@@ -14,4 +14,5 @@ export const CommonSelectors = {
   checkboxWithTag: 'div.flex.items-center.mb-4',
   numberInput: 'input[type="number"]',
   dataCharts: 'canvas',
+  anyChangeAlert: '[role="alert"]',
 }

@@ -11,6 +11,7 @@ import { getPageRoute } from '@router/router.const'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
+import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
 import {
@@ -76,6 +77,7 @@ export const FilterControl = observer(
                   className="ml-2"
                   variant={'secondary-dark'}
                   onClick={() => dtreeStore.openModalTextEditor()}
+                  dataTestId={DecisionTreesMenuDataCy.textEditor}
                 />
               )}
               <Button

@@ -4,6 +4,7 @@ import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
 
 describe('Regression test of the decision tree', () => {
   const includedVariants = '+5041176'
+  const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
 
   const text =
     ' \nif Compound_Request(request = [[1,  {"0": ["HG003", "HG004"], "1-2": ["HG002"]} ]]) in   :\n     return true'
@@ -14,13 +15,13 @@ describe('Regression test of the decision tree', () => {
     datasetPage.leftPanel.datasetsListElem
       .getButtonByText('xl_PGP3140_wgs_NIST-4_2')
       .click()
-    datasetPage.datasetInfo.datasetHeader.haveText('xl_PGP3140_wgs_NIST-4_2')
+    datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
     datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
-    cy.url().should('include', '/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    cy.url().should('include', `/filter?ds=${datasetName}`)
   })
   it('should search attribute based on a substring', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders
@@ -29,7 +30,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should select all attributes | step 3', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -48,7 +49,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should join second attribute with first | step 4', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -78,7 +79,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should join third attribute by OR | step 5', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -126,7 +127,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add step after | step 6', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -145,7 +146,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add Min_GQ attributes to the second step | step 7', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -170,7 +171,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add Max_GQ attributes to the second step | step 8', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -214,7 +215,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add third step | step 9', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -245,7 +246,7 @@ describe('Regression test of the decision tree', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should add attributes to step 3 | step 10', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -282,7 +283,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should delete step | step 12', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -311,7 +312,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add attribute to third step | step 13', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -354,7 +355,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should not add attribute if press cancel | step 14', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -393,7 +394,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should not change attributes if cancel button is pressed | step 15', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -444,7 +445,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should collapse decision tree panel | step 17', () => {
-    decisionTreesPage.visit('/filter?ds=xl_PGP3140_wgs_NIST-4_2')
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()

@@ -1,6 +1,7 @@
 import cn from 'classnames'
 
 import { Icon } from '@ui/icon'
+import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
 import { SwitchTheme } from './switch-theme'
 
 interface IProps {
@@ -21,6 +22,7 @@ export const HeaderModal = ({
   <div className="flex w-full justify-between items-center font-medium">
     <div
       className={cn(theme === 'light' ? 'text-black' : 'text-white', 'flex')}
+      data-testid={DecisionTreeModal.modalHeader}
     >
       {groupName}
 

@@ -34,6 +34,11 @@ class DecisionTreesPage extends BasePage {
         cancelAddNewDataset: Helper.getDataId(
           DecisionTreesMenuDataCy.cancelAddNewDataset,
         ),
+        textEditor: Helper.getDataId(DecisionTreesMenuDataCy.textEditor),
+        createNew: Helper.getDataId(DecisionTreesMenuDataCy.createNew),
+        applyNewTree: Helper.getDataId(DecisionTreesMenuDataCy.applyNewTree),
+        newDecisionTreeNameInput:
+          DecisionTreesMenuDataCy.newDecisionTreeNameInput,
       },
       labels: {},
     })
@@ -73,6 +78,8 @@ class DecisionTreesPage extends BasePage {
         ),
         expandAll: Helper.getDataId(DecisionTreesResultsDataCy.expandAll),
         collapseAll: Helper.getDataId(DecisionTreesResultsDataCy.collapseAll),
+        modalHeader: Helper.getDataId(DecisionTreeModal.modalHeader),
+        anyChangeAlert: CommonSelectors.anyChangeAlert,
       },
       labels: {
         graphHeaders: '',
@@ -81,6 +88,8 @@ class DecisionTreesPage extends BasePage {
         treeTooltip: 'Show excluded varants for step 5',
         joinByLabel: 'Join by AND',
         contentEditor: '',
+        modalHeader: 'Edit current Decision Tree code',
+        anyChangeAlert: '',
       },
     })
     this.attributesList = new AttributesListWidget({
