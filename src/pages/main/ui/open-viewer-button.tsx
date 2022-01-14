@@ -77,6 +77,10 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
       ref={ref}
     >
       {pages.map((pageName, index) => {
+        const shouldRenderOption = pageName !== GlbPagesNames.IGV
+
+        if (!shouldRenderOption) return
+
         return (
           <span
             className="py-1 px-3 rounded hover:bg-blue-light"

@@ -6,6 +6,7 @@ export const Routes = Glb.makeEnum({
   WS: '/ws',
   Filter: '/filter',
   Refiner: '/filter/refiner/',
+  IGV: '/igv',
 })
 
 export const RouteNames = Glb.makeEnum({
@@ -13,6 +14,7 @@ export const RouteNames = Glb.makeEnum({
   [Routes.Refiner]: GlbPagesNames.Refiner,
   [Routes.WS]: GlbPagesNames.Table,
   [Routes.Root]: GlbPagesNames.Root,
+  [Routes.IGV]: GlbPagesNames.IGV,
 })
 
 export type PageRoute = typeof Routes[keyof typeof Routes]

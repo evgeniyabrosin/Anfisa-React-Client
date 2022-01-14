@@ -14,6 +14,7 @@ import { Icon } from '@ui/icon'
 import { closeHandler } from '../drawer'
 import { DrawerNote } from './drawer-note'
 import { DrawerTags } from './drawer-tags'
+import { IgvButton } from './igv-button'
 
 interface Props {
   setLayout: Dispatch<SetStateAction<any>>
@@ -92,13 +93,13 @@ export const VariantHeader = observer(
                 onClick={handleNextVariant}
               />
             </div>
-
             <div className="text-blue-bright font-bold leading-18px">
               {`[${genInfo}] `}
               <span dangerouslySetInnerHTML={{ __html: hg19 }} />
             </div>
-
             <DrawerTags />
+
+            <IgvButton />
 
             <DrawerNote />
           </div>
