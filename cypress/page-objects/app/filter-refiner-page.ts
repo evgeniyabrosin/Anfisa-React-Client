@@ -30,8 +30,8 @@ class FilterRefinerPage extends BasePage {
     this.filter = new FilterRefinerFilterWidget({
       selectors: {
         filterHeader: Helper.getDataId(FilterRefiner.filterHeader),
-        filterElements: Helper.getDataId(FilterRefiner.filterElements),
-        filterElementsCheckbox: Helper.getDataId(CommonSelectors.checkbox),
+        filterElements: FilterRefiner.filterElements,
+        filterElementsCheckbox: CommonSelectors.checkbox,
         addButton: Helper.getDataId(FilterRefiner.addButton),
         clearButton: Helper.getDataId(FilterRefiner.clearButton),
       },
@@ -43,8 +43,8 @@ class FilterRefinerPage extends BasePage {
     this.total = new FilterRefinerTotalWidget({
       selectors: {
         applyButton: Helper.getDataId(FilterRefiner.applyButton),
-        rulesListElement: Helper.getDataId(FilterRefiner.rulesListElement),
-        rulesListCheckbox: Helper.getDataId(CommonSelectors.checkbox),
+        resultsListElement: Helper.getDataId(FilterRefiner.resultsListElement),
+        resultsListCheckbox: Helper.getDataId(CommonSelectors.checkbox),
         variantsNumber: Helper.getDataId(FilterRefiner.variantsNumber),
       },
       labels: {

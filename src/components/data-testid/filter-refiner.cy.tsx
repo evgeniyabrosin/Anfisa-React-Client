@@ -4,10 +4,10 @@ export const FilterRefiner = {
   searchField: 'search-input',
   listElements: 'list-element',
   filterHeader: 'filter-header',
-  filterElements: 'filter-element',
+  filterElements: '.text-black',
   addButton: 'add-button',
   clearButton: 'clear-button',
   applyButton: 'apply-button',
-  rulesListElement: 'rules-list-element',
+  resultsListElement: 'results-list-element',
   variantsNumber: 'variants-number',
 }

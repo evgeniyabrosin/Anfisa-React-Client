@@ -5,8 +5,8 @@ import { UIWidget } from '../../lib/ui-widget'
 
 export interface FilterRefinerTotalSelectors {
   applyButton: string
-  rulesListElement: string
-  rulesListCheckbox: string
+  resultsListElement: string
+  resultsListCheckbox: string
   variantsNumber: string
 }
 
@@ -17,8 +17,8 @@ export interface FilterRefinerTotalLabels {
 
 export class FilterRefinerTotalWidget extends UIWidget {
   readonly applyButton: Button
-  readonly rulesListElement: Label
-  readonly rulesListCheckbox: Checkbox
+  readonly resultsListElement: Label
+  readonly resultsListCheckbox: Checkbox
   readonly variantsNumber: Label
 
   constructor(options: {
@@ -31,11 +31,11 @@ export class FilterRefinerTotalWidget extends UIWidget {
     const labels = options.labels
 
     this.applyButton = new Button(selectors.applyButton)
-    this.rulesListElement = new Label(
-      selectors.rulesListElement,
+    this.resultsListElement = new Label(
+      selectors.resultsListElement,
       labels.rulesListElement,
     )
-    this.rulesListCheckbox = new Checkbox(selectors.rulesListCheckbox)
+    this.resultsListCheckbox = new Checkbox(selectors.resultsListCheckbox)
     this.variantsNumber = new Label(
       selectors.variantsNumber,
       labels.variantsNumber,

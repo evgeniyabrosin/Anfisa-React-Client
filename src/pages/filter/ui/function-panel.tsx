@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
+import { FilterRefiner } from '@components/data-testid/filter-refiner.cy'
 import { CompundHet } from './compound-het'
 import { CompoundRequest } from './compound-request'
 import { CustomInheritanceMode } from './custom-inheritance-mode'
@@ -205,6 +206,7 @@ export const FunctionPanel = (): ReactElement => {
                 text={t('general.add')}
                 onClick={props.submitForm}
                 disabled={!!filterStore.error}
+                dataTestId={FilterRefiner.addButton}
               />
             </div>
           </div>
