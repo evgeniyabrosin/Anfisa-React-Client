@@ -6,8 +6,8 @@ export const en = {
     csv: 'Csv',
     noResultsFound: 'No results found',
     noResultsFoundByFilters:
-      'There are no results. Try to clear filters and try again',
-    cleanFilters: 'Clean filters',
+      'There are no results. Try to reset filters and try again',
+    resetFilters: 'Reset filters',
     selectAll: 'Select All',
     clearAll: 'Clear All',
     cancel: 'Cancel',

@@ -171,7 +171,7 @@ export const Table = observer(
             text={t('general.noResultsFoundByFilters')}
             className="text-black font-bold"
             action={{
-              text: t('general.cleanFilters'),
+              text: t('general.resetFilters'),
               handler: resetTableToInitial,
             }}
           />
