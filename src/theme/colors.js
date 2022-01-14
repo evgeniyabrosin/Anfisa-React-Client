@@ -35,7 +35,10 @@ module.exports = {
   red: {
     secondary: '#dc3737',
     light: '#ff3137',
-    lighter: '#FFE6E7',
+    lighter: '#ffe6e7',
+    hover: '#e70010',
+    active: '#cf4041',
+    disabled: '#e2e7ec',
   },
   orange: {
     secondary: '#f87c3a',

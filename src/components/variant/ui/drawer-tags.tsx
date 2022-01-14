@@ -12,6 +12,7 @@ import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { noFirstSymbolsPattern } from '@utils/validateNotes'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {
@@ -58,7 +59,9 @@ const DrawerTagModal = observer(({ close }: any) => {
       setError('')
     }
 
-    if (value.length > 30) setError('Tag name is too long')
+    if (value.length > 30) setError(t('error.tagNameIsTooLong'))
+
+    if (noFirstSymbolsPattern.test(value)) setError(t('error.noFirstSymbols'))
 
     setCustomTag(value)
   }
@@ -169,8 +172,7 @@ const DrawerTagModal = observer(({ close }: any) => {
             <Button
               text="Add custom tag"
               disabled={!customTag.trim() || !!error}
-              variant={'secondary'}
-              className="mt-2 hover:bg-blue-bright hover:text-white"
+              className="mt-2"
               onClick={handleSetCustomTag}
               dataTestId={VariantDrawerDataCy.addCustomTag}
             />
@@ -183,13 +185,11 @@ const DrawerTagModal = observer(({ close }: any) => {
           text={t('general.cancel')}
           onClick={close}
           variant={'secondary'}
-          className="mr-3 ml-auto hover:bg-blue-bright hover:text-white"
+          className="mr-2 ml-auto"
         />
 
         <Button
           text="Save tags"
-          variant={'secondary'}
-          className="hover:bg-blue-bright hover:text-white"
           onClick={handleSaveTagsAsync}
           dataTestId={VariantDrawerDataCy.saveTags}
         />
