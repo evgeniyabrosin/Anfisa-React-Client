@@ -57,6 +57,8 @@ jobs:
       if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
       uses: actions/checkout@v2
     - run: |
+            git config --global user.name 'evgeniy-chernomortsev'
+            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
             yarn config set version-git-message "[RELEASE] %s"
             yarn version --patch
             git config --global user.name 'evgeniy-chernomortsev'
