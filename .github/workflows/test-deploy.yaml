@@ -55,6 +55,7 @@ jobs:
         aws-region: eu-central-1
     - name: Increment version
       if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
+      uses: actions/checkout@v2
       run: |
             yarn config set version-git-message "[RELEASE] %s"
             yarn version --patch
