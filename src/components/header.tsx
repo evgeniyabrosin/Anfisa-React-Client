@@ -105,6 +105,7 @@ export const Header = observer(
               <Logo mode="white" className="mr-4" />
 
               <span className="text-grey-blue">
+                Anfisa front: {process.env.REACT_APP_VERSION} back:{' '}
                 {toJS(dirinfoStore.dirinfo).version as string}
               </span>
             </div>
