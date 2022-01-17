@@ -29,7 +29,6 @@ export const Button = ({
   dataTestId,
 }: ButtonProps): ReactElement => {
   let padding = ''
-  const rounding = icon ? 'rounded' : 'rounded-full'
   const classNameString: string = cn(className)
   const isPrimary = variant === 'primary'
   const isSecondary = variant === 'secondary'
@@ -52,9 +51,8 @@ export const Button = ({
   }
 
   const cnButton = cn(
-    'flex items-center justify-center',
+    'flex items-center justify-center rounded-full',
     padding,
-    rounding,
     {
       //default primary
       'bg-blue-bright':

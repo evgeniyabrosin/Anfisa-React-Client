@@ -57,6 +57,7 @@ export const SelectModalButtons = observer(
               <Button
                 disabled={disabled}
                 text={t('dtree.replace')}
+                className={'mr-2'}
                 onClick={() => handleAddAttribute('REPLACE')}
               />
 
