@@ -52,6 +52,8 @@ export const FilterRefinerGroups = observer(
         filterStore.removeSelectedFiltersGroup(group, name)
         datasetStore.removeConditionGroup({ subGroup: name })
       }
+
+      datasetStore.fetchWsListAsync()
     }
 
     return (

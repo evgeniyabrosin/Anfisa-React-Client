@@ -160,6 +160,8 @@ export const FunctionPanel = (): ReactElement => {
         [[FuncStepTypesEnum.CompoundRequest, noArray.length]],
       )
     }
+
+    datasetStore.fetchWsListAsync()
   }
 
   const handleClear = () => {
@@ -172,6 +174,7 @@ export const FunctionPanel = (): ReactElement => {
     })
 
     filterStore.resetStatFuncData()
+    datasetStore.fetchWsListAsync()
   }
 
   if (!Component) {
