@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import { Button } from '@ui/button'
+import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
 import { deleteAttribute } from '@utils/changeAttribute/deleteAttribute'
 
 interface IProps {
@@ -32,6 +33,7 @@ export const EditModalButtons = observer(
             variant={'secondary'}
             className="mr-2"
             onClick={handleClose}
+            dataTestId={DecisionTreeModal.cancelButton}
           />
 
           <div className="relative">

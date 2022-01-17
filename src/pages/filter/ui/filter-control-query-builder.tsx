@@ -13,6 +13,7 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
+import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { DtreeModal } from './dtree-modal'
@@ -140,6 +141,7 @@ export const FilterControlQueryBuilder = observer(
                   'text-blue-bright text-14 cursor-pointer hover:text-blue-light',
                 )}
                 onClick={handleCreateTree}
+                data-testid={DecisionTreesMenuDataCy.createNew}
               >
                 {t('filter.createPreset')}
               </span>
@@ -194,6 +196,7 @@ export const FilterControlQueryBuilder = observer(
               size="md"
               onClick={handleClick}
               className="text-white mt-auto ml-2"
+              dataTestId={DecisionTreesMenuDataCy.applyNewTree}
             />
           )}
         </div>

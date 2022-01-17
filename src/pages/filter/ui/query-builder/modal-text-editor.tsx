@@ -161,6 +161,7 @@ export const ModalTextEditor = observer(
           theme={theme}
           isTextEditor
           handleChangeTheme={handleChangeTheme}
+          data-testid={'modal-header'}
         />
 
         <div className="flex items-center mt-1">

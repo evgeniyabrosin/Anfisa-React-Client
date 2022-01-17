@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { InputSearch } from '@components/input-search'
 
 interface IProps {
@@ -59,6 +60,7 @@ export const QueryBuilderSearch = observer(
                 size={20}
                 className="cursor-pointer hover:text-blue-bright"
                 onClick={() => handleClick('collapse')}
+                dataTestId={DecisionTreesResultsDataCy.expandAll}
               />
             </div>
 
@@ -68,6 +70,7 @@ export const QueryBuilderSearch = observer(
                 size={20}
                 className="cursor-pointer hover:text-blue-bright"
                 onClick={() => handleClick('expand')}
+                dataTestId={DecisionTreesResultsDataCy.collapseAll}
               />
             </div>
           </div>

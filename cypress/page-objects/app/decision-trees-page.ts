@@ -1,10 +1,11 @@
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
+import { DecisionTreeModal } from '../../../src/components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '../../../src/components/data-testid/decision-tree-results.cy'
-import { DecisionTreeMinGQ } from '../../../src/components/data-testid/min-gq.cy'
 import { BasePage } from '../lib/base-page'
 import { Helper } from '../lib/helpers'
 import { AttributesListWidget } from './widgets/attributes-list.widget'
+import { DecisionTreeChartWidget } from './widgets/decision-tree-chart.widget'
 import { DecisionTreeWidget } from './widgets/decision-tree-menu.widget'
 import { DecisionTreeResultsWidget } from './widgets/decision-tree-results.widget'
 
@@ -12,6 +13,7 @@ class DecisionTreesPage extends BasePage {
   readonly decisionTreeMenu: DecisionTreeWidget
   readonly decisionTreeResults: DecisionTreeResultsWidget
   readonly attributesList: AttributesListWidget
+  readonly decisionTreeChart: DecisionTreeChartWidget
   constructor() {
     super()
     this.decisionTreeMenu = new DecisionTreeWidget({
@@ -32,6 +34,11 @@ class DecisionTreesPage extends BasePage {
         cancelAddNewDataset: Helper.getDataId(
           DecisionTreesMenuDataCy.cancelAddNewDataset,
         ),
+        textEditor: Helper.getDataId(DecisionTreesMenuDataCy.textEditor),
+        createNew: Helper.getDataId(DecisionTreesMenuDataCy.createNew),
+        applyNewTree: Helper.getDataId(DecisionTreesMenuDataCy.applyNewTree),
+        newDecisionTreeNameInput:
+          DecisionTreesMenuDataCy.newDecisionTreeNameInput,
       },
       labels: {},
     })
@@ -54,11 +61,25 @@ class DecisionTreesPage extends BasePage {
         ),
         treeTooltip: `${CommonSelectors.treeTooltip}`,
         addAttribute: Helper.getDataId(DecisionTreesResultsDataCy.addAttrbute),
-        joinByLabel: Helper.getDataId(DecisionTreesResultsDataCy.joinByLabel),
+        joinByLabel: Helper.getDataId(DecisionTreeModal.joinByLabel),
         optionsMenu: Helper.getDataId(DecisionTreesResultsDataCy.optionsMenu),
         addStepAfter: Helper.getDataId(DecisionTreesResultsDataCy.addStepAfter),
-        leftInput: Helper.getDataId(DecisionTreeMinGQ.leftInput),
-        rightInput: Helper.getDataId(DecisionTreeMinGQ.rightInput),
+        deleteStep: Helper.getDataId(DecisionTreesResultsDataCy.deleteStep),
+        leftInput: Helper.getDataId(DecisionTreeModal.leftInput),
+        rightInput: Helper.getDataId(DecisionTreeModal.rightInput),
+        selectReset: Helper.getDataId(DecisionTreeModal.selectReset),
+        addButton: Helper.getDataId(DecisionTreeModal.addButton),
+        removeButton: Helper.getDataId(DecisionTreeModal.removeButton),
+        numberInput: Helper.getDataId(CommonSelectors.numberInput),
+        cancelButton: Helper.getDataId(DecisionTreeModal.cancelButton),
+        gearButton: Helper.getDataId(DecisionTreesResultsDataCy.gearButton),
+        contentEditor: Helper.getDataId(
+          DecisionTreesResultsDataCy.contentEditor,
+        ),
+        expandAll: Helper.getDataId(DecisionTreesResultsDataCy.expandAll),
+        collapseAll: Helper.getDataId(DecisionTreesResultsDataCy.collapseAll),
+        modalHeader: Helper.getDataId(DecisionTreeModal.modalHeader),
+        anyChangeAlert: CommonSelectors.anyChangeAlert,
       },
       labels: {
         graphHeaders: '',
@@ -66,6 +87,9 @@ class DecisionTreesPage extends BasePage {
         stepCard: 'header3',
         treeTooltip: 'Show excluded varants for step 5',
         joinByLabel: 'Join by AND',
+        contentEditor: '',
+        modalHeader: 'Edit current Decision Tree code',
+        anyChangeAlert: '',
       },
     })
     this.attributesList = new AttributesListWidget({
@@ -73,16 +97,23 @@ class DecisionTreesPage extends BasePage {
         searchForAttr: Helper.getDataId(
           DecisionTreesResultsDataCy.searchForAttr,
         ),
-        selectAll: Helper.getDataId(
-          DecisionTreesResultsDataCy.selectAllFromAttribute,
-        ),
+        selectAll: Helper.getDataId(DecisionTreeModal.selectAllFromAttribute),
         addSelectedAttributes: Helper.getDataId(
-          DecisionTreesResultsDataCy.addSelectedAttributes,
+          DecisionTreeModal.addSelectedAttributes,
         ),
-        addByJoin: Helper.getDataId(DecisionTreesResultsDataCy.addByJoin),
+        addByJoin: Helper.getDataId(DecisionTreeModal.addByJoin),
         problemGroup: CommonSelectors.checkbox,
-        joinByAnd: Helper.getDataId(DecisionTreesResultsDataCy.joinByAnd),
-        joinByOr: Helper.getDataId(DecisionTreesResultsDataCy.joinByOr),
+        joinByAnd: Helper.getDataId(DecisionTreeModal.joinByAnd),
+        joinByOr: Helper.getDataId(DecisionTreeModal.joinByOr),
+        replaceButton: Helper.getDataId(DecisionTreeModal.replaceButton),
+      },
+    })
+    this.decisionTreeChart = new DecisionTreeChartWidget({
+      selectors: {
+        dataCharts: CommonSelectors.dataCharts,
+      },
+      labels: {
+        dataCharts: '',
       },
     })
   }

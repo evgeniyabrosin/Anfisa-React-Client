@@ -91,6 +91,7 @@ export const ModalOperation = observer(
                 deleteStep(index)
               }}
               className="font-normal py-2 px-2 hover:bg-grey-light"
+              data-testid={DecisionTreesResultsDataCy.deleteStep}
             >
               {t('dtree.delete')}
             </div>

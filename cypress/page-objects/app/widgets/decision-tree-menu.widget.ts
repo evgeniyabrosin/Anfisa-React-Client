@@ -12,6 +12,10 @@ export interface DecisionTreeMenuSelectors {
   datasetNameInput: string
   addNewDataset: string
   cancelAddNewDataset: string
+  textEditor: string
+  createNew: string
+  applyNewTree: string
+  newDecisionTreeNameInput: string
 }
 
 export interface DecisionTreeLabels {}
@@ -25,6 +29,10 @@ export class DecisionTreeWidget extends UIWidget {
   readonly datasetNameInput: Input
   readonly addNewDataset: Button
   readonly cancelAddNewDataset: Button
+  readonly textEditor: Button
+  readonly createNew: Button
+  readonly applyNewTree: Button
+  readonly newDecisionTreeNameInput: Input
 
   constructor(options: {
     selectors: DecisionTreeMenuSelectors
@@ -42,5 +50,11 @@ export class DecisionTreeWidget extends UIWidget {
     this.datasetNameInput = new Input(selectors.datasetNameInput)
     this.addNewDataset = new Button(selectors.addNewDataset)
     this.cancelAddNewDataset = new Button(selectors.cancelAddNewDataset)
+    this.textEditor = new Button(selectors.textEditor)
+    this.createNew = new Button(selectors.createNew)
+    this.applyNewTree = new Button(selectors.applyNewTree)
+    this.newDecisionTreeNameInput = new Input(
+      selectors.newDecisionTreeNameInput,
+    )
   }
 }
