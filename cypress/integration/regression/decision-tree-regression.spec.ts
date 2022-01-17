@@ -3,18 +3,20 @@ import { datasetPage } from '../../page-objects/app/datasets-page'
 import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
 
 describe('Regression test of the decision tree', () => {
-  const includedVariants = '+5041176'
+  const includedVariants = '+5,041,176'
   const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
 
   const text =
     ' \nif Compound_Request(request = [[1,  {"0": ["HG003", "HG004"], "1-2": ["HG002"]} ]]) in   :\n     return true'
 
+  const inheritanceMode = 'Inheritance_Mode'
+  const selectAll = 'Select All'
+  const compoundRequest = 'Compound_Request'
+
   it('should open decision tree for XL dataset', () => {
     datasetPage.visit()
     datasetPage.leftPanel.leftPanelHeader.haveText('Datasets')
-    datasetPage.leftPanel.datasetsListElem
-      .getButtonByText('xl_PGP3140_wgs_NIST-4_2')
-      .click()
+    datasetPage.leftPanel.datasetsListElem.getButtonByText(datasetName).click()
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
     datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
@@ -36,10 +38,10 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.waitUntil(() =>
       decisionTreesPage.attributesList.selectAll.element.then(el => {
-        return el.text() === 'Select All'
+        return el.text() === selectAll
       }),
     )
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -53,7 +55,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -61,9 +63,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Inheritance_Mode')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(inheritanceMode)
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
@@ -83,7 +83,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -91,9 +91,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Inheritance_Mode')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(inheritanceMode)
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
@@ -107,9 +105,7 @@ describe('Regression test of the decision tree', () => {
       .getChildren()
       .contains('AND')
     decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Inheritance_Mode')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(inheritanceMode)
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
@@ -131,7 +127,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -150,7 +146,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -175,7 +171,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -219,7 +215,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -250,7 +246,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -287,7 +283,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -316,7 +312,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -340,9 +336,7 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Compound_Request')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.decisionTreeResults.selectReset.select(
       'Autosomal Dominant',
@@ -350,7 +344,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     decisionTreesPage.decisionTreeResults.searchGraphResults
       .eq(1)
-      .type('Compound_Request')
+      .type(compoundRequest)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(1)
   })
 
@@ -359,7 +353,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -398,7 +392,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -422,22 +416,18 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Compound_Request')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.decisionTreeResults.selectReset.select(
       'Autosomal Dominant',
     )
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
-    cy.wait(1000)
+    cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeResults.gearButton.eq(2).click()
-    cy.wait(1000)
     decisionTreesPage.decisionTreeResults.addButton.click()
     decisionTreesPage.decisionTreeResults.selectReset.select('Compensational')
     decisionTreesPage.decisionTreeResults.cancelButton.click()
-    //cy.get('button').contains('Save changes').click()
     cy.wait('@applyAttributes')
     decisionTreesPage.decisionTreeResults.contentEditor
       .eq(2)
@@ -449,7 +439,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
     cy.intercept('POST', '/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
@@ -473,9 +463,7 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
-    decisionTreesPage.attributesList.searchForAttr
-      .eq(0)
-      .type('Compound_Request')
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.decisionTreeResults.selectReset.select(
       'Autosomal Dominant',
