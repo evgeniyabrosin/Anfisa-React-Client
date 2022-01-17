@@ -56,7 +56,7 @@ jobs:
     - name: Increment version
       if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
       uses: actions/checkout@v2
-      run: |
+    - run: |
             yarn config set version-git-message "[RELEASE] %s"
             yarn version --patch
             git push --tags &&
