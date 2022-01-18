@@ -6,6 +6,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
+import { FilterRefiner } from '@components/data-testid/filter-refiner.cy'
 import { resetOptions } from '../../compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
@@ -59,6 +60,7 @@ export const CustomInheritanceModeContent = observer(
               options={resetOptions}
               value={resetValue}
               reset
+              data-testid={FilterRefiner.selectReset}
             />
           </div>
 

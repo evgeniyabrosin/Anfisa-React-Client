@@ -9,18 +9,28 @@ import { Switch } from '@ui/switch'
 interface Props {
   name: string
   setColumns: (columns: IColumns[]) => void
-  index: number
   columns: IColumns[]
 }
 
 export const ColumnNameItem = observer(
-  ({ name, setColumns, index, columns }: Props): ReactElement => {
+  ({ name, setColumns, columns }: Props): ReactElement => {
     const handleHiddenClick = () => {
-      const copy = JSON.parse(JSON.stringify(columns))
+      const newColumns = columns.map(col => {
+        if (col.title === name) {
+          col.hidden = !col.hidden
+        }
 
-      copy[index].hidden = !copy[index].hidden
-      columnsStore.setColumns(copy)
-      setColumns(copy)
+        return col
+      })
+
+      columnsStore.setColumns(newColumns)
+      setColumns(newColumns)
+    }
+
+    const isChecked = () => {
+      const columnItem = columns.find(col => col.title === name)
+
+      return !!columnItem && !columnItem.hidden
     }
 
     return (
@@ -30,10 +40,7 @@ export const ColumnNameItem = observer(
           <span className="text-12 my-1">{name}</span>
         </div>
 
-        <Switch
-          onChange={handleHiddenClick}
-          isChecked={!columns[index].hidden}
-        />
+        <Switch onChange={handleHiddenClick} isChecked={isChecked()} />
       </div>
     )
   },

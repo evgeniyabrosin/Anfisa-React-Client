@@ -80,7 +80,6 @@ export const ColumnsList = observer(
                           name={item.title}
                           setColumns={setColumns}
                           columns={columns}
-                          index={index}
                         />
                       </div>
                     )}

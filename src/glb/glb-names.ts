@@ -5,6 +5,7 @@ export const GlbPagesNames = Glb.makeEnum({
   Table: 'table',
   Filter: 'filter',
   Refiner: 'refiner',
+  IGV: 'IGV',
 })
 
 export const GlbDatasetTypeNames = Glb.makeEnum({

@@ -1,6 +1,8 @@
 import { Button } from '../../lib/button'
 import { Checkbox } from '../../lib/checkbox'
+import { Input } from '../../lib/input'
 import { Label } from '../../lib/label'
+import { Select } from '../../lib/select'
 import { UIWidget } from '../../lib/ui-widget'
 
 export interface FilterRefinerFilterSelectors {
@@ -9,11 +11,23 @@ export interface FilterRefinerFilterSelectors {
   filterElementsCheckbox: string
   addButton: string
   clearButton: string
+  noProblemGroupSelected: string
+  problemGroup: string
+  geneName: string
+  selectReset: string
+  redMessage: string
+  removeButton: string
+  inputNumberSamples: string
+  inputText: string
 }
 
 export interface FilterRefinerFilterLabels {
   filterHeader: string
   filterElements: string
+  noProblemGroupSelected: string
+  problemGroup: string
+  geneName: string
+  redMessage: string
 }
 
 export class FilterRefinerFilterWidget extends UIWidget {
@@ -22,6 +36,14 @@ export class FilterRefinerFilterWidget extends UIWidget {
   readonly filterElementsCheckbox: Checkbox
   readonly addButton: Button
   readonly clearButton: Button
+  readonly noProblemGroupSelected: Label
+  readonly problemGroup: Label
+  readonly geneName: Label
+  readonly selectReset: Select
+  readonly redMessage: Label
+  readonly removeButton: Button
+  readonly inputNumberSamples: Input
+  readonly inputText: Input
 
   constructor(options: {
     selectors: FilterRefinerFilterSelectors
@@ -40,5 +62,16 @@ export class FilterRefinerFilterWidget extends UIWidget {
     this.filterElementsCheckbox = new Checkbox(selectors.filterElementsCheckbox)
     this.addButton = new Button(selectors.addButton)
     this.clearButton = new Button(selectors.clearButton)
+    this.noProblemGroupSelected = new Label(
+      selectors.noProblemGroupSelected,
+      labels.noProblemGroupSelected,
+    )
+    this.problemGroup = new Label(selectors.problemGroup, labels.problemGroup)
+    this.geneName = new Label(selectors.geneName, labels.geneName)
+    this.selectReset = new Select(selectors.selectReset)
+    this.redMessage = new Label(selectors.redMessage, labels.redMessage)
+    this.removeButton = new Button(selectors.removeButton)
+    this.inputNumberSamples = new Input(selectors.inputNumberSamples)
+    this.inputText = new Input(selectors.inputText)
   }
 }

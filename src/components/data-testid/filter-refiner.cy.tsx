@@ -10,4 +10,11 @@ export const FilterRefiner = {
   applyButton: 'apply-button',
   resultsListElement: 'results-list-element',
   variantsNumber: 'variants-number',
+  noProblemGroupSelected: 'no-problem-group-selected',
+  problemGroup: 'problem-group',
+  geneName: 'gene-name',
+  selectReset: 'select-reset',
+  removeButton: 'remove-button',
+  undoButton: 'undo-button',
+  redoButton: 'redo-button',
 }

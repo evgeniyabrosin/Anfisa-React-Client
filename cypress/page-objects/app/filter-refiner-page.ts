@@ -19,6 +19,8 @@ class FilterRefinerPage extends BasePage {
       selectors: {
         selectPreset: Helper.getDataId(FilterRefiner.selectPreset),
         saveDataset: Helper.getDataId(FilterRefiner.saveDataset),
+        undoButton: Helper.getDataId(FilterRefiner.undoButton),
+        redoButton: Helper.getDataId(FilterRefiner.redoButton),
       },
     })
     this.leftPanel = new FilterRefinerLeftPanelWidget({
@@ -34,10 +36,24 @@ class FilterRefinerPage extends BasePage {
         filterElementsCheckbox: CommonSelectors.checkbox,
         addButton: Helper.getDataId(FilterRefiner.addButton),
         clearButton: Helper.getDataId(FilterRefiner.clearButton),
+        noProblemGroupSelected: Helper.getDataId(
+          FilterRefiner.noProblemGroupSelected,
+        ),
+        problemGroup: Helper.getDataId(FilterRefiner.problemGroup),
+        geneName: Helper.getDataId(FilterRefiner.geneName),
+        selectReset: Helper.getDataId(FilterRefiner.selectReset),
+        redMessage: CommonSelectors.redMessage,
+        removeButton: Helper.getDataId(FilterRefiner.removeButton),
+        inputNumberSamples: CommonSelectors.numberInput,
+        inputText: CommonSelectors.tagInput,
       },
       labels: {
         filterHeader: '',
         filterElements: '',
+        noProblemGroupSelected: 'Out of choice. Select problem group.',
+        problemGroup: '',
+        geneName: '',
+        redMessage: 'Improper approx mode gene',
       },
     })
     this.total = new FilterRefinerTotalWidget({
