@@ -13,6 +13,11 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '/app': '' },
       },
+      '/igv-resource': {
+        target: process.env.IGV_SERVICE_URL,
+        changeOrigin: true,
+        pathRewrite: { '/igv-resource': '' },
+      },
     },
   },
   plugins: [

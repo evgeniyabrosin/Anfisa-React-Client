@@ -10,6 +10,7 @@ import { ReccntCommon } from '@declarations'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
+import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
 const normHitClass = 'norm hit'
@@ -248,13 +249,15 @@ export const VariantBody = observer(
                 }}
               >
                 {aspect.title}
+                <div className="flex">
+                  {aspect.name === 'view_gen' && <IgvButton />}
 
-                <Icon
-                  name="ArrowsOut"
-                  className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
-                />
+                  <Icon
+                    name="ArrowsOut"
+                    className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
+                  />
+                </div>
               </div>
-
               <div
                 className={cn(
                   'px-3 overflow-x-auto overflow-y-scroll content-child',

@@ -2,42 +2,46 @@ import { ReactElement, useEffect, useRef } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 
+import { getIgvUrl } from '@core/get-api-url'
+import { useParams } from '@core/hooks/use-params'
 import { ErrorPage } from '@pages/error/error'
 
 const igv = require('igv')
 
+// TODO: when the design is ready, make an error if the file you need is missing
+
+// TODO: add check if we downloaded this sample...
 const IgvPage = observer(
   (): ReactElement => {
     const ref = useRef<HTMLDivElement>(null)
 
+    const params = useParams()
+
+    const locus = params.get('locus')
+    const names = params.get('names')
+    const nameList = names?.split(',') ?? []
+
+    const isCorrectParams = locus && names
+
     useEffect(() => {
+      const tracks = nameList.map(name => {
+        return {
+          name,
+          url: getIgvUrl(`/bams/GRCh38/${name}.sorted.bam`),
+          indexURL: getIgvUrl(`/bams/GRCh38/${name}.sorted.bam.bai`),
+          format: 'bam',
+        }
+      })
+
       const options = {
         genome: 'hg38',
-        locus: 'chr1:55052518 deletion',
-        tracks: [
-          {
-            name: 'HG003',
-            url:
-              'https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud/bams/GRCh38/HG003.sorted.bam',
-            indexURL:
-              'https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud/bams/GRCh38/HG003.sorted.bam.bai',
-            format: 'bam',
-          },
-          {
-            name: 'HG002',
-            url:
-              'https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud/bams/GRCh38/HG002.sorted.bam',
-            indexURL:
-              'https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud/bams/GRCh38/HG002.sorted.bam.bai',
-            format: 'bam',
-          },
-        ],
+        locus,
+        tracks,
       }
 
-      igv.createBrowser(ref.current, options)
-      // igv.createBrowser(ref.current, options).then((browser: any) => {
-      // console.log(browser)
-      // })
+      if (isCorrectParams) igv.createBrowser(ref.current, options)
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return <div ref={ref} />

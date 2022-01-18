@@ -205,4 +205,7 @@ export const en = {
     getBack: 'Get back to start page',
     smthWentWrong: 'Sorry, something went wrong...',
   },
+  igv: {
+    openIgv: 'Open igv',
+  },
 }
