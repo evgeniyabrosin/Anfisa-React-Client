@@ -75,7 +75,10 @@ export const EnumPanel = observer(
       filterStore.setSelectedFilters(localSelectedFilters)
 
       datasetStore.removeConditionGroup({ subGroup: groupItemName })
-      datasetStore.fetchWsListAsync()
+
+      if (!datasetStore.isXL) {
+        datasetStore.fetchWsListAsync()
+      }
 
       setCurrentPage(0)
       setShouldClear(true)
@@ -95,7 +98,10 @@ export const EnumPanel = observer(
         ],
       ])
       setCurrentPage(0)
-      datasetStore.fetchWsListAsync()
+
+      if (!datasetStore.isXL) {
+        datasetStore.fetchWsListAsync()
+      }
 
       const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
 
