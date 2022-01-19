@@ -210,5 +210,6 @@ export const en = {
   },
   igv: {
     openIgv: 'Open igv',
+    filesNotFound: 'Files not found',
   },
 }
