@@ -3,7 +3,7 @@ import { datasetPage } from '../../page-objects/app/datasets-page'
 import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
 
 describe('Regression test of the decision tree', () => {
-  const includedVariants = '+5041176'
+  const includedVariants = '+5,041,176'
   const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
 
   const text =
