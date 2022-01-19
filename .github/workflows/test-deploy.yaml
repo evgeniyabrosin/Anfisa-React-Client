@@ -60,6 +60,7 @@ jobs:
             git config --global user.name 'evgeniy-chernomortsev'
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
             yarn config set version-git-message "[RELEASE] %s"
+            chmod ug+x .husky/*
             yarn version --patch
             git config --global user.name 'evgeniy-chernomortsev'
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
