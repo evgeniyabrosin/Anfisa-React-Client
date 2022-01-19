@@ -102,7 +102,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint:fix"
+      "pre-commit": "yarn lint:fix",
+      "pre-push": "yarn lint && yarn stylelint"
     }
   },
   "eslintConfig": {
