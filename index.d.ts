@@ -316,3 +316,11 @@ export interface IRemoveConditionItem {
   subGroup: string
   itemName: string
 }
+
+export interface IGridLayout {
+  w: number
+  h: number
+  x: number
+  y: number
+  i: string
+}

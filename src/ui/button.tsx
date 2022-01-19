@@ -5,7 +5,12 @@ export interface ButtonProps {
   text?: string
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
-  variant?: 'primary' | 'secondary' | 'secondary-dark' | 'primary-dark'
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'secondary-dark'
+    | 'primary-dark'
+    | 'diestruction'
   className?: Argument
   onClick?: () => void
   append?: ReactElement
@@ -29,12 +34,12 @@ export const Button = ({
   dataTestId,
 }: ButtonProps): ReactElement => {
   let padding = ''
-  const rounding = icon ? 'rounded' : 'rounded-full'
   const classNameString: string = cn(className)
   const isPrimary = variant === 'primary'
   const isSecondary = variant === 'secondary'
   const isPrimaryDark = variant === 'primary-dark'
   const isSecondaryDark = variant === 'secondary-dark'
+  const isDiestruction = variant === 'diestruction'
 
   const isDefaultBackground: boolean =
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
@@ -52,9 +57,8 @@ export const Button = ({
   }
 
   const cnButton = cn(
-    'flex items-center justify-center',
+    'flex items-center justify-center rounded-full',
     padding,
-    rounding,
     {
       //default primary
       'bg-blue-bright':
@@ -63,12 +67,19 @@ export const Button = ({
       //hover primary
       'hover:bg-blue-hover': isPrimary || isPrimaryDark,
       'active:bg-blue-active': isPrimary || isPrimaryDark,
+      //default secondary, diestruction
+      'text-black': isSecondary,
+      isDiestruction,
       //default secondary
       'border-2 border-blue-bright': isSecondary || isSecondaryDark,
-      'text-black': isSecondary,
       //hover secondary
       'hover:border-blue-hover': isSecondary || isSecondaryDark,
       'active:border-blue-active': isSecondary || isSecondaryDark,
+      //default diestruction
+      'border-2 border-red-secondary': isDiestruction,
+      //hover diestruction
+      'hover:border-red-hover': isDiestruction,
+      'active:border-red-active': isDiestruction,
       //disabled general
       'cursor-not-allowed': disabled,
       'text-grey-blue': disabled,
@@ -77,11 +88,15 @@ export const Button = ({
       'hover:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       'active:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       //disabled secondary
-      'border-grey-disabled': disabled && (isSecondary || isSecondaryDark),
+      'border-grey-disabled': disabled && (isDiestruction || isSecondaryDark),
       'hover:border-grey-disabled':
         disabled && (isSecondary || isSecondaryDark),
       'active:border-grey-disabled':
         disabled && (isSecondary || isSecondaryDark),
+      //disabled diestruction
+      'border-red-disabled': disabled && isDiestruction,
+      'hover:border-red-disabled': disabled && isDiestruction,
+      'active:border-red-disabled': disabled && isDiestruction,
     },
     className,
   )

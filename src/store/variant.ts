@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { ReccntCommon, ReccntDisplayItem } from '@declarations'
+import { IGridLayout, ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import datasetStore from './dataset'
 
@@ -13,8 +13,8 @@ export class VariantStore {
   drawerVisible = false
   variant: ReccntCommon[] = []
   recordsDisplayConfig: any = {}
-  wsDrawerVariantsLayout: any[] = []
-  modalDrawerVariantsLayout: any[] = []
+  wsDrawerVariantsLayout: IGridLayout[] = []
+  modalDrawerVariantsLayout: IGridLayout[] = []
   index = 0
   choosedIndex = 0
   dsName = ''

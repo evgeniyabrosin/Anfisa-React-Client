@@ -30,6 +30,7 @@ class DatasetStore {
   genesList: string[] = []
   tags: string[] = []
   samples: string[] = []
+  selectedVariantNumber?: number
 
   wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
   offset = 0
@@ -83,6 +84,10 @@ class DatasetStore {
 
   setActivePreset(value: string) {
     this.activePreset = value
+  }
+
+  setSelectedVariantNumber(index: number | undefined) {
+    this.selectedVariantNumber = index
   }
 
   resetActivePreset() {
@@ -259,7 +264,9 @@ class DatasetStore {
         localBody.append('conditions', JSON.stringify(this.conditions))
     }
 
-    this.activePreset && localBody.append('filter', this.activePreset)
+    this.activePreset &&
+      this.conditions.length === 0 &&
+      localBody.append('filter', this.activePreset)
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
@@ -380,10 +387,24 @@ class DatasetStore {
     this.setIsLoadingTabReport(false)
   }
   async fetchFilteredTabReportAsync() {
-    const seq = this.filteredNo.slice(
-      this.indexFilteredNo,
-      this.indexFilteredNo + INCREASE_INDEX,
-    )
+    let seq: number[] = []
+
+    if (this.selectedVariantNumber !== undefined) {
+      const lastVariant = this.filteredNo[this.filteredNo.length - 1]
+
+      const currentSet = Math.ceil(this.selectedVariantNumber / INCREASE_INDEX)
+      const lastVariantInSet = currentSet * INCREASE_INDEX
+
+      seq =
+        lastVariantInSet >= lastVariant
+          ? this.filteredNo
+          : this.filteredNo.slice(0, lastVariantInSet)
+    } else {
+      seq = this.filteredNo.slice(
+        this.indexFilteredNo,
+        this.indexFilteredNo + INCREASE_INDEX,
+      )
+    }
 
     if (this.indexFilteredNo === 0) {
       this.setIsLoadingTabReport(true)
@@ -396,6 +417,8 @@ class DatasetStore {
 
     this.indexFilteredNo += INCREASE_INDEX
     this.isFetchingMore = false
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    this.setSelectedVariantNumber(undefined)
   }
 
   async fetchTagSelectAsync() {

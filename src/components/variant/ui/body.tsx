@@ -1,4 +1,10 @@
-import { ReactElement, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 import GridLayout from 'react-grid-layout'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
@@ -6,10 +12,12 @@ import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
-import { ReccntCommon } from '@declarations'
+import { IGridLayout, ReccntCommon } from '@declarations'
+import { SessionStoreManager } from '@core/storage-management/session-store-manager'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
+import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
 const normHitClass = 'norm hit'
@@ -113,8 +121,8 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
 
 interface Props {
   drawerWidth: number
-  layout: any
-  setLayout: any
+  layout: IGridLayout[]
+  setLayout: Dispatch<SetStateAction<IGridLayout[]>>
 }
 
 export const VariantBody = observer(
@@ -128,6 +136,10 @@ export const VariantBody = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
       indicator = 1
     })
+
+    const sortGridLayout = (gridLayout: IGridLayout[]) => {
+      return [...gridLayout].sort((a, b) => a.y - b.y)
+    }
 
     return (
       <GridLayout
@@ -145,17 +157,15 @@ export const VariantBody = observer(
           })
 
           variantStore.checkRecodsDisplaying()
-          window.sessionStorage.setItem(
-            'gridLayout',
-            JSON.stringify(layoutData),
-          )
-
+          SessionStoreManager.write('gridLayout', sortGridLayout(layoutData))
           setLayout(layoutData)
         }}
         onLayoutChange={layoutData => {
           if (indicator === 0) {
             return
           } else {
+            const sortedGridLayout = sortGridLayout(layoutData)
+
             layoutData.forEach(layoutItem => {
               variantStore.updateRecordsDisplayConfig(
                 layoutItem.i,
@@ -164,12 +174,8 @@ export const VariantBody = observer(
             })
 
             variantStore.checkRecodsDisplaying()
-            window.sessionStorage.setItem(
-              'gridLayout',
-              JSON.stringify(layoutData),
-            )
-
-            setLayout(layoutData)
+            SessionStoreManager.write('gridLayout', sortedGridLayout)
+            setLayout(sortedGridLayout)
           }
         }}
       >
@@ -207,7 +213,7 @@ export const VariantBody = observer(
 
                   const openedH = clientHeight * 0.0208 + 1.3
 
-                  setLayout((prev: any[]) => {
+                  setLayout((prev: IGridLayout[]) => {
                     const clonedLayout: any[] = clone(prev)
 
                     const layoutItemIndex = clonedLayout.findIndex(
@@ -248,13 +254,15 @@ export const VariantBody = observer(
                 }}
               >
                 {aspect.title}
+                <div className="flex">
+                  {aspect.name === 'view_gen' && <IgvButton />}
 
-                <Icon
-                  name="ArrowsOut"
-                  className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
-                />
+                  <Icon
+                    name="ArrowsOut"
+                    className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
+                  />
+                </div>
               </div>
-
               <div
                 className={cn(
                   'px-3 overflow-x-auto overflow-y-scroll content-child',

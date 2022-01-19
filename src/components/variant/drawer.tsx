@@ -2,6 +2,8 @@ import { ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { IGridLayout } from '@declarations'
+import { SessionStoreManager } from '@core/storage-management/session-store-manager'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { VariantBody } from './ui/body'
@@ -19,11 +21,11 @@ export const closeHandler = () => {
 export const VariantDrawer = observer(
   (): ReactElement => {
     const drawerWidth = window.innerWidth - 380
-    const localStorageData = window.sessionStorage.getItem('gridLayout')
-    const currentGridLayout = localStorageData && JSON.parse(localStorageData)
 
-    const [layout, setLayout] = useState(
-      currentGridLayout || variantStore.wsDrawerVariantsLayout,
+    const gridLayout = SessionStoreManager.read<IGridLayout[]>('gridLayout')
+
+    const [layout, setLayout] = useState<IGridLayout[]>(
+      gridLayout || variantStore.wsDrawerVariantsLayout,
     )
 
     useEffect(() => {

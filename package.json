@@ -1,6 +1,6 @@
 {
   "name": "anfisa-react-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@monaco-editor/react": "4.3.1",
@@ -21,7 +21,7 @@
     "react-beautiful-dnd": "13.1.0",
     "react-dom": "17.0.2",
     "react-dropdown": "1.9.2",
-    "react-error-boundary": "^3.1.4",
+    "react-error-boundary": "3.1.4",
     "react-grid-layout": "1.2.5",
     "react-indiana-drag-scroll": "2.1.0",
     "react-intl": "5.15.8",
@@ -42,6 +42,8 @@
     "web-vitals": "1.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "16.0.2",
+    "@commitlint/config-conventional": "16.0.0",
     "@craco/craco": "6.1.2",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
@@ -65,6 +67,7 @@
     "@typescript-eslint/parser": "4.22.0",
     "autoprefixer": "9",
     "classnames": "2.3.1",
+    "commitlint-plugin-function-rules": "1.6.0",
     "craco-alias": "3.0.1",
     "cypress": "9.0.0",
     "cypress-dotenv": "2.0.0",
@@ -76,13 +79,21 @@
     "eslint-plugin-jest": "25.2.4",
     "eslint-plugin-react": "7.23.2",
     "husky": "7.0.2",
+    "lint-staged": "12.1.7",
     "postcss": "7",
+    "stylelint": "14.2.0",
+    "stylelint-config-standard": "24.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "scripts": {
+    "prepare": "husky install",
     "start": "yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
+    "stylelint": "stylelint \"**/*.css\" --config stylelint.config.js",
+    "stylelint:fix": "stylelint \"**/*.css\" --config stylelint.config.js --fix",
+    "lint-stage": "lint-staged --relative",
+    "commitlint": "commitlint --edit",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
@@ -91,7 +102,9 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint:fix"
+      "pre-commit": "yarn lint-stage && yarn lint:fix",
+      "pre-push": "yarn lint && yarn stylelint",
+      "commit-msg": "yarn commitlint"
     }
   },
   "eslintConfig": {

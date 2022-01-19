@@ -204,5 +204,11 @@ export const en = {
   error: {
     getBack: 'Get back to start page',
     smthWentWrong: 'Sorry, something went wrong...',
+    noFirstSymbols: 'No symbols at the first position',
+    tooLongNote: 'Note is too long',
+    tagNameIsTooLong: 'Tag name is too long',
+  },
+  igv: {
+    openIgv: 'Open igv',
   },
 }
