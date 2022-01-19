@@ -27,8 +27,8 @@ const IgvPage = observer(
       const tracks = nameList.map(name => {
         return {
           name,
-          url: getIgvUrl(`/bams/GRCh38/${name}.sorted.bam`),
-          indexURL: getIgvUrl(`/bams/GRCh38/${name}.sorted.bam.bai`),
+          url: getIgvUrl(`bams/GRCh38/${name}.sorted.bam`),
+          indexURL: getIgvUrl(`bams/GRCh38/${name}.sorted.bam.bai`),
           format: 'bam',
         }
       })
