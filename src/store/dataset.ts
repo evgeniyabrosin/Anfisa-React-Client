@@ -393,7 +393,10 @@ class DatasetStore {
   async fetchFilteredTabReportAsync() {
     let seq: number[] = []
 
-    if (this.selectedVariantNumber !== undefined) {
+    if (
+      this.selectedVariantNumber !== undefined &&
+      this.selectedVariantNumber > 0
+    ) {
       const lastVariant = this.filteredNo[this.filteredNo.length - 1]
 
       const currentSet = Math.ceil(this.selectedVariantNumber / INCREASE_INDEX)
