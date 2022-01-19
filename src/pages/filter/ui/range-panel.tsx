@@ -32,6 +32,8 @@ export const RangePanel = observer(
     const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
 
     const handleAddConditionsAsync = async () => {
+      if (datasetStore.activePreset) datasetStore.resetActivePreset()
+
       const arrayNo = await datasetStore.setConditionsAsync([
         [FilterKindEnum.Numeric, selectedFilter.name, [+min, true, +max, true]],
       ])
@@ -49,6 +51,17 @@ export const RangePanel = observer(
 
     const handleClear = () => {
       datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+
+      const group = filterStore.selectedGroupItem.vgroup
+      const groupItemName = filterStore.selectedGroupItem.name
+      const localSelectedFilters = filterStore.selectedFilters
+
+      if (
+        localSelectedFilters[group]?.[groupItemName] &&
+        datasetStore.activePreset
+      ) {
+        datasetStore.resetActivePreset()
+      }
 
       filterStore.removeSelectedFilters({
         group: selectedFilter.vgroup,

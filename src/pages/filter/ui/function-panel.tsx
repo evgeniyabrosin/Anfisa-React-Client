@@ -70,6 +70,8 @@ export const FunctionPanel = (): ReactElement => {
       return
     }
 
+    if (datasetStore.activePreset) datasetStore.resetActivePreset()
+
     if (selectedFilter.name === FuncStepTypesEnum.InheritanceMode) {
       const noArray = await datasetStore.setConditionsAsync([
         [

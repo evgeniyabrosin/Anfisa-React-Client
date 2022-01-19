@@ -330,8 +330,7 @@ class DatasetStore {
         })
       }
     })
-
-    !source && this.fetchDsStatAsync()
+    !source || (this.isXL && this.fetchDsStatAsync())
   }
 
   async fetchTabReportAsync() {

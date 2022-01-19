@@ -15,6 +15,8 @@ export const QueryResults = observer(
       subGroupKey: string,
       title: string,
     ) => {
+      datasetStore.resetActivePreset()
+
       filterStore.removeSelectedFilters({
         group: subGroupKey,
         groupItemName: title,
