@@ -14,7 +14,7 @@ module.exports = {
         pathRewrite: { '/app': '' },
       },
       '/igv-resource': {
-        target: process.env.IGV_SERVICE_URL,
+        target: process.env.REACT_APP_IGV_SERVICE_URL,
         changeOrigin: true,
         pathRewrite: { '/igv-resource': '' },
       },
