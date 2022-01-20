@@ -162,7 +162,9 @@ export const FunctionPanel = (): ReactElement => {
       )
     }
 
-    datasetStore.fetchWsListAsync()
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
   }
 
   const handleClear = () => {
@@ -175,7 +177,10 @@ export const FunctionPanel = (): ReactElement => {
     })
 
     filterStore.resetStatFuncData()
-    datasetStore.fetchWsListAsync()
+
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
   }
 
   if (!Component) {

@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -9,6 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { InputSearch } from '@components/input-search'
+import { Loader } from '@components/loader'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 export const FilterRefinerGroups = observer(
@@ -53,7 +54,9 @@ export const FilterRefinerGroups = observer(
         datasetStore.removeConditionGroup({ subGroup: name })
       }
 
-      datasetStore.fetchWsListAsync()
+      if (!datasetStore.isXL) {
+        datasetStore.fetchWsListAsync()
+      }
     }
 
     return (
@@ -73,30 +76,39 @@ export const FilterRefinerGroups = observer(
         >
           <div id="input" className="mx-4 mb-3" />
 
-          {keys.map((group, index) => (
-            <div key={group}>
-              <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
+          {Object.keys(datasetStore.dsStat).length === 0 &&
+          datasetStore.isLoadingDsStat ? (
+            <Loader />
+          ) : (
+            <Fragment>
+              {keys.map((group, index) => (
+                <div key={group}>
+                  <p className="text-14 font-500 text-grey-blue pl-4">
+                    {group}
+                  </p>
 
-              {values[index].map((item: StatList) => {
-                const incomplete = item?.incomplete ?? false
+                  {values[index].map((item: StatList) => {
+                    const incomplete = item?.incomplete ?? false
 
-                return (
-                  <FilterRefinerGroupItem
-                    className="pl-4"
-                    onChange={checked =>
-                      handleCheckGroupItem(checked, group, item.name)
-                    }
-                    {...item}
-                    key={item.name}
-                    isFunc={item.kind === FilterKindEnum.Func}
-                    isNumeric={item.kind === FilterKindEnum.Numeric}
-                    group={group}
-                    incomplete={incomplete}
-                  />
-                )
-              })}
-            </div>
-          ))}
+                    return (
+                      <FilterRefinerGroupItem
+                        className="pl-4"
+                        onChange={checked =>
+                          handleCheckGroupItem(checked, group, item.name)
+                        }
+                        {...item}
+                        key={item.name}
+                        isFunc={item.kind === FilterKindEnum.Func}
+                        isNumeric={item.kind === FilterKindEnum.Numeric}
+                        group={group}
+                        incomplete={incomplete}
+                      />
+                    )
+                  })}
+                </div>
+              ))}
+            </Fragment>
+          )}
         </div>
       </div>
     )

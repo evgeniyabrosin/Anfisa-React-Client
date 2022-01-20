@@ -42,7 +42,9 @@ export const RangePanel = observer(
         [[selectedFilter.name, arrayNo.length]],
       )
 
-      datasetStore.fetchWsListAsync()
+      if (!datasetStore.isXL) {
+        datasetStore.fetchWsListAsync()
+      }
     }
 
     const handleClear = () => {
@@ -58,7 +60,10 @@ export const RangePanel = observer(
       setIsVisibleMixedError(false)
       setMin('')
       setMax('')
-      datasetStore.fetchWsListAsync()
+
+      if (!datasetStore.isXL) {
+        datasetStore.fetchWsListAsync()
+      }
     }
 
     const validateMin = (value: string) => {

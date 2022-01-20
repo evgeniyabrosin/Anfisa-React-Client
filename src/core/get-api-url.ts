@@ -7,5 +7,5 @@ export const getApiUrl = (url: string): string => {
 export const getIgvUrl = (url: string): string => {
   return process.env.NODE_ENV === 'development'
     ? `/igv-resource/${url}`
-    : `${process.env.IGV_SERVICE_URL}/${url}`
+    : `${process.env.REACT_APP_IGV_SERVICE_URL}/${url}`
 }
