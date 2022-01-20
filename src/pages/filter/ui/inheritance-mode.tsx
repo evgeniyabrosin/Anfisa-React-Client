@@ -128,6 +128,17 @@ export const InheritanceMode = observer(
           </p>
 
           <p
+            className="text-12 leading-14px text-blue-bright cursor-pointer ml-auto mr-2"
+            onClick={() => {
+              setFieldValue(
+                'variants',
+                variants.map(variant => variant[0]),
+              )
+            }}
+          >
+            {t('general.selectAll')}
+          </p>
+          <p
             className="text-12 leading-14px text-blue-bright cursor-pointer"
             onClick={() => setFieldValue('variants', [])}
           >
