@@ -67,6 +67,11 @@ describe('Regression test of the decision tree', () => {
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
+    cy.waitUntil(() =>
+      decisionTreesPage.attributesList.problemGroup.element.should(
+        'be.visible',
+      ),
+    )
     decisionTreesPage.attributesList.problemGroup.eq(3).click()
     decisionTreesPage.attributesList.addByJoin.click()
     decisionTreesPage.attributesList.joinByAnd.click()
@@ -95,6 +100,11 @@ describe('Regression test of the decision tree', () => {
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
+    cy.waitUntil(() =>
+      decisionTreesPage.attributesList.problemGroup.element.should(
+        'be.visible',
+      ),
+    )
     decisionTreesPage.attributesList.problemGroup.eq(3).click()
     decisionTreesPage.attributesList.addByJoin.click()
     decisionTreesPage.attributesList.joinByAnd.click()
