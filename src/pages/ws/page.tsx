@@ -1,5 +1,6 @@
 import { Fragment, ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
+import { useHistory } from 'react-router-dom'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import {
@@ -9,12 +10,12 @@ import {
   withDefault,
 } from 'use-query-params'
 
+import { HistoryLocationState } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
@@ -34,6 +35,11 @@ const WSPage = observer(
     const params = useParams()
 
     useDatasetName()
+
+    const historyLocationState = useHistory().location
+      .state as HistoryLocationState
+
+    const prevPage = historyLocationState?.prevPage || ''
 
     const [query] = useQueryParams({
       variant: NumberParam,
@@ -66,8 +72,7 @@ const WSPage = observer(
           variantStore.setDsName(params.get('ds') ?? '')
         }
 
-        await datasetStore.initDatasetAsync(dsName)
-        await dirinfoStore.fetchDsinfoAsync(dsName)
+        await datasetStore.initDatasetAsync(dsName, prevPage)
       }
 
       initAsync()

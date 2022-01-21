@@ -43,7 +43,9 @@ export const QuerySelected = observer(
             draggable: true,
             progress: 0,
           })
-        : history.push(`${Routes.WS}?ds=${params.get('ds')}`)
+        : history.push(`${Routes.WS}?ds=${params.get('ds')}`, {
+            prevPage: 'refiner',
+          })
     }
 
     return (
