@@ -6,13 +6,13 @@ import { variantDrawerPage } from '../../page-objects/app/variant-drawer-page'
 import { testData } from '../../page-objects/lib/faker'
 import { Timeouts } from '../../page-objects/lib/timeouts.cy'
 
-describe('Regression test of the main table | step 1', () => {
+describe('Regression test of the main table', () => {
   const link = '/ws?ds=PGP3140_wgs_panel_hl'
   const homozygous = '⏚BGM_Homozygous_Rec'
   const datasetName = 'PGP3140_wgs_panel_hl'
   const customTag = testData.getFakeData(1)
 
-  it('should open main table for PGP3140_wgs_panel_hl dataset', () => {
+  it('should open main table for PGP3140_wgs_panel_hl dataset | step 1', () => {
     datasetPage.visit()
     datasetPage.leftPanel.leftPanelHeader.checkLabelText('Datasets')
     datasetPage.leftPanel.datasetsListElem.getButtonByText(datasetName).click()
