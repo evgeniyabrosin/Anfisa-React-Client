@@ -7,7 +7,7 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
 import columnsStore from '@store/wsColumns'
 import { PopperTableModal } from '@components/popper-table-modal'
-import { ColumnsList } from './columns-list'
+import { ColumnsList } from '../columns-list/columns-list'
 
 interface Props {
   close: () => void
