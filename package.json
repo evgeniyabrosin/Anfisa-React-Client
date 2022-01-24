@@ -78,15 +78,14 @@
     "eslint-config-react-config-r13v": "1.4.0",
     "eslint-plugin-jest": "25.2.4",
     "eslint-plugin-react": "7.23.2",
-    "husky": "7.0.2",
     "lint-staged": "12.1.7",
     "postcss": "7",
+    "simple-git-hooks": "^2.7.0",
     "stylelint": "14.2.0",
     "stylelint-config-standard": "24.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "scripts": {
-    "prepare": "husky install",
     "start": "yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
@@ -100,12 +99,9 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint-stage && yarn lint:fix",
-      "pre-push": "yarn lint && yarn stylelint",
-      "commit-msg": "yarn commitlint"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint-stage && yarn lint:fix",
+    "pre-push": "yarn commitlint && yarn lint && yarn stylelint"
   },
   "eslintConfig": {
     "extends": [
