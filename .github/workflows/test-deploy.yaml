@@ -23,6 +23,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: |
             yarn install
+            git config core.hooksPath .git/hooks/
+            rm -rf .git/hooks
             npx simple-git-hooks
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
