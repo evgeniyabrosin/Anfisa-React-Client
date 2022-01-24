@@ -21,7 +21,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install
+    - run: |
+            yarn install
+            npx simple-git-hooks
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
