@@ -99,12 +99,10 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint-stage && yarn lint:fix",
-      "pre-push": "yarn lint && yarn stylelint",
-      "commit-msg": "yarn commitlint"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint-stage && yarn lint:fix",
+    "pre-push": "yarn lint && yarn stylelint",
+    "commit-msg": "yarn commitlint"
   },
   "eslintConfig": {
     "extends": [
