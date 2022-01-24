@@ -62,9 +62,10 @@ jobs:
             git config --global user.name 'evgeniy-chernomortsev'
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
             yarn config set version-git-message "[RELEASE] %s"
+            yarn config set version-commit-hooks false
             yarn version --patch
             git push --tags &&
-            git push --no-verify
+            git push
     - name: Close opened port
       env:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
