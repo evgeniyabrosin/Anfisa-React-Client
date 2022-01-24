@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { datasetPage } from '../../page-objects/app/datasets-page'
 import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
 import { Timeouts } from '../../page-objects/lib/timeouts.cy'
@@ -10,21 +9,13 @@ describe('Regression test of the decision tree', () => {
   const decisionTreeName = 'new_decision_tree'
 
   it('should expand all | step 18', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    searchForCallers()
+    selectAllAttributes()
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
     cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    decisionTreesPage.decisionTreeResults.optionsMenu.click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
+    addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
@@ -33,9 +24,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.rightInput.type('100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
-    decisionTreesPage.decisionTreeResults.optionsMenu.eq(1).click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
+    addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr
@@ -55,14 +44,8 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.contentEditor.element.should('exist')
   })
   it('should collapse charts | step 20', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    searchForCallers()
+    selectAllAttributes()
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -70,14 +53,8 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeChart.dataCharts.element.should('not.exist')
   })
   it('should expand collapsed charts | step 21', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    searchForCallers()
+    selectAllAttributes()
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -88,14 +65,8 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should open text editor | step 22', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    searchForCallers()
+    selectAllAttributes()
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -119,9 +90,7 @@ describe('Regression test of the decision tree', () => {
     //   .first()
     //   .should('have.text', includedVariants)
     cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    // decisionTreesPage.decisionTreeResults.optionsMenu.click()
-    // decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    // cy.wait('@stepAfter')
+    // addStepAfter(0)
     // decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     // decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
     cy.intercept('POST', '/app/dtree_set').as('selectList')
@@ -150,7 +119,7 @@ describe('Regression test of the decision tree', () => {
     cy.url().should('include', `/filter?ds=${datasetName}`)
   })
 
-  it('should apply decision tree presert | step 25', () => {
+  it('should apply decision tree preset | step 25', () => {
     datasetPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', '/app/statunits').as('decTreeUpload')
@@ -159,7 +128,7 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@decTreeUpload')
   })
 
-  it('should apply changes | step 26', () => {
+  it('should show changes made in decision tree | step 26', () => {
     datasetPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', '/app/statunits').as('decTreeUpload')
@@ -183,14 +152,8 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should create new decision tree | step 27', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+    searchForCallers()
+    selectAllAttributes()
     decisionTreesPage.decisionTreeMenu.createNew.click()
     decisionTreesPage.decisionTreeMenu.newDecisionTreeNameInput.type(
       `${decisionTreeName}`,
@@ -198,7 +161,19 @@ describe('Regression test of the decision tree', () => {
     cy.intercept('POST', '/app/dtree_stat').as('createNewTree')
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
     cy.wait('@createNewTree')
-    decisionTreesPage.decisionTreeResults.anyChangeAlert.checkExists()
+    decisionTreesPage.decisionTreeResults.anyChangeAlert.element.within(
+      $popup => {
+        cy.wrap($popup).should(
+          'have.text',
+          `Decision Tree "${decisionTreeName}" has been created`,
+        )
+      },
+    )
+    decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
+    decisionTreesPage.decisionTreeMenu.selectDecision.element.should(
+      'contain',
+      decisionTreeName,
+    )
   })
 
   it('should modify created decision tree | step 28', () => {
@@ -212,9 +187,7 @@ describe('Regression test of the decision tree', () => {
     )
     cy.wait('@decTreeUpload')
     cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    decisionTreesPage.decisionTreeResults.optionsMenu.click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
+    addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
@@ -230,7 +203,14 @@ describe('Regression test of the decision tree', () => {
       .click()
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
     cy.wait('@modifyTree')
-    decisionTreesPage.decisionTreeResults.anyChangeAlert.checkExists()
+    decisionTreesPage.decisionTreeResults.anyChangeAlert.element.within(
+      $popup => {
+        cy.wrap($popup).should(
+          'have.text',
+          `Decision Tree "${decisionTreeName}" has been modified`,
+        )
+      },
+    )
   })
 
   it('should delete created decision tree | step 29', () => {
@@ -250,6 +230,36 @@ describe('Regression test of the decision tree', () => {
       .click()
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
     cy.wait('@deleteTree')
-    decisionTreesPage.decisionTreeResults.anyChangeAlert.checkExists()
+    decisionTreesPage.decisionTreeResults.anyChangeAlert.element.within(
+      $popup => {
+        cy.wrap($popup).should(
+          'have.text',
+          `Decision Tree "${decisionTreeName}" has been deleted`,
+        )
+      },
+    )
+    decisionTreesPage.decisionTreeMenu.selectDecision.element
+      .contains(decisionTreeName)
+      .should('not.exist')
   })
+
+  function searchForCallers() {
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.decisionTreeResults.addAttribute.click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
+  }
+
+  function selectAllAttributes() {
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
+    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
+  }
+
+  function addStepAfter(elementNumber: number) {
+    decisionTreesPage.decisionTreeResults.optionsMenu.eq(elementNumber).click()
+    decisionTreesPage.decisionTreeResults.addStepAfter.click()
+    cy.wait('@stepAfter')
+  }
 })

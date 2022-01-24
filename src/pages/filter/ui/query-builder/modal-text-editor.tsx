@@ -10,6 +10,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import Editor from '@monaco-editor/react'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
 import { HeaderModal } from './ui/header-modal'
@@ -161,7 +162,7 @@ export const ModalTextEditor = observer(
           theme={theme}
           isTextEditor
           handleChangeTheme={handleChangeTheme}
-          data-testid={'modal-header'}
+          data-testid={DecisionTreeModalDataCy.modalHeader}
         />
 
         <div className="flex items-center mt-1">

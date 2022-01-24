@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
+import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { Pagintaion } from '@components/pagintaion'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { createChunks } from '@utils/createChunks'
@@ -122,7 +122,7 @@ export const ModalSelectFilters = observer(
             <div
               className="cursor-pointer text-blue-bright"
               onClick={() => handleCheckAll(true)}
-              data-testid={DecisionTreeModal.selectAllFromAttribute}
+              data-testid={DecisionTreeModalDataCy.selectAllFromAttribute}
             >
               {t('general.selectAll')}
             </div>
@@ -132,7 +132,7 @@ export const ModalSelectFilters = observer(
             <div
               className="cursor-pointer text-blue-bright"
               onClick={() => handleCheckAll(false)}
-              data-testid={DecisionTreeModal.clearAllFromAttribute}
+              data-testid={DecisionTreeModalDataCy.clearAllFromAttribute}
             >
               {t('general.clearAll')}
             </div>
