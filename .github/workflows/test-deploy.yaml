@@ -21,11 +21,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: |
-            yarn install
-            git config core.hooksPath .git/hooks/
-            rm -rf .git/hooks
-            npx simple-git-hooks
+    - run: yarn install
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
@@ -67,10 +63,8 @@ jobs:
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
             yarn config set version-git-message "[RELEASE] %s"
             yarn version --patch
-            git config --global user.name 'evgeniy-chernomortsev'
-            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
             git push --tags &&
-            git push
+            git push --no-verify
     - name: Close opened port
       env:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
