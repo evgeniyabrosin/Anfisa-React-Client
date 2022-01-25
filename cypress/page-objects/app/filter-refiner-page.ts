@@ -1,5 +1,5 @@
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
-import { FilterRefiner } from '../../../src/components/data-testid/filter-refiner.cy'
+import { FilterRefinerDataCy } from '../../../src/components/data-testid/filter-refiner.cy'
 import { BasePage } from '../lib/base-page'
 import { Helper } from '../lib/helpers'
 import { FilterRefinerMenuWidget } from './widgets/filter-refiner.widget'
@@ -17,35 +17,36 @@ class FilterRefinerPage extends BasePage {
     super()
     this.menu = new FilterRefinerMenuWidget({
       selectors: {
-        selectPreset: Helper.getDataId(FilterRefiner.selectPreset),
-        saveDataset: Helper.getDataId(FilterRefiner.saveDataset),
-        undoButton: Helper.getDataId(FilterRefiner.undoButton),
-        redoButton: Helper.getDataId(FilterRefiner.redoButton),
+        selectPreset: Helper.getDataId(FilterRefinerDataCy.selectPreset),
+        saveDataset: Helper.getDataId(FilterRefinerDataCy.saveDataset),
+        undoButton: Helper.getDataId(FilterRefinerDataCy.undoButton),
+        redoButton: Helper.getDataId(FilterRefinerDataCy.redoButton),
       },
     })
     this.leftPanel = new FilterRefinerLeftPanelWidget({
       selectors: {
-        searchField: Helper.getDataId(FilterRefiner.searchField),
-        listElements: Helper.getDataId(FilterRefiner.listElements),
+        searchField: Helper.getDataId(FilterRefinerDataCy.searchField),
+        listElements: Helper.getDataId(FilterRefinerDataCy.listElements),
       },
     })
     this.filter = new FilterRefinerFilterWidget({
       selectors: {
-        filterHeader: Helper.getDataId(FilterRefiner.filterHeader),
-        filterElements: FilterRefiner.filterElements,
+        filterHeader: Helper.getDataId(FilterRefinerDataCy.filterHeader),
+        filterElements: FilterRefinerDataCy.filterElements,
         filterElementsCheckbox: CommonSelectors.checkbox,
-        addButton: Helper.getDataId(FilterRefiner.addButton),
-        clearButton: Helper.getDataId(FilterRefiner.clearButton),
+        addButton: Helper.getDataId(FilterRefinerDataCy.addButton),
+        clearButton: Helper.getDataId(FilterRefinerDataCy.clearButton),
         noProblemGroupSelected: Helper.getDataId(
-          FilterRefiner.noProblemGroupSelected,
+          FilterRefinerDataCy.noProblemGroupSelected,
         ),
-        problemGroup: Helper.getDataId(FilterRefiner.problemGroup),
-        geneName: Helper.getDataId(FilterRefiner.geneName),
-        selectReset: Helper.getDataId(FilterRefiner.selectReset),
+        problemGroup: Helper.getDataId(FilterRefinerDataCy.problemGroup),
+        geneName: Helper.getDataId(FilterRefinerDataCy.geneName),
+        selectReset: Helper.getDataId(FilterRefinerDataCy.selectReset),
         redMessage: CommonSelectors.redMessage,
-        removeButton: Helper.getDataId(FilterRefiner.removeButton),
+        removeButton: Helper.getDataId(FilterRefinerDataCy.removeButton),
         inputNumberSamples: CommonSelectors.numberInput,
         inputText: CommonSelectors.tagInput,
+        approxDropdown: Helper.getDataId(FilterRefinerDataCy.approxDropdown),
       },
       labels: {
         filterHeader: '',
@@ -58,10 +59,12 @@ class FilterRefinerPage extends BasePage {
     })
     this.total = new FilterRefinerTotalWidget({
       selectors: {
-        applyButton: Helper.getDataId(FilterRefiner.applyButton),
-        resultsListElement: Helper.getDataId(FilterRefiner.resultsListElement),
+        applyButton: Helper.getDataId(FilterRefinerDataCy.applyButton),
+        resultsListElement: Helper.getDataId(
+          FilterRefinerDataCy.resultsListElement,
+        ),
         resultsListCheckbox: Helper.getDataId(CommonSelectors.checkbox),
-        variantsNumber: Helper.getDataId(FilterRefiner.variantsNumber),
+        variantsNumber: Helper.getDataId(FilterRefinerDataCy.variantsNumber),
       },
       labels: {
         rulesListElement: '',

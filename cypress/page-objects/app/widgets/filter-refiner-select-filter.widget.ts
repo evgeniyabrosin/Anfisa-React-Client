@@ -19,6 +19,7 @@ export interface FilterRefinerFilterSelectors {
   removeButton: string
   inputNumberSamples: string
   inputText: string
+  approxDropdown: string
 }
 
 export interface FilterRefinerFilterLabels {
@@ -44,6 +45,7 @@ export class FilterRefinerFilterWidget extends UIWidget {
   readonly removeButton: Button
   readonly inputNumberSamples: Input
   readonly inputText: Input
+  readonly approxDropdown: Button
 
   constructor(options: {
     selectors: FilterRefinerFilterSelectors
@@ -73,5 +75,6 @@ export class FilterRefinerFilterWidget extends UIWidget {
     this.removeButton = new Button(selectors.removeButton)
     this.inputNumberSamples = new Input(selectors.inputNumberSamples)
     this.inputText = new Input(selectors.inputText)
+    this.approxDropdown = new Button(selectors.approxDropdown)
   }
 }

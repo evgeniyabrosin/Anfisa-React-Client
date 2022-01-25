@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
-import { FilterRefiner } from '@components/data-testid/filter-refiner.cy'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 
 export interface IInheritanceFormValues {
   problemGroups: string[]
@@ -118,7 +118,7 @@ export const InheritanceMode = observer(
               />
               <span
                 className="text-14 leading-16px ml-2"
-                data-testid={FilterRefiner.problemGroup}
+                data-testid={FilterRefinerDataCy.problemGroup}
               >
                 {problemGroup}
               </span>
@@ -160,7 +160,7 @@ export const InheritanceMode = observer(
               />
               <span
                 className="text-14 leading-16px ml-2"
-                data-testid={FilterRefiner.geneName}
+                data-testid={FilterRefinerDataCy.geneName}
               >
                 {variant[0]}
               </span>
@@ -172,7 +172,7 @@ export const InheritanceMode = observer(
         {variants.length === 0 && (
           <div
             className="flex justify-center w-full mt-2 text-14 text-grey-blue"
-            data-testid={FilterRefiner.noProblemGroupSelected}
+            data-testid={FilterRefinerDataCy.noProblemGroupSelected}
           >
             Out of choice. Select problem group.
           </div>
