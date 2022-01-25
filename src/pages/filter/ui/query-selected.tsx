@@ -33,6 +33,16 @@ export const QuerySelected = observer(
         : datasetStore.filteredNo.length
 
     const handleClick = () => {
+      let conditionsUrl = ''
+
+      if (datasetStore.conditions.length > 0) {
+        datasetStore.conditions.forEach(condition => {
+          conditionsUrl += `&refiner=${condition[0]},${condition[1]},${
+            condition[2]
+          },${condition[3]![0]}`
+        })
+      }
+
       allVariants > 2600
         ? toast.error(t('filter.tooMuchVariants'), {
             position: 'bottom-right',
@@ -43,7 +53,7 @@ export const QuerySelected = observer(
             draggable: true,
             progress: 0,
           })
-        : history.push(`${Routes.WS}?ds=${params.get('ds')}`, {
+        : history.push(`${Routes.WS}?ds=${params.get('ds')}${conditionsUrl}`, {
             prevPage: 'refiner',
           })
     }

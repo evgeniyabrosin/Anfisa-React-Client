@@ -11,11 +11,10 @@ import {
 } from 'use-query-params'
 
 import { HistoryLocationState } from '@declarations'
-import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore, { Condition } from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
@@ -43,30 +42,25 @@ const WSPage = observer(
 
     const [query] = useQueryParams({
       variant: NumberParam,
-      filters: withDefault(ArrayParam, []),
+      refiner: withDefault(ArrayParam, []),
     })
 
-    const { filters, variant } = query
+    const { variant, refiner } = query
 
     Number.isInteger(variant) && variantStore.setIndex(variant as number)
 
     useEffect(() => {
+      const conditions: Condition[] = (refiner as string[]).map((c: string) => {
+        const item: string[] = c!.split(',')
+        const [name, group, symbol, value] = item
+
+        return [name, group, symbol, [value]]
+      })
+
+      datasetStore.setConditionsAsync(conditions)
+
       const initAsync = async () => {
         const dsName = params.get('ds') || ''
-
-        if (filters.length > 0) {
-          const conditions: any = []
-
-          filters.forEach(filter => {
-            const splitted: any = filter?.split('=')
-            const name = splitted[0]
-            const value = splitted[1].split(',')
-            const condition = [FilterKindEnum.Enum, name, '', value]
-
-            conditions.push(condition)
-          })
-          datasetStore.setConditionsAsync(conditions)
-        }
 
         if (dsName && !variantStore.dsName) {
           variantStore.setDsName(params.get('ds') ?? '')

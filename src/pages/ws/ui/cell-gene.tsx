@@ -1,6 +1,7 @@
 import { Fragment, ReactElement } from 'react'
 import cn from 'classnames'
 import get from 'lodash/get'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
@@ -16,7 +17,8 @@ export const CellGene = observer(
     const value = get(cell, 'value[0]', []) as string[]
     const rowIndex = get(cell, 'row.index', -1)
 
-    const iconColor = datasetStore?.wsRecords?.[rowIndex]?.cl.split('-')[0]
+    const records = toJS(datasetStore?.wsRecords)
+    const iconColor = records?.[rowIndex]?.cl.split('-')[0]
 
     const geneCellHeight =
       columnsStore.viewType === ViewTypeEnum.Compact
@@ -25,9 +27,9 @@ export const CellGene = observer(
 
     return (
       <div className="flex items-center">
-        {datasetStore?.wsRecords?.[rowIndex]?.cl && (
+        {records?.[rowIndex]?.cl && (
           <Fragment>
-            {datasetStore?.wsRecords?.[rowIndex]?.cl.includes('cross') ? (
+            {records?.[rowIndex]?.cl.includes('cross') ? (
               <PlusIcon color={geneColorMap[iconColor]} />
             ) : (
               <div

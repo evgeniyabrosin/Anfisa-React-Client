@@ -22,6 +22,8 @@ import operations from './operations'
 
 const INCREASE_INDEX = 50
 
+export type Condition = [string, string, unknown, string[]?, unknown?]
+
 class DatasetStore {
   dsStat: DsStatType = {}
   variantsAmount = 0
@@ -39,7 +41,7 @@ class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: any[] = []
+  conditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
 
@@ -140,7 +142,7 @@ class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: any[][]) {
+  async setConditionsAsync(conditions: Condition[]) {
     if (!conditions[0]) {
       this.conditions = []
       await this.fetchDsStatAsync()
@@ -176,14 +178,16 @@ class DatasetStore {
       item => item[1] === subGroup,
     )
 
-    const conditionKind = cloneConditions.find(item => item[1] === subGroup)[0]
+    const conditionKind = cloneConditions.find(
+      item => item![1] === subGroup,
+    )![0]
 
     if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3].filter(
+      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
         (item: string) => item !== itemName,
       )
 
-      if (filteredItems.length === 0) {
+      if (filteredItems?.length === 0) {
         cloneConditions.splice(subGroupIndex, 1)
       } else {
         cloneConditions[subGroupIndex][3] = filteredItems
