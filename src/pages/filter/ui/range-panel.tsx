@@ -3,29 +3,44 @@ import { reaction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { NumericExpressionTypes } from '@core/enum/numeric-expression-types'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { createNumericExpression } from '@utils/createNumericExpression'
 
-export interface IRangePanelFormValues {
-  min: string
-  max: string
-}
+type TNumericExpression = [null | number, boolean, null | number, boolean]
 
 const getCachedValues = () => {
-  return filterStore.readFilterCondition<IRangePanelFormValues>(
+  return filterStore.readFilterCondition<TNumericExpression>(
     filterStore.selectedGroupItem.name,
   )
+}
+
+const getFilterValue = (arg: string): string | number => {
+  const filterExpression = getCachedValues()
+
+  if (filterExpression) {
+    if (arg === 'min' && typeof filterExpression[0] === 'number') {
+      return filterExpression[0]
+    }
+
+    if (arg === 'max' && typeof filterExpression[2] === 'number') {
+      return filterExpression[2]
+    }
+  }
+
+  return ''
 }
 
 export const RangePanel = observer(
   (): ReactElement => {
     const selectedFilter = filterStore.selectedGroupItem
 
-    const [min, setMin] = useState(getCachedValues()?.min || '')
-    const [max, setMax] = useState(getCachedValues()?.max || '')
+    const [min, setMin] = useState<string | number>(getFilterValue('min'))
+    const [max, setMax] = useState<string | number>(getFilterValue('max'))
 
     const [isVisibleMinError, setIsVisibleMinError] = useState(false)
     const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
@@ -34,14 +49,31 @@ export const RangePanel = observer(
     const handleAddConditionsAsync = async () => {
       if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-      const arrayNo = await datasetStore.setConditionsAsync([
-        [FilterKindEnum.Numeric, selectedFilter.name, [+min, true, +max, true]],
+      await datasetStore.setConditionsAsync([
+        [
+          FilterKindEnum.Numeric,
+          selectedFilter.name,
+          createNumericExpression({
+            expType: NumericExpressionTypes.GreaterThan,
+            minValue: min,
+            maxValue: max,
+          }),
+        ],
       ])
 
       filterStore.addSelectedFilterGroup(
         selectedFilter.vgroup,
         selectedFilter.name,
-        [[selectedFilter.name, arrayNo.length]],
+        [
+          [
+            selectedFilter.name,
+            createNumericExpression({
+              expType: NumericExpressionTypes.GreaterThan,
+              minValue: min,
+              maxValue: max,
+            }),
+          ],
+        ],
       )
 
       if (!datasetStore.isXL) {
@@ -114,12 +146,13 @@ export const RangePanel = observer(
         setIsVisibleMixedError(false)
       }
 
-      filterStore.setFilterCondition<IRangePanelFormValues>(
+      filterStore.setFilterCondition(
         filterStore.selectedGroupItem.name,
-        {
-          min,
-          max,
-        },
+        createNumericExpression({
+          expType: NumericExpressionTypes.GreaterThan,
+          minValue: min,
+          maxValue: max,
+        }),
       )
     }, [min, max])
 
@@ -127,8 +160,8 @@ export const RangePanel = observer(
       const dispose = reaction(
         () => filterStore.selectedGroupItem.name,
         () => {
-          setMin(getCachedValues()?.min || '')
-          setMax(getCachedValues()?.max || '')
+          setMin(getFilterValue('min'))
+          setMax(getFilterValue('max'))
         },
       )
 

@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
+import filterStore from '@store/filter'
 import datasetStore from './dataset'
 
 class PresetStore {
@@ -23,6 +24,8 @@ class PresetStore {
     })
 
     const result = await response.json()
+
+    filterStore.resetFilterCondition()
 
     runInAction(() => {
       datasetStore.updatePresetLoad(result, source)
