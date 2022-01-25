@@ -40,6 +40,17 @@ jobs:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
       run: |
             aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32
+    - name: Increment version
+      if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
+      uses: actions/checkout@v2
+    - run: |
+            git config --global user.name 'evgeniy-chernomortsev'
+            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
+            yarn config set version-git-message "[RELEASE] %s"
+            yarn config set version-commit-hooks false
+            yarn version --patch
+            git push --tags --no-verify &&
+            git push --no-verify
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
@@ -55,17 +66,6 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-central-1
-    - name: Increment version
-      if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
-      uses: actions/checkout@v2
-    - run: |
-            git config --global user.name 'evgeniy-chernomortsev'
-            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
-            yarn config set version-git-message "[RELEASE] %s"
-            yarn config set version-commit-hooks false
-            yarn version --patch
-            git push --tags --no-verify &&
-            git push --no-verify
     - name: Close opened port
       env:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
