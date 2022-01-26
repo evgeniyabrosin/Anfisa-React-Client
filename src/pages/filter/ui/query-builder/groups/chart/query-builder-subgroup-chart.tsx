@@ -29,7 +29,7 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> = ({
       chartData = getHistogramChartData(histogram)
     }
 
-    return chartData
+    return chartData || ({} as ChartData)
   }
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> = ({
 
     const config: ChartConfiguration = {
       type: 'bar',
-      data: chartData as ChartData,
+      data: chartData,
       options: {
         layout: { padding: { left: 12, right: 12, top: 12 } },
         plugins: { legend: { display: false } },
