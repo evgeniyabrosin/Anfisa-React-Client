@@ -1,6 +1,7 @@
 import { Button } from '../../lib/button'
 import { Checkbox } from '../../lib/checkbox'
 import { Input } from '../../lib/input'
+import { Label } from '../../lib/label'
 import { UIWidget } from '../../lib/ui-widget'
 
 export interface AttributesListSelectors {
@@ -12,6 +13,10 @@ export interface AttributesListSelectors {
   joinByAnd: string
   joinByOr: string
   replaceButton: string
+  variantsList: string
+}
+export interface AttributesListLabels {
+  variantsList: string
 }
 export class AttributesListWidget extends UIWidget {
   readonly searchForAttr: Input
@@ -22,11 +27,16 @@ export class AttributesListWidget extends UIWidget {
   readonly joinByAnd: Button
   readonly joinByOr: Button
   readonly replaceButton: Button
+  readonly variantsList: Label
 
-  constructor(options: { selectors: AttributesListSelectors }) {
+  constructor(options: {
+    selectors: AttributesListSelectors
+    labels: AttributesListLabels
+  }) {
     super(options)
 
     const selectors = options.selectors
+    const labels = options.labels
 
     this.searchForAttr = new Input(selectors.searchForAttr)
     this.selectAll = new Button(selectors.selectAll)
@@ -36,5 +46,6 @@ export class AttributesListWidget extends UIWidget {
     this.joinByAnd = new Button(selectors.joinByAnd)
     this.joinByOr = new Button(selectors.joinByOr)
     this.replaceButton = new Button(selectors.replaceButton)
+    this.variantsList = new Label(selectors.variantsList, labels.variantsList)
   }
 }

@@ -22,14 +22,14 @@ describe('Regression test of the decision tree', () => {
     cy.url().should('include', `/filter?ds=${datasetName}`)
   })
   it('should search attribute based on a substring', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders
       .eq(0)
       .should('have.text', 'Callers')
   })
 
   it('should select all attributes | step 3', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.waitUntil(() =>
       decisionTreesPage.attributesList.selectAll.element.then(el => {
@@ -46,16 +46,16 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should join second attribute with first | step 4', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
     addInheritanceMode()
     cy.waitUntil(() =>
-      decisionTreesPage.attributesList.problemGroup.element.should(
+      decisionTreesPage.attributesList.variantsList.element.should(
         'be.visible',
       ),
     )
@@ -66,16 +66,16 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should join third attribute by OR | step 5', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
     addInheritanceMode()
     cy.waitUntil(() =>
-      decisionTreesPage.attributesList.problemGroup.element.should(
+      decisionTreesPage.attributesList.variantsList.element.should(
         'be.visible',
       ),
     )
@@ -93,40 +93,40 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add step after | step 6', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
   })
 
   it('should add Min_GQ attributes to the second step | step 7', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
   })
 
   it('should add Max_GQ attributes to the second step | step 8', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     decisionTreesPage.decisionTreeResults.searchGraphResults
@@ -151,31 +151,35 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add third step | step 9', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
   })
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should add attributes to step 3 | step 10', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Compound_Het')
@@ -187,14 +191,14 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should delete step | step 12', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
@@ -204,16 +208,18 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should add attribute to third step | step 13', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
@@ -229,20 +235,27 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should not add attribute if press cancel | step 14', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Has_Variant')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    cy.waitUntil(() =>
+      decisionTreesPage.attributesList.problemGroup.element.should(
+        'be.visible',
+      ),
+    )
     decisionTreesPage.attributesList.problemGroup.eq(1).click()
     decisionTreesPage.decisionTreeResults.cancelButton.click()
     decisionTreesPage.decisionTreeResults.searchGraphResults
@@ -252,16 +265,18 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should not change attributes if cancel button is pressed | step 15', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
@@ -269,9 +284,15 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.selectReset.select(
       'Autosomal Dominant',
     )
+    cy.intercept('POST', 'app/dtree_stat').as('loadTree')
+    cy.waitUntil(() =>
+      decisionTreesPage.attributesList.addSelectedAttributes.element.should(
+        'not.be.disabled',
+      ),
+    )
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
-    cy.wait('@stepAfter')
+    cy.wait('@loadTree')
     decisionTreesPage.decisionTreeResults.gearButton.eq(2).click()
     decisionTreesPage.decisionTreeResults.addButton.click()
     decisionTreesPage.decisionTreeResults.selectReset.select('Compensational')
@@ -283,16 +304,18 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should collapse decision tree panel | step 17', () => {
-    searchForCallers()
+    decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    selectAllAttributes()
+    decisionTreesPage.selectAllAttributes(selectAll)
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    addStepAfter()
+    decisionTreesPage.addStepAfter(0)
     addMinGq('10', '100')
-    addThirdStep()
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@stepAfter')
+    decisionTreesPage.addStepAfter(1)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type(compoundRequest)
@@ -308,31 +331,12 @@ describe('Regression test of the decision tree', () => {
     )
   })
 
-  function searchForCallers() {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-  }
-
-  function selectAllAttributes() {
-    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-  }
-
   function addInheritanceMode() {
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type(inheritanceMode)
     cy.intercept('POST', '/app/statfunc').as('loadProblemGroup')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     cy.wait('@loadProblemGroup')
-  }
-
-  function addStepAfter() {
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    decisionTreesPage.decisionTreeResults.optionsMenu.click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
   }
 
   function addMinGq(min: string, max: string) {
@@ -351,13 +355,5 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.joinByLabel
       .getChildren()
       .contains(method)
-  }
-
-  function addThirdStep() {
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@stepAfter')
-    decisionTreesPage.decisionTreeResults.optionsMenu.eq(1).click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
   }
 })

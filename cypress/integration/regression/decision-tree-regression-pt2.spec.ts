@@ -7,15 +7,17 @@ describe('Regression test of the decision tree', () => {
   const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
   const filterName = '⏚Hearing Loss, v.5'
   const decisionTreeName = 'new_decision_tree'
+  const selectAll = 'Select All'
 
   it('should expand all | step 18', () => {
-    searchForCallers()
-    selectAllAttributes()
+    decisionTreesPage.searchForCallers(datasetName)
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.selectAllAttributes(selectAll)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
     cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    addStepAfter(0)
+    decisionTreesPage.addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
@@ -23,8 +25,9 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.leftInput.type('10')
     decisionTreesPage.decisionTreeResults.rightInput.type('100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@stepAfter')
-    addStepAfter(1)
+    cy.wait(500)
+    decisionTreesPage.addStepAfter(1)
+    cy.wait(500)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr
@@ -44,8 +47,9 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.contentEditor.element.should('exist')
   })
   it('should collapse charts | step 20', () => {
-    searchForCallers()
-    selectAllAttributes()
+    decisionTreesPage.searchForCallers(datasetName)
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.selectAllAttributes(selectAll)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -53,8 +57,9 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeChart.dataCharts.element.should('not.exist')
   })
   it('should expand collapsed charts | step 21', () => {
-    searchForCallers()
-    selectAllAttributes()
+    decisionTreesPage.searchForCallers(datasetName)
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.selectAllAttributes(selectAll)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -65,8 +70,9 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should open text editor | step 22', () => {
-    searchForCallers()
-    selectAllAttributes()
+    decisionTreesPage.searchForCallers(datasetName)
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.selectAllAttributes(selectAll)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
@@ -152,11 +158,13 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should create new decision tree | step 27', () => {
-    searchForCallers()
-    selectAllAttributes()
+    decisionTreesPage.searchForCallers(datasetName)
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.selectAllAttributes(selectAll)
     decisionTreesPage.decisionTreeMenu.createNew.click()
     decisionTreesPage.decisionTreeMenu.newDecisionTreeNameInput.type(
       `${decisionTreeName}`,
+      100,
     )
     cy.intercept('POST', '/app/dtree_stat').as('createNewTree')
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
@@ -187,7 +195,7 @@ describe('Regression test of the decision tree', () => {
     )
     cy.wait('@decTreeUpload')
     cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
-    addStepAfter(0)
+    decisionTreesPage.addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
@@ -196,6 +204,13 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.rightInput.type('100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
+    cy.wait('@decTreeUpload')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.contentEditor.element.should(
+        'have.length',
+        2,
+      ),
+    )
     decisionTreesPage.decisionTreeMenu.decisionActions.click()
     cy.intercept('POST', '/app/dtree_stat').as('modifyTree')
     decisionTreesPage.decisionTreeMenu.selectDropdownElem
@@ -242,24 +257,4 @@ describe('Regression test of the decision tree', () => {
       .contains(decisionTreeName)
       .should('not.exist')
   })
-
-  function searchForCallers() {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
-    decisionTreesPage.decisionTreeResults.addAttribute.click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
-  }
-
-  function selectAllAttributes() {
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
-    decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
-  }
-
-  function addStepAfter(elementNumber: number) {
-    decisionTreesPage.decisionTreeResults.optionsMenu.eq(elementNumber).click()
-    decisionTreesPage.decisionTreeResults.addStepAfter.click()
-    cy.wait('@stepAfter')
-  }
 })

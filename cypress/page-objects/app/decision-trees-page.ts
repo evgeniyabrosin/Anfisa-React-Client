@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
 import { DecisionTreeModalDataCy } from '../../../src/components/data-testid/decision-tree-modal.cy'
@@ -108,6 +109,10 @@ class DecisionTreesPage extends BasePage {
         joinByAnd: Helper.getDataId(DecisionTreeModalDataCy.joinByAnd),
         joinByOr: Helper.getDataId(DecisionTreeModalDataCy.joinByOr),
         replaceButton: Helper.getDataId(DecisionTreeModalDataCy.replaceButton),
+        variantsList: Helper.getDataId(DecisionTreesResultsDataCy.variantsList),
+      },
+      labels: {
+        variantsList: '',
       },
     })
     this.decisionTreeChart = new DecisionTreeChartWidget({
@@ -118,6 +123,25 @@ class DecisionTreesPage extends BasePage {
         dataCharts: '',
       },
     })
+  }
+  searchForCallers(datasetName: string): void {
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.decisionTreeResults.addAttribute.click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
+  }
+
+  selectAllAttributes(selectAll: string): void {
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
+    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes')
+  }
+
+  addStepAfter(elementNumber: number) {
+    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    decisionTreesPage.decisionTreeResults.optionsMenu.eq(elementNumber).click()
+    decisionTreesPage.decisionTreeResults.addStepAfter.click()
+    cy.wait('@stepAfter')
   }
 }
 

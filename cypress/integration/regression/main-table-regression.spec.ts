@@ -65,7 +65,11 @@ describe('Regression test of the main table | step 1', () => {
     mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
     variantDrawerPage.variantDrawer.tagInput.type(customTag, 100)
-    cy.wait(1000)
+    cy.waitUntil(() =>
+      variantDrawerPage.variantDrawer.addCustomTag.element.should(
+        'not.be.disabled',
+      ),
+    )
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
     cy.intercept('POST', '/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
