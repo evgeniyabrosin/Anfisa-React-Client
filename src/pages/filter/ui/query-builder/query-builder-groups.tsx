@@ -75,17 +75,17 @@ export const QueryBuilderGroups = observer(
             className="overflow-y-auto"
             style={{ maxHeight: 'calc(100vh - 300px)' }}
           >
-            <DeferRender chunkSize={chunkSize} renderId={decrement}>
-              {groupNames.map((groupName, index) => (
-                <QueryBuilderSubgroup
-                  groupName={groupName}
-                  subGroupData={subGroupData[index]}
-                  key={groupName + dtreeStore.queryBuilderRenderKey}
-                  changeIndicator={dtreeStore.filterChangeIndicator}
-                  isContentExpanded={dtreeStore.isFilterContentExpanded}
-                />
-              ))}
-            </DeferRender>
+            {/* <DeferRender chunkSize={chunkSize} renderId={decrement}> */}
+            {groupNames.map((groupName, index) => (
+              <QueryBuilderSubgroup
+                groupName={groupName}
+                subGroupData={subGroupData[index]}
+                key={groupName + dtreeStore.queryBuilderRenderKey}
+                changeIndicator={dtreeStore.filterChangeIndicator}
+                isContentExpanded={dtreeStore.isFilterContentExpanded}
+              />
+            ))}
+            {/* </DeferRender> */}
           </div>
         </div>
       </Fragment>
