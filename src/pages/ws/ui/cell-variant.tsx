@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import variantStore from '@store/variant'
 import { CopyToClipboard } from '@components/copy-to-clipboard'
 import { CellI } from './cell-interfaces'
-import { isRowSelected } from './table'
+import { isRowSelected } from './table/table'
 
 export const CellVariant = observer(
   ({ cell }: CellI): ReactElement => {
