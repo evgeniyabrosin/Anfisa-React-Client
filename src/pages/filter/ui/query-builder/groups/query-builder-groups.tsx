@@ -5,7 +5,7 @@ import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { DeferRender } from '@utils/deferRender'
-import { QueryBuilderSearch } from './query-builder-search'
+import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer(
@@ -75,17 +75,17 @@ export const QueryBuilderGroups = observer(
             className="overflow-y-auto"
             style={{ maxHeight: 'calc(100vh - 300px)' }}
           >
-            {/* <DeferRender chunkSize={chunkSize} renderId={decrement}> */}
-            {groupNames.map((groupName, index) => (
-              <QueryBuilderSubgroup
-                groupName={groupName}
-                subGroupData={subGroupData[index]}
-                key={groupName + dtreeStore.queryBuilderRenderKey}
-                changeIndicator={dtreeStore.filterChangeIndicator}
-                isContentExpanded={dtreeStore.isFilterContentExpanded}
-              />
-            ))}
-            {/* </DeferRender> */}
+            <DeferRender chunkSize={chunkSize} renderId={decrement}>
+              {groupNames.map((groupName, index) => (
+                <QueryBuilderSubgroup
+                  groupName={groupName}
+                  subGroupData={subGroupData[index]}
+                  key={groupName + dtreeStore.queryBuilderRenderKey}
+                  changeIndicator={dtreeStore.filterChangeIndicator}
+                  isContentExpanded={dtreeStore.isFilterContentExpanded}
+                />
+              ))}
+            </DeferRender>
           </div>
         </div>
       </Fragment>
