@@ -11,11 +11,6 @@ on:
       - '!main'
     tags: [ stage ]
     
-#on:
-#  push:
-#    branches: [ main ]
-#    tags: [ stage ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -68,7 +63,7 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: '/home/forome/anfisa_front/anfisaCI'
+          TARGET: '/home/forome/anfisa_front/anfisa-feature'
 #          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
           EXCLUDE: "/node_modules/"
     - name: Auth AWS
