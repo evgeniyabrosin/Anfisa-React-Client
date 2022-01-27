@@ -10,6 +10,6 @@ FROM nginx:latest
 COPY ./default.nginx /opt/
 RUN rm -Rf /etc/nginx/conf.d/* && cd /opt/ && mv default.nginx /etc/nginx/conf.d/Anfisa.conf
 COPY --from=build-deps /opt/Anfisa-React-Client/build /usr/share/nginx/html/Anfisa
-EXPOSE 80
+EXPOSE 8080
 EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
