@@ -30,15 +30,8 @@ export const IgvButton = observer(
     const fixedLocus = locus.split(' ')[0]
 
     return (
-      <Link
-        target="_blank"
-        to={`${Routes.IGV}?locus=${fixedLocus}&names=${fixedSampleList}`}
-      >
-        <Button
-          className="mx-2 whitespace-nowrap"
-          text={t('igv.openIgv')}
-          size="sm"
-        />
+      <Link target="_blank" to={`${Routes.IGV}?locus=${fixedLocus}&names=${fixedSampleList}`}>
+        <Button className="mx-2 whitespace-nowrap" text={t('igv.openIgv')} size="sm" />
       </Link>
     )
   },

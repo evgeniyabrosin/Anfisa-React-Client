@@ -8,12 +8,7 @@ export interface ISessionStoreDataProviderProps<T = any> {
   storePrefix?: string
 }
 
-export const SessionStoreDataProvider = <T,>({
-  children,
-  storeKey,
-  values,
-  storePrefix,
-}: React.PropsWithChildren<ISessionStoreDataProviderProps<T>>): JSX.Element => {
+export const SessionStoreDataProvider = <T,>({ children, storeKey, values, storePrefix }: React.PropsWithChildren<ISessionStoreDataProviderProps<T>>): JSX.Element => {
   useEffect(() => {
     SessionStoreManager.write(storeKey, values, storePrefix)
   }, [storeKey, values, storePrefix])

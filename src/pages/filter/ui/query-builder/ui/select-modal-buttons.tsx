@@ -20,71 +20,47 @@ interface IProps {
   handleAddAttribute: (action: ActionType) => void
 }
 
-export const SelectModalButtons = observer(
-  ({
-    handleModals,
-    handleClose,
-    handleModalJoin,
-    currentGroup,
-    disabled,
-    handleAddAttribute,
-  }: IProps) => {
-    return (
-      <div
-        className={cn('flex mt-1 items-center', {
-          'justify-end': dtreeStore.modalSource === ModalSources.TreeStat,
-          'justify-between': dtreeStore.modalSource === ModalSources.TreeStep,
-        })}
-      >
-        {dtreeStore.modalSource === ModalSources.TreeStep && (
-          <div
-            className="text-14 text-blue-bright font-medium cursor-pointer"
-            onClick={handleModals}
-          >
-            {t('dtree.backToAttribute')}
-          </div>
-        )}
+export const SelectModalButtons = observer(({ handleModals, handleClose, handleModalJoin, currentGroup, disabled, handleAddAttribute }: IProps) => {
+  return (
+    <div
+      className={cn('flex mt-1 items-center', {
+        'justify-end': dtreeStore.modalSource === ModalSources.TreeStat,
+        'justify-between': dtreeStore.modalSource === ModalSources.TreeStep,
+      })}
+    >
+      {dtreeStore.modalSource === ModalSources.TreeStep && (
+        <div className="text-14 text-blue-bright font-medium cursor-pointer" onClick={handleModals}>
+          {t('dtree.backToAttribute')}
+        </div>
+      )}
 
-        <div className="flex">
-          <Button
-            text={t('general.cancel')}
-            variant={'secondary'}
-            className={'mr-2'}
-            onClick={() => handleClose()}
-          />
-          {currentGroup && currentGroup.length > 0 ? (
-            <Fragment>
+      <div className="flex">
+        <Button text={t('general.cancel')} variant={'secondary'} className={'mr-2'} onClick={() => handleClose()} />
+        {currentGroup && currentGroup.length > 0 ? (
+          <Fragment>
+            <Button disabled={disabled} text={t('dtree.replace')} className={'mr-2'} onClick={() => handleAddAttribute('REPLACE')} />
+
+            <div className="relative">
               <Button
                 disabled={disabled}
-                text={t('dtree.replace')}
-                className={'mr-2'}
-                onClick={() => handleAddAttribute('REPLACE')}
+                text={t('dtree.addByJoining')}
+                onClick={handleModalJoin}
+                icon={<Icon name="Arrow" className="transform -rotate-90" />}
+                dataTestId={DecisionTreesResultsDataCy.addByJoin}
               />
 
-              <div className="relative">
-                <Button
-                  disabled={disabled}
-                  text={t('dtree.addByJoining')}
-                  onClick={handleModalJoin}
-                  icon={<Icon name="Arrow" className="transform -rotate-90" />}
-                  dataTestId={DecisionTreesResultsDataCy.addByJoin}
-                />
-
-                {dtreeStore.isModalJoinVisible && (
-                  <ModalJoin handleAddAttribute={handleAddAttribute} />
-                )}
-              </div>
-            </Fragment>
-          ) : (
-            <Button
-              text={t('dtree.addNewAttribute')}
-              onClick={() => handleAddAttribute('INSERT')}
-              disabled={disabled}
-              dataTestId={DecisionTreesResultsDataCy.addSelectedAttributes}
-            />
-          )}
-        </div>
+              {dtreeStore.isModalJoinVisible && <ModalJoin handleAddAttribute={handleAddAttribute} />}
+            </div>
+          </Fragment>
+        ) : (
+          <Button
+            text={t('dtree.addNewAttribute')}
+            onClick={() => handleAddAttribute('INSERT')}
+            disabled={disabled}
+            dataTestId={DecisionTreesResultsDataCy.addSelectedAttributes}
+          />
+        )}
       </div>
-    )
-  },
-)
+    </div>
+  )
+})

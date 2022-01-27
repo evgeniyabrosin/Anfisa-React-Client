@@ -1,10 +1,7 @@
 import { Glb } from '@glb/glb'
 import { GlbPagesNames } from '@glb/glb-names'
 
-export type FilterControlOptions = Exclude<
-  GlbPagesNames,
-  'table' | 'root' | 'IGV'
->
+export type FilterControlOptions = Exclude<GlbPagesNames, 'table' | 'root' | 'IGV'>
 
 export const FilterControlOptions: FilterControlOption[] = [
   { value: GlbPagesNames.Filter, label: 'Decision Tree' },

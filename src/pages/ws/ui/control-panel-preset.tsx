@@ -13,9 +13,7 @@ import { ControlPanelTitle } from './control-panel-title'
 
 export const Preset = observer(
   (): ReactElement => {
-    const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
-      (preset: FilterList) => preset.name,
-    )
+    const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map((preset: FilterList) => preset.name)
 
     const onSelectAsync = async (arg: Option, reset?: string) => {
       datasetStore.setActivePreset(arg.value)
@@ -37,24 +35,14 @@ export const Preset = observer(
           <ControlPanelTitle title={t('ds.preset')} />
 
           {datasetStore.activePreset && (
-            <span
-              onClick={() =>
-                onSelectAsync({ value: '', label: '' } as Option, 'reset')
-              }
-              className="text-14 text-blue-bright cursor-pointer"
-            >
+            <span onClick={() => onSelectAsync({ value: '', label: '' } as Option, 'reset')} className="text-14 text-blue-bright cursor-pointer">
               {t('general.clear')}
             </span>
           )}
         </div>
 
         <div data-testid={MainTableDataCy.selectPreset}>
-          <DropDown
-            options={presets}
-            value={datasetStore.activePreset}
-            onSelect={onSelectAsync}
-            placeholder={t('general.selectAnOption')}
-          />
+          <DropDown options={presets} value={datasetStore.activePreset} onSelect={onSelectAsync} placeholder={t('general.selectAnOption')} />
         </div>
       </div>
     )

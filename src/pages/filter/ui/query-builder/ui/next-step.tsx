@@ -55,37 +55,17 @@ export const NextStep = observer(
     }
 
     return (
-      <div
-        className="flex flex-col mb-2"
-        data-testid={DecisionTreesResultsDataCy.stepCard}
-      >
+      <div className="flex flex-col mb-2" data-testid={DecisionTreesResultsDataCy.stepCard}>
         <div className="flex">
-          <TreeView
-            className={cn(
-              'pr-3',
-              currentStep.isReturnedVariantsActive ? 'bg-green-light' : '',
-            )}
-          >
-            <NextStepRoute
-              isExpanded={isExpanded}
-              index={index}
-              isIncluded={!dtreeStore.getStepData[index].excluded}
-            />
+          <TreeView className={cn('pr-3', currentStep.isReturnedVariantsActive ? 'bg-green-light' : '')}>
+            <NextStepRoute isExpanded={isExpanded} index={index} isIncluded={!dtreeStore.getStepData[index].excluded} />
           </TreeView>
 
           <ResultsView
-            className={cn(
-              'border-l border-grey-light font-medium px-5 relative',
-              currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
-            )}
+            className={cn('border-l border-grey-light font-medium px-5 relative', currentStep.isActive ? ' bg-green-light' : 'bg-blue-light')}
             onClick={event => setStepActive(index, event)}
           >
-            <NextStepHeader
-              isExpanded={isExpanded}
-              expandContent={expandContent}
-              index={index}
-              isExcluded={dtreeStore.getStepData[index].excluded}
-            />
+            <NextStepHeader isExpanded={isExpanded} expandContent={expandContent} index={index} isExcluded={dtreeStore.getStepData[index].excluded} />
 
             {isExpanded && <NextStepContent index={index} />}
           </ResultsView>

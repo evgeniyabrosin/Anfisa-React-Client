@@ -54,15 +54,10 @@ class DirInfoStore {
   }
 
   setSortDirection() {
-    const clonedSortDirection: SortDirectionsType = Object.assign(
-      this.sortDirections,
-    )
+    const clonedSortDirection: SortDirectionsType = Object.assign(this.sortDirections)
 
     if (this.sortType) {
-      clonedSortDirection[this.sortType] =
-        clonedSortDirection[this.sortType] === SortDirection.ASC
-          ? SortDirection.DESC
-          : SortDirection.ASC
+      clonedSortDirection[this.sortType] = clonedSortDirection[this.sortType] === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC
     }
 
     runInAction(() => {
@@ -78,19 +73,11 @@ class DirInfoStore {
     let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
 
     if (this.filterValue) {
-      keys = keys.filter(key =>
-        key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()),
-      )
+      keys = keys.filter(key => key.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()))
     }
 
     if (this.sortType === SortDatasets.Name) {
-      return orderBy(
-        keys,
-        i => i,
-        this.sortDirections[this.sortType].toLocaleLowerCase() as
-          | 'asc'
-          | 'desc',
-      )
+      return orderBy(keys, i => i, this.sortDirections[this.sortType].toLocaleLowerCase() as 'asc' | 'desc')
     }
 
     if (this.sortType === SortDatasets.CreatedAt) {
@@ -99,19 +86,14 @@ class DirInfoStore {
           return 1
         }
 
-        if (
-          !this.dirinfo['ds-dict'][a]['create-time'] ||
-          !this.dirinfo['ds-dict'][b]['create-time']
-        ) {
+        if (!this.dirinfo['ds-dict'][a]['create-time'] || !this.dirinfo['ds-dict'][b]['create-time']) {
           return 1
         }
 
         const aDate = new Date(this.dirinfo['ds-dict'][a]['create-time'])
         const bDate = new Date(this.dirinfo['ds-dict'][b]['create-time'])
 
-        return this.sortDirections.CreatedAt === SortDirection.ASC
-          ? +aDate - +bDate
-          : +bDate - +aDate
+        return this.sortDirections.CreatedAt === SortDirection.ASC ? +aDate - +bDate : +bDate - +aDate
       })
     }
 
@@ -122,11 +104,7 @@ class DirInfoStore {
     const ancestors: any[] = get(this, 'dsinfo.ancestors', [])
     const clonedAncestors = cloneDeep(ancestors)
 
-    if (
-      clonedAncestors[0] &&
-      clonedAncestors[0][1] &&
-      clonedAncestors[0][1][1]
-    ) {
+    if (clonedAncestors[0] && clonedAncestors[0][1] && clonedAncestors[0][1][1]) {
       const formatedData = clonedAncestors[0][1][1].map((item: any) => {
         if (item[0] === 'Info') {
           item[0] = 'Base Info'

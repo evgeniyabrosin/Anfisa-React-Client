@@ -43,46 +43,28 @@ export const ModalNotes = observer(() => {
 
   return (
     <ModalBase refer={ref} minHeight={200} width="500px">
-      <HeaderModal
-        groupName={`${t('variant.notesFor')} [${genInfo}] ${hg19}`}
-        handleClose={handleClose}
-      />
+      <HeaderModal groupName={`${t('variant.notesFor')} [${genInfo}] ${hg19}`} handleClose={handleClose} />
 
       <div ref={ref} className="flex flex-col mt-2">
         <div>{currentTag}</div>
 
         <div className="relative mt-5">
-          {error && (
-            <div className="absolute -top-3.5 text-12 text-red-secondary">
-              {error}
-            </div>
-          )}
+          {error && <div className="absolute -top-3.5 text-12 text-red-secondary">{error}</div>}
 
           <textarea
             placeholder="Enter text"
             className="w-full mt-1 p-3 h-80 rounded-lg resize-none mx-auto shadow-dark"
             rows={15}
             value={value}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              handleChange(e.target.value)
-            }
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange(e.target.value)}
           />
         </div>
 
         <div className="w-full flex justify-end ml-auto mt-6">
           <div className="flex items-center">
-            <Button
-              text={t('general.cancel')}
-              variant={'secondary'}
-              onClick={handleClose}
-            />
+            <Button text={t('general.cancel')} variant={'secondary'} onClick={handleClose} />
 
-            <Button
-              text={t('variant.saveNote')}
-              disabled={!value || !!error}
-              className="ml-2"
-              onClick={handleSaveNote}
-            />
+            <Button text={t('variant.saveNote')} disabled={!value || !!error} className="ml-2" onClick={handleSaveNote} />
           </div>
         </div>
       </div>

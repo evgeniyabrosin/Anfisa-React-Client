@@ -18,21 +18,13 @@ export const DeferRender = observer(
       if (renderedItemsCount < childrenArray.length) {
         const requestId = window.requestIdleCallback(
           () => {
-            setRenderedItemsCount(
-              Math.min(renderedItemsCount + chunkSize, childrenArray.length),
-            )
+            setRenderedItemsCount(Math.min(renderedItemsCount + chunkSize, childrenArray.length))
             renderId(requestId)
           },
           { timeout: 200 },
         )
       }
-    }, [
-      renderedItemsCount,
-      setRenderedItemsCount,
-      childrenArray.length,
-      chunkSize,
-      renderId,
-    ])
+    }, [renderedItemsCount, setRenderedItemsCount, childrenArray.length, chunkSize, renderId])
 
     const sliced = childrenArray.slice(0, renderedItemsCount)
 

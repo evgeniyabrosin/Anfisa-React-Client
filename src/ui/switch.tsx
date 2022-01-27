@@ -20,12 +20,7 @@ const width = {
   md: 28,
 }
 
-export const Switch = ({
-  isChecked,
-  disabled,
-  size = 'md',
-  onChange,
-}: Props): ReactElement => (
+export const Switch = ({ isChecked, disabled, size = 'md', onChange }: Props): ReactElement => (
   <SwitchBase
     onChange={onChange}
     checked={isChecked}

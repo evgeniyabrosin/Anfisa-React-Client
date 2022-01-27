@@ -15,15 +15,10 @@ export const FnLabel = observer(
     return (
       <div
         style={{ width: 18, height: 18 }}
-        className={cn(
-          'flex items-center justify-center mr-1 text-12 shadow-dark rounded-sm font-mono',
-          {
-            'text-green-secondary bg-green-light':
-              (currentStep && !currentStep.isActive) || subGroup,
-            'text-blue-bright bg-blue-medium':
-              currentStep && currentStep.isActive,
-          },
-        )}
+        className={cn('flex items-center justify-center mr-1 text-12 shadow-dark rounded-sm font-mono', {
+          'text-green-secondary bg-green-light': (currentStep && !currentStep.isActive) || subGroup,
+          'text-blue-bright bg-blue-medium': currentStep && currentStep.isActive,
+        })}
       >
         {t('dtree.fn')}
       </div>

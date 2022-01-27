@@ -15,65 +15,41 @@ interface IProps {
   isModal?: boolean
 }
 
-export const QueryBuilderSubgroup = observer(
-  ({
-    groupName,
-    subGroupData,
-    isContentExpanded,
-    changeIndicator,
-    isModal,
-  }: IProps) => {
-    const [isVisibleSubGroup, setIsVisibleSubGroup] = useState(true)
+export const QueryBuilderSubgroup = observer(({ groupName, subGroupData, isContentExpanded, changeIndicator, isModal }: IProps) => {
+  const [isVisibleSubGroup, setIsVisibleSubGroup] = useState(true)
 
-    const expandContent = () => {
-      setIsVisibleSubGroup(prev => !prev)
-    }
+  const expandContent = () => {
+    setIsVisibleSubGroup(prev => !prev)
+  }
 
-    const onClick = useCallback(() => {
-      expandContent()
-    }, [])
+  const onClick = useCallback(() => {
+    expandContent()
+  }, [])
 
-    useEffect(() => {
-      !isContentExpanded && setIsVisibleSubGroup(true)
-      isContentExpanded && setIsVisibleSubGroup(false)
-    }, [isContentExpanded, changeIndicator])
+  useEffect(() => {
+    !isContentExpanded && setIsVisibleSubGroup(true)
+    isContentExpanded && setIsVisibleSubGroup(false)
+  }, [isContentExpanded, changeIndicator])
 
-    return (
-      <div>
-        <div
-          onClick={onClick}
-          className={cn(
-            'flex items-center justify-between mb-3 text-16 cursor-pointer',
-            {
-              'text-black': !isVisibleSubGroup,
-              'text-grey-blue': !isVisibleSubGroup && !isModal,
-              'text-white': isVisibleSubGroup && !isModal,
-              'hover:text-white': !isModal,
-              'hover:text-blue-dark': isModal,
-              'text-blue-dark': isModal && isVisibleSubGroup,
-            },
-          )}
-        >
-          <span data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}>
-            {groupName}
-          </span>
+  return (
+    <div>
+      <div
+        onClick={onClick}
+        className={cn('flex items-center justify-between mb-3 text-16 cursor-pointer', {
+          'text-black': !isVisibleSubGroup,
+          'text-grey-blue': !isVisibleSubGroup && !isModal,
+          'text-white': isVisibleSubGroup && !isModal,
+          'hover:text-white': !isModal,
+          'hover:text-blue-dark': isModal,
+          'text-blue-dark': isModal && isVisibleSubGroup,
+        })}
+      >
+        <span data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}>{groupName}</span>
 
-          <ExpandContentButton
-            isVisible={isVisibleSubGroup}
-            isModal={isModal}
-          />
-        </div>
-
-        {isVisibleSubGroup &&
-          subGroupData.map((subGroupItem, index) => (
-            <QueryBuilderSubgroupItem
-              subGroupItem={subGroupItem}
-              key={index}
-              isModal={isModal}
-              groupName={groupName}
-            />
-          ))}
+        <ExpandContentButton isVisible={isVisibleSubGroup} isModal={isModal} />
       </div>
-    )
-  },
-)
+
+      {isVisibleSubGroup && subGroupData.map((subGroupItem, index) => <QueryBuilderSubgroupItem subGroupItem={subGroupItem} key={index} isModal={isModal} groupName={groupName} />)}
+    </div>
+  )
+})

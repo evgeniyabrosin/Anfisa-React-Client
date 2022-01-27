@@ -13,11 +13,7 @@ interface Props {
   dataTestId?: string
 }
 
-export const TableProperiesButton = ({
-  refEl,
-  isOpen,
-  onClick,
-}: Props): ReactElement => (
+export const TableProperiesButton = ({ refEl, isOpen, onClick }: Props): ReactElement => (
   <Button
     dataTestId={MainTableDataCy.customizeTable}
     refEl={refEl}
@@ -25,14 +21,6 @@ export const TableProperiesButton = ({
     text={t('ds.customizeTable')}
     variant={'secondary-dark'}
     prepend={<Icon name="Settings" />}
-    append={
-      <Icon
-        name="Arrow"
-        className={cn(
-          'transform transition-transform',
-          isOpen ? 'rotate-90' : '-rotate-90',
-        )}
-      />
-    }
+    append={<Icon name="Arrow" className={cn('transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')} />}
   />
 )

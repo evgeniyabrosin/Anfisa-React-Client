@@ -26,27 +26,14 @@ interface PropsPanel {
   close: () => void
 }
 
-const ButtonBase = ({
-  isOpen,
-  refEl,
-  className,
-  ...rest
-}: PropsButton): ReactElement => (
+const ButtonBase = ({ isOpen, refEl, className, ...rest }: PropsButton): ReactElement => (
   <Button
     text={t('home.openInViewer')}
     dataTestId={DatasetInfoDataCy.openInViewer}
     refEl={refEl}
     size="md"
     onClick={rest.onClick}
-    append={
-      <Icon
-        name="Arrow"
-        className={cn(
-          'transform transition-transform',
-          isOpen ? 'rotate-90' : '-rotate-90',
-        )}
-      />
-    }
+    append={<Icon name="Arrow" className={cn('transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')} />}
   />
 )
 
@@ -54,9 +41,7 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
   const ref = useRef<any>(null)
   const history = useHistory()
 
-  let pages = Object.values(GlbPagesNames).filter(
-    name => name !== GlbPagesNames.Root,
-  )
+  let pages = Object.values(GlbPagesNames).filter(name => name !== GlbPagesNames.Root)
 
   if (datasetStore.isXL) {
     pages = pages.filter(p => p !== GlbPagesNames.Table)
@@ -72,10 +57,7 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
   useOutsideClick(ref, close)
 
   return (
-    <div
-      className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col"
-      ref={ref}
-    >
+    <div className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col" ref={ref}>
       {pages.map((pageName, index) => {
         const shouldRenderOption = pageName !== GlbPagesNames.IGV
 

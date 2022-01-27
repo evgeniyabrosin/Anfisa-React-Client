@@ -49,9 +49,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
     let params = ''
 
     Object.entries(variantStore.tagsWithNotes).map((tagData, index) => {
-      params += `"${tagData[0]}":${
-        isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`
-      }`
+      params += `"${tagData[0]}":${isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`}`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
         params += `,`
@@ -98,48 +96,24 @@ const DrawerNoteModal = observer(({ close }: any) => {
         </span>
       </span>
       <div className="relative mt-3">
-        {error && (
-          <div className="absolute -top-2.5 text-12 text-red-secondary">
-            {error}
-          </div>
-        )}
+        {error && <div className="absolute -top-2.5 text-12 text-red-secondary">{error}</div>}
 
         <textarea
           placeholder="Enter text"
           className="w-96 mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
           rows={15}
           value={value}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-            handleChange(e.target.value)
-          }
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange(e.target.value)}
         />
       </div>
 
       <div className="flex justify-between mt-4">
-        <div>
-          {variantStore.noteText && (
-            <Button
-              text={t('general.delete')}
-              onClick={deleteNoteAsync}
-              variant={'diestruction'}
-            />
-          )}
-        </div>
+        <div>{variantStore.noteText && <Button text={t('general.delete')} onClick={deleteNoteAsync} variant={'diestruction'} />}</div>
 
         <div className="flex items-center">
-          <Button
-            text={t('general.cancel')}
-            onClick={close}
-            variant={'secondary'}
-          />
+          <Button text={t('general.cancel')} onClick={close} variant={'secondary'} />
 
-          <Button
-            text="Save note"
-            dataTestId={VariantDrawerDataCy.saveNote}
-            disabled={!value || !value.trim() || !!error}
-            className="ml-2"
-            onClick={handleSaveNoteAsync}
-          />
+          <Button text="Save note" dataTestId={VariantDrawerDataCy.saveNote} disabled={!value || !value.trim() || !!error} className="ml-2" onClick={handleSaveNoteAsync} />
         </div>
       </div>
     </div>
@@ -151,10 +125,7 @@ export const DrawerNote = observer(() => {
     <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
       <span className="text-14 text-white px-3">{t('variant.notes')}</span>
 
-      <PopperButton
-        ButtonElement={DrawerNoteButton}
-        ModalElement={DrawerNoteModal}
-      />
+      <PopperButton ButtonElement={DrawerNoteButton} ModalElement={DrawerNoteModal} />
     </div>
   )
 })

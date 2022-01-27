@@ -31,76 +31,53 @@ const Separator = styled.div`
   width: 1px;
 `
 
-export const Pagintaion = observer(
-  ({ pagesNumbers, currentPage, setPageNumber }: IProps) => {
-    const testPage = currentPage + 1
-    const isFirstPage = currentPage === 0
-    const isLastPage = testPage === pagesNumbers
+export const Pagintaion = observer(({ pagesNumbers, currentPage, setPageNumber }: IProps) => {
+  const testPage = currentPage + 1
+  const isFirstPage = currentPage === 0
+  const isLastPage = testPage === pagesNumbers
 
-    const changePage = (action: Actions) => {
-      switch (action) {
-        case Actions.first:
-          if (isFirstPage) break
-          setPageNumber(0)
+  const changePage = (action: Actions) => {
+    switch (action) {
+      case Actions.first:
+        if (isFirstPage) break
+        setPageNumber(0)
 
-          break
-        case Actions.prev:
-          if (isFirstPage) break
-          setPageNumber(currentPage - 1)
-          break
-        case Actions.next:
-          if (isLastPage) break
-          setPageNumber(currentPage + 1)
+        break
+      case Actions.prev:
+        if (isFirstPage) break
+        setPageNumber(currentPage - 1)
+        break
+      case Actions.next:
+        if (isLastPage) break
+        setPageNumber(currentPage + 1)
 
-          break
-        case Actions.last:
-          if (isLastPage) break
-          setPageNumber(pagesNumbers - 1)
+        break
+      case Actions.last:
+        if (isLastPage) break
+        setPageNumber(pagesNumbers - 1)
 
-          break
+        break
 
-        default:
-          break
-      }
+      default:
+        break
     }
+  }
 
-    return (
-      <div className="flex justify-center">
-        <Panel>
-          <div onClick={() => changePage(Actions.prev)}>
-            <Icon
-              name="Arrow"
-              size={22}
-              className={cn(
-                `${
-                  !isFirstPage
-                    ? 'text-blue-bright cursor-pointer'
-                    : 'text-grey-blue'
-                }`,
-              )}
-            />
-          </div>
+  return (
+    <div className="flex justify-center">
+      <Panel>
+        <div onClick={() => changePage(Actions.prev)}>
+          <Icon name="Arrow" size={22} className={cn(`${!isFirstPage ? 'text-blue-bright cursor-pointer' : 'text-grey-blue'}`)} />
+        </div>
 
-          <Separator />
-          <span className="px-2">{testPage + '/' + pagesNumbers}</span>
-          <Separator />
+        <Separator />
+        <span className="px-2">{testPage + '/' + pagesNumbers}</span>
+        <Separator />
 
-          <div onClick={() => changePage(Actions.next)}>
-            <Icon
-              name="Arrow"
-              size={22}
-              className={cn(
-                'transform -rotate-180',
-                `${
-                  !isLastPage
-                    ? 'text-blue-bright cursor-pointer'
-                    : 'text-grey-blue'
-                }`,
-              )}
-            />
-          </div>
-        </Panel>
-      </div>
-    )
-  },
-)
+        <div onClick={() => changePage(Actions.next)}>
+          <Icon name="Arrow" size={22} className={cn('transform -rotate-180', `${!isLastPage ? 'text-blue-bright cursor-pointer' : 'text-grey-blue'}`)} />
+        </div>
+      </Panel>
+    </div>
+  )
+})

@@ -19,20 +19,14 @@ export class LeftPanelWidget extends UIWidget {
   readonly leftPanelHeader: Label
   readonly datasetsListElem: Button
 
-  constructor(options: {
-    selectors: LeftPanelSelectors
-    labels: LeftPanelLabels
-  }) {
+  constructor(options: { selectors: LeftPanelSelectors; labels: LeftPanelLabels }) {
     super(options)
 
     const selectors = options.selectors
     const labels = options.labels
 
     this.searchInput = new Input(selectors.searchInput)
-    this.leftPanelHeader = new Label(
-      selectors.leftPanelHeader,
-      labels.leftPanelHeader,
-    )
+    this.leftPanelHeader = new Label(selectors.leftPanelHeader, labels.leftPanelHeader)
     this.datasetsListElem = new Button(selectors.datasetsListElem)
   }
 }

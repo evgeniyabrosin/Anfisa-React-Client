@@ -2,9 +2,7 @@ import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
 import { PageRoute, Routes } from './routes.enum'
 
-export const getPageRoute = (
-  name: GlbPagesNames | FilterControlOptions,
-): PageRoute => {
+export const getPageRoute = (name: GlbPagesNames | FilterControlOptions): PageRoute => {
   let route = ''
 
   switch (name) {

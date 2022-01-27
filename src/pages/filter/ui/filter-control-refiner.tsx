@@ -17,10 +17,7 @@ import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
-import {
-  noFirstNumberPattern,
-  noSymbolPattern,
-} from './query-builder/ui/modal-save-dataset'
+import { noFirstNumberPattern, noSymbolPattern } from './query-builder/ui/modal-save-dataset'
 
 export const FilterControlRefiner = observer(
   (): ReactElement => {
@@ -41,10 +38,7 @@ export const FilterControlRefiner = observer(
 
     const presets: string[] = get(datasetStore, 'dsStat.filter-list', [])
       .filter((preset: FilterList) => {
-        if (
-          filterStore.actionName === ActionFilterEnum.Delete ||
-          filterStore.actionName === ActionFilterEnum.Modify
-        ) {
+        if (filterStore.actionName === ActionFilterEnum.Delete || filterStore.actionName === ActionFilterEnum.Modify) {
           return !preset.standard
         }
 
@@ -75,11 +69,7 @@ export const FilterControlRefiner = observer(
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
-        if (
-          noSymbolPattern.test(createPresetName) ||
-          noFirstNumberPattern.test(createPresetName) ||
-          createPresetName.length > 50
-        ) {
+        if (noSymbolPattern.test(createPresetName) || noFirstNumberPattern.test(createPresetName) || createPresetName.length > 50) {
           toast.error(t('filter.notValidName'), {
             position: 'bottom-right',
             autoClose: 3000,
@@ -115,26 +105,16 @@ export const FilterControlRefiner = observer(
       }
     }
 
-    const isApplyDisabled =
-      activePreset.startsWith('⏚') &&
-      (filterStore.actionName === ActionFilterEnum.Modify ||
-        filterStore.actionName === ActionFilterEnum.Delete)
+    const isApplyDisabled = activePreset.startsWith('⏚') && (filterStore.actionName === ActionFilterEnum.Modify || filterStore.actionName === ActionFilterEnum.Delete)
 
     return (
       <Fragment>
         <div className="flex items-center border-black">
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-grey-blue text-14 font-bold">
-                {t('filter.presets')}
-              </span>
+              <span className="text-grey-blue text-14 font-bold">{t('filter.presets')}</span>
 
-              <span
-                className="text-blue-bright text-14 cursor-pointer"
-                onClick={() =>
-                  filterStore.setActionName(ActionFilterEnum.Create)
-                }
-              >
+              <span className="text-blue-bright text-14 cursor-pointer" onClick={() => filterStore.setActionName(ActionFilterEnum.Create)}>
                 {t('filter.createPreset')}
               </span>
             </div>
@@ -148,21 +128,11 @@ export const FilterControlRefiner = observer(
                 onChange={e => setCreatePresetName(e.target.value)}
               />
             ) : (
-              <DropDown
-                options={presets}
-                value={activePreset}
-                onSelect={args => setActivePreset(args.value)}
-              />
+              <DropDown options={presets} value={activePreset} onSelect={args => setActivePreset(args.value)} />
             )}
           </div>
 
-          {filterStore.actionName !== ActionFilterEnum.Create &&
-            activePreset && (
-              <PopperButton
-                ButtonElement={FilterButton}
-                ModalElement={FilterModal}
-              />
-            )}
+          {filterStore.actionName !== ActionFilterEnum.Create && activePreset && <PopperButton ButtonElement={FilterButton} ModalElement={FilterModal} />}
 
           {filterStore.actionName === ActionFilterEnum.Create && (
             <Button
@@ -179,13 +149,7 @@ export const FilterControlRefiner = observer(
           )}
 
           {filterStore.actionName && (activePreset || createPresetName) && (
-            <Button
-              text={t('general.apply')}
-              size="md"
-              onClick={handleClick}
-              disabled={isApplyDisabled}
-              className="text-white mt-auto ml-2"
-            />
+            <Button text={t('general.apply')} size="md" onClick={handleClick} disabled={isApplyDisabled} className="text-white mt-auto ml-2" />
           )}
         </div>
 

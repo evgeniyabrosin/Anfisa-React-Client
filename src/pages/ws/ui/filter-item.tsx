@@ -23,21 +23,14 @@ export const FilterItem = ({ group, variants }: Props): ReactElement => {
           const sum = amountValues.reduce((prev, cur) => prev + cur, 0)
 
           return (
-            <div
-              key={groupItemKey}
-              className="flex flex-wrap text-12 leading-5"
-            >
+            <div key={groupItemKey} className="flex flex-wrap text-12 leading-5">
               <div className="flex">
                 <div className="text-white mr-1">{groupItemKey}</div>
 
-                {amountValues.length > 0 && sum !== 0 && (
-                  <div className="text-grey-blue">({sum})</div>
-                )}
+                {amountValues.length > 0 && sum !== 0 && <div className="text-grey-blue">({sum})</div>}
               </div>
 
-              {index === 1 && amountMore > 0 && (
-                <span className="text-grey-blue w-full">{`+${amountMore} more`}</span>
-              )}
+              {index === 1 && amountMore > 0 && <span className="text-grey-blue w-full">{`+${amountMore} more`}</span>}
             </div>
           )
         })}

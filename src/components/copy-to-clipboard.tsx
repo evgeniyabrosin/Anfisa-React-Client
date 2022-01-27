@@ -28,11 +28,5 @@ export const CopyToClipboard = ({ text, className }: Props): ReactElement => {
     })
   }
 
-  return (
-    <Icon
-      name="Copy"
-      className={cn('cursor-pointer', className)}
-      onClick={copy}
-    />
-  )
+  return <Icon name="Copy" className={cn('cursor-pointer', className)} onClick={copy} />
 }

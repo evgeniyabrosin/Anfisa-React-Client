@@ -26,10 +26,7 @@ export const FilterSortDatasets = observer(
       <div className="flex justify-between my-2">
         <SortItem text={t('home.name')} sortType={SortDatasets.Name} />
 
-        <SortItem
-          text={t('home.createdAt')}
-          sortType={SortDatasets.CreatedAt}
-        />
+        <SortItem text={t('home.createdAt')} sortType={SortDatasets.CreatedAt} />
       </div>
     </div>
   ),

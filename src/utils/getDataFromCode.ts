@@ -6,23 +6,17 @@ export const getDataFromCode = (code: string) => {
 
     const lastCommentWord = startCondition.exec(element)?.[0] ?? ''
 
-    const comment = element.includes('#')
-      ? element.slice(element.indexOf('#'), element.indexOf(lastCommentWord))
-      : ''
+    const comment = element.includes('#') ? element.slice(element.indexOf('#'), element.indexOf(lastCommentWord)) : ''
 
     const fullCondition = /((\r\n|\r|\n)|^)if( not | )[\w(|](.|\r\n|\r|\n)+/
 
     const condition = fullCondition.exec(element)?.[0] ?? ''
 
-    const changedElement = element
-      .replace(/\r\n|\r|\n/g, ' ')
-      .replace(/"([^"]*)"/g, '')
+    const changedElement = element.replace(/\r\n|\r|\n/g, ' ').replace(/"([^"]*)"/g, '')
 
     const words = changedElement.split(' ')
 
-    const types: string[] = words.filter(
-      word => word === 'or' || word === 'and',
-    )
+    const types: string[] = words.filter(word => word === 'or' || word === 'and')
 
     const isNegate = changedElement.includes('if not ')
 

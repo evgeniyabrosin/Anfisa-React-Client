@@ -29,19 +29,10 @@ export const EditFilter = observer(
     return (
       <div style={{ minWidth: '144px' }}>
         <ControlPanelTitle title={t('ds.filters')}>
-          <Switch
-            isChecked={!datasetStore.isFilterDisabled}
-            size="sm"
-            onChange={switchHandler}
-          />
+          <Switch isChecked={!datasetStore.isFilterDisabled} size="sm" onChange={switchHandler} />
         </ControlPanelTitle>
 
-        <Button
-          text={t('ds.editFilters')}
-          size="md"
-          className="w-full"
-          onClick={handleClick}
-        />
+        <Button text={t('ds.editFilters')} size="md" className="w-full" onClick={handleClick} />
       </div>
     )
   },

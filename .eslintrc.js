@@ -52,6 +52,7 @@ module.exports = {
         semi: false,
         arrowParens: 'avoid',
         bracketSpacing: true,
+        printWidth: 180
       },
     ],
   },

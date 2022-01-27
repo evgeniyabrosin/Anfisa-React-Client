@@ -21,24 +21,15 @@ export class FilterRefinerTotalWidget extends UIWidget {
   readonly rulesListCheckbox: Checkbox
   readonly variantsNumber: Label
 
-  constructor(options: {
-    selectors: FilterRefinerTotalSelectors
-    labels: FilterRefinerTotalLabels
-  }) {
+  constructor(options: { selectors: FilterRefinerTotalSelectors; labels: FilterRefinerTotalLabels }) {
     super(options)
 
     const selectors = options.selectors
     const labels = options.labels
 
     this.applyButton = new Button(selectors.applyButton)
-    this.rulesListElement = new Label(
-      selectors.rulesListElement,
-      labels.rulesListElement,
-    )
+    this.rulesListElement = new Label(selectors.rulesListElement, labels.rulesListElement)
     this.rulesListCheckbox = new Checkbox(selectors.rulesListCheckbox)
-    this.variantsNumber = new Label(
-      selectors.variantsNumber,
-      labels.variantsNumber,
-    )
+    this.variantsNumber = new Label(selectors.variantsNumber, labels.variantsNumber)
   }
 }

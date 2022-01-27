@@ -13,9 +13,7 @@ export class UIElement {
   }
 
   getElement() {
-    return this.isTextSelector
-      ? cy.contains(this._selector)
-      : cy.get(this._selector, { timeout: Timeouts.FifteenSecondsTimeout })
+    return this.isTextSelector ? cy.contains(this._selector) : cy.get(this._selector, { timeout: Timeouts.FifteenSecondsTimeout })
   }
 
   contains(text: string) {

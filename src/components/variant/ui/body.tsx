@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
+import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react'
 import GridLayout from 'react-grid-layout'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
@@ -53,9 +47,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
   return (
     <div>
       {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full">
-          No data to show
-        </div>
+        <div className="flex justify-center text-center w-full">No data to show</div>
       ) : (
         <table className="min-w-full">
           {colhead && colhead.length > 0 && (
@@ -67,11 +59,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                     {th}
 
                     {th === t('variant.showSelectionOnly') && (
-                      <Checkbox
-                        checked={filterSelection !== normClass}
-                        className="ml-1"
-                        onChange={(e: any) => handleSelection(e.target.checked)}
-                      />
+                      <Checkbox checked={filterSelection !== normClass} className="ml-1" onChange={(e: any) => handleSelection(e.target.checked)} />
                     )}
                   </td>
                 ))}
@@ -83,31 +71,15 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
               if (!row) return <tr key={i} />
 
               return (
-                <tr
-                  key={row.name}
-                  className="border-b last:border-0 border-blue-lighter"
-                >
-                  <Tooltip
-                    overlay={row.tooltip}
-                    placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
-                  >
-                    <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
-                      {row.title}
-                    </td>
+                <tr key={row.name} className="border-b last:border-0 border-blue-lighter">
+                  <Tooltip overlay={row.tooltip} placement="bottomLeft" trigger={row.tooltip ? ['hover'] : []}>
+                    <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">{row.title}</td>
                   </Tooltip>
 
                   {row.cells
                     .filter(cell => cell[1]?.includes(filterSelection))
                     .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-medium',
-                          !cell[1]?.includes(noTrHitClass) && 'text-white',
-                        )}
-                        dangerouslySetInnerHTML={{ __html: cell[0] }}
-                      />
+                      <td key={cIndex} className={cn('py-3 pr-3 font-medium', !cell[1]?.includes(noTrHitClass) && 'text-white')} dangerouslySetInnerHTML={{ __html: cell[0] }} />
                     ))}
                 </tr>
               )
@@ -167,10 +139,7 @@ export const VariantBody = observer(
             const sortedGridLayout = sortGridLayout(layoutData)
 
             layoutData.forEach(layoutItem => {
-              variantStore.updateRecordsDisplayConfig(
-                layoutItem.i,
-                layoutItem.h,
-              )
+              variantStore.updateRecordsDisplayConfig(layoutItem.i, layoutItem.h)
             })
 
             variantStore.checkRecodsDisplaying()
@@ -192,61 +161,39 @@ export const VariantBody = observer(
                 onClick={e => {
                   const target = e.target as HTMLButtonElement
 
-                  if (
-                    target &&
-                    target.classList.contains('dragHandleSelector')
-                  ) {
+                  if (target && target.classList.contains('dragHandleSelector')) {
                     return
                   }
 
                   const cloneRecords: any = variantStore.recordsDisplayConfig
 
-                  const drawerElement = document.querySelector(
-                    `#drawer-${aspect.name}`,
-                  )
+                  const drawerElement = document.querySelector(`#drawer-${aspect.name}`)
 
-                  const clientHeight = get(
-                    drawerElement?.firstChild,
-                    'clientHeight',
-                    0,
-                  )
+                  const clientHeight = get(drawerElement?.firstChild, 'clientHeight', 0)
 
                   const openedH = clientHeight * 0.0208 + 1.3
 
                   setLayout((prev: IGridLayout[]) => {
                     const clonedLayout: any[] = clone(prev)
 
-                    const layoutItemIndex = clonedLayout.findIndex(
-                      (aspectItem: any) => aspectItem.i === aspect.name,
-                    )
+                    const layoutItemIndex = clonedLayout.findIndex((aspectItem: any) => aspectItem.i === aspect.name)
 
-                    clonedLayout[layoutItemIndex].h = cloneRecords[aspect.name]
-                      .isOpen
-                      ? 1
-                      : openedH
+                    clonedLayout[layoutItemIndex].h = cloneRecords[aspect.name].isOpen ? 1 : openedH
 
-                    variantStore.updateRecordsDisplayConfig(
-                      clonedLayout[layoutItemIndex].i,
-                      clonedLayout[layoutItemIndex].h,
-                    )
+                    variantStore.updateRecordsDisplayConfig(clonedLayout[layoutItemIndex].i, clonedLayout[layoutItemIndex].h)
 
-                    const reflowLayout = clonedLayout.map(
-                      (layoutItem, layoutIndex: number) => {
-                        if (layoutIndex < layoutItemIndex) {
-                          return layoutItem
-                        }
+                    const reflowLayout = clonedLayout.map((layoutItem, layoutIndex: number) => {
+                      if (layoutIndex < layoutItemIndex) {
+                        return layoutItem
+                      }
 
-                        return {
-                          ...layoutItem,
-                          y: layoutItem.y + openedH,
-                        }
-                      },
-                    )
+                      return {
+                        ...layoutItem,
+                        y: layoutItem.y + openedH,
+                      }
+                    })
 
-                    window.sessionStorage.setItem(
-                      'gridLayout',
-                      JSON.stringify(reflowLayout),
-                    )
+                    window.sessionStorage.setItem('gridLayout', JSON.stringify(reflowLayout))
 
                     return reflowLayout
                   })
@@ -257,26 +204,17 @@ export const VariantBody = observer(
                 <div className="flex">
                   {aspect.name === 'view_gen' && <IgvButton />}
 
-                  <Icon
-                    name="ArrowsOut"
-                    className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
-                  />
+                  <Icon name="ArrowsOut" className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright" />
                 </div>
               </div>
               <div
-                className={cn(
-                  'px-3 overflow-x-auto overflow-y-scroll content-child',
-                )}
+                className={cn('px-3 overflow-x-auto overflow-y-scroll content-child')}
                 id={`drawer-${aspect.name}`}
                 style={{
                   height: get(layout, aspect.name, 0).h,
                 }}
               >
-                {aspect.type === 'pre' ? (
-                  <PreView {...aspect} />
-                ) : (
-                  <TableView {...aspect} name={aspect.name} />
-                )}
+                {aspect.type === 'pre' ? <PreView {...aspect} /> : <TableView {...aspect} name={aspect.name} />}
               </div>
             </div>
           )

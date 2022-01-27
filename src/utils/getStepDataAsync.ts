@@ -2,9 +2,7 @@ import dtreeStore, { IStepData } from '@store/dtree'
 import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
 import { getDataFromCode } from './getDataFromCode'
 
-export const getStepDataAsync = async (
-  activeStepIndex: number,
-): Promise<IStepData[]> => {
+export const getStepDataAsync = async (activeStepIndex: number): Promise<IStepData[]> => {
   const dtreeSteps = Object.values(dtreeStore.dtree['cond-atoms'])
 
   const pointCountsFromDtreeSet: number[][] = dtreeStore.dtree['point-counts']
@@ -19,9 +17,7 @@ export const getStepDataAsync = async (
   } else {
     dtreeStore.setIsCountsReceived(true)
 
-    const pointCounts = pointCountsFromDtreeSet.map(element =>
-      element.filter((_element, index) => index === 0),
-    )
+    const pointCounts = pointCountsFromDtreeSet.map(element => element.filter((_element, index) => index === 0))
 
     dtreeStore.setPointCounts(pointCounts)
   }

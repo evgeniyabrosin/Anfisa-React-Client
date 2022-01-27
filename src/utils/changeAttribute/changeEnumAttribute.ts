@@ -34,9 +34,6 @@ export const changeEnumAttribute = () => {
 
   filteredAttribute.push(uniq(dtreeStore.selectedFilters))
 
-  body.append(
-    'instr',
-    JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
-  )
+  body.append('instr', JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]))
   dtreeStore.fetchDtreeSetAsync(body)
 }

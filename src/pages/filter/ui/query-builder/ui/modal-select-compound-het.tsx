@@ -53,11 +53,7 @@ export const ModalSelectCompoundHet = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"approx":"${approxCondition}","state":${
-        stateCondition === '-current-' || !stateCondition
-          ? null
-          : `"${stateCondition}"`
-      }}`
+      const params = `{"approx":"${approxCondition}","state":${stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -78,9 +74,7 @@ export const ModalSelectCompoundHet = observer(
       if (type === 'approx') {
         setApproxCondition(value)
 
-        const params = `{"approx":"${value}","state":${
-          stateCondition !== '-current-' ? `"${stateCondition}"` : null
-        }}`
+        const params = `{"approx":"${value}","state":${stateCondition !== '-current-' ? `"${stateCondition}"` : null}}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -90,9 +84,7 @@ export const ModalSelectCompoundHet = observer(
       if (type === 'state') {
         setStateCondition(value)
 
-        const params = `{"approx":"${approxCondition}","state":${
-          value !== '-current-' ? `"${value}"` : null
-        }}`
+        const params = `{"approx":"${approxCondition}","state":${value !== '-current-' ? `"${value}"` : null}}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -116,10 +108,7 @@ export const ModalSelectCompoundHet = observer(
       const params: IParams = { approx: approxCondition }
 
       if (stateCondition) {
-        params.state =
-          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
-            ? null
-            : stateOptions
+        params.state = JSON.stringify(stateOptions) === JSON.stringify(['-current-']) ? null : stateOptions
       }
 
       addAttributeToStep(action, 'func', null, params)
@@ -130,10 +119,7 @@ export const ModalSelectCompoundHet = observer(
 
     return (
       <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal
-          groupName={dtreeStore.groupNameToChange}
-          handleClose={handleClose}
-        />
+        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
         <div className="flex justify-between w-full mt-4 text-14">
           <ApproxStateModalMods

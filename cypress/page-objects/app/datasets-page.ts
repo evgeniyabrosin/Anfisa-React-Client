@@ -15,9 +15,7 @@ class DatasetPage extends BasePage {
       selectors: {
         searchInput: Helper.getDataId(FilterDatasetDataCy.searchInput),
         leftPanelHeader: Helper.getDataId(FilterDatasetDataCy.leftPanelHeader),
-        datasetsListElem: Helper.getDataId(
-          FilterDatasetDataCy.datasetsListElem,
-        ),
+        datasetsListElem: Helper.getDataId(FilterDatasetDataCy.datasetsListElem),
       },
       labels: { leftPanelHeader: 'Datasets' },
     })

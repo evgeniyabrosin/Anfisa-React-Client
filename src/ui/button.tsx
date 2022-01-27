@@ -5,12 +5,7 @@ export interface ButtonProps {
   text?: string
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
-  variant?:
-    | 'primary'
-    | 'secondary'
-    | 'secondary-dark'
-    | 'primary-dark'
-    | 'diestruction'
+  variant?: 'primary' | 'secondary' | 'secondary-dark' | 'primary-dark' | 'diestruction'
   className?: Argument
   onClick?: () => void
   append?: ReactElement
@@ -20,19 +15,7 @@ export interface ButtonProps {
   dataTestId?: string
 }
 
-export const Button = ({
-  text,
-  size = 'md',
-  disabled = false,
-  variant = 'primary',
-  onClick,
-  className,
-  append,
-  prepend,
-  icon,
-  refEl,
-  dataTestId,
-}: ButtonProps): ReactElement => {
+export const Button = ({ text, size = 'md', disabled = false, variant = 'primary', onClick, className, append, prepend, icon, refEl, dataTestId }: ButtonProps): ReactElement => {
   let padding = ''
   const classNameString: string = cn(className)
   const isPrimary = variant === 'primary'
@@ -41,8 +24,7 @@ export const Button = ({
   const isSecondaryDark = variant === 'secondary-dark'
   const isDiestruction = variant === 'diestruction'
 
-  const isDefaultBackground: boolean =
-    /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
+  const isDefaultBackground: boolean = /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
 
   switch (size) {
     case 'xs':
@@ -61,8 +43,7 @@ export const Button = ({
     padding,
     {
       //default primary
-      'bg-blue-bright':
-        !disabled && (isPrimary || isPrimaryDark) && isDefaultBackground,
+      'bg-blue-bright': !disabled && (isPrimary || isPrimaryDark) && isDefaultBackground,
       'text-white': isPrimary || isSecondaryDark || isPrimaryDark,
       //hover primary
       'hover:bg-blue-hover': isPrimary || isPrimaryDark,
@@ -89,10 +70,8 @@ export const Button = ({
       'active:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       //disabled secondary
       'border-grey-disabled': disabled && (isDiestruction || isSecondaryDark),
-      'hover:border-grey-disabled':
-        disabled && (isSecondary || isSecondaryDark),
-      'active:border-grey-disabled':
-        disabled && (isSecondary || isSecondaryDark),
+      'hover:border-grey-disabled': disabled && (isSecondary || isSecondaryDark),
+      'active:border-grey-disabled': disabled && (isSecondary || isSecondaryDark),
       //disabled diestruction
       'border-red-disabled': disabled && isDiestruction,
       'hover:border-red-disabled': disabled && isDiestruction,
@@ -106,13 +85,7 @@ export const Button = ({
   }
 
   return (
-    <button
-      data-testid={dataTestId}
-      disabled={disabled}
-      className={cnButton}
-      ref={refEl}
-      onClick={clickHandler}
-    >
+    <button data-testid={dataTestId} disabled={disabled} className={cnButton} ref={refEl} onClick={clickHandler}>
       {prepend}
       {text && <span className="mx-2 text-xs leading-14px">{text}</span>}
       {icon}

@@ -49,9 +49,7 @@ class ZoneStore {
   }
 
   removeGenesList(geneName: string, type: string) {
-    this.localGenesList = this.localGenesList.filter(
-      genesList => geneName !== genesList,
-    )
+    this.localGenesList = this.localGenesList.filter(genesList => geneName !== genesList)
 
     if (type === 'fast') {
       this.createSelectedZoneFilter('isGenesList')
@@ -69,9 +67,7 @@ class ZoneStore {
   }
 
   removeSample(sample: string, type: string) {
-    this.localSamples = this.localSamples.filter(
-      sampleItem => sampleItem !== sample,
-    )
+    this.localSamples = this.localSamples.filter(sampleItem => sampleItem !== sample)
 
     if (type === 'fast') {
       this.createSelectedZoneFilter('isSamples')
@@ -83,9 +79,7 @@ class ZoneStore {
   }
 
   paintSelectedSamples() {
-    const sampleTypes = new Set(
-      this.selectedSamples.map(sample => sample.slice(0, 7).trim()),
-    )
+    const sampleTypes = new Set(this.selectedSamples.map(sample => sample.slice(0, 7).trim()))
 
     if (sampleTypes.has('proband')) {
       this.isProband = true
@@ -187,13 +181,8 @@ class ZoneStore {
     }
 
     const filteredData = await Promise.all(
-      (this.isModeNOT
-        ? difference(datasetStore.tags, this.selectedTags)
-        : this.selectedTags
-      ).map(async tag => {
-        const response = await fetch(
-          getApiUrl(`tag_select?ds=${datasetStore.datasetName}&tag=${tag}`),
-        )
+      (this.isModeNOT ? difference(datasetStore.tags, this.selectedTags) : this.selectedTags).map(async tag => {
+        const response = await fetch(getApiUrl(`tag_select?ds=${datasetStore.datasetName}&tag=${tag}`))
 
         const result = await response.json()
         const currentNo = result['tag-rec-list']

@@ -11,32 +11,14 @@ interface IProps {
   handleChangeTheme?: any
 }
 
-export const HeaderModal = ({
-  groupName,
-  handleClose,
-  theme = 'light',
-  isTextEditor,
-  handleChangeTheme,
-}: IProps) => (
+export const HeaderModal = ({ groupName, handleClose, theme = 'light', isTextEditor, handleChangeTheme }: IProps) => (
   <div className="flex w-full justify-between items-center font-medium">
-    <div
-      className={cn(theme === 'light' ? 'text-black' : 'text-white', 'flex')}
-    >
+    <div className={cn(theme === 'light' ? 'text-black' : 'text-white', 'flex')}>
       {groupName}
 
-      {isTextEditor && (
-        <SwitchTheme handleChangeTheme={handleChangeTheme} theme={theme} />
-      )}
+      {isTextEditor && <SwitchTheme handleChangeTheme={handleChangeTheme} theme={theme} />}
     </div>
 
-    <Icon
-      name="Close"
-      size={16}
-      className={cn(
-        'cursor-pointer',
-        theme === 'light' ? 'text-black' : 'text-white',
-      )}
-      onClick={handleClose}
-    />
+    <Icon name="Close" size={16} className={cn('cursor-pointer', theme === 'light' ? 'text-black' : 'text-white')} onClick={handleClose} />
   </div>
 )

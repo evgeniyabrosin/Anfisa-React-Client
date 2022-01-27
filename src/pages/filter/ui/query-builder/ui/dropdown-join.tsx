@@ -35,10 +35,7 @@ export const DropDownJoin = observer(
             {t('dtree.joinByAnd')}
           </div>
 
-          <div
-            onClick={() => handleJoin('or')}
-            className="text-14 cursor-pointer font-normal py-2 px-2 hover:bg-blue-bright hover:text-white rounded-bl-md rounded-br-md"
-          >
+          <div onClick={() => handleJoin('or')} className="text-14 cursor-pointer font-normal py-2 px-2 hover:bg-blue-bright hover:text-white rounded-bl-md rounded-br-md">
             {t('dtree.joinByOr')}
           </div>
         </Card>

@@ -10,10 +10,7 @@ export class UIWidget {
   readonly selectors: UIWidgetSelectors
   readonly labels: UIWidgetLabels
 
-  constructor(options: {
-    selectors: UIWidgetSelectors
-    labels?: UIWidgetLabels
-  }) {
+  constructor(options: { selectors: UIWidgetSelectors; labels?: UIWidgetLabels }) {
     this.selectors = options.selectors
 
     this.labels = options.labels ?? {}

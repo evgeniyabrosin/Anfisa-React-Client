@@ -45,17 +45,11 @@ export const Header = observer(
       const initAsync = async () => {
         await dirinfoStore.fetchDirInfoAsync()
 
-        const xlName = get(
-          toJS(dirinfoStore.dirinfo),
-          `['ds-dict'][${ds}].ancestors[0][0]`,
-          '',
-        )
+        const xlName = get(toJS(dirinfoStore.dirinfo), `['ds-dict'][${ds}].ancestors[0][0]`, '')
 
         setXlDatasetName(xlName)
 
-        setDatasets(
-          get(toJS(dirinfoStore.dirinfo), `ds-dict.${xlName}.secondary`, []),
-        )
+        setDatasets(get(toJS(dirinfoStore.dirinfo), `ds-dict.${xlName}.secondary`, []))
       }
 
       source !== 'filter' && initAsync()
@@ -64,8 +58,7 @@ export const Header = observer(
     const handleChangeDataset = (arg: Option) => {
       if (arg.value === ds) return
 
-      ds !== arg.value &&
-        history.push(`${history.location.pathname}?ds=${arg.value}`)
+      ds !== arg.value && history.push(`${history.location.pathname}?ds=${arg.value}`)
       datasetStore.setDatasetName(history.location.pathname)
 
       const dsName = arg.value
@@ -80,11 +73,7 @@ export const Header = observer(
     }
 
     const copyLink = () => {
-      copyToClipboard(
-        `${window.origin}${history.location.pathname}?ds=${ds}${
-          variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''
-        }`,
-      )
+      copyToClipboard(`${window.origin}${history.location.pathname}?ds=${ds}${variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''}`)
 
       toast.info(t('ds.copied'), {
         position: 'bottom-right',
@@ -105,8 +94,7 @@ export const Header = observer(
               <Logo mode="white" className="mr-4" />
 
               <span className="text-grey-blue">
-                Anfisa front: {process.env.REACT_APP_VERSION} back:{' '}
-                {toJS(dirinfoStore.dirinfo).version as string}
+                Anfisa front: {process.env.REACT_APP_VERSION} back: {toJS(dirinfoStore.dirinfo).version as string}
               </span>
             </div>
           </Link>
@@ -116,9 +104,7 @@ export const Header = observer(
               <Fragment>
                 <div className="mx-4 bg-blue-lighter w-0.5 h-4" />
 
-                <span className="font-bold uppercase text-xs text-blue-bright">
-                  {t('home.title')}
-                </span>
+                <span className="font-bold uppercase text-xs text-blue-bright">{t('home.title')}</span>
 
                 <span className="mx-2">/</span>
 
@@ -126,17 +112,9 @@ export const Header = observer(
 
                 <span className="mx-2">/</span>
 
-                <DropDown
-                  options={datasets}
-                  value={ds}
-                  onSelect={handleChangeDataset}
-                />
+                <DropDown options={datasets} value={ds} onSelect={handleChangeDataset} />
 
-                <Icon
-                  name="CopyLink"
-                  className="cursor-pointer ml-2"
-                  onClick={copyLink}
-                />
+                <Icon name="CopyLink" className="cursor-pointer ml-2" onClick={copyLink} />
               </Fragment>
             )}
           </div>

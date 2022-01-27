@@ -19,21 +19,12 @@ export const QueryBuilderTreeView = observer(
     return (
       <div id="parent" className="flex flex-col overflow-auto h-full">
         {stepData.map((element, index: number) => {
-          const key = element.groups
-            ? JSON.stringify(element.groups) +
-              element.finishFilterCounts +
-              index
-            : index
+          const key = element.groups ? JSON.stringify(element.groups) + element.finishFilterCounts + index : index
 
           return element.isFinalStep ? (
             <FinalStep key={key} index={index} />
           ) : (
-            <NextStep
-              key={key}
-              index={index}
-              changeIndicator={dtreeStore.resultsChangeIndicator}
-              isContentExpanded={dtreeStore.isResultsContentExpanded}
-            />
+            <NextStep key={key} index={index} changeIndicator={dtreeStore.resultsChangeIndicator} isContentExpanded={dtreeStore.isResultsContentExpanded} />
           )
         })}
       </div>

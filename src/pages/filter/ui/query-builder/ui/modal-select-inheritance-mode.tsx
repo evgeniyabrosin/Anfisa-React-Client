@@ -33,17 +33,12 @@ export const ModalSelectInheritanceMode = observer(
 
     const problemGroup = attrData.affected
 
-    const [problemGroupData, setProblemGroupData] = useState<string[]>(
-      problemGroup,
-    )
+    const [problemGroupData, setProblemGroupData] = useState<string[]>(problemGroup)
 
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"problem_group":["${problemGroup
-        .toString()
-        .split(',')
-        .join('","')}"]}`
+      const params = `{"problem_group":["${problemGroup.toString().split(',').join('","')}"]}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -67,11 +62,7 @@ export const ModalSelectInheritanceMode = observer(
         setProblemGroupData((prev: any) => {
           const newProblemGroupData = [...prev, value]
 
-          const params = `{"problem_group":["${newProblemGroupData
-            .reverse()
-            .toString()
-            .split(',')
-            .join('","')}"]}`
+          const params = `{"problem_group":["${newProblemGroupData.reverse().toString().split(',').join('","')}"]}`
 
           dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -79,14 +70,9 @@ export const ModalSelectInheritanceMode = observer(
         })
       } else {
         setProblemGroupData((prev: any) => {
-          const newProblemGroupData = prev.filter(
-            (item: string) => item !== value,
-          )
+          const newProblemGroupData = prev.filter((item: string) => item !== value)
 
-          const params = `{"problem_group": ["${newProblemGroupData
-            .toString()
-            .split(',')
-            .join('", "')}"]}`
+          const params = `{"problem_group": ["${newProblemGroupData.toString().split(',').join('", "')}"]}`
 
           dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -98,10 +84,7 @@ export const ModalSelectInheritanceMode = observer(
     const handleReset = () => {
       setProblemGroupData(attrData.affected)
 
-      const params = `{"problem_group": ["${attrData.affected
-        .toString()
-        .split(',')
-        .join('", "')}"]}`
+      const params = `{"problem_group": ["${attrData.affected.toString().split(',').join('", "')}"]}`
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
@@ -127,17 +110,9 @@ export const ModalSelectInheritanceMode = observer(
 
     return (
       <ModalBase refer={ref} minHeight={340}>
-        <HeaderModal
-          groupName={dtreeStore.groupNameToChange}
-          handleClose={handleClose}
-        />
+        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
-        <InheritanceModeContent
-          attrData={attrData}
-          handleProblemGroup={handleProblemGroup}
-          problemGroupData={problemGroupData}
-          handleReset={handleReset}
-        />
+        <InheritanceModeContent attrData={attrData} handleProblemGroup={handleProblemGroup} problemGroupData={problemGroupData} handleReset={handleReset} />
 
         <SelectModalButtons
           handleClose={handleClose}

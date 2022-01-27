@@ -61,9 +61,7 @@ export const ModalTextEditor = observer(
       }
     }, [])
 
-    const [theme, setTheme] = useState<TEditorTheme>(
-      LocalStoreManager.read<TEditorTheme>(TEXT_EDITOR_THEME) || 'light',
-    )
+    const [theme, setTheme] = useState<TEditorTheme>(LocalStoreManager.read<TEditorTheme>(TEXT_EDITOR_THEME) || 'light')
 
     const ref = useRef(null)
 
@@ -74,10 +72,7 @@ export const ModalTextEditor = observer(
 
       setCode(codeToCheck)
 
-      const response = await fetchDtreeCheckAsync(
-        params.get('ds') || '',
-        codeToCheck,
-      )
+      const response = await fetchDtreeCheckAsync(params.get('ds') || '', codeToCheck)
 
       setError(
         response.status === 500
@@ -166,9 +161,7 @@ export const ModalTextEditor = observer(
         <div className="flex items-center mt-1">
           {hasError(error) && (
             <div className="text-red-secondary bg-yellow-bright">
-              {error.line !== 0 && error.pos !== 0
-                ? `At line ${error.line} pos ${error.pos}: ${error.error}`
-                : `${error.error}`}
+              {error.line !== 0 && error.pos !== 0 ? `At line ${error.line} pos ${error.pos}: ${error.error}` : `${error.error}`}
             </div>
           )}
         </div>
@@ -190,12 +183,7 @@ export const ModalTextEditor = observer(
         </div>
 
         <div className="flex justify-end w-full">
-          <Button
-            text="Drop changes"
-            size="md"
-            onClick={handleDrop}
-            variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
-          />
+          <Button text="Drop changes" size="md" onClick={handleDrop} variant={theme === 'light' ? 'secondary' : 'secondary-dark'} />
 
           <Button
             text="Done"
@@ -206,13 +194,7 @@ export const ModalTextEditor = observer(
             className={cn('mx-2')}
           />
 
-          <Button
-            text="Save"
-            size="md"
-            disabled={!checked || hasError(error)}
-            onClick={handleSave}
-            variant={theme === 'light' ? 'primary' : 'primary-dark'}
-          />
+          <Button text="Save" size="md" disabled={!checked || hasError(error)} onClick={handleSave} variant={theme === 'light' ? 'primary' : 'primary-dark'} />
         </div>
       </ModalBase>
     )

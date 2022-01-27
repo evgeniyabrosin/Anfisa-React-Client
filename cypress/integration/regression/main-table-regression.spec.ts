@@ -83,11 +83,7 @@ describe('Regression test of the main table | step 1', () => {
     //number of variants changes
     mainTablePage.mainTable.numVariants.haveText('Variants: 2')
     filterByGene('CHSY1', 'Variants: 1')
-    cy.waitUntil(() =>
-      mainTablePage.mainTable.tableRow.element.then(
-        () => Cypress.$(CommonSelectors.tableCell).length,
-      ),
-    )
+    cy.waitUntil(() => mainTablePage.mainTable.tableRow.element.then(() => Cypress.$(CommonSelectors.tableCell).length))
     mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(testData.getFakeData(4))
@@ -187,15 +183,11 @@ describe('Regression test of the main table | step 1', () => {
     cy.wait('@loadPreset', { timeout: Timeouts.TwentySecondsTimeout })
     //number of variants changes
     mainTablePage.mainTable.numVariants.haveText('Variants: 2')
-    cy.intercept('GET', `/app/excel/${datasetName}_****.xlsx`).as(
-      'reportDownload',
-    )
+    cy.intercept('GET', `/app/excel/${datasetName}_****.xlsx`).as('reportDownload')
     mainTablePage.mainTable.exportReport.click()
     mainTablePage.mainTable.exportExcel.click()
     cy.wait('@reportDownload', { timeout: Timeouts.FifteenSecondsTimeout })
-    cy.readFile(`./cypress/downloads/${datasetName}.xlsx`, 'utf8').should(
-      'exist',
-    )
+    cy.readFile(`./cypress/downloads/${datasetName}.xlsx`, 'utf8').should('exist')
   })
 
   it('should save csv file | test #13', () => {
@@ -214,10 +206,7 @@ describe('Regression test of the main table | step 1', () => {
     mainTablePage.mainTable.exportCsv.click()
     cy.wait('@reportCsvDownload', { timeout: Timeouts.TwentySecondsTimeout })
     cy.readFile(`./cypress/downloads/${datasetName}.csv`).should('exist')
-    cy.readFile(`./cypress/downloads/${datasetName}.csv`).should(
-      'contain',
-      'ClinVar,HGMD,Coordinate,Change,MSQ',
-    )
+    cy.readFile(`./cypress/downloads/${datasetName}.csv`).should('contain', 'ClinVar,HGMD,Coordinate,Change,MSQ')
   })
 
   function filterByGene(geneName: string, numVariants: string) {

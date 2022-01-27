@@ -36,19 +36,11 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
-    if (
-      pathName === PatnNameEnum.Filter &&
-      filterStore.method === GlbPagesNames.Filter &&
-      dtreeStore.acceptedVariants === 0
-    ) {
+    if (pathName === PatnNameEnum.Filter && filterStore.method === GlbPagesNames.Filter && dtreeStore.acceptedVariants === 0) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
-    if (
-      pathName === PatnNameEnum.Filter &&
-      filterStore.method === GlbPagesNames.Refiner &&
-      datasetStore.statAmount[0] === 0
-    ) {
+    if (pathName === PatnNameEnum.Filter && filterStore.method === GlbPagesNames.Refiner && datasetStore.statAmount[0] === 0) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
@@ -56,11 +48,7 @@ export const ModalSaveDataset = observer(() => {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
-    if (
-      pathName === PatnNameEnum.Ws &&
-      !datasetStore.activePreset &&
-      datasetStore.conditions.length === 0
-    ) {
+    if (pathName === PatnNameEnum.Ws && !datasetStore.activePreset && datasetStore.conditions.length === 0) {
       setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
     }
   }, [pathName])
@@ -131,18 +119,11 @@ export const ModalSaveDataset = observer(() => {
   }
 
   const handleChange = (name: string) => {
-    if (
-      error === DatasetCreationErrorsEnum.EmptyDataset ||
-      error === DatasetCreationErrorsEnum.ChooseAnyFilter
-    ) {
+    if (error === DatasetCreationErrorsEnum.EmptyDataset || error === DatasetCreationErrorsEnum.ChooseAnyFilter) {
       return
     }
 
-    if (
-      noSymbolPattern.test(name) ||
-      noFirstNumberPattern.test(name) ||
-      name.length > 250
-    ) {
+    if (noSymbolPattern.test(name) || noFirstNumberPattern.test(name) || name.length > 250) {
       setError(DatasetCreationErrorsEnum.IncorrectName)
     } else {
       setError('')
@@ -153,43 +134,30 @@ export const ModalSaveDataset = observer(() => {
 
   return (
     <ModalBase refer={ref} minHeight={200} width="520px">
-      <HeaderModal
-        groupName={t('dsCreation.addDatasetTitle')}
-        handleClose={handleClose}
-      />
+      <HeaderModal groupName={t('dsCreation.addDatasetTitle')} handleClose={handleClose} />
 
       <div className="flex flex-col mt-4" ref={ref}>
         <div className="">
           <span className="text-14">{t('dsCreation.label')}</span>
 
-          <Input
-            value={value}
-            onChange={e => handleChange(e.target.value)}
-            className="mt-1"
-            data-testid={DecisionTreesMenuDataCy.datasetNameInput}
-          />
+          <Input value={value} onChange={e => handleChange(e.target.value)} className="mt-1" data-testid={DecisionTreesMenuDataCy.datasetNameInput} />
 
           <span className="text-12 text-red-secondary mt-2">{error}</span>
         </div>
 
-        {!isDone &&
-          pathName !== PatnNameEnum.Filter &&
-          filterStore.method !== GlbPagesNames.Refiner && (
-            <div className="mt-5 flex items-center">
-              <Attention className="mr-2" />
+        {!isDone && pathName !== PatnNameEnum.Filter && filterStore.method !== GlbPagesNames.Refiner && (
+          <div className="mt-5 flex items-center">
+            <Attention className="mr-2" />
 
-              <span className="text-12">{t('dsCreation.attention')}</span>
-            </div>
-          )}
+            <span className="text-12">{t('dsCreation.attention')}</span>
+          </div>
+        )}
 
         <span className="mt-2 text-14">
           {operations.savingStatus[1]}
 
           {isDone && (
-            <span
-              className="ml-2 mt-1 text-14 text-blue-bright cursor-pointer"
-              onClick={handleOpenDataset}
-            >
+            <span className="ml-2 mt-1 text-14 text-blue-bright cursor-pointer" onClick={handleOpenDataset}>
               Open It
             </span>
           )}

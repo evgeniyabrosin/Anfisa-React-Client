@@ -40,10 +40,7 @@ export const NextStepHeader = observer(
 
     const difference = dtreeStore.getStepData[index].difference
 
-    const toggleExclude = (
-      stepIndex: number,
-      action: 'BOOL-TRUE' | 'BOOL-FALSE',
-    ) => {
+    const toggleExclude = (stepIndex: number, action: 'BOOL-TRUE' | 'BOOL-FALSE') => {
       dtreeStore.toggleIsExcluded(stepIndex)
       changeStep(stepIndex, action)
     }
@@ -54,40 +51,20 @@ export const NextStepHeader = observer(
 
     return (
       <Fragment>
-        <div
-          style={{ minHeight: 43 }}
-          className="flex w-full justify-between items-center mt-1 step-content-area"
-        >
+        <div style={{ minHeight: 43 }} className="flex w-full justify-between items-center mt-1 step-content-area">
           <div className="relative flex items-center">
             {!isEmptyFirstStep && (
-              <Icon
-                dataTestId={DecisionTreesResultsDataCy.optionsMenu}
-                name="Options"
-                className="cursor-pointer text-blue-bright"
-                stroke={false}
-                onClick={showModal}
-              />
+              <Icon dataTestId={DecisionTreesResultsDataCy.optionsMenu} name="Options" className="cursor-pointer text-blue-bright" stroke={false} onClick={showModal} />
             )}
 
             <Step>
-              {t('dtree.step')}{' '}
-              {dtreeStore.algorithmFilterValue
-                ? dtreeStore.getStepData[index].step
-                : index + 1}
+              {t('dtree.step')} {dtreeStore.algorithmFilterValue ? dtreeStore.getStepData[index].step : index + 1}
             </Step>
 
-            <div className="absolute">
-              {isVisibleModal && (
-                <ModalOperation hideModal={hideModal} index={index} />
-              )}
-            </div>
+            <div className="absolute">{isVisibleModal && <ModalOperation hideModal={hideModal} index={index} />}</div>
 
             {!isExpanded && (difference || difference === 0) && (
-              <div className="ml-2 text-14 text-grey-blue font-normal">
-                {`(${getNumberWithCommas(difference)} variants are ${
-                  isExcluded ? 'excluded' : 'included'
-                })`}
-              </div>
+              <div className="ml-2 text-14 text-grey-blue font-normal">{`(${getNumberWithCommas(difference)} variants are ${isExcluded ? 'excluded' : 'included'})`}</div>
             )}
 
             <div
@@ -96,19 +73,13 @@ export const NextStepHeader = observer(
               })}
             >
               <div className="flex items-center mr-3">
-                <RadioButton
-                  isChecked={!currentStep.excluded}
-                  onChange={() => toggleExclude(index, 'BOOL-TRUE')}
-                />
+                <RadioButton isChecked={!currentStep.excluded} onChange={() => toggleExclude(index, 'BOOL-TRUE')} />
 
                 <Operation className="ml-1">{t('dtree.include')}</Operation>
               </div>
 
               <div className="flex items-center">
-                <RadioButton
-                  isChecked={currentStep.excluded}
-                  onChange={() => toggleExclude(index, 'BOOL-FALSE')}
-                />
+                <RadioButton isChecked={currentStep.excluded} onChange={() => toggleExclude(index, 'BOOL-FALSE')} />
 
                 <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
               </div>
@@ -116,11 +87,7 @@ export const NextStepHeader = observer(
           </div>
 
           <div className="flex">
-            <ExpandContentButton
-              isVisible={isExpanded}
-              isStep
-              expandContent={expandContent}
-            />
+            <ExpandContentButton isVisible={isExpanded} isStep expandContent={expandContent} />
           </div>
         </div>
         {isExpanded && <StepDivider />}

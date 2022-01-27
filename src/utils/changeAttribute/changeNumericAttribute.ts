@@ -25,10 +25,7 @@ export const changeNumericAttribute = (numericData: any[]) => {
 
   filteredAttribute.push(numericData)
 
-  body.append(
-    'instr',
-    JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
-  )
+  body.append('instr', JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]))
 
   dtreeStore.fetchDtreeSetAsync(body)
 }

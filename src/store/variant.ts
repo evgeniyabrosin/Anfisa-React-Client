@@ -45,22 +45,12 @@ export class VariantStore {
   }
 
   prevVariant() {
-    datasetStore.filteredNo.length === 0
-      ? (this.index += 1)
-      : (this.index =
-          datasetStore.filteredNo[
-            datasetStore.filteredNo.indexOf(this.index) - 1
-          ])
+    datasetStore.filteredNo.length === 0 ? (this.index += 1) : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) - 1])
     this.fetchVarinatInfoAsync()
   }
 
   nextVariant() {
-    datasetStore.filteredNo.length === 0
-      ? (this.index += 1)
-      : (this.index =
-          datasetStore.filteredNo[
-            datasetStore.filteredNo.indexOf(this.index) + 1
-          ])
+    datasetStore.filteredNo.length === 0 ? (this.index += 1) : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) + 1])
 
     this.fetchVarinatInfoAsync()
   }
@@ -84,9 +74,7 @@ export class VariantStore {
 
   handleAllRecordsOpen(status: boolean) {
     for (const key in this.recordsDisplayConfig) {
-      if (
-        Object.prototype.hasOwnProperty.call(this.recordsDisplayConfig, key)
-      ) {
+      if (Object.prototype.hasOwnProperty.call(this.recordsDisplayConfig, key)) {
         this.recordsDisplayConfig[key].isOpen = status
       }
     }
@@ -126,36 +114,20 @@ export class VariantStore {
   async fetchVarinatInfoAsync() {
     if (datasetStore.isXL) return
 
-    const details = datasetStore.wsRecords.find(
-      record => record.no === this.index,
-    )
+    const details = datasetStore.wsRecords.find(record => record.no === this.index)
 
     const [variantResponse, tagsResponse] = await Promise.all([
-      fetch(
-        getApiUrl(
-          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${
-            details ? details.dt : ''
-          }`,
-        ),
-        {
-          method: 'POST',
-        },
-      ),
+      fetch(getApiUrl(`reccnt?ds=${this.dsName}&rec=${this.index}&details=${details ? details.dt : ''}`), {
+        method: 'POST',
+      }),
       fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
     ])
 
-    const [variant, tagsData] = await Promise.all([
-      variantResponse.json(),
-      tagsResponse.json(),
-    ])
+    const [variant, tagsData] = await Promise.all([variantResponse.json(), tagsResponse.json()])
 
-    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
-      tag => tag !== '_note',
-    )
+    const checkedTags = Object.keys(tagsData['rec-tags']).filter(tag => tag !== '_note')
 
-    const optionalTags = get(tagsData, 'op-tags').filter(
-      (tag: string) => tag !== '_note',
-    )
+    const optionalTags = get(tagsData, 'op-tags').filter((tag: string) => tag !== '_note')
 
     runInAction(() => {
       this.variant = variant
@@ -191,9 +163,7 @@ export class VariantStore {
 
     const tagsData = await response.json()
 
-    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
-      tag => tag !== '_note',
-    )
+    const checkedTags = Object.keys(tagsData['rec-tags']).filter(tag => tag !== '_note')
 
     runInAction(() => {
       this.checkedTags = checkedTags
@@ -202,16 +172,10 @@ export class VariantStore {
     })
   }
 
-  async fetchVarinatInfoForModalAsync(
-    datasetName: string,
-    orderNumber: number,
-  ) {
-    const variantResponse = await fetch(
-      getApiUrl(`reccnt?ds=${datasetName}&rec=${orderNumber}`),
-      {
-        method: 'POST',
-      },
-    )
+  async fetchVarinatInfoForModalAsync(datasetName: string, orderNumber: number) {
+    const variantResponse = await fetch(getApiUrl(`reccnt?ds=${datasetName}&rec=${orderNumber}`), {
+      method: 'POST',
+    })
 
     const variant = await variantResponse.json()
 
@@ -248,10 +212,7 @@ export class VariantStore {
         }),
       )
 
-      window.sessionStorage.setItem(
-        'gridLayout',
-        JSON.stringify(this.wsDrawerVariantsLayout),
-      )
+      window.sessionStorage.setItem('gridLayout', JSON.stringify(this.wsDrawerVariantsLayout))
     }
   }
 
@@ -265,9 +226,7 @@ export class VariantStore {
         }
       }
 
-      keyProp
-        ? (this.tagsWithNotes[keyProp] = tagWithNote[1])
-        : (this.tagsWithNotes[tagWithNote[0]] = tagWithNote[1])
+      keyProp ? (this.tagsWithNotes[keyProp] = tagWithNote[1]) : (this.tagsWithNotes[tagWithNote[0]] = tagWithNote[1])
     } else {
       delete this.tagsWithNotes[tagWithNote[0]]
     }

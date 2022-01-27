@@ -1,9 +1,6 @@
 import { RefObject, useEffect } from 'react'
 
-export const useOutsideClick = (
-  ref: RefObject<HTMLElement>,
-  handleOutsideClick: () => void,
-): void => {
+export const useOutsideClick = (ref: RefObject<HTMLElement>, handleOutsideClick: () => void): void => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleClickOutside = (event: any) => {

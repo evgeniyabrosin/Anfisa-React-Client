@@ -10,7 +10,5 @@ export const fetchJobStatusAsync = async (taskId: string): Promise<any> => {
 
   dtreeStore.setJobStatus(result)
 
-  return !result[0]
-    ? setTimeout(async () => await fetchJobStatusAsync(taskId), 1000)
-    : { ok: true, data: result }
+  return !result[0] ? setTimeout(async () => await fetchJobStatusAsync(taskId), 1000) : { ok: true, data: result }
 }

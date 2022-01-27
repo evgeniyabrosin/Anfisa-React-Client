@@ -14,9 +14,7 @@ export class StepLabel extends Label {
       .contains(text!)
       .parents(`[data-testid = "${DecisionTreesResultsDataCy.stepCard}"]`)
       .within(() => {
-        cy.get(
-          `[data-testid = "${DecisionTreesResultsDataCy.excludeInfo}"]`,
-        ).click()
+        cy.get(`[data-testid = "${DecisionTreesResultsDataCy.excludeInfo}"]`).click()
       })
   }
 }

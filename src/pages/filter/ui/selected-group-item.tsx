@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
+import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
@@ -17,13 +11,7 @@ interface IProps {
 }
 
 export const SelectedGroupItem = observer(
-  ({
-    shouldClear,
-    isAdded,
-    variant,
-    handleCheckGroupItem,
-    setShouldClear,
-  }: IProps): ReactElement => {
+  ({ shouldClear, isAdded, variant, handleCheckGroupItem, setShouldClear }: IProps): ReactElement => {
     const [checked, setChecked] = useState(isAdded)
 
     const handleCheck = (event: any) => {
@@ -42,11 +30,7 @@ export const SelectedGroupItem = observer(
 
     return (
       <div className="flex items-center mb-2 text-14">
-        <Checkbox
-          checked={checked}
-          className="-mt-0.5 mr-1 cursor-pointer"
-          onChange={handleCheck}
-        />
+        <Checkbox checked={checked} className="-mt-0.5 mr-1 cursor-pointer" onChange={handleCheck} />
 
         <span className="text-black">{variant[0]}</span>
 

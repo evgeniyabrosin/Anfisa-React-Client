@@ -60,27 +60,20 @@ export const NextStepContentItem = observer(
     const handleModals = () => {
       makeStepActive(index)
 
-      group[0] === StepTypeEnum.Enum &&
-        dtreeStore.openModalEditFilters(group[1], index, currNo)
+      group[0] === StepTypeEnum.Enum && dtreeStore.openModalEditFilters(group[1], index, currNo)
 
-      group[0] === StepTypeEnum.Numeric &&
-        dtreeStore.openModalEditNumbers(group[1], index, currNo)
+      group[0] === StepTypeEnum.Numeric && dtreeStore.openModalEditNumbers(group[1], index, currNo)
 
       if (group[0] === StepTypeEnum.Func) {
-        group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
+        group[1] === FuncStepTypesEnum.InheritanceMode && dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
 
-        group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
+        group[1] === FuncStepTypesEnum.CustomInheritanceMode && dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
 
-        group[1] === FuncStepTypesEnum.CompoundHet &&
-          dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
+        group[1] === FuncStepTypesEnum.CompoundHet && dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
 
-        group[1] === FuncStepTypesEnum.CompoundRequest &&
-          dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
+        group[1] === FuncStepTypesEnum.CompoundRequest && dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
 
-        group[1] === FuncStepTypesEnum.GeneRegion &&
-          dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
+        group[1] === FuncStepTypesEnum.GeneRegion && dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
       }
     }
 
@@ -94,10 +87,7 @@ export const NextStepContentItem = observer(
       <div className="flex flex-col h-auto">
         {currNo > 0 && (
           <div
-            className={cn(
-              'flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area',
-              currentStep.isActive ? 'bg-green-light' : 'bg-blue-light',
-            )}
+            className={cn('flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area', currentStep.isActive ? 'bg-green-light' : 'bg-blue-light')}
             data-testId={DecisionTreesResultsDataCy.joinByLabel}
           >
             <div className="mr-1">{t('dtree.joinBy')}</div>
@@ -113,41 +103,18 @@ export const NextStepContentItem = observer(
               expandContent={toggleVisible}
             /> */}
 
-            {isVisible && (
-              <DropDownJoin
-                close={() => setIsVisible(false)}
-                index={index}
-                currNo={currNo}
-              />
-            )}
+            {isVisible && <DropDownJoin close={() => setIsVisible(false)} index={index} currNo={currNo} />}
           </div>
         )}
 
-        <ContentControl
-          className={cn(
-            'w-full h-auto flex rounded-md mr-2 pl-2 py-3 step-content-area',
-            currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
-          )}
-        >
+        <ContentControl className={cn('w-full h-auto flex rounded-md mr-2 pl-2 py-3 step-content-area', currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium')}>
           <div className="flex items-center h-auto w-full pr-2 ">
-            <Icon
-              name="SettingsFat"
-              className="mr-1 cursor-pointer text-blue-bright"
-              size={18}
-              stroke={false}
-              onClick={handleModals}
-            />
+            <Icon name="SettingsFat" className="mr-1 cursor-pointer text-blue-bright" size={18} stroke={false} onClick={handleModals} />
 
-            {isNegateStep && (
-              <NegateWrapper className="flex items-center justify-center">
-                NOT
-              </NegateWrapper>
-            )}
+            {isNegateStep && <NegateWrapper className="flex items-center justify-center">NOT</NegateWrapper>}
 
             <div className="flex items-center text-14 font-medium mr-2">
-              {group.includes(StepTypeEnum.Func) && (
-                <FnLabel currentStep={currentStep} />
-              )}
+              {group.includes(StepTypeEnum.Func) && <FnLabel currentStep={currentStep} />}
               {`${group[1]}`}
             </div>
             {/* TODO: add switch to step after implementation in backend */}
@@ -156,24 +123,14 @@ export const NextStepContentItem = observer(
             </div> */}
             {!isNumeric && (
               <label className="pl-4">
-                <Checkbox
-                  checked={isNegateAttribute}
-                  className="mr-1"
-                  onChange={() =>
-                    editStepAttribute(index, currNo, isNegateAttribute)
-                  }
-                />
+                <Checkbox checked={isNegateAttribute} className="mr-1" onChange={() => editStepAttribute(index, currNo, isNegateAttribute)} />
                 {t('dtree.negate')}
               </label>
             )}
           </div>
 
           <div className="flex flex-row step-content-area">
-            {isNegateAttribute && (
-              <NegateWrapper className="flex items-center justify-center">
-                NOT
-              </NegateWrapper>
-            )}
+            {isNegateAttribute && <NegateWrapper className="flex items-center justify-center">NOT</NegateWrapper>}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
               {group[0] === StepTypeEnum.Numeric &&
@@ -182,10 +139,7 @@ export const NextStepContentItem = observer(
                   group[1],
                 )}
 
-              {group[0] !== StepTypeEnum.Numeric &&
-                group
-                  .find((elem: any) => Array.isArray(elem))
-                  .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
+              {group[0] !== StepTypeEnum.Numeric && group.find((elem: any) => Array.isArray(elem)).map((item: any[]) => <div key={Math.random()}>{item}</div>)}
             </div>
           </div>
         </ContentControl>

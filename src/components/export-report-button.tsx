@@ -13,12 +13,7 @@ interface Props {
   onClick?: () => void
 }
 
-export const ExportReportButton = ({
-  isOpen,
-  refEl,
-  className,
-  ...rest
-}: Props): ReactElement => (
+export const ExportReportButton = ({ isOpen, refEl, className, ...rest }: Props): ReactElement => (
   <Button
     text={t('general.exportReport')}
     dataTestId={MainTableDataCy.exportReport}
@@ -26,14 +21,6 @@ export const ExportReportButton = ({
     size="sm"
     prepend={<Icon name="Export" />}
     onClick={rest.onClick}
-    append={
-      <Icon
-        name="Arrow"
-        className={cn(
-          'transform transition-transform',
-          isOpen ? 'rotate-90' : '-rotate-90',
-        )}
-      />
-    }
+    append={<Icon name="Arrow" className={cn('transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')} />}
   />
 )

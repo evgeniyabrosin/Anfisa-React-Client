@@ -10,12 +10,7 @@ interface Props {
   onClick: (doc: any) => void
 }
 
-export const DocsList = ({
-  data,
-  activeName,
-  baseDatasetName,
-  onClick,
-}: Props): ReactElement => {
+export const DocsList = ({ data, activeName, baseDatasetName, onClick }: Props): ReactElement => {
   if (!data[1]) return <Fragment />
 
   return (
@@ -46,13 +41,7 @@ export const DocsList = ({
             {Array.isArray(doc[1]) && (
               <div>
                 {doc[1].map(item => (
-                  <InfoTextItem
-                    isClickable
-                    className={baseDatasetName ? 'pl-4' : 'pl-8'}
-                    isActive={activeName === item[0]}
-                    key={item[0]}
-                    onClick={() => onClick(item)}
-                  >
+                  <InfoTextItem isClickable className={baseDatasetName ? 'pl-4' : 'pl-8'} isActive={activeName === item[0]} key={item[0]} onClick={() => onClick(item)}>
                     {item[0]}
                   </InfoTextItem>
                 ))}

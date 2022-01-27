@@ -86,25 +86,15 @@ export const PopperTableModal = observer(
         <div className="px-4 pt-4">
           <p className="text-blue-dark mb-5 font-medium">{title}</p>
 
-          <InputSearch
-            value={searchValue}
-            placeholder={searchInputPlaceholder}
-            onChange={e => onChange && onChange(e.target.value)}
-          />
+          <InputSearch value={searchValue} placeholder={searchInputPlaceholder} onChange={e => onChange && onChange(e.target.value)} />
 
-          {viewType && setViewType && (
-            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
-          )}
+          {viewType && setViewType && <ViewTypeTable setViewType={setViewType} viewType={viewType} />}
 
           <div className="flex justify-between mt-5">
             {viewType ? (
-              <span className="text-14 text-grey-blue">
-                {selectedAmount} Selected
-              </span>
+              <span className="text-14 text-grey-blue">{selectedAmount} Selected</span>
             ) : (
-              <span className="text-14 text-grey-blue">
-                {defintSelectedAmount() || 0} Selected
-              </span>
+              <span className="text-14 text-grey-blue">{defintSelectedAmount() || 0} Selected</span>
             )}
 
             <span className="text-12 text-blue-bright leading-14">
@@ -125,18 +115,9 @@ export const PopperTableModal = observer(
         <div className="w-full pl-4">{children}</div>
 
         <div className="flex justify-end pb-4 px-4 mt-4">
-          <Button
-            text={t('general.cancel')}
-            variant={'secondary'}
-            onClick={handleClose}
-          />
+          <Button text={t('general.cancel')} variant={'secondary'} onClick={handleClose} />
 
-          <Button
-            text={t('general.apply')}
-            className="ml-3"
-            onClick={onApply}
-            dataTestId={MainTableDataCy.applyButton}
-          />
+          <Button text={t('general.apply')} className="ml-3" onClick={onApply} dataTestId={MainTableDataCy.applyButton} />
         </div>
       </div>
     )

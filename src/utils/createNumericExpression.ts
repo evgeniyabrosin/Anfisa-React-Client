@@ -1,63 +1,70 @@
+import { NumericExpressionType } from '@core/enum/numeric-expression-types'
+import { InnerValues } from '@glb/glb-types'
 import { NumericExpressionTypes } from './../core/enum/numeric-expression-types'
 
 interface ICreateExpression {
-  expType: string
+  expType: NumericExpressionType
   extraExpType?: string
   minValue?: string | number
   maxValue?: string | number
 }
 
-export const createNumericExpression = ({
-  expType,
-  extraExpType,
-  minValue,
-  maxValue,
-}: ICreateExpression) => {
-  if (expType === NumericExpressionTypes.GreatThan && maxValue) {
-    return [null, true, +maxValue, false]
+export const createNumericExpression = ({ expType, extraExpType, minValue, maxValue }: ICreateExpression) => {
+  const isExtraGreaterThan = (): boolean => {
+    return extraExpType === NumericExpressionTypes.GreaterThan
   }
 
-  if (expType === NumericExpressionTypes.GreatOrEqualThan && maxValue) {
-    return [null, true, +maxValue, true]
+  const isExtraGreatOrEqualThan = (): boolean => {
+    return extraExpType === NumericExpressionTypes.GreaterOrEqualThan
   }
 
-  if (expType === NumericExpressionTypes.GreatThan && minValue) {
-    return [+minValue, false, null, true]
+  const numericExperssionValues = {
+    [NumericExpressionTypes.GreaterThan]: {
+      withMaxValue: [null, true, +maxValue!, false],
+      withMinValue: [+minValue!, false, null, true],
+      withExtraGreaterThan: [+minValue!, false, +maxValue!, false],
+      withExtraGreatOrEqualThan: [+minValue!, false, +maxValue!, true],
+    },
+
+    [NumericExpressionTypes.GreaterOrEqualThan]: {
+      withMaxValue: [null, true, +maxValue!, true],
+      withMinValue: [+minValue!, true, null, true],
+      withExtraGreaterThan: [+minValue!, true, +maxValue!, false],
+      withExtraGreatOrEqualThan: [+minValue!, true, +maxValue!, true],
+    },
   }
 
-  if (expType === NumericExpressionTypes.GreatOrEqualThan && minValue) {
-    return [+minValue, true, null, true]
+  type NumericExperssionValue = InnerValues<typeof numericExperssionValues, keyof typeof numericExperssionValues>
+
+  const getValue = (type: NumericExpressionType): NumericExperssionValue => {
+    let value: NumericExperssionValue = []
+
+    const numericValue = numericExperssionValues[type]
+
+    switch (true) {
+      case minValue === maxValue:
+        value = numericValue.withExtraGreatOrEqualThan
+        break
+      case !!maxValue:
+        value = numericValue.withMaxValue
+        break
+      case !!minValue:
+        value = numericValue.withMinValue
+        break
+      case isExtraGreaterThan():
+        value = numericValue.withExtraGreaterThan
+        break
+      case isExtraGreatOrEqualThan():
+        value = numericValue.withExtraGreatOrEqualThan
+    }
+
+    return value
   }
 
-  if (
-    expType === NumericExpressionTypes.GreatThan &&
-    extraExpType === NumericExpressionTypes.GreatThan
-  ) {
-    return [+minValue!, false, +maxValue!, false]
+  const expTypeOptions: { [key in NumericExpressionType]: any } = {
+    [NumericExpressionTypes.GreaterThan]: getValue(NumericExpressionTypes.GreaterThan),
+    [NumericExpressionTypes.GreaterOrEqualThan]: getValue(NumericExpressionTypes.GreaterOrEqualThan),
   }
 
-  if (
-    expType === NumericExpressionTypes.GreatOrEqualThan &&
-    extraExpType === NumericExpressionTypes.GreatThan
-  ) {
-    return [+minValue!, true, +maxValue!, false]
-  }
-
-  if (
-    expType === NumericExpressionTypes.GreatThan &&
-    extraExpType === NumericExpressionTypes.GreatOrEqualThan
-  ) {
-    return [+minValue!, false, +maxValue!, true]
-  }
-
-  if (
-    expType === NumericExpressionTypes.GreatOrEqualThan &&
-    extraExpType === NumericExpressionTypes.GreatOrEqualThan
-  ) {
-    return [+minValue!, true, +maxValue!, true]
-  }
-
-  if (minValue === maxValue) {
-    return [+minValue!, true, +maxValue!, true]
-  }
+  return expTypeOptions[expType]
 }

@@ -2,11 +2,7 @@ import { getApiUrl } from '@core/get-api-url'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 
-export const fetchDtreeCountsAsync = async (
-  code: string,
-  stepCount: number,
-  startIndex = 0,
-) => {
+export const fetchDtreeCountsAsync = async (code: string, stepCount: number, startIndex = 0) => {
   const points = [...new Array(stepCount - startIndex).keys()]
   const correctedPoints = points.map((element: number) => element + startIndex)
   const requestId = dtreeStore.dtree['rq-id']

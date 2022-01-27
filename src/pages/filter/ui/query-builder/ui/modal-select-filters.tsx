@@ -82,12 +82,7 @@ export const ModalSelectFilters = observer(
 
     const originGroupList: any[] = toJS(dtreeStore.selectedGroups[2]) ?? []
 
-    const filteredGroupList = originGroupList.filter(
-      (variant: [string, number]) =>
-        variant[0]
-          .toLocaleLowerCase()
-          .includes(searchValue.toLocaleLowerCase()),
-    )
+    const filteredGroupList = originGroupList.filter((variant: [string, number]) => variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
 
     const groupsPerPage = 100
     const chunks = createChunks(filteredGroupList, groupsPerPage)
@@ -98,18 +93,12 @@ export const ModalSelectFilters = observer(
 
         {originGroupList.length > 15 && (
           <div className="flex mt-3">
-            <QueryBuilderSearch
-              value={searchValue}
-              onChange={handleChange}
-              isSubgroupItemSearch
-            />
+            <QueryBuilderSearch value={searchValue} onChange={handleChange} isSubgroupItemSearch />
           </div>
         )}
 
         <div className="flex justify-between w-full mt-4 text-14">
-          <div className="text-grey-blue">
-            {dtreeStore.selectedFilters.length} selected
-          </div>
+          <div className="text-grey-blue">{dtreeStore.selectedFilters.length} selected</div>
 
           <div className="flex">
             <div className="flex items-center">
@@ -119,21 +108,13 @@ export const ModalSelectFilters = observer(
 
             <ModsDivider />
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(true)}
-              data-testid={DecisionTreesResultsDataCy.selectAllFromAttribute}
-            >
+            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(true)} data-testid={DecisionTreesResultsDataCy.selectAllFromAttribute}>
               {t('general.selectAll')}
             </div>
 
             <ModsDivider />
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(false)}
-              data-testid={DecisionTreesResultsDataCy.clearAllFromAttribute}
-            >
+            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(false)} data-testid={DecisionTreesResultsDataCy.clearAllFromAttribute}>
               {t('general.clearAll')}
             </div>
           </div>
@@ -147,16 +128,11 @@ export const ModalSelectFilters = observer(
 
               return (
                 variantNumbers !== 0 && (
-                  <div
-                    key={variantName}
-                    className="flex items-center mb-2 text-14"
-                  >
+                  <div key={variantName} className="flex items-center mb-2 text-14">
                     <Checkbox
                       checked={dtreeStore.selectedFilters.includes(variantName)}
                       className="-mt-0.5 mr-1 cursor-pointer"
-                      onChange={e =>
-                        handleCheckGroupItem(e.target.checked, variantName)
-                      }
+                      onChange={e => handleCheckGroupItem(e.target.checked, variantName)}
                     />
 
                     <span className="text-black">{variantName}</span>
@@ -169,19 +145,11 @@ export const ModalSelectFilters = observer(
               )
             })
           ) : (
-            <div className="flex justify-center items-center text-14 text-grey-blue">
-              {t('dtree.noFilters')}
-            </div>
+            <div className="flex justify-center items-center text-14 text-grey-blue">{t('dtree.noFilters')}</div>
           )}
         </div>
 
-        {filteredGroupList.length > groupsPerPage && (
-          <Pagintaion
-            pagesNumbers={chunks.length}
-            currentPage={currentPage}
-            setPageNumber={setCurrentPage}
-          />
-        )}
+        {filteredGroupList.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
 
         <SelectModalButtons
           handleClose={handleClose}

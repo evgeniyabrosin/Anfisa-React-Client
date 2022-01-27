@@ -14,24 +14,14 @@ export const Datasets = (): ReactElement => {
 
   return (
     <div
-      className={cn([
-        'bg-blue-lighter',
-        'flex-shrink-0',
-        'pt-4',
-        isOpen ? 'pl-4' : 'pl-2',
-      ])}
+      className={cn(['bg-blue-lighter', 'flex-shrink-0', 'pt-4', isOpen ? 'pl-4' : 'pl-2'])}
       style={{
         width: isOpen ? '320px' : 'auto',
       }}
     >
-      <div
-        className={cn('flex justify-between mb-3', isOpen ? 'pr-4' : 'pr-2')}
-      >
+      <div className={cn('flex justify-between mb-3', isOpen ? 'pr-4' : 'pr-2')}>
         {isOpen && (
-          <div
-            data-testid={FilterDatasetDataCy.leftPanelHeader}
-            className="font-bold text-white text-20 leading-6"
-          >
+          <div data-testid={FilterDatasetDataCy.leftPanelHeader} className="font-bold text-white text-20 leading-6">
             {t('home.datasets')}
           </div>
         )}

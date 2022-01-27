@@ -72,10 +72,7 @@ const RefinerPage = observer(
             )}
 
             <div className="ml-2">
-              <PopperButton
-                ButtonElement={ExportReportButton}
-                ModalElement={ExportPanel}
-              />
+              <PopperButton ButtonElement={ExportReportButton} ModalElement={ExportPanel} />
             </div>
           </div>
         </Header>

@@ -8,13 +8,7 @@ interface Props {
   close: () => void
 }
 
-const actions = [
-  ActionFilterEnum.Load,
-  ActionFilterEnum.Create,
-  ActionFilterEnum.Modify,
-  ActionFilterEnum.Join,
-  ActionFilterEnum.Delete,
-]
+const actions = [ActionFilterEnum.Load, ActionFilterEnum.Create, ActionFilterEnum.Modify, ActionFilterEnum.Join, ActionFilterEnum.Delete]
 
 export const FilterModal = ({ close }: Props): ReactElement => {
   const ref = useRef(null)
@@ -27,16 +21,9 @@ export const FilterModal = ({ close }: Props): ReactElement => {
   useOutsideClick(ref, close)
 
   return (
-    <div
-      className="bg-white w-24 flex flex-col rounded text-12 leading-12px"
-      ref={ref}
-    >
+    <div className="bg-white w-24 flex flex-col rounded text-12 leading-12px" ref={ref}>
       {actions.map(action => (
-        <span
-          key={action}
-          onClick={() => handleClick(action)}
-          className="px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white"
-        >
+        <span key={action} onClick={() => handleClick(action)} className="px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white">
           {action}
         </span>
       ))}

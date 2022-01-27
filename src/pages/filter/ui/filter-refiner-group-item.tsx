@@ -19,23 +19,8 @@ type Props = StatListType & {
 }
 
 export const FilterRefinerGroupItem = observer(
-  ({
-    name,
-    onChange,
-    className,
-    group,
-    isFunc,
-    isNumeric,
-    title,
-    tooltip,
-    incomplete = false,
-    ...rest
-  }: Props): ReactElement => {
-    const checked = get(
-      filterStore,
-      `selectedFilters[${group}][${name}]`,
-      false,
-    )
+  ({ name, onChange, className, group, isFunc, isNumeric, title, tooltip, incomplete = false, ...rest }: Props): ReactElement => {
+    const checked = get(filterStore, `selectedFilters[${group}][${name}]`, false)
 
     const isIndeterminate = filterStore.selectedGroupItem.name === name
 
@@ -66,11 +51,7 @@ export const FilterRefinerGroupItem = observer(
           onChange={event => onChange && onChange(event.target.checked)}
         />
 
-        {isFunc && (
-          <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-            fn
-          </p>
-        )}
+        {isFunc && <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">fn</p>}
 
         <p
           key={name}
@@ -85,12 +66,7 @@ export const FilterRefinerGroupItem = observer(
         <span className="text-14 text-blue-bright">{`${status}`}</span>
 
         {tooltip && (
-          <Tooltip
-            key={group}
-            overlay={tooltip}
-            placement="left"
-            trigger={tooltip ? ['click'] : []}
-          >
+          <Tooltip key={group} overlay={tooltip} placement="left" trigger={tooltip ? ['click'] : []}>
             <Icon name="Info" className="ml-1 text-grey-blue cursor-pointer" />
           </Tooltip>
         )}

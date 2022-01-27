@@ -30,10 +30,7 @@ export class VariantDrawerWidget extends UIWidget {
   readonly saveNote: Button
   readonly addedTag: Label
 
-  constructor(options: {
-    selectors: VariantDrawerSelectors
-    labels: VariantDrawerLabels
-  }) {
+  constructor(options: { selectors: VariantDrawerSelectors; labels: VariantDrawerLabels }) {
     super(options)
 
     const selectors = options.selectors

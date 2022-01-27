@@ -14,41 +14,21 @@ import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 export const FilterRefinerGroups = observer(
   (): ReactElement => {
-    const {
-      filterValue,
-      setFilterValue,
-      filteredQueryBuilder,
-    } = useFilterQueryBuilder()
+    const { filterValue, setFilterValue, filteredQueryBuilder } = useFilterQueryBuilder()
 
     const keys = Object.keys(filteredQueryBuilder)
 
     const values = Object.values(filteredQueryBuilder)
 
-    const handleCheckGroupItem = (
-      checked: boolean,
-      group: string,
-      name: string,
-    ) => {
+    const handleCheckGroupItem = (checked: boolean, group: string, name: string) => {
       if (checked) {
-        const filterItem =
-          filteredQueryBuilder[group] &&
-          filteredQueryBuilder[group].find(item => item.name === name)
+        const filterItem = filteredQueryBuilder[group] && filteredQueryBuilder[group].find(item => item.name === name)
 
-        const filterItemVariants = get(filterItem, 'variants', []) as [
-          string,
-          number,
-        ][]
+        const filterItemVariants = get(filterItem, 'variants', []) as [string, number][]
 
         filterStore.addSelectedFilterGroup(group, name, filterItemVariants)
 
-        datasetStore.setConditionsAsync([
-          [
-            FilterKindEnum.Enum,
-            name,
-            '',
-            filterItemVariants.map(item => item[0]),
-          ],
-        ])
+        datasetStore.setConditionsAsync([[FilterKindEnum.Enum, name, '', filterItemVariants.map(item => item[0])]])
       } else {
         datasetStore.resetActivePreset()
         filterStore.removeSelectedFiltersGroup(group, name)
@@ -71,22 +51,16 @@ export const FilterRefinerGroups = observer(
           }}
         />
 
-        <div
-          className="overflow-y-scroll border-gre"
-          style={{ maxHeight: 'calc(100vh - 250px)' }}
-        >
+        <div className="overflow-y-scroll border-gre" style={{ maxHeight: 'calc(100vh - 250px)' }}>
           <div id="input" className="mx-4 mb-3" />
 
-          {Object.keys(datasetStore.dsStat).length === 0 &&
-          datasetStore.isLoadingDsStat ? (
+          {Object.keys(datasetStore.dsStat).length === 0 && datasetStore.isLoadingDsStat ? (
             <Loader />
           ) : (
             <Fragment>
               {keys.map((group, index) => (
                 <div key={group}>
-                  <p className="text-14 font-500 text-grey-blue pl-4">
-                    {group}
-                  </p>
+                  <p className="text-14 font-500 text-grey-blue pl-4">{group}</p>
 
                   {values[index].map((item: StatList) => {
                     const incomplete = item?.incomplete ?? false
@@ -94,9 +68,7 @@ export const FilterRefinerGroups = observer(
                     return (
                       <FilterRefinerGroupItem
                         className="pl-4"
-                        onChange={checked =>
-                          handleCheckGroupItem(checked, group, item.name)
-                        }
+                        onChange={checked => handleCheckGroupItem(checked, group, item.name)}
                         {...item}
                         key={item.name}
                         isFunc={item.kind === FilterKindEnum.Func}

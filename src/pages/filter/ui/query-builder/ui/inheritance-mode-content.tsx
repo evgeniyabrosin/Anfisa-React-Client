@@ -16,78 +16,55 @@ interface IProps {
   handleReset: () => void
 }
 
-export const InheritanceModeContent = observer(
-  ({ attrData, handleProblemGroup, problemGroupData, handleReset }: IProps) => {
-    const variants = dtreeStore.statFuncData.variants
+export const InheritanceModeContent = observer(({ attrData, handleProblemGroup, problemGroupData, handleReset }: IProps) => {
+  const variants = dtreeStore.statFuncData.variants
 
-    const handleCheckGroupItem = (checked: boolean, name: string) => {
-      if (checked) {
-        dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
-      }
+  const handleCheckGroupItem = (checked: boolean, name: string) => {
+    if (checked) {
+      dtreeStore.addSelectedFilter(name)
+    } else {
+      dtreeStore.removeSelectedFilter(name)
     }
+  }
 
-    return (
-      <Fragment>
-        <div className="flex items-center justify-between w-full mt-4 text-14">
-          <div>{t('dtree.problemGroup')}</div>
+  return (
+    <Fragment>
+      <div className="flex items-center justify-between w-full mt-4 text-14">
+        <div>{t('dtree.problemGroup')}</div>
 
-          {attrData.family.map((group: string) => (
-            <div key={group}>
-              <Checkbox
-                onChange={(e: any) =>
-                  handleProblemGroup(e.target.checked, group)
-                }
-                checked={
-                  problemGroupData
-                    ? problemGroupData.includes(group)
-                    : attrData.affected.includes(group)
-                }
-                className="mx-1 cursor-pointer"
-              />
-              <span>{group}</span>
-            </div>
-          ))}
+        {attrData.family.map((group: string) => (
+          <div key={group}>
+            <Checkbox
+              onChange={(e: any) => handleProblemGroup(e.target.checked, group)}
+              checked={problemGroupData ? problemGroupData.includes(group) : attrData.affected.includes(group)}
+              className="mx-1 cursor-pointer"
+            />
+            <span>{group}</span>
+          </div>
+        ))}
 
-          <Button
-            onClick={handleReset}
-            text="Reset"
-            variant={'secondary'}
-            className="h-4/5"
-          />
+        <Button onClick={handleReset} text="Reset" variant={'secondary'} className="h-4/5" />
+      </div>
+
+      <div className="flex justify-between w-full mt-4">
+        <div className="text-14 text-grey-blue">
+          {dtreeStore.selectedFilters.length} {t('dtree.selected')}
         </div>
 
-        <div className="flex justify-between w-full mt-4">
-          <div className="text-14 text-grey-blue">
-            {dtreeStore.selectedFilters.length} {t('dtree.selected')}
+        <div className="flex">
+          <div className="text-14 text-blue-bright cursor-pointer" onClick={() => alert('This function is not ready yet')}>
+            {t('general.selectAll')}
           </div>
 
-          <div className="flex">
-            <div
-              className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
-            >
-              {t('general.selectAll')}
-            </div>
+          <ModsDivider />
 
-            <ModsDivider />
-
-            <div
-              className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
-            >
-              {t('general.clearAll')}
-            </div>
+          <div className="text-14 text-blue-bright cursor-pointer" onClick={() => alert('This function is not ready yet')}>
+            {t('general.clearAll')}
           </div>
         </div>
+      </div>
 
-        <DisabledVariantsAmount
-          variants={variants}
-          disabled={false}
-          handleCheckGroupItem={handleCheckGroupItem}
-        />
-      </Fragment>
-    )
-  },
-)
+      <DisabledVariantsAmount variants={variants} disabled={false} handleCheckGroupItem={handleCheckGroupItem} />
+    </Fragment>
+  )
+})

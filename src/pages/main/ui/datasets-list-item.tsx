@@ -27,20 +27,10 @@ interface DsNameProps {
   className?: Argument
 }
 
-const DatasetName = ({
-  dsName,
-  kind,
-  isActiveParent,
-  isChildrenVisible,
-  isChild = false,
-  className,
-}: DsNameProps): ReactElement => {
+const DatasetName = ({ dsName, kind, isActiveParent, isChildrenVisible, isChild = false, className }: DsNameProps): ReactElement => {
   const datasetRef = useRef<any>(null)
 
-  const isTooltip =
-    datasetRef?.current?.getBoundingClientRect().width +
-      datasetRef?.current?.getBoundingClientRect().x >
-    235
+  const isTooltip = datasetRef?.current?.getBoundingClientRect().width + datasetRef?.current?.getBoundingClientRect().x > 235
 
   return (
     <Tooltip overlay={dsName} trigger={isTooltip ? ['hover'] : []}>
@@ -75,8 +65,7 @@ export const DatasetsListItem = observer(
     const secondaryKeys: string[] = get(item, 'secondary', [])
     const hasChildren = secondaryKeys.length > 0
 
-    const isActiveParent =
-      hasChildren && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
+    const isActiveParent = hasChildren && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
 
     useEffect(() => {
       setIsOpenFolder(secondaryKeys.includes(params.get('ds') || ''))
@@ -108,17 +97,9 @@ export const DatasetsListItem = observer(
             'bg-blue-bright bg-opacity-10': isActive,
           })}
         >
-          <DatasetType
-            hasChildren={hasChildren}
-            isActive={isActive || isActiveParent}
-          />
+          <DatasetType hasChildren={hasChildren} isActive={isActive || isActiveParent} />
 
-          <DatasetName
-            dsName={item.name}
-            kind={item.kind}
-            isActive={isActive}
-            isActiveParent={isActiveParent}
-          />
+          <DatasetName dsName={item.name} kind={item.kind} isActive={isActive} isActiveParent={isActiveParent} />
 
           <div className="ml-auto text-10 leading-18px text-grey-blue whitespace-nowrap bg-blue-lighter">
             <div
@@ -134,16 +115,9 @@ export const DatasetsListItem = observer(
         {isOpenFolder && hasChildren && (
           <div>
             {secondaryKeys.map((secondaryKey: string) => {
-              const secondaryItem: DsDistItem =
-                dirinfoStore.dirinfo['ds-dict'][secondaryKey]
+              const secondaryItem: DsDistItem = dirinfoStore.dirinfo['ds-dict'][secondaryKey]
 
-              return (
-                <DatasetsListItem
-                  item={secondaryItem}
-                  key={secondaryItem.name}
-                  isSubItems
-                />
-              )
+              return <DatasetsListItem item={secondaryItem} key={secondaryItem.name} isSubItems />
             })}
           </div>
         )}

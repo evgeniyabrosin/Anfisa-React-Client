@@ -38,27 +38,15 @@ export interface ICompoundRequestProps {
   state: string | null
 }
 
-const approxOptions = [
-  'shared transcript',
-  'shared gene',
-  'non-intersecting transcripts',
-]
+const approxOptions = ['shared transcript', 'shared gene', 'non-intersecting transcripts']
 
-export const resetOptions = [
-  'Homozygous Recessive/X-linked',
-  'Autosomal Dominant',
-  'Compensational',
-]
+export const resetOptions = ['Homozygous Recessive/X-linked', 'Autosomal Dominant', 'Compensational']
 
 export const CompoundRequest = observer(
   ({ setFieldValue }: FormikProps<ICompoundRequestProps>): ReactElement => {
-    const cachedValues = filterStore.readFilterCondition<ICompoundRequestFormValues>(
-      FuncStepTypesEnum.CompoundRequest,
-    )
+    const cachedValues = filterStore.readFilterCondition<ICompoundRequestFormValues>(FuncStepTypesEnum.CompoundRequest)
 
-    const [requestCondition, setRequestCondition] = useState(
-      cachedValues?.requestCondition || [[1, {}] as TRequestCondition],
-    )
+    const [requestCondition, setRequestCondition] = useState(cachedValues?.requestCondition || [[1, {}] as TRequestCondition])
 
     const [resetValue, setResetValue] = useState(cachedValues?.reset || '')
 
@@ -81,29 +69,19 @@ export const CompoundRequest = observer(
     }, [setFieldValue, variants])
 
     useEffect(() => {
-      filterStore.fetchStatFuncAsync(
-        FuncStepTypesEnum.CompoundRequest,
-        JSON.stringify({ request: [] }),
-      )
+      filterStore.fetchStatFuncAsync(FuncStepTypesEnum.CompoundRequest, JSON.stringify({ request: [] }))
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-      filterStore.setFilterCondition<ICompoundRequestFormValues>(
-        FuncStepTypesEnum.CompoundRequest,
-        {
-          reset: resetValue,
-          requestCondition,
-        },
-      )
+      filterStore.setFilterCondition<ICompoundRequestFormValues>(FuncStepTypesEnum.CompoundRequest, {
+        reset: resetValue,
+        requestCondition,
+      })
     }, [resetValue, requestCondition])
 
-    const handleRequestCondition = (
-      requestBlockIndex: number,
-      currentSelectIndex: number,
-      target: any,
-    ) => {
+    const handleRequestCondition = (requestBlockIndex: number, currentSelectIndex: number, target: any) => {
       const requestData = getRequestData(target, currentSelectIndex, attrData)
 
       const newRequest = Object.fromEntries(getSortedArray(requestData))
@@ -137,9 +115,7 @@ export const CompoundRequest = observer(
       filterStore.fetchStatFuncAsync(FuncStepTypesEnum.CompoundRequest, params)
     }
 
-    const [activeRequestIndex, setActiveRequestIndex] = useState(
-      requestCondition.length - 1,
-    )
+    const [activeRequestIndex, setActiveRequestIndex] = useState(requestCondition.length - 1)
 
     const handleRequestBlocksAmount = (type: string) => {
       if (type === 'ADD') {
@@ -150,25 +126,18 @@ export const CompoundRequest = observer(
         setActiveRequestIndex(newRequestCondition.length - 1)
         setResetValue('')
       } else {
-        const newRequestCondition = cloneDeep(requestCondition).filter(
-          (_item: any[], index: number) => index !== activeRequestIndex,
-        )
+        const newRequestCondition = cloneDeep(requestCondition).filter((_item: any[], index: number) => index !== activeRequestIndex)
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
 
-        setResetValue(
-          getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
-        )
+        setResetValue(getResetType(newRequestCondition[newRequestCondition.length - 1][1]))
 
         sendRequestAsync(newRequestCondition)
       }
     }
 
-    const handleRequestConditionNumber = (
-      requestBlockIndex: number,
-      value: number,
-    ) => {
+    const handleRequestConditionNumber = (requestBlockIndex: number, value: number) => {
       if (value < 0) return
 
       const newRequestCondition: any[] = cloneDeep(requestCondition)
@@ -247,30 +216,16 @@ export const CompoundRequest = observer(
               onClick={(e: any) => handleActiveRequest(index, e)}
             >
               <div className="flex cursor-pointer step-content-area">
-                <InputNumber
-                  value={item[0]}
-                  onChange={(e: any) =>
-                    handleRequestConditionNumber(index, e.target.value)
-                  }
-                  className="shadow-dark w-1/3 h-5 bg-blue-medium"
-                />
+                <InputNumber value={item[0]} onChange={(e: any) => handleRequestConditionNumber(index, e.target.value)} className="shadow-dark w-1/3 h-5 bg-blue-medium" />
               </div>
 
               <div className="flex flex-1 justify-between step-content-area">
                 {attrData.family.map((group: string, currNo: number) => (
-                  <div
-                    className="step-content-area"
-                    onClick={(e: any) => handleActiveRequest(index, e)}
-                    key={group}
-                  >
-                    <span className="cursor-pointer step-content-area">
-                      {group}
-                    </span>
+                  <div className="step-content-area" onClick={(e: any) => handleActiveRequest(index, e)} key={group}>
+                    <span className="cursor-pointer step-content-area">{group}</span>
 
                     <Select
-                      onChange={(e: any) =>
-                        handleRequestCondition(index, currNo, e.target)
-                      }
+                      onChange={(e: any) => handleRequestCondition(index, currNo, e.target)}
                       className="w-auto ml-1"
                       options={selectOptions}
                       value={getSelectedValue(group, index)}
@@ -291,22 +246,13 @@ export const CompoundRequest = observer(
             <div className="flex items-center">
               <span className="mr-2 text-18 leading-14px">Approx:</span>
 
-              <Select
-                value={approxOptions[2]}
-                options={approxOptions}
-                disabled={true}
-              />
+              <Select value={approxOptions[2]} options={approxOptions} disabled={true} />
             </div>
 
             <div className="flex items-center ml-3">
               <span>{t('dtree.state')}</span>
 
-              <Select
-                options={['-current-']}
-                value={'-current-'}
-                className="w-full ml-2"
-                disabled={true}
-              />
+              <Select options={['-current-']} value={'-current-'} className="w-full ml-2" disabled={true} />
             </div>
           </div>
 
@@ -317,21 +263,13 @@ export const CompoundRequest = observer(
 
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div className="flex">
-            <Button
-              onClick={() => handleRequestBlocksAmount('ADD')}
-              text="Add"
-              variant={'secondary'}
-              className={cn('mr-4')}
-              disabled={requestCondition.length === 5}
-            />
+            <Button onClick={() => handleRequestBlocksAmount('ADD')} text="Add" variant={'secondary'} className={cn('mr-4')} disabled={requestCondition.length === 5} />
 
             <Button
               onClick={() => handleRequestBlocksAmount('REMOVE')}
               text="Remove"
               variant={'secondary'}
-              className={cn(
-                'border-red-secondary hover:text-white hover:bg-red-secondary',
-              )}
+              className={cn('border-red-secondary hover:text-white hover:bg-red-secondary')}
               disabled={requestCondition.length === 1}
             />
           </div>
@@ -339,13 +277,7 @@ export const CompoundRequest = observer(
           <div className="flex w-1/2">
             <span>{t('dtree.reset')}</span>
 
-            <Select
-              options={resetOptions}
-              onChange={(e: any) => handleReset(e.target.value)}
-              className="w-full ml-2"
-              value={resetValue}
-              reset
-            />
+            <Select options={resetOptions} onChange={(e: any) => handleReset(e.target.value)} className="w-full ml-2" value={resetValue} reset />
           </div>
         </div>
 

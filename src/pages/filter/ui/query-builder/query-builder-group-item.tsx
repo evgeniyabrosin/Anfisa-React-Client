@@ -18,27 +18,10 @@ type Props = StatListType & {
 }
 
 export const QueryBuilderGroupItem = observer(
-  ({
-    name,
-    onChange,
-    className,
-    amount,
-    group,
-    isFunc,
-    isNumeric,
-    title,
-    tooltip,
-    ...rest
-  }: Props): ReactElement => {
-    const checked = get(
-      filterStore,
-      `selectedFilters[${group}][${name}]`,
-      false,
-    )
+  ({ name, onChange, className, amount, group, isFunc, isNumeric, title, tooltip, ...rest }: Props): ReactElement => {
+    const checked = get(filterStore, `selectedFilters[${group}][${name}]`, false)
 
-    const selectedAmounts: number[] = Object.values(
-      get(filterStore, `selectedFilters[${group}][${name}]`, {}),
-    )
+    const selectedAmounts: number[] = Object.values(get(filterStore, `selectedFilters[${group}][${name}]`, {}))
 
     const selectedSum = selectedAmounts.reduce((prev, cur) => prev + cur, 0)
 
@@ -49,12 +32,7 @@ export const QueryBuilderGroupItem = observer(
     }
 
     return (
-      <Tooltip
-        key={group}
-        overlay={tooltip}
-        placement="bottomLeft"
-        trigger={tooltip ? ['hover'] : []}
-      >
+      <Tooltip key={group} overlay={tooltip} placement="bottomLeft" trigger={tooltip ? ['hover'] : []}>
         <div
           className={cn(
             'flex items-center py-1 pr-20',
@@ -72,11 +50,7 @@ export const QueryBuilderGroupItem = observer(
             onChange={event => onChange && onChange(event.target.checked)}
           />
 
-          {isFunc && (
-            <span className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-              fn
-            </span>
-          )}
+          {isFunc && <span className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">fn</span>}
 
           <span
             key={name}
@@ -91,9 +65,7 @@ export const QueryBuilderGroupItem = observer(
           {amount !== 0 && (
             <span className="text-grey-blue ml-1">
               {'('}
-              {selectedSum !== 0 && (
-                <span className="text-blue-bright">{`${selectedSum}/`}</span>
-              )}
+              {selectedSum !== 0 && <span className="text-blue-bright">{`${selectedSum}/`}</span>}
               {`${amount})`}
             </span>
           )}

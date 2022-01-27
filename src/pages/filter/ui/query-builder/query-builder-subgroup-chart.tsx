@@ -60,10 +60,7 @@ type Props = {
   histogram?: any[]
 }
 
-export const QueryBuilderSubgroupChart: FC<Props> = ({
-  variants = [],
-  histogram,
-}) => {
+export const QueryBuilderSubgroupChart: FC<Props> = ({ variants = [], histogram }) => {
   const ref = useRef<HTMLCanvasElement>(document.createElement('canvas'))
 
   useEffect(() => {
@@ -106,11 +103,7 @@ export const QueryBuilderSubgroupChart: FC<Props> = ({
       }
     }
 
-    const config: ChartConfiguration<
-      keyof ChartTypeRegistry,
-      number[],
-      string
-    > = {
+    const config: ChartConfiguration<keyof ChartTypeRegistry, number[], string> = {
       type: 'bar',
       data,
       options: {

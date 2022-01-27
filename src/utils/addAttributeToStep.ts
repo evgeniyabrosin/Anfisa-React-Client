@@ -19,9 +19,7 @@ export const addAttributeToStep = (
 
   const shouldTakeAttributeFromStore = attributeType !== 'numeric'
 
-  const currentFilters = shouldTakeAttributeFromStore
-    ? dtreeStore.selectedFilters
-    : filters
+  const currentFilters = shouldTakeAttributeFromStore ? dtreeStore.selectedFilters : filters
 
   const subGroupName = dtreeStore.selectedGroups[1]
   const attribute = [attributeType, subGroupName, currentFilters]

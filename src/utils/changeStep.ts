@@ -4,10 +4,7 @@ import { ChangeStepActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import datasetStore from '../store/dataset'
 
-export const changeStep = (
-  index: number,
-  action: ChangeStepActionType,
-): void => {
+export const changeStep = (index: number, action: ChangeStepActionType): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
   const body = new URLSearchParams({
@@ -19,9 +16,7 @@ export const changeStep = (
 
   locadStepData.length = index + 1
 
-  const emptyStepList = locadStepData.filter(
-    element => element.groups.length === 0 && !element.isFinalStep,
-  )
+  const emptyStepList = locadStepData.filter(element => element.groups.length === 0 && !element.isFinalStep)
 
   const calculatedIndex = index - emptyStepList.length
   const stepIndex = dtreeStore.getStepIndexForApi(calculatedIndex)

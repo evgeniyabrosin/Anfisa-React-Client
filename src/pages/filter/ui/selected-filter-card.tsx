@@ -22,43 +22,24 @@ export const SelectedFilterCard = observer(
       return <Fragment />
     }
 
-    const getSelectedFilter = (
-      filterName: string,
-      filterExp: number | any[],
-    ) => {
-      return typeof filterExp === 'number'
-        ? filterName
-        : getNumericExpression(filterExp, filterName)
+    const getSelectedFilter = (filterName: string, filterExp: number | any[]) => {
+      return typeof filterExp === 'number' ? filterName : getNumericExpression(filterExp, filterName)
     }
 
     return (
       <div>
-        <div
-          className="flex items-center border-b border-grey-light p-4 cursor-pointer"
-          onClick={isOpen ? close : open}
-        >
+        <div className="flex items-center border-b border-grey-light p-4 cursor-pointer" onClick={isOpen ? close : open}>
           <span className="leading-16px">{title}</span>
 
-          <Icon
-            name="Arrow"
-            className={cn(
-              'text-blue-bright ml-auto transform transition-transform',
-              isOpen ? 'rotate-90' : '-rotate-90',
-            )}
-          />
+          <Icon name="Arrow" className={cn('text-blue-bright ml-auto transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')} />
         </div>
 
         {isOpen && (
           <div>
             {filtersEntries.map(([filterName, filterExpression]) => (
-              <div
-                key={filterName + filterExpression}
-                className="flex items-center pl-6 py-4"
-              >
+              <div key={filterName + filterExpression} className="flex items-center pl-6 py-4">
                 <Checkbox checked onChange={() => onRemove(filterName)} />
-                <span className="text-14 leading-16px font-bold ml-2">
-                  {getSelectedFilter(filterName, filterExpression)}
-                </span>
+                <span className="text-14 leading-16px font-bold ml-2">{getSelectedFilter(filterName, filterExpression)}</span>
               </div>
             ))}
           </div>

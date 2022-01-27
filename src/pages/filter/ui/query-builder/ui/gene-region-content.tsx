@@ -14,47 +14,31 @@ interface IProps {
   variants: [string, number]
 }
 
-export const GeneRegionContent = observer(
-  ({
-    locusCondition,
-    validateValue,
-    handleSetValue,
-    isErrorVisible,
-    variants,
-  }: IProps) => {
-    return (
-      <Fragment>
-        <div className="flex justify-between w-full mt-4 text-14">
-          <div className="flex">
-            <span>{t('dtree.locus')}</span>
+export const GeneRegionContent = observer(({ locusCondition, validateValue, handleSetValue, isErrorVisible, variants }: IProps) => {
+  return (
+    <Fragment>
+      <div className="flex justify-between w-full mt-4 text-14">
+        <div className="flex">
+          <span>{t('dtree.locus')}</span>
 
-            <div className="relative flex ml-2">
-              <Input
-                value={locusCondition}
-                onChange={(e: any) => {
-                  validateValue(e.target.value)
-                  handleSetValue(e.target.value)
-                }}
-                className="h-5"
-              />
+          <div className="relative flex ml-2">
+            <Input
+              value={locusCondition}
+              onChange={(e: any) => {
+                validateValue(e.target.value)
+                handleSetValue(e.target.value)
+              }}
+              className="h-5"
+            />
 
-              {isErrorVisible && (
-                <div className="absolute -bottom-3 flex items-center mt-1 h-3 text-10 text-red-secondary">
-                  {t('dtree.chromosomeNameIsNotCorrect')}
-                </div>
-              )}
-            </div>
+            {isErrorVisible && <div className="absolute -bottom-3 flex items-center mt-1 h-3 text-10 text-red-secondary">{t('dtree.chromosomeNameIsNotCorrect')}</div>}
           </div>
-
-          <AllNotModalMods />
         </div>
 
-        <DisabledVariantsAmount
-          variants={variants}
-          disabled={true}
-          isErrorVisible={isErrorVisible}
-        />
-      </Fragment>
-    )
-  },
-)
+        <AllNotModalMods />
+      </div>
+
+      <DisabledVariantsAmount variants={variants} disabled={true} isErrorVisible={isErrorVisible} />
+    </Fragment>
+  )
+})
