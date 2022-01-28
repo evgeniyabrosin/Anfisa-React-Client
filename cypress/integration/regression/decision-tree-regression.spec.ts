@@ -113,7 +113,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
   })
@@ -127,7 +127,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     decisionTreesPage.decisionTreeResults.searchGraphResults
       .eq(1)
@@ -159,7 +159,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -176,7 +176,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -199,7 +199,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeResults.optionsMenu.eq(1).click()
@@ -216,7 +216,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -243,7 +243,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -273,7 +273,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -312,7 +312,7 @@ describe('Regression test of the decision tree', () => {
       .first()
       .should('have.text', includedVariants)
     decisionTreesPage.addStepAfter(0)
-    addMinGq('10', '100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
@@ -339,14 +339,14 @@ describe('Regression test of the decision tree', () => {
     cy.wait('@loadProblemGroup')
   }
 
-  function addMinGq(min: string, max: string) {
-    decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
-    decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.decisionTreeResults.leftInput.type(min)
-    decisionTreesPage.decisionTreeResults.rightInput.type(max)
-  }
+  // function addMinGq(min: string, max: string) {
+  //   decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
+  //   decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
+  //   decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
+  //   decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+  //   decisionTreesPage.decisionTreeResults.leftInput.type(min)
+  //   decisionTreesPage.decisionTreeResults.rightInput.type(max)
+  // }
 
   function joinBy(method: string) {
     decisionTreesPage.decisionTreeResults.joinByLabel

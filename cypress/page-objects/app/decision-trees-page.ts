@@ -143,6 +143,15 @@ class DecisionTreesPage extends BasePage {
     decisionTreesPage.decisionTreeResults.addStepAfter.click()
     cy.wait('@stepAfter')
   }
+
+  addMinGq(min: string, max: string) {
+    decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
+    decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.decisionTreeResults.leftInput.type(min)
+    decisionTreesPage.decisionTreeResults.rightInput.type(max)
+  }
 }
 
 export const decisionTreesPage = new DecisionTreesPage()

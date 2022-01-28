@@ -13,21 +13,15 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.selectAllAttributes(selectAll)
+    cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
     decisionTreesPage.addStepAfter(0)
-    decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
-    decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
-    decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
-    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
-    decisionTreesPage.decisionTreeResults.leftInput.type('10')
-    decisionTreesPage.decisionTreeResults.rightInput.type('100')
+    decisionTreesPage.addMinGq('10', '100')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait(500)
+    cy.wait('@stepAfter')
     decisionTreesPage.addStepAfter(1)
-    cy.wait(500)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(2).click()
     decisionTreesPage.attributesList.searchForAttr
@@ -38,7 +32,6 @@ describe('Regression test of the decision tree', () => {
       'Autosomal Dominant',
     )
     decisionTreesPage.attributesList.addSelectedAttributes.click()
-    cy.wait('@applyAttributes')
     decisionTreesPage.decisionTreeResults.collapseAll.eq(1).click()
     decisionTreesPage.decisionTreeResults.contentEditor.element.should(
       'not.exist',
