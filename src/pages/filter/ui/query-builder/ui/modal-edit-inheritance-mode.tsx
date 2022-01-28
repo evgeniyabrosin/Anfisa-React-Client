@@ -35,12 +35,17 @@ export const ModalEditInheritanceMode = observer(
       })
     })
 
-    const problemGroup = Object.keys(currentGroup[currentGroup.length - 1]).length > 0 ? Object.values(currentGroup[currentGroup.length - 1])[0] : attrData.affected
+    const problemGroup =
+      Object.keys(currentGroup[currentGroup.length - 1]).length > 0
+        ? Object.values(currentGroup[currentGroup.length - 1])[0]
+        : attrData.affected
 
     const [problemGroupData, setProblemGroupData] = useState<string[]>(problemGroup)
 
     useEffect(() => {
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].find((elem: any) => Array.isArray(elem)).map((item: string) => dtreeStore.addSelectedFilter(item))
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+        .find((elem: any) => Array.isArray(elem))
+        .map((item: string) => dtreeStore.addSelectedFilter(item))
 
       return () => {
         dtreeStore.resetSelectedFilters()
@@ -111,7 +116,12 @@ export const ModalEditInheritanceMode = observer(
       <ModalBase refer={ref} minHeight={340}>
         <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
-        <InheritanceModeContent attrData={attrData} handleProblemGroup={handleProblemGroup} problemGroupData={problemGroupData} handleReset={handleReset} />
+        <InheritanceModeContent
+          attrData={attrData}
+          handleProblemGroup={handleProblemGroup}
+          problemGroupData={problemGroupData}
+          handleReset={handleReset}
+        />
 
         <EditModalButtons
           handleClose={handleClose}

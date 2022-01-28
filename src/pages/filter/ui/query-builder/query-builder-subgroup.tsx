@@ -49,7 +49,10 @@ export const QueryBuilderSubgroup = observer(({ groupName, subGroupData, isConte
         <ExpandContentButton isVisible={isVisibleSubGroup} isModal={isModal} />
       </div>
 
-      {isVisibleSubGroup && subGroupData.map((subGroupItem, index) => <QueryBuilderSubgroupItem subGroupItem={subGroupItem} key={index} isModal={isModal} groupName={groupName} />)}
+      {isVisibleSubGroup &&
+        subGroupData.map((subGroupItem, index) => (
+          <QueryBuilderSubgroupItem subGroupItem={subGroupItem} key={index} isModal={isModal} groupName={groupName} />
+        ))}
     </div>
   )
 })

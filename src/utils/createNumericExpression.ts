@@ -61,10 +61,5 @@ export const createNumericExpression = ({ expType, extraExpType, minValue, maxVa
     return value
   }
 
-  const expTypeOptions: { [key in NumericExpressionType]: any } = {
-    [NumericExpressionTypes.GreaterThan]: getValue(NumericExpressionTypes.GreaterThan),
-    [NumericExpressionTypes.GreaterOrEqualThan]: getValue(NumericExpressionTypes.GreaterOrEqualThan),
-  }
-
-  return expTypeOptions[expType]
+  return getValue(expType)
 }

@@ -21,7 +21,9 @@ export const InfoList = observer(
           return
         }
 
-        dirinfoStore.setInfoFrameLink(doc[2].images.map((image: string) => `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${image}`))
+        dirinfoStore.setInfoFrameLink(
+          doc[2].images.map((image: string) => `app/dsdoc/${baseDatasetName ?? dirinfoStore.selectedDirinfoName}/${image}`),
+        )
 
         return
       }

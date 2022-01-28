@@ -48,7 +48,8 @@ export const QueryBuilderGroups = observer(
 
           <div className="flex items-center justify-between w-full h-8 mb-2">
             <div className="text-blue-bright font-medium">
-              {activeStep && (activeStep.isFinalStep ? t('dtree.showingResultsForFinalStep') : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
+              {activeStep &&
+                (activeStep.isFinalStep ? t('dtree.showingResultsForFinalStep') : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
 
               {shouldShowVariantsPrompt && returnedVariantsPrompt}
             </div>

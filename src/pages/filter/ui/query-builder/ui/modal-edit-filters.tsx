@@ -27,7 +27,9 @@ export const ModalEditFilters = observer(
     const currentGroupLength = dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup].length
 
     useEffect(() => {
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup][currentGroupLength - 1].map((item: string) => dtreeStore.addSelectedFilter(item))
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup][currentGroupLength - 1].map((item: string) =>
+        dtreeStore.addSelectedFilter(item),
+      )
 
       return () => {
         dtreeStore.resetSelectedFilters()
@@ -81,11 +83,15 @@ export const ModalEditFilters = observer(
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    const selectedGroup = subGroups.find(subGroup => subGroup.find(element => element.name === groupName))?.find(element => element.name === groupName)
+    const selectedGroup = subGroups
+      .find(subGroup => subGroup.find(element => element.name === groupName))
+      ?.find(element => element.name === groupName)
 
     const originGroupList: any[] = selectedGroup?.variants ?? []
 
-    const filteredGroupList = originGroupList.filter((variant: [string, number]) => variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+    const filteredGroupList = originGroupList.filter((variant: [string, number]) =>
+      variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+    )
 
     const groupsPerPage = 100
     const chunks = createChunks(filteredGroupList, groupsPerPage)
@@ -154,7 +160,9 @@ export const ModalEditFilters = observer(
           )}
         </div>
 
-        {filteredGroupList.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />
+        )}
 
         <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={selectedGroupsAmount.length === 0} />
       </ModalBase>

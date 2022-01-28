@@ -113,7 +113,13 @@ const DrawerNoteModal = observer(({ close }: any) => {
         <div className="flex items-center">
           <Button text={t('general.cancel')} onClick={close} variant={'secondary'} />
 
-          <Button text="Save note" dataTestId={VariantDrawerDataCy.saveNote} disabled={!value || !value.trim() || !!error} className="ml-2" onClick={handleSaveNoteAsync} />
+          <Button
+            text="Save note"
+            dataTestId={VariantDrawerDataCy.saveNote}
+            disabled={!value || !value.trim() || !!error}
+            className="ml-2"
+            onClick={handleSaveNoteAsync}
+          />
         </div>
       </div>
     </div>

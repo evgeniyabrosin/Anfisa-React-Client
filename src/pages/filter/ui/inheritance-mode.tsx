@@ -18,10 +18,16 @@ export const InheritanceMode = observer(({ values, setFieldValue }: FormikProps<
   const [variants, setVariants] = useState([])
   const [problemGroups, setProblemGroups] = useState<string[]>([])
 
-  const [problemGroupValues, variantsValues] = [cachedValues?.problemGroups || values.problemGroups, cachedValues?.variants || values.variants]
+  const [problemGroupValues, variantsValues] = [
+    cachedValues?.problemGroups || values.problemGroups,
+    cachedValues?.variants || values.variants,
+  ]
 
   const fetchStatFuncAsync = async (param?: Record<string, string | string[]>) => {
-    const statFuncData = await filterStore.fetchStatFuncAsync(FuncStepTypesEnum.InheritanceMode, JSON.stringify(param) || JSON.stringify({ problem_group: [] }))
+    const statFuncData = await filterStore.fetchStatFuncAsync(
+      FuncStepTypesEnum.InheritanceMode,
+      JSON.stringify(param) || JSON.stringify({ problem_group: [] }),
+    )
 
     const filteredVaraints = statFuncData?.variants?.filter(item => item[1] > 0)
 
@@ -130,7 +136,9 @@ export const InheritanceMode = observer(({ values, setFieldValue }: FormikProps<
         )
       })}
 
-      {variants.length === 0 && <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">Out of choice. Select problem group.</div>}
+      {variants.length === 0 && (
+        <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">Out of choice. Select problem group.</div>
+      )}
     </Form>
   )
 })

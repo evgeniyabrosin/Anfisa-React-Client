@@ -84,7 +84,9 @@ export const FunctionPanel = (): ReactElement => {
         ],
       ])
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.InheritanceMode, [[FuncStepTypesEnum.InheritanceMode, noArray.length]])
+      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.InheritanceMode, [
+        [FuncStepTypesEnum.InheritanceMode, noArray.length],
+      ])
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
@@ -92,7 +94,9 @@ export const FunctionPanel = (): ReactElement => {
 
       const noArray = await datasetStore.setConditionsAsync(condition)
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CustomInheritanceMode, [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]])
+      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CustomInheritanceMode, [
+        [FuncStepTypesEnum.CustomInheritanceMode, noArray.length],
+      ])
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
@@ -102,7 +106,9 @@ export const FunctionPanel = (): ReactElement => {
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CompoundHet) {
-      const noArray = await datasetStore.setConditionsAsync([['func', selectedFilter.name, '', values.variants, { approx: values.approx || null, state: values.state || null }]])
+      const noArray = await datasetStore.setConditionsAsync([
+        ['func', selectedFilter.name, '', values.variants, { approx: values.approx || null, state: values.state || null }],
+      ])
 
       filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CompoundHet, [[FuncStepTypesEnum.CompoundHet, noArray.length]])
     }
@@ -122,7 +128,9 @@ export const FunctionPanel = (): ReactElement => {
         ],
       ])
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CompoundRequest, [[FuncStepTypesEnum.CompoundRequest, noArray.length]])
+      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CompoundRequest, [
+        [FuncStepTypesEnum.CompoundRequest, noArray.length],
+      ])
     }
 
     if (!datasetStore.isXL) {

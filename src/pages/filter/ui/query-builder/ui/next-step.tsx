@@ -62,10 +62,18 @@ export const NextStep = observer(
           </TreeView>
 
           <ResultsView
-            className={cn('border-l border-grey-light font-medium px-5 relative', currentStep.isActive ? ' bg-green-light' : 'bg-blue-light')}
+            className={cn(
+              'border-l border-grey-light font-medium px-5 relative',
+              currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
+            )}
             onClick={event => setStepActive(index, event)}
           >
-            <NextStepHeader isExpanded={isExpanded} expandContent={expandContent} index={index} isExcluded={dtreeStore.getStepData[index].excluded} />
+            <NextStepHeader
+              isExpanded={isExpanded}
+              expandContent={expandContent}
+              index={index}
+              isExcluded={dtreeStore.getStepData[index].excluded}
+            />
 
             {isExpanded && <NextStepContent index={index} />}
           </ResultsView>

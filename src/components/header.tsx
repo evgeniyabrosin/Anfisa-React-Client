@@ -73,7 +73,9 @@ export const Header = observer(
     }
 
     const copyLink = () => {
-      copyToClipboard(`${window.origin}${history.location.pathname}?ds=${ds}${variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''}`)
+      copyToClipboard(
+        `${window.origin}${history.location.pathname}?ds=${ds}${variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''}`,
+      )
 
       toast.info(t('ds.copied'), {
         position: 'bottom-right',

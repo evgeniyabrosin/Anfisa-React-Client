@@ -16,7 +16,9 @@ import { noFirstSymbolsPattern } from '@utils/validateNotes'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {
-  return <Button refEl={refEl} text={'+ Add'} size="xs" variant={'secondary-dark'} onClick={onClick} dataTestId={VariantDrawerDataCy.addTag} />
+  return (
+    <Button refEl={refEl} text={'+ Add'} size="xs" variant={'secondary-dark'} onClick={onClick} dataTestId={VariantDrawerDataCy.addTag} />
+  )
 })
 
 const DrawerTagModal = observer(({ close }: any) => {
@@ -136,7 +138,13 @@ const DrawerTagModal = observer(({ close }: any) => {
           {error && <div className="mt-px text-12 text-red-secondary whitespace-nowrap">{error}</div>}
 
           <div className="flex justify-end w-full">
-            <Button text="Add custom tag" disabled={!customTag.trim() || !!error} className="mt-2" onClick={handleSetCustomTag} dataTestId={VariantDrawerDataCy.addCustomTag} />
+            <Button
+              text="Add custom tag"
+              disabled={!customTag.trim() || !!error}
+              className="mt-2"
+              onClick={handleSetCustomTag}
+              dataTestId={VariantDrawerDataCy.addCustomTag}
+            />
           </div>
         </div>
       </div>

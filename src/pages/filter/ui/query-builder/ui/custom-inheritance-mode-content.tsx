@@ -31,7 +31,12 @@ export const CustomInheritanceModeContent = observer(({ attrData, handleSetScena
           <div key={group}>
             <span>{group}</span>
 
-            <Select onChange={(e: any) => handleSetScenario(group, e.target.value)} className="w-auto ml-1" options={selectOptions} value={selectStates[index]} />
+            <Select
+              onChange={(e: any) => handleSetScenario(group, e.target.value)}
+              className="w-auto ml-1"
+              options={selectOptions}
+              value={selectStates[index]}
+            />
           </div>
         ))}
       </div>
@@ -40,7 +45,13 @@ export const CustomInheritanceModeContent = observer(({ attrData, handleSetScena
         <div className="flex w-1/2">
           <span>{t('dtree.reset')}</span>
 
-          <Select onChange={(e: any) => handleReset(e.target.value)} className="w-full ml-2" options={resetOptions} value={resetValue} reset />
+          <Select
+            onChange={(e: any) => handleReset(e.target.value)}
+            className="w-full ml-2"
+            options={resetOptions}
+            value={resetValue}
+            reset
+          />
         </div>
 
         <AllNotModalMods />

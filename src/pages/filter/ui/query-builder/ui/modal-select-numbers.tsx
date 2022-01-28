@@ -152,7 +152,11 @@ export const ModalSelectNumbers = observer(
                 className="h-8 w-full shadow-dark"
               />
 
-              {isVisibleLeftError && <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">{t('dtree.lowerBoundError')}</div>}
+              {isVisibleLeftError && (
+                <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">
+                  {t('dtree.lowerBoundError')}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center w-12 p-1 ml-2 shadow-dark rounded">
@@ -201,7 +205,11 @@ export const ModalSelectNumbers = observer(
                 className="h-8 w-full shadow-dark"
               />
 
-              {isVisibleRightError && <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">{t('dtree.upperBoundError')}</div>}
+              {isVisibleRightError && (
+                <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">
+                  {t('dtree.upperBoundError')}
+                </div>
+              )}
             </div>
           </div>
 

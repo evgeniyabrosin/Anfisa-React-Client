@@ -90,7 +90,9 @@ export const ModalEditCompoundHet = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"approx":"${approxCondition}","state":${stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`}}`
+      const params = `{"approx":"${approxCondition}","state":${
+        stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`
+      }}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 

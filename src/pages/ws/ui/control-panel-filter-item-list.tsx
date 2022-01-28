@@ -31,10 +31,34 @@ export const FilterItemList = observer(({ items, isGenes, isGenesList, isSamples
     <div className="mt-5 h-60 overflow-y-scroll">
       {items.map(item => (
         <div key={item} className="flex items-center mb-4">
-          {isGenes && <Checkbox checked={zoneStore.localGenes.includes(item)} className="w-4 h-4" onChange={e => handleCheck(e.target.checked, item)} />}
-          {isGenesList && <Checkbox checked={zoneStore.localGenesList.includes(item)} className="w-4 h-4" onChange={e => handleCheck(e.target.checked, item)} />}
-          {isSamples && <Checkbox checked={zoneStore.localSamples.includes(item)} className="w-4 h-4" onChange={e => handleCheck(e.target.checked, item)} />}
-          {isTags && <Checkbox checked={zoneStore.localTags.includes(item)} className="w-4 h-4" onChange={e => handleCheck(e.target.checked, item)} />}
+          {isGenes && (
+            <Checkbox
+              checked={zoneStore.localGenes.includes(item)}
+              className="w-4 h-4"
+              onChange={e => handleCheck(e.target.checked, item)}
+            />
+          )}
+          {isGenesList && (
+            <Checkbox
+              checked={zoneStore.localGenesList.includes(item)}
+              className="w-4 h-4"
+              onChange={e => handleCheck(e.target.checked, item)}
+            />
+          )}
+          {isSamples && (
+            <Checkbox
+              checked={zoneStore.localSamples.includes(item)}
+              className="w-4 h-4"
+              onChange={e => handleCheck(e.target.checked, item)}
+            />
+          )}
+          {isTags && (
+            <Checkbox
+              checked={zoneStore.localTags.includes(item)}
+              className="w-4 h-4"
+              onChange={e => handleCheck(e.target.checked, item)}
+            />
+          )}
 
           <span className="text-12 ml-1" data-testid={MainTableDataCy.checkboxListElement}>
             {item}

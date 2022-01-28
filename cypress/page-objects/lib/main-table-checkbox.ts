@@ -14,6 +14,10 @@ export class MainTableCheckbox extends Checkbox {
       .click({ force: true })
   }
   checkTagInDrawer(substring?: string, timeout?: number) {
-    cy.get(CommonSelectors.checkBoxListInDrawer, { timeout }).find(CommonSelectors.tagNameInDrawer).contains(substring!).siblings(CommonSelectors.checkbox).click({ force: true })
+    cy.get(CommonSelectors.checkBoxListInDrawer, { timeout })
+      .find(CommonSelectors.tagNameInDrawer)
+      .contains(substring!)
+      .siblings(CommonSelectors.checkbox)
+      .click({ force: true })
   }
 }

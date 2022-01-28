@@ -193,5 +193,12 @@ const variantClassesMap = {
 }
 
 export const DropDown = ({ options, value, placeholder, variant = DropdownVariantEnum.DARK, onSelect }: Props): ReactElement => (
-  <StyledDropDown options={options} variant={variant} value={value} onChange={onSelect} placeholder={placeholder} {...variantClassesMap[variant]} />
+  <StyledDropDown
+    options={options}
+    variant={variant}
+    value={value}
+    onChange={onSelect}
+    placeholder={placeholder}
+    {...variantClassesMap[variant]}
+  />
 )

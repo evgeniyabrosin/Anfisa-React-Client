@@ -59,7 +59,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                     {th}
 
                     {th === t('variant.showSelectionOnly') && (
-                      <Checkbox checked={filterSelection !== normClass} className="ml-1" onChange={(e: any) => handleSelection(e.target.checked)} />
+                      <Checkbox
+                        checked={filterSelection !== normClass}
+                        className="ml-1"
+                        onChange={(e: any) => handleSelection(e.target.checked)}
+                      />
                     )}
                   </td>
                 ))}
@@ -79,7 +83,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                   {row.cells
                     .filter(cell => cell[1]?.includes(filterSelection))
                     .map((cell, cIndex) => (
-                      <td key={cIndex} className={cn('py-3 pr-3 font-medium', !cell[1]?.includes(noTrHitClass) && 'text-white')} dangerouslySetInnerHTML={{ __html: cell[0] }} />
+                      <td
+                        key={cIndex}
+                        className={cn('py-3 pr-3 font-medium', !cell[1]?.includes(noTrHitClass) && 'text-white')}
+                        dangerouslySetInnerHTML={{ __html: cell[0] }}
+                      />
                     ))}
                 </tr>
               )

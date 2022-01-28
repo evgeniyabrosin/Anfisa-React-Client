@@ -235,7 +235,9 @@ export const ModalSelectCompoundRequest = observer(
 
       const approx = approxCondition === 'transcript' ? null : `"${approxCondition}"`
 
-      const params = `{"approx":${approx},"state":${stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`},"request":${requestString}}`
+      const params = `{"approx":${approx},"state":${
+        stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`
+      },"request":${requestString}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -298,7 +300,11 @@ export const ModalSelectCompoundRequest = observer(
               onClick={(e: any) => handleActiveRequest(index, e)}
             >
               <div className="flex cursor-pointer step-content-area">
-                <InputNumber value={item[0]} onChange={(e: any) => handleRequestConditionNumber(index, e.target.value)} className="shadow-dark w-1/3 h-5" />
+                <InputNumber
+                  value={item[0]}
+                  onChange={(e: any) => handleRequestConditionNumber(index, e.target.value)}
+                  className="shadow-dark w-1/3 h-5"
+                />
               </div>
 
               <div className="flex flex-1 justify-between step-content-area">
@@ -321,7 +327,13 @@ export const ModalSelectCompoundRequest = observer(
 
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div className="flex">
-            <Button onClick={() => handleRequestBlocksAmount('ADD')} text="Add" variant={'secondary'} className={cn('mr-4')} disabled={requestCondition.length === 5} />
+            <Button
+              onClick={() => handleRequestBlocksAmount('ADD')}
+              text="Add"
+              variant={'secondary'}
+              className={cn('mr-4')}
+              disabled={requestCondition.length === 5}
+            />
 
             <Button
               onClick={() => handleRequestBlocksAmount('REMOVE')}
@@ -335,7 +347,13 @@ export const ModalSelectCompoundRequest = observer(
           <div className="flex w-1/2">
             <span>{t('dtree.reset')}</span>
 
-            <Select options={resetOptions} value={resetValue} onChange={(e: any) => handleReset(e.target.value)} className="w-full ml-2" reset />
+            <Select
+              options={resetOptions}
+              value={resetValue}
+              onChange={(e: any) => handleReset(e.target.value)}
+              className="w-full ml-2"
+              reset
+            />
           </div>
         </div>
 

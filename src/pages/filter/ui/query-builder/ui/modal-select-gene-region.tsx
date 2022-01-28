@@ -70,7 +70,13 @@ export const ModalSelectGeneRegion = observer(
       <ModalBase refer={ref} minHeight={250}>
         <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
-        <GeneRegionContent locusCondition={locusCondition} validateValue={validateValue} handleSetValue={handleSetValue} isErrorVisible={isErrorVisible} variants={variants} />
+        <GeneRegionContent
+          locusCondition={locusCondition}
+          validateValue={validateValue}
+          handleSetValue={handleSetValue}
+          isErrorVisible={isErrorVisible}
+          variants={variants}
+        />
 
         <SelectModalButtons
           handleClose={handleClose}

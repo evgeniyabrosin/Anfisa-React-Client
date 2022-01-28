@@ -54,7 +54,13 @@ export const NextStepHeader = observer(
         <div style={{ minHeight: 43 }} className="flex w-full justify-between items-center mt-1 step-content-area">
           <div className="relative flex items-center">
             {!isEmptyFirstStep && (
-              <Icon dataTestId={DecisionTreesResultsDataCy.optionsMenu} name="Options" className="cursor-pointer text-blue-bright" stroke={false} onClick={showModal} />
+              <Icon
+                dataTestId={DecisionTreesResultsDataCy.optionsMenu}
+                name="Options"
+                className="cursor-pointer text-blue-bright"
+                stroke={false}
+                onClick={showModal}
+              />
             )}
 
             <Step>
@@ -64,7 +70,9 @@ export const NextStepHeader = observer(
             <div className="absolute">{isVisibleModal && <ModalOperation hideModal={hideModal} index={index} />}</div>
 
             {!isExpanded && (difference || difference === 0) && (
-              <div className="ml-2 text-14 text-grey-blue font-normal">{`(${getNumberWithCommas(difference)} variants are ${isExcluded ? 'excluded' : 'included'})`}</div>
+              <div className="ml-2 text-14 text-grey-blue font-normal">{`(${getNumberWithCommas(difference)} variants are ${
+                isExcluded ? 'excluded' : 'included'
+              })`}</div>
             )}
 
             <div

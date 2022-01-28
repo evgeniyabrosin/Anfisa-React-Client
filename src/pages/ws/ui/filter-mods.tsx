@@ -20,12 +20,20 @@ export const FilterMods = (): ReactElement => {
     <Fragment>
       <div className="flex my-2">
         <div className="mr-6 flex items-center">
-          <Checkbox onChange={e => handleCheck(e.target, (e.target.name = FilterModsEnum.NOTMode))} checked={zoneStore.isModeNOT} className="mb-0.5" />
+          <Checkbox
+            onChange={e => handleCheck(e.target, (e.target.name = FilterModsEnum.NOTMode))}
+            checked={zoneStore.isModeNOT}
+            className="mb-0.5"
+          />
           <span className="ml-1 text-12">{t('ds.notMode')}</span>
         </div>
 
         <div className="mr-6 flex items-center">
-          <Checkbox onChange={e => handleCheck(e.target, (e.target.name = FilterModsEnum.VariantsWithNotesOnly))} checked={zoneStore.isModeWithNotes} className="mb-0.5" />
+          <Checkbox
+            onChange={e => handleCheck(e.target, (e.target.name = FilterModsEnum.VariantsWithNotesOnly))}
+            checked={zoneStore.isModeWithNotes}
+            className="mb-0.5"
+          />
           <span className="ml-1 text-12">{t('ds.variantsWithNotesOnly')}</span>
         </div>
       </div>

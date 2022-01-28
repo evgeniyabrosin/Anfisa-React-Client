@@ -61,7 +61,11 @@ export const GeneRegion = observer(({ values: { locus }, setFieldValue }: Formik
             }}
           />
 
-          {isErrorVisible && <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">{t('dtree.chromosomeNameIsNotCorrect')}</div>}
+          {isErrorVisible && (
+            <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
+              {t('dtree.chromosomeNameIsNotCorrect')}
+            </div>
+          )}
         </div>
 
         <DisabledVariantsAmount variants={variants} disabled={true} isErrorVisible={isErrorVisible} />

@@ -15,7 +15,19 @@ export interface ButtonProps {
   dataTestId?: string
 }
 
-export const Button = ({ text, size = 'md', disabled = false, variant = 'primary', onClick, className, append, prepend, icon, refEl, dataTestId }: ButtonProps): ReactElement => {
+export const Button = ({
+  text,
+  size = 'md',
+  disabled = false,
+  variant = 'primary',
+  onClick,
+  className,
+  append,
+  prepend,
+  icon,
+  refEl,
+  dataTestId,
+}: ButtonProps): ReactElement => {
   let padding = ''
   const classNameString: string = cn(className)
   const isPrimary = variant === 'primary'

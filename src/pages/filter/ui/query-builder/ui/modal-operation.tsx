@@ -53,11 +53,18 @@ export const ModalOperation = observer(
       <div ref={ref}>
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
           <Fragment>
-            <div onClick={() => createStep(index, 'BEFORE')} className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light">
+            <div
+              onClick={() => createStep(index, 'BEFORE')}
+              className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
+            >
               {t('dtree.addStepBefore')}
             </div>
 
-            <div onClick={() => createStep(index, 'AFTER')} className="font-normal py-2 px-2 hover:bg-grey-light" data-testId={DecisionTreesResultsDataCy.addStepAfter}>
+            <div
+              onClick={() => createStep(index, 'AFTER')}
+              className="font-normal py-2 px-2 hover:bg-grey-light"
+              data-testId={DecisionTreesResultsDataCy.addStepAfter}
+            >
               {t('dtree.addStepAfter')}
             </div>
 

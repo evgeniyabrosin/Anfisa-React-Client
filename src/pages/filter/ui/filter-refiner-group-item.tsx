@@ -51,7 +51,9 @@ export const FilterRefinerGroupItem = observer(
           onChange={event => onChange && onChange(event.target.checked)}
         />
 
-        {isFunc && <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">fn</p>}
+        {isFunc && (
+          <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">fn</p>
+        )}
 
         <p
           key={name}

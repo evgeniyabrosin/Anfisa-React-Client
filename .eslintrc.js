@@ -20,19 +20,7 @@ module.exports = {
           // react related packages, other packages
           ['^react', '(\\w-/)*'],
           // Side effect imports, Alias, Relative
-          [
-            '^\\u0000',
-            '^@declarations',
-            '^@core',
-            '^@i18n',
-            '^@theme',
-            '^@store',
-            '^@router',
-            '^@icons',
-            '^@ui',
-            '^@',
-            '^\\.',
-          ],
+          ['^\\u0000', '^@declarations', '^@core', '^@i18n', '^@theme', '^@store', '^@router', '^@icons', '^@ui', '^@', '^\\.'],
         ],
       },
     ],
@@ -52,7 +40,7 @@ module.exports = {
         semi: false,
         arrowParens: 'avoid',
         bracketSpacing: true,
-        printWidth: 180
+        printWidth: 140,
       },
     ],
   },
