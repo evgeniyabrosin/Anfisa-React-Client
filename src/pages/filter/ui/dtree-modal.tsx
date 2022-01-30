@@ -71,11 +71,7 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
         <span
           key={action}
           onClick={() => handleClick(action)}
-          className={cn(
-            'px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white',
-            { 'rounded-t': index === 0 },
-            { 'rounded-b': index === actions.length - 1 },
-          )}
+          className={cn('px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white', { 'rounded-t': index === 0 }, { 'rounded-b': index === actions.length - 1 })}
           data-testid={DecisionTreesMenuDataCy.selectDropdownElem}
         >
           {action}

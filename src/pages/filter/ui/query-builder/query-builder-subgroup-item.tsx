@@ -54,16 +54,13 @@ export const QueryBuilderSubgroupItem = observer(({ subGroupItem, isModal, group
     }
 
     if (group.kind === FilterKindEnum.Func) {
-      group.name === FuncStepTypesEnum.InheritanceMode &&
-        dtreeStore.openModalSelectInheritanceMode(group.name, dtreeStore.currentStepIndex, source)
+      group.name === FuncStepTypesEnum.InheritanceMode && dtreeStore.openModalSelectInheritanceMode(group.name, dtreeStore.currentStepIndex, source)
 
-      group.name === FuncStepTypesEnum.CustomInheritanceMode &&
-        dtreeStore.openModalSelectCustomInheritanceMode(group.name, dtreeStore.currentStepIndex, source)
+      group.name === FuncStepTypesEnum.CustomInheritanceMode && dtreeStore.openModalSelectCustomInheritanceMode(group.name, dtreeStore.currentStepIndex, source)
 
       group.name === FuncStepTypesEnum.CompoundHet && dtreeStore.openModalSelectCompoundHet(group.name, dtreeStore.currentStepIndex, source)
 
-      group.name === FuncStepTypesEnum.CompoundRequest &&
-        dtreeStore.openModalSelectCompoundRequest(group.name, dtreeStore.currentStepIndex, source)
+      group.name === FuncStepTypesEnum.CompoundRequest && dtreeStore.openModalSelectCompoundRequest(group.name, dtreeStore.currentStepIndex, source)
 
       group.name === FuncStepTypesEnum.GeneRegion && dtreeStore.openModalSelectGeneRegion(group.name, dtreeStore.currentStepIndex, source)
     }
@@ -73,13 +70,7 @@ export const QueryBuilderSubgroupItem = observer(({ subGroupItem, isModal, group
     <div className="pl-2 mb-2">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center cursor-pointer">
-          <Icon
-            name="Add"
-            fill={true}
-            stroke={false}
-            className="-mt-0.5 mr-1.5 text-blue-bright hover:text-blue-dark"
-            onClick={() => handleAttrClick(subGroupItem)}
-          />
+          <Icon name="Add" fill={true} stroke={false} className="-mt-0.5 mr-1.5 text-blue-bright hover:text-blue-dark" onClick={() => handleAttrClick(subGroupItem)} />
 
           {subGroupItem.kind === FilterKindEnum.Func && <FnLabel subGroup={true} />}
 
@@ -103,11 +94,9 @@ export const QueryBuilderSubgroupItem = observer(({ subGroupItem, isModal, group
       </div>
 
       {/* TODO: if varaintas length > 100  add antoher visualisation*/}
-      {isVisibleSubGroupItem &&
-        !isModal &&
-        subGroupItem.variants &&
-        subGroupItem.variants.length > 0 &&
-        subGroupItem.variants.length < 100 && <QueryBuilderSubgroupChart variants={toJS(subGroupItem.variants)} />}
+      {isVisibleSubGroupItem && !isModal && subGroupItem.variants && subGroupItem.variants.length > 0 && subGroupItem.variants.length < 100 && (
+        <QueryBuilderSubgroupChart variants={toJS(subGroupItem.variants)} />
+      )}
       {isVisibleSubGroupItem && !isModal && subGroupItem.max > 0 && <QueryBuilderSubgroupChart histogram={toJS(subGroupItem.histogram)} />}
     </div>
   )

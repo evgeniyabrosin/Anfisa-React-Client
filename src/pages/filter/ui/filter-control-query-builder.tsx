@@ -110,8 +110,7 @@ export const FilterControlQueryBuilder = observer(
     }
 
     const isApplyDisabled =
-      dtreeStore.currentDtreeName.startsWith('⏚') &&
-      (filterStore.actionName === ActionFilterEnum.Modify || filterStore.actionName === ActionFilterEnum.Delete)
+      dtreeStore.currentDtreeName.startsWith('⏚') && (filterStore.actionName === ActionFilterEnum.Modify || filterStore.actionName === ActionFilterEnum.Delete)
 
     return (
       <Fragment>
@@ -157,13 +156,7 @@ export const FilterControlQueryBuilder = observer(
           )}
 
           {(createTreeName || filterStore.actionName === ActionFilterEnum.Delete || filterStore.actionName === ActionFilterEnum.Modify) && (
-            <Button
-              text={t('general.apply')}
-              disabled={isApplyDisabled}
-              size="md"
-              onClick={handleClick}
-              className="text-white mt-auto ml-2"
-            />
+            <Button text={t('general.apply')} disabled={isApplyDisabled} size="md" onClick={handleClick} className="text-white mt-auto ml-2" />
           )}
         </div>
         <DatasetCreationButton />

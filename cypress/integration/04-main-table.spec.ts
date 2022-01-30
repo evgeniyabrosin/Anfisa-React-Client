@@ -132,9 +132,7 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
     mainTablePage.mainTable.tableRow.getButtonByText('p.A1685P').click()
     variantDrawerPage.variantDrawer.addNote.click()
-    variantDrawerPage.variantDrawer.fillSpace.type(
-      'MS, 11/10/21: more common in Ashkenazi Jews than in other populations, is not present in ClinVar',
-    )
+    variantDrawerPage.variantDrawer.fillSpace.type('MS, 11/10/21: more common in Ashkenazi Jews than in other populations, is not present in ClinVar')
     cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)

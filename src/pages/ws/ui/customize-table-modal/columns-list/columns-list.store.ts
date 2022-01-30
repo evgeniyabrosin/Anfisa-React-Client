@@ -7,17 +7,11 @@ export class ColumnListStore {
   private columnsToIgnore = new Set(['Gene', 'Variant'])
 
   public get filteredColumns(): IColumns[] {
-    return columnsStore.getExtendedColumns.filter((column: IColumns) =>
-      column.title
-        .toLocaleLowerCase()
-        .includes(columnsStore.searchColumnValue.toLocaleLowerCase()),
-    )
+    return columnsStore.getExtendedColumns.filter((column: IColumns) => column.title.toLocaleLowerCase().includes(columnsStore.searchColumnValue.toLocaleLowerCase()))
   }
 
   public get columnsToDisplay(): IColumns[] {
-    return this.filteredColumns.filter(
-      (column: IColumns) => !this.columnsToIgnore.has(column.title),
-    )
+    return this.filteredColumns.filter((column: IColumns) => !this.columnsToIgnore.has(column.title))
   }
 
   constructor() {

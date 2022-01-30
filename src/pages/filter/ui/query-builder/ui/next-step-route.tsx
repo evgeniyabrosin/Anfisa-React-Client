@@ -123,28 +123,16 @@ export const NextStepRoute = observer(
               <ExcludeTurn isIncluded={isIncluded}>
                 <div className="absolute w-full right-4 flex justify-end items-center" style={{ top: 48 }}>
                   <Tooltip overlay={tooltipConent} trigger={shouldTooltipAppear ? ['hover'] : []}>
-                    <ExcludeAmount
-                      isIncluded={isIncluded}
-                      onClick={() => makeStepActive(index, 'isReturnedVariantsActive')}
-                      data-testid={DecisionTreesResultsDataCy.excludeInfo}
-                    >
+                    <ExcludeAmount isIncluded={isIncluded} onClick={() => makeStepActive(index, 'isReturnedVariantsActive')} data-testid={DecisionTreesResultsDataCy.excludeInfo}>
                       <span>
                         {isIncluded ? `+` : `-`}
-                        {isDifferenceActive ? (
-                          <DifferenceCounts isIncluded={isIncluded}>{differenceWithCommas}</DifferenceCounts>
-                        ) : (
-                          <span>{differenceWithCommas}</span>
-                        )}
+                        {isDifferenceActive ? <DifferenceCounts isIncluded={isIncluded}>{differenceWithCommas}</DifferenceCounts> : <span>{differenceWithCommas}</span>}
                       </span>
                     </ExcludeAmount>
                   </Tooltip>
 
                   <div className="ml-1">
-                    {isIncluded ? (
-                      <Icon name="ThreadAdd" className="transform rotate-45 text-green-secondary" />
-                    ) : (
-                      <Icon name="ThreadClose" className="text-purple-bright" />
-                    )}
+                    {isIncluded ? <Icon name="ThreadAdd" className="transform rotate-45 text-green-secondary" /> : <Icon name="ThreadClose" className="text-purple-bright" />}
                   </div>
                 </div>
               </ExcludeTurn>

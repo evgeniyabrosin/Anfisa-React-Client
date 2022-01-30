@@ -82,9 +82,7 @@ export const ModalSelectFilters = observer(
 
     const originGroupList: any[] = toJS(dtreeStore.selectedGroups[2]) ?? []
 
-    const filteredGroupList = originGroupList.filter((variant: [string, number]) =>
-      variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
-    )
+    const filteredGroupList = originGroupList.filter((variant: [string, number]) => variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
 
     const groupsPerPage = 100
     const chunks = createChunks(filteredGroupList, groupsPerPage)
@@ -110,21 +108,13 @@ export const ModalSelectFilters = observer(
 
             <ModsDivider />
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(true)}
-              data-testid={DecisionTreesResultsDataCy.selectAllFromAttribute}
-            >
+            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(true)} data-testid={DecisionTreesResultsDataCy.selectAllFromAttribute}>
               {t('general.selectAll')}
             </div>
 
             <ModsDivider />
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(false)}
-              data-testid={DecisionTreesResultsDataCy.clearAllFromAttribute}
-            >
+            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(false)} data-testid={DecisionTreesResultsDataCy.clearAllFromAttribute}>
               {t('general.clearAll')}
             </div>
           </div>
@@ -159,9 +149,7 @@ export const ModalSelectFilters = observer(
           )}
         </div>
 
-        {filteredGroupList.length > groupsPerPage && (
-          <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />
-        )}
+        {filteredGroupList.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
 
         <SelectModalButtons
           handleClose={handleClose}

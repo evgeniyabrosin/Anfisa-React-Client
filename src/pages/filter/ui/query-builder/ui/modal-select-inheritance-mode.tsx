@@ -112,12 +112,7 @@ export const ModalSelectInheritanceMode = observer(
       <ModalBase refer={ref} minHeight={340}>
         <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
-        <InheritanceModeContent
-          attrData={attrData}
-          handleProblemGroup={handleProblemGroup}
-          problemGroupData={problemGroupData}
-          handleReset={handleReset}
-        />
+        <InheritanceModeContent attrData={attrData} handleProblemGroup={handleProblemGroup} problemGroupData={problemGroupData} handleReset={handleReset} />
 
         <SelectModalButtons
           handleClose={handleClose}

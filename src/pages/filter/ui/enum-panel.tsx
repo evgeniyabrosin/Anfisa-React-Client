@@ -157,9 +157,7 @@ export const EnumPanel = observer(
           </div>
         </div>
 
-        {filteredVariants.length > groupsPerPage && (
-          <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />
-        )}
+        {filteredVariants.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
         <div className="flex items-center justify-between mt-1 pb-2">
           <Button variant={'secondary'} text={t('general.clear')} onClick={handleClear} />
 

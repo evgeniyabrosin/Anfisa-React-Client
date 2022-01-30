@@ -135,9 +135,7 @@ export const ModalEditNumbers = observer(
 
         <div className="relative flex flex-1 items-center my-4">
           <div className="relative flex items-center justify-start w-1/2 h-20 pr-1 pl-px">
-            <div className="absolute top-0 left-0 flex justify-start w-1/2 truncate">
-              {dtreeStore.isFiltersLoading ? t('dtree.loading') : formatValue(minValue)}
-            </div>
+            <div className="absolute top-0 left-0 flex justify-start w-1/2 truncate">{dtreeStore.isFiltersLoading ? t('dtree.loading') : formatValue(minValue)}</div>
 
             <div className="flex w-full flex-col h-8">
               <InputNumber
@@ -149,11 +147,7 @@ export const ModalEditNumbers = observer(
                 className="h-8 w-full shadow-dark"
               />
 
-              {isVisibleLeftError && (
-                <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">
-                  {t('dtree.lowerBoundError')}
-                </div>
-              )}
+              {isVisibleLeftError && <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">{t('dtree.lowerBoundError')}</div>}
             </div>
 
             <div className="flex items-center w-12 p-1 ml-2 shadow-dark rounded">
@@ -175,9 +169,7 @@ export const ModalEditNumbers = observer(
           <div className="w-4 h-px bg-grey-blue" />
 
           <div className="relative flex items-center justify-end h-20 w-1/2 pl-1 pr-px">
-            <div className="absolute top-0 right-0 w-1/2 flex justify-end truncate">
-              {dtreeStore.isFiltersLoading ? t('dtree.loading') : formatValue(maxValue)}
-            </div>
+            <div className="absolute top-0 right-0 w-1/2 flex justify-end truncate">{dtreeStore.isFiltersLoading ? t('dtree.loading') : formatValue(maxValue)}</div>
 
             <div className="flex items-center w-12 p-1 mr-2 shadow-dark rounded">
               <div
@@ -203,11 +195,7 @@ export const ModalEditNumbers = observer(
                 className="h-8 w-full shadow-dark"
               />
 
-              {isVisibleRightError && (
-                <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">
-                  {t('dtree.upperBoundError')}
-                </div>
-              )}
+              {isVisibleRightError && <div className="absolute bottom-1 flex flex-1 items-center h-4 w-full text-10 text-red-secondary">{t('dtree.upperBoundError')}</div>}
             </div>
           </div>
 
@@ -218,11 +206,7 @@ export const ModalEditNumbers = observer(
           )}
         </div>
 
-        <EditModalButtons
-          handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
-          disabled={!valueFrom && valueFrom !== 0 && !valueTo && valueTo !== 0}
-        />
+        <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={!valueFrom && valueFrom !== 0 && !valueTo && valueTo !== 0} />
       </ModalBase>
     )
   },

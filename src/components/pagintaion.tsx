@@ -75,11 +75,7 @@ export const Pagintaion = observer(({ pagesNumbers, currentPage, setPageNumber }
         <Separator />
 
         <div onClick={() => changePage(Actions.next)}>
-          <Icon
-            name="Arrow"
-            size={22}
-            className={cn('transform -rotate-180', `${!isLastPage ? 'text-blue-bright cursor-pointer' : 'text-grey-blue'}`)}
-          />
+          <Icon name="Arrow" size={22} className={cn('transform -rotate-180', `${!isLastPage ? 'text-blue-bright cursor-pointer' : 'text-grey-blue'}`)} />
         </div>
       </Panel>
     </div>

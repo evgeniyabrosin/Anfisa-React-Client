@@ -140,12 +140,7 @@ export const ModalSaveDataset = observer(() => {
         <div className="">
           <span className="text-14">{t('dsCreation.label')}</span>
 
-          <Input
-            value={value}
-            onChange={e => handleChange(e.target.value)}
-            className="mt-1"
-            data-testid={DecisionTreesMenuDataCy.datasetNameInput}
-          />
+          <Input value={value} onChange={e => handleChange(e.target.value)} className="mt-1" data-testid={DecisionTreesMenuDataCy.datasetNameInput} />
 
           <span className="text-12 text-red-secondary mt-2">{error}</span>
         </div>

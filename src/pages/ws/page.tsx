@@ -30,8 +30,7 @@ const WSPage = observer(
 
     useDatasetName()
 
-    const historyLocationState = useHistory().location
-      .state as HistoryLocationState
+    const historyLocationState = useHistory().location.state as HistoryLocationState
 
     const prevPage = historyLocationState?.prevPage || ''
 

@@ -77,9 +77,7 @@ export const NextStepContent = observer(
         <Content>
           <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
             {groups && groups.length > 0 ? (
-              groups.map((group: any, currNo: number) => (
-                <NextStepContentItem key={JSON.stringify(group) + currNo} group={group} index={index} currNo={currNo} />
-              ))
+              groups.map((group: any, currNo: number) => <NextStepContentItem key={JSON.stringify(group) + currNo} group={group} index={index} currNo={currNo} />)
             ) : (
               <div className="text-14 text-grey-blue font-normal step-content-area">{t('dtree.nothingSelected')}</div>
             )}
@@ -100,11 +98,7 @@ export const NextStepContent = observer(
           )}
         </Content>
 
-        <div
-          data-testid={DecisionTreesResultsDataCy.addAttrbute}
-          className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark"
-          onClick={openModal}
-        >
+        <div data-testid={DecisionTreesResultsDataCy.addAttrbute} className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark" onClick={openModal}>
           {t('dtree.addAttribute')}
         </div>
       </div>

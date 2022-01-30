@@ -22,12 +22,8 @@ export const PopperButton = ({ ButtonElement, ModalElement, ButtonElementClassNa
 
   return (
     <Fragment>
-      {data && data.length === 0 && type && (
-        <ButtonElement refEl={setReferenceElement} isOpen={isOpen} className={cn(ButtonElementClassName)} onClick={isOpen ? close : open} />
-      )}
-      {!type && (
-        <ButtonElement refEl={setReferenceElement} isOpen={isOpen} className={cn(ButtonElementClassName)} onClick={isOpen ? close : open} />
-      )}
+      {data && data.length === 0 && type && <ButtonElement refEl={setReferenceElement} isOpen={isOpen} className={cn(ButtonElementClassName)} onClick={isOpen ? close : open} />}
+      {!type && <ButtonElement refEl={setReferenceElement} isOpen={isOpen} className={cn(ButtonElementClassName)} onClick={isOpen ? close : open} />}
 
       {isOpen && (
         <div ref={setPopperElement} className="z-50 mt-2" style={styles.popper} {...attributes.popper}>

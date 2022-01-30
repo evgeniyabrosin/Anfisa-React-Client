@@ -182,19 +182,13 @@ export const RangePanel = observer(
               validateMax(e.target.value)
             }}
           />
-          {isVisibleMixedError && (
-            <div className="flex justify-center w-full mt-px text-12 text-red-secondary">{t('dtree.conditionError')}</div>
-          )}
+          {isVisibleMixedError && <div className="flex justify-center w-full mt-px text-12 text-red-secondary">{t('dtree.conditionError')}</div>}
         </div>
 
         <div className="flex items-center justify-between mt-1">
           <Button variant={'secondary'} text={t('general.clear')} onClick={handleClear} />
 
-          <Button
-            text={t('general.add')}
-            onClick={handleAddConditionsAsync}
-            disabled={isVisibleMinError || isVisibleMaxError || isVisibleMixedError || (!max && !min)}
-          />
+          <Button text={t('general.add')} onClick={handleAddConditionsAsync} disabled={isVisibleMinError || isVisibleMaxError || isVisibleMixedError || (!max && !min)} />
         </div>
       </div>
     )

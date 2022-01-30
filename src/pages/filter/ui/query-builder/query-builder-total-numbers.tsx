@@ -82,9 +82,7 @@ export const QueryBuilderTotalNumbers = observer(
             />
           )}
 
-          {hasStartVariants && (
-            <Button onClick={() => openTableModal(false)} text={t('dtree.viewVariants')} variant={'secondary-dark'} className="ml-5" />
-          )}
+          {hasStartVariants && <Button onClick={() => openTableModal(false)} text={t('dtree.viewVariants')} variant={'secondary-dark'} className="ml-5" />}
         </div>
       </div>
     )

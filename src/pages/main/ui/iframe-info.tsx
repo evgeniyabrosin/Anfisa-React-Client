@@ -36,11 +36,7 @@ export const IframeInfo = observer(
 
         {!Array.isArray(dirinfoStore.infoFrameLink) && (
           <Fragment>
-            {isImg ? (
-              <img src={dirinfoStore.infoFrameLink} className={cn('p-3 m-auto')} />
-            ) : (
-              <iframe src={dirinfoStore.infoFrameLink} frameBorder="0" className="flex-grow" />
-            )}
+            {isImg ? <img src={dirinfoStore.infoFrameLink} className={cn('p-3 m-auto')} /> : <iframe src={dirinfoStore.infoFrameLink} frameBorder="0" className="flex-grow" />}
           </Fragment>
         )}
       </div>

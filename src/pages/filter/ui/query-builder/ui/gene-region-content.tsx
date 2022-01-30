@@ -31,11 +31,7 @@ export const GeneRegionContent = observer(({ locusCondition, validateValue, hand
               className="h-5"
             />
 
-            {isErrorVisible && (
-              <div className="absolute -bottom-3 flex items-center mt-1 h-3 text-10 text-red-secondary">
-                {t('dtree.chromosomeNameIsNotCorrect')}
-              </div>
-            )}
+            {isErrorVisible && <div className="absolute -bottom-3 flex items-center mt-1 h-3 text-10 text-red-secondary">{t('dtree.chromosomeNameIsNotCorrect')}</div>}
           </div>
         </div>
 

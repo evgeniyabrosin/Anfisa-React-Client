@@ -43,9 +43,7 @@ export const FilterControl = observer(
     return (
       <Fragment>
         <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
-          <div className="flex items-center w-full mt-5">
-            {page === GlbPagesNames.Refiner ? <FilterControlRefiner /> : <FilterControlQueryBuilder />}
-          </div>
+          <div className="flex items-center w-full mt-5">{page === GlbPagesNames.Refiner ? <FilterControlRefiner /> : <FilterControlQueryBuilder />}</div>
 
           <div className="flex justify-between w-full mt-3">
             <div className="flex items-center">
@@ -59,23 +57,9 @@ export const FilterControl = observer(
                 }}
               />
 
-              {page === GlbPagesNames.Filter && (
-                <Button text="Text editor" className="ml-2" variant={'secondary-dark'} onClick={() => dtreeStore.openModalTextEditor()} />
-              )}
-              <Button
-                text="Undo"
-                className="ml-2"
-                variant={'secondary-dark'}
-                disabled={isUndoLocked}
-                onClick={() => moveActionHistory(-1)}
-              />
-              <Button
-                text="Redo"
-                className="ml-2"
-                variant={'secondary-dark'}
-                disabled={isRedoLocked}
-                onClick={() => moveActionHistory(1)}
-              />
+              {page === GlbPagesNames.Filter && <Button text="Text editor" className="ml-2" variant={'secondary-dark'} onClick={() => dtreeStore.openModalTextEditor()} />}
+              <Button text="Undo" className="ml-2" variant={'secondary-dark'} disabled={isUndoLocked} onClick={() => moveActionHistory(-1)} />
+              <Button text="Redo" className="ml-2" variant={'secondary-dark'} disabled={isRedoLocked} onClick={() => moveActionHistory(1)} />
             </div>
             <div className="flex flex-wrap">
               <Icon name="Close" className="text-white cursor-pointer" onClick={handleClose} />

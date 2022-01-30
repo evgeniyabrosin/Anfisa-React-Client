@@ -42,10 +42,7 @@ export const FilterTags = observer(({ data, isGenes, isGenesList, isSamples, isT
 
         <div>
           <div
-            className={cn(
-              'items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg flex-nowrap',
-              data && data.length >= 3 ? 'inline-flex' : 'hidden',
-            )}
+            className={cn('items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg flex-nowrap', data && data.length >= 3 ? 'inline-flex' : 'hidden')}
           >
             + {data && data.length - 2}
           </div>

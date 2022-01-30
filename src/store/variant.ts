@@ -45,16 +45,12 @@ export class VariantStore {
   }
 
   prevVariant() {
-    datasetStore.filteredNo.length === 0
-      ? (this.index += 1)
-      : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) - 1])
+    datasetStore.filteredNo.length === 0 ? (this.index += 1) : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) - 1])
     this.fetchVarinatInfoAsync()
   }
 
   nextVariant() {
-    datasetStore.filteredNo.length === 0
-      ? (this.index += 1)
-      : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) + 1])
+    datasetStore.filteredNo.length === 0 ? (this.index += 1) : (this.index = datasetStore.filteredNo[datasetStore.filteredNo.indexOf(this.index) + 1])
 
     this.fetchVarinatInfoAsync()
   }

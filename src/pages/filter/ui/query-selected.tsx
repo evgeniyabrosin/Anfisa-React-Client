@@ -30,9 +30,7 @@ export const QuerySelected = observer(
 
       if (datasetStore.conditions.length > 0) {
         datasetStore.conditions.forEach(condition => {
-          conditionsUrl += `&refiner=${condition[0]},${condition[1]},${
-            condition[2]
-          },${condition[3]?.[0] || ''}`
+          conditionsUrl += `&refiner=${condition[0]},${condition[1]},${condition[2]},${condition[3]?.[0] || ''}`
         })
       }
 

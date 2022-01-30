@@ -46,10 +46,7 @@ export const FinalStep = observer(
           </TreeView>
 
           <ResultsView
-            className={cn(
-              'border-l border-grey-light font-medium px-5 relative',
-              currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
-            )}
+            className={cn('border-l border-grey-light font-medium px-5 relative', currentStep.isActive ? ' bg-green-light' : 'bg-blue-light')}
             onClick={event => setStepActive(index, event)}
           >
             <div className="flex w-full  items-center  step-content-area">
@@ -71,11 +68,7 @@ export const FinalStep = observer(
             </div>
             <StepDivider />
             <div className="text-14 text-grey-blue font-normal step-content-area self-start mt-2 mb-2">{t('dtree.initialStep')}</div>
-            <Button
-              text={t('dtree.addStep')}
-              className="absolute -bottom-9 z-1000 left-0"
-              onClick={() => createEmptyStep(prevStepIndex, 'AFTER')}
-            />
+            <Button text={t('dtree.addStep')} className="absolute -bottom-9 z-1000 left-0" onClick={() => createEmptyStep(prevStepIndex, 'AFTER')} />
           </ResultsView>
         </div>
       </div>

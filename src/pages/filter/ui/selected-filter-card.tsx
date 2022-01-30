@@ -31,10 +31,7 @@ export const SelectedFilterCard = observer(
         <div className="flex items-center border-b border-grey-light p-4 cursor-pointer" onClick={isOpen ? close : open}>
           <span className="leading-16px">{title}</span>
 
-          <Icon
-            name="Arrow"
-            className={cn('text-blue-bright ml-auto transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')}
-          />
+          <Icon name="Arrow" className={cn('text-blue-bright ml-auto transform transition-transform', isOpen ? 'rotate-90' : '-rotate-90')} />
         </div>
 
         {isOpen && (

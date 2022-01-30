@@ -105,9 +105,7 @@ export const FilterControlRefiner = observer(
       }
     }
 
-    const isApplyDisabled =
-      activePreset.startsWith('⏚') &&
-      (filterStore.actionName === ActionFilterEnum.Modify || filterStore.actionName === ActionFilterEnum.Delete)
+    const isApplyDisabled = activePreset.startsWith('⏚') && (filterStore.actionName === ActionFilterEnum.Modify || filterStore.actionName === ActionFilterEnum.Delete)
 
     return (
       <Fragment>
@@ -134,9 +132,7 @@ export const FilterControlRefiner = observer(
             )}
           </div>
 
-          {filterStore.actionName !== ActionFilterEnum.Create && activePreset && (
-            <PopperButton ButtonElement={FilterButton} ModalElement={FilterModal} />
-          )}
+          {filterStore.actionName !== ActionFilterEnum.Create && activePreset && <PopperButton ButtonElement={FilterButton} ModalElement={FilterModal} />}
 
           {filterStore.actionName === ActionFilterEnum.Create && (
             <Button
@@ -153,13 +149,7 @@ export const FilterControlRefiner = observer(
           )}
 
           {filterStore.actionName && (activePreset || createPresetName) && (
-            <Button
-              text={t('general.apply')}
-              size="md"
-              onClick={handleClick}
-              disabled={isApplyDisabled}
-              className="text-white mt-auto ml-2"
-            />
+            <Button text={t('general.apply')} size="md" onClick={handleClick} disabled={isApplyDisabled} className="text-white mt-auto ml-2" />
           )}
         </div>
 

@@ -194,13 +194,7 @@ export const ModalTextEditor = observer(
             className={cn('mx-2')}
           />
 
-          <Button
-            text="Save"
-            size="md"
-            disabled={!checked || hasError(error)}
-            onClick={handleSave}
-            variant={theme === 'light' ? 'primary' : 'primary-dark'}
-          />
+          <Button text="Save" size="md" disabled={!checked || hasError(error)} onClick={handleSave} variant={theme === 'light' ? 'primary' : 'primary-dark'} />
         </div>
       </ModalBase>
     )

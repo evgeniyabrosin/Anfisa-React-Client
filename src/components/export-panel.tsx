@@ -44,19 +44,11 @@ export const ExportPanel = ({ close }: Props): ReactElement => {
 
   return (
     <div className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col w-32" ref={ref}>
-      <span
-        className="py-1 px-2 rounded hover:bg-blue-light"
-        onClick={() => handleDownload(ExportTypeEnum.Excel)}
-        data-testid={MainTableDataCy.exportExcel}
-      >
+      <span className="py-1 px-2 rounded hover:bg-blue-light" onClick={() => handleDownload(ExportTypeEnum.Excel)} data-testid={MainTableDataCy.exportExcel}>
         {t('general.excel')}
       </span>
 
-      <span
-        className="py-1 px-2 rounded hover:bg-blue-light"
-        onClick={() => handleDownload(ExportTypeEnum.CSV)}
-        data-testid={MainTableDataCy.exportCsv}
-      >
+      <span className="py-1 px-2 rounded hover:bg-blue-light" onClick={() => handleDownload(ExportTypeEnum.CSV)} data-testid={MainTableDataCy.exportCsv}>
         {t('general.csv')}
       </span>
     </div>

@@ -13,9 +13,7 @@ export const editStepAttribute = (stepIndex: number, locationIndex: number, isNe
   const location = [stepIndexForApi, locationIndex]
   const attribute = dtreeStore.stepData[stepIndex].groups[locationIndex]
 
-  const filteredAttribute = attribute.filter(
-    (element: any) => element !== 'OR' && element !== 'and' && element !== 'NOT' && element !== 'or',
-  )
+  const filteredAttribute = attribute.filter((element: any) => element !== 'OR' && element !== 'and' && element !== 'NOT' && element !== 'or')
 
   const negation = isNegate ? '' : 'NOT'
 

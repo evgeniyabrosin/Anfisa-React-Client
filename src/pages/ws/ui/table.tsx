@@ -57,9 +57,7 @@ export const Table = observer(
     const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } = zoneStore
 
     const defaultColumn = {
-      width: variantStore.drawerVisible
-        ? 190
-        : (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) / 8,
+      width: variantStore.drawerVisible ? 190 : (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) / 8,
     }
 
     const { getTableProps, getTableBodyProps, headerGroups, totalColumnsWidth, rows, prepareRow } = useTable(
@@ -157,11 +155,7 @@ export const Table = observer(
 
     const renderNoResults = useCallback(() => {
       const isFiltersSelected =
-        Object.keys(selectedFilters).length > 0 ||
-        selectedGenes.length > 0 ||
-        selectedGenesList.length > 0 ||
-        selectedSamples.length > 0 ||
-        selectedTags.length > 0
+        Object.keys(selectedFilters).length > 0 || selectedGenes.length > 0 || selectedGenesList.length > 0 || selectedSamples.length > 0 || selectedTags.length > 0
 
       if (datasetStore.tabReport.length === 0) {
         return isFiltersSelected ? (
@@ -195,9 +189,7 @@ export const Table = observer(
             onClick={() => handleOpenVariant(row)}
             className={cn(
               'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible && isRowSelected(row.index, variantStore.index)
-                ? 'bg-blue-bright text-white'
-                : 'text-black hover:bg-blue-light',
+              variantStore.drawerVisible && isRowSelected(row.index, variantStore.index) ? 'bg-blue-bright text-white' : 'text-black hover:bg-blue-light',
             )}
           >
             {row.cells.map((cell: any) => {

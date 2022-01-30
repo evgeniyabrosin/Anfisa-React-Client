@@ -24,12 +24,7 @@ export const QueryBuilderTreeView = observer(
           return element.isFinalStep ? (
             <FinalStep key={key} index={index} />
           ) : (
-            <NextStep
-              key={key}
-              index={index}
-              changeIndicator={dtreeStore.resultsChangeIndicator}
-              isContentExpanded={dtreeStore.isResultsContentExpanded}
-            />
+            <NextStep key={key} index={index} changeIndicator={dtreeStore.resultsChangeIndicator} isContentExpanded={dtreeStore.isResultsContentExpanded} />
           )
         })}
       </div>

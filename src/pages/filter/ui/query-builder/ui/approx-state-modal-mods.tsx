@@ -12,14 +12,7 @@ interface IProps {
   handleSetCondition: (value: string, type: string) => void
 }
 
-export const ApproxStateModalMods = ({
-  approxOptions,
-  approxValues,
-  approxCondition,
-  stateOptions,
-  stateCondition,
-  handleSetCondition,
-}: IProps) => (
+export const ApproxStateModalMods = ({ approxOptions, approxValues, approxCondition, stateOptions, stateCondition, handleSetCondition }: IProps) => (
   <Fragment>
     <div className="flex w-1/2">
       <span>{t('dtree.approx')}</span>

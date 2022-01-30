@@ -53,9 +53,7 @@ export const CustomInheritanceMode = observer(({ setFieldValue }: FormikProps<IC
   }, [firstSelectValue, secondSelectValue, thirdSelectValue, resetValue])
 
   useEffect(() => {
-    const params = datasetStore.isXL
-      ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}`
-      : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
+    const params = datasetStore.isXL ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}` : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
 
     const scenario = datasetStore.isXL ? { '2': ['HG002'], '0-1': ['HG003', 'HG004'] } : { '2': ['NA24385'], '0-1': ['NA24143', 'NA24149'] }
 
@@ -188,13 +186,5 @@ export const CustomInheritanceMode = observer(({ setFieldValue }: FormikProps<IC
     setResetValue(name)
   }
 
-  return (
-    <CustomInheritanceModeContent
-      attrData={attrData}
-      handleSetScenario={handleSetScenario}
-      selectStates={selectStates}
-      handleReset={handleReset}
-      resetValue={resetValue}
-    />
-  )
+  return <CustomInheritanceModeContent attrData={attrData} handleSetScenario={handleSetScenario} selectStates={selectStates} handleReset={handleReset} resetValue={resetValue} />
 })

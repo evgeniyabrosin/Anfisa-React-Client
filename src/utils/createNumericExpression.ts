@@ -4,7 +4,7 @@ import { NumericExpressionTypes } from './../core/enum/numeric-expression-types'
 
 interface ICreateExpression {
   expType: NumericExpressionType
-  extraExpType?: string
+  extraExpType?: NumericExpressionType
   minValue?: string | number
   maxValue?: string | number
 }

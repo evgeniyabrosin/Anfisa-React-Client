@@ -203,13 +203,7 @@ export const ModalEditCustomInheritanceMode = observer(
       <ModalBase refer={ref} minHeight={250}>
         <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
 
-        <CustomInheritanceModeContent
-          attrData={attrData}
-          handleSetScenario={handleSetScenario}
-          selectStates={selectStates}
-          handleReset={handleReset}
-          resetValue={resetValue}
-        />
+        <CustomInheritanceModeContent attrData={attrData} handleSetScenario={handleSetScenario} selectStates={selectStates} handleReset={handleReset} resetValue={resetValue} />
 
         <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={!variants} />
       </ModalBase>
