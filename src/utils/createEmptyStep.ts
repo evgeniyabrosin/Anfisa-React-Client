@@ -2,7 +2,10 @@ import { toJS } from 'mobx'
 
 import dtreeStore from '@store/dtree'
 
-export const createEmptyStep = (stepIndex: number, position: 'BEFORE' | 'AFTER') => {
+export const createEmptyStep = (
+  stepIndex: number,
+  position: 'BEFORE' | 'AFTER',
+) => {
   dtreeStore.insertStep(position, stepIndex)
 
   const currentIndex = position === 'BEFORE' ? stepIndex : stepIndex + 1

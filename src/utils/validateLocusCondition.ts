@@ -9,7 +9,12 @@ interface IValidateLocusConditionProps {
   currentStepIndex?: number
 }
 
-export const validateLocusCondition = ({ value, setIsErrorVisible, groupName, currentStepIndex }: IValidateLocusConditionProps): void => {
+export const validateLocusCondition = ({
+  value,
+  setIsErrorVisible,
+  groupName,
+  currentStepIndex,
+}: IValidateLocusConditionProps): void => {
   let numberValue = value[3]
   let lastIndexOfName = 3
 
@@ -22,7 +27,8 @@ export const validateLocusCondition = ({ value, setIsErrorVisible, groupName, cu
     !+numberValue ||
     +numberValue > 23 ||
     value[lastIndexOfName + 1] !== ':' ||
-    (!+value.slice(lastIndexOfName + 2) && value.slice(lastIndexOfName + 2) !== '')
+    (!+value.slice(lastIndexOfName + 2) &&
+      value.slice(lastIndexOfName + 2) !== '')
   ) {
     setIsErrorVisible(true)
     filterStore.setError('out of choice')

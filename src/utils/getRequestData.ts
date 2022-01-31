@@ -1,4 +1,8 @@
-export const getRequestData = (target: any, selectIndex: number, attrData: any) => {
+export const getRequestData = (
+  target: any,
+  selectIndex: number,
+  attrData: any,
+) => {
   let firstSiblingValue: string
   let secondSiblingValue: string
   const parent = target.parentNode.parentNode
@@ -28,7 +32,8 @@ export const getRequestData = (target: any, selectIndex: number, attrData: any) 
 
   if (selectIndex === 2) {
     firstSiblingValue = parent.firstChild.lastChild.value
-    secondSiblingValue = target.parentNode.previousElementSibling.lastChild.value
+    secondSiblingValue =
+      target.parentNode.previousElementSibling.lastChild.value
 
     requestData = [
       [firstSiblingValue, attrData.family[0]],

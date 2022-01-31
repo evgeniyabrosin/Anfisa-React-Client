@@ -10,7 +10,11 @@ export const QueryResults = observer(
   (): ReactElement => {
     const keys = Object.keys(filterStore.selectedFilters)
 
-    const handleRemoveItem = (itemName: string, subGroupKey: string, title: string) => {
+    const handleRemoveItem = (
+      itemName: string,
+      subGroupKey: string,
+      title: string,
+    ) => {
       datasetStore.resetActivePreset()
 
       filterStore.removeSelectedFilters({
@@ -31,24 +35,36 @@ export const QueryResults = observer(
 
     if (keys.length === 0) {
       return (
-        <div style={{ height: 'calc(100vh - 223px)' }} className="w-full flex justify-center items-center">
-          <p className="leading-16px text-grey-blue">{t('general.noResultsFound')}</p>
+        <div
+          style={{ height: 'calc(100vh - 223px)' }}
+          className="w-full flex justify-center items-center"
+        >
+          <p className="leading-16px text-grey-blue">
+            {t('general.noResultsFound')}
+          </p>
         </div>
       )
     }
 
     return (
-      <div className="overflow-y-scroll" style={{ height: 'calc(100vh - 280px)' }}>
+      <div
+        className="overflow-y-scroll"
+        style={{ height: 'calc(100vh - 280px)' }}
+      >
         {keys.map(subGroupKey => (
           <div key={subGroupKey} className="flex flex-col">
-            {Object.keys(filterStore.selectedFilters[subGroupKey]).map(title => (
-              <SelectedFilterCard
-                key={title}
-                title={title}
-                filters={filterStore.selectedFilters[subGroupKey][title]}
-                onRemove={itemName => handleRemoveItem(itemName, subGroupKey, title)}
-              />
-            ))}
+            {Object.keys(filterStore.selectedFilters[subGroupKey]).map(
+              title => (
+                <SelectedFilterCard
+                  key={title}
+                  title={title}
+                  filters={filterStore.selectedFilters[subGroupKey][title]}
+                  onRemove={itemName =>
+                    handleRemoveItem(itemName, subGroupKey, title)
+                  }
+                />
+              ),
+            )}
           </div>
         ))}
       </div>

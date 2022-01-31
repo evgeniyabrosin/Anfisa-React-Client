@@ -1,7 +1,10 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 
-export const changeFunctionalStep = (params: any, isInheritanceMode = false) => {
+export const changeFunctionalStep = (
+  params: any,
+  isInheritanceMode = false,
+) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
   const body = new URLSearchParams({
@@ -38,6 +41,9 @@ export const changeFunctionalStep = (params: any, isInheritanceMode = false) => 
 
   filteredAttribute.push(params)
 
-  body.append('instr', JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]))
+  body.append(
+    'instr',
+    JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
+  )
   dtreeStore.fetchDtreeSetAsync(body)
 }

@@ -1,7 +1,11 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 
-export const editStepAttribute = (stepIndex: number, locationIndex: number, isNegate: boolean) => {
+export const editStepAttribute = (
+  stepIndex: number,
+  locationIndex: number,
+  isNegate: boolean,
+) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
   const body = new URLSearchParams({
@@ -13,7 +17,13 @@ export const editStepAttribute = (stepIndex: number, locationIndex: number, isNe
   const location = [stepIndexForApi, locationIndex]
   const attribute = dtreeStore.stepData[stepIndex].groups[locationIndex]
 
-  const filteredAttribute = attribute.filter((element: any) => element !== 'OR' && element !== 'and' && element !== 'NOT' && element !== 'or')
+  const filteredAttribute = attribute.filter(
+    (element: any) =>
+      element !== 'OR' &&
+      element !== 'and' &&
+      element !== 'NOT' &&
+      element !== 'or',
+  )
 
   const negation = isNegate ? '' : 'NOT'
 
@@ -26,7 +36,10 @@ export const editStepAttribute = (stepIndex: number, locationIndex: number, isNe
     filteredAttribute.splice(-2, 0, negation)
   }
 
-  body.append('instr', JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]))
+  body.append(
+    'instr',
+    JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
+  )
 
   dtreeStore.resetLocalDtreeCode()
   dtreeStore.fetchDtreeSetAsync(body)

@@ -18,27 +18,38 @@ export const EnumPanel = observer(
   (): ReactElement => {
     const statList: StatList[] = toJS(datasetStore.dsStat['stat-list']) ?? []
 
-    const currentStatList: StatList | undefined = statList.find((item: any) => item.name === filterStore.selectedGroupItem.name)
+    const currentStatList: StatList | undefined = statList.find(
+      (item: any) => item.name === filterStore.selectedGroupItem.name,
+    )
 
     const variants = currentStatList?.variants ?? []
 
-    const [selectedVariants, setSelectedVariants] = useState<[string, number][]>([])
+    const [selectedVariants, setSelectedVariants] = useState<
+      [string, number][]
+    >([])
 
     const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
 
-    const filteredVariants = variants.filter((variant: any[]) => variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+    const filteredVariants = variants.filter((variant: any[]) =>
+      variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+    )
 
     const groupsPerPage = 12
     const chunks = createChunks(filteredVariants, groupsPerPage)
 
-    const handleCheckGroupItem = (checked: boolean, variant: [string, number]) => {
+    const handleCheckGroupItem = (
+      checked: boolean,
+      variant: [string, number],
+    ) => {
       if (checked) {
         const localVariantNameList = [...selectedVariants, variant]
 
         setSelectedVariants(localVariantNameList)
       } else {
-        const localVariantNameList = selectedVariants.filter(element => element[0] !== variant[0])
+        const localVariantNameList = selectedVariants.filter(
+          element => element[0] !== variant[0],
+        )
 
         setSelectedVariants(localVariantNameList)
       }
@@ -82,7 +93,14 @@ export const EnumPanel = observer(
 
       const nameVariantList = selectedVariants.map(element => element[0])
 
-      datasetStore.setConditionsAsync([[FilterKindEnum.Enum, filterStore.selectedGroupItem.name, 'OR', nameVariantList]])
+      datasetStore.setConditionsAsync([
+        [
+          FilterKindEnum.Enum,
+          filterStore.selectedGroupItem.name,
+          'OR',
+          nameVariantList,
+        ],
+      ])
       setCurrentPage(0)
 
       if (!datasetStore.isXL) {
@@ -120,7 +138,9 @@ export const EnumPanel = observer(
 
     const { conditions } = datasetStore
 
-    const currentCondition: any[] | undefined = conditions.find((element: any[]) => element[1] === groupItemName)
+    const currentCondition: any[] | undefined = conditions.find(
+      (element: any[]) => element[1] === groupItemName,
+    )
 
     const attributeList: string[] | undefined = currentCondition?.[3]
 
@@ -129,7 +149,11 @@ export const EnumPanel = observer(
     return (
       <div>
         <div className="flex mt-3">
-          <QueryBuilderSearch value={searchValue} onChange={handleChange} isSubgroupItemSearch />
+          <QueryBuilderSearch
+            value={searchValue}
+            onChange={handleChange}
+            isSubgroupItemSearch
+          />
         </div>
 
         <div className="mt-4">
@@ -152,16 +176,32 @@ export const EnumPanel = observer(
                 )
               })
             ) : (
-              <div className="flex justify-center items-center text-14 text-grey-blue">{t('dtree.noFilters')}</div>
+              <div className="flex justify-center items-center text-14 text-grey-blue">
+                {t('dtree.noFilters')}
+              </div>
             )}
           </div>
         </div>
 
-        {filteredVariants.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
+        {filteredVariants.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
         <div className="flex items-center justify-between mt-1 pb-2">
-          <Button variant={'secondary'} text={t('general.clear')} onClick={handleClear} />
+          <Button
+            variant={'secondary'}
+            text={t('general.clear')}
+            onClick={handleClear}
+          />
 
-          <Button text={t('general.add')} onClick={handleAddConditions} disabled={isBlockAddBtn} />
+          <Button
+            text={t('general.add')}
+            onClick={handleAddConditions}
+            disabled={isBlockAddBtn}
+          />
         </div>
       </div>
     )

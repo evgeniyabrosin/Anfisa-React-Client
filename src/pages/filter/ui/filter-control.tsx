@@ -13,7 +13,10 @@ import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
-import { FilterControlOptions, FilterControlOptionsNames } from './filter-control.const'
+import {
+  FilterControlOptions,
+  FilterControlOptionsNames,
+} from './filter-control.const'
 import { FilterControlQueryBuilder } from './filter-control-query-builder'
 import { FilterControlRefiner } from './filter-control-refiner'
 
@@ -21,7 +24,9 @@ export const FilterControl = observer(
   (): ReactElement => {
     const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0
 
-    const isLastActionHistoryIndex = dtreeStore.actionHistoryIndex + 1 === toJS(dtreeStore.actionHistory).length
+    const isLastActionHistoryIndex =
+      dtreeStore.actionHistoryIndex + 1 ===
+      toJS(dtreeStore.actionHistory).length
 
     const isUndoLocked = isFirstActionHistoryIndex
     const isRedoLocked = isLastActionHistoryIndex
@@ -43,11 +48,19 @@ export const FilterControl = observer(
     return (
       <Fragment>
         <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
-          <div className="flex items-center w-full mt-5">{page === GlbPagesNames.Refiner ? <FilterControlRefiner /> : <FilterControlQueryBuilder />}</div>
+          <div className="flex items-center w-full mt-5">
+            {page === GlbPagesNames.Refiner ? (
+              <FilterControlRefiner />
+            ) : (
+              <FilterControlQueryBuilder />
+            )}
+          </div>
 
           <div className="flex justify-between w-full mt-3">
             <div className="flex items-center">
-              <span className="text-grey-blue text-14 font-bold mr-2">{t('filter.method')}</span>
+              <span className="text-grey-blue text-14 font-bold mr-2">
+                {t('filter.method')}
+              </span>
 
               <DropDown
                 options={FilterControlOptions}
@@ -57,12 +70,35 @@ export const FilterControl = observer(
                 }}
               />
 
-              {page === GlbPagesNames.Filter && <Button text="Text editor" className="ml-2" variant={'secondary-dark'} onClick={() => dtreeStore.openModalTextEditor()} />}
-              <Button text="Undo" className="ml-2" variant={'secondary-dark'} disabled={isUndoLocked} onClick={() => moveActionHistory(-1)} />
-              <Button text="Redo" className="ml-2" variant={'secondary-dark'} disabled={isRedoLocked} onClick={() => moveActionHistory(1)} />
+              {page === GlbPagesNames.Filter && (
+                <Button
+                  text="Text editor"
+                  className="ml-2"
+                  variant={'secondary-dark'}
+                  onClick={() => dtreeStore.openModalTextEditor()}
+                />
+              )}
+              <Button
+                text="Undo"
+                className="ml-2"
+                variant={'secondary-dark'}
+                disabled={isUndoLocked}
+                onClick={() => moveActionHistory(-1)}
+              />
+              <Button
+                text="Redo"
+                className="ml-2"
+                variant={'secondary-dark'}
+                disabled={isRedoLocked}
+                onClick={() => moveActionHistory(1)}
+              />
             </div>
             <div className="flex flex-wrap">
-              <Icon name="Close" className="text-white cursor-pointer" onClick={handleClose} />
+              <Icon
+                name="Close"
+                className="text-white cursor-pointer"
+                onClick={handleClose}
+              />
             </div>
           </div>
         </div>

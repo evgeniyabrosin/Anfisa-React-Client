@@ -13,7 +13,11 @@ export default {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M9.5 2V5.5H13.0005" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M9.5 2V5.5H13.0005"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </Fragment>
   ),
 }

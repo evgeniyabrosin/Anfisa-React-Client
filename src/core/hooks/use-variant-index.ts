@@ -10,7 +10,9 @@ export const useVariantIndex = () => {
         '//' +
         window.location.host +
         window.location.pathname +
-        `?ds=${params.get('ds') ?? ''}${Number.isInteger(index) ? `&variantIndex=${index}` : ''}`
+        `?ds=${params.get('ds') ?? ''}${
+          Number.isInteger(index) ? `&variantIndex=${index}` : ''
+        }`
 
       window.history.pushState({ path: newurl }, '', newurl)
     }

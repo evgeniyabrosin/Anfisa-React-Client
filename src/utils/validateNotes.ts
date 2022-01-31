@@ -2,7 +2,9 @@ import { t } from '@i18n'
 
 export const noFirstSymbolsPattern = /^[!"#$%&'()*+,./:;<=>?@[\\\]^_`{|}~§±№-]/
 
-export const validateNotes = (note: string): { isValid: boolean; error?: string } => {
+export const validateNotes = (
+  note: string,
+): { isValid: boolean; error?: string } => {
   if (noFirstSymbolsPattern.test(note)) {
     return { isValid: false, error: t('error.noFirstSymbols') }
   }

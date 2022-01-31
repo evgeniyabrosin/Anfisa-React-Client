@@ -13,59 +13,81 @@ export interface IGeneRegionFormValues {
   locus: string
 }
 
-export const GeneRegion = observer(({ values: { locus }, setFieldValue }: FormikProps<IGeneRegionFormValues>) => {
-  const cachedValues = filterStore.readFilterCondition<IGeneRegionFormValues>(FuncStepTypesEnum.GeneRegion)
+export const GeneRegion = observer(
+  ({
+    values: { locus },
+    setFieldValue,
+  }: FormikProps<IGeneRegionFormValues>) => {
+    const cachedValues = filterStore.readFilterCondition<IGeneRegionFormValues>(
+      FuncStepTypesEnum.GeneRegion,
+    )
 
-  const locusValue = cachedValues?.locus || ''
-  const { variants } = filterStore.statFuncData
+    const locusValue = cachedValues?.locus || ''
+    const { variants } = filterStore.statFuncData
 
-  const [isErrorVisible, setIsErrorVisible] = useState(false)
+    const [isErrorVisible, setIsErrorVisible] = useState(false)
 
-  const validateValue = (value: string) => {
-    validateLocusCondition({ value, setIsErrorVisible })
-  }
-
-  useEffect(() => {
-    isErrorVisible ? filterStore.setError('out of choice') : filterStore.setError('')
-  }, [isErrorVisible])
-
-  useEffect(() => {
-    if (!locusValue) {
-      filterStore.setError('out of choice')
+    const validateValue = (value: string) => {
+      validateLocusCondition({ value, setIsErrorVisible })
     }
 
-    const params = `{"locus":"${locusValue}"}`
+    useEffect(() => {
+      isErrorVisible
+        ? filterStore.setError('out of choice')
+        : filterStore.setError('')
+    }, [isErrorVisible])
 
-    filterStore.fetchStatFuncAsync('GeneRegion', params)
+    useEffect(() => {
+      if (!locusValue) {
+        filterStore.setError('out of choice')
+      }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+      const params = `{"locus":"${locusValue}"}`
 
-  useEffect(() => {
-    filterStore.setFilterCondition<IGeneRegionFormValues>(FuncStepTypesEnum.GeneRegion, {
-      locus,
-    })
-  }, [locus])
+      filterStore.fetchStatFuncAsync('GeneRegion', params)
 
-  return (
-    <Form>
-      <div className="mt-4">
-        <span className="text-14 leading-16px text-grey-blue font-bold">Locus</span>
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-        <div className="relative flex">
-          <Input
-            value={locusValue}
-            onChange={e => {
-              setFieldValue('locus', e.target.value)
-              validateValue(e.target.value)
-            }}
+    useEffect(() => {
+      filterStore.setFilterCondition<IGeneRegionFormValues>(
+        FuncStepTypesEnum.GeneRegion,
+        {
+          locus,
+        },
+      )
+    }, [locus])
+
+    return (
+      <Form>
+        <div className="mt-4">
+          <span className="text-14 leading-16px text-grey-blue font-bold">
+            Locus
+          </span>
+
+          <div className="relative flex">
+            <Input
+              value={locusValue}
+              onChange={e => {
+                setFieldValue('locus', e.target.value)
+                validateValue(e.target.value)
+              }}
+            />
+
+            {isErrorVisible && (
+              <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
+                {t('dtree.chromosomeNameIsNotCorrect')}
+              </div>
+            )}
+          </div>
+
+          <DisabledVariantsAmount
+            variants={variants}
+            disabled={true}
+            isErrorVisible={isErrorVisible}
           />
-
-          {isErrorVisible && <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">{t('dtree.chromosomeNameIsNotCorrect')}</div>}
         </div>
-
-        <DisabledVariantsAmount variants={variants} disabled={true} isErrorVisible={isErrorVisible} />
-      </div>
-    </Form>
-  )
-})
+      </Form>
+    )
+  },
+)

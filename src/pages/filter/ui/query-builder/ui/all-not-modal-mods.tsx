@@ -7,7 +7,11 @@ import { ModsDivider } from './mods-divider'
 export const AllNotModalMods = observer(() => (
   <div className="flex text-14 text-blue-bright">
     <div className="flex items-center">
-      <Checkbox checked={false} className="mr-1 cursor-pointer" disabled={true} />
+      <Checkbox
+        checked={false}
+        className="mr-1 cursor-pointer"
+        disabled={true}
+      />
 
       <span>{t('dtree.all')}</span>
     </div>
@@ -15,7 +19,11 @@ export const AllNotModalMods = observer(() => (
     <ModsDivider />
 
     <div className="flex items-center">
-      <Checkbox checked={false} className="mr-1 cursor-pointer" disabled={true} />
+      <Checkbox
+        checked={false}
+        className="mr-1 cursor-pointer"
+        disabled={true}
+      />
 
       <span>{t('dtree.not')}</span>
     </div>

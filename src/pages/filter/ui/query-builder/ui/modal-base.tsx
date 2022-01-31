@@ -32,11 +32,21 @@ interface IProps {
   theme?: string
 }
 
-export const ModalBase = ({ minHeight, maxHeight = '580px', refer, width = '580px', theme = 'light', children }: IProps) => (
+export const ModalBase = ({
+  minHeight,
+  maxHeight = '580px',
+  refer,
+  width = '580px',
+  theme = 'light',
+  children,
+}: IProps) => (
   <ModalView className="bg-grey-blue">
     <ModalContent
       ref={refer}
-      className={cn('flex flex-col justify-between py-4 px-4 rounded-lg', theme === 'light' ? 'bg-white' : 'bg-black')}
+      className={cn(
+        'flex flex-col justify-between py-4 px-4 rounded-lg',
+        theme === 'light' ? 'bg-white' : 'bg-black',
+      )}
       minHeight={minHeight}
       maxHeight={maxHeight}
       width={width}

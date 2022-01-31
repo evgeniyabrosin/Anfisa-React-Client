@@ -90,7 +90,9 @@ export const ModalSelectCompoundRequest = observer(
 
         const approx = value === 'transcript' ? null : `"${value}"`
 
-        const params = `{"approx":${approx},"state":${stateCondition !== '-current-' ? `"${stateCondition}"` : null},"request":${request}}`
+        const params = `{"approx":${approx},"state":${
+          stateCondition !== '-current-' ? `"${stateCondition}"` : null
+        },"request":${request}}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -100,9 +102,12 @@ export const ModalSelectCompoundRequest = observer(
       if (type === 'state') {
         setStateCondition(value)
 
-        const approx = approxCondition === 'transcript' ? null : `"${approxCondition}"`
+        const approx =
+          approxCondition === 'transcript' ? null : `"${approxCondition}"`
 
-        const params = `{"approx":${approx},"state":${value !== '-current-' ? `"${value}"` : null}}`
+        const params = `{"approx":${approx},"state":${
+          value !== '-current-' ? `"${value}"` : null
+        }}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -112,7 +117,9 @@ export const ModalSelectCompoundRequest = observer(
 
     // request condition functions
 
-    const [activeRequestIndex, setActiveRequestIndex] = useState(requestCondition.length - 1)
+    const [activeRequestIndex, setActiveRequestIndex] = useState(
+      requestCondition.length - 1,
+    )
 
     const handleActiveRequest = (requestBlockIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -137,14 +144,18 @@ export const ModalSelectCompoundRequest = observer(
         setActiveRequestIndex(newRequestCondition.length - 1)
         setResetValue('')
       } else {
-        const newRequestCondition = cloneDeep(requestCondition).filter((_item: any[], index: number) => index !== activeRequestIndex)
+        const newRequestCondition = cloneDeep(requestCondition).filter(
+          (_item: any[], index: number) => index !== activeRequestIndex,
+        )
 
         setRequestCondition(newRequestCondition)
         setActiveRequestIndex(newRequestCondition.length - 1)
 
         sendRequest(newRequestCondition)
 
-        setResetValue(getResetType(newRequestCondition[newRequestCondition.length - 1][1]))
+        setResetValue(
+          getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
+        )
       }
     }
 
@@ -162,7 +173,10 @@ export const ModalSelectCompoundRequest = observer(
       return value
     }
 
-    const handleRequestConditionNumber = (requestBlockIndex: number, value: number) => {
+    const handleRequestConditionNumber = (
+      requestBlockIndex: number,
+      value: number,
+    ) => {
       if (value < 0) return
 
       const newRequestCondition: any[] = cloneDeep(requestCondition)
@@ -178,7 +192,11 @@ export const ModalSelectCompoundRequest = observer(
       sendRequest(newRequestCondition)
     }
 
-    const handleRequestCondition = (requestBlockIndex: number, currentSelectIndex: number, target: any) => {
+    const handleRequestCondition = (
+      requestBlockIndex: number,
+      currentSelectIndex: number,
+      target: any,
+    ) => {
       const requestData = getRequestData(target, currentSelectIndex, attrData)
 
       const newRequest = Object.fromEntries(getSortedArray(requestData))
@@ -233,9 +251,14 @@ export const ModalSelectCompoundRequest = observer(
         .slice(10)
         .replace(/\s+/g, '')
 
-      const approx = approxCondition === 'transcript' ? null : `"${approxCondition}"`
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
 
-      const params = `{"approx":${approx},"state":${stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`},"request":${requestString}}`
+      const params = `{"approx":${approx},"state":${
+        stateCondition === '-current-' || !stateCondition
+          ? null
+          : `"${stateCondition}"`
+      },"request":${requestString}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -253,14 +276,18 @@ export const ModalSelectCompoundRequest = observer(
     }
 
     const handleAddAttribute = (action: ActionType) => {
-      const approx = approxCondition === 'transcript' ? null : `"${approxCondition}"`
+      const approx =
+        approxCondition === 'transcript' ? null : `"${approxCondition}"`
 
       const params: IParams = {
         approx,
       }
 
       if (stateCondition) {
-        params.state = JSON.stringify(stateOptions) === JSON.stringify(['-current-']) ? null : stateOptions
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
       }
 
       params.request = requestCondition
@@ -272,7 +299,10 @@ export const ModalSelectCompoundRequest = observer(
 
     return (
       <ModalBase refer={ref} minHeight={300}>
-        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
         <div className="flex justify-between w-full mt-4 text-14">
           <ApproxStateModalMods
@@ -298,16 +328,30 @@ export const ModalSelectCompoundRequest = observer(
               onClick={(e: any) => handleActiveRequest(index, e)}
             >
               <div className="flex cursor-pointer step-content-area">
-                <InputNumber value={item[0]} onChange={(e: any) => handleRequestConditionNumber(index, e.target.value)} className="shadow-dark w-1/3 h-5" />
+                <InputNumber
+                  value={item[0]}
+                  onChange={(e: any) =>
+                    handleRequestConditionNumber(index, e.target.value)
+                  }
+                  className="shadow-dark w-1/3 h-5"
+                />
               </div>
 
               <div className="flex flex-1 justify-between step-content-area">
                 {attrData.family.map((group: string, currNo: number) => (
-                  <div className="step-content-area" onClick={(e: any) => handleActiveRequest(index, e)} key={group}>
-                    <span className="cursor-pointer step-content-area">{group}</span>
+                  <div
+                    className="step-content-area"
+                    onClick={(e: any) => handleActiveRequest(index, e)}
+                    key={group}
+                  >
+                    <span className="cursor-pointer step-content-area">
+                      {group}
+                    </span>
 
                     <Select
-                      onChange={(e: any) => handleRequestCondition(index, currNo, e.target)}
+                      onChange={(e: any) =>
+                        handleRequestCondition(index, currNo, e.target)
+                      }
                       className="w-auto ml-1"
                       options={selectOptions}
                       value={getSelectedValue(group, index)}
@@ -321,13 +365,21 @@ export const ModalSelectCompoundRequest = observer(
 
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div className="flex">
-            <Button onClick={() => handleRequestBlocksAmount('ADD')} text="Add" variant={'secondary'} className={cn('mr-4')} disabled={requestCondition.length === 5} />
+            <Button
+              onClick={() => handleRequestBlocksAmount('ADD')}
+              text="Add"
+              variant={'secondary'}
+              className={cn('mr-4')}
+              disabled={requestCondition.length === 5}
+            />
 
             <Button
               onClick={() => handleRequestBlocksAmount('REMOVE')}
               text="Remove"
               variant={'secondary'}
-              className={cn('border-red-secondary hover:text-white hover:bg-red-secondary')}
+              className={cn(
+                'border-red-secondary hover:text-white hover:bg-red-secondary',
+              )}
               disabled={requestCondition.length === 1}
             />
           </div>
@@ -335,7 +387,13 @@ export const ModalSelectCompoundRequest = observer(
           <div className="flex w-1/2">
             <span>{t('dtree.reset')}</span>
 
-            <Select options={resetOptions} value={resetValue} onChange={(e: any) => handleReset(e.target.value)} className="w-full ml-2" reset />
+            <Select
+              options={resetOptions}
+              value={resetValue}
+              onChange={(e: any) => handleReset(e.target.value)}
+              className="w-full ml-2"
+              reset
+            />
           </div>
         </div>
 

@@ -12,30 +12,41 @@ interface IProps {
   inheritanceMode?: boolean
 }
 
-export const DisabledVariantsAmount = observer(({ variants, disabled, isErrorVisible, handleCheckGroupItem }: IProps) => (
-  <div className="my-5 text-14">
-    {variants?.length > 0 && !isErrorVisible ? (
-      variants.map((variant: any) => (
-        <div key={variant} className="flex items-center">
-          {disabled ? (
-            <Checkbox checked={true} disabled={true} className="-mt-0.5 mr-1 cursor-pointer" />
-          ) : (
-            <Checkbox
-              checked={dtreeStore.selectedFilters.includes(variant[0])}
-              className="-mt-0.5 mr-1 cursor-pointer"
-              onChange={(e: any) => handleCheckGroupItem && handleCheckGroupItem(e.target.checked, variant[0])}
-            />
-          )}
+export const DisabledVariantsAmount = observer(
+  ({ variants, disabled, isErrorVisible, handleCheckGroupItem }: IProps) => (
+    <div className="my-5 text-14">
+      {variants?.length > 0 && !isErrorVisible ? (
+        variants.map((variant: any) => (
+          <div key={variant} className="flex items-center">
+            {disabled ? (
+              <Checkbox
+                checked={true}
+                disabled={true}
+                className="-mt-0.5 mr-1 cursor-pointer"
+              />
+            ) : (
+              <Checkbox
+                checked={dtreeStore.selectedFilters.includes(variant[0])}
+                className="-mt-0.5 mr-1 cursor-pointer"
+                onChange={(e: any) =>
+                  handleCheckGroupItem &&
+                  handleCheckGroupItem(e.target.checked, variant[0])
+                }
+              />
+            )}
 
-          <span className="text-black">{variant[0]}</span>
+            <span className="text-black">{variant[0]}</span>
 
-          <span className="text-grey-blue ml-2">
-            {variant[1]} {t('dtree.variants')}
-          </span>
+            <span className="text-grey-blue ml-2">
+              {variant[1]} {t('dtree.variants')}
+            </span>
+          </div>
+        ))
+      ) : (
+        <div className="flex justify-center items-center text-grey-blue">
+          {t('dtree.noFilters')}
         </div>
-      ))
-    ) : (
-      <div className="flex justify-center items-center text-grey-blue">{t('dtree.noFilters')}</div>
-    )}
-  </div>
-))
+      )}
+    </div>
+  ),
+)

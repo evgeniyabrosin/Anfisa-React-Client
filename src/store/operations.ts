@@ -26,13 +26,16 @@ class OperationsStore {
 
     off && body.append('off', String(off))
 
-    const response = await fetch(getApiUrl(`macro_tagging?ds=${datasetStore.datasetName}&tag=${tag}`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const response = await fetch(
+      getApiUrl(`macro_tagging?ds=${datasetStore.datasetName}&tag=${tag}`),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body,
       },
-      body,
-    })
+    )
 
     await response.json()
 
@@ -52,7 +55,10 @@ class OperationsStore {
     }
 
     if (datasetStore.zone.length > 0) {
-      const zoneParams = datasetStore.zone.map(item => `["${item[0]}",["${item[1].toString().split(',').join('","')}"]]`)
+      const zoneParams = datasetStore.zone.map(
+        item =>
+          `["${item[0]}",["${item[1].toString().split(',').join('","')}"]]`,
+      )
 
       const zone = `[${zoneParams}]`
 
@@ -107,7 +113,10 @@ class OperationsStore {
     }
   }
 
-  async saveDatasetAsync(wsName: string, pathName: string): Promise<{ ok: boolean; message?: string }> {
+  async saveDatasetAsync(
+    wsName: string,
+    pathName: string,
+  ): Promise<{ ok: boolean; message?: string }> {
     this.resetIsCreationOver()
 
     const body = new URLSearchParams({
@@ -120,7 +129,10 @@ class OperationsStore {
 
     let compareValue = 0
 
-    compareValue = isRefiner || isMainTable ? datasetStore.statAmount[0] : dtreeStore.acceptedVariants
+    compareValue =
+      isRefiner || isMainTable
+        ? datasetStore.statAmount[0]
+        : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {
       const conditions = JSON.stringify(datasetStore.conditions)
@@ -181,7 +193,9 @@ class OperationsStore {
       if (this.savingStatus[1] === 'Done') this.setIsCreationOver()
     })
 
-    return !result[0] ? setTimeout(async () => await this.getJobStatusAsync(taskId), 1000) : { ok: true, data: result }
+    return !result[0]
+      ? setTimeout(async () => await this.getJobStatusAsync(taskId), 1000)
+      : { ok: true, data: result }
   }
 
   setIsCreationOver() {

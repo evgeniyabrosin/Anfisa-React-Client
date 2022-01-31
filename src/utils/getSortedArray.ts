@@ -12,18 +12,33 @@ export const getSortedArray = (selectedData: any[]) => {
   })
 
   selectedData.map((_item, index) => {
-    if (selectedData[index + 1] && selectedData[index][0] === selectedData[index + 1][0]) {
-      selectedData[index].length > selectedData[index + 1].length ? selectedData.splice(index + 1, 1) : selectedData.splice(index, 1)
+    if (
+      selectedData[index + 1] &&
+      selectedData[index][0] === selectedData[index + 1][0]
+    ) {
+      selectedData[index].length > selectedData[index + 1].length
+        ? selectedData.splice(index + 1, 1)
+        : selectedData.splice(index, 1)
     }
 
-    if (selectedData[index + 2] && selectedData[index][0] === selectedData[index + 2][0]) {
-      selectedData[index].length > selectedData[index + 2].length ? selectedData.splice(index + 2, 1) : selectedData.splice(index, 1)
+    if (
+      selectedData[index + 2] &&
+      selectedData[index][0] === selectedData[index + 2][0]
+    ) {
+      selectedData[index].length > selectedData[index + 2].length
+        ? selectedData.splice(index + 2, 1)
+        : selectedData.splice(index, 1)
     }
   })
 
   selectedData.map((_item, index) => {
-    if (selectedData[index + 1] && selectedData[index][0] === selectedData[index + 1][0]) {
-      selectedData[index].length > selectedData[index + 1].length ? selectedData.splice(index + 1, 1) : selectedData.splice(index, 1)
+    if (
+      selectedData[index + 1] &&
+      selectedData[index][0] === selectedData[index + 1][0]
+    ) {
+      selectedData[index].length > selectedData[index + 1].length
+        ? selectedData.splice(index + 1, 1)
+        : selectedData.splice(index, 1)
     }
   })
   selectedData = selectedData.filter(item => item[0] !== '--')

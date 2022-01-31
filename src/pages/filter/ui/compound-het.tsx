@@ -19,15 +19,25 @@ const options = [
   { label: 'non-intersecting transcripts', value: 'rough' },
 ]
 
-export const CompundHet = ({ setFieldValue, values: { approx, variants } }: FormikProps<ICompoundHetFormValues>): ReactElement => {
-  const cachedValues = filterStore.readFilterCondition<ICompoundHetFormValues>(FuncStepTypesEnum.CompoundHet)
+export const CompundHet = ({
+  setFieldValue,
+  values: { approx, variants },
+}: FormikProps<ICompoundHetFormValues>): ReactElement => {
+  const cachedValues = filterStore.readFilterCondition<ICompoundHetFormValues>(
+    FuncStepTypesEnum.CompoundHet,
+  )
 
   const [statFuncStatus, setStatFuncStatus] = useState<IStatFuncData>()
 
   const initialApprox = cachedValues?.approx || options[0].value
 
-  const fetchStatFuncAsync = async (param?: Record<string, string | string[]>) => {
-    const statFuncData = await filterStore.fetchStatFuncAsync(FuncStepTypesEnum.CompoundHet, JSON.stringify(param) || {})
+  const fetchStatFuncAsync = async (
+    param?: Record<string, string | string[]>,
+  ) => {
+    const statFuncData = await filterStore.fetchStatFuncAsync(
+      FuncStepTypesEnum.CompoundHet,
+      JSON.stringify(param) || {},
+    )
 
     const nameList = statFuncData.variants?.map(variant => variant?.[0])
 
@@ -43,10 +53,13 @@ export const CompundHet = ({ setFieldValue, values: { approx, variants } }: Form
   }, [])
 
   useEffect(() => {
-    filterStore.setFilterCondition<ICompoundHetFormValues>(FuncStepTypesEnum.CompoundHet, {
-      variants,
-      approx,
-    })
+    filterStore.setFilterCondition<ICompoundHetFormValues>(
+      FuncStepTypesEnum.CompoundHet,
+      {
+        variants,
+        approx,
+      },
+    )
   }, [variants, approx])
 
   const onChangeAsync = async (arg: Option) => {
@@ -60,7 +73,11 @@ export const CompundHet = ({ setFieldValue, values: { approx, variants } }: Form
       <div className="flex items-center mt-4">
         <span className="mr-2 text-18 leading-14px">Approx:</span>
 
-        <DropDown value={initialApprox} options={options} onSelect={onChangeAsync} />
+        <DropDown
+          value={initialApprox}
+          options={options}
+          onSelect={onChangeAsync}
+        />
       </div>
 
       <div className="mt-4">

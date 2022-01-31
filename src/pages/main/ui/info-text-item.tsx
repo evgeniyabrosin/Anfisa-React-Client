@@ -10,7 +10,14 @@ interface Props {
   onClick?: () => void
 }
 
-export const InfoTextItem = ({ children, isClickable, isActive, isTitleBaseInfo, className, ...rest }: Props): ReactElement => {
+export const InfoTextItem = ({
+  children,
+  isClickable,
+  isActive,
+  isTitleBaseInfo,
+  className,
+  ...rest
+}: Props): ReactElement => {
   return (
     <div
       className={cn(

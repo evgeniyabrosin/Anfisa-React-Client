@@ -26,7 +26,10 @@ export class DecisionTreeWidget extends UIWidget {
   readonly addNewDataset: Button
   readonly cancelAddNewDataset: Button
 
-  constructor(options: { selectors: DecisionTreeMenuSelectors; labels: DecisionTreeLabels }) {
+  constructor(options: {
+    selectors: DecisionTreeMenuSelectors
+    labels: DecisionTreeLabels
+  }) {
     super(options)
 
     const selectors = options.selectors

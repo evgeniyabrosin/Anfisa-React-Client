@@ -14,7 +14,8 @@ interface Props {
 
 export const SortItem = observer(
   ({ text, sortType }: Props): ReactElement => {
-    const sortIconTransform = dirinfoStore.sortDirections[sortType] === SortDirection.ASC
+    const sortIconTransform =
+      dirinfoStore.sortDirections[sortType] === SortDirection.ASC
 
     const handleClick = () => {
       if (dirinfoStore.sortType === sortType) {
@@ -24,11 +25,16 @@ export const SortItem = observer(
       }
     }
 
-    const textColor = sortType === dirinfoStore.sortType ? 'text-blue-bright' : 'text-grey-blue'
+    const textColor =
+      sortType === dirinfoStore.sortType ? 'text-blue-bright' : 'text-grey-blue'
 
     return (
       <div className="flex items-center cursor-pointer" onClick={handleClick}>
-        <div className={cn('text-sm leading-tight mr-2 select-none', textColor)}>{text}</div>
+        <div
+          className={cn('text-sm leading-tight mr-2 select-none', textColor)}
+        >
+          {text}
+        </div>
 
         <Icon
           name="Sort"

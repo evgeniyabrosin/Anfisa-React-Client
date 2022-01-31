@@ -75,7 +75,15 @@ interface IconProps {
   dataTestId?: string
 }
 
-export const Icon = ({ name, size, stroke, fill, className, onClick, dataTestId }: IconProps): ReactElement => {
+export const Icon = ({
+  name,
+  size,
+  stroke,
+  fill,
+  className,
+  onClick,
+  dataTestId,
+}: IconProps): ReactElement => {
   const icon: IconItem = iconItems[name]
 
   // Square icon
@@ -88,9 +96,15 @@ export const Icon = ({ name, size, stroke, fill, className, onClick, dataTestId 
     height = icon.viewBox.h
 
     if (size) {
-      width = icon.viewBox.w > icon.viewBox.h ? size : size * (icon.viewBox.w / icon.viewBox.h)
+      width =
+        icon.viewBox.w > icon.viewBox.h
+          ? size
+          : size * (icon.viewBox.w / icon.viewBox.h)
 
-      height = icon.viewBox.h > icon.viewBox.w ? size : size * (icon.viewBox.h / icon.viewBox.w)
+      height =
+        icon.viewBox.h > icon.viewBox.w
+          ? size
+          : size * (icon.viewBox.h / icon.viewBox.w)
     }
   }
 

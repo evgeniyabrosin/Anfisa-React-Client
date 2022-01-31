@@ -11,7 +11,12 @@ export const ErrorPage = () => {
     <div className="flex justify-center items-center flex-col h-full w-full pt-2 bg-blue-lighter text-white text-20">
       <span>{t('error.smthWentWrong')}</span>
 
-      <Button text={t('error.getBack')} className="mt-3" variant={'secondary-dark'} onClick={() => history.push(Routes.Root)} />
+      <Button
+        text={t('error.getBack')}
+        className="mt-3"
+        variant={'secondary-dark'}
+        onClick={() => history.push(Routes.Root)}
+      />
     </div>
   )
 }

@@ -18,7 +18,10 @@ export class DatasetInfoWidget extends UIWidget {
   readonly viewerOption: Button
   readonly datasetHeader: Label
 
-  constructor(options: { selectors: DatasetInfoSelectors; labels: DatasetInfoLabels }) {
+  constructor(options: {
+    selectors: DatasetInfoSelectors
+    labels: DatasetInfoLabels
+  }) {
     super(options)
 
     const selectors = options.selectors
@@ -27,6 +30,9 @@ export class DatasetInfoWidget extends UIWidget {
     this.openInViewer = new Button(selectors.openInViewer)
     this.viewerOption = new Button(selectors.viewerOption)
 
-    this.datasetHeader = new Label(selectors.datasetHeader, labels.datasetHeader)
+    this.datasetHeader = new Label(
+      selectors.datasetHeader,
+      labels.datasetHeader,
+    )
   }
 }

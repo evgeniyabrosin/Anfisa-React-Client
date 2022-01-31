@@ -45,7 +45,10 @@ export class DecisionTreeResultsWidget extends UIWidget {
   readonly leftInput: Input
   readonly rightInput: Input
 
-  constructor(options: { selectors: DecisionTreeResultsSelectors; labels: DecisionTreeResultsLabels }) {
+  constructor(options: {
+    selectors: DecisionTreeResultsSelectors
+    labels: DecisionTreeResultsLabels
+  }) {
     super(options)
 
     const selectors = options.selectors
@@ -53,8 +56,14 @@ export class DecisionTreeResultsWidget extends UIWidget {
 
     this.searchGraphResults = new Input(selectors.searchGraphResults)
     this.searchStepsResults = new Input(selectors.searchStepsResults)
-    this.groupGraphHeaders = new Label(selectors.groupGraphHeaders, labels.graphHeaders)
-    this.graphHeaders = new Label(selectors.graphHeaders, labels.groupGraphHeaders)
+    this.groupGraphHeaders = new Label(
+      selectors.groupGraphHeaders,
+      labels.graphHeaders,
+    )
+    this.graphHeaders = new Label(
+      selectors.graphHeaders,
+      labels.groupGraphHeaders,
+    )
     this.stepCard = new StepLabel(selectors.stepCard, labels.stepCard)
     this.excludeInfo = new Button(selectors.excludeInfo)
     this.viewReturnedVariants = new Button(selectors.viewReturnedVariants)

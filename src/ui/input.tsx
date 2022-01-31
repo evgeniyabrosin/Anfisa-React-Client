@@ -14,7 +14,9 @@ export const Input = ({ ...rest }: Props): ReactElement => {
 
   const classNameString: string = cn(className)
 
-  const isDefaultBorder: boolean = /border-grey-blue/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
+  const isDefaultBorder: boolean =
+    /border-grey-blue/.test(classNameString) ||
+    !/bg-[\w-]*/.test(classNameString)
 
   return (
     <input

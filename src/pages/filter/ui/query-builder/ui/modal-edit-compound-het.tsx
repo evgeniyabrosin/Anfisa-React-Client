@@ -25,7 +25,8 @@ export const ModalEditCompoundHet = observer(
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup = dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup =
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
     const groupName = dtreeStore.groupNameToChange
 
@@ -50,9 +51,13 @@ export const ModalEditCompoundHet = observer(
       approxValues.push(mode[0])
     })
 
-    const [stateCondition, setStateCondition] = useState(getDefaultValue('state'))
+    const [stateCondition, setStateCondition] = useState(
+      getDefaultValue('state'),
+    )
 
-    const [approxCondition, setApproxCondition] = useState(getDefaultValue('approx'))
+    const [approxCondition, setApproxCondition] = useState(
+      getDefaultValue('approx'),
+    )
 
     const getStateOptions = () => {
       const state = get(currentGroup[currentGroup.length - 1], 'state')
@@ -60,7 +65,9 @@ export const ModalEditCompoundHet = observer(
 
       if (!state) return ['-current-']
 
-      return defaultValue === null || defaultValue ? state : ['-current-', state]
+      return defaultValue === null || defaultValue
+        ? state
+        : ['-current-', state]
     }
 
     const stateOptions: string[] = getStateOptions()
@@ -77,7 +84,10 @@ export const ModalEditCompoundHet = observer(
       if (type === 'state') {
         const state = get(currentGroup[currentGroup.length - 1], 'state')
 
-        const defaultValue = get(currentGroup[currentGroup.length - 1], 'default')
+        const defaultValue = get(
+          currentGroup[currentGroup.length - 1],
+          'default',
+        )
 
         if (state === undefined) return '-current-'
 
@@ -90,7 +100,11 @@ export const ModalEditCompoundHet = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"approx":"${approxCondition}","state":${stateCondition === '-current-' || !stateCondition ? null : `"${stateCondition}"`}}`
+      const params = `{"approx":"${approxCondition}","state":${
+        stateCondition === '-current-' || !stateCondition
+          ? null
+          : `"${stateCondition}"`
+      }}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -107,7 +121,10 @@ export const ModalEditCompoundHet = observer(
       const params: IParams = { approx: approxCondition }
 
       if (stateCondition) {
-        params.state = JSON.stringify(stateOptions) === JSON.stringify(['-current-']) ? null : stateOptions
+        params.state =
+          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+            ? null
+            : stateOptions
       }
 
       changeFunctionalStep(params)
@@ -120,7 +137,9 @@ export const ModalEditCompoundHet = observer(
       if (type === 'approx') {
         setApproxCondition(value)
 
-        const params = `{"approx":"${value}","state":${stateCondition !== '-current-' ? `"${stateCondition}"` : null}}`
+        const params = `{"approx":"${value}","state":${
+          stateCondition !== '-current-' ? `"${stateCondition}"` : null
+        }}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -130,7 +149,9 @@ export const ModalEditCompoundHet = observer(
       if (type === 'state') {
         setStateCondition(value)
 
-        const params = `{"approx":"${approxCondition}","state":${value !== '-current-' ? `"${value}"` : null}}`
+        const params = `{"approx":"${approxCondition}","state":${
+          value !== '-current-' ? `"${value}"` : null
+        }}`
 
         dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -140,7 +161,10 @@ export const ModalEditCompoundHet = observer(
 
     return (
       <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
         <div className="flex justify-between w-full mt-4 text-14">
           <ApproxStateModalMods
@@ -157,7 +181,11 @@ export const ModalEditCompoundHet = observer(
 
         <DisabledVariantsAmount variants={variants} disabled={true} />
 
-        <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={!variants} />
+        <EditModalButtons
+          handleClose={handleClose}
+          handleSaveChanges={handleSaveChanges}
+          disabled={!variants}
+        />
       </ModalBase>
     )
   },

@@ -24,7 +24,11 @@ export const VariantHeader = observer(
     const history = useHistory()
     const location = useLocation()
 
-    const genInfo = get(toJS(variantStore.variant), '[0].rows[0].cells[0][0]', '')
+    const genInfo = get(
+      toJS(variantStore.variant),
+      '[0].rows[0].cells[0][0]',
+      '',
+    )
 
     const hg19 = get(toJS(variantStore.variant), '[0].rows[1].cells[0][0]', '')
     const filteredNo = toJS(datasetStore.filteredNo)
@@ -109,11 +113,21 @@ export const VariantHeader = observer(
                   setLayout((prev: any[]) => {
                     const newLayout = prev.map((item: any, index: number) => ({
                       ...item,
-                      h: get(parents[index].children[1].firstChild, 'clientHeight', 0) * 0.0208 + 1.3,
+                      h:
+                        get(
+                          parents[index].children[1].firstChild,
+                          'clientHeight',
+                          0,
+                        ) *
+                          0.0208 +
+                        1.3,
                       y: index,
                     }))
 
-                    window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
+                    window.sessionStorage.setItem(
+                      'gridLayout',
+                      JSON.stringify(newLayout),
+                    )
 
                     return newLayout
                   })
@@ -131,7 +145,10 @@ export const VariantHeader = observer(
                       h: 1,
                     }))
 
-                    window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
+                    window.sessionStorage.setItem(
+                      'gridLayout',
+                      JSON.stringify(newLayout),
+                    )
 
                     return newLayout
                   })
@@ -139,7 +156,11 @@ export const VariantHeader = observer(
               />
             </div>
 
-            <Icon name="Close" className="cursor-pointer text-white hover:text-blue-bright" onClick={handleCloseDrawer} />
+            <Icon
+              name="Close"
+              className="cursor-pointer text-white hover:text-blue-bright"
+              onClick={handleCloseDrawer}
+            />
           </div>
         </div>
       </div>

@@ -114,17 +114,31 @@ const FilterPage = observer(
         {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
         {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
 
-        {dtreeStore.isModalEditInheritanceModeVisible && <ModalEditInheritanceMode />}
-        {dtreeStore.isModalSelectInheritanceModeVisible && <ModalSelectInheritanceMode />}
+        {dtreeStore.isModalEditInheritanceModeVisible && (
+          <ModalEditInheritanceMode />
+        )}
+        {dtreeStore.isModalSelectInheritanceModeVisible && (
+          <ModalSelectInheritanceMode />
+        )}
 
-        {dtreeStore.isModalEditCustomInheritanceModeVisible && <ModalEditCustomInheritanceMode />}
-        {dtreeStore.isModalSelectCustomInheritanceModeVisible && <ModalSelectCustomInheritanceMode />}
+        {dtreeStore.isModalEditCustomInheritanceModeVisible && (
+          <ModalEditCustomInheritanceMode />
+        )}
+        {dtreeStore.isModalSelectCustomInheritanceModeVisible && (
+          <ModalSelectCustomInheritanceMode />
+        )}
 
         {dtreeStore.isModalEditCompoundHetVisible && <ModalEditCompoundHet />}
-        {dtreeStore.isModalSelectCompoundHetVisible && <ModalSelectCompoundHet />}
+        {dtreeStore.isModalSelectCompoundHetVisible && (
+          <ModalSelectCompoundHet />
+        )}
 
-        {dtreeStore.isModalEditCompoundRequestVisible && <ModalEditCompoundRequest />}
-        {dtreeStore.isModalSelectCompoundRequestVisible && <ModalSelectCompoundRequest />}
+        {dtreeStore.isModalEditCompoundRequestVisible && (
+          <ModalEditCompoundRequest />
+        )}
+        {dtreeStore.isModalSelectCompoundRequestVisible && (
+          <ModalSelectCompoundRequest />
+        )}
 
         {dtreeStore.isModalEditGeneRegionVisible && <ModalEditGeneRegion />}
         {dtreeStore.isModalSelectGeneRegionVisible && <ModalSelectGeneRegion />}

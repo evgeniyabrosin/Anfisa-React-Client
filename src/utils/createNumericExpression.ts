@@ -9,7 +9,12 @@ interface ICreateExpression {
   maxValue?: string | number
 }
 
-export const createNumericExpression = ({ expType, extraExpType, minValue, maxValue }: ICreateExpression) => {
+export const createNumericExpression = ({
+  expType,
+  extraExpType,
+  minValue,
+  maxValue,
+}: ICreateExpression) => {
   const isExtraGreaterThan = (): boolean => {
     return extraExpType === NumericExpressionTypes.GreaterThan
   }
@@ -34,7 +39,10 @@ export const createNumericExpression = ({ expType, extraExpType, minValue, maxVa
     },
   }
 
-  type NumericExperssionValue = InnerValues<typeof numericExperssionValues, keyof typeof numericExperssionValues>
+  type NumericExperssionValue = InnerValues<
+    typeof numericExperssionValues,
+    keyof typeof numericExperssionValues
+  >
 
   const getValue = (type: NumericExpressionType): NumericExperssionValue => {
     let value: NumericExperssionValue = []

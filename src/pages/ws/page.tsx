@@ -3,7 +3,12 @@ import { withErrorBoundary } from 'react-error-boundary'
 import { useHistory } from 'react-router-dom'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { ArrayParam, NumberParam, useQueryParams, withDefault } from 'use-query-params'
+import {
+  ArrayParam,
+  NumberParam,
+  useQueryParams,
+  withDefault,
+} from 'use-query-params'
 
 import { HistoryLocationState } from '@declarations'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
@@ -30,7 +35,8 @@ const WSPage = observer(
 
     useDatasetName()
 
-    const historyLocationState = useHistory().location.state as HistoryLocationState
+    const historyLocationState = useHistory().location
+      .state as HistoryLocationState
 
     const prevPage = historyLocationState?.prevPage || ''
 
@@ -68,7 +74,11 @@ const WSPage = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const [allVariants, transcribedVariants, allTranscripts] = get(datasetStore, 'statAmount', [])
+    const [allVariants, transcribedVariants, allTranscripts] = get(
+      datasetStore,
+      'statAmount',
+      [],
+    )
 
     return (
       <Fragment>
@@ -79,7 +89,10 @@ const WSPage = observer(
         <div className="h-full flex flex-col">
           <Header>
             <div className="text-white flex-grow flex justify-end pr-6">
-              <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold" data-testid={MainTableDataCy.numVariants}>
+              <span
+                className="text-12 leading-14px text-white mt-2 ml-auto font-bold"
+                data-testid={MainTableDataCy.numVariants}
+              >
                 {t('filter.variants', {
                   all: allVariants,
                 })}
@@ -97,7 +110,10 @@ const WSPage = observer(
                 })}
               </span>
 
-              <PopperButton ButtonElement={ExportReportButton} ModalElement={ExportPanel} />
+              <PopperButton
+                ButtonElement={ExportReportButton}
+                ModalElement={ExportPanel}
+              />
             </div>
           </Header>
 

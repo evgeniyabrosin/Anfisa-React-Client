@@ -12,7 +12,11 @@ import { ModalBase } from './modal-base'
 
 export const ModalSelectAttribute = observer(
   (): ReactElement => {
-    const { filterValue, setFilterValue, filteredQueryBuilder } = useFilterQueryBuilder()
+    const {
+      filterValue,
+      setFilterValue,
+      filteredQueryBuilder,
+    } = useFilterQueryBuilder()
 
     const [readScrollPosition] = useScrollPosition({
       elem: '#attributes-container',
@@ -37,15 +41,27 @@ export const ModalSelectAttribute = observer(
 
     return (
       <ModalBase refer={modalBaseRef} minHeight={340}>
-        <HeaderModal groupName={t('dtree.selectAttribute')} handleClose={handleClose} />
+        <HeaderModal
+          groupName={t('dtree.selectAttribute')}
+          handleClose={handleClose}
+        />
 
         <div className="flex w-full mt-4">
-          <QueryBuilderSearch value={filterValue} onChange={(value: string) => setFilterValue(value)} isModal />
+          <QueryBuilderSearch
+            value={filterValue}
+            onChange={(value: string) => setFilterValue(value)}
+            isModal
+          />
         </div>
 
-        <div id="attributes-container" className="flex-1 overflow-y-scroll mt-4">
+        <div
+          id="attributes-container"
+          className="flex-1 overflow-y-scroll mt-4"
+        >
           {dtreeStore.isFiltersLoading ? (
-            <div className="flex justify-center w-full my-4">{t('dtree.loading')}</div>
+            <div className="flex justify-center w-full my-4">
+              {t('dtree.loading')}
+            </div>
           ) : (
             groupNames.map((groupName, index) => (
               <QueryBuilderSubgroup

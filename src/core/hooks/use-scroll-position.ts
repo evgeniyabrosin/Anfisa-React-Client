@@ -8,11 +8,16 @@ export type TScrollPositionParams = {
 export type TReadScrollPosition = () => void
 export type TWriteScrollPosition = () => void
 
-export const useScrollPosition = ({ elem, storageId }: TScrollPositionParams): [TReadScrollPosition, TWriteScrollPosition] => {
+export const useScrollPosition = ({
+  elem,
+  storageId,
+}: TScrollPositionParams): [TReadScrollPosition, TWriteScrollPosition] => {
   const readScrollPosition: TReadScrollPosition = (): void => {
-    const scrollOptions = SessionStoreManager.read<ScrollToOptions>(storageId) || {}
+    const scrollOptions =
+      SessionStoreManager.read<ScrollToOptions>(storageId) || {}
 
-    const HTMLElement = typeof elem === 'string' ? document.querySelectorAll(elem)[0] : elem
+    const HTMLElement =
+      typeof elem === 'string' ? document.querySelectorAll(elem)[0] : elem
 
     HTMLElement?.scrollTo(scrollOptions)
   }

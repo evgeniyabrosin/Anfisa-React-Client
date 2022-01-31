@@ -14,7 +14,9 @@ export const QueryBuilderTotalNumbers = observer(
 
     const stepData = toJS(dtreeStore.stepData)
 
-    const stepIndex = stepData.findIndex(element => element.isActive || element.isReturnedVariantsActive)
+    const stepIndex = stepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
 
     const returnedVariants = stepData[stepIndex]?.difference
     const startVariants = stepData[stepIndex]?.startFilterCounts
@@ -38,9 +40,13 @@ export const QueryBuilderTotalNumbers = observer(
         return prevNumber + currNumber
       }
 
-      const acceptedVariants = dtreeStore.stepData.map(step => !step.excluded && step.difference).reduce(sum)
+      const acceptedVariants = dtreeStore.stepData
+        .map(step => !step.excluded && step.difference)
+        .reduce(sum)
 
-      const rejectedVariants = dtreeStore.stepData.map(step => step.excluded && step.difference).reduce(sum)
+      const rejectedVariants = dtreeStore.stepData
+        .map(step => step.excluded && step.difference)
+        .reduce(sum)
 
       return type === 'excluded' ? rejectedVariants : acceptedVariants
     }
@@ -48,7 +54,9 @@ export const QueryBuilderTotalNumbers = observer(
     return (
       <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark justify-between">
         <div className="flex flex-wrap">
-          <span className="font-bold text-white w-full">{t('dtree.results')}</span>
+          <span className="font-bold text-white w-full">
+            {t('dtree.results')}
+          </span>
 
           <span className="text-12 leading-14px text-grey-blue mt-2">
             {t('ds.totalVariants')}
@@ -82,7 +90,14 @@ export const QueryBuilderTotalNumbers = observer(
             />
           )}
 
-          {hasStartVariants && <Button onClick={() => openTableModal(false)} text={t('dtree.viewVariants')} variant={'secondary-dark'} className="ml-5" />}
+          {hasStartVariants && (
+            <Button
+              onClick={() => openTableModal(false)}
+              text={t('dtree.viewVariants')}
+              variant={'secondary-dark'}
+              className="ml-5"
+            />
+          )}
         </div>
       </div>
     )

@@ -6,4 +6,15 @@ interface Props {
   isDisabled?: boolean
 }
 
-export const RadioButton = ({ isChecked, onChange, isDisabled }: Props): ReactElement => <input type="radio" checked={isChecked} onChange={onChange} disabled={isDisabled} />
+export const RadioButton = ({
+  isChecked,
+  onChange,
+  isDisabled,
+}: Props): ReactElement => (
+  <input
+    type="radio"
+    checked={isChecked}
+    onChange={onChange}
+    disabled={isDisabled}
+  />
+)

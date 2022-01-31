@@ -15,9 +15,13 @@ interface Props {
 
 export const SettingsPanel = observer(
   ({ close }: Props): ReactElement => {
-    const [viewType, setViewType] = useState<ViewTypeEnum>(columnsStore.viewType)
+    const [viewType, setViewType] = useState<ViewTypeEnum>(
+      columnsStore.viewType,
+    )
 
-    const [defaultColumns, setDefaultColumns] = useState<IColumns[]>(cloneDeep(columnsStore.getExtendedColumns))
+    const [defaultColumns, setDefaultColumns] = useState<IColumns[]>(
+      cloneDeep(columnsStore.getExtendedColumns),
+    )
 
     return (
       <PopperTableModal

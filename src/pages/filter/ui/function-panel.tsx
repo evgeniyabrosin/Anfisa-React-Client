@@ -50,7 +50,8 @@ const initialStateMap: Record<string, any> = {
 export const FunctionPanel = (): ReactElement => {
   const selectedFilter = filterStore.selectedGroupItem
 
-  const Component: FunctionComponent<Record<string, any>> = functionsMap[selectedFilter.name]
+  const Component: FunctionComponent<Record<string, any>> =
+    functionsMap[selectedFilter.name]
 
   const onSubmitAsync = async (values: any) => {
     if (filterStore.error) return
@@ -79,32 +80,65 @@ export const FunctionPanel = (): ReactElement => {
           '',
           values.variants,
           {
-            problem_group: values.problemGroups.length > 0 ? values.problemGroups : null,
+            problem_group:
+              values.problemGroups.length > 0 ? values.problemGroups : null,
           },
         ],
       ])
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.InheritanceMode, [[FuncStepTypesEnum.InheritanceMode, noArray.length]])
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.InheritanceMode,
+        [[FuncStepTypesEnum.InheritanceMode, noArray.length]],
+      )
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
-      const condition = ['func', FuncStepTypesEnum.CustomInheritanceMode, '', values.variants, { scenario: values.scenario }]
+      const condition = [
+        'func',
+        FuncStepTypesEnum.CustomInheritanceMode,
+        '',
+        values.variants,
+        { scenario: values.scenario },
+      ]
 
       const noArray = await datasetStore.setConditionsAsync(condition)
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CustomInheritanceMode, [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]])
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CustomInheritanceMode,
+        [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]],
+      )
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
-      const noArray = await datasetStore.setConditionsAsync([['func', selectedFilter.name, '', ['True'], values]])
+      const noArray = await datasetStore.setConditionsAsync([
+        ['func', selectedFilter.name, '', ['True'], values],
+      ])
 
-      filterStore.addSelectedFilterGroup('Coordinates', FuncStepTypesEnum.GeneRegion, [[FuncStepTypesEnum.GeneRegion, noArray.length]])
+      filterStore.addSelectedFilterGroup(
+        'Coordinates',
+        FuncStepTypesEnum.GeneRegion,
+        [[FuncStepTypesEnum.GeneRegion, noArray.length]],
+      )
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CompoundHet) {
-      const noArray = await datasetStore.setConditionsAsync([['func', selectedFilter.name, '', values.variants, { approx: values.approx || null, state: values.state || null }]])
+      const noArray = await datasetStore.setConditionsAsync([
+        [
+          'func',
+          selectedFilter.name,
+          '',
+          values.variants,
+          { approx: values.approx || null, state: values.state || null },
+        ],
+      ])
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CompoundHet, [[FuncStepTypesEnum.CompoundHet, noArray.length]])
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CompoundHet,
+        [[FuncStepTypesEnum.CompoundHet, noArray.length]],
+      )
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CompoundRequest) {
@@ -122,7 +156,11 @@ export const FunctionPanel = (): ReactElement => {
         ],
       ])
 
-      filterStore.addSelectedFilterGroup('Inheritance', FuncStepTypesEnum.CompoundRequest, [[FuncStepTypesEnum.CompoundRequest, noArray.length]])
+      filterStore.addSelectedFilterGroup(
+        'Inheritance',
+        FuncStepTypesEnum.CompoundRequest,
+        [[FuncStepTypesEnum.CompoundRequest, noArray.length]],
+      )
     }
 
     if (!datasetStore.isXL) {
@@ -154,7 +192,11 @@ export const FunctionPanel = (): ReactElement => {
 
   return (
     <div>
-      <Formik initialValues={initialValues[selectedFilter.name]} enableReinitialize onSubmit={onSubmitAsync}>
+      <Formik
+        initialValues={initialValues[selectedFilter.name]}
+        enableReinitialize
+        onSubmit={onSubmitAsync}
+      >
         {props => (
           <div>
             <Component {...props} />
@@ -169,7 +211,11 @@ export const FunctionPanel = (): ReactElement => {
                 }}
               />
 
-              <Button text={t('general.add')} onClick={props.submitForm} disabled={!!filterStore.error} />
+              <Button
+                text={t('general.add')}
+                onClick={props.submitForm}
+                disabled={!!filterStore.error}
+              />
             </div>
           </div>
         )}

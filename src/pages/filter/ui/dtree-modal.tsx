@@ -66,12 +66,19 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
   useOutsideClick(ref, close)
 
   return (
-    <div className="bg-white w-24 flex flex-col rounded text-12 leading-12px shadow-dark" ref={ref}>
+    <div
+      className="bg-white w-24 flex flex-col rounded text-12 leading-12px shadow-dark"
+      ref={ref}
+    >
       {actions.map((action, index) => (
         <span
           key={action}
           onClick={() => handleClick(action)}
-          className={cn('px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white', { 'rounded-t': index === 0 }, { 'rounded-b': index === actions.length - 1 })}
+          className={cn(
+            'px-2 py-1 cursor-pointer hover:bg-blue-bright hover:text-white',
+            { 'rounded-t': index === 0 },
+            { 'rounded-b': index === actions.length - 1 },
+          )}
           data-testid={DecisionTreesMenuDataCy.selectDropdownElem}
         >
           {action}

@@ -3,7 +3,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsStatType, IRemoveConditionItem, StatListType, TabReportType } from '@declarations'
+import {
+  DsStatType,
+  IRemoveConditionItem,
+  StatListType,
+  TabReportType,
+} from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
@@ -118,7 +123,9 @@ class DatasetStore {
 
     const indexOfExistingZone = this.zone.findIndex(elem => elem[0] === zone[0])
 
-    indexOfExistingZone !== -1 ? (this.zone[indexOfExistingZone] = zone) : (this.zone = [...this.zone, zone])
+    indexOfExistingZone !== -1
+      ? (this.zone[indexOfExistingZone] = zone)
+      : (this.zone = [...this.zone, zone])
   }
 
   removeZone(zone: [string, string[]]) {
@@ -141,7 +148,9 @@ class DatasetStore {
       await this.fetchDsStatAsync()
     }
 
-    const groupCondtionsIndex = this.conditions.findIndex((item: any) => item[1] === conditions[0][1])
+    const groupCondtionsIndex = this.conditions.findIndex(
+      (item: any) => item[1] === conditions[0][1],
+    )
 
     if (groupCondtionsIndex !== -1) {
       this.conditions.splice(groupCondtionsIndex, 1)
@@ -155,7 +164,9 @@ class DatasetStore {
   }
 
   async removeFunctionConditionAsync(functionName: string) {
-    this.conditions = this.conditions.filter(([_, name]) => name !== functionName)
+    this.conditions = this.conditions.filter(
+      ([_, name]) => name !== functionName,
+    )
 
     await this.fetchDsStatAsync()
   }
@@ -163,12 +174,18 @@ class DatasetStore {
   removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
     const cloneConditions = cloneDeep(this.conditions)
 
-    const subGroupIndex = cloneConditions.findIndex(item => item[1] === subGroup)
+    const subGroupIndex = cloneConditions.findIndex(
+      item => item[1] === subGroup,
+    )
 
-    const conditionKind = cloneConditions.find(item => item![1] === subGroup)![0]
+    const conditionKind = cloneConditions.find(
+      item => item![1] === subGroup,
+    )![0]
 
     if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3]?.filter((item: string) => item !== itemName)
+      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
+        (item: string) => item !== itemName,
+      )
 
       if (filteredItems?.length === 0) {
         cloneConditions.splice(subGroupIndex, 1)
@@ -187,7 +204,9 @@ class DatasetStore {
   removeConditionGroup({ subGroup }: { subGroup: string }) {
     const cloneConditions = cloneDeep(this.conditions)
 
-    const subGroupIndex = cloneConditions.findIndex(item => item[1] === subGroup)
+    const subGroupIndex = cloneConditions.findIndex(
+      item => item[1] === subGroup,
+    )
 
     if (subGroupIndex !== -1) {
       cloneConditions.splice(subGroupIndex, 1)
@@ -220,7 +239,10 @@ class DatasetStore {
     this.conditions = []
   }
 
-  async initDatasetAsync(datasetName: string = this.datasetName, prevPage?: string) {
+  async initDatasetAsync(
+    datasetName: string = this.datasetName,
+    prevPage?: string,
+  ) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
@@ -228,13 +250,18 @@ class DatasetStore {
     if (!prevPage) {
       await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
 
-      this.filteredNo.length === 0 ? await this.fetchTabReportAsync() : await this.fetchFilteredTabReportAsync()
+      this.filteredNo.length === 0
+        ? await this.fetchTabReportAsync()
+        : await this.fetchFilteredTabReportAsync()
 
       this.fetchDsStatAsync()
     }
   }
 
-  async fetchDsStatAsync(shouldSaveInHistory = true, bodyFromHistory?: URLSearchParams) {
+  async fetchDsStatAsync(
+    shouldSaveInHistory = true,
+    bodyFromHistory?: URLSearchParams,
+  ) {
     this.isLoadingDsStat = true
 
     const localBody = new URLSearchParams({
@@ -243,10 +270,13 @@ class DatasetStore {
     })
 
     if (!this.isFilterDisabled) {
-      this.conditions.length > 0 && localBody.append('conditions', JSON.stringify(this.conditions))
+      this.conditions.length > 0 &&
+        localBody.append('conditions', JSON.stringify(this.conditions))
     }
 
-    this.activePreset && this.conditions.length === 0 && localBody.append('filter', this.activePreset)
+    this.activePreset &&
+      this.conditions.length === 0 &&
+      localBody.append('filter', this.activePreset)
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
@@ -296,9 +326,14 @@ class DatasetStore {
     dsStatData.conditions?.forEach((condition: any[]) => {
       const name = condition[1]
 
-      const filterItem = dsStatData['stat-list']?.find((item: any) => item.name === name)
+      const filterItem = dsStatData['stat-list']?.find(
+        (item: any) => item.name === name,
+      )
 
-      if (condition[0] === FilterKindEnum.Enum || condition[0] === FilterKindEnum.Func) {
+      if (
+        condition[0] === FilterKindEnum.Enum ||
+        condition[0] === FilterKindEnum.Func
+      ) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
             group: filterItem.vgroup,
@@ -320,14 +355,23 @@ class DatasetStore {
   }
 
   async fetchTabReportAsync() {
-    if (this.indexTabReport !== 0 && this.indexTabReport < this.variantsAmount) {
+    if (
+      this.indexTabReport !== 0 &&
+      this.indexTabReport < this.variantsAmount
+    ) {
       this.isFetchingMore = true
     }
 
     if (this.variantsAmount > this.indexTabReport) {
-      const arrayLength = this.variantsAmount < INCREASE_INDEX ? this.variantsAmount : INCREASE_INDEX
+      const arrayLength =
+        this.variantsAmount < INCREASE_INDEX
+          ? this.variantsAmount
+          : INCREASE_INDEX
 
-      const seq = Array.from({ length: arrayLength }, (_, i) => i + this.indexTabReport)
+      const seq = Array.from(
+        { length: arrayLength },
+        (_, i) => i + this.indexTabReport,
+      )
 
       await this._fetchTabReportAsync(this.datasetName, seq)
 
@@ -370,15 +414,24 @@ class DatasetStore {
   async fetchFilteredTabReportAsync() {
     let seq: number[] = []
 
-    if (this.selectedVariantNumber !== undefined && this.selectedVariantNumber > 0) {
+    if (
+      this.selectedVariantNumber !== undefined &&
+      this.selectedVariantNumber > 0
+    ) {
       const lastVariant = this.filteredNo[this.filteredNo.length - 1]
 
       const currentSet = Math.ceil(this.selectedVariantNumber / INCREASE_INDEX)
       const lastVariantInSet = currentSet * INCREASE_INDEX
 
-      seq = lastVariantInSet >= lastVariant ? this.filteredNo : this.filteredNo.slice(0, lastVariantInSet)
+      seq =
+        lastVariantInSet >= lastVariant
+          ? this.filteredNo
+          : this.filteredNo.slice(0, lastVariantInSet)
     } else {
-      seq = this.filteredNo.slice(this.indexFilteredNo, this.indexFilteredNo + INCREASE_INDEX)
+      seq = this.filteredNo.slice(
+        this.indexFilteredNo,
+        this.indexFilteredNo + INCREASE_INDEX,
+      )
     }
 
     if (this.indexFilteredNo === 0) {
@@ -399,9 +452,12 @@ class DatasetStore {
   async fetchTagSelectAsync() {
     if (this.isXL) return
 
-    const response = await fetch(getApiUrl(`tag_select?ds=${this.datasetName}`), {
-      method: 'POST',
-    })
+    const response = await fetch(
+      getApiUrl(`tag_select?ds=${this.datasetName}`),
+      {
+        method: 'POST',
+      },
+    )
 
     const result = await response.json()
 
@@ -413,14 +469,19 @@ class DatasetStore {
   async fetchWsTagsAsync() {
     if (this.isXL) return
 
-    const response = await fetch(getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${variantStore.index}`), {
-      method: 'POST',
-    })
+    const response = await fetch(
+      getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${variantStore.index}`),
+      {
+        method: 'POST',
+      },
+    )
 
     const result = await response.json()
 
     runInAction(() => {
-      this.tags = [...result['op-tags'], ...result['check-tags']].filter(item => item !== '_note')
+      this.tags = [...result['op-tags'], ...result['check-tags']].filter(
+        item => item !== '_note',
+      )
     })
   }
 
@@ -432,7 +493,10 @@ class DatasetStore {
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', kind === 'reset' ? '[]' : JSON.stringify(this.conditions))
+      body.append(
+        'conditions',
+        kind === 'reset' ? '[]' : JSON.stringify(this.conditions),
+      )
       body.append('zone', JSON.stringify(this.zone))
     }
 
@@ -455,11 +519,17 @@ class DatasetStore {
       const taskResult = await operations.getJobStatusAsync(result.task_id)
 
       runInAction(() => {
-        this.filteredNo = taskResult?.data?.[0].samples ? taskResult.data[0].samples.map((variant: { no: number }) => variant.no) : []
+        this.filteredNo = taskResult?.data?.[0].samples
+          ? taskResult.data[0].samples.map(
+              (variant: { no: number }) => variant.no,
+            )
+          : []
       })
     } else {
       runInAction(() => {
-        this.filteredNo = result.records ? result.records.map((variant: { no: number }) => variant.no) : []
+        this.filteredNo = result.records
+          ? result.records.map((variant: { no: number }) => variant.no)
+          : []
 
         this.statAmount = get(result, 'filtered-counts', [])
         this.wsRecords = result.records
@@ -485,7 +555,9 @@ class DatasetStore {
     const result = await response.json()
 
     runInAction(() => {
-      zone === 'Symbol' ? (this.genes = result.variants) : (this.genesList = result.variants)
+      zone === 'Symbol'
+        ? (this.genes = result.variants)
+        : (this.genesList = result.variants)
     })
   }
 

@@ -18,18 +18,28 @@ export const TagsContainer = observer(() => {
             'flex-wrap': isExpandTags,
           })}
         >
-          {variantStore.checkedTags.slice(0, isExpandTags ? variantStore.checkedTags.length : 2).map(tag => (
-            <Tag text={tag} key={tag} isActive hideCloseIcon />
-          ))}
+          {variantStore.checkedTags
+            .slice(0, isExpandTags ? variantStore.checkedTags.length : 2)
+            .map(tag => (
+              <Tag text={tag} key={tag} isActive hideCloseIcon />
+            ))}
 
           {variantStore.checkedTags.length > 2 && (
             <Fragment>
               {isExpandTags ? (
-                <span className="text-12 leading-14px font-bold text-blue-bright p-1 cursor-pointer" onClick={roll}>
+                <span
+                  className="text-12 leading-14px font-bold text-blue-bright p-1 cursor-pointer"
+                  onClick={roll}
+                >
                   {t('general.showLess')}
                 </span>
               ) : (
-                <Tag text={`+${variantStore.checkedTags.length - 2}`} isActive onClick={expand} hideCloseIcon />
+                <Tag
+                  text={`+${variantStore.checkedTags.length - 2}`}
+                  isActive
+                  onClick={expand}
+                  hideCloseIcon
+                />
               )}
             </Fragment>
           )}

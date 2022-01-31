@@ -11,5 +11,11 @@ interface Props {
 export const InputNumber = ({ ...rest }: Props): ReactElement => {
   const { className, ...tempRest } = rest
 
-  return <input type="number" className={cn('text-sm rounded leading-tight py-1.5 px-3', className)} {...tempRest} />
+  return (
+    <input
+      type="number"
+      className={cn('text-sm rounded leading-tight py-1.5 px-3', className)}
+      {...tempRest}
+    />
+  )
 }

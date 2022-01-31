@@ -16,7 +16,16 @@ import { noFirstSymbolsPattern } from '@utils/validateNotes'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {
-  return <Button refEl={refEl} text={'+ Add'} size="xs" variant={'secondary-dark'} onClick={onClick} dataTestId={VariantDrawerDataCy.addTag} />
+  return (
+    <Button
+      refEl={refEl}
+      text={'+ Add'}
+      size="xs"
+      variant={'secondary-dark'}
+      onClick={onClick}
+      dataTestId={VariantDrawerDataCy.addTag}
+    />
+  )
 })
 
 const DrawerTagModal = observer(({ close }: any) => {
@@ -29,7 +38,9 @@ const DrawerTagModal = observer(({ close }: any) => {
   const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
   const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
 
-  const [checkedTags, setCheckedTags] = useState<string[]>(variantStore.checkedTags)
+  const [checkedTags, setCheckedTags] = useState<string[]>(
+    variantStore.checkedTags,
+  )
 
   const [error, setError] = useState<string>('')
 
@@ -38,7 +49,11 @@ const DrawerTagModal = observer(({ close }: any) => {
   const tags = [...variantStore.generalTags, ...variantStore.optionalTags]
 
   const handleChange = (value: string) => {
-    if (tags.map(tag => tag.toLocaleLowerCase()).includes(value.toLocaleLowerCase())) {
+    if (
+      tags
+        .map(tag => tag.toLocaleLowerCase())
+        .includes(value.toLocaleLowerCase())
+    ) {
       setError(t('variant.tagExists'))
     } else {
       setError('')
@@ -83,7 +98,9 @@ const DrawerTagModal = observer(({ close }: any) => {
     let params = ''
 
     Object.entries(variantStore.tagsWithNotes).map((tagData, index) => {
-      params += `"${tagData[0]}":${isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`}`
+      params += `"${tagData[0]}":${
+        isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`
+      }`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
         params += `,`
@@ -100,7 +117,10 @@ const DrawerTagModal = observer(({ close }: any) => {
   }
 
   return (
-    <div ref={ref} className="bg-blue-light flex flex-col py-5 px-4 rounded-xl overflow-y-auto">
+    <div
+      ref={ref}
+      className="bg-blue-light flex flex-col py-5 px-4 rounded-xl overflow-y-auto"
+    >
       <span className="w-full">
         <span>{t('variant.tagsFor')} </span>
 
@@ -115,14 +135,20 @@ const DrawerTagModal = observer(({ close }: any) => {
         {tags.map(tag => (
           <div key={tag} className="flex items-center mb-4">
             <Checkbox
-              checked={checkedTags.includes(tag) || Object.keys(variantStore.tagsWithNotes).includes(tag)}
+              checked={
+                checkedTags.includes(tag) ||
+                Object.keys(variantStore.tagsWithNotes).includes(tag)
+              }
               className="w-4 h-4"
               onChange={e => handleCheck(e.target.checked, tag)}
             />
 
             <span className="text-12 ml-1">{tag}</span>
 
-            <span className="ml-2 cursor-pointer hover:text-blue-bright" onClick={() => handleClick(tag)}>
+            <span
+              className="ml-2 cursor-pointer hover:text-blue-bright"
+              onClick={() => handleClick(tag)}
+            >
               {Object.keys(variantStore.tagsWithNotes).includes(tag) && `(#)`}
             </span>
           </div>
@@ -130,21 +156,43 @@ const DrawerTagModal = observer(({ close }: any) => {
       </div>
 
       <div className="mt-2 h-auto">
-        <Input value={customTag} onChange={(e: any) => handleChange(e.target.value)} />
+        <Input
+          value={customTag}
+          onChange={(e: any) => handleChange(e.target.value)}
+        />
 
         <div className="flex justify-between">
-          {error && <div className="mt-px text-12 text-red-secondary whitespace-nowrap">{error}</div>}
+          {error && (
+            <div className="mt-px text-12 text-red-secondary whitespace-nowrap">
+              {error}
+            </div>
+          )}
 
           <div className="flex justify-end w-full">
-            <Button text="Add custom tag" disabled={!customTag.trim() || !!error} className="mt-2" onClick={handleSetCustomTag} dataTestId={VariantDrawerDataCy.addCustomTag} />
+            <Button
+              text="Add custom tag"
+              disabled={!customTag.trim() || !!error}
+              className="mt-2"
+              onClick={handleSetCustomTag}
+              dataTestId={VariantDrawerDataCy.addCustomTag}
+            />
           </div>
         </div>
       </div>
 
       <div className="flex mt-4">
-        <Button text={t('general.cancel')} onClick={close} variant={'secondary'} className="mr-2 ml-auto" />
+        <Button
+          text={t('general.cancel')}
+          onClick={close}
+          variant={'secondary'}
+          className="mr-2 ml-auto"
+        />
 
-        <Button text="Save tags" onClick={handleSaveTagsAsync} dataTestId={VariantDrawerDataCy.saveTags} />
+        <Button
+          text="Save tags"
+          onClick={handleSaveTagsAsync}
+          dataTestId={VariantDrawerDataCy.saveTags}
+        />
       </div>
     </div>
   )
@@ -156,7 +204,10 @@ export const DrawerTags = observer(() => {
       <span className="text-14 text-white px-3">{t('variant.tags')}</span>
 
       <div className="mr-3">
-        <PopperButton ButtonElement={DrawerTagButton} ModalElement={DrawerTagModal} />
+        <PopperButton
+          ButtonElement={DrawerTagButton}
+          ModalElement={DrawerTagModal}
+        />
       </div>
 
       {variantStore.checkedTags.length > 0 && <TagsContainer />}

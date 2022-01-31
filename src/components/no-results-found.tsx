@@ -13,13 +13,21 @@ export interface INoResultsAction {
   handler: () => void
 }
 
-export const NoResultsFound = ({ text, className, action }: React.PropsWithChildren<INoResultsFoundProps>): ReactElement => {
+export const NoResultsFound = ({
+  text,
+  className,
+  action,
+}: React.PropsWithChildren<INoResultsFoundProps>): ReactElement => {
   const renderAction = () => {
     if (!action) return
 
     return (
       <div className="mt-3">
-        <Button text={action.text} variant="secondary" onClick={action.handler} />
+        <Button
+          text={action.text}
+          variant="secondary"
+          onClick={action.handler}
+        />
       </div>
     )
   }

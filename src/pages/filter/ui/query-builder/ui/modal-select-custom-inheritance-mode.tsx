@@ -41,7 +41,9 @@ export const ModalSelectCustomInheritanceMode = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = datasetStore.isXL ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}` : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
+      const params = datasetStore.isXL
+        ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}`
+        : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -76,7 +78,10 @@ export const ModalSelectCustomInheritanceMode = observer(
       let scenarioString = ''
 
       newScenario.map((item, index) => {
-        scenarioString += `"${item[0]}":["${item[1].toString().split(',').join('","')}"]`
+        scenarioString += `"${item[0]}":["${item[1]
+          .toString()
+          .split(',')
+          .join('","')}"]`
 
         if (newScenario[index + 1]) scenarioString += `,`
       })
@@ -194,9 +199,18 @@ export const ModalSelectCustomInheritanceMode = observer(
 
     return (
       <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
-        <CustomInheritanceModeContent attrData={attrData} handleSetScenario={handleSetScenario} selectStates={selectStates} handleReset={handleReset} resetValue={resetValue} />
+        <CustomInheritanceModeContent
+          attrData={attrData}
+          handleSetScenario={handleSetScenario}
+          selectStates={selectStates}
+          handleReset={handleReset}
+          resetValue={resetValue}
+        />
 
         <SelectModalButtons
           handleClose={handleClose}

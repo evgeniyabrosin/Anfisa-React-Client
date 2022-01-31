@@ -17,17 +17,28 @@ export const ModalEditFilters = observer(
   (): ReactElement => {
     const ref = useRef(null)
 
-    const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups[dtreeStore.groupIndexToChange]
+    const currentGroup =
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        dtreeStore.groupIndexToChange
+      ]
 
     const indexOfCurrentGroup = dtreeStore.groupIndexToChange
     const groupName = dtreeStore.groupNameToChange
 
-    const selectedGroupsAmount = currentGroup.length > 0 ? dtreeStore.selectedFilters : []
+    const selectedGroupsAmount =
+      currentGroup.length > 0 ? dtreeStore.selectedFilters : []
 
-    const currentGroupLength = dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup].length
+    const currentGroupLength =
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        indexOfCurrentGroup
+      ].length
 
     useEffect(() => {
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup][currentGroupLength - 1].map((item: string) => dtreeStore.addSelectedFilter(item))
+      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+        indexOfCurrentGroup
+      ][currentGroupLength - 1].map((item: string) =>
+        dtreeStore.addSelectedFilter(item),
+      )
 
       return () => {
         dtreeStore.resetSelectedFilters()
@@ -81,11 +92,18 @@ export const ModalEditFilters = observer(
 
     const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    const selectedGroup = subGroups.find(subGroup => subGroup.find(element => element.name === groupName))?.find(element => element.name === groupName)
+    const selectedGroup = subGroups
+      .find(subGroup => subGroup.find(element => element.name === groupName))
+      ?.find(element => element.name === groupName)
 
     const originGroupList: any[] = selectedGroup?.variants ?? []
 
-    const filteredGroupList = originGroupList.filter((variant: [string, number]) => variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))
+    const filteredGroupList = originGroupList.filter(
+      (variant: [string, number]) =>
+        variant[0]
+          .toLocaleLowerCase()
+          .includes(searchValue.toLocaleLowerCase()),
+    )
 
     const groupsPerPage = 100
     const chunks = createChunks(filteredGroupList, groupsPerPage)
@@ -96,13 +114,18 @@ export const ModalEditFilters = observer(
 
         {originGroupList.length > 15 && (
           <div className="flex mt-3">
-            <QueryBuilderSearch value={searchValue} onChange={handleChange} isSubgroupItemSearch />
+            <QueryBuilderSearch
+              value={searchValue}
+              onChange={handleChange}
+              isSubgroupItemSearch
+            />
           </div>
         )}
 
         <div className="flex justify-between items-center w-full mt-4 text-14">
           <div className="text-14 text-grey-blue">
-            {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0} {t('dtree.selected')}
+            {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0}{' '}
+            {t('dtree.selected')}
           </div>
 
           <div className="flex">
@@ -113,13 +136,19 @@ export const ModalEditFilters = observer(
 
             <ModsDivider />
 
-            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(true)}>
+            <div
+              className="cursor-pointer text-blue-bright"
+              onClick={() => handleCheckAll(true)}
+            >
               {t('general.selectAll')}
             </div>
 
             <ModsDivider />
 
-            <div className="cursor-pointer text-blue-bright" onClick={() => handleCheckAll(false)}>
+            <div
+              className="cursor-pointer text-blue-bright"
+              onClick={() => handleCheckAll(false)}
+            >
               {t('general.clearAll')}
             </div>
           </div>
@@ -133,11 +162,16 @@ export const ModalEditFilters = observer(
 
               return (
                 variantNumbers !== 0 && (
-                  <div key={variantName} className="flex items-center mb-2 text-14">
+                  <div
+                    key={variantName}
+                    className="flex items-center mb-2 text-14"
+                  >
                     <Checkbox
                       checked={dtreeStore.selectedFilters.includes(variantName)}
                       className="-mt-0.5 mr-1 cursor-pointer"
-                      onChange={e => handleCheckGroupItem(e.target.checked, variantName)}
+                      onChange={e =>
+                        handleCheckGroupItem(e.target.checked, variantName)
+                      }
                     />
 
                     <span className="text-black">{variantName}</span>
@@ -150,13 +184,25 @@ export const ModalEditFilters = observer(
               )
             })
           ) : (
-            <div className="flex justify-center items-center text-14 text-grey-blue">{t('dtree.noFilters')}</div>
+            <div className="flex justify-center items-center text-14 text-grey-blue">
+              {t('dtree.noFilters')}
+            </div>
           )}
         </div>
 
-        {filteredGroupList.length > groupsPerPage && <Pagintaion pagesNumbers={chunks.length} currentPage={currentPage} setPageNumber={setCurrentPage} />}
+        {filteredGroupList.length > groupsPerPage && (
+          <Pagintaion
+            pagesNumbers={chunks.length}
+            currentPage={currentPage}
+            setPageNumber={setCurrentPage}
+          />
+        )}
 
-        <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={selectedGroupsAmount.length === 0} />
+        <EditModalButtons
+          handleClose={handleClose}
+          handleSaveChanges={handleSaveChanges}
+          disabled={selectedGroupsAmount.length === 0}
+        />
       </ModalBase>
     )
   },

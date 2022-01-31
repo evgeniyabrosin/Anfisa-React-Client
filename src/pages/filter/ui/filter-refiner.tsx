@@ -14,7 +14,10 @@ export const FilterRefiner = (): ReactElement => {
   )
 
   return (
-    <div className="flex overflow-y-hidden" style={{ maxHeight: 'calc(100vh - 201px)' }}>
+    <div
+      className="flex overflow-y-hidden"
+      style={{ maxHeight: 'calc(100vh - 201px)' }}
+    >
       <FilterRefinerGroups />
 
       <SelectedGroup />

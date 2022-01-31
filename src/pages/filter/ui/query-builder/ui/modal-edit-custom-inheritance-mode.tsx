@@ -21,7 +21,8 @@ export const ModalEditCustomInheritanceMode = observer(
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup = dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup =
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
     const groupName = dtreeStore.groupNameToChange
 
@@ -42,11 +43,16 @@ export const ModalEditCustomInheritanceMode = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const scenarioString = getFuncParams(groupName, currentGroup[currentGroup.length - 1])
+      const scenarioString = getFuncParams(
+        groupName,
+        currentGroup[currentGroup.length - 1],
+      )
         .slice(10)
         .replace(/\s+/g, '')
 
-      setResetValue(getResetType(currentGroup[currentGroup.length - 1].scenario))
+      setResetValue(
+        getResetType(currentGroup[currentGroup.length - 1].scenario),
+      )
 
       const params = `{"scenario":${scenarioString}}`
 
@@ -57,11 +63,17 @@ export const ModalEditCustomInheritanceMode = observer(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const [firstSelectValue, setFirstSelectValue] = useState<string>(getSelectedValue(attrData.family[0]))
+    const [firstSelectValue, setFirstSelectValue] = useState<string>(
+      getSelectedValue(attrData.family[0]),
+    )
 
-    const [secondSelectValue, setSecondSelectValue] = useState<string>(getSelectedValue(attrData.family[1]))
+    const [secondSelectValue, setSecondSelectValue] = useState<string>(
+      getSelectedValue(attrData.family[1]),
+    )
 
-    const [thirdSelectValue, setThirdSelectValue] = useState<string>(getSelectedValue(attrData.family[2]))
+    const [thirdSelectValue, setThirdSelectValue] = useState<string>(
+      getSelectedValue(attrData.family[2]),
+    )
 
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
 
@@ -81,7 +93,10 @@ export const ModalEditCustomInheritanceMode = observer(
       let scenarioString = ''
 
       newScenario.map((item, index) => {
-        scenarioString += `"${item[0]}":["${item[1].toString().split(',').join('","')}"]`
+        scenarioString += `"${item[0]}":["${item[1]
+          .toString()
+          .split(',')
+          .join('","')}"]`
 
         if (newScenario[index + 1]) scenarioString += `,`
       })
@@ -115,7 +130,9 @@ export const ModalEditCustomInheritanceMode = observer(
     }
 
     function getSelectedValue(group: string): any {
-      const data: any[] = Object.entries(currentGroup[currentGroup.length - 1].scenario)
+      const data: any[] = Object.entries(
+        currentGroup[currentGroup.length - 1].scenario,
+      )
 
       let value = '--'
 
@@ -201,11 +218,24 @@ export const ModalEditCustomInheritanceMode = observer(
 
     return (
       <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
-        <CustomInheritanceModeContent attrData={attrData} handleSetScenario={handleSetScenario} selectStates={selectStates} handleReset={handleReset} resetValue={resetValue} />
+        <CustomInheritanceModeContent
+          attrData={attrData}
+          handleSetScenario={handleSetScenario}
+          selectStates={selectStates}
+          handleReset={handleReset}
+          resetValue={resetValue}
+        />
 
-        <EditModalButtons handleClose={handleClose} handleSaveChanges={handleSaveChanges} disabled={!variants} />
+        <EditModalButtons
+          handleClose={handleClose}
+          handleSaveChanges={handleSaveChanges}
+          disabled={!variants}
+        />
       </ModalBase>
     )
   },

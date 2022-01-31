@@ -10,6 +10,9 @@ export const Results = (): ReactElement => (
   <div>
     <ControlPanelTitle title={t('ds.results')} />
 
-    <PopperButton ButtonElement={TableProperiesButton} ModalElement={SettingsPanel} />
+    <PopperButton
+      ButtonElement={TableProperiesButton}
+      ModalElement={SettingsPanel}
+    />
   </div>
 )

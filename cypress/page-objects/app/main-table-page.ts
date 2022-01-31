@@ -61,7 +61,10 @@ export class MainTableWidget extends UIWidget {
   readonly checkboxListElement: Label
   readonly customizeTableList: Label
 
-  constructor(options: { selectors: MainTableSelectors; labels: MainTableLables }) {
+  constructor(options: {
+    selectors: MainTableSelectors
+    labels: MainTableLables
+  }) {
     super(options)
 
     const selectors = options.selectors
@@ -85,8 +88,14 @@ export class MainTableWidget extends UIWidget {
     this.columnSwitch = new Button(selectors.columnSwitch)
     this.searchColumn = new Input(selectors.searchColumn)
     this.columnHeader = new Label(selectors.columnHeader, labels.columnHeader!)
-    this.checkboxListElement = new Label(selectors.checkboxListElement, labels.checkboxListElement!)
-    this.customizeTableList = new Label(selectors.customizeTableList, labels.customizeTableList)
+    this.checkboxListElement = new Label(
+      selectors.checkboxListElement,
+      labels.checkboxListElement!,
+    )
+    this.customizeTableList = new Label(
+      selectors.customizeTableList,
+      labels.customizeTableList,
+    )
     this.exportCsv = new Button(selectors.exportCsv)
   }
 }
@@ -115,8 +124,12 @@ class MainTablePage extends BasePage {
         columnSwitch: `${CommonSelectors.columnSwitch}`,
         searchColumn: Helper.getDataId(MainTableDataCy.searchColumn),
         columnHeader: `${CommonSelectors.columnHeader}`,
-        checkboxListElement: Helper.getDataId(MainTableDataCy.checkboxListElement),
-        customizeTableList: Helper.getDataId(MainTableDataCy.customizeTableList),
+        checkboxListElement: Helper.getDataId(
+          MainTableDataCy.checkboxListElement,
+        ),
+        customizeTableList: Helper.getDataId(
+          MainTableDataCy.customizeTableList,
+        ),
       },
       labels: {
         numVariants: 'number-of-variants',

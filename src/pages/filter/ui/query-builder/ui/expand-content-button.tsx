@@ -11,7 +11,13 @@ interface IProps {
   expandContent?: () => void
 }
 
-export const ExpandContentButton = ({ isVisible, isStep, isModal, isDropDown, expandContent }: IProps): ReactElement => {
+export const ExpandContentButton = ({
+  isVisible,
+  isStep,
+  isModal,
+  isDropDown,
+  expandContent,
+}: IProps): ReactElement => {
   return (
     <div
       className={cn('w-4 h-4', {
@@ -25,9 +31,12 @@ export const ExpandContentButton = ({ isVisible, isStep, isModal, isDropDown, ex
         name="Arrow"
         onClick={expandContent}
         size={16}
-        className={cn('transform rotate-90 cursor-pointer hover:text-blue-bright', {
-          'transform -rotate-90': !isVisible,
-        })}
+        className={cn(
+          'transform rotate-90 cursor-pointer hover:text-blue-bright',
+          {
+            'transform -rotate-90': !isVisible,
+          },
+        )}
       />
     </div>
   )

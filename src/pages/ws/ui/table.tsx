@@ -41,7 +41,10 @@ const offsetSizeToLoad = (offsetSize / 100) * 60
 
 const TABLE_SCROLL_POSITION = 'tableScrollPosition'
 
-export const isRowSelected = (rowIndex: number, activeIndex: number): boolean => {
+export const isRowSelected = (
+  rowIndex: number,
+  activeIndex: number,
+): boolean => {
   return toJS(datasetStore.filteredNo)[rowIndex] === activeIndex
 }
 
@@ -54,13 +57,29 @@ export const Table = observer(
 
     const { selectedFilters } = filterStore
 
-    const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } = zoneStore
+    const {
+      selectedGenes,
+      selectedGenesList,
+      selectedSamples,
+      selectedTags,
+    } = zoneStore
 
     const defaultColumn = {
-      width: variantStore.drawerVisible ? 190 : (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) / 8,
+      width: variantStore.drawerVisible
+        ? 190
+        : (window.innerWidth ||
+            document.documentElement.clientWidth ||
+            document.body.clientWidth) / 8,
     }
 
-    const { getTableProps, getTableBodyProps, headerGroups, totalColumnsWidth, rows, prepareRow } = useTable(
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      totalColumnsWidth,
+      rows,
+      prepareRow,
+    } = useTable(
       {
         columns,
         data,
@@ -155,7 +174,11 @@ export const Table = observer(
 
     const renderNoResults = useCallback(() => {
       const isFiltersSelected =
-        Object.keys(selectedFilters).length > 0 || selectedGenes.length > 0 || selectedGenesList.length > 0 || selectedSamples.length > 0 || selectedTags.length > 0
+        Object.keys(selectedFilters).length > 0 ||
+        selectedGenes.length > 0 ||
+        selectedGenesList.length > 0 ||
+        selectedSamples.length > 0 ||
+        selectedTags.length > 0
 
       if (datasetStore.tabReport.length === 0) {
         return isFiltersSelected ? (
@@ -173,7 +196,13 @@ export const Table = observer(
       } else {
         return null
       }
-    }, [selectedFilters, selectedGenes, selectedGenesList, selectedSamples, selectedTags])
+    }, [
+      selectedFilters,
+      selectedGenes,
+      selectedGenesList,
+      selectedSamples,
+      selectedTags,
+    ])
 
     const RenderRow = useCallback(
       ({ index, style }) => {
@@ -189,7 +218,10 @@ export const Table = observer(
             onClick={() => handleOpenVariant(row)}
             className={cn(
               'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible && isRowSelected(row.index, variantStore.index) ? 'bg-blue-bright text-white' : 'text-black hover:bg-blue-light',
+              variantStore.drawerVisible &&
+                isRowSelected(row.index, variantStore.index)
+                ? 'bg-blue-bright text-white'
+                : 'text-black hover:bg-blue-light',
             )}
           >
             {row.cells.map((cell: any) => {
@@ -201,9 +233,15 @@ export const Table = observer(
                   {...cell.getCellProps()}
                   key={Math.random()}
                   className={cn('td overflow-hidden', {
-                    'py-1': cell.column.Header !== tableColumnMap.samples && columnsStore.viewType === ViewTypeEnum.Compact,
-                    'py-4': cell.column.Header !== tableColumnMap.samples && columnsStore.viewType !== ViewTypeEnum.Compact,
-                    'h-full': cell.column.Header === tableColumnMap.samples && columnsStore.viewType !== ViewTypeEnum.Compact,
+                    'py-1':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType === ViewTypeEnum.Compact,
+                    'py-4':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType !== ViewTypeEnum.Compact,
+                    'h-full':
+                      cell.column.Header === tableColumnMap.samples &&
+                      columnsStore.viewType !== ViewTypeEnum.Compact,
                     'px-4': cell.column.Header !== tableColumnMap.samples,
                   })}
                 >
@@ -231,7 +269,10 @@ export const Table = observer(
     )
 
     const handleScrollAsync = async () => {
-      if (toJS(datasetStore.filteredNo).length > 0 && datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length) {
+      if (
+        toJS(datasetStore.filteredNo).length > 0 &&
+        datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length
+      ) {
         await datasetStore.fetchFilteredTabReportAsync()
 
         return
@@ -243,7 +284,11 @@ export const Table = observer(
     }
 
     return (
-      <div {...getTableProps()} style={{ width: totalColumnsWidth }} className="table h-full">
+      <div
+        {...getTableProps()}
+        style={{ width: totalColumnsWidth }}
+        className="table h-full"
+      >
         <div className="thead">
           {headerGroups.map(headerGroup => {
             const stylesHead = { ...headerGroup.getHeaderGroupProps().style }
@@ -251,11 +296,22 @@ export const Table = observer(
             stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
 
             return (
-              <div {...headerGroup.getHeaderGroupProps()} key={Math.random()} className="tr" style={stylesHead}>
+              <div
+                {...headerGroup.getHeaderGroupProps()}
+                key={Math.random()}
+                className="tr"
+                style={stylesHead}
+              >
                 {headerGroup.headers.map((column: any) => {
                   return (
-                    <div {...column.getHeaderProps()} key={Math.random()} className="th">
-                      {column.HeaderComponent ? column.render('HeaderComponent') : column.render('Header')}
+                    <div
+                      {...column.getHeaderProps()}
+                      key={Math.random()}
+                      className="th"
+                    >
+                      {column.HeaderComponent
+                        ? column.render('HeaderComponent')
+                        : column.render('Header')}
                     </div>
                   )
                 })}
@@ -269,12 +325,23 @@ export const Table = observer(
         {toJS(datasetStore.tabReport).length > 0 && (
           <div {...getTableBodyProps()} className="text-12 tbody">
             <FixedSizeList
-              height={(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) - 200}
+              height={
+                (window.innerHeight ||
+                  document.documentElement.clientHeight ||
+                  document.body.clientHeight) - 200
+              }
               itemCount={rows.length}
               initialScrollOffset={datasetStore.offset}
-              itemSize={columnsStore.viewType === ViewTypeEnum.Compact ? RowHeight.Compact : RowHeight.Basic}
+              itemSize={
+                columnsStore.viewType === ViewTypeEnum.Compact
+                  ? RowHeight.Compact
+                  : RowHeight.Basic
+              }
               onScroll={debounce(props => {
-                if (props.scrollOffset > datasetStore.offset + offsetSizeToLoad) {
+                if (
+                  props.scrollOffset >
+                  datasetStore.offset + offsetSizeToLoad
+                ) {
                   datasetStore.setTableOffest(props.scrollOffset)
                   handleScrollAsync()
                 }

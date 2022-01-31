@@ -12,14 +12,18 @@ export const CellVariant = observer(
     const value = get(cell, 'value', '').split(' ')
     const rowIndex = get(cell, 'row.index', null)
 
-    const selectedRow = variantStore.drawerVisible && isRowSelected(rowIndex, variantStore.index)
+    const selectedRow =
+      variantStore.drawerVisible && isRowSelected(rowIndex, variantStore.index)
 
     return (
       <div className="leading-18px">
         <div className="flex">
           <span className="mr-1">{value[0]}</span>
 
-          <CopyToClipboard text={`${value[0]} ${value[1]}`} className={selectedRow ? 'text-white' : 'text-blue-bright'} />
+          <CopyToClipboard
+            text={`${value[0]} ${value[1]}`}
+            className={selectedRow ? 'text-white' : 'text-blue-bright'}
+          />
         </div>
         <div>{value[1]}</div>
       </div>

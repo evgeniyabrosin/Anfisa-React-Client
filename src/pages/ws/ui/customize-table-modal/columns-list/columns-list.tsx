@@ -1,5 +1,10 @@
 import { ReactElement } from 'react'
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
 
 import columnsStore from '@store/wsColumns'
@@ -19,7 +24,10 @@ const columnListStore = new ColumnListStore()
 export const ColumnsList = observer(
   (): ReactElement => {
     const onDragEnd = (result: DropResult) => {
-      columnListStore.reorderColumns(result.source.index, result.destination?.index)
+      columnListStore.reorderColumns(
+        result.source.index,
+        result.destination?.index,
+      )
     }
 
     const { columnsToDisplay, toggleColumnHidden } = columnListStore
@@ -31,16 +39,27 @@ export const ColumnsList = observer(
             {provided => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {columnsToDisplay.map((column, index) => (
-                  <Draggable key={column.title} draggableId={column.title} index={index} isDragDisabled={!!columnsStore.searchColumnValue}>
+                  <Draggable
+                    key={column.title}
+                    draggableId={column.title}
+                    index={index}
+                    isDragDisabled={!!columnsStore.searchColumnValue}
+                  >
                     {providedDraggable => (
                       <div
                         ref={providedDraggable.innerRef}
                         {...providedDraggable.draggableProps}
                         {...providedDraggable.dragHandleProps}
-                        style={getItemStyle(providedDraggable.draggableProps.style)}
+                        style={getItemStyle(
+                          providedDraggable.draggableProps.style,
+                        )}
                         data-testid={MainTableDataCy.customizeTableList}
                       >
-                        <ColumnNameItem name={column.title} isChecked={!column.hidden} onClickSwitch={() => toggleColumnHidden(column.title)} />
+                        <ColumnNameItem
+                          name={column.title}
+                          isChecked={!column.hidden}
+                          onClickSwitch={() => toggleColumnHidden(column.title)}
+                        />
                       </div>
                     )}
                   </Draggable>

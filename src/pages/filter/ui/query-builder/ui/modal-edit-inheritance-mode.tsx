@@ -15,13 +15,16 @@ export const ModalEditInheritanceMode = observer(
     const currentStepIndex = dtreeStore.currentStepIndex
     const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup = dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    const currentGroup =
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
     const groupName = dtreeStore.groupNameToChange
 
-    const selectedGroupsAmount = currentGroup && currentGroup.length > 0 ? dtreeStore.selectedFilters : []
+    const selectedGroupsAmount =
+      currentGroup && currentGroup.length > 0 ? dtreeStore.selectedFilters : []
 
-    const currentGroupLength = dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].length
+    const currentGroupLength =
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].length
 
     let attrData: any
 
@@ -35,12 +38,19 @@ export const ModalEditInheritanceMode = observer(
       })
     })
 
-    const problemGroup = Object.keys(currentGroup[currentGroup.length - 1]).length > 0 ? Object.values(currentGroup[currentGroup.length - 1])[0] : attrData.affected
+    const problemGroup =
+      Object.keys(currentGroup[currentGroup.length - 1]).length > 0
+        ? Object.values(currentGroup[currentGroup.length - 1])[0]
+        : attrData.affected
 
-    const [problemGroupData, setProblemGroupData] = useState<string[]>(problemGroup)
+    const [problemGroupData, setProblemGroupData] = useState<string[]>(
+      problemGroup,
+    )
 
     useEffect(() => {
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex].find((elem: any) => Array.isArray(elem)).map((item: string) => dtreeStore.addSelectedFilter(item))
+      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+        .find((elem: any) => Array.isArray(elem))
+        .map((item: string) => dtreeStore.addSelectedFilter(item))
 
       return () => {
         dtreeStore.resetSelectedFilters()
@@ -50,7 +60,10 @@ export const ModalEditInheritanceMode = observer(
     useEffect(() => {
       const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"problem_group":["${problemGroup.toString().split(',').join('","')}"]}`
+      const params = `{"problem_group":["${problemGroup
+        .toString()
+        .split(',')
+        .join('","')}"]}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
@@ -80,7 +93,11 @@ export const ModalEditInheritanceMode = observer(
         setProblemGroupData((prev: any) => {
           const newProblemGroupData = [...prev, value]
 
-          const params = `{"problem_group":["${newProblemGroupData.reverse().toString().split(',').join('","')}"]}`
+          const params = `{"problem_group":["${newProblemGroupData
+            .reverse()
+            .toString()
+            .split(',')
+            .join('","')}"]}`
 
           dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -88,9 +105,14 @@ export const ModalEditInheritanceMode = observer(
         })
       } else {
         setProblemGroupData((prev: any) => {
-          const newProblemGroupData = prev.filter((item: string) => item !== value)
+          const newProblemGroupData = prev.filter(
+            (item: string) => item !== value,
+          )
 
-          const params = `{"problem_group": ["${newProblemGroupData.toString().split(',').join('", "')}"]}`
+          const params = `{"problem_group": ["${newProblemGroupData
+            .toString()
+            .split(',')
+            .join('", "')}"]}`
 
           dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -102,21 +124,35 @@ export const ModalEditInheritanceMode = observer(
     const handleReset = () => {
       setProblemGroupData(attrData.affected)
 
-      const params = `{"problem_group": ["${attrData.affected.toString().split(',').join('", "')}"]}`
+      const params = `{"problem_group": ["${attrData.affected
+        .toString()
+        .split(',')
+        .join('", "')}"]}`
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
 
     return (
       <ModalBase refer={ref} minHeight={340}>
-        <HeaderModal groupName={dtreeStore.groupNameToChange} handleClose={handleClose} />
+        <HeaderModal
+          groupName={dtreeStore.groupNameToChange}
+          handleClose={handleClose}
+        />
 
-        <InheritanceModeContent attrData={attrData} handleProblemGroup={handleProblemGroup} problemGroupData={problemGroupData} handleReset={handleReset} />
+        <InheritanceModeContent
+          attrData={attrData}
+          handleProblemGroup={handleProblemGroup}
+          problemGroupData={problemGroupData}
+          handleReset={handleReset}
+        />
 
         <EditModalButtons
           handleClose={handleClose}
           handleSaveChanges={handleSaveChanges}
-          disabled={selectedGroupsAmount.length === 0 || (problemGroupData && problemGroupData.length === 0)}
+          disabled={
+            selectedGroupsAmount.length === 0 ||
+            (problemGroupData && problemGroupData.length === 0)
+          }
         />
       </ModalBase>
     )

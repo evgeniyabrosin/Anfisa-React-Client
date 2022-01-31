@@ -70,11 +70,15 @@ class ColumnsStore {
   }
 
   showColumns() {
-    this.selectedColumns = this.columns.filter(column => !column.hidden).map(column => column.title ?? column)
+    this.selectedColumns = this.columns
+      .filter(column => !column.hidden)
+      .map(column => column.title ?? column)
   }
 
   getColumnsForOpenDrawer() {
-    const columnsForOpenDrawer = this.getExtendedColumns.filter(column => !column.hidden).splice(0, 2)
+    const columnsForOpenDrawer = this.getExtendedColumns
+      .filter(column => !column.hidden)
+      .splice(0, 2)
 
     return columnsForOpenDrawer
   }

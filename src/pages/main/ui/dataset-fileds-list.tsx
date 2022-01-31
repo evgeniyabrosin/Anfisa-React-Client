@@ -26,15 +26,28 @@ const CommonDetails = observer(
 
         <DatasetField label="Annotations" value={versions.annotations} />
 
-        <DatasetField label="Annotations Date" value={versions.annotations_date} />
+        <DatasetField
+          label="Annotations Date"
+          value={versions.annotations_date}
+        />
 
-        <DatasetField label="Annotations build" value={versions.annotations_build} />
+        <DatasetField
+          label="Annotations build"
+          value={versions.annotations_build}
+        />
 
-        <DatasetField label="bcftools_annotate_version" className="col-span-2" value={versions.bcftools_annotate_version} />
+        <DatasetField
+          label="bcftools_annotate_version"
+          className="col-span-2"
+          value={versions.bcftools_annotate_version}
+        />
 
         <DatasetField label="gatk" value={versions.gatk} />
 
-        <DatasetField label="gatk_select_variants" value={versions.gatk_select_variants} />
+        <DatasetField
+          label="gatk_select_variants"
+          value={versions.gatk_select_variants}
+        />
 
         <DatasetField label="Pipeline" value={versions.pipeline} />
       </div>
@@ -68,13 +81,18 @@ const InfoDetails = observer(
     useEffect(() => {
       document.addEventListener('fullscreenchange', toggleStoreFullScreen)
 
-      return () => document.addEventListener('fullscreenchange', toggleStoreFullScreen)
+      return () =>
+        document.addEventListener('fullscreenchange', toggleStoreFullScreen)
     }, [])
 
     return (
       <Card className="flex flex-col col-span-2 xl:col-span-3">
         <div className="flex justify-end mb-3">
-          <Icon name="FullScreen" className="text-grey-blue cursor-pointer" onClick={openFullScreen} />
+          <Icon
+            name="FullScreen"
+            className="text-grey-blue cursor-pointer"
+            onClick={openFullScreen}
+          />
         </div>
 
         <IframeInfo id="IframeInfo" />
@@ -92,7 +110,14 @@ export const DatasetsFieldsList = observer(
       <React.Fragment>
         {hasInfoDetails && <InfoDetails />}
 
-        {versions && <CommonDetails className={hasInfoDetails ? 'col-span-3' : 'col-span-2 xl:col-span-3'} versions={versions} />}
+        {versions && (
+          <CommonDetails
+            className={
+              hasInfoDetails ? 'col-span-3' : 'col-span-2 xl:col-span-3'
+            }
+            versions={versions}
+          />
+        )}
       </React.Fragment>
     )
   },

@@ -21,16 +21,25 @@ export const QuerySelected = observer(
 
     const variants: any = dirinfoStore.dsinfo.total || 0
 
-    const [allVariants, transcribedVariants, allTranscripts] = get(datasetStore, 'statAmount', [])
+    const [allVariants, transcribedVariants, allTranscripts] = get(
+      datasetStore,
+      'statAmount',
+      [],
+    )
 
-    const selectedVariants = datasetStore.conditions.length === 0 ? allVariants : datasetStore.filteredNo.length
+    const selectedVariants =
+      datasetStore.conditions.length === 0
+        ? allVariants
+        : datasetStore.filteredNo.length
 
     const handleClick = () => {
       let conditionsUrl = ''
 
       if (datasetStore.conditions.length > 0) {
         datasetStore.conditions.forEach(condition => {
-          conditionsUrl += `&refiner=${condition[0]},${condition[1]},${condition[2]},${condition[3]?.[0] || ''}`
+          conditionsUrl += `&refiner=${condition[0]},${condition[1]},${
+            condition[2]
+          },${condition[3]?.[0] || ''}`
         })
       }
 
@@ -55,7 +64,9 @@ export const QuerySelected = observer(
           <div className="flex flex-wrap">
             <span className="font-bold text-16 text-blue-bright w-full">
               {t('dtree.results')}
-              <span className="font-normal text-grey-blue ml-2">({variants})</span>
+              <span className="font-normal text-grey-blue ml-2">
+                ({variants})
+              </span>
             </span>
 
             <span className="text-12 leading-14px text-white mt-2">
@@ -82,7 +93,11 @@ export const QuerySelected = observer(
           </div>
 
           {datasetStore.isXL ? (
-            <Button className="ml-auto" onClick={() => dtreeStore.openTableModal()} text={t('dtree.viewVariants')} />
+            <Button
+              className="ml-auto"
+              onClick={() => dtreeStore.openTableModal()}
+              text={t('dtree.viewVariants')}
+            />
           ) : (
             <Button
               className="ml-auto"

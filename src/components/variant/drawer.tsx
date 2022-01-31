@@ -24,7 +24,9 @@ export const VariantDrawer = observer(
 
     const gridLayout = SessionStoreManager.read<IGridLayout[]>('gridLayout')
 
-    const [layout, setLayout] = useState<IGridLayout[]>(gridLayout || variantStore.wsDrawerVariantsLayout)
+    const [layout, setLayout] = useState<IGridLayout[]>(
+      gridLayout || variantStore.wsDrawerVariantsLayout,
+    )
 
     useEffect(() => {
       return () => {
@@ -42,7 +44,11 @@ export const VariantDrawer = observer(
       >
         <VariantHeader setLayout={setLayout} />
 
-        <VariantBody drawerWidth={drawerWidth} setLayout={setLayout} layout={layout} />
+        <VariantBody
+          drawerWidth={drawerWidth}
+          setLayout={setLayout}
+          layout={layout}
+        />
       </div>
     )
   },

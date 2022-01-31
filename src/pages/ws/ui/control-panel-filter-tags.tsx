@@ -21,7 +21,15 @@ type ModalProps = {
   title?: string
 }
 
-const ButtonElementEdit = ({ refEl, onClick }: any) => <HeaderTableButton text={t('ds.edit')} refEl={refEl} onClick={onClick} noIcon={true} className="text-blue-bright" />
+const ButtonElementEdit = ({ refEl, onClick }: any) => (
+  <HeaderTableButton
+    text={t('ds.edit')}
+    refEl={refEl}
+    onClick={onClick}
+    noIcon={true}
+    className="text-blue-bright"
+  />
+)
 
 const ButtonElementAdd = ({ refEl, onClick }: any) => (
   <Fragment>
@@ -86,7 +94,12 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
       className="mt-7"
       isTags={true}
     >
-      <FilterItemList items={datasetStore.tags.filter(item => item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()))} isTags={true} />
+      <FilterItemList
+        items={datasetStore.tags.filter(item =>
+          item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+        )}
+        isTags={true}
+      />
     </PopperTableModal>
   )
 })
@@ -96,10 +109,22 @@ export const FilterItemTags = observer(
     return (
       <div style={{ minWidth: 75 }}>
         <ControlPanelTitle title={title}>
-          {zoneStore.selectedTags.length > 0 && <PopperButton title={title} ButtonElement={ButtonElementEdit} ModalElement={ModalElement} />}
+          {zoneStore.selectedTags.length > 0 && (
+            <PopperButton
+              title={title}
+              ButtonElement={ButtonElementEdit}
+              ModalElement={ModalElement}
+            />
+          )}
         </ControlPanelTitle>
 
-        <PopperButton title={title} ButtonElement={ButtonElementAdd} ModalElement={ModalElement} data={zoneStore.selectedTags} type="add" />
+        <PopperButton
+          title={title}
+          ButtonElement={ButtonElementAdd}
+          ModalElement={ModalElement}
+          data={zoneStore.selectedTags}
+          type="add"
+        />
 
         <div
           style={{

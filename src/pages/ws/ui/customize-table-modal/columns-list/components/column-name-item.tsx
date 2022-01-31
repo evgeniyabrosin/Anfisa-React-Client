@@ -9,7 +9,11 @@ interface IColumnNameItemProps {
   onClickSwitch: () => void
 }
 
-export const ColumnNameItem = ({ name, onClickSwitch, isChecked }: IColumnNameItemProps): ReactElement => {
+export const ColumnNameItem = ({
+  name,
+  onClickSwitch,
+  isChecked,
+}: IColumnNameItemProps): ReactElement => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">

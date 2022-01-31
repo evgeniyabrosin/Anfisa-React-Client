@@ -20,7 +20,10 @@ export const CellGene = observer(
     const records = toJS(datasetStore?.wsRecords)
     const iconColor = records?.[rowIndex]?.cl.split('-')[0]
 
-    const geneCellHeight = columnsStore.viewType === ViewTypeEnum.Compact ? RowHeight.Compact : RowHeight.Basic
+    const geneCellHeight =
+      columnsStore.viewType === ViewTypeEnum.Compact
+        ? RowHeight.Compact
+        : RowHeight.Basic
 
     return (
       <div className="flex items-center">
@@ -30,9 +33,12 @@ export const CellGene = observer(
               <PlusIcon color={geneColorMap[iconColor]} />
             ) : (
               <div
-                className={cn('flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2', {
-                  'bg-grey-blue': iconColor === 'grey',
-                })}
+                className={cn(
+                  'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
+                  {
+                    'bg-grey-blue': iconColor === 'grey',
+                  },
+                )}
                 style={{
                   border: `2px solid ${geneColorMap[iconColor]}`,
                 }}
@@ -41,7 +47,10 @@ export const CellGene = observer(
           </Fragment>
         )}
 
-        <div className="flex flex-col flex-wrap w-full" style={{ maxHeight: `${geneCellHeight}px` }}>
+        <div
+          className="flex flex-col flex-wrap w-full"
+          style={{ maxHeight: `${geneCellHeight}px` }}
+        >
           {value.map(gene => (
             <div className="text-14 leading-18px" key={gene}>
               {gene}

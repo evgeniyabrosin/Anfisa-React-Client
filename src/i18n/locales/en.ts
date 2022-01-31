@@ -5,7 +5,8 @@ export const en = {
     excel: 'Excel',
     csv: 'Csv',
     noResultsFound: 'No results found',
-    noResultsFoundByFilters: 'There are no results. Try to reset filters and try again',
+    noResultsFoundByFilters:
+      'There are no results. Try to reset filters and try again',
     resetFilters: 'Reset filters',
     selectAll: 'Select All',
     clearAll: 'Clear All',
@@ -64,14 +65,16 @@ export const en = {
     edit: 'Edit',
     notMode: 'NOT Mode',
     variantsWithNotesOnly: 'Variants with notes only',
-    tooMuchVariants: 'There are too many variants to export. The number of variants should be less than 300',
+    tooMuchVariants:
+      'There are too many variants to export. The number of variants should be less than 300',
   },
   dsCreation: {
     saveDataset: 'Save dataset',
     datasetCreation: 'Dataset Creation',
     addDatasetTitle: 'Add new dataset',
     label: 'Dataset Name:',
-    attention: 'Attention: Zone filters (Gene, Gene List, Sample, Tags) do not participate in dataset creation',
+    attention:
+      'Attention: Zone filters (Gene, Gene List, Sample, Tags) do not participate in dataset creation',
     addDataset: 'Add dataset',
   },
   variant: {
@@ -186,7 +189,8 @@ export const en = {
     loadAnyDtree: 'Load any Decision Tree first',
     noChanges: 'There are no changes in Decision Tree',
     chooseAnyTree: 'Choose any Decision Tree from the left list first',
-    cantDeleteModifyDefaultTree: 'You cannot delete or modify default Decision Trees',
+    cantDeleteModifyDefaultTree:
+      'You cannot delete or modify default Decision Trees',
     confirmClosing: 'Do you really want to close the window?',
     changesWontBeSaved: 'This action will drop all your changes',
     acceptedVariants: 'Accepted variants: ',

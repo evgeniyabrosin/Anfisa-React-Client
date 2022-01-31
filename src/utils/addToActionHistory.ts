@@ -1,10 +1,15 @@
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 
-export const addToActionHistory = (body: URLSearchParams, isFilterRefiner = false) => {
+export const addToActionHistory = (
+  body: URLSearchParams,
+  isFilterRefiner = false,
+) => {
   const actionHistory = [...dtreeStore.actionHistory]
 
-  const filtersHistory = JSON.parse(JSON.stringify(filterStore.selectedFiltersHistory))
+  const filtersHistory = JSON.parse(
+    JSON.stringify(filterStore.selectedFiltersHistory),
+  )
 
   const nextIndex = dtreeStore.actionHistoryIndex + 1
 

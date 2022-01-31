@@ -29,7 +29,9 @@ describe('XL Dataset should be opened in decision tree', () => {
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
-    decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains('Variant').scrollIntoView()
+    decisionTreesPage.decisionTreeResults.groupGraphHeaders
+      .contains('Variant')
+      .scrollIntoView()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.treeToolptip.checkLabelText()
   })
@@ -40,7 +42,10 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.treeToolptip.checkLabelText()
-    decisionTreesPage.decisionTreeResults.graphHeaders.contains('Most_Severe_Consequence').scrollIntoView().should('be.visible')
+    decisionTreesPage.decisionTreeResults.graphHeaders
+      .contains('Most_Severe_Consequence')
+      .scrollIntoView()
+      .should('be.visible')
   })
 
   it('should find group of graphs Presence_in_Databases | Test #3/3', () => {
@@ -48,9 +53,15 @@ describe('XL Dataset should be opened in decision tree', () => {
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
-    decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains('Variant').scrollIntoView()
-    decisionTreesPage.decisionTreeResults.searchGraphResults.first().type('Presence_in_Databases')
-    decisionTreesPage.decisionTreeResults.graphHeaders.contains('Presence_in_Databases')
+    decisionTreesPage.decisionTreeResults.groupGraphHeaders
+      .contains('Variant')
+      .scrollIntoView()
+    decisionTreesPage.decisionTreeResults.searchGraphResults
+      .first()
+      .type('Presence_in_Databases')
+    decisionTreesPage.decisionTreeResults.graphHeaders.contains(
+      'Presence_in_Databases',
+    )
   })
 
   it('should find splice_altering in group of graphs "Predictions" | Test #3/4', () => {
@@ -58,8 +69,13 @@ describe('XL Dataset should be opened in decision tree', () => {
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
-    decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains('Predictions').scrollIntoView()
-    decisionTreesPage.decisionTreeResults.graphHeaders.contains('splice_altering').scrollIntoView().should('be.visible')
+    decisionTreesPage.decisionTreeResults.groupGraphHeaders
+      .contains('Predictions')
+      .scrollIntoView()
+    decisionTreesPage.decisionTreeResults.graphHeaders
+      .contains('splice_altering')
+      .scrollIntoView()
+      .should('be.visible')
   })
 
   it('should find masked_repeats in group of graphs "Region_Canonical" | Test #3/5', () => {
@@ -67,9 +83,15 @@ describe('XL Dataset should be opened in decision tree', () => {
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
-    decisionTreesPage.decisionTreeResults.groupGraphHeaders.contains('Coordinates').scrollIntoView()
-    decisionTreesPage.decisionTreeResults.searchGraphResults.first().type('Region_Canonical')
-    decisionTreesPage.decisionTreeResults.graphHeaders.contains('Region_Canonical')
+    decisionTreesPage.decisionTreeResults.groupGraphHeaders
+      .contains('Coordinates')
+      .scrollIntoView()
+    decisionTreesPage.decisionTreeResults.searchGraphResults
+      .first()
+      .type('Region_Canonical')
+    decisionTreesPage.decisionTreeResults.graphHeaders.contains(
+      'Region_Canonical',
+    )
   })
 
   function visitWithFilter() {

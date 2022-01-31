@@ -55,7 +55,9 @@ export const NextStepContent = observer(
           case 'and':
           case 'or':
           case 'not':
-            return <span key={wordIndex} className="text-white">{` ${word} `}</span>
+            return (
+              <span key={wordIndex} className="text-white">{` ${word} `}</span>
+            )
 
           default:
             return <span key={wordIndex}>{`${word} `}</span>
@@ -77,19 +79,34 @@ export const NextStepContent = observer(
         <Content>
           <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
             {groups && groups.length > 0 ? (
-              groups.map((group: any, currNo: number) => <NextStepContentItem key={JSON.stringify(group) + currNo} group={group} index={index} currNo={currNo} />)
+              groups.map((group: any, currNo: number) => (
+                <NextStepContentItem
+                  key={JSON.stringify(group) + currNo}
+                  group={group}
+                  index={index}
+                  currNo={currNo}
+                />
+              ))
             ) : (
-              <div className="text-14 text-grey-blue font-normal step-content-area">{t('dtree.nothingSelected')}</div>
+              <div className="text-14 text-grey-blue font-normal step-content-area">
+                {t('dtree.nothingSelected')}
+              </div>
             )}
           </div>
 
           {groups && groups.length > 0 && (
             <ContentEditor className="w-1/3 h-full">
               <div className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono">
-                {dtreeStore.stepData[index].comment && <div className="text-white mb-2">{dtreeStore.stepData[index].comment}</div>}
+                {dtreeStore.stepData[index].comment && (
+                  <div className="text-white mb-2">
+                    {dtreeStore.stepData[index].comment}
+                  </div>
+                )}
 
                 <div className="flex">
-                  <div className="text-orange-secondary mr-2">{wordList.map(element => element)}</div>
+                  <div className="text-orange-secondary mr-2">
+                    {wordList.map(element => element)}
+                  </div>
                 </div>
 
                 <div className="text-grey-light pl-2">return {result}</div>
@@ -98,7 +115,11 @@ export const NextStepContent = observer(
           )}
         </Content>
 
-        <div data-testid={DecisionTreesResultsDataCy.addAttrbute} className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark" onClick={openModal}>
+        <div
+          data-testid={DecisionTreesResultsDataCy.addAttrbute}
+          className="text-14 text-blue-bright font-normal pt-1 cursor-pointer hover:text-blue-dark"
+          onClick={openModal}
+        >
           {t('dtree.addAttribute')}
         </div>
       </div>

@@ -10,7 +10,10 @@ import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
 import datasetStore from './dataset'
 
-export type SelectedFiltersType = Record<string, Record<string, Record<string, number>>>
+export type SelectedFiltersType = Record<
+  string,
+  Record<string, Record<string, number>>
+>
 
 interface AddSelectedFiltersI {
   group: string
@@ -64,7 +67,11 @@ class FilterStore {
     }
   }
 
-  removeSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
+  removeSelectedFilters({
+    group,
+    groupItemName,
+    variant,
+  }: AddSelectedFiltersI) {
     if (!this.selectedFilters[group]) {
       return
     }
@@ -82,7 +89,11 @@ class FilterStore {
     }
   }
 
-  addSelectedFilterGroup(group: string, groupItemName: string, variants: any[]) {
+  addSelectedFilterGroup(
+    group: string,
+    groupItemName: string,
+    variants: any[],
+  ) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
     }
@@ -107,7 +118,9 @@ class FilterStore {
   }
 
   async fetchDsInfoAsync() {
-    const response = await fetch(getApiUrl(`dsinfo?ds=${datasetStore.datasetName}`))
+    const response = await fetch(
+      getApiUrl(`dsinfo?ds=${datasetStore.datasetName}`),
+    )
 
     const result = await response.json()
 
@@ -177,7 +190,9 @@ class FilterStore {
   }
 
   readFilterCondition<T = any>(filterName: string) {
-    return this.filterCondition[filterName] ? (this.filterCondition[filterName] as T) : undefined
+    return this.filterCondition[filterName]
+      ? (this.filterCondition[filterName] as T)
+      : undefined
   }
 
   resetFilterCondition() {

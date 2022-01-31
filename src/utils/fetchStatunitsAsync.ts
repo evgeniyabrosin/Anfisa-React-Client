@@ -5,7 +5,10 @@ import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { getFilteredAttrsList } from './getFilteredAttrsList'
 
-export const fetchStatunitsAsync = async (statList: any[], stepIndex?: string) => {
+export const fetchStatunitsAsync = async (
+  statList: any[],
+  stepIndex?: string,
+) => {
   const incompletePropertyList: string[] = []
 
   statList.forEach(element => {
@@ -53,7 +56,9 @@ export const fetchStatunitsAsync = async (statList: any[], stepIndex?: string) =
 
   const newStatList = statList.map(element => {
     if (element?.incomplete) {
-      const calculatedElement = calculatedUnits.find((unit: any) => element.name === unit.name)
+      const calculatedElement = calculatedUnits.find(
+        (unit: any) => element.name === unit.name,
+      )
 
       return calculatedElement ?? element
     }
@@ -63,7 +68,9 @@ export const fetchStatunitsAsync = async (statList: any[], stepIndex?: string) =
 
   const filteredStatList = getFilteredAttrsList(newStatList)
 
-  isRefiner ? datasetStore.setStatList(filteredStatList) : dtreeStore.setStatList(filteredStatList)
+  isRefiner
+    ? datasetStore.setStatList(filteredStatList)
+    : dtreeStore.setStatList(filteredStatList)
 
   fetchStatunitsAsync(newStatList, stepIndex)
 }

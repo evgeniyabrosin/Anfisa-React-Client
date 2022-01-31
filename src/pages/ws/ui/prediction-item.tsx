@@ -14,7 +14,10 @@ export const PredictionItem = ({ name, value }: Props): ReactElement => {
 
   return (
     <div className="flex text-10 leading-16px items-center whitespace-nowrap">
-      <Icon name="Circle" className={cn('mr-1', getVariantClass(value[0][1]))} />
+      <Icon
+        name="Circle"
+        className={cn('mr-1', getVariantClass(value[0][1]))}
+      />
 
       {`${name}: ${value[0][0]}`}
     </div>

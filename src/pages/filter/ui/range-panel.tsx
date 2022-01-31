@@ -16,7 +16,12 @@ const getCachedValues = () => {
 }
 
 const getFilterValue = (arg: string): string | number => {
-  const filterExpression: [null | number, boolean, null | number, boolean] = getCachedValues()
+  const filterExpression: [
+    null | number,
+    boolean,
+    null | number,
+    boolean,
+  ] = getCachedValues()
 
   if (filterExpression) {
     if (arg === 'min' && typeof filterExpression[0] === 'number') {
@@ -57,16 +62,20 @@ export const RangePanel = observer(
         ],
       ])
 
-      filterStore.addSelectedFilterGroup(selectedFilter.vgroup, selectedFilter.name, [
+      filterStore.addSelectedFilterGroup(
+        selectedFilter.vgroup,
+        selectedFilter.name,
         [
-          selectedFilter.name,
-          createNumericExpression({
-            expType: NumericExpressionTypes.GreaterThan,
-            minValue: min,
-            maxValue: max,
-          }),
+          [
+            selectedFilter.name,
+            createNumericExpression({
+              expType: NumericExpressionTypes.GreaterThan,
+              minValue: min,
+              maxValue: max,
+            }),
+          ],
         ],
-      ])
+      )
 
       if (!datasetStore.isXL) {
         datasetStore.fetchWsListAsync()
@@ -80,7 +89,10 @@ export const RangePanel = observer(
       const groupItemName = filterStore.selectedGroupItem.name
       const localSelectedFilters = filterStore.selectedFilters
 
-      if (localSelectedFilters[group]?.[groupItemName] && datasetStore.activePreset) {
+      if (
+        localSelectedFilters[group]?.[groupItemName] &&
+        datasetStore.activePreset
+      ) {
         datasetStore.resetActivePreset()
       }
 
@@ -101,7 +113,11 @@ export const RangePanel = observer(
     }
 
     const validateMin = (value: string) => {
-      if (value < selectedFilter.min || value > selectedFilter.max || value === '-0') {
+      if (
+        value < selectedFilter.min ||
+        value > selectedFilter.max ||
+        value === '-0'
+      ) {
         setIsVisibleMinError(true)
       } else {
         setIsVisibleMinError(false)
@@ -111,7 +127,11 @@ export const RangePanel = observer(
     }
 
     const validateMax = (value: string) => {
-      if (value > selectedFilter.max || value < selectedFilter.min || value === '-0') {
+      if (
+        value > selectedFilter.max ||
+        value < selectedFilter.min ||
+        value === '-0'
+      ) {
         setIsVisibleMaxError(true)
       } else {
         setIsVisibleMaxError(false)
@@ -155,7 +175,11 @@ export const RangePanel = observer(
         <div className="flex justify-between items-end w-full">
           <span>Min {selectedFilter.min}</span>
 
-          {isVisibleMinError && <span className="text-12 text-red-secondary">{t('dtree.lowerBoundError')}</span>}
+          {isVisibleMinError && (
+            <span className="text-12 text-red-secondary">
+              {t('dtree.lowerBoundError')}
+            </span>
+          )}
         </div>
 
         <InputNumber
@@ -170,7 +194,11 @@ export const RangePanel = observer(
         <div className="flex justify-between items-end w-full">
           <span>Max {selectedFilter.max}</span>
 
-          {isVisibleMaxError && <span className="text-12 text-red-secondary">{t('dtree.upperBoundError')}</span>}
+          {isVisibleMaxError && (
+            <span className="text-12 text-red-secondary">
+              {t('dtree.upperBoundError')}
+            </span>
+          )}
         </div>
 
         <div className="relative h-14">
@@ -182,13 +210,30 @@ export const RangePanel = observer(
               validateMax(e.target.value)
             }}
           />
-          {isVisibleMixedError && <div className="flex justify-center w-full mt-px text-12 text-red-secondary">{t('dtree.conditionError')}</div>}
+          {isVisibleMixedError && (
+            <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
+              {t('dtree.conditionError')}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-between mt-1">
-          <Button variant={'secondary'} text={t('general.clear')} onClick={handleClear} />
+          <Button
+            variant={'secondary'}
+            text={t('general.clear')}
+            onClick={handleClear}
+          />
 
-          <Button text={t('general.add')} onClick={handleAddConditionsAsync} disabled={isVisibleMinError || isVisibleMaxError || isVisibleMixedError || (!max && !min)} />
+          <Button
+            text={t('general.add')}
+            onClick={handleAddConditionsAsync}
+            disabled={
+              isVisibleMinError ||
+              isVisibleMaxError ||
+              isVisibleMixedError ||
+              (!max && !min)
+            }
+          />
         </div>
       </div>
     )

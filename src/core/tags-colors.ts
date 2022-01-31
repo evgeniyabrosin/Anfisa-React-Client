@@ -1,6 +1,17 @@
 import md5 from 'md5'
 
-export const tagsColors = ['#8FD6F8', '#FDD500', '#B6D6BA', '#C81E72', '#3C59DC', '#ECCBC8', '#A87FF6', '#E4DA3B', '#167909', '#8F14E4']
+export const tagsColors = [
+  '#8FD6F8',
+  '#FDD500',
+  '#B6D6BA',
+  '#C81E72',
+  '#3C59DC',
+  '#ECCBC8',
+  '#A87FF6',
+  '#E4DA3B',
+  '#167909',
+  '#8F14E4',
+]
 
 class TagsColorMap {
   static colorsMap: { name: string; color: string }[] = []

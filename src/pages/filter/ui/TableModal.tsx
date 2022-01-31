@@ -79,7 +79,10 @@ export const TableModal = observer(() => {
 
   useEffect(() => {
     if (jobStatusData) {
-      if (Boolean(jobStatusData['samples']) && Boolean(jobStatusData['records'])) {
+      if (
+        Boolean(jobStatusData['samples']) &&
+        Boolean(jobStatusData['records'])
+      ) {
         setVariantSize('MIDDLE')
       } else if (jobStatusData['records']) {
         setVariantSize('SMALL')
@@ -100,7 +103,9 @@ export const TableModal = observer(() => {
 
   useEffect(() => {
     if (jobStatusData) {
-      const orderNumber = isSample ? samples[variantIndex]?.no ?? 0 : records[variantIndex]?.no ?? 0
+      const orderNumber = isSample
+        ? samples[variantIndex]?.no ?? 0
+        : records[variantIndex]?.no ?? 0
 
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
@@ -129,7 +134,10 @@ export const TableModal = observer(() => {
 
   return (
     <ModalView className="bg-grey-blue" onClick={closeModal}>
-      <ModalContent className="flex flex-col py-4 px-4 bg-white rounded-lg overflow-y-auto" ref={ref}>
+      <ModalContent
+        className="flex flex-col py-4 px-4 bg-white rounded-lg overflow-y-auto"
+        ref={ref}
+      >
         {isLoading ? (
           jobStatus[1]
         ) : (
@@ -147,13 +155,21 @@ export const TableModal = observer(() => {
                 <div className="flex flex-col">
                   <div>In scope: {allVaraints}</div>
                   <div className="flex items-center mr-3">
-                    <RadioButton isDisabled={variantSize === 'LARGE'} isChecked={!isSampleMode} onChange={toggleMode} />
+                    <RadioButton
+                      isDisabled={variantSize === 'LARGE'}
+                      isChecked={!isSampleMode}
+                      onChange={toggleMode}
+                    />
 
                     <div className="ml-1">{t('dtree.fullList')}</div>
                   </div>
 
                   <div className="flex items-center">
-                    <RadioButton isDisabled={variantSize === 'SMALL'} isChecked={isSampleMode} onChange={toggleMode} />
+                    <RadioButton
+                      isDisabled={variantSize === 'SMALL'}
+                      isChecked={isSampleMode}
+                      onChange={toggleMode}
+                    />
 
                     <p className="ml-1 ">{t('dtree.samples25')}</p>
                   </div>
@@ -165,11 +181,17 @@ export const TableModal = observer(() => {
                     className="shadow-dark p-1 mb-5 cursor-pointer"
                     // data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
-                    <p onClick={() => setVariantIndex(index)}>N - {index + 1}</p>
+                    <p onClick={() => setVariantIndex(index)}>
+                      N - {index + 1}
+                    </p>
                   </div>
                 ))}
               </div>
-              <VariantBody drawerWidth={drawerWidth} setLayout={setLayout} layout={layout} />
+              <VariantBody
+                drawerWidth={drawerWidth}
+                setLayout={setLayout}
+                layout={layout}
+              />
             </div>
           </Fragment>
         )}

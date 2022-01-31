@@ -12,8 +12,21 @@ interface Props {
   dataTestId?: string
 }
 
-export const HeaderTableButton = ({ text, refEl, onClick, noIcon, className, specialIcon, dataTestId }: Props) => (
-  <div ref={refEl} onClick={onClick} className={cn('flex item-center justify-between cursor-pointer', className)} data-testid={dataTestId}>
+export const HeaderTableButton = ({
+  text,
+  refEl,
+  onClick,
+  noIcon,
+  className,
+  specialIcon,
+  dataTestId,
+}: Props) => (
+  <div
+    ref={refEl}
+    onClick={onClick}
+    className={cn('flex item-center justify-between cursor-pointer', className)}
+    data-testid={dataTestId}
+  >
     {specialIcon && '+'}
 
     <p>{text}</p>

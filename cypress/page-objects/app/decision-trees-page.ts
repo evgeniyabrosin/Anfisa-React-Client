@@ -17,25 +17,41 @@ class DecisionTreesPage extends BasePage {
     this.decisionTreeMenu = new DecisionTreeWidget({
       selectors: {
         selectDecision: `[aria-haspopup = "${DecisionTreesMenuDataCy.selectDecision}"]`,
-        decisionActions: Helper.getDataId(DecisionTreesMenuDataCy.decisionActions),
+        decisionActions: Helper.getDataId(
+          DecisionTreesMenuDataCy.decisionActions,
+        ),
         loadDecision: Helper.getDataId(DecisionTreesMenuDataCy.loadDecision),
-        selectDropdownElem: Helper.getDataId(DecisionTreesMenuDataCy.selectDropdownElem),
+        selectDropdownElem: Helper.getDataId(
+          DecisionTreesMenuDataCy.selectDropdownElem,
+        ),
         saveDataset: Helper.getDataId(DecisionTreesMenuDataCy.saveDataset),
-        datasetNameInput: Helper.getDataId(DecisionTreesMenuDataCy.datasetNameInput),
+        datasetNameInput: Helper.getDataId(
+          DecisionTreesMenuDataCy.datasetNameInput,
+        ),
         addNewDataset: Helper.getDataId(DecisionTreesMenuDataCy.addNewDataset),
-        cancelAddNewDataset: Helper.getDataId(DecisionTreesMenuDataCy.cancelAddNewDataset),
+        cancelAddNewDataset: Helper.getDataId(
+          DecisionTreesMenuDataCy.cancelAddNewDataset,
+        ),
       },
       labels: {},
     })
     this.decisionTreeResults = new DecisionTreeResultsWidget({
       selectors: {
-        searchGraphResults: Helper.getDataId(DecisionTreesResultsDataCy.searchGraphResults),
-        searchStepsResults: Helper.getDataId(DecisionTreesResultsDataCy.searchStepsResults),
-        groupGraphHeaders: Helper.getDataId(DecisionTreesResultsDataCy.groupGraphHeaders),
+        searchGraphResults: Helper.getDataId(
+          DecisionTreesResultsDataCy.searchGraphResults,
+        ),
+        searchStepsResults: Helper.getDataId(
+          DecisionTreesResultsDataCy.searchStepsResults,
+        ),
+        groupGraphHeaders: Helper.getDataId(
+          DecisionTreesResultsDataCy.groupGraphHeaders,
+        ),
         graphHeaders: Helper.getDataId(DecisionTreesResultsDataCy.graphHeaders),
         stepCard: Helper.getDataId(DecisionTreesResultsDataCy.stepCard),
         excludeInfo: Helper.getDataId(DecisionTreesResultsDataCy.excludeInfo),
-        viewReturnedVariants: Helper.getDataId(DecisionTreesResultsDataCy.viewReturnedVariants),
+        viewReturnedVariants: Helper.getDataId(
+          DecisionTreesResultsDataCy.viewReturnedVariants,
+        ),
         treeTooltip: `${CommonSelectors.treeTooltip}`,
         addAttribute: Helper.getDataId(DecisionTreesResultsDataCy.addAttrbute),
         joinByLabel: Helper.getDataId(DecisionTreesResultsDataCy.joinByLabel),
@@ -54,9 +70,15 @@ class DecisionTreesPage extends BasePage {
     })
     this.attributesList = new AttributesListWidget({
       selectors: {
-        searchForAttr: Helper.getDataId(DecisionTreesResultsDataCy.searchForAttr),
-        selectAll: Helper.getDataId(DecisionTreesResultsDataCy.selectAllFromAttribute),
-        addSelectedAttributes: Helper.getDataId(DecisionTreesResultsDataCy.addSelectedAttributes),
+        searchForAttr: Helper.getDataId(
+          DecisionTreesResultsDataCy.searchForAttr,
+        ),
+        selectAll: Helper.getDataId(
+          DecisionTreesResultsDataCy.selectAllFromAttribute,
+        ),
+        addSelectedAttributes: Helper.getDataId(
+          DecisionTreesResultsDataCy.addSelectedAttributes,
+        ),
         addByJoin: Helper.getDataId(DecisionTreesResultsDataCy.addByJoin),
         problemGroup: CommonSelectors.checkbox,
         joinByAnd: Helper.getDataId(DecisionTreesResultsDataCy.joinByAnd),
