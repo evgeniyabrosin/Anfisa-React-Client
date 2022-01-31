@@ -1,6 +1,5 @@
 Feature: Main table, Dataset Creation
-
-  As the Anfisa user I want to create a new dataset based on the variants on the Main Table page
+    As the Anfisa user I want to create a new dataset based on the variants on the Main Table page
     Scenario: Save a new dataset
         Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
         When user chooses the "⏚SEQaBOO_Hearing_Loss_v_5" preset
@@ -37,7 +36,7 @@ Feature: Main table, Dataset Creation
         And writes name for the dataset
         And clicks "Add dataset"
         Then Dataset should be saved.
-        
+
     Scenario: Save a new dataset without any applied filters
         Given The main table of the dataset
         When User clicks save dataset without applying Filter Preset or Filter Refiner condition
@@ -103,7 +102,7 @@ Feature: Main table, Dataset Creation
         And writes the name for a dataset with more than 250 characters.
         And clicks "Add dataset"
         Then dataset should not be saved.
-        
+
     Scenario: Try to create dataset with spaces in the name
         Given The main table of the dataset
         When  user chooses any Preset with variants
@@ -111,7 +110,7 @@ Feature: Main table, Dataset Creation
         And writes name for a dataset with Space
         And user clicks "Add dataset"
         Then the dataset should not be saved
-        
+
     Scenario: Try to create dataset with special chars in the name
         Given The main table of the dataset
         When  user chooses any Preset with variants
@@ -119,7 +118,7 @@ Feature: Main table, Dataset Creation
         And writes name for dataset with special character( -_+)
         And user clicks "Add dataset"
         Then the dataset should not be saved
-    
+
     Scenario: Try to create dataset with name that begins from a number
         Given The main table of the dataset
         When  user chooses any Preset with variants
@@ -127,15 +126,21 @@ Feature: Main table, Dataset Creation
         And writes name for the dataset which begins with a number (5asd)
         And user clicks "Add dataset"
         Then the dataset should not be saved
+    <<<<<<< HEAD
 
-    Scenario: Cancel dataset 
+    =======
+    >>>>>>> 113f72d8909dc694d0ecdea637f042a6c4c94f10
+    Scenario: Cancel dataset
         Given The main table of the dataset
         When  user chooses any Preset with variants
         And clicks "Save dataset"
         And writes name for the dataset
         And clicks "Cancel"
         Then dataset should be canceled
-        
+    <<<<<<< HEAD
+
+    =======
+    >>>>>>> 113f72d8909dc694d0ecdea637f042a6c4c94f10
     Scenario: Creation dataset process cannot be canceled
         Given The main table of the dataset
         When  user chooses any Preset with variants
