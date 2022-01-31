@@ -12,7 +12,6 @@ import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
-import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
 import {

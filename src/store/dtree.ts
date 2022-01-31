@@ -335,7 +335,7 @@ class DtreeStore {
           if (
             subItem[1]
               .toLocaleLowerCase()
-              .startsWith(this.algorithmFilterValue.toLocaleLowerCase())
+              .includes(this.algorithmFilterValue.toLocaleLowerCase())
           ) {
             return (data = [...data, stepData[currNo]])
           }

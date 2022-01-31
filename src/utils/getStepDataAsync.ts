@@ -33,7 +33,7 @@ export const getStepDataAsync = async (
   dtreeSteps.map((item: any, index: number) => {
     localStepData.push({
       step: index + 1,
-      groups: item,
+      groups: item.filter((elem: any[]) => elem.length > 0),
       excluded: !stepCodes[index].result,
       isActive: index === activeStepIndex,
       isReturnedVariantsActive: false,
@@ -52,12 +52,6 @@ export const getStepDataAsync = async (
         currNo !== 0 && group.splice(-1, 0, stepCodes[index].types[currNo - 1])
       })
     }
-  })
-
-  localStepData.map((step: IStepData) => {
-    step.groups.map((group: any[], index: number) => {
-      step.groups[index] = group.filter((elem: any[]) => elem)
-    })
   })
 
   return localStepData

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { DecisionTreesMenuDataCy } from '../../../src/components/data-testid/decision-tree-menu.cy'
-import { DecisionTreeModal } from '../../../src/components/data-testid/decision-tree-modal.cy'
+import { DecisionTreeModalDataCy } from '../../../src/components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '../../../src/components/data-testid/decision-tree-results.cy'
 import { BasePage } from '../lib/base-page'
 import { Helper } from '../lib/helpers'
@@ -61,24 +62,24 @@ class DecisionTreesPage extends BasePage {
         ),
         treeTooltip: `${CommonSelectors.treeTooltip}`,
         addAttribute: Helper.getDataId(DecisionTreesResultsDataCy.addAttrbute),
-        joinByLabel: Helper.getDataId(DecisionTreeModal.joinByLabel),
+        joinByLabel: Helper.getDataId(DecisionTreeModalDataCy.joinByLabel),
         optionsMenu: Helper.getDataId(DecisionTreesResultsDataCy.optionsMenu),
         addStepAfter: Helper.getDataId(DecisionTreesResultsDataCy.addStepAfter),
         deleteStep: Helper.getDataId(DecisionTreesResultsDataCy.deleteStep),
-        leftInput: Helper.getDataId(DecisionTreeModal.leftInput),
-        rightInput: Helper.getDataId(DecisionTreeModal.rightInput),
-        selectReset: Helper.getDataId(DecisionTreeModal.selectReset),
-        addButton: Helper.getDataId(DecisionTreeModal.addButton),
-        removeButton: Helper.getDataId(DecisionTreeModal.removeButton),
+        leftInput: Helper.getDataId(DecisionTreeModalDataCy.leftInput),
+        rightInput: Helper.getDataId(DecisionTreeModalDataCy.rightInput),
+        selectReset: Helper.getDataId(DecisionTreeModalDataCy.selectReset),
+        addButton: Helper.getDataId(DecisionTreeModalDataCy.addButton),
+        removeButton: Helper.getDataId(DecisionTreeModalDataCy.removeButton),
         numberInput: Helper.getDataId(CommonSelectors.numberInput),
-        cancelButton: Helper.getDataId(DecisionTreeModal.cancelButton),
+        cancelButton: Helper.getDataId(DecisionTreeModalDataCy.cancelButton),
         gearButton: Helper.getDataId(DecisionTreesResultsDataCy.gearButton),
         contentEditor: Helper.getDataId(
           DecisionTreesResultsDataCy.contentEditor,
         ),
         expandAll: Helper.getDataId(DecisionTreesResultsDataCy.expandAll),
         collapseAll: Helper.getDataId(DecisionTreesResultsDataCy.collapseAll),
-        modalHeader: Helper.getDataId(DecisionTreeModal.modalHeader),
+        modalHeader: Helper.getDataId(DecisionTreeModalDataCy.modalHeader),
         anyChangeAlert: CommonSelectors.anyChangeAlert,
       },
       labels: {
@@ -97,15 +98,21 @@ class DecisionTreesPage extends BasePage {
         searchForAttr: Helper.getDataId(
           DecisionTreesResultsDataCy.searchForAttr,
         ),
-        selectAll: Helper.getDataId(DecisionTreeModal.selectAllFromAttribute),
-        addSelectedAttributes: Helper.getDataId(
-          DecisionTreeModal.addSelectedAttributes,
+        selectAll: Helper.getDataId(
+          DecisionTreeModalDataCy.selectAllFromAttribute,
         ),
-        addByJoin: Helper.getDataId(DecisionTreeModal.addByJoin),
+        addSelectedAttributes: Helper.getDataId(
+          DecisionTreeModalDataCy.addSelectedAttributes,
+        ),
+        addByJoin: Helper.getDataId(DecisionTreeModalDataCy.addByJoin),
         problemGroup: CommonSelectors.checkbox,
-        joinByAnd: Helper.getDataId(DecisionTreeModal.joinByAnd),
-        joinByOr: Helper.getDataId(DecisionTreeModal.joinByOr),
-        replaceButton: Helper.getDataId(DecisionTreeModal.replaceButton),
+        joinByAnd: Helper.getDataId(DecisionTreeModalDataCy.joinByAnd),
+        joinByOr: Helper.getDataId(DecisionTreeModalDataCy.joinByOr),
+        replaceButton: Helper.getDataId(DecisionTreeModalDataCy.replaceButton),
+        variantsList: Helper.getDataId(DecisionTreesResultsDataCy.variantsList),
+      },
+      labels: {
+        variantsList: '',
       },
     })
     this.decisionTreeChart = new DecisionTreeChartWidget({
@@ -116,6 +123,34 @@ class DecisionTreesPage extends BasePage {
         dataCharts: '',
       },
     })
+  }
+  searchForCallers(datasetName: string): void {
+    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.decisionTreeResults.addAttribute.click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
+  }
+
+  selectAllAttributes(selectAll: string): void {
+    decisionTreesPage.attributesList.selectAll.contains(selectAll).click()
+    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    decisionTreesPage.attributesList.addSelectedAttributes.click()
+    cy.wait('@applyAttributes')
+  }
+
+  addStepAfter(elementNumber: number) {
+    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    decisionTreesPage.decisionTreeResults.optionsMenu.eq(elementNumber).click()
+    decisionTreesPage.decisionTreeResults.addStepAfter.click()
+    cy.wait('@stepAfter')
+  }
+
+  addMinGq(min: string, max: string) {
+    decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
+    decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
+    decisionTreesPage.attributesList.searchForAttr.eq(0).type('Min_GQ')
+    decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
+    decisionTreesPage.decisionTreeResults.leftInput.type(min)
+    decisionTreesPage.decisionTreeResults.rightInput.type(max)
   }
 }
 

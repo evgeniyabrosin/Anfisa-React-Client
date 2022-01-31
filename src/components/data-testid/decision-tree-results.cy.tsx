@@ -15,4 +15,5 @@ export const DecisionTreesResultsDataCy = {
   contentEditor: 'content-editor',
   expandAll: 'expand-all',
   collapseAll: 'collapse-all',
+  variantsList: 'variant-element',
 }

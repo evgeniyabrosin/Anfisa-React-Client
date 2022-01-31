@@ -50,6 +50,7 @@ export const FilterRefinerGroups = observer(
           ],
         ])
       } else {
+        datasetStore.resetActivePreset()
         filterStore.removeSelectedFiltersGroup(group, name)
         datasetStore.removeConditionGroup({ subGroup: name })
       }

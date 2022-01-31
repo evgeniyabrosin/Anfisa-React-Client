@@ -5,7 +5,7 @@ import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { DecisionTreeModal } from '@components/data-testid/decision-tree-modal.cy'
+import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 
 interface IProps {
   handleAddAttribute: (action: ActionType) => void
@@ -33,7 +33,7 @@ export const ModalJoin = observer(
           <div
             onClick={() => handleJoin('JOIN-AND')}
             className="cursor-pointer rounded-br-none rounded-bl-none rounded-l-md rounded-r-md py-2 px-2 hover:bg-blue-bright hover:text-white"
-            data-testId={DecisionTreeModal.joinByAnd}
+            data-testId={DecisionTreeModalDataCy.joinByAnd}
           >
             {t('dtree.joinByAnd')}
           </div>
@@ -41,7 +41,7 @@ export const ModalJoin = observer(
           <div
             onClick={() => handleJoin('JOIN-OR')}
             className="cursor-pointer py-2 px-2 hover:bg-blue-bright hover:text-white rounded-bl-md rounded-br-md"
-            data-testId={DecisionTreeModal.joinByOr}
+            data-testId={DecisionTreeModalDataCy.joinByOr}
           >
             {t('dtree.joinByOr')}
           </div>

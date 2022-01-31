@@ -71,6 +71,8 @@ export const EnumPanel = observer(
 
       if (localSelectedFilters[group]?.[groupItemName]) {
         delete localSelectedFilters[group][groupItemName]
+
+        if (datasetStore.activePreset) datasetStore.resetActivePreset()
       }
 
       filterStore.setSelectedFilters(localSelectedFilters)
@@ -87,6 +89,8 @@ export const EnumPanel = observer(
 
     const handleAddConditions = () => {
       if (selectedVariants.length === 0) return
+
+      if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
       const nameVariantList = selectedVariants.map(element => element[0])
 

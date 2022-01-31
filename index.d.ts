@@ -324,3 +324,7 @@ export interface IGridLayout {
   y: number
   i: string
 }
+
+export interface HistoryLocationState {
+  prevPage?: string
+}

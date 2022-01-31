@@ -1,4 +1,4 @@
-export const DecisionTreeModal = {
+export const DecisionTreeModalDataCy = {
   selectAllFromAttribute: 'select-all',
   clearAllFromAttribute: 'clear-all',
   addSelectedAttributes: 'add-selected',
