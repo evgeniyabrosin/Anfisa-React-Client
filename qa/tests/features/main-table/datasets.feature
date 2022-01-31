@@ -126,10 +126,7 @@ Feature: Main table, Dataset Creation
         And writes name for the dataset which begins with a number (5asd)
         And user clicks "Add dataset"
         Then the dataset should not be saved
-    <<<<<<< HEAD
 
-    =======
-    >>>>>>> 113f72d8909dc694d0ecdea637f042a6c4c94f10
     Scenario: Cancel dataset
         Given The main table of the dataset
         When  user chooses any Preset with variants
@@ -137,10 +134,7 @@ Feature: Main table, Dataset Creation
         And writes name for the dataset
         And clicks "Cancel"
         Then dataset should be canceled
-    <<<<<<< HEAD
 
-    =======
-    >>>>>>> 113f72d8909dc694d0ecdea637f042a6c4c94f10
     Scenario: Creation dataset process cannot be canceled
         Given The main table of the dataset
         When  user chooses any Preset with variants
