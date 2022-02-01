@@ -16,16 +16,16 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should open decision tree and select filter | Test #2', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(18)
     cy.wait('@decTreeUpload')
   })
 
   it('should exclude 3 variants | Test #3/1', () => {
-    cy.intercept('POST', '/app/statunits').as('filterLoad')
+    cy.intercept('POST', '/anfisa/app/statunits').as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -37,7 +37,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find graph Most_Severe_Consequence | Test #3/2', () => {
-    cy.intercept('POST', '/app/statunits').as('filterLoad')
+    cy.intercept('POST', '/anfisa/app/statunits').as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -49,7 +49,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find group of graphs Presence_in_Databases | Test #3/3', () => {
-    cy.intercept('POST', '/app/statunits').as('filterLoad')
+    cy.intercept('POST', '/anfisa/app/statunits').as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -65,7 +65,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find splice_altering in group of graphs "Predictions" | Test #3/4', () => {
-    cy.intercept('POST', '/app/statunits').as('filterLoad')
+    cy.intercept('POST', '/anfisa/app/statunits').as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -79,7 +79,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   it('should find masked_repeats in group of graphs "Region_Canonical" | Test #3/5', () => {
-    cy.intercept('POST', '/app/statunits').as('filterLoad')
+    cy.intercept('POST', '/anfisa/app/statunits').as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -95,7 +95,7 @@ describe('XL Dataset should be opened in decision tree', () => {
   })
 
   function visitWithFilter() {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
   }

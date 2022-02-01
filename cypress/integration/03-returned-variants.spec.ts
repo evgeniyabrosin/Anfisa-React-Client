@@ -8,17 +8,17 @@ describe('Test on table of returned variants', () => {
   const filterName = '⏚Hearing Loss, v.5'
 
   it('should open main table | test #4', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', '/anfisa/app/dtree_set').as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     cy.intercept(
       'POST',
-      '/app/reccnt?ds=xl_PGP3140_wgs_NIST-4_2&rec=2823765',
+      '/anfisa/app/reccnt?ds=xl_PGP3140_wgs_NIST-4_2&rec=2823765',
     ).as('returnedVariantsTable')
     decisionTreesPage.decisionTreeResults.viewReturnedVariants.click()
     cy.wait('@returnedVariantsTable', {
@@ -46,13 +46,13 @@ describe('Test on table of returned variants', () => {
   })
 
   it('Add dataset and open it in Main Table | test #5', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', '/anfisa/app/dtree_set').as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList', {
       timeout: Timeouts.TenSecondsTimeout,
     })
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload', {
       timeout: Timeouts.TenSecondsTimeout,

@@ -5,7 +5,7 @@ import { Helper } from '../../page-objects/lib/helpers'
 
 describe('Filter refiner regression test', () => {
   const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
-  const link = `/filter/refiner/?ds=${datasetName}`
+  const link = `filter/refiner/?ds=${datasetName}`
 
   it('should search attribute via substring | step 1', () => {
     filterRefinerPage.visit(link)
@@ -17,7 +17,7 @@ describe('Filter refiner regression test', () => {
   it('should choose values | step 2', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('Callers')
-    cy.intercept('POST', '/app/ds_stat').as('addFilters')
+    cy.intercept('POST', '/anfisa/app/ds_stat').as('addFilters')
     selectFilterElements(0)
     selectFilterElements(2)
     filterRefinerPage.filter.addButton.click()
@@ -33,7 +33,7 @@ describe('Filter refiner regression test', () => {
 
   it('should show filter | step 4', () => {
     filterRefinerPage.visit(link)
-    cy.intercept('POST', '/app/statunits').as('problemGroup')
+    cy.intercept('POST', '/anfisa/app/statunits').as('problemGroup')
     selectElementInLeftPanel('Inheritance_Mode')
     cy.waitUntil(() =>
       filterRefinerPage.filter.problemGroup.element.should('be.visible'),
@@ -62,7 +62,7 @@ describe('Filter refiner regression test', () => {
     cy.waitUntil(() =>
       filterRefinerPage.filter.selectReset.element.should('be.visible'),
     )
-    cy.intercept('POST', '/app/statfunc').as('uploadReset')
+    cy.intercept('POST', '/anfisa/app/statfunc').as('uploadReset')
     filterRefinerPage.filter.selectReset.select('Homozygous Recessive/X-linked')
     cy.wait('@uploadReset')
     //TODO click All mode checkbox
@@ -75,7 +75,7 @@ describe('Filter refiner regression test', () => {
     cy.waitUntil(() =>
       filterRefinerPage.filter.selectReset.element.should('be.visible'),
     )
-    cy.intercept('POST', '/app/statfunc').as('uploadReset')
+    cy.intercept('POST', '/anfisa/app/statfunc').as('uploadReset')
     filterRefinerPage.filter.selectReset.select('Compensational')
     cy.wait('@uploadReset')
     //TODO click Not mode checkbox
@@ -160,7 +160,7 @@ describe('Filter refiner regression test', () => {
     filterRefinerPage.visit(link)
     filterRefinerPage.leftPanel.listElements.element.contains('Callers').click()
     selectElementInLeftPanel('Callers')
-    cy.intercept('POST', '/app/ds_stat').as('addFilters')
+    cy.intercept('POST', '/anfisa/app/ds_stat').as('addFilters')
     selectFilterElements(0)
     selectFilterElements(2)
     filterRefinerPage.filter.addButton.click()
@@ -175,7 +175,7 @@ describe('Filter refiner regression test', () => {
   it.skip('should redo undone steps| step 14', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('Callers')
-    cy.intercept('POST', '/app/ds_stat').as('addFilters')
+    cy.intercept('POST', '/anfisa/app/ds_stat').as('addFilters')
     selectFilterElements(0)
     selectFilterElements(2)
     filterRefinerPage.filter.addButton.click()

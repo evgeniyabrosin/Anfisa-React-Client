@@ -10,18 +10,18 @@ describe('Regression test of the decision tree', () => {
   const decisionTreeName = 'new_decision_tree'
 
   it('should expand all | step 18', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    cy.intercept('POST', '/anfisa/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
       .first()
       .should('have.text', includedVariants)
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('stepAfter')
     decisionTreesPage.decisionTreeResults.optionsMenu.click()
     decisionTreesPage.decisionTreeResults.addStepAfter.click()
     cy.wait('@stepAfter')
@@ -55,12 +55,12 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.contentEditor.element.should('exist')
   })
   it('should collapse charts | step 20', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    cy.intercept('POST', '/anfisa/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
@@ -70,12 +70,12 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeChart.dataCharts.element.should('not.exist')
   })
   it('should expand collapsed charts | step 21', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    cy.intercept('POST', '/anfisa/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
@@ -88,12 +88,12 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should open text editor | step 22', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    cy.intercept('POST', '/anfisa/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeResults.excludeInfo
@@ -107,7 +107,7 @@ describe('Regression test of the decision tree', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should save dataset and open it in main table | step 23', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     // decisionTreesPage.decisionTreeResults.addAttribute.click()
     // decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     // decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -118,18 +118,18 @@ describe('Regression test of the decision tree', () => {
     // decisionTreesPage.decisionTreeResults.excludeInfo
     //   .first()
     //   .should('have.text', includedVariants)
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('stepAfter')
     // decisionTreesPage.decisionTreeResults.optionsMenu.click()
     // decisionTreesPage.decisionTreeResults.addStepAfter.click()
     // cy.wait('@stepAfter')
     // decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     // decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    cy.intercept('POST', '/anfisa/app/dtree_set').as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList', {
       timeout: Timeouts.TenSecondsTimeout,
     })
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload', {
       timeout: Timeouts.TenSecondsTimeout,
@@ -147,22 +147,22 @@ describe('Regression test of the decision tree', () => {
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
     datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
-    cy.url().should('include', `/filter?ds=${datasetName}`)
+    cy.url().should('include', `filter?ds=${datasetName}`)
   })
 
   it('should apply decision tree presert | step 25', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(18)
     cy.wait('@decTreeUpload')
   })
 
   it('should apply changes | step 26', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(18)
     cy.wait('@decTreeUpload')
@@ -183,35 +183,35 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should create new decision tree | step 27', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
     decisionTreesPage.attributesList.selectAll.contains('Select All').click()
-    cy.intercept('POST', '/app/statunits').as('applyAttributes')
+    cy.intercept('POST', '/anfisa/app/statunits').as('applyAttributes')
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@applyAttributes').its('response.statusCode').should('eq', 200)
     decisionTreesPage.decisionTreeMenu.createNew.click()
     decisionTreesPage.decisionTreeMenu.newDecisionTreeNameInput.type(
       `${decisionTreeName}`,
     )
-    cy.intercept('POST', '/app/dtree_stat').as('createNewTree')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('createNewTree')
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
     cy.wait('@createNewTree')
     decisionTreesPage.decisionTreeResults.anyChangeAlert.checkExists()
   })
 
   it('should modify created decision tree | step 28', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', '/anfisa/app/dtree_set').as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       decisionTreeName,
     )
     cy.wait('@decTreeUpload')
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('stepAfter')
     decisionTreesPage.decisionTreeResults.optionsMenu.click()
     decisionTreesPage.decisionTreeResults.addStepAfter.click()
     cy.wait('@stepAfter')
@@ -224,7 +224,7 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.attributesList.addSelectedAttributes.click()
     cy.wait('@stepAfter')
     decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    cy.intercept('POST', '/app/dtree_stat').as('modifyTree')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('modifyTree')
     decisionTreesPage.decisionTreeMenu.selectDropdownElem
       .contains('Modify')
       .click()
@@ -234,17 +234,17 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should delete created decision tree | step 29', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', '/anfisa/app/dtree_set').as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', '/anfisa/app/statunits').as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       decisionTreeName,
     )
     cy.wait('@decTreeUpload')
     decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    cy.intercept('POST', '/app/dtree_stat').as('deleteTree')
+    cy.intercept('POST', '/anfisa/app/dtree_stat').as('deleteTree')
     decisionTreesPage.decisionTreeMenu.selectDropdownElem
       .contains('Delete')
       .click()

@@ -40,9 +40,9 @@ describe('Open saved dataset in MainTable', () => {
   })
 
   it('should select preset in main table | test #6', () => {
-    mainTablePage.visit('/ws?ds=Dataset_from_autotests')
+    mainTablePage.visit('ws?ds=Dataset_from_autotests')
     mainTablePage.mainTable.selectPreset.click()
-    cy.intercept('POST', '/app/tab_report').as('loadPreset')
+    cy.intercept('POST', '/anfisa/app/tab_report').as('loadPreset')
     mainTablePage.mainTable.numVariants.haveText(variants1)
     mainTablePage.mainTable.preset.getButtonByText(presetName).click()
     cy.wait('@loadPreset').its('response.statusCode').should('eq', 200)
@@ -75,7 +75,7 @@ describe('Open saved dataset in MainTable', () => {
     )
     variantDrawerPage.variantDrawer.tagInput.type(likelyBenign)
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(likelyBenign)
@@ -95,9 +95,10 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
     mainTablePage.mainTable.tableRow.getButtonByText('p.M541L').click()
     variantDrawerPage.variantDrawer.addNote.click()
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: DM in HGMD but benign in ClinVar, common in AS',
     )
@@ -127,7 +128,7 @@ describe('Open saved dataset in MainTable', () => {
     )
     variantDrawerPage.variantDrawer.tagInput.type(forSecondaryReview)
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(forSecondaryReview)
@@ -150,9 +151,10 @@ describe('Open saved dataset in MainTable', () => {
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: more common in Ashkenazi Jews than in other populations, is not present in ClinVar',
     )
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
@@ -181,7 +183,7 @@ describe('Open saved dataset in MainTable', () => {
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
@@ -206,9 +208,10 @@ describe('Open saved dataset in MainTable', () => {
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: DM in HGMD but benign in ClinVar, common in AS',
     )
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
@@ -237,7 +240,7 @@ describe('Open saved dataset in MainTable', () => {
       'For_secondary_review',
       Timeouts.TenSecondsTimeout,
     )
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('For_secondary_review')
@@ -260,9 +263,10 @@ describe('Open saved dataset in MainTable', () => {
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21:  coding in NDUFS3 only, a very rare variant that does not have any clinical annotations, but  It does have damaging in-silico predictions from Polyphen and SIFT',
     )
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
@@ -291,7 +295,7 @@ describe('Open saved dataset in MainTable', () => {
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
@@ -323,7 +327,7 @@ describe('Open saved dataset in MainTable', () => {
       Timeouts.TenSecondsTimeout,
     )
 
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
@@ -347,9 +351,10 @@ describe('Open saved dataset in MainTable', () => {
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21:  a damaging prediction by Polyphen HDIV',
     )
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
@@ -378,7 +383,7 @@ describe('Open saved dataset in MainTable', () => {
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
@@ -405,7 +410,7 @@ describe('Open saved dataset in MainTable', () => {
     )
     variantDrawerPage.variantDrawer.tagInput.type(benign)
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
-    cy.intercept('POST', '/app/ws_tags').as('addTags')
+    cy.intercept('POST', '/anfisa/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(benign)
@@ -428,9 +433,10 @@ describe('Open saved dataset in MainTable', () => {
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: it is possibly de-novo',
     )
-    cy.intercept('POST', '/app/ws_tags?ds=Dataset_from_autotests&rec=**').as(
-      'addNote',
-    )
+    cy.intercept(
+      'POST',
+      '/anfisa/app/ws_tags?ds=Dataset_from_autotests&rec=**',
+    ).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.forceClick()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
@@ -443,7 +449,7 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.checkbox.variantMainTableCheckbox(
       'Benign/Likely benign',
     )
-    cy.intercept('POST', '/app/ws_list').as('addTag')
+    cy.intercept('POST', '/anfisa/app/ws_list').as('addTag')
     mainTablePage.mainTable.applyButton.forceClick()
     cy.wait('@addTag').its('response.statusCode').should('eq', 200)
     mainTablePage.mainTable.tableRow.element
@@ -452,14 +458,14 @@ describe('Open saved dataset in MainTable', () => {
   })
 
   it('should save Excel file | test #17', () => {
-    mainTablePage.visit('/ws?ds=Dataset_from_autotests')
+    mainTablePage.visit('ws?ds=Dataset_from_autotests')
     mainTablePage.mainTable.selectPreset.click()
-    cy.intercept('POST', '/app/tab_report').as('loadPreset')
+    cy.intercept('POST', '/anfisa/app/tab_report').as('loadPreset')
     mainTablePage.mainTable.preset
       .getButtonByText('⏚SEQaBOO_Hearing_Quick')
       .click()
     cy.wait('@loadPreset')
-    cy.intercept('GET', '/app/excel/Dataset_from_autotests_**.xlsx').as(
+    cy.intercept('GET', '/anfisa/app/excel/Dataset_from_autotests_**.xlsx').as(
       'reportDownload',
     )
     mainTablePage.mainTable.exportReport.click()
@@ -471,7 +477,7 @@ describe('Open saved dataset in MainTable', () => {
   })
 
   function loginWithPreset() {
-    mainTablePage.visit('/ws?ds=Dataset_from_autotests')
+    mainTablePage.visit('ws?ds=Dataset_from_autotests')
     mainTablePage.mainTable.selectPreset.click()
     cy.intercept('POST', '/app/tab_report').as('loadPreset')
     mainTablePage.mainTable.numVariants.haveText(variants1)
