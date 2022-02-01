@@ -7,10 +7,15 @@ name: add-githubactions-test CI
 on:
   push:
     branches:
-      - '*FOROME-*'
+      - 'FOROME-*'
       - '!main'
     tags: [ stage ]
     
+#on:
+#  push:
+#    branches: [ main ]
+#    tags: [ stage ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,14 +41,13 @@ jobs:
             yarn version --patch
             git push --tags --no-verify &&
             git push --no-verify
-
     - run: yarn install
       env:
-          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
+          REACT_APP_URL_BACKEND: "https://http://18.159.24.132/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
     - run: yarn build
       env:
-          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
+          REACT_APP_URL_BACKEND: "https://http://18.159.24.132/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
