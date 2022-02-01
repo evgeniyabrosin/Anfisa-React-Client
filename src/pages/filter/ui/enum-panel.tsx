@@ -9,7 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
-import { FilterRefiner } from '@components/data-testid/filter-refiner.cy'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 import { Pagintaion } from '@components/pagintaion'
 import { createChunks } from '@utils/createChunks'
 import { QueryBuilderSearch } from './query-builder/query-builder-search'
@@ -198,7 +198,7 @@ export const EnumPanel = observer(
             text={t('general.add')}
             onClick={handleAddConditions}
             disabled={isBlockAddBtn}
-            dataTestId={FilterRefiner.addButton}
+            dataTestId={FilterRefinerDataCy.addButton}
           />
         </div>
       </div>

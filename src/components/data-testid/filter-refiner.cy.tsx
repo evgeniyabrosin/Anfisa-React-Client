@@ -1,4 +1,4 @@
-export const FilterRefiner = {
+export const FilterRefinerDataCy = {
   selectPreset: 'select-preset',
   saveDataset: 'save-dataset',
   searchField: 'search-input',
@@ -17,4 +17,5 @@ export const FilterRefiner = {
   removeButton: 'remove-button',
   undoButton: 'undo-button',
   redoButton: 'redo-button',
+  approxDropdown: 'approx-dropdown',
 }

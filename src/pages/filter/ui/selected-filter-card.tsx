@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { Icon } from '@ui/icon'
-import { FilterRefiner } from '@components/data-testid/filter-refiner.cy'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 
 interface Props {
   title: string
@@ -46,7 +46,7 @@ export const SelectedFilterCard = observer(
                 <Checkbox checked onChange={() => onRemove(filterKey)} />
                 <span
                   className="text-14 leading-16px font-bold ml-2"
-                  data-testid={FilterRefiner.resultsListElement}
+                  data-testid={FilterRefinerDataCy.resultsListElement}
                 >
                   {filterKey}
                 </span>
