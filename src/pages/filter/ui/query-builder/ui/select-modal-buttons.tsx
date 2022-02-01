@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { ModalJoin } from './modal-join'
 
 interface IProps {
@@ -51,6 +51,7 @@ export const SelectModalButtons = observer(
             variant={'secondary'}
             className={'mr-2'}
             onClick={() => handleClose()}
+            dataTestId={DecisionTreeModalDataCy.cancelButton}
           />
           {currentGroup && currentGroup.length > 0 ? (
             <Fragment>
@@ -59,6 +60,7 @@ export const SelectModalButtons = observer(
                 text={t('dtree.replace')}
                 className={'mr-2'}
                 onClick={() => handleAddAttribute('REPLACE')}
+                dataTestId={DecisionTreeModalDataCy.replaceButton}
               />
 
               <div className="relative">
@@ -67,7 +69,7 @@ export const SelectModalButtons = observer(
                   text={t('dtree.addByJoining')}
                   onClick={handleModalJoin}
                   icon={<Icon name="Arrow" className="transform -rotate-90" />}
-                  dataTestId={DecisionTreesResultsDataCy.addByJoin}
+                  dataTestId={DecisionTreeModalDataCy.addByJoin}
                 />
 
                 {dtreeStore.isModalJoinVisible && (
@@ -80,7 +82,7 @@ export const SelectModalButtons = observer(
               text={t('dtree.addNewAttribute')}
               onClick={() => handleAddAttribute('INSERT')}
               disabled={disabled}
-              dataTestId={DecisionTreesResultsDataCy.addSelectedAttributes}
+              dataTestId={DecisionTreeModalDataCy.addSelectedAttributes}
             />
           )}
         </div>

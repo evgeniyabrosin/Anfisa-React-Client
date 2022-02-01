@@ -1,8 +1,8 @@
 import { UIElement } from './ui-element'
 
 export class Input extends UIElement {
-  type(value: string): void {
-    this.getElement().type(value)
+  type(value: string, delay?: number): void {
+    this.getElement().type(value, { delay })
   }
 
   clear(): void {

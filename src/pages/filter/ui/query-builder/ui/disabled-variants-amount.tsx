@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 
 interface IProps {
   variants: any[]
@@ -35,7 +36,12 @@ export const DisabledVariantsAmount = observer(
               />
             )}
 
-            <span className="text-black">{variant[0]}</span>
+            <span
+              className="text-black"
+              data-testid={DecisionTreesResultsDataCy.variantsList}
+            >
+              {variant[0]}
+            </span>
 
             <span className="text-grey-blue ml-2">
               {variant[1]} {t('dtree.variants')}

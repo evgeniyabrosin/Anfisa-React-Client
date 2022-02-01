@@ -3,6 +3,7 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useBlockLayout, useTable } from 'react-table'
 import { FixedSizeList } from 'react-window'
+import InfiniteLoader from 'react-window-infinite-loader'
 import cn from 'classnames'
 import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
@@ -11,7 +12,6 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
-import { SessionStoreManager } from '@core/storage-management/session-store-manager'
 import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -20,6 +20,7 @@ import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
+import { Loader } from '@components/loader'
 import { NoResultsFound } from '@components/no-results-found'
 
 interface Props {
@@ -35,9 +36,6 @@ export enum RowHeight {
   Compact = 60,
   Basic = 80,
 }
-
-const offsetSize = 2800
-const offsetSizeToLoad = (offsetSize / 100) * 60
 
 const TABLE_SCROLL_POSITION = 'tableScrollPosition'
 
@@ -162,7 +160,6 @@ export const Table = observer(
 
       return () => {
         window.removeEventListener('resize', handleResize)
-        SessionStoreManager.delete(TABLE_SCROLL_POSITION)
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -207,6 +204,7 @@ export const Table = observer(
     const RenderRow = useCallback(
       ({ index, style }) => {
         const row = rows[index]
+        const isItemLoaded = index !== rows.length - 1
 
         prepareRow(row)
 
@@ -224,43 +222,47 @@ export const Table = observer(
                 : 'text-black hover:bg-blue-light',
             )}
           >
-            {row.cells.map((cell: any) => {
-              const isSampleColumn = cell?.column?.Header === 'Samples'
-              const valueNumber = Object.keys(cell.value).length
+            {isItemLoaded ? (
+              row.cells.map((cell: any) => {
+                const isSampleColumn = cell?.column?.Header === 'Samples'
+                const valueNumber = Object.keys(cell.value).length
 
-              return (
-                <div
-                  {...cell.getCellProps()}
-                  key={Math.random()}
-                  className={cn('td overflow-hidden', {
-                    'py-1':
-                      cell.column.Header !== tableColumnMap.samples &&
-                      columnsStore.viewType === ViewTypeEnum.Compact,
-                    'py-4':
-                      cell.column.Header !== tableColumnMap.samples &&
-                      columnsStore.viewType !== ViewTypeEnum.Compact,
-                    'h-full':
-                      cell.column.Header === tableColumnMap.samples &&
-                      columnsStore.viewType !== ViewTypeEnum.Compact,
-                    'px-4': cell.column.Header !== tableColumnMap.samples,
-                  })}
-                >
-                  {isSampleColumn ? (
-                    <div onClick={stopPropagation}>
-                      <ScrollContainer
-                        style={{
-                          cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
-                        }}
-                      >
-                        {cell.render('Cell')}
-                      </ScrollContainer>
-                    </div>
-                  ) : (
-                    cell.render('Cell')
-                  )}
-                </div>
-              )
-            })}
+                return (
+                  <div
+                    {...cell.getCellProps()}
+                    key={Math.random()}
+                    className={cn('td overflow-hidden', {
+                      'py-1':
+                        cell.column.Header !== tableColumnMap.samples &&
+                        columnsStore.viewType === ViewTypeEnum.Compact,
+                      'py-4':
+                        cell.column.Header !== tableColumnMap.samples &&
+                        columnsStore.viewType !== ViewTypeEnum.Compact,
+                      'h-full':
+                        cell.column.Header === tableColumnMap.samples &&
+                        columnsStore.viewType !== ViewTypeEnum.Compact,
+                      'px-4': cell.column.Header !== tableColumnMap.samples,
+                    })}
+                  >
+                    {isSampleColumn ? (
+                      <div onClick={stopPropagation}>
+                        <ScrollContainer
+                          style={{
+                            cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </ScrollContainer>
+                      </div>
+                    ) : (
+                      cell.render('Cell')
+                    )}
+                  </div>
+                )
+              })
+            ) : (
+              <Loader />
+            )}
           </div>
         )
       },
@@ -324,32 +326,32 @@ export const Table = observer(
 
         {toJS(datasetStore.tabReport).length > 0 && (
           <div {...getTableBodyProps()} className="text-12 tbody">
-            <FixedSizeList
-              height={
-                (window.innerHeight ||
-                  document.documentElement.clientHeight ||
-                  document.body.clientHeight) - 200
-              }
+            <InfiniteLoader
+              isItemLoaded={index => index !== rows.length - 1}
               itemCount={rows.length}
-              initialScrollOffset={datasetStore.offset}
-              itemSize={
-                columnsStore.viewType === ViewTypeEnum.Compact
-                  ? RowHeight.Compact
-                  : RowHeight.Basic
-              }
-              onScroll={debounce(props => {
-                if (
-                  props.scrollOffset >
-                  datasetStore.offset + offsetSizeToLoad
-                ) {
-                  datasetStore.setTableOffest(props.scrollOffset)
-                  handleScrollAsync()
-                }
-              }, 100)}
-              width={totalColumnsWidth}
+              loadMoreItems={handleScrollAsync}
             >
-              {RenderRow}
-            </FixedSizeList>
+              {({ onItemsRendered, ref }) => (
+                <FixedSizeList
+                  height={
+                    (window.innerHeight ||
+                      document.documentElement.clientHeight ||
+                      document.body.clientHeight) - 200
+                  }
+                  itemCount={rows.length}
+                  itemSize={
+                    columnsStore.viewType === ViewTypeEnum.Compact
+                      ? RowHeight.Compact
+                      : RowHeight.Basic
+                  }
+                  width={totalColumnsWidth}
+                  ref={ref}
+                  onItemsRendered={onItemsRendered}
+                >
+                  {RenderRow}
+                </FixedSizeList>
+              )}
+            </InfiniteLoader>
           </div>
         )}
       </div>

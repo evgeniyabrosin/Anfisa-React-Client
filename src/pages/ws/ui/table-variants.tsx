@@ -7,7 +7,7 @@ import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
 import { Loader } from '@components/loader'
 import { variantColumnTable } from '../columns'
-import { Table } from './table'
+import { Table } from './table/table'
 
 const Styles = styled.div`
   overflow-x: auto;

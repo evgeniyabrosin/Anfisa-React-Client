@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -7,10 +7,10 @@ import {
 } from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
 
-import { IColumns } from '@declarations'
 import columnsStore from '@store/wsColumns'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
-import { ColumnNameItem } from './column-name-item'
+import { ColumnListStore } from './columns-list.store'
+import { ColumnNameItem } from './components/column-name-item'
 
 const getItemStyle = (draggableStyle: any) => ({
   userSelect: 'none',
@@ -19,39 +19,18 @@ const getItemStyle = (draggableStyle: any) => ({
   top: draggableStyle.top - 130 || 600,
 })
 
+const columnListStore = new ColumnListStore()
+
 export const ColumnsList = observer(
   (): ReactElement => {
-    const [columns, setColumns] = useState<IColumns[]>(
-      columnsStore.getExtendedColumns,
-    )
-
-    useEffect(() => {
-      setColumns(columnsStore.getExtendedColumns)
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [columnsStore.searchColumnValue, columnsStore.columns])
-
     const onDragEnd = (result: DropResult) => {
-      const items = Array.from(columns)
-      const startItemsLength = items.length
-
-      const [reorderItem] = items.splice(result.source.index, 1)
-
-      if (result.destination) {
-        items.splice(result.destination.index, 0, reorderItem)
-      }
-
-      if (items.length !== startItemsLength) return
-
-      columnsStore.setColumns(items)
-      setColumns(items)
+      columnListStore.reorderColumns(
+        result.source.index,
+        result.destination?.index,
+      )
     }
 
-    const filteredColumns = columns.filter(item =>
-      item.title
-        .toLocaleLowerCase()
-        .includes(columnsStore.searchColumnValue.toLocaleLowerCase()),
-    )
+    const { columnsToDisplay, toggleColumnHidden } = columnListStore
 
     return (
       <div className="mt-3 w-64 pr-4">
@@ -59,10 +38,10 @@ export const ColumnsList = observer(
           <Droppable droppableId="droppable">
             {provided => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {filteredColumns.map((item, index) => (
+                {columnsToDisplay.map((column, index) => (
                   <Draggable
-                    key={item.title}
-                    draggableId={item.title}
+                    key={column.title}
+                    draggableId={column.title}
                     index={index}
                     isDragDisabled={!!columnsStore.searchColumnValue}
                   >
@@ -77,9 +56,9 @@ export const ColumnsList = observer(
                         data-testid={MainTableDataCy.customizeTableList}
                       >
                         <ColumnNameItem
-                          name={item.title}
-                          setColumns={setColumns}
-                          columns={columns}
+                          name={column.title}
+                          isChecked={!column.hidden}
+                          onClickSwitch={() => toggleColumnHidden(column.title)}
                         />
                       </div>
                     )}

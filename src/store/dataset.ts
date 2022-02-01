@@ -22,6 +22,8 @@ import operations from './operations'
 
 const INCREASE_INDEX = 50
 
+export type Condition = [string, string, unknown, string[]?, unknown?]
+
 class DatasetStore {
   dsStat: DsStatType = {}
   variantsAmount = 0
@@ -39,7 +41,7 @@ class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: any[] = []
+  conditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
 
@@ -140,7 +142,7 @@ class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: any[][]) {
+  async setConditionsAsync(conditions: Condition[]) {
     if (!conditions[0]) {
       this.conditions = []
       await this.fetchDsStatAsync()
@@ -176,14 +178,16 @@ class DatasetStore {
       item => item[1] === subGroup,
     )
 
-    const conditionKind = cloneConditions.find(item => item[1] === subGroup)[0]
+    const conditionKind = cloneConditions.find(
+      item => item![1] === subGroup,
+    )![0]
 
     if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3].filter(
+      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
         (item: string) => item !== itemName,
       )
 
-      if (filteredItems.length === 0) {
+      if (filteredItems?.length === 0) {
         cloneConditions.splice(subGroupIndex, 1)
       } else {
         cloneConditions[subGroupIndex][3] = filteredItems
@@ -228,23 +232,30 @@ class DatasetStore {
     this.statAmount = []
     this.prevPreset = ''
     this.wsRecords = []
+    this.tabReport = []
   }
 
   resetConditions() {
     this.conditions = []
   }
 
-  async initDatasetAsync(datasetName: string = this.datasetName) {
+  async initDatasetAsync(
+    datasetName: string = this.datasetName,
+    prevPage?: string,
+  ) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
-    await this.fetchWsTagsAsync()
-    await this.fetchWsListAsync(this.isXL)
-    this.fetchDsStatAsync()
 
-    this.filteredNo.length === 0
-      ? await this.fetchTabReportAsync()
-      : await this.fetchFilteredTabReportAsync()
+    if (!prevPage) {
+      await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
+
+      this.filteredNo.length === 0
+        ? await this.fetchTabReportAsync()
+        : await this.fetchFilteredTabReportAsync()
+
+      this.fetchDsStatAsync()
+    }
   }
 
   async fetchDsStatAsync(
@@ -252,7 +263,6 @@ class DatasetStore {
     bodyFromHistory?: URLSearchParams,
   ) {
     this.isLoadingDsStat = true
-    this.setIsLoadingTabReport(true)
 
     const localBody = new URLSearchParams({
       ds: this.datasetName,
@@ -465,12 +475,17 @@ class DatasetStore {
   }
 
   async fetchWsListAsync(isXL?: boolean, kind?: string) {
+    this.setIsLoadingTabReport(true)
+
     const body = new URLSearchParams({
       ds: this.datasetName,
     })
 
     if (!this.isFilterDisabled) {
-      body.append('conditions', kind ? '[]' : JSON.stringify(this.conditions))
+      body.append(
+        'conditions',
+        kind === 'reset' ? '[]' : JSON.stringify(this.conditions),
+      )
       body.append('zone', JSON.stringify(this.zone))
     }
 
@@ -510,7 +525,7 @@ class DatasetStore {
       })
     }
 
-    await this.fetchFilteredTabReportAsync()
+    if (kind !== 'withoutTabReport') await this.fetchFilteredTabReportAsync()
 
     return this.filteredNo
   }

@@ -64,11 +64,19 @@ describe('Regression test of the main table | step 1', () => {
     filterByGene('CHSY1', 'Variants: 1')
     mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    variantDrawerPage.variantDrawer.tagInput.type(customTag)
+    variantDrawerPage.variantDrawer.tagInput.type(customTag, 100)
+    cy.waitUntil(() =>
+      variantDrawerPage.variantDrawer.addCustomTag.element.should(
+        'not.be.disabled',
+      ),
+    )
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
     cy.intercept('POST', '/app/ws_tags').as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
     cy.wait('@addTags', { timeout: Timeouts.TwentySecondsTimeout })
+    variantDrawerPage.variantDrawer.addedTag.element
+      .should('be.visible')
+      .and('have.text', customTag)
   })
 
   it('should add note to the variant | step 5', () => {
@@ -192,7 +200,7 @@ describe('Regression test of the main table | step 1', () => {
     )
     mainTablePage.mainTable.exportReport.click()
     mainTablePage.mainTable.exportExcel.click()
-    cy.wait('@reportDownload', { timeout: Timeouts.FifteenSecondsTimeout })
+    cy.wait('@reportDownload', { timeout: Timeouts.ThirtyFiveSecondsTimeout })
     cy.readFile(`./cypress/downloads/${datasetName}.xlsx`, 'utf8').should(
       'exist',
     )
@@ -212,7 +220,9 @@ describe('Regression test of the main table | step 1', () => {
     cy.intercept('POST', '/app/csv_export').as('reportCsvDownload')
     mainTablePage.mainTable.exportReport.click()
     mainTablePage.mainTable.exportCsv.click()
-    cy.wait('@reportCsvDownload', { timeout: Timeouts.TwentySecondsTimeout })
+    cy.wait('@reportCsvDownload', {
+      timeout: Timeouts.ThirtyFiveSecondsTimeout,
+    })
     cy.readFile(`./cypress/downloads/${datasetName}.csv`).should('exist')
     cy.readFile(`./cypress/downloads/${datasetName}.csv`).should(
       'contain',
@@ -223,6 +233,9 @@ describe('Regression test of the main table | step 1', () => {
   function filterByGene(geneName: string, numVariants: string) {
     mainTablePage.mainTable.addGene.click()
     mainTablePage.mainTable.searchFilter.type(geneName)
+    cy.waitUntil(() =>
+      mainTablePage.mainTable.checkboxListElement.element.should('be.visible'),
+    )
     mainTablePage.mainTable.geneCheckbox.check()
     cy.intercept('POST', '/app/tab_report').as('applyGeneFilter')
     mainTablePage.mainTable.applyButton.click()
