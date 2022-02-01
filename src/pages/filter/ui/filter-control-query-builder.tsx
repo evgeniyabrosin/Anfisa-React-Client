@@ -16,6 +16,7 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
+import { validatePresetName } from '@utils/validation/validatePresetName'
 import { DtreeModal } from './dtree-modal'
 import { FilterButton } from './filter-button'
 
@@ -86,6 +87,22 @@ export const FilterControlQueryBuilder = observer(
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
+        const isDtreeNameValid = validatePresetName(createTreeName)
+
+        if (!isDtreeNameValid) {
+          toast.error(t('error.dtreeNameIsNotValid'), {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+          })
+
+          return
+        }
+
         instruction = ['DTREE', 'UPDATE', createTreeName]
         notification = `${t('dtree.dtree')} "${createTreeName}" ${t(
           'dtree.hasBeenCreated',

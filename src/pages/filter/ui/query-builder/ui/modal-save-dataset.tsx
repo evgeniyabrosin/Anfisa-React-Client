@@ -19,11 +19,12 @@ import { Attention } from '@ui/icons/attention'
 import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
+import {
+  noFirstNumberPattern,
+  noSymbolPattern,
+} from '@utils/validation/validationPatterns'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
-
-export const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
-export const noFirstNumberPattern = /^[\d_]/
 
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)

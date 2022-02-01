@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
-import { validateLocusCondition } from '@utils/validateLocusCondition'
+import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { EditModalButtons } from './edit-modal-buttons'
 import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
