@@ -48,8 +48,8 @@ export const CellGene = observer(
         )}
 
         <div
-          className="flex flex-col flex-wrap w-full"
-          style={{ maxHeight: `${geneCellHeight}px` }}
+        // className="flex flex-col flex-wrap w-full"
+        // style={{ maxHeight: `${geneCellHeight}px` }}
         >
           {value.map(gene => (
             <div className="text-14 leading-18px" key={gene}>

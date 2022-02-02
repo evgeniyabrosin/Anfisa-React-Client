@@ -2,8 +2,15 @@ import { ReactElement, useCallback, useEffect } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useBlockLayout, useTable } from 'react-table'
-import { FixedSizeList } from 'react-window'
-import InfiniteLoader from 'react-window-infinite-loader'
+import {
+  CellMeasurer,
+  CellMeasurerCache,
+  InfiniteLoader,
+  List,
+} from 'react-virtualized'
+import Autosizer from 'react-virtualized-auto-sizer'
+// import { VariableSizeList as List } from 'react-window'
+// import InfiniteLoader from 'react-window-infinite-loader'
 import cn from 'classnames'
 import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
@@ -54,6 +61,10 @@ export const Table = observer(
     const alreadyOpened = !!params.get('variant')
 
     const { selectedFilters } = filterStore
+
+    const cache = new CellMeasurerCache({
+      minHeight: 20,
+    })
 
     const {
       selectedGenes,
@@ -202,68 +213,90 @@ export const Table = observer(
     ])
 
     const RenderRow = useCallback(
-      ({ index, style }) => {
+      ({ index, style, key, parent }) => {
         const row = rows[index]
         const isItemLoaded = index !== rows.length - 1
 
         prepareRow(row)
 
         return (
-          <div
-            {...row.getRowProps({
-              style,
-            })}
-            onClick={() => handleOpenVariant(row)}
-            className={cn(
-              'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible &&
-                isRowSelected(row.index, variantStore.index)
-                ? 'bg-blue-bright text-white'
-                : 'text-black hover:bg-blue-light',
-            )}
+          <CellMeasurer
+            cache={cache}
+            columnIndex={0}
+            key={key}
+            overscanRowCount={10}
+            parent={parent}
+            rowIndex={index}
           >
-            {isItemLoaded ? (
-              row.cells.map((cell: any) => {
-                const isSampleColumn = cell?.column?.Header === 'Samples'
-                const valueNumber = Object.keys(cell.value).length
+            {({ measure, registerChild }) => {
+              // console.log(measure())
 
-                return (
-                  <div
-                    {...cell.getCellProps()}
-                    key={Math.random()}
-                    className={cn('td overflow-hidden', {
-                      'py-1':
-                        cell.column.Header !== tableColumnMap.samples &&
-                        columnsStore.viewType === ViewTypeEnum.Compact,
-                      'py-4':
-                        cell.column.Header !== tableColumnMap.samples &&
-                        columnsStore.viewType !== ViewTypeEnum.Compact,
-                      'h-full':
-                        cell.column.Header === tableColumnMap.samples &&
-                        columnsStore.viewType !== ViewTypeEnum.Compact,
-                      'px-4': cell.column.Header !== tableColumnMap.samples,
-                    })}
-                  >
-                    {isSampleColumn ? (
-                      <div onClick={stopPropagation}>
-                        <ScrollContainer
-                          style={{
-                            cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
-                          }}
+              return (
+                <div
+                  // {...row.getRowProps({
+                  //   style,
+                  // })}
+                  key={key}
+                  ref={registerChild}
+                  onClick={() => handleOpenVariant(row)}
+                  id={`row_${index}`}
+                  style={style}
+                  className={cn(
+                    'cursor-pointer flex items-center tr',
+                    variantStore.drawerVisible &&
+                      isRowSelected(row.index, variantStore.index)
+                      ? 'bg-blue-bright text-white'
+                      : 'text-black hover:bg-blue-light',
+                  )}
+                >
+                  {isItemLoaded ? (
+                    row.cells.map((cell: any) => {
+                      const isSampleColumn = cell?.column?.Header === 'Samples'
+                      const valueNumber = Object.keys(cell.value).length
+
+                      return (
+                        <div
+                          {...cell.getCellProps()}
+                          key={Math.random()}
+                          className={cn('td overflow-hidden', {
+                            'py-1':
+                              cell.column.Header !== tableColumnMap.samples &&
+                              columnsStore.viewType === ViewTypeEnum.Compact,
+                            'py-4':
+                              cell.column.Header !== tableColumnMap.samples &&
+                              columnsStore.viewType !== ViewTypeEnum.Compact,
+                            'h-full':
+                              cell.column.Header === tableColumnMap.samples &&
+                              columnsStore.viewType !== ViewTypeEnum.Compact,
+                            'px-4':
+                              cell.column.Header !== tableColumnMap.samples,
+                          })}
                         >
-                          {cell.render('Cell')}
-                        </ScrollContainer>
-                      </div>
-                    ) : (
-                      cell.render('Cell')
-                    )}
-                  </div>
-                )
-              })
-            ) : (
-              <Loader />
-            )}
-          </div>
+                          {isSampleColumn ? (
+                            <div onClick={stopPropagation}>
+                              <ScrollContainer
+                                style={{
+                                  cursor: `${
+                                    valueNumber > 3 ? 'grabbing' : 'auto'
+                                  }`,
+                                }}
+                              >
+                                {cell.render('Cell')}
+                              </ScrollContainer>
+                            </div>
+                          ) : (
+                            cell.render('Cell')
+                          )}
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <Loader />
+                  )}
+                </div>
+              )
+            }}
+          </CellMeasurer>
         )
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -271,6 +304,8 @@ export const Table = observer(
     )
 
     const handleScrollAsync = async () => {
+      console.log('====>', 'Load')
+
       if (
         toJS(datasetStore.filteredNo).length > 0 &&
         datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length
@@ -286,75 +321,76 @@ export const Table = observer(
     }
 
     return (
-      <div
-        {...getTableProps()}
-        style={{ width: totalColumnsWidth }}
-        className="table h-full"
-      >
-        <div className="thead">
-          {headerGroups.map(headerGroup => {
-            const stylesHead = { ...headerGroup.getHeaderGroupProps().style }
+      <Autosizer>
+        {({ height }) => (
+          <div style={{ width: totalColumnsWidth }} className="table h-full">
+            <div className="thead">
+              {headerGroups.map((headerGroup, idx) => {
+                const stylesHead = {
+                  ...headerGroup.getHeaderGroupProps().style,
+                }
 
-            stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
+                stylesHead.width =
+                  Number.parseFloat(stylesHead.width as string) - 8
 
-            return (
-              <div
-                {...headerGroup.getHeaderGroupProps()}
-                key={Math.random()}
-                className="tr"
-                style={stylesHead}
-              >
-                {headerGroup.headers.map((column: any) => {
-                  return (
-                    <div
-                      {...column.getHeaderProps()}
-                      key={Math.random()}
-                      className="th"
-                    >
-                      {column.HeaderComponent
-                        ? column.render('HeaderComponent')
-                        : column.render('Header')}
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
+                return (
+                  <div
+                    {...headerGroup.getHeaderGroupProps()}
+                    key={idx}
+                    className="tr"
+                    style={stylesHead}
+                  >
+                    {headerGroup.headers.map((column: any) => {
+                      return (
+                        <div
+                          {...column.getHeaderProps()}
+                          key={Math.random()}
+                          className="th"
+                        >
+                          {column.HeaderComponent
+                            ? column.render('HeaderComponent')
+                            : column.render('Header')}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              })}
+            </div>
 
-        {renderNoResults()}
+            {renderNoResults()}
 
-        {toJS(datasetStore.tabReport).length > 0 && (
-          <div {...getTableBodyProps()} className="text-12 tbody">
-            <InfiniteLoader
-              isItemLoaded={index => index !== rows.length - 1}
-              itemCount={rows.length}
-              loadMoreItems={handleScrollAsync}
-            >
-              {({ onItemsRendered, ref }) => (
-                <FixedSizeList
-                  height={
-                    (window.innerHeight ||
-                      document.documentElement.clientHeight ||
-                      document.body.clientHeight) - 200
-                  }
-                  itemCount={rows.length}
-                  itemSize={
-                    columnsStore.viewType === ViewTypeEnum.Compact
-                      ? RowHeight.Compact
-                      : RowHeight.Basic
-                  }
-                  width={totalColumnsWidth}
-                  ref={ref}
-                  onItemsRendered={onItemsRendered}
+            {toJS(datasetStore.tabReport).length > 0 && (
+              <div className="text-12 tbody">
+                <InfiniteLoader
+                  isRowLoaded={({ index }) => {
+                    return !!rows[index + 1]
+                  }}
+                  rowCount={rows.length}
+                  loadMoreRows={handleScrollAsync}
                 >
-                  {RenderRow}
-                </FixedSizeList>
-              )}
-            </InfiniteLoader>
+                  {({ onRowsRendered, registerChild }) => (
+                    <List
+                      height={height}
+                      rowCount={rows.length}
+                      rowHeight={cache.rowHeight}
+                      rowRenderer={RenderRow}
+                      deferredMeasurementCache={cache}
+                      // columnsStore.viewType === ViewTypeEnum.Compact
+                      //   ? RowHeight.Compact
+                      //   : RowHeight.Basic
+                      //}
+                      width={totalColumnsWidth}
+                      ref={registerChild}
+                      onRowsRendered={onRowsRendered}
+                    />
+                  )}
+                </InfiniteLoader>
+              </div>
+            )}
           </div>
         )}
-      </div>
+      </Autosizer>
     )
   },
 )
