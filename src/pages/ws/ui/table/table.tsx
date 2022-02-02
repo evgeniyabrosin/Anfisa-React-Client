@@ -2,6 +2,7 @@ import { ReactElement, useCallback, useEffect } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useBlockLayout, useTable } from 'react-table'
+import Autosizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import cn from 'classnames'
@@ -38,6 +39,7 @@ export enum RowHeight {
 }
 
 const TABLE_SCROLL_POSITION = 'tableScrollPosition'
+const DEFAULT_HEADER_HEIGHT = 40
 
 export const isRowSelected = (
   rowIndex: number,
@@ -204,7 +206,9 @@ export const Table = observer(
     const RenderRow = useCallback(
       ({ index, style }) => {
         const row = rows[index]
-        const isItemLoaded = index !== rows.length - 1
+
+        const isLoading =
+          datasetStore.isFetchingMore && index === rows.length - 1
 
         prepareRow(row)
 
@@ -222,7 +226,7 @@ export const Table = observer(
                 : 'text-black hover:bg-blue-light',
             )}
           >
-            {isItemLoaded ? (
+            {!isLoading ? (
               row.cells.map((cell: any) => {
                 const isSampleColumn = cell?.column?.Header === 'Samples'
                 const valueNumber = Object.keys(cell.value).length
@@ -261,13 +265,19 @@ export const Table = observer(
                 )
               })
             ) : (
-              <Loader />
+              <Loader size="s" />
             )}
           </div>
         )
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [handleOpenVariant, prepareRow, rows, variantStore.index],
+      [
+        handleOpenVariant,
+        prepareRow,
+        rows,
+        variantStore.index,
+        datasetStore.isFetchingMore,
+      ],
     )
 
     const handleScrollAsync = debounce(async () => {
@@ -294,9 +304,11 @@ export const Table = observer(
         style={{ width: totalColumnsWidth }}
         className="table h-full"
       >
-        <div className="thead">
+        <div style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }} className="thead">
           {headerGroups.map(headerGroup => {
-            const stylesHead = { ...headerGroup.getHeaderGroupProps().style }
+            const stylesHead = {
+              ...headerGroup.getHeaderGroupProps().style,
+            }
 
             stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
 
@@ -328,34 +340,34 @@ export const Table = observer(
         {renderNoResults()}
 
         {toJS(datasetStore.tabReport).length > 0 && (
-          <div {...getTableBodyProps()} className="text-12 tbody">
-            <InfiniteLoader
-              isItemLoaded={index => index !== rows.length - 1}
-              itemCount={rows.length}
-              loadMoreItems={handleScrollAsync}
-            >
-              {({ onItemsRendered, ref }) => (
-                <FixedSizeList
-                  height={
-                    (window.innerHeight ||
-                      document.documentElement.clientHeight ||
-                      document.body.clientHeight) - 200
-                  }
-                  itemCount={rows.length}
-                  itemSize={
-                    columnsStore.viewType === ViewTypeEnum.Compact
-                      ? RowHeight.Compact
-                      : RowHeight.Basic
-                  }
-                  width={totalColumnsWidth}
-                  ref={ref}
-                  onItemsRendered={onItemsRendered}
+          <Autosizer>
+            {({ height }) => (
+              <div {...getTableBodyProps()} className="text-12 tbody">
+                <InfiniteLoader
+                  isItemLoaded={index => index !== rows.length}
+                  itemCount={rows.length + 1}
+                  loadMoreItems={handleScrollAsync}
                 >
-                  {RenderRow}
-                </FixedSizeList>
-              )}
-            </InfiniteLoader>
-          </div>
+                  {({ onItemsRendered, ref }) => (
+                    <FixedSizeList
+                      height={height - DEFAULT_HEADER_HEIGHT}
+                      itemCount={rows.length}
+                      itemSize={
+                        columnsStore.viewType === ViewTypeEnum.Compact
+                          ? RowHeight.Compact
+                          : RowHeight.Basic
+                      }
+                      width={totalColumnsWidth}
+                      ref={ref}
+                      onItemsRendered={onItemsRendered}
+                    >
+                      {RenderRow}
+                    </FixedSizeList>
+                  )}
+                </InfiniteLoader>
+              </div>
+            )}
+          </Autosizer>
         )}
       </div>
     )
