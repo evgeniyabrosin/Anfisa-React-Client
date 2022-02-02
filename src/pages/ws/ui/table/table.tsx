@@ -270,11 +270,14 @@ export const Table = observer(
       [handleOpenVariant, prepareRow, rows, variantStore.index],
     )
 
-    const handleScrollAsync = async () => {
-      if (
-        toJS(datasetStore.filteredNo).length > 0 &&
-        datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length
-      ) {
+    const handleScrollAsync = debounce(async () => {
+      const datasetVariantsAmount = toJS(datasetStore.filteredNo).length
+      const lastLoadedVariant = datasetStore.indexFilteredNo
+
+      const isNeedToLoadMore =
+        datasetVariantsAmount > 0 && lastLoadedVariant < datasetVariantsAmount
+
+      if (isNeedToLoadMore) {
         await datasetStore.fetchFilteredTabReportAsync()
 
         return
@@ -283,7 +286,7 @@ export const Table = observer(
       if (!datasetStore.reportsLoaded) {
         await datasetStore.fetchTabReportAsync()
       }
-    }
+    }, 100)
 
     return (
       <div
