@@ -28,7 +28,6 @@ class FilterStore {
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
   statFuncData: any = []
-  error = ''
   filterCondition: Record<string, any> = {}
 
   selectedFiltersHistory: SelectedFiltersType[] = []
@@ -162,10 +161,6 @@ class FilterStore {
     return result
   }
 
-  setError(value: string) {
-    this.error = value
-  }
-
   resetData() {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
@@ -197,6 +192,10 @@ class FilterStore {
 
   resetFilterCondition() {
     this.filterCondition = {}
+  }
+
+  clearFilterCondition(filterName: string) {
+    delete this.filterCondition[filterName]
   }
 }
 

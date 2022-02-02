@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, FormikProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 
@@ -7,6 +7,7 @@ import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Input } from '@ui//input'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
+import { PanelButtons } from './panelButtons'
 import { DisabledVariantsAmount } from './query-builder/ui/disabled-variants-amount'
 
 export interface IGeneRegionFormValues {
@@ -17,6 +18,8 @@ export const GeneRegion = observer(
   ({
     values: { locus },
     setFieldValue,
+    submitForm,
+    resetForm,
   }: FormikProps<IGeneRegionFormValues>) => {
     const cachedValues = filterStore.readFilterCondition<IGeneRegionFormValues>(
       FuncStepTypesEnum.GeneRegion,
@@ -32,16 +35,6 @@ export const GeneRegion = observer(
     }
 
     useEffect(() => {
-      isErrorVisible
-        ? filterStore.setError('out of choice')
-        : filterStore.setError('')
-    }, [isErrorVisible])
-
-    useEffect(() => {
-      if (!locusValue) {
-        filterStore.setError('out of choice')
-      }
-
       const params = `{"locus":"${locusValue}"}`
 
       filterStore.fetchStatFuncAsync('GeneRegion', params)
@@ -58,36 +51,51 @@ export const GeneRegion = observer(
       )
     }, [locus])
 
+    const handleResetFields = () => {
+      filterStore.clearFilterCondition(FuncStepTypesEnum.GeneRegion)
+    }
+
     return (
-      <Form>
-        <div className="mt-4">
-          <span className="text-14 leading-16px text-grey-blue font-bold">
-            {'Locus'}
-          </span>
+      <React.Fragment>
+        <Form>
+          <div className="mt-4">
+            <span className="text-14 leading-16px text-grey-blue font-bold">
+              Locus
+            </span>
 
-          <div className="relative flex">
-            <Input
-              value={locusValue}
-              onChange={e => {
-                setFieldValue('locus', e.target.value)
-                validateValue(e.target.value)
-              }}
+            <div className="relative flex">
+              <Input
+                value={locusValue}
+                onChange={e => {
+                  setFieldValue('locus', e.target.value)
+                  validateValue(e.target.value)
+                }}
+              />
+
+              {isErrorVisible && (
+                <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
+                  {t('dtree.chromosomeNameIsNotCorrect')}
+                </div>
+              )}
+            </div>
+
+            <DisabledVariantsAmount
+              variants={variants}
+              disabled={true}
+              isErrorVisible={isErrorVisible}
             />
-
-            {isErrorVisible && (
-              <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
-                {t('dtree.chromosomeNameIsNotCorrect')}
-              </div>
-            )}
           </div>
+        </Form>
 
-          <DisabledVariantsAmount
-            variants={variants}
-            disabled={true}
-            isErrorVisible={isErrorVisible}
-          />
-        </div>
-      </Form>
+        <PanelButtons
+          selectedFilterName={filterStore.selectedGroupItem.name}
+          selectedFilterGroup={filterStore.selectedGroupItem.vgroup}
+          onSubmit={submitForm}
+          resetForm={resetForm}
+          resetFields={handleResetFields}
+          disabled={!variants || isErrorVisible}
+        />
+      </React.Fragment>
     )
   },
 )
