@@ -41,10 +41,11 @@ interface PropsRow {
 
 export enum RowHeight {
   Compact = 60,
-  Basic = 80,
+  Cozy = 80,
 }
 
 const TABLE_SCROLL_POSITION = 'tableScrollPosition'
+const DEFAULT_HEADER_HEIGHT = 40
 
 export const isRowSelected = (
   rowIndex: number,
@@ -64,6 +65,8 @@ export const Table = observer(
 
     const cache = new CellMeasurerCache({
       minHeight: 20,
+      defaultHeight: RowHeight[columnsStore.viewType],
+      fixedWidth: true,
     })
 
     const {
@@ -81,14 +84,7 @@ export const Table = observer(
             document.body.clientWidth) / 8,
     }
 
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      totalColumnsWidth,
-      rows,
-      prepareRow,
-    } = useTable(
+    const { headerGroups, totalColumnsWidth, rows, prepareRow } = useTable(
       {
         columns,
         data,
@@ -215,7 +211,9 @@ export const Table = observer(
     const RenderRow = useCallback(
       ({ index, style, key, parent }) => {
         const row = rows[index]
-        const isItemLoaded = index !== rows.length - 1
+
+        const isLoading =
+          datasetStore.isFetchingMore && index === rows.length - 1
 
         prepareRow(row)
 
@@ -228,18 +226,13 @@ export const Table = observer(
             parent={parent}
             rowIndex={index}
           >
-            {({ measure, registerChild }) => {
-              // console.log(measure())
-
+            {({ registerChild }) => {
               return (
                 <div
-                  // {...row.getRowProps({
-                  //   style,
-                  // })}
                   key={key}
-                  ref={registerChild}
                   onClick={() => handleOpenVariant(row)}
                   id={`row_${index}`}
+                  ref={registerChild}
                   style={style}
                   className={cn(
                     'cursor-pointer flex items-center tr',
@@ -249,7 +242,7 @@ export const Table = observer(
                       : 'text-black hover:bg-blue-light',
                   )}
                 >
-                  {isItemLoaded ? (
+                  {!isLoading ? (
                     row.cells.map((cell: any) => {
                       const isSampleColumn = cell?.column?.Header === 'Samples'
                       const valueNumber = Object.keys(cell.value).length
@@ -304,8 +297,6 @@ export const Table = observer(
     )
 
     const handleScrollAsync = async () => {
-      console.log('====>', 'Load')
-
       if (
         toJS(datasetStore.filteredNo).length > 0 &&
         datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length
@@ -321,46 +312,45 @@ export const Table = observer(
     }
 
     return (
-      <Autosizer>
-        {({ height }) => (
-          <div style={{ width: totalColumnsWidth }} className="table h-full">
-            <div className="thead">
-              {headerGroups.map((headerGroup, idx) => {
-                const stylesHead = {
-                  ...headerGroup.getHeaderGroupProps().style,
-                }
+      <div style={{ width: totalColumnsWidth }} className="table h-full">
+        <div style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }} className="thead">
+          {headerGroups.map((headerGroup, idx) => {
+            const stylesHead = {
+              ...headerGroup.getHeaderGroupProps().style,
+            }
 
-                stylesHead.width =
-                  Number.parseFloat(stylesHead.width as string) - 8
+            stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
 
-                return (
-                  <div
-                    {...headerGroup.getHeaderGroupProps()}
-                    key={idx}
-                    className="tr"
-                    style={stylesHead}
-                  >
-                    {headerGroup.headers.map((column: any) => {
-                      return (
-                        <div
-                          {...column.getHeaderProps()}
-                          key={Math.random()}
-                          className="th"
-                        >
-                          {column.HeaderComponent
-                            ? column.render('HeaderComponent')
-                            : column.render('Header')}
-                        </div>
-                      )
-                    })}
-                  </div>
-                )
-              })}
-            </div>
+            return (
+              <div
+                {...headerGroup.getHeaderGroupProps()}
+                key={idx}
+                className="tr"
+                style={stylesHead}
+              >
+                {headerGroup.headers.map((column: any) => {
+                  return (
+                    <div
+                      {...column.getHeaderProps()}
+                      key={Math.random()}
+                      className="th"
+                    >
+                      {column.HeaderComponent
+                        ? column.render('HeaderComponent')
+                        : column.render('Header')}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
 
-            {renderNoResults()}
+        {renderNoResults()}
 
-            {toJS(datasetStore.tabReport).length > 0 && (
+        {toJS(datasetStore.tabReport).length > 0 && (
+          <Autosizer>
+            {({ height }) => (
               <div className="text-12 tbody">
                 <InfiniteLoader
                   isRowLoaded={({ index }) => {
@@ -371,15 +361,15 @@ export const Table = observer(
                 >
                   {({ onRowsRendered, registerChild }) => (
                     <List
-                      height={height}
+                      height={height - DEFAULT_HEADER_HEIGHT}
                       rowCount={rows.length}
-                      rowHeight={cache.rowHeight}
+                      rowHeight={
+                        columnsStore.viewType === ViewTypeEnum.Compact
+                          ? RowHeight[ViewTypeEnum.Compact]
+                          : cache.rowHeight
+                      }
                       rowRenderer={RenderRow}
                       deferredMeasurementCache={cache}
-                      // columnsStore.viewType === ViewTypeEnum.Compact
-                      //   ? RowHeight.Compact
-                      //   : RowHeight.Basic
-                      //}
                       width={totalColumnsWidth}
                       ref={registerChild}
                       onRowsRendered={onRowsRendered}
@@ -388,9 +378,9 @@ export const Table = observer(
                 </InfiniteLoader>
               </div>
             )}
-          </div>
+          </Autosizer>
         )}
-      </Autosizer>
+      </div>
     )
   },
 )

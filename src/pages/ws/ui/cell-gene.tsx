@@ -20,10 +20,21 @@ export const CellGene = observer(
     const records = toJS(datasetStore?.wsRecords)
     const iconColor = records?.[rowIndex]?.cl.split('-')[0]
 
-    const geneCellHeight =
-      columnsStore.viewType === ViewTypeEnum.Compact
-        ? RowHeight.Compact
-        : RowHeight.Basic
+    const isCompactView = columnsStore.viewType === ViewTypeEnum.Compact
+
+    const cellProps: React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLDivElement>,
+      HTMLDivElement
+    > = isCompactView
+      ? {
+          style: {
+            maxHeight: isCompactView
+              ? `${RowHeight[ViewTypeEnum.Compact] - 10}px`
+              : 'auto',
+          },
+          title: value.join('\n'),
+        }
+      : {}
 
     return (
       <div className="flex items-center">
@@ -47,10 +58,7 @@ export const CellGene = observer(
           </Fragment>
         )}
 
-        <div
-        // className="flex flex-col flex-wrap w-full"
-        // style={{ maxHeight: `${geneCellHeight}px` }}
-        >
+        <div {...cellProps}>
           {value.map(gene => (
             <div className="text-14 leading-18px" key={gene}>
               {gene}

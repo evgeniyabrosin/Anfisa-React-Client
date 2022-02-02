@@ -394,7 +394,7 @@ class DatasetStore {
 
     runInAction(() => {
       this.tabReport = [...this.tabReport, ...result]
-      this.reportsLoaded = this.tabReport.length === this.variantsAmount
+      this.reportsLoaded = this.tabReport.length === this.filteredNo.length
       this.isFetchingMore = false
     })
 
