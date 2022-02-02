@@ -1,106 +1,109 @@
 Feature: Main table, Filter by Gene
-  As the Anfisa user I want to filter variants list by Gene
- 
+    As the Anfisa user I want to filter variants list by Gene
+
     Scenario: Open the Main Table page
         Given The Main page was opened
         When User clicks an WS dataset
-        And click the Open in viewer button
-        And click the Main Table sub-menu
-        Then The Main Table should be opened
-
+        And clicks the "Open in viewer" button
+        And clicks the "Main Table" sub-menu
+        Then The "Main Table" page should be opened
+    ​
     Scenario: Genes are correspond to the dataset
-        Given The main table for WS dataset was opened
-        When user clicks the "Add" button under Gene section
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
         Then List of genes should be displayed
         And Genes should correspond to the dataset
-        
+
     Scenario: Open Main Table page to another dataset
-        Given The main table for WS dataset was opened
+        Given The "Main table" for WS dataset was open
         When user back to the Main page screen
-        And click another WS dataset
-        And click the Open in viewer button
-        And click the Main Table sub-menu
-        Then The Main Table should be opened
-
+        And clicks another WS dataset
+        And clicks the "Open in viewer" button
+        And clicks the "Main Table" sub-menu
+        Then The "Main Table" page should be opened
+    ​
     Scenario: Genes are correspond to the dataset
-        Given The main table for WS dataset was opened
-        When user clicks the "Add" button under Gene section
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
         Then List of genes should be displayed
         And Genes should correspond to the dataset
 
-    Scenario: Filter by Gene
-        Given The main table of X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And Gene dialog is opened
-        And clicks any existed gene
-        And clicks "Apply"
+    Scenario: Select a gene without applying
+        Given The "Main table" of the WS dataset was open
+        When User clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And  User clicks a gene lists
+        Then  Gene list should be checked but should not be added to the panel
+    ​
+    Scenario: Add filter by one gene
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And User clicks any existed gene
+        And clicks the "Apply" button
         Then Variants list should be filtered by selected gene
-
-    Scenario: Check a few genes
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And gene dialog is opened
-        And user clicks a few genes
-        Then Chosen genes should be checked but should not be added to the panel.
-        
-    Scenario: Check a few genes
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And gene dialog is opened
-        And user clicks a few genes
-        And clicks "Apply"
-        Then Variants list should be filtered by selected genes
-
-    Scenario: Search by gene
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And  gene dialog is opened
-        And User writes existed gene in the search field
-        Then The gene should be searched
-
-    Scenario: Search by gene (substring)
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And  gene dialog is opened
-        And User writes existed gene substring in the search field
-        Then  The gene should be searched
-
-    Scenario: Search by gene (lower-case)
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And gene dialog is opened
-        And  User writes existed gene with lowercase in the search field
-        Then  The gene should be searched
-
-    Scenario: Search by gene (upper-case)
-            Given The main table of the X dataset was opened
-            When User clicks the "Add" button under "Gene"
-            And gene dialog is opened
-            And  User writes existed gene with upper-case in the search field
-            Then  The gene should be searched
-
-    Scenario: Clear All Genes
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And  gene dialog is opened
-        And User chooses some existed genes
-        And genes are added to the gene field
-        And User clicks "Clear all"
-        Then  all chosen genes should be cleared.
-
-    Scenario: user checks a few genes in the list and clicks Apply button
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And  gene dialog is opened
+    ​
+    Scenario: Add filter by a few genes
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
         And user clicks a few genes
         And clicks the "Apply" button
-        Then Variants list should be filtered by selected genes.
+        Then Variants list should be filtered by selected genes
+    ​
+    Scenario: Edit filter
+        Given Some gene lists were added to the "Gene"
+        When User clicks "Edit" button near "Gene"
+        And adds/removes some Genes from the "Gene"
+        And clicks the "Apply" button
+        Then Variants list should be filtered by newly selected genes
+    ​
+    Scenario: Clear All
+        Given Some Samples were added to the "Gene"
+        When User clicks "Edit" button near "Gene"
+        And clicks the "Clear all" button
+        And clicks the "Apply" button
+        Then All chosen genes should be cleared
 
-    Scenario: Cancel selected genes
-        Given The main table of the X dataset was opened
-        When User clicks the "Add" button under "Gene"
-        And gene dialog is opened
-        And User adds few genes
-        And User clicks "Cancel"
-        Then all applied changes are canceled
-        And previous applied genes are not removed
+    Scenario: Cancel
+        Given The "Main table" of the WS dataset was open
+        When User clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And User adds a few genes
+        And clicks the "Cancel" button
+        Then variants should not be filtered by genes (no filter's changes)
+    ​
+    Scenario: Search by gene
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And User enters existed gene in the Search field
+        Then The gene should be searched
+    ​
+    Scenario: Search by gene (substring)
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And User enters existed gene substring in the Search field
+        Then  The gene should be searched
+    ​
+    Scenario: Search by gene (lower-case)
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And  User enters existed gene with lowercase in the Search field
+        Then  The gene should be searched
+    ​
+    Scenario: Search by gene (upper-case)
+        Given The "Main table" for WS dataset was open
+        When user clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And  User enters existed gene with upper-case in the Search field
+        Then  The gene should be searched
+    ​
+    Scenario: Search by random row
+        Given The "Main table" of the WS dataset was open
+        When User clicks the "Add" button under the "Gene" section
+        And the "Gene" dialog is opened
+        And  User enters non-existed gene in the Search field
+        Then  Entered gene should not be found
