@@ -19,7 +19,7 @@ describe('Regression test of the decision tree', () => {
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
     datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
-    cy.url().should('include', `/filter?ds=${datasetName}`)
+    cy.url().should('include', `filter?ds=${datasetName}`)
   })
   it('should search attribute based on a substring', () => {
     decisionTreesPage.searchForCallers(datasetName)

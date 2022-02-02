@@ -6,13 +6,15 @@ import { Timeouts } from '../page-objects/lib/timeouts.cy'
 describe('Test on table of returned variants', () => {
   const datasetName = 'xl_PGP3140_wgs_NIST-4_2'
   const filterName = '⏚Hearing Loss, v.5'
+  const selectList = '/app/dtree_set'
+  const decTreeUpload = '/app/statunits'
 
   it('should open main table | test #4', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    //cy.wait('@selectList')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload')
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
@@ -46,13 +48,13 @@ describe('Test on table of returned variants', () => {
   })
 
   it('Add dataset and open it in Main Table | test #5', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList', {
       timeout: Timeouts.TenSecondsTimeout,
     })
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload', {
       timeout: Timeouts.TenSecondsTimeout,

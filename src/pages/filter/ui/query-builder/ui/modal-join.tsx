@@ -33,7 +33,7 @@ export const ModalJoin = observer(
           <div
             onClick={() => handleJoin('JOIN-AND')}
             className="cursor-pointer rounded-br-none rounded-bl-none rounded-l-md rounded-r-md py-2 px-2 hover:bg-blue-bright hover:text-white"
-            data-testId={DecisionTreeModalDataCy.joinByAnd}
+            data-testid={DecisionTreeModalDataCy.joinByAnd}
           >
             {t('dtree.joinByAnd')}
           </div>
@@ -41,7 +41,7 @@ export const ModalJoin = observer(
           <div
             onClick={() => handleJoin('JOIN-OR')}
             className="cursor-pointer py-2 px-2 hover:bg-blue-bright hover:text-white rounded-bl-md rounded-br-md"
-            data-testId={DecisionTreeModalDataCy.joinByOr}
+            data-testid={DecisionTreeModalDataCy.joinByOr}
           >
             {t('dtree.joinByOr')}
           </div>

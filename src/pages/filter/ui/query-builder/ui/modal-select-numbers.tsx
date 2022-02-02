@@ -237,7 +237,7 @@ export const ModalSelectNumbers = observer(
             </div>
             <div className="flex flex-col w-full h-8">
               <InputNumber
-                data-testId={DecisionTreeModalDataCy.rightInput}
+                data-testid={DecisionTreeModalDataCy.rightInput}
                 value={valueTo}
                 onChange={(e: any) => {
                   setValueTo(e.target.value)

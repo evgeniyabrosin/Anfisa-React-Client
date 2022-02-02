@@ -9,6 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 import { Pagintaion } from '@components/pagintaion'
 import { createChunks } from '@utils/createChunks'
 import { QueryBuilderSearch } from './query-builder/query-builder-search'
@@ -77,6 +78,7 @@ export const EnumPanel = observer(
       filterStore.setSelectedFilters(localSelectedFilters)
 
       datasetStore.removeConditionGroup({ subGroup: groupItemName })
+      datasetStore.fetchWsListAsync()
 
       if (!datasetStore.isXL) {
         datasetStore.fetchWsListAsync()
@@ -102,6 +104,7 @@ export const EnumPanel = observer(
         ],
       ])
       setCurrentPage(0)
+      datasetStore.fetchWsListAsync()
 
       if (!datasetStore.isXL) {
         datasetStore.fetchWsListAsync()
@@ -201,6 +204,7 @@ export const EnumPanel = observer(
             text={t('general.add')}
             onClick={handleAddConditions}
             disabled={isBlockAddBtn}
+            dataTestId={FilterRefinerDataCy.addButton}
           />
         </div>
       </div>

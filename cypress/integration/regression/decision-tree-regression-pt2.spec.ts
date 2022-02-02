@@ -8,6 +8,10 @@ describe('Regression test of the decision tree', () => {
   const filterName = '⏚Hearing Loss, v.5'
   const decisionTreeName = 'new_decision_tree'
   const selectAll = 'Select All'
+  const stepAfter = '/app/dtree_stat'
+  const selectList = '/app/dtree_set'
+  const decTreeUpload = '/app/statunits'
+  const dTreeStat = '/app/dtree_stat'
 
   it('should expand all | step 18', () => {
     decisionTreesPage.searchForCallers(datasetName)
@@ -77,7 +81,7 @@ describe('Regression test of the decision tree', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should save dataset and open it in main table | step 23', () => {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     // decisionTreesPage.decisionTreeResults.addAttribute.click()
     // decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
     // decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()
@@ -88,16 +92,16 @@ describe('Regression test of the decision tree', () => {
     // decisionTreesPage.decisionTreeResults.excludeInfo
     //   .first()
     //   .should('have.text', includedVariants)
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    cy.intercept('POST', stepAfter).as('stepAfter')
     // addStepAfter(0)
     // decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     // decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList', {
       timeout: Timeouts.TenSecondsTimeout,
     })
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload', {
       timeout: Timeouts.TenSecondsTimeout,
@@ -115,13 +119,13 @@ describe('Regression test of the decision tree', () => {
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
     datasetPage.datasetInfo.openInViewer.click()
     datasetPage.datasetInfo.viewerOption.contains('Decision Tree Panel').click()
-    cy.url().should('include', `/filter?ds=${datasetName}`)
+    cy.url().should('include', `filter?ds=${datasetName}`)
   })
 
   it('should apply decision tree preset | step 25', () => {
     datasetPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(18)
     cy.wait('@decTreeUpload')
@@ -130,7 +134,7 @@ describe('Regression test of the decision tree', () => {
   it('should show changes made in decision tree | step 26', () => {
     datasetPage.visit(`/filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(18)
     cy.wait('@decTreeUpload')
@@ -159,7 +163,7 @@ describe('Regression test of the decision tree', () => {
       `${decisionTreeName}`,
       100,
     )
-    cy.intercept('POST', '/app/dtree_stat').as('createNewTree')
+    cy.intercept('POST', dTreeStat).as('createNewTree')
     decisionTreesPage.decisionTreeMenu.applyNewTree.click()
     cy.wait('@createNewTree')
     decisionTreesPage.decisionTreeResults.anyChangeAlert.element.within(
@@ -178,16 +182,16 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should modify created decision tree | step 28', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       decisionTreeName,
     )
     cy.wait('@decTreeUpload')
-    cy.intercept('POST', '/app/dtree_stat').as('stepAfter')
+    cy.intercept('POST', stepAfter).as('stepAfter')
     decisionTreesPage.addStepAfter(0)
     decisionTreesPage.decisionTreeResults.stepCard.countElements(2)
     decisionTreesPage.decisionTreeResults.addAttribute.eq(1).click()
@@ -205,7 +209,7 @@ describe('Regression test of the decision tree', () => {
       ),
     )
     decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    cy.intercept('POST', '/app/dtree_stat').as('modifyTree')
+    cy.intercept('POST', dTreeStat).as('modifyTree')
     decisionTreesPage.decisionTreeMenu.selectDropdownElem
       .contains('Modify')
       .click()
@@ -222,17 +226,17 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should delete created decision tree | step 29', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
-    cy.intercept('POST', '/app/dtree_set').as('selectList')
+    datasetPage.visit(`filter?ds=${datasetName}`)
+    cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList')
-    cy.intercept('POST', '/app/statunits').as('decTreeUpload')
+    cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(
       decisionTreeName,
     )
     cy.wait('@decTreeUpload')
     decisionTreesPage.decisionTreeMenu.decisionActions.click()
-    cy.intercept('POST', '/app/dtree_stat').as('deleteTree')
+    cy.intercept('POST', dTreeStat).as('deleteTree')
     decisionTreesPage.decisionTreeMenu.selectDropdownElem
       .contains('Delete')
       .click()

@@ -8,6 +8,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { RadioButton } from '@ui/radio-button'
+import { ReturnedVariantsDataCy } from '@components/data-testid/returned-variants'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
@@ -144,10 +145,10 @@ export const TableModal = observer(() => {
           <Fragment>
             <div
               className="flex w-full justify-center text-16 font-semibold"
-              // data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
               dangerouslySetInnerHTML={{
                 __html: variantList[variantIndex]?.lb ?? '',
               }}
+              data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
             />
 
             <div className="flex">
@@ -179,7 +180,7 @@ export const TableModal = observer(() => {
                   <div
                     key={index}
                     className="shadow-dark p-1 mb-5 cursor-pointer"
-                    // data-testid={ReturnedVariantsDataCy.sampleButton}
+                    data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
                       N - {index + 1}

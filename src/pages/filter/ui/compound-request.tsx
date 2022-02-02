@@ -12,6 +12,7 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getRequestData } from '@utils/getRequestData'
@@ -323,6 +324,7 @@ export const CompoundRequest = observer(
               variant={'secondary'}
               className={cn('mr-4')}
               disabled={requestCondition.length === 5}
+              dataTestId={FilterRefinerDataCy.addButton}
             />
 
             <Button
@@ -333,6 +335,7 @@ export const CompoundRequest = observer(
                 'border-red-secondary hover:text-white hover:bg-red-secondary',
               )}
               disabled={requestCondition.length === 1}
+              dataTestId={FilterRefinerDataCy.removeButton}
             />
           </div>
 
@@ -345,6 +348,7 @@ export const CompoundRequest = observer(
               className="w-full ml-2"
               value={resetValue}
               reset
+              data-testid={FilterRefinerDataCy.selectReset}
             />
           </div>
         </div>

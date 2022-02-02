@@ -8,6 +8,7 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 
 export interface IRangePanelFormValues {
   min: string
@@ -199,6 +200,7 @@ export const RangePanel = observer(
               isVisibleMixedError ||
               (!max && !min)
             }
+            dataTestId={FilterRefinerDataCy.addButton}
           />
         </div>
       </div>

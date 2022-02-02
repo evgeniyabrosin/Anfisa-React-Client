@@ -15,4 +15,5 @@ export const CommonSelectors = {
   numberInput: 'input[type="number"]',
   dataCharts: 'canvas',
   anyChangeAlert: '[role="alert"]',
+  redMessage: '.text-red-secondary',
 }

@@ -61,4 +61,7 @@ export class UIElement {
   scrollButtonIntoView(text: string) {
     cy.contains(text).scrollIntoView().click()
   }
+  siblings(selector: string) {
+    return this.getElement().siblings(selector)
+  }
 }
