@@ -9,8 +9,6 @@ import {
   List,
 } from 'react-virtualized'
 import Autosizer from 'react-virtualized-auto-sizer'
-// import { VariableSizeList as List } from 'react-window'
-// import InfiniteLoader from 'react-window-infinite-loader'
 import cn from 'classnames'
 import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
@@ -20,15 +18,13 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import { tableColumnMap } from '@core/table-column-map'
-import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import filterStore from '@store/filter'
-import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
 import { Loader } from '@components/loader'
-import { NoResultsFound } from '@components/no-results-found'
+import { renderNoResults } from './components/render-no-results'
+import { TableHeader } from './components/table-header'
 
 interface Props {
   columns: any[]
@@ -44,8 +40,8 @@ export enum RowHeight {
   Cozy = 80,
 }
 
-const TABLE_SCROLL_POSITION = 'tableScrollPosition'
-const DEFAULT_HEADER_HEIGHT = 40
+export const TABLE_SCROLL_POSITION = 'tableScrollPosition'
+export const DEFAULT_HEADER_HEIGHT = 40
 
 export const isRowSelected = (
   rowIndex: number,
@@ -61,20 +57,11 @@ export const Table = observer(
     const history = useHistory()
     const alreadyOpened = !!params.get('variant')
 
-    const { selectedFilters } = filterStore
-
     const cache = new CellMeasurerCache({
       minHeight: 20,
       defaultHeight: RowHeight[columnsStore.viewType],
       fixedWidth: true,
     })
-
-    const {
-      selectedGenes,
-      selectedGenesList,
-      selectedSamples,
-      selectedTags,
-    } = zoneStore
 
     const defaultColumn = {
       width: variantStore.drawerVisible
@@ -142,13 +129,6 @@ export const Table = observer(
       event.nativeEvent.stopImmediatePropagation()
     }
 
-    const resetTableToInitial = () => {
-      filterStore.resetData()
-      zoneStore.resetAllSelectedItems()
-      datasetStore.clearZone()
-      datasetStore.initDatasetAsync()
-    }
-
     useEffect(() => {
       alreadyOpened &&
         handleOpenVariant({
@@ -175,38 +155,6 @@ export const Table = observer(
       readScrollPosition()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [datasetStore.isLoadingTabReport])
-
-    const renderNoResults = useCallback(() => {
-      const isFiltersSelected =
-        Object.keys(selectedFilters).length > 0 ||
-        selectedGenes.length > 0 ||
-        selectedGenesList.length > 0 ||
-        selectedSamples.length > 0 ||
-        selectedTags.length > 0
-
-      if (datasetStore.tabReport.length === 0) {
-        return isFiltersSelected ? (
-          <NoResultsFound
-            text={t('general.noResultsFoundByFilters')}
-            className="text-black font-bold"
-            action={{
-              text: t('general.resetFilters'),
-              handler: resetTableToInitial,
-            }}
-          />
-        ) : (
-          <NoResultsFound text={t('general.noResultsFound')} />
-        )
-      } else {
-        return null
-      }
-    }, [
-      selectedFilters,
-      selectedGenes,
-      selectedGenesList,
-      selectedSamples,
-      selectedTags,
-    ])
 
     const RenderRow = useCallback(
       ({ index, style, key, parent }) => {
@@ -284,7 +232,7 @@ export const Table = observer(
                       )
                     })
                   ) : (
-                    <Loader />
+                    <Loader size="s" />
                   )}
                 </div>
               )
@@ -293,14 +241,23 @@ export const Table = observer(
         )
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [handleOpenVariant, prepareRow, rows, variantStore.index],
+      [
+        handleOpenVariant,
+        prepareRow,
+        rows,
+        variantStore.index,
+        datasetStore.isFetchingMore,
+      ],
     )
 
     const handleScrollAsync = async () => {
-      if (
-        toJS(datasetStore.filteredNo).length > 0 &&
-        datasetStore.indexFilteredNo < toJS(datasetStore.filteredNo).length
-      ) {
+      const datasetVariantsAmount = toJS(datasetStore.filteredNo).length
+      const lastLoadedVariant = datasetStore.indexFilteredNo
+
+      const isNeedToLoadMore =
+        datasetVariantsAmount > 0 && lastLoadedVariant < datasetVariantsAmount
+
+      if (isNeedToLoadMore) {
         await datasetStore.fetchFilteredTabReportAsync()
 
         return
@@ -313,50 +270,17 @@ export const Table = observer(
 
     return (
       <div style={{ width: totalColumnsWidth }} className="table h-full">
-        <div style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }} className="thead">
-          {headerGroups.map((headerGroup, idx) => {
-            const stylesHead = {
-              ...headerGroup.getHeaderGroupProps().style,
-            }
-
-            stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
-
-            return (
-              <div
-                {...headerGroup.getHeaderGroupProps()}
-                key={idx}
-                className="tr"
-                style={stylesHead}
-              >
-                {headerGroup.headers.map((column: any) => {
-                  return (
-                    <div
-                      {...column.getHeaderProps()}
-                      key={Math.random()}
-                      className="th"
-                    >
-                      {column.HeaderComponent
-                        ? column.render('HeaderComponent')
-                        : column.render('Header')}
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
+        <TableHeader headerGroups={headerGroups} />
 
         {renderNoResults()}
 
         {toJS(datasetStore.tabReport).length > 0 && (
           <Autosizer>
-            {({ height }) => (
+            {({ height, width }) => (
               <div className="text-12 tbody">
                 <InfiniteLoader
-                  isRowLoaded={({ index }) => {
-                    return !!rows[index + 1]
-                  }}
-                  rowCount={rows.length}
+                  isRowLoaded={({ index }) => index !== rows.length}
+                  rowCount={rows.length + 1}
                   loadMoreRows={handleScrollAsync}
                 >
                   {({ onRowsRendered, registerChild }) => (
@@ -370,7 +294,7 @@ export const Table = observer(
                       }
                       rowRenderer={RenderRow}
                       deferredMeasurementCache={cache}
-                      width={totalColumnsWidth}
+                      width={width}
                       ref={registerChild}
                       onRowsRendered={onRowsRendered}
                     />
