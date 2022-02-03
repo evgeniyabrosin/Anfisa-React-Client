@@ -36,7 +36,7 @@ jobs:
     - run: |
             git config --global user.name 'evgeniy-chernomortsev'
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
-            yarn config set version-git-message "[feature branch] %s"
+            yarn config set version-git-message "[push in $GITHUB_REF_NAME] %s"
             yarn config set version-commit-hooks false
             yarn version --patch
             git push --tags --no-verify &&
