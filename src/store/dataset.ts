@@ -330,7 +330,10 @@ class DatasetStore {
         (item: any) => item.name === name,
       )
 
-      if (condition[0] === FilterKindEnum.Enum) {
+      if (
+        condition[0] === FilterKindEnum.Enum ||
+        condition[0] === FilterKindEnum.Func
+      ) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
             group: filterItem.vgroup,
@@ -338,8 +341,16 @@ class DatasetStore {
             variant: [value, 0],
           })
         })
+      } else {
+        filterStore.addSelectedFilters({
+          group: filterItem.vgroup,
+          groupItemName: name,
+          variant: [name, condition[condition.length - 1]],
+        })
+        filterStore.setFilterCondition(name, condition[condition.length - 1])
       }
     })
+
     !source || (this.isXL && this.fetchDsStatAsync())
   }
 
@@ -400,6 +411,7 @@ class DatasetStore {
 
     this.setIsLoadingTabReport(false)
   }
+
   async fetchFilteredTabReportAsync() {
     let seq: number[] = []
 

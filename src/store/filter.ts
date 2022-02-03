@@ -92,7 +92,7 @@ class FilterStore {
   addSelectedFilterGroup(
     group: string,
     groupItemName: string,
-    variants: [string, number][],
+    variants: any[],
   ) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
@@ -193,6 +193,10 @@ class FilterStore {
     return this.filterCondition[filterName]
       ? (this.filterCondition[filterName] as T)
       : undefined
+  }
+
+  resetFilterCondition() {
+    this.filterCondition = {}
   }
 }
 
