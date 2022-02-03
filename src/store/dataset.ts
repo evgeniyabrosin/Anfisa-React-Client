@@ -146,19 +146,19 @@ class DatasetStore {
     if (!conditions[0]) {
       this.conditions = []
       await this.fetchDsStatAsync()
+    } else {
+      const groupCondtionsIndex = this.conditions.findIndex(
+        (item: any) => item[1] === conditions[0][1],
+      )
+
+      if (groupCondtionsIndex !== -1) {
+        this.conditions.splice(groupCondtionsIndex, 1)
+      }
+
+      this.conditions = this.conditions.concat(conditions)
+
+      await this.fetchDsStatAsync()
     }
-
-    const groupCondtionsIndex = this.conditions.findIndex(
-      (item: any) => item[1] === conditions[0][1],
-    )
-
-    if (groupCondtionsIndex !== -1) {
-      this.conditions.splice(groupCondtionsIndex, 1)
-    }
-
-    this.conditions = this.conditions.concat(conditions)
-
-    await this.fetchDsStatAsync()
 
     return Array.from({ length: this.statAmount[0] })
   }
