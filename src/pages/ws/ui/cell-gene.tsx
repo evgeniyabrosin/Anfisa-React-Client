@@ -12,60 +12,58 @@ import { CellI } from './cell-interfaces'
 import { PlusIcon } from './plus-icon'
 import { RowHeight } from './table/table'
 
-export const CellGene = observer(
-  ({ cell }: CellI): ReactElement => {
-    const value = get(cell, 'value[0]', []) as string[]
-    const rowIndex = get(cell, 'row.index', -1)
+export const CellGene = observer(({ cell }: CellI): ReactElement => {
+  const value = get(cell, 'value[0]', []) as string[]
+  const rowIndex = get(cell, 'row.index', -1)
 
-    const records = toJS(datasetStore?.wsRecords)
-    const iconColor = records?.[rowIndex]?.cl.split('-')[0]
+  const records = toJS(datasetStore?.wsRecords)
+  const iconColor = records?.[rowIndex]?.cl.split('-')[0]
 
-    const isCompactView = columnsStore.viewType === ViewTypeEnum.Compact
+  const isCompactView = columnsStore.viewType === ViewTypeEnum.Compact
 
-    const cellProps: React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    > = isCompactView
-      ? {
-          style: {
-            maxHeight: isCompactView
-              ? `${RowHeight[ViewTypeEnum.Compact] - 10}px`
-              : 'auto',
-          },
-          title: value.join('\n'),
-        }
-      : {}
+  const cellProps: React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > = isCompactView
+    ? {
+        style: {
+          maxHeight: isCompactView
+            ? `${RowHeight[ViewTypeEnum.Compact] - 10}px`
+            : 'auto',
+        },
+        title: value.join('\n'),
+      }
+    : {}
 
-    return (
-      <div className="flex items-center">
-        {records?.[rowIndex]?.cl && (
-          <Fragment>
-            {records?.[rowIndex]?.cl.includes('cross') ? (
-              <PlusIcon color={geneColorMap[iconColor]} />
-            ) : (
-              <div
-                className={cn(
-                  'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
-                  {
-                    'bg-grey-blue': iconColor === 'grey',
-                  },
-                )}
-                style={{
-                  border: `2px solid ${geneColorMap[iconColor]}`,
-                }}
-              />
-            )}
-          </Fragment>
-        )}
+  return (
+    <div className="flex items-center">
+      {records?.[rowIndex]?.cl && (
+        <Fragment>
+          {records?.[rowIndex]?.cl.includes('cross') ? (
+            <PlusIcon color={geneColorMap[iconColor]} />
+          ) : (
+            <div
+              className={cn(
+                'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
+                {
+                  'bg-grey-blue': iconColor === 'grey',
+                },
+              )}
+              style={{
+                border: `2px solid ${geneColorMap[iconColor]}`,
+              }}
+            />
+          )}
+        </Fragment>
+      )}
 
-        <div {...cellProps}>
-          {value.map(gene => (
-            <div className="text-14 leading-18px" key={gene}>
-              {gene}
-            </div>
-          ))}
-        </div>
+      <div {...cellProps}>
+        {value.map(gene => (
+          <div className="text-14 leading-18px" key={gene}>
+            {gene}
+          </div>
+        ))}
       </div>
-    )
-  },
-)
+    </div>
+  )
+})
