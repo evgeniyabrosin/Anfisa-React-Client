@@ -24,7 +24,7 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
       })}
       size="xs"
       icon={variantStore.noteText ? <Icon name="File" /> : undefined}
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addNote}
     />
@@ -54,7 +54,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
       }`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += `,`
+        params += ','
       }
     })
 
@@ -121,7 +121,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             <Button
               text={t('general.delete')}
               onClick={deleteNoteAsync}
-              variant={'diestruction'}
+              variant="diestruction"
             />
           )}
         </div>
@@ -130,7 +130,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
           <Button
             text={t('general.cancel')}
             onClick={close}
-            variant={'secondary'}
+            variant="secondary"
           />
 
           <Button

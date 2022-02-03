@@ -19,9 +19,9 @@ const DrawerTagButton = observer(({ refEl, onClick }: any) => {
   return (
     <Button
       refEl={refEl}
-      text={'+ Add'}
+      text="+ Add"
       size="xs"
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addTag}
     />
@@ -103,7 +103,7 @@ const DrawerTagModal = observer(({ close }: any) => {
       }`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += `,`
+        params += ','
       }
     })
 
@@ -149,7 +149,7 @@ const DrawerTagModal = observer(({ close }: any) => {
               className="ml-2 cursor-pointer hover:text-blue-bright"
               onClick={() => handleClick(tag)}
             >
-              {Object.keys(variantStore.tagsWithNotes).includes(tag) && `(#)`}
+              {Object.keys(variantStore.tagsWithNotes).includes(tag) && '(#)'}
             </span>
           </div>
         ))}
@@ -184,7 +184,7 @@ const DrawerTagModal = observer(({ close }: any) => {
         <Button
           text={t('general.cancel')}
           onClick={close}
-          variant={'secondary'}
+          variant="secondary"
           className="mr-2 ml-auto"
         />
 

@@ -54,7 +54,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
     <div>
       {rows?.length === 0 ? (
         <div className="flex justify-center text-center w-full">
-          No data to show
+          {'No data to show'}
         </div>
       ) : (
         <table className="min-w-full">

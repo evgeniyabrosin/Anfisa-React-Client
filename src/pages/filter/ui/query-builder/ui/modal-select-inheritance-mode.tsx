@@ -9,145 +9,142 @@ import { InheritanceModeContent } from './inheritance-mode-content'
 import { ModalBase } from './modal-base'
 import { SelectModalButtons } from './select-modal-buttons'
 
-export const ModalSelectInheritanceMode = observer(
-  (): ReactElement => {
-    const ref = useRef(null)
+export const ModalSelectInheritanceMode = observer((): ReactElement => {
+  const ref = useRef(null)
 
-    const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = dtreeStore.currentStepIndex
 
-    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
+  const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
-    const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeStore.groupNameToChange
 
-    let attrData: any
+  let attrData: any
 
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+  const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    subGroups.map(subGroup => {
-      subGroup.map((item, currNo) => {
-        if (item.name === groupName) {
-          attrData = subGroup[currNo]
-        }
-      })
+  subGroups.map(subGroup => {
+    subGroup.map((item, currNo) => {
+      if (item.name === groupName) {
+        attrData = subGroup[currNo]
+      }
     })
+  })
 
-    const problemGroup = attrData.affected
+  const problemGroup = attrData.affected
 
-    const [problemGroupData, setProblemGroupData] = useState<string[]>(
-      problemGroup,
-    )
+  const [problemGroupData, setProblemGroupData] =
+    useState<string[]>(problemGroup)
 
-    useEffect(() => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+  useEffect(() => {
+    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"problem_group":["${problemGroup
-        .toString()
-        .split(',')
-        .join('","')}"]}`
+    const params = `{"problem_group":["${problemGroup
+      .toString()
+      .split(',')
+      .join('","')}"]}`
 
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
+    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
-      const initAsync = async () => {
-        await dtreeStore.fetchStatFuncAsync(groupName, params)
-      }
-
-      initAsync()
-
-      return () => dtreeStore.resetSelectedFilters()
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const handleClose = () => {
-      dtreeStore.closeModalSelectInheritanceMode()
+    const initAsync = async () => {
+      await dtreeStore.fetchStatFuncAsync(groupName, params)
     }
 
-    const handleProblemGroup = (checked: boolean, value: string) => {
-      if (checked) {
-        setProblemGroupData((prev: any) => {
-          const newProblemGroupData = [...prev, value]
+    initAsync()
 
-          const params = `{"problem_group":["${newProblemGroupData
-            .reverse()
-            .toString()
-            .split(',')
-            .join('","')}"]}`
+    return () => dtreeStore.resetSelectedFilters()
 
-          dtreeStore.fetchStatFuncAsync(groupName, params)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-          return newProblemGroupData
-        })
-      } else {
-        setProblemGroupData((prev: any) => {
-          const newProblemGroupData = prev.filter(
-            (item: string) => item !== value,
-          )
+  const handleClose = () => {
+    dtreeStore.closeModalSelectInheritanceMode()
+  }
 
-          const params = `{"problem_group": ["${newProblemGroupData
-            .toString()
-            .split(',')
-            .join('", "')}"]}`
+  const handleProblemGroup = (checked: boolean, value: string) => {
+    if (checked) {
+      setProblemGroupData((prev: any) => {
+        const newProblemGroupData = [...prev, value]
 
-          dtreeStore.fetchStatFuncAsync(groupName, params)
+        const params = `{"problem_group":["${newProblemGroupData
+          .reverse()
+          .toString()
+          .split(',')
+          .join('","')}"]}`
 
-          return newProblemGroupData
-        })
-      }
+        dtreeStore.fetchStatFuncAsync(groupName, params)
+
+        return newProblemGroupData
+      })
+    } else {
+      setProblemGroupData((prev: any) => {
+        const newProblemGroupData = prev.filter(
+          (item: string) => item !== value,
+        )
+
+        const params = `{"problem_group": ["${newProblemGroupData
+          .toString()
+          .split(',')
+          .join('", "')}"]}`
+
+        dtreeStore.fetchStatFuncAsync(groupName, params)
+
+        return newProblemGroupData
+      })
     }
+  }
 
-    const handleReset = () => {
-      setProblemGroupData(attrData.affected)
+  const handleReset = () => {
+    setProblemGroupData(attrData.affected)
 
-      const params = `{"problem_group": ["${attrData.affected
-        .toString()
-        .split(',')
-        .join('", "')}"]}`
+    const params = `{"problem_group": ["${attrData.affected
+      .toString()
+      .split(',')
+      .join('", "')}"]}`
 
-      dtreeStore.fetchStatFuncAsync(groupName, params)
-    }
+    dtreeStore.fetchStatFuncAsync(groupName, params)
+  }
 
-    const handleModals = () => {
-      dtreeStore.closeModalSelectInheritanceMode()
-      dtreeStore.openModalAttribute(currentStepIndex)
-      dtreeStore.resetSelectedFilters()
-    }
+  const handleModals = () => {
+    dtreeStore.closeModalSelectInheritanceMode()
+    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.resetSelectedFilters()
+  }
 
-    const handleModalJoin = () => {
-      dtreeStore.openModalJoin()
-    }
+  const handleModalJoin = () => {
+    dtreeStore.openModalJoin()
+  }
 
-    const handleAddAttribute = (action: ActionType) => {
-      const params = { problem_group: problemGroupData }
+  const handleAddAttribute = (action: ActionType) => {
+    const params = { problem_group: problemGroupData }
 
-      addAttributeToStep(action, 'func', null, params)
+    addAttributeToStep(action, 'func', null, params)
 
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectInheritanceMode()
-    }
+    dtreeStore.resetSelectedFilters()
+    dtreeStore.closeModalSelectInheritanceMode()
+  }
 
-    return (
-      <ModalBase refer={ref} minHeight={340}>
-        <HeaderModal
-          groupName={dtreeStore.groupNameToChange}
-          handleClose={handleClose}
-        />
+  return (
+    <ModalBase refer={ref} minHeight={340}>
+      <HeaderModal
+        groupName={dtreeStore.groupNameToChange}
+        handleClose={handleClose}
+      />
 
-        <InheritanceModeContent
-          attrData={attrData}
-          handleProblemGroup={handleProblemGroup}
-          problemGroupData={problemGroupData}
-          handleReset={handleReset}
-        />
+      <InheritanceModeContent
+        attrData={attrData}
+        handleProblemGroup={handleProblemGroup}
+        problemGroupData={problemGroupData}
+        handleReset={handleReset}
+      />
 
-        <SelectModalButtons
-          handleClose={handleClose}
-          handleModals={handleModals}
-          handleModalJoin={handleModalJoin}
-          handleAddAttribute={handleAddAttribute}
-          disabled={dtreeStore.selectedFilters.length === 0}
-          currentGroup={currentGroup}
-        />
-      </ModalBase>
-    )
-  },
-)
+      <SelectModalButtons
+        handleClose={handleClose}
+        handleModals={handleModals}
+        handleModalJoin={handleModalJoin}
+        handleAddAttribute={handleAddAttribute}
+        disabled={dtreeStore.selectedFilters.length === 0}
+        currentGroup={currentGroup}
+      />
+    </ModalBase>
+  )
+})

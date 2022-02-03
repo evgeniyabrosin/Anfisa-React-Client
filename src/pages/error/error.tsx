@@ -14,7 +14,7 @@ export const ErrorPage = () => {
       <Button
         text={t('error.getBack')}
         className="mt-3"
-        variant={'secondary-dark'}
+        variant="secondary-dark"
         onClick={() => history.push(Routes.Root)}
       />
     </div>

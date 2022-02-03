@@ -74,7 +74,7 @@ export const QueryBuilderGroupItem = observer(
 
           {isFunc && (
             <span className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-              fn
+              {'fn'}
             </span>
           )}
 

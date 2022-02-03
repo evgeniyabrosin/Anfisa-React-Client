@@ -65,7 +65,7 @@ const Root = styled.div`
 export const Loader = (): ReactElement => {
   return (
     <Root>
-      <div className="loader text-blue-bright">Loading...</div>
+      <div className="loader text-blue-bright">{'Loading...'}</div>
     </Root>
   )
 }

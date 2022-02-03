@@ -16,7 +16,7 @@ export const fetchDsListAsync = async (requestValue: number | any[]) => {
     body.append('conditions', stringRequestValue)
   }
 
-  const response = await fetch(getApiUrl(`ds_list`), {
+  const response = await fetch(getApiUrl('ds_list'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

@@ -35,23 +35,36 @@ const getFilterValue = (arg: string): string | number => {
   return ''
 }
 
-export const RangePanel = observer(
-  (): ReactElement => {
-    const selectedFilter = filterStore.selectedGroupItem
+export const RangePanel = observer((): ReactElement => {
+  const selectedFilter = filterStore.selectedGroupItem
 
-    const [min, setMin] = useState<string | number>(getFilterValue('min'))
-    const [max, setMax] = useState<string | number>(getFilterValue('max'))
+  const [min, setMin] = useState<string | number>(getFilterValue('min'))
+  const [max, setMax] = useState<string | number>(getFilterValue('max'))
 
-    const [isVisibleMinError, setIsVisibleMinError] = useState(false)
-    const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
-    const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
+  const [isVisibleMinError, setIsVisibleMinError] = useState(false)
+  const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
+  const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
 
-    const handleAddConditionsAsync = async () => {
-      if (datasetStore.activePreset) datasetStore.resetActivePreset()
+  const handleAddConditionsAsync = async () => {
+    if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-      await datasetStore.setConditionsAsync([
+    await datasetStore.setConditionsAsync([
+      [
+        FilterKindEnum.Numeric,
+        selectedFilter.name,
+        createNumericExpression({
+          expType: NumericExpressionTypes.GreaterThan,
+          minValue: min,
+          maxValue: max,
+        }),
+      ],
+    ])
+
+    filterStore.addSelectedFilterGroup(
+      selectedFilter.vgroup,
+      selectedFilter.name,
+      [
         [
-          FilterKindEnum.Numeric,
           selectedFilter.name,
           createNumericExpression({
             expType: NumericExpressionTypes.GreaterThan,
@@ -59,182 +72,167 @@ export const RangePanel = observer(
             maxValue: max,
           }),
         ],
-      ])
+      ],
+    )
 
-      filterStore.addSelectedFilterGroup(
-        selectedFilter.vgroup,
-        selectedFilter.name,
-        [
-          [
-            selectedFilter.name,
-            createNumericExpression({
-              expType: NumericExpressionTypes.GreaterThan,
-              minValue: min,
-              maxValue: max,
-            }),
-          ],
-        ],
-      )
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
+  }
 
-      if (!datasetStore.isXL) {
-        datasetStore.fetchWsListAsync()
-      }
+  const handleClear = () => {
+    datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+
+    const group = filterStore.selectedGroupItem.vgroup
+    const groupItemName = filterStore.selectedGroupItem.name
+    const localSelectedFilters = filterStore.selectedFilters
+
+    if (
+      localSelectedFilters[group]?.[groupItemName] &&
+      datasetStore.activePreset
+    ) {
+      datasetStore.resetActivePreset()
     }
 
-    const handleClear = () => {
-      datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+    filterStore.removeSelectedFilters({
+      group: selectedFilter.vgroup,
+      groupItemName: selectedFilter.name,
+      variant: [selectedFilter.name, 0],
+    })
+    setIsVisibleMinError(false)
+    setIsVisibleMaxError(false)
+    setIsVisibleMixedError(false)
+    setMin('')
+    setMax('')
 
-      const group = filterStore.selectedGroupItem.vgroup
-      const groupItemName = filterStore.selectedGroupItem.name
-      const localSelectedFilters = filterStore.selectedFilters
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
+  }
 
-      if (
-        localSelectedFilters[group]?.[groupItemName] &&
-        datasetStore.activePreset
-      ) {
-        datasetStore.resetActivePreset()
-      }
-
-      filterStore.removeSelectedFilters({
-        group: selectedFilter.vgroup,
-        groupItemName: selectedFilter.name,
-        variant: [selectedFilter.name, 0],
-      })
+  const validateMin = (value: string) => {
+    if (
+      value < selectedFilter.min ||
+      value > selectedFilter.max ||
+      value === '-0'
+    ) {
+      setIsVisibleMinError(true)
+    } else {
       setIsVisibleMinError(false)
+    }
+
+    if (!value) setIsVisibleMinError(false)
+  }
+
+  const validateMax = (value: string) => {
+    if (
+      value > selectedFilter.max ||
+      value < selectedFilter.min ||
+      value === '-0'
+    ) {
+      setIsVisibleMaxError(true)
+    } else {
       setIsVisibleMaxError(false)
+    }
+
+    if (!value) setIsVisibleMaxError(false)
+  }
+
+  useEffect(() => {
+    if (min && max && +min > +max) {
+      setIsVisibleMixedError(true)
+    } else {
       setIsVisibleMixedError(false)
-      setMin('')
-      setMax('')
-
-      if (!datasetStore.isXL) {
-        datasetStore.fetchWsListAsync()
-      }
     }
 
-    const validateMin = (value: string) => {
-      if (
-        value < selectedFilter.min ||
-        value > selectedFilter.max ||
-        value === '-0'
-      ) {
-        setIsVisibleMinError(true)
-      } else {
-        setIsVisibleMinError(false)
-      }
+    filterStore.setFilterCondition(
+      filterStore.selectedGroupItem.name,
+      createNumericExpression({
+        expType: NumericExpressionTypes.GreaterThan,
+        minValue: min,
+        maxValue: max,
+      }),
+    )
+  }, [min, max])
 
-      if (!value) setIsVisibleMinError(false)
-    }
+  useEffect(() => {
+    const dispose = reaction(
+      () => filterStore.selectedGroupItem.name,
+      () => {
+        setMin(getFilterValue('min'))
+        setMax(getFilterValue('max'))
+      },
+    )
 
-    const validateMax = (value: string) => {
-      if (
-        value > selectedFilter.max ||
-        value < selectedFilter.min ||
-        value === '-0'
-      ) {
-        setIsVisibleMaxError(true)
-      } else {
-        setIsVisibleMaxError(false)
-      }
+    return () => dispose()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-      if (!value) setIsVisibleMaxError(false)
-    }
+  return (
+    <div>
+      <div className="flex justify-between items-end w-full">
+        <span>Min {selectedFilter.min}</span>
 
-    useEffect(() => {
-      if (min && max && +min > +max) {
-        setIsVisibleMixedError(true)
-      } else {
-        setIsVisibleMixedError(false)
-      }
+        {isVisibleMinError && (
+          <span className="text-12 text-red-secondary">
+            {t('dtree.lowerBoundError')}
+          </span>
+        )}
+      </div>
 
-      filterStore.setFilterCondition(
-        filterStore.selectedGroupItem.name,
-        createNumericExpression({
-          expType: NumericExpressionTypes.GreaterThan,
-          minValue: min,
-          maxValue: max,
-        }),
-      )
-    }, [min, max])
+      <InputNumber
+        className="w-full"
+        value={min}
+        onChange={e => {
+          setMin(e.target.value)
+          validateMin(e.target.value)
+        }}
+      />
 
-    useEffect(() => {
-      const dispose = reaction(
-        () => filterStore.selectedGroupItem.name,
-        () => {
-          setMin(getFilterValue('min'))
-          setMax(getFilterValue('max'))
-        },
-      )
+      <div className="flex justify-between items-end w-full">
+        <span>Max {selectedFilter.max}</span>
 
-      return () => dispose()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        {isVisibleMaxError && (
+          <span className="text-12 text-red-secondary">
+            {t('dtree.upperBoundError')}
+          </span>
+        )}
+      </div>
 
-    return (
-      <div>
-        <div className="flex justify-between items-end w-full">
-          <span>Min {selectedFilter.min}</span>
-
-          {isVisibleMinError && (
-            <span className="text-12 text-red-secondary">
-              {t('dtree.lowerBoundError')}
-            </span>
-          )}
-        </div>
-
+      <div className="relative h-14">
         <InputNumber
           className="w-full"
-          value={min}
+          value={max}
           onChange={e => {
-            setMin(e.target.value)
-            validateMin(e.target.value)
+            setMax(e.target.value)
+            validateMax(e.target.value)
           }}
         />
-
-        <div className="flex justify-between items-end w-full">
-          <span>Max {selectedFilter.max}</span>
-
-          {isVisibleMaxError && (
-            <span className="text-12 text-red-secondary">
-              {t('dtree.upperBoundError')}
-            </span>
-          )}
-        </div>
-
-        <div className="relative h-14">
-          <InputNumber
-            className="w-full"
-            value={max}
-            onChange={e => {
-              setMax(e.target.value)
-              validateMax(e.target.value)
-            }}
-          />
-          {isVisibleMixedError && (
-            <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
-              {t('dtree.conditionError')}
-            </div>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between mt-1">
-          <Button
-            variant={'secondary'}
-            text={t('general.clear')}
-            onClick={handleClear}
-          />
-
-          <Button
-            text={t('general.add')}
-            onClick={handleAddConditionsAsync}
-            disabled={
-              isVisibleMinError ||
-              isVisibleMaxError ||
-              isVisibleMixedError ||
-              (!max && !min)
-            }
-          />
-        </div>
+        {isVisibleMixedError && (
+          <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
+            {t('dtree.conditionError')}
+          </div>
+        )}
       </div>
-    )
-  },
-)
+
+      <div className="flex items-center justify-between mt-1">
+        <Button
+          variant={'secondary'}
+          text={t('general.clear')}
+          onClick={handleClear}
+        />
+
+        <Button
+          text={t('general.add')}
+          onClick={handleAddConditionsAsync}
+          disabled={
+            isVisibleMinError ||
+            isVisibleMaxError ||
+            isVisibleMixedError ||
+            (!max && !min)
+          }
+        />
+      </div>
+    </div>
+  )
+})

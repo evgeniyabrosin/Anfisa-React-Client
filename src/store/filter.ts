@@ -145,7 +145,7 @@ class FilterStore {
 
     param && body.append('param', param)
 
-    const response = await fetch(getApiUrl(`statfunc`), {
+    const response = await fetch(getApiUrl('statfunc'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

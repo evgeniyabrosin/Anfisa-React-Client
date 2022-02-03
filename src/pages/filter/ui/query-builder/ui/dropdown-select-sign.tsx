@@ -26,14 +26,14 @@ export const DropDownSelectSign = observer(
             onClick={() => handleClick()}
             className="flex items-center justify-center h-full bg-blue-medium cursor-pointer rounded-br-none rounded-bl-none rounded-l-md rounded-r-md text-blue-bright hover:bg-blue-bright hover:text-white"
           >
-            {`<`}
+            {'<'}
           </div>
 
           <div
             onClick={() => handleClick('lessEqual')}
             className="flex items-center justify-center h-full bg-blue-medium cursor-pointer rounded-bl-md rounded-br-md text-blue-bright hover:bg-blue-bright hover:text-white"
           >
-            {`≤`}
+            {'≤'}
           </div>
         </div>
       </div>

@@ -284,7 +284,7 @@ class DatasetStore {
 
     const body = shouldSaveInHistory ? localBody : bodyFromHistory
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -389,7 +389,7 @@ class DatasetStore {
       return
     }
 
-    const response = await fetch(getApiUrl(`tab_report`), {
+    const response = await fetch(getApiUrl('tab_report'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -504,7 +504,7 @@ class DatasetStore {
     this.prevPreset = this.activePreset
     body.append('filter', this.activePreset)
 
-    const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
+    const response = await fetch(getApiUrl(isXL ? 'ds_list' : 'ws_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -545,7 +545,7 @@ class DatasetStore {
   async fetchZoneListAsync(zone: string) {
     const body = new URLSearchParams({ ds: this.datasetName, zone })
 
-    const response = await fetch(getApiUrl(`zone_list`), {
+    const response = await fetch(getApiUrl('zone_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -568,7 +568,7 @@ class DatasetStore {
       zone: 'Has_Variant',
     })
 
-    const response = await fetch(getApiUrl(`zone_list`), {
+    const response = await fetch(getApiUrl('zone_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

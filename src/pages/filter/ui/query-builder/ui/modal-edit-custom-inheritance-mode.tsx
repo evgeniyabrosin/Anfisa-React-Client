@@ -12,231 +12,227 @@ import { EditModalButtons } from './edit-modal-buttons'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 
-export const ModalEditCustomInheritanceMode = observer(
-  (): ReactElement => {
-    const ref = useRef(null)
+export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
+  const ref = useRef(null)
 
-    const [resetValue, setResetValue] = useState('')
+  const [resetValue, setResetValue] = useState('')
 
-    const currentStepIndex = dtreeStore.currentStepIndex
-    const currentGroupIndex = dtreeStore.groupIndexToChange
+  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentGroupIndex = dtreeStore.groupIndexToChange
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+  const currentGroup =
+    dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
-    const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeStore.groupNameToChange
 
-    const variants = dtreeStore.statFuncData.variants
+  const variants = dtreeStore.statFuncData.variants
 
-    let attrData: any
+  let attrData: any
 
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+  const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    subGroups.map(subGroup => {
-      subGroup.map((item, currNo) => {
-        if (item.name === groupName) {
-          attrData = subGroup[currNo]
-        }
-      })
+  subGroups.map(subGroup => {
+    subGroup.map((item, currNo) => {
+      if (item.name === groupName) {
+        attrData = subGroup[currNo]
+      }
+    })
+  })
+
+  useEffect(() => {
+    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+
+    const scenarioString = getFuncParams(
+      groupName,
+      currentGroup[currentGroup.length - 1],
+    )
+      .slice(10)
+      .replace(/\s+/g, '')
+
+    setResetValue(getResetType(currentGroup[currentGroup.length - 1].scenario))
+
+    const params = `{"scenario":${scenarioString}}`
+
+    dtreeStore.setCurrentStepIndexForApi(indexForApi)
+
+    dtreeStore.fetchStatFuncAsync(groupName, params)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const [firstSelectValue, setFirstSelectValue] = useState<string>(
+    getSelectedValue(attrData.family[0]),
+  )
+
+  const [secondSelectValue, setSecondSelectValue] = useState<string>(
+    getSelectedValue(attrData.family[1]),
+  )
+
+  const [thirdSelectValue, setThirdSelectValue] = useState<string>(
+    getSelectedValue(attrData.family[2]),
+  )
+
+  const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
+
+  const sendRequest = (type: string, value: string, multiData?: any[]) => {
+    let selectedData: any[] = []
+
+    if (type && value) {
+      selectedData = [
+        [type === 'first' ? value : firstSelectValue, attrData.family[0]],
+        [type === 'second' ? value : secondSelectValue, attrData.family[1]],
+        [type === 'third' ? value : thirdSelectValue, attrData.family[2]],
+      ]
+    }
+
+    const newScenario = getSortedArray(multiData || selectedData)
+
+    let scenarioString = ''
+
+    newScenario.map((item, index) => {
+      scenarioString += `"${item[0]}":["${item[1]
+        .toString()
+        .split(',')
+        .join('","')}"]`
+
+      if (newScenario[index + 1]) scenarioString += ','
     })
 
-    useEffect(() => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const scenarioString = getFuncParams(
-        groupName,
-        currentGroup[currentGroup.length - 1],
-      )
-        .slice(10)
-        .replace(/\s+/g, '')
+    const params = `{"scenario":{${scenarioString}}}`
 
-      setResetValue(
-        getResetType(currentGroup[currentGroup.length - 1].scenario),
-      )
+    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
-      const params = `{"scenario":${scenarioString}}`
+    dtreeStore.fetchStatFuncAsync(groupName, params)
+  }
 
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
+  const handleSetScenario = (group: string, value: string) => {
+    if (group === attrData.family[0]) {
+      setFirstSelectValue(value)
+      sendRequest('first', value)
+    }
 
-      dtreeStore.fetchStatFuncAsync(groupName, params)
+    if (group === attrData.family[1]) {
+      setSecondSelectValue(value)
+      sendRequest('second', value)
+    }
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    if (group === attrData.family[2]) {
+      setThirdSelectValue(value)
+      sendRequest('third', value)
+    }
 
-    const [firstSelectValue, setFirstSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[0]),
+    setResetValue('')
+  }
+
+  function getSelectedValue(group: string): any {
+    const data: any[] = Object.entries(
+      currentGroup[currentGroup.length - 1].scenario,
     )
 
-    const [secondSelectValue, setSecondSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[1]),
-    )
+    let value = '--'
 
-    const [thirdSelectValue, setThirdSelectValue] = useState<string>(
-      getSelectedValue(attrData.family[2]),
-    )
-
-    const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
-
-    const sendRequest = (type: string, value: string, multiData?: any[]) => {
-      let selectedData: any[] = []
-
-      if (type && value) {
-        selectedData = [
-          [type === 'first' ? value : firstSelectValue, attrData.family[0]],
-          [type === 'second' ? value : secondSelectValue, attrData.family[1]],
-          [type === 'third' ? value : thirdSelectValue, attrData.family[2]],
-        ]
+    data?.map((item, index) => {
+      if (group && item[1].includes(group)) {
+        value = data[index][0]
       }
+    })
 
-      const newScenario = getSortedArray(multiData || selectedData)
+    return value
+  }
 
-      let scenarioString = ''
+  const handleReset = (name: string) => {
+    if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
+      setFirstSelectValue('2')
+      setSecondSelectValue('0-1')
+      setThirdSelectValue('0-1')
 
-      newScenario.map((item, index) => {
-        scenarioString += `"${item[0]}":["${item[1]
-          .toString()
-          .split(',')
-          .join('","')}"]`
+      const multiData: any[] = [
+        ['2', attrData.family[0]],
+        ['0-1', attrData.family[1]],
+        ['0-1', attrData.family[2]],
+      ]
 
-        if (newScenario[index + 1]) scenarioString += `,`
-      })
-
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-      const params = `{"scenario":{${scenarioString}}}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
-      dtreeStore.fetchStatFuncAsync(groupName, params)
+      sendRequest('', '', multiData)
     }
 
-    const handleSetScenario = (group: string, value: string) => {
-      if (group === attrData.family[0]) {
-        setFirstSelectValue(value)
-        sendRequest('first', value)
-      }
+    if (name === InheritanceModeEnum.AutosomalDominant) {
+      setFirstSelectValue('1-2')
+      setSecondSelectValue('0')
+      setThirdSelectValue('0')
 
-      if (group === attrData.family[1]) {
-        setSecondSelectValue(value)
-        sendRequest('second', value)
-      }
+      const multiData: any[] = [
+        ['1-2', attrData.family[0]],
+        ['0', attrData.family[1]],
+        ['0', attrData.family[2]],
+      ]
 
-      if (group === attrData.family[2]) {
-        setThirdSelectValue(value)
-        sendRequest('third', value)
-      }
-
-      setResetValue('')
+      sendRequest('', '', multiData)
     }
 
-    function getSelectedValue(group: string): any {
-      const data: any[] = Object.entries(
-        currentGroup[currentGroup.length - 1].scenario,
-      )
+    if (name === InheritanceModeEnum.Compensational) {
+      setFirstSelectValue('0')
+      setSecondSelectValue('1-2')
+      setThirdSelectValue('1-2')
 
-      let value = '--'
+      const multiData: any[] = [
+        ['0', attrData.family[0]],
+        ['1-2', attrData.family[1]],
+        ['1-2', attrData.family[2]],
+      ]
 
-      data?.map((item, index) => {
-        if (group && item[1].includes(group)) {
-          value = data[index][0]
-        }
-      })
-
-      return value
+      sendRequest('', '', multiData)
     }
 
-    const handleReset = (name: string) => {
-      if (name === InheritanceModeEnum.HomozygousRecessive_XLinked) {
-        setFirstSelectValue('2')
-        setSecondSelectValue('0-1')
-        setThirdSelectValue('0-1')
+    if (name === 'empty') {
+      setFirstSelectValue('--')
+      setSecondSelectValue('--')
+      setThirdSelectValue('--')
 
-        const multiData: any[] = [
-          ['2', attrData.family[0]],
-          ['0-1', attrData.family[1]],
-          ['0-1', attrData.family[2]],
-        ]
+      const multiData: any[] = [
+        ['--', attrData.family[0]],
+        ['--', attrData.family[1]],
+        ['--', attrData.family[2]],
+      ]
 
-        sendRequest('', '', multiData)
-      }
-
-      if (name === InheritanceModeEnum.AutosomalDominant) {
-        setFirstSelectValue('1-2')
-        setSecondSelectValue('0')
-        setThirdSelectValue('0')
-
-        const multiData: any[] = [
-          ['1-2', attrData.family[0]],
-          ['0', attrData.family[1]],
-          ['0', attrData.family[2]],
-        ]
-
-        sendRequest('', '', multiData)
-      }
-
-      if (name === InheritanceModeEnum.Compensational) {
-        setFirstSelectValue('0')
-        setSecondSelectValue('1-2')
-        setThirdSelectValue('1-2')
-
-        const multiData: any[] = [
-          ['0', attrData.family[0]],
-          ['1-2', attrData.family[1]],
-          ['1-2', attrData.family[2]],
-        ]
-
-        sendRequest('', '', multiData)
-      }
-
-      if (name === 'empty') {
-        setFirstSelectValue('--')
-        setSecondSelectValue('--')
-        setThirdSelectValue('--')
-
-        const multiData: any[] = [
-          ['--', attrData.family[0]],
-          ['--', attrData.family[1]],
-          ['--', attrData.family[2]],
-        ]
-
-        sendRequest('', '', multiData)
-      }
-
-      setResetValue(name)
+      sendRequest('', '', multiData)
     }
 
-    const handleClose = () => {
-      dtreeStore.closeModalEditCustomInheritanceMode()
-    }
+    setResetValue(name)
+  }
 
-    const handleSaveChanges = () => {
-      const params = { scenario: dtreeStore.scenario }
+  const handleClose = () => {
+    dtreeStore.closeModalEditCustomInheritanceMode()
+  }
 
-      changeFunctionalStep(params)
-      dtreeStore.closeModalEditCustomInheritanceMode()
-    }
+  const handleSaveChanges = () => {
+    const params = { scenario: dtreeStore.scenario }
 
-    return (
-      <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal
-          groupName={dtreeStore.groupNameToChange}
-          handleClose={handleClose}
-        />
+    changeFunctionalStep(params)
+    dtreeStore.closeModalEditCustomInheritanceMode()
+  }
 
-        <CustomInheritanceModeContent
-          attrData={attrData}
-          handleSetScenario={handleSetScenario}
-          selectStates={selectStates}
-          handleReset={handleReset}
-          resetValue={resetValue}
-        />
+  return (
+    <ModalBase refer={ref} minHeight={250}>
+      <HeaderModal
+        groupName={dtreeStore.groupNameToChange}
+        handleClose={handleClose}
+      />
 
-        <EditModalButtons
-          handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
-          disabled={!variants}
-        />
-      </ModalBase>
-    )
-  },
-)
+      <CustomInheritanceModeContent
+        attrData={attrData}
+        handleSetScenario={handleSetScenario}
+        selectStates={selectStates}
+        handleReset={handleReset}
+        resetValue={resetValue}
+      />
+
+      <EditModalButtons
+        handleClose={handleClose}
+        handleSaveChanges={handleSaveChanges}
+        disabled={!variants}
+      />
+    </ModalBase>
+  )
+})

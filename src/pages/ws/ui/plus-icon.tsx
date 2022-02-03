@@ -7,6 +7,6 @@ export const PlusIcon = ({ color }: { color: string }): ReactElement => (
       color,
     }}
   >
-    ✚
+    {'✚'}
   </div>
 )

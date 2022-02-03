@@ -19,7 +19,7 @@ export const FilterButton = observer(
       refEl={refEl}
       size="md"
       icon={<Icon name="Arrow" className="transform -rotate-90" />}
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       className={cn('mt-auto ml-2', className)}
       dataTestId={DecisionTreesMenuDataCy.decisionActions}
       onClick={rest.onClick}

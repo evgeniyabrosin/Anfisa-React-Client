@@ -153,7 +153,10 @@ export const TableModal = observer(() => {
             <div className="flex">
               <div className="p-5">
                 <div className="flex flex-col">
-                  <div>In scope: {allVaraints}</div>
+                  <div>
+                    {'In scope: '}
+                    {allVaraints}
+                  </div>
                   <div className="flex items-center mr-3">
                     <RadioButton
                       isDisabled={variantSize === 'LARGE'}
@@ -182,7 +185,8 @@ export const TableModal = observer(() => {
                     // data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
-                      N - {index + 1}
+                      {'N - '}
+                      {index + 1}
                     </p>
                   </div>
                 ))}

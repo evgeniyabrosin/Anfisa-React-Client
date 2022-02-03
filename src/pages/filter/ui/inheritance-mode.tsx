@@ -14,9 +14,10 @@ export interface IInheritanceFormValues {
 
 export const InheritanceMode = observer(
   ({ values, setFieldValue }: FormikProps<IInheritanceFormValues>) => {
-    const cachedValues = filterStore.readFilterCondition<IInheritanceFormValues>(
-      FuncStepTypesEnum.InheritanceMode,
-    )
+    const cachedValues =
+      filterStore.readFilterCondition<IInheritanceFormValues>(
+        FuncStepTypesEnum.InheritanceMode,
+      )
 
     const [variants, setVariants] = useState([])
     const [problemGroups, setProblemGroups] = useState<string[]>([])
@@ -98,14 +99,14 @@ export const InheritanceMode = observer(
       <Form>
         <div className="flex items-center justify-between">
           <p className="text-14 leading-16px font-bold text-grey-blue mt-4">
-            Problem group
+            {'Problem group'}
           </p>
 
           <p
             className="text-12 text-blue-bright leading-14px cursor-pointer"
             onClick={handleSetFieldValueAsync}
           >
-            Reset
+            {'Reset'}
           </p>
         </div>
         <div className="flex items-center justify-between mt-4">
@@ -124,7 +125,7 @@ export const InheritanceMode = observer(
 
         <div className="flex items-center justify-between">
           <p className="text-14 leading-14px text-grey-blue">
-            {variantsValues?.length} Selected
+            {variantsValues?.length} {'Selected'}
           </p>
 
           <p
@@ -171,7 +172,7 @@ export const InheritanceMode = observer(
 
         {variants.length === 0 && (
           <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
-            Out of choice. Select problem group.
+            {'Out of choice. Select problem group.'}
           </div>
         )}
       </Form>

@@ -50,7 +50,11 @@ export const SelectedGroupItem = observer(
 
         <span className="text-black">{variant[0]}</span>
 
-        <span className="text-grey-blue ml-2">({variant[1]})</span>
+        <span className="text-grey-blue ml-2">
+          {'('}
+          {variant[1]}
+          {')'}
+        </span>
       </div>
     )
   },

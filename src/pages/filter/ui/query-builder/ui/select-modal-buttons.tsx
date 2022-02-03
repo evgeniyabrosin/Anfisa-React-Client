@@ -48,8 +48,8 @@ export const SelectModalButtons = observer(
         <div className="flex">
           <Button
             text={t('general.cancel')}
-            variant={'secondary'}
-            className={'mr-2'}
+            variant="secondary"
+            className="mr-2"
             onClick={() => handleClose()}
             dataTestId={DecisionTreeModalDataCy.cancelButton}
           />
@@ -58,7 +58,7 @@ export const SelectModalButtons = observer(
               <Button
                 disabled={disabled}
                 text={t('dtree.replace')}
-                className={'mr-2'}
+                className="mr-2"
                 onClick={() => handleAddAttribute('REPLACE')}
                 dataTestId={DecisionTreeModalDataCy.replaceButton}
               />

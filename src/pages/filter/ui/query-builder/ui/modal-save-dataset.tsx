@@ -191,7 +191,7 @@ export const ModalSaveDataset = observer(() => {
               className="ml-2 mt-1 text-14 text-blue-bright cursor-pointer"
               onClick={handleOpenDataset}
             >
-              Open It
+              {'Open It'}
             </span>
           )}
         </span>
@@ -199,7 +199,7 @@ export const ModalSaveDataset = observer(() => {
         <div className="flex ml-auto mt-6">
           <Button
             text={t('general.cancel')}
-            variant={'secondary'}
+            variant="secondary"
             className="border-grey-light hover:bg-grey-light"
             onClick={handleClose}
             dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
@@ -209,7 +209,7 @@ export const ModalSaveDataset = observer(() => {
             text={t('dsCreation.addDataset')}
             className="ml-4"
             disabled={!value.trim() || error.length > 0}
-            variant={'secondary'}
+            variant="secondary"
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />

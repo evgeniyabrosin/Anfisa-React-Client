@@ -25,7 +25,8 @@ export const InfoTextItem = ({
         {
           'text-blue-bright underline cursor-pointer': isClickable,
           'bg-blue-bright bg-opacity-10': isActive,
-          'text-grey-blue font-medium border-t border-grey-light': isTitleBaseInfo,
+          'text-grey-blue font-medium border-t border-grey-light':
+            isTitleBaseInfo,
         },
         className,
       )}

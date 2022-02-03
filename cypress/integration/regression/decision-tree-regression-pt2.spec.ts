@@ -75,7 +75,6 @@ describe('Regression test of the decision tree', () => {
     )
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should save dataset and open it in main table | step 23', () => {
     decisionTreesPage.visit(`/filter?ds=${datasetName}`)
     // decisionTreesPage.decisionTreeResults.addAttribute.click()

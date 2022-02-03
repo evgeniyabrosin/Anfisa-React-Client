@@ -53,7 +53,7 @@ export const InheritanceModeContent = observer(
           <Button
             onClick={handleReset}
             text="Reset"
-            variant={'secondary'}
+            variant="secondary"
             className="h-4/5"
           />
         </div>

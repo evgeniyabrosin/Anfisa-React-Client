@@ -15,7 +15,7 @@ class PresetStore {
       filter,
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -40,7 +40,7 @@ class PresetStore {
       instr: JSON.stringify(['DELETE', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -60,7 +60,7 @@ class PresetStore {
       instr: JSON.stringify(['JOIN', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -80,7 +80,7 @@ class PresetStore {
       instr: JSON.stringify(['UPDATE', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

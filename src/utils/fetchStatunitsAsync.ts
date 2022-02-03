@@ -43,7 +43,7 @@ export const fetchStatunitsAsync = async (
     dtreeStore.dtreeCode && body.append('code', dtreeStore.dtreeCode)
   }
 
-  const response = await fetch(getApiUrl(`statunits`), {
+  const response = await fetch(getApiUrl('statunits'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

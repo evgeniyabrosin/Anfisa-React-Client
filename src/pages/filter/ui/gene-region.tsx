@@ -62,7 +62,7 @@ export const GeneRegion = observer(
       <Form>
         <div className="mt-4">
           <span className="text-14 leading-16px text-grey-blue font-bold">
-            Locus
+            {'Locus'}
           </span>
 
           <div className="relative flex">

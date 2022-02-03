@@ -73,7 +73,7 @@ export const ModalNotes = observer(() => {
           <div className="flex items-center">
             <Button
               text={t('general.cancel')}
-              variant={'secondary'}
+              variant="secondary"
               onClick={handleClose}
             />
 

@@ -55,70 +55,64 @@ const CommonDetails = observer(
   ),
 )
 
-const InfoDetails = observer(
-  (): ReactElement => {
-    const id = 'IframeInfo'
+const InfoDetails = observer((): ReactElement => {
+  const id = 'IframeInfo'
 
-    const openFullScreen = () => {
-      const el = document.querySelector(`#${id}`)
+  const openFullScreen = () => {
+    const el = document.querySelector(`#${id}`)
 
-      if (!el) return
+    if (!el) return
 
-      el.requestFullscreen()
-    }
+    el.requestFullscreen()
+  }
 
-    const toggleStoreFullScreen = () => {
-      const el = document.querySelector(`#${id}`)
+  const toggleStoreFullScreen = () => {
+    const el = document.querySelector(`#${id}`)
 
-      if (!el) return
+    if (!el) return
 
-      const fullscreenEnabled = document.fullscreenElement !== null
+    const fullscreenEnabled = document.fullscreenElement !== null
 
-      if (fullscreenEnabled) dirinfoStore.setIframeInfoFullscreen(true)
-      else dirinfoStore.setIframeInfoFullscreen(false)
-    }
+    if (fullscreenEnabled) dirinfoStore.setIframeInfoFullscreen(true)
+    else dirinfoStore.setIframeInfoFullscreen(false)
+  }
 
-    useEffect(() => {
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', toggleStoreFullScreen)
+
+    return () =>
       document.addEventListener('fullscreenchange', toggleStoreFullScreen)
+  }, [])
 
-      return () =>
-        document.addEventListener('fullscreenchange', toggleStoreFullScreen)
-    }, [])
+  return (
+    <Card className="flex flex-col col-span-2 xl:col-span-3">
+      <div className="flex justify-end mb-3">
+        <Icon
+          name="FullScreen"
+          className="text-grey-blue cursor-pointer"
+          onClick={openFullScreen}
+        />
+      </div>
 
-    return (
-      <Card className="flex flex-col col-span-2 xl:col-span-3">
-        <div className="flex justify-end mb-3">
-          <Icon
-            name="FullScreen"
-            className="text-grey-blue cursor-pointer"
-            onClick={openFullScreen}
-          />
-        </div>
+      <IframeInfo id="IframeInfo" />
+    </Card>
+  )
+})
 
-        <IframeInfo id="IframeInfo" />
-      </Card>
-    )
-  },
-)
+export const DatasetsFieldsList = observer((): ReactElement => {
+  const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions')
+  const hasInfoDetails = !!dirinfoStore.infoFrameLink
 
-export const DatasetsFieldsList = observer(
-  (): ReactElement => {
-    const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions')
-    const hasInfoDetails = !!dirinfoStore.infoFrameLink
+  return (
+    <React.Fragment>
+      {hasInfoDetails && <InfoDetails />}
 
-    return (
-      <React.Fragment>
-        {hasInfoDetails && <InfoDetails />}
-
-        {versions && (
-          <CommonDetails
-            className={
-              hasInfoDetails ? 'col-span-3' : 'col-span-2 xl:col-span-3'
-            }
-            versions={versions}
-          />
-        )}
-      </React.Fragment>
-    )
-  },
-)
+      {versions && (
+        <CommonDetails
+          className={hasInfoDetails ? 'col-span-3' : 'col-span-2 xl:col-span-3'}
+          versions={versions}
+        />
+      )}
+    </React.Fragment>
+  )
+})
