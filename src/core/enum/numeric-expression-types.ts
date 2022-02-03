@@ -5,4 +5,5 @@ export const NumericExpressionTypes = Glb.makeEnum({
   GreaterOrEqualThan: 'Great_or_equal_than',
 })
 
-export type NumericExpressionType = typeof NumericExpressionTypes[keyof typeof NumericExpressionTypes]
+export type NumericExpressionType =
+  typeof NumericExpressionTypes[keyof typeof NumericExpressionTypes]
