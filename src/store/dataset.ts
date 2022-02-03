@@ -146,19 +146,19 @@ class DatasetStore {
     if (!conditions[0]) {
       this.conditions = []
       await this.fetchDsStatAsync()
+    } else {
+      const groupCondtionsIndex = this.conditions.findIndex(
+        (item: any) => item[1] === conditions[0][1],
+      )
+
+      if (groupCondtionsIndex !== -1) {
+        this.conditions.splice(groupCondtionsIndex, 1)
+      }
+
+      this.conditions = this.conditions.concat(conditions)
+
+      await this.fetchDsStatAsync()
     }
-
-    const groupCondtionsIndex = this.conditions.findIndex(
-      (item: any) => item[1] === conditions[0][1],
-    )
-
-    if (groupCondtionsIndex !== -1) {
-      this.conditions.splice(groupCondtionsIndex, 1)
-    }
-
-    this.conditions = this.conditions.concat(conditions)
-
-    await this.fetchDsStatAsync()
 
     return Array.from({ length: this.statAmount[0] })
   }
@@ -284,7 +284,7 @@ class DatasetStore {
 
     const body = shouldSaveInHistory ? localBody : bodyFromHistory
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -330,7 +330,10 @@ class DatasetStore {
         (item: any) => item.name === name,
       )
 
-      if (condition[0] === FilterKindEnum.Enum) {
+      if (
+        condition[0] === FilterKindEnum.Enum ||
+        condition[0] === FilterKindEnum.Func
+      ) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
             group: filterItem.vgroup,
@@ -338,8 +341,16 @@ class DatasetStore {
             variant: [value, 0],
           })
         })
+      } else {
+        filterStore.addSelectedFilters({
+          group: filterItem.vgroup,
+          groupItemName: name,
+          variant: [name, condition[condition.length - 1]],
+        })
+        filterStore.setFilterCondition(name, condition[condition.length - 1])
       }
     })
+
     !source || (this.isXL && this.fetchDsStatAsync())
   }
 
@@ -378,7 +389,7 @@ class DatasetStore {
       return
     }
 
-    const response = await fetch(getApiUrl(`tab_report`), {
+    const response = await fetch(getApiUrl('tab_report'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -400,6 +411,7 @@ class DatasetStore {
 
     this.setIsLoadingTabReport(false)
   }
+
   async fetchFilteredTabReportAsync() {
     let seq: number[] = []
 
@@ -492,7 +504,7 @@ class DatasetStore {
     this.prevPreset = this.activePreset
     body.append('filter', this.activePreset)
 
-    const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
+    const response = await fetch(getApiUrl(isXL ? 'ds_list' : 'ws_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -533,7 +545,7 @@ class DatasetStore {
   async fetchZoneListAsync(zone: string) {
     const body = new URLSearchParams({ ds: this.datasetName, zone })
 
-    const response = await fetch(getApiUrl(`zone_list`), {
+    const response = await fetch(getApiUrl('zone_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -556,7 +568,7 @@ class DatasetStore {
       zone: 'Has_Variant',
     })
 
-    const response = await fetch(getApiUrl(`zone_list`), {
+    const response = await fetch(getApiUrl('zone_list'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

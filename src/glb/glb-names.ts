@@ -14,4 +14,5 @@ export const GlbDatasetTypeNames = Glb.makeEnum({
 })
 
 export type GlbPagesNames = typeof GlbPagesNames[keyof typeof GlbPagesNames]
-export type GlbDatasetTypeNames = typeof GlbDatasetTypeNames[keyof typeof GlbDatasetTypeNames]
+export type GlbDatasetTypeNames =
+  typeof GlbDatasetTypeNames[keyof typeof GlbDatasetTypeNames]

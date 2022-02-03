@@ -21,4 +21,5 @@ export const FilterControlOptionsNames = Glb.makeEnum({
   [GlbPagesNames.Refiner]: 'Filter Refiner',
 })
 
-export type FilterControlOptionsNames = typeof FilterControlOptionsNames[keyof typeof FilterControlOptionsNames]
+export type FilterControlOptionsNames =
+  typeof FilterControlOptionsNames[keyof typeof FilterControlOptionsNames]

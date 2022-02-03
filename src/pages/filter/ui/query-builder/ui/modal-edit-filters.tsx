@@ -13,197 +13,192 @@ import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { ModsDivider } from './mods-divider'
 
-export const ModalEditFilters = observer(
-  (): ReactElement => {
-    const ref = useRef(null)
+export const ModalEditFilters = observer((): ReactElement => {
+  const ref = useRef(null)
 
-    const currentGroup =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-        dtreeStore.groupIndexToChange
-      ]
+  const currentGroup =
+    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+      dtreeStore.groupIndexToChange
+    ]
 
-    const indexOfCurrentGroup = dtreeStore.groupIndexToChange
-    const groupName = dtreeStore.groupNameToChange
+  const indexOfCurrentGroup = dtreeStore.groupIndexToChange
+  const groupName = dtreeStore.groupNameToChange
 
-    const selectedGroupsAmount =
-      currentGroup.length > 0 ? dtreeStore.selectedFilters : []
+  const selectedGroupsAmount =
+    currentGroup.length > 0 ? dtreeStore.selectedFilters : []
 
-    const currentGroupLength =
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-        indexOfCurrentGroup
-      ].length
+  const currentGroupLength =
+    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup]
+      .length
 
-    useEffect(() => {
-      dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-        indexOfCurrentGroup
-      ][currentGroupLength - 1].map((item: string) =>
-        dtreeStore.addSelectedFilter(item),
-      )
+  useEffect(() => {
+    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
+      indexOfCurrentGroup
+    ][currentGroupLength - 1].map((item: string) =>
+      dtreeStore.addSelectedFilter(item),
+    )
 
-      return () => {
-        dtreeStore.resetSelectedFilters()
-      }
-    }, [indexOfCurrentGroup, currentGroupLength])
-
-    const handleCheckGroupItem = (checked: boolean, name: string) => {
-      if (checked) {
-        dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
-      }
-    }
-
-    const handleSaveChanges = () => {
-      changeEnumAttribute()
-      dtreeStore.closeModalEditFilters()
-    }
-
-    const handleClose = () => {
-      dtreeStore.closeModalEditFilters()
+    return () => {
       dtreeStore.resetSelectedFilters()
     }
+  }, [indexOfCurrentGroup, currentGroupLength])
 
-    const [searchValue, setSearchValue] = useState('')
-    const [currentPage, setCurrentPage] = useState(0)
-
-    const [isAllFiltersChecked, setIsAllFiltersChecked] = useState(false)
-
-    const handleCheckAll = (checked: boolean) => {
-      if (checked && isAllFiltersChecked) return
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      chunks[currentPage]?.forEach(([variantName]: [string, number]) => {
-        if (checked) {
-          dtreeStore.addSelectedFilter(variantName)
-        } else {
-          dtreeStore.removeSelectedFilter(variantName)
-        }
-
-        setIsAllFiltersChecked(checked)
-      })
+  const handleCheckGroupItem = (checked: boolean, name: string) => {
+    if (checked) {
+      dtreeStore.addSelectedFilter(name)
+    } else {
+      dtreeStore.removeSelectedFilter(name)
     }
+  }
 
-    const handleChange = (value: string) => {
-      setSearchValue(value)
+  const handleSaveChanges = () => {
+    changeEnumAttribute()
+    dtreeStore.closeModalEditFilters()
+  }
 
-      if (currentPage === 0) return
+  const handleClose = () => {
+    dtreeStore.closeModalEditFilters()
+    dtreeStore.resetSelectedFilters()
+  }
 
-      setCurrentPage(0)
-    }
+  const [searchValue, setSearchValue] = useState('')
+  const [currentPage, setCurrentPage] = useState(0)
 
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+  const [isAllFiltersChecked, setIsAllFiltersChecked] = useState(false)
 
-    const selectedGroup = subGroups
-      .find(subGroup => subGroup.find(element => element.name === groupName))
-      ?.find(element => element.name === groupName)
+  const handleCheckAll = (checked: boolean) => {
+    if (checked && isAllFiltersChecked) return
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    chunks[currentPage]?.forEach(([variantName]: [string, number]) => {
+      if (checked) {
+        dtreeStore.addSelectedFilter(variantName)
+      } else {
+        dtreeStore.removeSelectedFilter(variantName)
+      }
 
-    const originGroupList: any[] = selectedGroup?.variants ?? []
+      setIsAllFiltersChecked(checked)
+    })
+  }
 
-    const filteredGroupList = originGroupList.filter(
-      (variant: [string, number]) =>
-        variant[0]
-          .toLocaleLowerCase()
-          .includes(searchValue.toLocaleLowerCase()),
-    )
+  const handleChange = (value: string) => {
+    setSearchValue(value)
 
-    const groupsPerPage = 100
-    const chunks = createChunks(filteredGroupList, groupsPerPage)
+    if (currentPage === 0) return
 
-    return (
-      <ModalBase refer={ref} minHeight={200}>
-        <HeaderModal groupName={groupName} handleClose={handleClose} />
+    setCurrentPage(0)
+  }
 
-        {originGroupList.length > 15 && (
-          <div className="flex mt-3">
-            <QueryBuilderSearch
-              value={searchValue}
-              onChange={handleChange}
-              isSubgroupItemSearch
-            />
-          </div>
-        )}
+  const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-        <div className="flex justify-between items-center w-full mt-4 text-14">
-          <div className="text-14 text-grey-blue">
-            {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0}{' '}
-            {t('dtree.selected')}
-          </div>
+  const selectedGroup = subGroups
+    .find(subGroup => subGroup.find(element => element.name === groupName))
+    ?.find(element => element.name === groupName)
 
-          <div className="flex">
-            <div className="flex items-center">
-              <Checkbox checked={false} className="mr-1 cursor-pointer" />
-              <div className="text-14 font-normal">{t('ds.notMode')}</div>
-            </div>
+  const originGroupList: any[] = selectedGroup?.variants ?? []
 
-            <ModsDivider />
+  const filteredGroupList = originGroupList.filter(
+    (variant: [string, number]) =>
+      variant[0].toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+  )
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(true)}
-            >
-              {t('general.selectAll')}
-            </div>
+  const groupsPerPage = 100
+  const chunks = createChunks(filteredGroupList, groupsPerPage)
 
-            <ModsDivider />
+  return (
+    <ModalBase refer={ref} minHeight={200}>
+      <HeaderModal groupName={groupName} handleClose={handleClose} />
 
-            <div
-              className="cursor-pointer text-blue-bright"
-              onClick={() => handleCheckAll(false)}
-            >
-              {t('general.clearAll')}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto my-4 text-14">
-          {chunks[currentPage] ? (
-            chunks[currentPage].map((variant: [string, number]) => {
-              const variantName = variant[0]
-              const variantNumbers = variant[1]
-
-              return (
-                variantNumbers !== 0 && (
-                  <div
-                    key={variantName}
-                    className="flex items-center mb-2 text-14"
-                  >
-                    <Checkbox
-                      checked={dtreeStore.selectedFilters.includes(variantName)}
-                      className="-mt-0.5 mr-1 cursor-pointer"
-                      onChange={e =>
-                        handleCheckGroupItem(e.target.checked, variantName)
-                      }
-                    />
-
-                    <span className="text-black">{variantName}</span>
-
-                    <span className="text-grey-blue ml-2">
-                      {variantNumbers} {t('dtree.variants')}
-                    </span>
-                  </div>
-                )
-              )
-            })
-          ) : (
-            <div className="flex justify-center items-center text-14 text-grey-blue">
-              {t('dtree.noFilters')}
-            </div>
-          )}
-        </div>
-
-        {filteredGroupList.length > groupsPerPage && (
-          <Pagintaion
-            pagesNumbers={chunks.length}
-            currentPage={currentPage}
-            setPageNumber={setCurrentPage}
+      {originGroupList.length > 15 && (
+        <div className="flex mt-3">
+          <QueryBuilderSearch
+            value={searchValue}
+            onChange={handleChange}
+            isSubgroupItemSearch
           />
-        )}
+        </div>
+      )}
 
-        <EditModalButtons
-          handleClose={handleClose}
-          handleSaveChanges={handleSaveChanges}
-          disabled={selectedGroupsAmount.length === 0}
+      <div className="flex justify-between items-center w-full mt-4 text-14">
+        <div className="text-14 text-grey-blue">
+          {currentGroup.length > 0 ? dtreeStore.selectedFilters.length : 0}{' '}
+          {t('dtree.selected')}
+        </div>
+
+        <div className="flex">
+          <div className="flex items-center">
+            <Checkbox checked={false} className="mr-1 cursor-pointer" />
+            <div className="text-14 font-normal">{t('ds.notMode')}</div>
+          </div>
+
+          <ModsDivider />
+
+          <div
+            className="cursor-pointer text-blue-bright"
+            onClick={() => handleCheckAll(true)}
+          >
+            {t('general.selectAll')}
+          </div>
+
+          <ModsDivider />
+
+          <div
+            className="cursor-pointer text-blue-bright"
+            onClick={() => handleCheckAll(false)}
+          >
+            {t('general.clearAll')}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto my-4 text-14">
+        {chunks[currentPage] ? (
+          chunks[currentPage].map((variant: [string, number]) => {
+            const variantName = variant[0]
+            const variantNumbers = variant[1]
+
+            return (
+              variantNumbers !== 0 && (
+                <div
+                  key={variantName}
+                  className="flex items-center mb-2 text-14"
+                >
+                  <Checkbox
+                    checked={dtreeStore.selectedFilters.includes(variantName)}
+                    className="-mt-0.5 mr-1 cursor-pointer"
+                    onChange={e =>
+                      handleCheckGroupItem(e.target.checked, variantName)
+                    }
+                  />
+
+                  <span className="text-black">{variantName}</span>
+
+                  <span className="text-grey-blue ml-2">
+                    {variantNumbers} {t('dtree.variants')}
+                  </span>
+                </div>
+              )
+            )
+          })
+        ) : (
+          <div className="flex justify-center items-center text-14 text-grey-blue">
+            {t('dtree.noFilters')}
+          </div>
+        )}
+      </div>
+
+      {filteredGroupList.length > groupsPerPage && (
+        <Pagintaion
+          pagesNumbers={chunks.length}
+          currentPage={currentPage}
+          setPageNumber={setCurrentPage}
         />
-      </ModalBase>
-    )
-  },
-)
+      )}
+
+      <EditModalButtons
+        handleClose={handleClose}
+        handleSaveChanges={handleSaveChanges}
+        disabled={selectedGroupsAmount.length === 0}
+      />
+    </ModalBase>
+  )
+})

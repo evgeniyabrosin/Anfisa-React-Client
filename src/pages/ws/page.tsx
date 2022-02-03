@@ -29,27 +29,30 @@ import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
 
-const WSPage = observer(
-  (): ReactElement => {
-    const params = useParams()
+const WSPage = observer((): ReactElement => {
+  const params = useParams()
 
-    useDatasetName()
+  useDatasetName()
 
-    const historyLocationState = useHistory().location
-      .state as HistoryLocationState
+  const historyLocationState = useHistory().location
+    .state as HistoryLocationState
 
-    const prevPage = historyLocationState?.prevPage || ''
+  const prevPage = historyLocationState?.prevPage || ''
 
-    const [query] = useQueryParams({
-      variant: NumberParam,
-      refiner: withDefault(ArrayParam, []),
-    })
+  const [query] = useQueryParams({
+    variant: NumberParam,
+    refiner: withDefault(ArrayParam, []),
+  })
 
-    const { variant, refiner } = query
+  const { variant, refiner } = query
 
-    Number.isInteger(variant) && variantStore.setIndex(variant as number)
+  const hasConditionsInSearchParamsOnly =
+    refiner.length > 0 && datasetStore.conditions.length === 0
 
-    useEffect(() => {
+  Number.isInteger(variant) && variantStore.setIndex(variant as number)
+
+  useEffect(() => {
+    if (hasConditionsInSearchParamsOnly) {
       const conditions: Condition[] = (refiner as string[]).map((c: string) => {
         const item: string[] = c!.split(',')
         const [name, group, symbol, value] = item
@@ -58,77 +61,77 @@ const WSPage = observer(
       })
 
       datasetStore.setConditionsAsync(conditions)
+    }
 
-      const initAsync = async () => {
-        const dsName = params.get('ds') || ''
+    const initAsync = async () => {
+      const dsName = params.get('ds') || ''
 
-        if (dsName && !variantStore.dsName) {
-          variantStore.setDsName(params.get('ds') ?? '')
-        }
-
-        await datasetStore.initDatasetAsync(dsName, prevPage)
+      if (dsName && !variantStore.dsName) {
+        variantStore.setDsName(params.get('ds') ?? '')
       }
 
-      initAsync()
+      await datasetStore.initDatasetAsync(dsName, prevPage)
+    }
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    initAsync()
 
-    const [allVariants, transcribedVariants, allTranscripts] = get(
-      datasetStore,
-      'statAmount',
-      [],
-    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    return (
-      <Fragment>
-        {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
+  const [allVariants, transcribedVariants, allTranscripts] = get(
+    datasetStore,
+    'statAmount',
+    [],
+  )
 
-        {variantStore.isModalNotesVisible && <ModalNotes />}
+  return (
+    <Fragment>
+      {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
-        <div className="h-full flex flex-col">
-          <Header>
-            <div className="text-white flex-grow flex justify-end pr-6">
-              <span
-                className="text-12 leading-14px text-white mt-2 ml-auto font-bold"
-                data-testid={MainTableDataCy.numVariants}
-              >
-                {t('filter.variants', {
-                  all: allVariants,
-                })}
-              </span>
+      {variantStore.isModalNotesVisible && <ModalNotes />}
 
-              <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold">
-                {t('filter.transcribedVariants', {
-                  all: transcribedVariants,
-                })}
-              </span>
+      <div className="h-full flex flex-col">
+        <Header>
+          <div className="text-white flex-grow flex justify-end pr-6">
+            <span
+              className="text-12 leading-14px text-white mt-2 ml-auto font-bold"
+              data-testid={MainTableDataCy.numVariants}
+            >
+              {t('filter.variants', {
+                all: allVariants,
+              })}
+            </span>
 
-              <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 mr-6 font-bold">
-                {t('filter.transcripts', {
-                  all: allTranscripts,
-                })}
-              </span>
+            <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold">
+              {t('filter.transcribedVariants', {
+                all: transcribedVariants,
+              })}
+            </span>
 
-              <PopperButton
-                ButtonElement={ExportReportButton}
-                ModalElement={ExportPanel}
-              />
-            </div>
-          </Header>
+            <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 mr-6 font-bold">
+              {t('filter.transcripts', {
+                all: allTranscripts,
+              })}
+            </span>
 
-          <ControlPanel />
-
-          <div className="flex-grow flex overflow-hidden">
-            <TableVariants />
-
-            <VariantDrawer />
+            <PopperButton
+              ButtonElement={ExportReportButton}
+              ModalElement={ExportPanel}
+            />
           </div>
+        </Header>
+
+        <ControlPanel />
+
+        <div className="flex-grow flex overflow-hidden">
+          <TableVariants />
+
+          <VariantDrawer />
         </div>
-      </Fragment>
-    )
-  },
-)
+      </div>
+    </Fragment>
+  )
+})
 
 export default withErrorBoundary(WSPage, {
   fallback: <ErrorPage />,

@@ -5,18 +5,16 @@ import { QueryBuilderTotalNumbers } from './query-builder-total-numbers'
 import { QueryBuilderTreeHeader } from './query-builder-tree-header'
 import { QueryBuilderTreeView } from './query-builder-tree-view'
 
-export const QueryBuilderTree = observer(
-  (): ReactElement => {
-    return (
-      <div className="flex flex-col w-2/3">
-        <QueryBuilderTotalNumbers />
+export const QueryBuilderTree = observer((): ReactElement => {
+  return (
+    <div className="flex flex-col w-2/3">
+      <QueryBuilderTotalNumbers />
 
-        <div className="flex flex-col h-screen overflow-y-scroll">
-          <QueryBuilderTreeHeader />
+      <div className="flex flex-col h-screen overflow-y-scroll">
+        <QueryBuilderTreeHeader />
 
-          <QueryBuilderTreeView />
-        </div>
+        <QueryBuilderTreeView />
       </div>
-    )
-  },
-)
+    </div>
+  )
+})

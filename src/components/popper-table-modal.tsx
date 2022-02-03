@@ -99,11 +99,11 @@ export const PopperTableModal = observer(
           <div className="flex justify-between mt-5">
             {viewType ? (
               <span className="text-14 text-grey-blue">
-                {selectedAmount} Selected
+                {selectedAmount} {'Selected'}
               </span>
             ) : (
               <span className="text-14 text-grey-blue">
-                {defintSelectedAmount() || 0} Selected
+                {defintSelectedAmount() || 0} {'Selected'}
               </span>
             )}
 
@@ -127,7 +127,7 @@ export const PopperTableModal = observer(
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
-            variant={'secondary'}
+            variant="secondary"
             onClick={handleClose}
           />
 

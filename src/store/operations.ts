@@ -66,7 +66,7 @@ class OperationsStore {
     }
 
     if (exportType === ExportTypeEnum.Excel) {
-      const response = await fetch(getApiUrl(`export`), {
+      const response = await fetch(getApiUrl('export'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -92,7 +92,7 @@ class OperationsStore {
     if (exportType === ExportTypeEnum.CSV) {
       body.append('schema', 'xbr')
 
-      const response = await fetch(getApiUrl(`csv_export`), {
+      const response = await fetch(getApiUrl('csv_export'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -153,7 +153,7 @@ class OperationsStore {
 
     datasetStore.setIsLoadingTabReport(true)
 
-    const response = await fetch(getApiUrl(`ds2ws`), {
+    const response = await fetch(getApiUrl('ds2ws'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

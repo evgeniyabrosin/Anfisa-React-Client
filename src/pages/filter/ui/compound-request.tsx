@@ -52,9 +52,10 @@ export const resetOptions = [
 
 export const CompoundRequest = observer(
   ({ setFieldValue }: FormikProps<ICompoundRequestProps>): ReactElement => {
-    const cachedValues = filterStore.readFilterCondition<ICompoundRequestFormValues>(
-      FuncStepTypesEnum.CompoundRequest,
-    )
+    const cachedValues =
+      filterStore.readFilterCondition<ICompoundRequestFormValues>(
+        FuncStepTypesEnum.CompoundRequest,
+      )
 
     const [requestCondition, setRequestCondition] = useState(
       cachedValues?.requestCondition || [[1, {}] as TRequestCondition],
@@ -289,7 +290,7 @@ export const CompoundRequest = observer(
         <div className="flex justify-between items-center w-full mt-4 text-14">
           <div className="flex">
             <div className="flex items-center">
-              <span className="mr-2 text-18 leading-14px">Approx:</span>
+              <span className="mr-2 text-18 leading-14px">{'Approx:'}</span>
 
               <Select
                 value={approxOptions[2]}
@@ -303,7 +304,7 @@ export const CompoundRequest = observer(
 
               <Select
                 options={['-current-']}
-                value={'-current-'}
+                value="-current-"
                 className="w-full ml-2"
                 disabled={true}
               />
@@ -320,7 +321,7 @@ export const CompoundRequest = observer(
             <Button
               onClick={() => handleRequestBlocksAmount('ADD')}
               text="Add"
-              variant={'secondary'}
+              variant="secondary"
               className={cn('mr-4')}
               disabled={requestCondition.length === 5}
             />
@@ -328,7 +329,7 @@ export const CompoundRequest = observer(
             <Button
               onClick={() => handleRequestBlocksAmount('REMOVE')}
               text="Remove"
-              variant={'secondary'}
+              variant="secondary"
               className={cn(
                 'border-red-secondary hover:text-white hover:bg-red-secondary',
               )}

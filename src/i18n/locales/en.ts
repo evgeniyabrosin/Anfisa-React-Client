@@ -213,6 +213,7 @@ export const en = {
     noFirstSymbols: 'No symbols at the first position',
     tooLongNote: 'Note is too long',
     tagNameIsTooLong: 'Tag name is too long',
+    dtreeNameIsNotValid: 'Decision tree name is not valid',
   },
   igv: {
     openIgv: 'Open igv',

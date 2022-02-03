@@ -26,9 +26,10 @@ export interface ICustomInheritanceFormValues {
 
 export const CustomInheritanceMode = observer(
   ({ setFieldValue }: FormikProps<ICustomInheritanceModeProps>) => {
-    const cachedValues = filterStore.readFilterCondition<ICustomInheritanceFormValues>(
-      FuncStepTypesEnum.CustomInheritanceMode,
-    )
+    const cachedValues =
+      filterStore.readFilterCondition<ICustomInheritanceFormValues>(
+        FuncStepTypesEnum.CustomInheritanceMode,
+      )
 
     const { first, second, third, reset } = cachedValues || {}
 
@@ -64,8 +65,8 @@ export const CustomInheritanceMode = observer(
 
     useEffect(() => {
       const params = datasetStore.isXL
-        ? `{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}`
-        : `{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}`
+        ? '{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}'
+        : '{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}'
 
       const scenario = datasetStore.isXL
         ? { '2': ['HG002'], '0-1': ['HG003', 'HG004'] }
@@ -119,7 +120,7 @@ export const CustomInheritanceMode = observer(
           .split(',')
           .join('","')}"]`
 
-        if (newScenario[index + 1]) scenarioString += `,`
+        if (newScenario[index + 1]) scenarioString += ','
       })
 
       const params = `{"scenario":{${scenarioString}}}`

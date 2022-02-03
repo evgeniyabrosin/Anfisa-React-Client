@@ -16,44 +16,42 @@ interface Props {
   values?: string[]
 }
 
-export const Select = observer(
-  ({ ...rest }: Props): ReactElement => {
-    const {
-      className,
-      options,
-      reset,
-      value,
-      disabled,
-      approx,
-      values,
-      ...tempRest
-    } = rest
+export const Select = observer(({ ...rest }: Props): ReactElement => {
+  const {
+    className,
+    options,
+    reset,
+    value,
+    disabled,
+    approx,
+    values,
+    ...tempRest
+  } = rest
 
-    return (
-      <select
-        className={cn('border-grey-blue border rounded', className)}
-        {...tempRest}
-        value={value}
-        disabled={disabled}
-      >
-        {reset && (
-          <Fragment>
-            <option />
+  return (
+    <select
+      className={cn('border-grey-blue border rounded', className)}
+      {...tempRest}
+      value={value}
+      disabled={disabled}
+    >
+      {reset && (
+        <Fragment>
+          <option />
 
-            <option value="empty">{t('dtree.empty')}</option>
-          </Fragment>
-        )}
+          <option value="empty">{t('dtree.empty')}</option>
+        </Fragment>
+      )}
 
-        {options &&
-          options.map((option, index) => (
-            <option
-              key={Math.random()}
-              value={approx && values ? values[index] : option}
-            >
-              {option}
-            </option>
-          ))}
-      </select>
-    )
-  },
-)
+      {options &&
+        options.map((option, index) => (
+          <option
+            key={Math.random()}
+            value={approx && values ? values[index] : option}
+          >
+            {option}
+          </option>
+        ))}
+    </select>
+  )
+})

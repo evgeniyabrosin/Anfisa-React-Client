@@ -53,7 +53,8 @@ export const FilterTags = observer(
                 data && data.length >= 3 ? 'inline-flex' : 'hidden',
               )}
             >
-              + {data && data.length - 2}
+              {'+ '}
+              {data && data.length - 2}
             </div>
           </div>
         </div>

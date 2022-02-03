@@ -13,44 +13,42 @@ import { Preset } from './control-panel-preset'
 import { Results } from './control-panel-settings'
 import { DatasetCreationButton } from './dataset-creation-button'
 
-export const ControlPanel = observer(
-  (): ReactElement => {
-    const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
+export const ControlPanel = observer((): ReactElement => {
+  const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
 
-    return (
-      <div className="w-auto flex pb-3 px-4 bg-blue-dark">
-        <div className={sectionClassName}>
-          <Preset />
+  return (
+    <div className="w-auto flex pb-3 px-4 bg-blue-dark">
+      <div className={sectionClassName}>
+        <Preset />
 
-          <ControlPanelDivider />
+        <ControlPanelDivider />
 
-          <EditFilter />
+        <EditFilter />
 
-          <ControlPanelDivider />
+        <ControlPanelDivider />
 
-          <Results />
+        <Results />
 
-          {!datasetStore.isXL && (
-            <div className="flex ml-5 bg-blue-lighter rounded-sm py-2 px-3">
-              <FilterItemGenes title={t('ds.gene')} />
+        {!datasetStore.isXL && (
+          <div className="flex ml-5 bg-blue-lighter rounded-sm py-2 px-3">
+            <FilterItemGenes title={t('ds.gene')} />
 
-              <ControlPanelDivider className="bg-blue-secondary" />
+            <ControlPanelDivider className="bg-blue-secondary" />
 
-              <FilterItemGenesList title={t('ds.geneList')} />
+            <FilterItemGenesList title={t('ds.geneList')} />
 
-              <ControlPanelDivider className="bg-blue-secondary" />
+            <ControlPanelDivider className="bg-blue-secondary" />
 
-              <FilterItemSamples title={t('ds.sample')} />
+            <FilterItemSamples title={t('ds.sample')} />
 
-              <ControlPanelDivider className="bg-blue-secondary" />
+            <ControlPanelDivider className="bg-blue-secondary" />
 
-              <FilterItemTags title={t('ds.tags')} />
-            </div>
-          )}
+            <FilterItemTags title={t('ds.tags')} />
+          </div>
+        )}
 
-          <DatasetCreationButton />
-        </div>
+        <DatasetCreationButton />
       </div>
-    )
-  },
-)
+    </div>
+  )
+})

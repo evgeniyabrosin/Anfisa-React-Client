@@ -92,7 +92,7 @@ class FilterStore {
   addSelectedFilterGroup(
     group: string,
     groupItemName: string,
-    variants: [string, number][],
+    variants: any[],
   ) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
@@ -145,7 +145,7 @@ class FilterStore {
 
     param && body.append('param', param)
 
-    const response = await fetch(getApiUrl(`statfunc`), {
+    const response = await fetch(getApiUrl('statfunc'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -193,6 +193,10 @@ class FilterStore {
     return this.filterCondition[filterName]
       ? (this.filterCondition[filterName] as T)
       : undefined
+  }
+
+  resetFilterCondition() {
+    this.filterCondition = {}
   }
 }
 

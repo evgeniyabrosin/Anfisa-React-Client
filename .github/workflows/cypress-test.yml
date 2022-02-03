@@ -1,0 +1,71 @@
+name: Cypress test
+on:
+  workflow_dispatch:
+  #schedule:
+    #- cron:  '27 * * * *'
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    # container: cypress/browsers:node16.13.0-chrome95-ff94
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [16]
+        include:
+          - envName: IBM-QA
+            baseUrl: 'http://localhost:3000/'
+            backendUrl: 'https://qa.asset-forome-dev-162fa491ef10b14d22843708d94ef0ba-0000.us-south.containers.appdomain.cloud/anfisa/app/'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        # ref: main
+        ref: FOROME-533
+
+    - name: Setup Node ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cypress run on ${{ matrix.envName }}
+      uses: cypress-io/github-action@v2
+      env:
+        BASIC_URL: ${{ matrix.baseUrl }}
+        BASIC_AUTH_USERNAME: ${{ secrets.FRONTEND_USERNAME }}
+        BASIC_AUTH_PASSWORD: ${{ secrets.FRONTEND_PASSWORD }}
+        REACT_APP_URL_BACKEND: ${{ matrix.backendUrl }}
+        REACT_APP_PROXY_AUTH: ${{ secrets.FRONTEND_USERNAME }}:${{ secrets.FRONTEND_PASSWORD }}
+      with:
+        install-command: yarn install
+        build: yarn run build
+        start: yarn run start
+        command: yarn run cy:run
+        wait-on: ${{ matrix.baseUrl }}
+        # config: video=false,screenshotOnRunFailure=false
+        # record: false
+        # browser: chrome
+        headless: true
+
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots
+  
+    - name: Upload videos
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos
+        path: cypress/videos
+
+    # - name: Slack notification
+    #   uses: act10ns/slack@v1
+    #   env:
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #   with:
+    #     status: ${{ job.status }}
+    #     steps: ${{ toJson(steps) }}
+    #   if: failure()

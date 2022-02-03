@@ -181,7 +181,7 @@ export class VariantStore {
       tags: `{${params}}`,
     })
 
-    const response = await fetch(getApiUrl(`ws_tags`), {
+    const response = await fetch(getApiUrl('ws_tags'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

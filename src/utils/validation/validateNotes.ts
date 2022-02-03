@@ -1,6 +1,5 @@
 import { t } from '@i18n'
-
-export const noFirstSymbolsPattern = /^[!"#$%&'()*+,./:;<=>?@[\\\]^_`{|}~§±№-]/
+import { noFirstSymbolsPattern } from './validationPatterns'
 
 export const validateNotes = (
   note: string,

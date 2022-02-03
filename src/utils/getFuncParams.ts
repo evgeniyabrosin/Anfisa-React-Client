@@ -1,5 +1,5 @@
 export const getFuncParams = (groupName: string, groupData: any) => {
-  if (Object.keys(groupData).length === 0) return `...`
+  if (Object.keys(groupData).length === 0) return '...'
 
   let string = ''
 
