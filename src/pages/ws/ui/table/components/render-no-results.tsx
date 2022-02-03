@@ -14,12 +14,8 @@ const resetTableToInitial = () => {
 export const renderNoResults = () => {
   const { selectedFilters } = filterStore
 
-  const {
-    selectedGenes,
-    selectedGenesList,
-    selectedSamples,
-    selectedTags,
-  } = zoneStore
+  const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } =
+    zoneStore
 
   const isFiltersSelected =
     Object.keys(selectedFilters).length > 0 ||
