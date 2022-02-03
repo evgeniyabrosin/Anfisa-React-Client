@@ -12,7 +12,7 @@ import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import { noFirstSymbolsPattern } from '@utils/validateNotes'
+import { noFirstSymbolsPattern } from '@utils/validation/validationPatterns'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {

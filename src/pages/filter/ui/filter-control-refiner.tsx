@@ -15,12 +15,9 @@ import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
+import { validatePresetName } from '@utils/validation/validatePresetName'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
-import {
-  noFirstNumberPattern,
-  noSymbolPattern,
-} from './query-builder/ui/modal-save-dataset'
 
 export const FilterControlRefiner = observer(
   (): ReactElement => {
@@ -75,11 +72,9 @@ export const FilterControlRefiner = observer(
       }
 
       if (filterStore.actionName === ActionFilterEnum.Create) {
-        if (
-          noSymbolPattern.test(createPresetName) ||
-          noFirstNumberPattern.test(createPresetName) ||
-          createPresetName.length > 50
-        ) {
+        const isPresetNameValid = validatePresetName(createPresetName)
+
+        if (!isPresetNameValid) {
           toast.error(t('filter.notValidName'), {
             position: 'bottom-right',
             autoClose: 3000,

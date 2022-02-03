@@ -12,7 +12,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import { validateNotes } from '@utils/validateNotes'
+import { validateNotes } from '@utils/validation/validateNotes'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
   return (
