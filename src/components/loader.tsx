@@ -1,23 +1,69 @@
-import { ReactElement } from 'react'
-import styled from 'styled-components'
+import React, { ReactElement } from 'react'
+import styled, { css } from 'styled-components'
 
-const Root = styled.div`
+export interface ILoaderProps {
+  size: 'xl' | 'l' | 'm' | 's' | 'xs'
+}
+
+const loaderSizes: Record<
+  ILoaderProps['size'],
+  Record<'fontSize' | 'width' | 'height' | 'margin', number>
+> = {
+  xl: {
+    fontSize: 13,
+    width: 25,
+    height: 25,
+    margin: 100,
+  },
+  l: {
+    fontSize: 10,
+    width: 20,
+    height: 20,
+    margin: 80,
+  },
+  m: {
+    fontSize: 8,
+    width: 15,
+    height: 15,
+    margin: 40,
+  },
+  s: {
+    fontSize: 5,
+    width: 10,
+    height: 10,
+    margin: 0,
+  },
+  xs: {
+    fontSize: 2,
+    width: 5,
+    height: 5,
+    margin: 0,
+  },
+}
+
+const Root = styled.div<{ size: ILoaderProps['size'] }>`
   width: 100%;
 
   .loader,
   .loader:before,
   .loader:after {
     border-radius: 50%;
-    width: 2.5em;
-    height: 2.5em;
+    ${({ size }) =>
+      css`
+        width: ${loaderSizes[size].width}px;
+        height: ${loaderSizes[size].height}px;
+      `}
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
     -webkit-animation: load7 1.8s infinite ease-in-out;
     animation: load7 1.8s infinite ease-in-out;
   }
   .loader {
-    font-size: 10px;
-    margin: 80px auto;
+    ${({ size }) =>
+      css`
+        font-size: ${loaderSizes[size].fontSize}px;
+        margin: ${loaderSizes[size].margin}px auto;
+      `}
     position: relative;
     text-indent: -9999em;
     -webkit-transform: translateZ(0);
@@ -62,10 +108,12 @@ const Root = styled.div`
   }
 `
 
-export const Loader = (): ReactElement => {
+export const Loader = ({
+  size = 'l',
+}: React.PropsWithChildren<Partial<ILoaderProps>>): ReactElement => {
   return (
-    <Root>
-      <div className="loader text-blue-bright">{'Loading...'}</div>
+    <Root size={size}>
+      <div className="loader text-blue-bright">Loading...</div>
     </Root>
   )
 }
