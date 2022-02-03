@@ -91,13 +91,6 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     [datasetName, routeToVariant],
   )
 
-  const handleResetTableToInitial = () => {
-    filterStore.resetData()
-    zoneStore.resetAllSelectedItems()
-    datasetStore.clearZone()
-    datasetStore.initDatasetAsync()
-  }
-
   useEffect(() => {
     alreadyOpened &&
       handleOpenVariant(
@@ -148,7 +141,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     <div className="table h-full">
       <TableHeader headerGroups={headerGroups} />
 
-      {renderNoResults(handleResetTableToInitial)}
+      {renderNoResults(tableStore.resetFilters)}
 
       {toJS(datasetStore.tabReport).length > 0 && (
         <Autosizer>

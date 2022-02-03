@@ -1,6 +1,8 @@
 import { makeAutoObservable, toJS } from 'mobx'
 
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
+import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 
@@ -58,6 +60,13 @@ class TableStore {
     if (!datasetStore.reportsLoaded) {
       await datasetStore.fetchTabReportAsync()
     }
+  }
+
+  public resetFilters() {
+    filterStore.resetData()
+    zoneStore.resetAllSelectedItems()
+    datasetStore.clearZone()
+    datasetStore.initDatasetAsync()
   }
 }
 
