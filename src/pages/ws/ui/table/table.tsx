@@ -15,6 +15,8 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
+import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
@@ -89,6 +91,13 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     [datasetName, routeToVariant],
   )
 
+  const handleResetTableToInitial = () => {
+    filterStore.resetData()
+    zoneStore.resetAllSelectedItems()
+    datasetStore.clearZone()
+    datasetStore.initDatasetAsync()
+  }
+
   useEffect(() => {
     alreadyOpened &&
       handleOpenVariant(
@@ -139,7 +148,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     <div className="table h-full">
       <TableHeader headerGroups={headerGroups} />
 
-      {renderNoResults()}
+      {renderNoResults(handleResetTableToInitial)}
 
       {toJS(datasetStore.tabReport).length > 0 && (
         <Autosizer>

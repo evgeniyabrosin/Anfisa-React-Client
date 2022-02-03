@@ -2368,14 +2368,14 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-virtualized-auto-sizer@^1.0.1":
+"@types/react-virtualized-auto-sizer@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.1.tgz#b3187dae1dfc4c15880c9cfc5b45f2719ea6ebd4"
   integrity sha512-GH8sAnBEM5GV9LTeiz56r4ZhMOUSrP43tAQNSRVxNexDjcNKLCEtnxusAItg1owFUFE6k0NslV26gqVClVvong==
   dependencies:
     "@types/react" "*"
 
-"@types/react-virtualized@^9.21.16":
+"@types/react-virtualized@9.21.16":
   version "9.21.16"
   resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.21.16.tgz#5e33c7e8a7c187f2b6d542132fc7a1d132b34f9d"
   integrity sha512-25QMrouz1VKq5T68+9JfRq3GP4JmN20ARi+hl5z7NMmriy07XmGd1Yh3I4EIZjmifpXhHZoQS/ny2fzZRyiAiw==
@@ -2383,7 +2383,7 @@
     "@types/prop-types" "*"
     "@types/react" "*"
 
-"@types/react-window-infinite-loader@^1.0.5":
+"@types/react-window-infinite-loader@1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@types/react-window-infinite-loader/-/react-window-infinite-loader-1.0.5.tgz#32469a6a47438d9ebf1b5f5719943f494ea0abdf"
   integrity sha512-3v45+4oBNJpSroULtb2EgTJyyK4pCjOMCg+RT/HnA3or5zY4jYufv6uH9NWPyLv0nx8dqt1s4nJqHilfthwKSw==
@@ -2454,7 +2454,7 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/shortid@^0.0.29":
+"@types/shortid@0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
   integrity sha1-gJPuBBam4r8qpjOBCRFLP7/6Dps=
@@ -9695,7 +9695,7 @@ react-virtualized-auto-sizer@1.0.6:
   resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.6.tgz#66c5b1c9278064c5ef1699ed40a29c11518f97ca"
   integrity sha512-7tQ0BmZqfVF6YYEWcIGuoR3OdYe8I/ZFbNclFlGOC3pMqunkYF/oL30NCjSGl9sMEb17AnzixDz98Kqc3N76HQ==
 
-react-virtualized@^9.22.3:
+react-virtualized@9.22.3:
   version "9.22.3"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.22.3.tgz#f430f16beb0a42db420dbd4d340403c0de334421"
   integrity sha512-MKovKMxWTcwPSxE1kK1HcheQTWfuCxAuBoSTf2gwyMM21NdX/PXUhnoP8Uc5dRKd+nKm8v41R36OellhdCpkrw==

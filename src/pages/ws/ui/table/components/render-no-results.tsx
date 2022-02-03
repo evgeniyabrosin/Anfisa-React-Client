@@ -4,14 +4,7 @@ import filterStore from '@store/filter'
 import zoneStore from '@store/filterZone'
 import { NoResultsFound } from '@components/no-results-found'
 
-const resetTableToInitial = () => {
-  filterStore.resetData()
-  zoneStore.resetAllSelectedItems()
-  datasetStore.clearZone()
-  datasetStore.initDatasetAsync()
-}
-
-export const renderNoResults = () => {
+export const renderNoResults = (onClick: () => void = () => {}) => {
   const { selectedFilters } = filterStore
 
   const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } =
@@ -35,7 +28,7 @@ export const renderNoResults = () => {
         className="text-black font-bold"
         action={{
           text: t('general.resetFilters'),
-          handler: resetTableToInitial,
+          handler: onClick,
         }}
       />
     ) : (
