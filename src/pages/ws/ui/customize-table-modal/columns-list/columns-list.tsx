@@ -29,7 +29,7 @@ export const ColumnsList = observer((): ReactElement => {
     )
   }
 
-  const { columnsToDisplay, toggleColumnHidden } = columnListStore
+  const { filteredColumns, toggleColumnHidden } = columnListStore
 
   return (
     <div className="mt-3 w-64 pr-4">
@@ -37,7 +37,7 @@ export const ColumnsList = observer((): ReactElement => {
         <Droppable droppableId="droppable">
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {columnsToDisplay.map((column, index) => (
+              {filteredColumns.map((column, index) => (
                 <Draggable
                   key={column.title}
                   draggableId={column.title}

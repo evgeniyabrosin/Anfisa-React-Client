@@ -1,9 +1,11 @@
 /* eslint-disable max-lines */
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 
+import { IColumns } from '@declarations'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
 
+export const columnsToIgnore: string[] = ['Gene', 'Variant']
 class ColumnsStore {
   columns: any[] = Object.values(tableColumnMap)
   viewType: ViewTypeEnum = ViewTypeEnum.Cozy
@@ -42,16 +44,10 @@ class ColumnsStore {
   }
 
   clearAllColumns() {
-    const clearedColumns =
-      typeof this.columns[0] !== 'string'
-        ? this.columns.map(column => ({
-            title: column.title,
-            hidden: true,
-          }))
-        : this.columns.map(column => ({
-            title: column,
-            hidden: true,
-          }))
+    const clearedColumns = this.getExtendedColumns.map(column => ({
+      title: column.title,
+      hidden: columnsToIgnore.includes(column.title) ? false : true,
+    }))
 
     this.setColumns(clearedColumns)
   }

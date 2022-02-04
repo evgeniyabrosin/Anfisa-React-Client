@@ -1,22 +1,16 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 
 import { IColumns } from '@declarations'
-import columnsStore from '../../../../../store/wsColumns'
+import columnsStore, { columnsToIgnore } from '@store/wsColumns'
 
 export class ColumnListStore {
-  private columnsToIgnore = new Set(['Gene', 'Variant'])
-
   public get filteredColumns(): IColumns[] {
-    return columnsStore.getExtendedColumns.filter((column: IColumns) =>
-      column.title
-        .toLocaleLowerCase()
-        .includes(columnsStore.searchColumnValue.toLocaleLowerCase()),
-    )
-  }
-
-  public get columnsToDisplay(): IColumns[] {
-    return this.filteredColumns.filter(
-      (column: IColumns) => !this.columnsToIgnore.has(column.title),
+    return columnsStore.getExtendedColumns.filter(
+      (column: IColumns) =>
+        column.title
+          .toLocaleLowerCase()
+          .includes(columnsStore.searchColumnValue.toLocaleLowerCase()) &&
+        !columnsToIgnore.includes(column.title),
     )
   }
 
@@ -37,17 +31,28 @@ export class ColumnListStore {
   }
 
   public reorderColumns = (sourceIndex: number, destinationIndex?: number) => {
-    const items = Array.from(columnsStore.getExtendedColumns)
+    const items = Array.from(this.filteredColumns)
     const startItemsLength = items.length
 
     const [reorderItem] = items.splice(sourceIndex, 1)
 
-    if (destinationIndex) {
+    if (typeof destinationIndex === 'number') {
       items.splice(destinationIndex, 0, reorderItem)
     }
 
-    if (items.length !== startItemsLength) return
+    if (items.length !== startItemsLength) {
+      return
+    }
 
-    columnsStore.setColumns(items)
+    const extendedColumns: IColumns[] = [
+      ...columnsToIgnore.map(col => ({ title: col, hidden: false })),
+      ...items,
+    ]
+
+    columnsStore.setColumns(extendedColumns)
+  }
+
+  public get visibleColumnsAmount(): number {
+    return this.filteredColumns.filter(column => column.hidden === false).length
   }
 }
