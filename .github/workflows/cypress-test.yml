@@ -61,11 +61,11 @@ jobs:
         name: cypress-videos
         path: cypress/videos
 
-    # - name: Slack notification
-    #   uses: act10ns/slack@v1
-    #   env:
-    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    #   with:
-    #     status: ${{ job.status }}
-    #     steps: ${{ toJson(steps) }}
-    #   if: failure()
+    - name: Slack notification
+      uses: act10ns/slack@v1
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+      if: failure()
