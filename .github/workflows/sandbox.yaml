@@ -9,6 +9,7 @@ on:
     branches:
       - 'FOROME-*'
       - '!main'
+      - '!develop'
     tags: [ stage ]
     
 jobs:
@@ -50,17 +51,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
    
-    - name: Increment version
-      if: "!startsWith(github.event.head_commit.message, '[FOROME-*]')"
-      uses: actions/checkout@v2
-    - run: |
-            git config --global user.name 'evgeniy-chernomortsev'
-            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
-            yarn config set version-git-message "[push in $GITHUB_REF_NAME] %s"
-            yarn config set version-commit-hooks false
-            yarn version --patch
-            git push --tags --no-verify &&
-            git push --no-verify
+    - name: Build
     - run: yarn install
       env:
           REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
