@@ -54,7 +54,7 @@ jobs:
       env:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
       run: |
-            aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32
+            aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32 --tag-specifications github_runner
     
     - name: commands via ssh
       uses: garygrossgarten/github-action-ssh@release
