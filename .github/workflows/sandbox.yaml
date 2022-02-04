@@ -19,31 +19,6 @@ jobs:
         node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-    - name: Auth AWS
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-central-1
-    - name: Open port temporary
-      env:
-        GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
-      run: |
-            aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32
-    
-    - name: commands via ssh
-#      env:
-#        branch: $GITHUB_REF_NAME
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-#        command: export branch=$GITHUB_REF_NAME && sudo mkdir -p /home/forome/anfisa_front/$branch
-        command: sudo mkdir -p /home/forome/anfisa_front/$branch
-        host: ${{ secrets.REMOTE_HOST_DEV }}
-        username: ${{ secrets.REMOTE_USER_DEV }}
-        privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
-      env:
-        branch: $GITHUB_REF_NAME
-    
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
@@ -68,7 +43,8 @@ jobs:
     - run: yarn build
       env:
           REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
-          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
+          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud" 
+    
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -80,6 +56,30 @@ jobs:
         GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
       run: |
             aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32
+    
+    - name: commands via ssh
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+#        command: export branch=$GITHUB_REF_NAME && sudo mkdir -p /home/forome/anfisa_front/$branch
+        command: sudo mkdir -p /home/forome/anfisa_front/$branch
+        host: ${{ secrets.REMOTE_HOST_DEV }}
+        username: ${{ secrets.REMOTE_USER_DEV }}
+        privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
+      env:
+        branch: $GITHUB_REF_NAME
+    
+#    - name: Auth AWS
+#      uses: aws-actions/configure-aws-credentials@v1
+#      with:
+#        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        aws-region: eu-central-1
+#    - name: Open port temporary
+#      env:
+#        GROUP: ${{ secrets.AWS_SEC_GROUP_ID }}
+#      run: |
+#            aws ec2 authorize-security-group-ingress --group-id $GROUP --protocol tcp --port 22 --cidr `curl https://ipinfo.io/ip`/32
+
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
