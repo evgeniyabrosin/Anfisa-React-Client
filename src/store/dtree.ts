@@ -195,7 +195,7 @@ class DtreeStore {
       tm: '0',
     })
 
-    const response = await fetch(getApiUrl(`dtree_stat`), {
+    const response = await fetch(getApiUrl('dtree_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -252,7 +252,7 @@ class DtreeStore {
 
     this.setIsCountsReceived(false)
 
-    const response = await fetch(getApiUrl(`dtree_set`), {
+    const response = await fetch(getApiUrl('dtree_set'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -292,7 +292,7 @@ class DtreeStore {
       param,
     })
 
-    const response = await fetch(getApiUrl(`statfunc`), {
+    const response = await fetch(getApiUrl('statfunc'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

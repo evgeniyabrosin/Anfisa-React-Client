@@ -11,38 +11,36 @@ import { Button } from '@ui/button'
 import { Switch } from '@ui/switch'
 import { GlbPagesNames } from '@glb/glb-names'
 import { ControlPanelTitle } from './control-panel-title'
-export const EditFilter = observer(
-  (): ReactElement => {
-    const histroy = useHistory()
-    const params = useParams()
+export const EditFilter = observer((): ReactElement => {
+  const histroy = useHistory()
+  const params = useParams()
 
-    const handleClick = () => {
-      histroy.push(`${Routes.Refiner}?ds=${params.get('ds')}`)
-      filterStore.setMethod(GlbPagesNames.Refiner)
-    }
+  const handleClick = () => {
+    histroy.push(`${Routes.Refiner}?ds=${params.get('ds')}`)
+    filterStore.setMethod(GlbPagesNames.Refiner)
+  }
 
-    const switchHandler = (checked: boolean) => {
-      datasetStore.setIsFilterDisabled(!checked)
-      datasetStore.fetchWsListAsync(datasetStore.isXL)
-    }
+  const switchHandler = (checked: boolean) => {
+    datasetStore.setIsFilterDisabled(!checked)
+    datasetStore.fetchWsListAsync(datasetStore.isXL)
+  }
 
-    return (
-      <div style={{ minWidth: '144px' }}>
-        <ControlPanelTitle title={t('ds.filters')}>
-          <Switch
-            isChecked={!datasetStore.isFilterDisabled}
-            size="sm"
-            onChange={switchHandler}
-          />
-        </ControlPanelTitle>
-
-        <Button
-          text={t('ds.editFilters')}
-          size="md"
-          className="w-full"
-          onClick={handleClick}
+  return (
+    <div style={{ minWidth: '144px' }}>
+      <ControlPanelTitle title={t('ds.filters')}>
+        <Switch
+          isChecked={!datasetStore.isFilterDisabled}
+          size="sm"
+          onChange={switchHandler}
         />
-      </div>
-    )
-  },
-)
+      </ControlPanelTitle>
+
+      <Button
+        text={t('ds.editFilters')}
+        size="md"
+        className="w-full"
+        onClick={handleClick}
+      />
+    </div>
+  )
+})

@@ -41,14 +41,13 @@ jobs:
             yarn version --patch
             git push --tags --no-verify &&
             git push --no-verify
-
     - run: yarn install
       env:
-          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
+          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
     - run: yarn build
       env:
-          REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
+          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
@@ -68,7 +67,7 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: '/home/forome/anfisa_front/anfisa-test-CI'
+          TARGET: '/home/forome/anfisa_front/anfisa-feature'
 #          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
           EXCLUDE: "/node_modules/"
     - name: Auth AWS

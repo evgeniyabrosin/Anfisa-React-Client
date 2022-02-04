@@ -23,6 +23,12 @@ export const en = {
     closeWindow: 'Close window',
     creaitionIsInProcess: 'Dataset creation has not been finished yet',
   },
+  header: {
+    version: {
+      frontend: 'Frontend: Anfisa {version}',
+      backend: 'Backend: {version}',
+    },
+  },
   home: {
     title: 'Home',
     datasets: 'Datasets',
@@ -207,8 +213,10 @@ export const en = {
     noFirstSymbols: 'No symbols at the first position',
     tooLongNote: 'Note is too long',
     tagNameIsTooLong: 'Tag name is too long',
+    dtreeNameIsNotValid: 'Decision tree name is not valid',
   },
   igv: {
     openIgv: 'Open igv',
+    filesNotFound: 'Files not found',
   },
 }

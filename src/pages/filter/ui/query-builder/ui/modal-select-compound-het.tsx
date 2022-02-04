@@ -12,153 +12,151 @@ import { ModalBase } from './modal-base'
 import { IParams } from './modal-edit-compound-het'
 import { SelectModalButtons } from './select-modal-buttons'
 
-export const ModalSelectCompoundHet = observer(
-  (): ReactElement => {
-    const ref = useRef(null)
+export const ModalSelectCompoundHet = observer((): ReactElement => {
+  const ref = useRef(null)
 
-    const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = dtreeStore.currentStepIndex
 
-    const currentGroup = dtreeStore.stepData[currentStepIndex].groups
+  const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
-    const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeStore.groupNameToChange
 
-    const variants = dtreeStore.statFuncData.variants
+  const variants = dtreeStore.statFuncData.variants
 
-    const approxValues: string[] = []
-    const approxOptions: string[] = []
+  const approxValues: string[] = []
+  const approxOptions: string[] = []
 
-    let attrData: any
+  let attrData: any
 
-    const subGroups = Object.values(dtreeStore.getQueryBuilder)
+  const subGroups = Object.values(dtreeStore.getQueryBuilder)
 
-    subGroups.map(subGroup => {
-      subGroup.map((item, currNo) => {
-        if (item.name === groupName) {
-          attrData = subGroup[currNo]
-        }
-      })
+  subGroups.map(subGroup => {
+    subGroup.map((item, currNo) => {
+      if (item.name === groupName) {
+        attrData = subGroup[currNo]
+      }
     })
+  })
 
-    attrData['approx-modes'].map((mode: string[]) => {
-      approxOptions.push(mode[1])
-      approxValues.push(mode[0])
-    })
+  attrData['approx-modes'].map((mode: string[]) => {
+    approxOptions.push(mode[1])
+    approxValues.push(mode[0])
+  })
 
-    const [stateCondition, setStateCondition] = useState('-current-')
+  const [stateCondition, setStateCondition] = useState('-current-')
 
-    const [approxCondition, setApproxCondition] = useState('transcript')
+  const [approxCondition, setApproxCondition] = useState('transcript')
 
-    const stateOptions: string[] = [stateCondition]
+  const stateOptions: string[] = [stateCondition]
 
-    useEffect(() => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+  useEffect(() => {
+    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-      const params = `{"approx":"${approxCondition}","state":${
-        stateCondition === '-current-' || !stateCondition
-          ? null
-          : `"${stateCondition}"`
+    const params = `{"approx":"${approxCondition}","state":${
+      stateCondition === '-current-' || !stateCondition
+        ? null
+        : `"${stateCondition}"`
+    }}`
+
+    dtreeStore.setCurrentStepIndexForApi(indexForApi)
+
+    dtreeStore.fetchStatFuncAsync(groupName, params)
+
+    return () => dtreeStore.resetStatFuncData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleClose = () => {
+    dtreeStore.closeModalSelectCompoundHet()
+  }
+
+  const handleSetCondition = (value: string, type: string) => {
+    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+
+    if (type === 'approx') {
+      setApproxCondition(value)
+
+      const params = `{"approx":"${value}","state":${
+        stateCondition !== '-current-' ? `"${stateCondition}"` : null
       }}`
 
       dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
-
-      return () => dtreeStore.resetStatFuncData()
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const handleClose = () => {
-      dtreeStore.closeModalSelectCompoundHet()
     }
 
-    const handleSetCondition = (value: string, type: string) => {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
+    if (type === 'state') {
+      setStateCondition(value)
 
-      if (type === 'approx') {
-        setApproxCondition(value)
+      const params = `{"approx":"${approxCondition}","state":${
+        value !== '-current-' ? `"${value}"` : null
+      }}`
 
-        const params = `{"approx":"${value}","state":${
-          stateCondition !== '-current-' ? `"${stateCondition}"` : null
-        }}`
+      dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
-        dtreeStore.setCurrentStepIndexForApi(indexForApi)
+      dtreeStore.fetchStatFuncAsync(groupName, params)
+    }
+  }
 
-        dtreeStore.fetchStatFuncAsync(groupName, params)
-      }
+  const handleModals = () => {
+    dtreeStore.closeModalSelectCompoundHet()
+    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.resetSelectedFilters()
+  }
 
-      if (type === 'state') {
-        setStateCondition(value)
+  const handleModalJoin = () => {
+    dtreeStore.openModalJoin()
+  }
 
-        const params = `{"approx":"${approxCondition}","state":${
-          value !== '-current-' ? `"${value}"` : null
-        }}`
+  const handleAddAttribute = (action: ActionType) => {
+    dtreeStore.addSelectedFilter(variants[0][0])
 
-        dtreeStore.setCurrentStepIndexForApi(indexForApi)
+    const params: IParams = { approx: approxCondition }
 
-        dtreeStore.fetchStatFuncAsync(groupName, params)
-      }
+    if (stateCondition) {
+      params.state =
+        JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
+          ? null
+          : stateOptions
     }
 
-    const handleModals = () => {
-      dtreeStore.closeModalSelectCompoundHet()
-      dtreeStore.openModalAttribute(currentStepIndex)
-      dtreeStore.resetSelectedFilters()
-    }
+    addAttributeToStep(action, 'func', null, params)
 
-    const handleModalJoin = () => {
-      dtreeStore.openModalJoin()
-    }
+    dtreeStore.resetSelectedFilters()
+    dtreeStore.closeModalSelectCompoundHet()
+  }
 
-    const handleAddAttribute = (action: ActionType) => {
-      dtreeStore.addSelectedFilter(variants[0][0])
+  return (
+    <ModalBase refer={ref} minHeight={250}>
+      <HeaderModal
+        groupName={dtreeStore.groupNameToChange}
+        handleClose={handleClose}
+      />
 
-      const params: IParams = { approx: approxCondition }
-
-      if (stateCondition) {
-        params.state =
-          JSON.stringify(stateOptions) === JSON.stringify(['-current-'])
-            ? null
-            : stateOptions
-      }
-
-      addAttributeToStep(action, 'func', null, params)
-
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.closeModalSelectCompoundHet()
-    }
-
-    return (
-      <ModalBase refer={ref} minHeight={250}>
-        <HeaderModal
-          groupName={dtreeStore.groupNameToChange}
-          handleClose={handleClose}
+      <div className="flex justify-between w-full mt-4 text-14">
+        <ApproxStateModalMods
+          approxOptions={approxOptions}
+          approxValues={approxValues}
+          approxCondition={approxCondition}
+          stateOptions={stateOptions}
+          stateCondition={stateCondition}
+          handleSetCondition={handleSetCondition}
         />
 
-        <div className="flex justify-between w-full mt-4 text-14">
-          <ApproxStateModalMods
-            approxOptions={approxOptions}
-            approxValues={approxValues}
-            approxCondition={approxCondition}
-            stateOptions={stateOptions}
-            stateCondition={stateCondition}
-            handleSetCondition={handleSetCondition}
-          />
+        <AllNotModalMods />
+      </div>
 
-          <AllNotModalMods />
-        </div>
+      <DisabledVariantsAmount variants={variants} disabled={true} />
 
-        <DisabledVariantsAmount variants={variants} disabled={true} />
-
-        <SelectModalButtons
-          handleClose={handleClose}
-          handleModals={handleModals}
-          handleModalJoin={handleModalJoin}
-          disabled={!variants}
-          currentGroup={currentGroup}
-          handleAddAttribute={handleAddAttribute}
-        />
-      </ModalBase>
-    )
-  },
-)
+      <SelectModalButtons
+        handleClose={handleClose}
+        handleModals={handleModals}
+        handleModalJoin={handleModalJoin}
+        disabled={!variants}
+        currentGroup={currentGroup}
+        handleAddAttribute={handleAddAttribute}
+      />
+    </ModalBase>
+  )
+})

@@ -6,30 +6,28 @@ import useWindowDimensions from '@core/hooks/use-window-dimensions'
 import dirinfoStore from '@store/dirinfo'
 import { DatasetsListItem } from './datasets-list-item'
 
-export const DatasetsList = observer(
-  (): ReactElement => {
-    const { height } = useWindowDimensions()
+export const DatasetsList = observer((): ReactElement => {
+  const { height } = useWindowDimensions()
 
-    const newRef = useRef<any>(null)
+  const newRef = useRef<any>(null)
 
-    const offsetTop = newRef?.current?.offsetTop || 0
+  const offsetTop = newRef?.current?.offsetTop || 0
 
-    return (
-      <div
-        ref={newRef}
-        style={{ height: height - offsetTop }}
-        className="overflow-y-auto overflow-x-hidden"
-      >
-        {dirinfoStore.dsDistKeys.map(key => {
-          const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
+  return (
+    <div
+      ref={newRef}
+      style={{ height: height - offsetTop }}
+      className="overflow-y-auto overflow-x-hidden"
+    >
+      {dirinfoStore.dsDistKeys.map(key => {
+        const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
 
-          if (!item || item.ancestors.length > 0) {
-            return
-          }
+        if (!item || item.ancestors.length > 0) {
+          return
+        }
 
-          return <DatasetsListItem item={item} key={item.name} />
-        })}
-      </div>
-    )
-  },
-)
+        return <DatasetsListItem item={item} key={item.name} />
+      })}
+    </div>
+  )
+})

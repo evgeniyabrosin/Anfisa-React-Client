@@ -79,7 +79,6 @@ describe('Regression test of the decision tree', () => {
     )
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should save dataset and open it in main table | step 23', () => {
     decisionTreesPage.visit(`filter?ds=${datasetName}`)
     // decisionTreesPage.decisionTreeResults.addAttribute.click()
@@ -123,7 +122,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should apply decision tree preset | step 25', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
@@ -132,7 +131,7 @@ describe('Regression test of the decision tree', () => {
   })
 
   it('should show changes made in decision tree | step 26', () => {
-    datasetPage.visit(`/filter?ds=${datasetName}`)
+    datasetPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)

@@ -14,7 +14,7 @@ import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-m
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
 import { editStepAttribute } from '@utils/editStepAttribute'
-import { getExpression } from '@utils/getExpression'
+import { getNumericExpression } from '@utils/getNumericExpression'
 import { makeStepActive } from '@utils/makeStepActive'
 import { DropDownJoin } from './dropdown-join'
 
@@ -142,7 +142,7 @@ export const NextStepContentItem = observer(
 
             {isNegateStep && (
               <NegateWrapper className="flex items-center justify-center">
-                NOT
+                {'NOT'}
               </NegateWrapper>
             )}
 
@@ -173,13 +173,13 @@ export const NextStepContentItem = observer(
           <div className="flex flex-row step-content-area">
             {isNegateAttribute && (
               <NegateWrapper className="flex items-center justify-center">
-                NOT
+                {'NOT'}
               </NegateWrapper>
             )}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
               {group[0] === StepTypeEnum.Numeric &&
-                getExpression(
+                getNumericExpression(
                   group.find((elem: any) => Array.isArray(elem)),
                   group[1],
                 )}

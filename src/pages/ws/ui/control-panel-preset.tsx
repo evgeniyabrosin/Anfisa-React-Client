@@ -11,52 +11,50 @@ import { DropDown } from '@ui/dropdown'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelTitle } from './control-panel-title'
 
-export const Preset = observer(
-  (): ReactElement => {
-    const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
-      (preset: FilterList) => preset.name,
-    )
+export const Preset = observer((): ReactElement => {
+  const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
+    (preset: FilterList) => preset.name,
+  )
 
-    const onSelectAsync = async (arg: Option, reset?: string) => {
-      datasetStore.setActivePreset(arg.value)
+  const onSelectAsync = async (arg: Option, reset?: string) => {
+    datasetStore.setActivePreset(arg.value)
 
-      if (datasetStore.prevPreset !== datasetStore.activePreset) {
-        filterPresetStore.loadPresetAsync(arg.value, 'ws')
+    if (datasetStore.prevPreset !== datasetStore.activePreset) {
+      filterPresetStore.loadPresetAsync(arg.value, 'ws')
 
-        datasetStore.fetchWsListAsync(false, 'reset')
-        datasetStore.setIsLoadingTabReport(true)
+      datasetStore.fetchWsListAsync(false, 'reset')
+      datasetStore.setIsLoadingTabReport(true)
 
-        reset && datasetStore.resetActivePreset()
-        reset && datasetStore.resetHasPreset()
-      }
+      reset && datasetStore.resetActivePreset()
+      reset && datasetStore.resetHasPreset()
     }
+  }
 
-    return (
-      <div>
-        <div className="flex items-center justify-between">
-          <ControlPanelTitle title={t('ds.preset')} />
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <ControlPanelTitle title={t('ds.preset')} />
 
-          {datasetStore.activePreset && (
-            <span
-              onClick={() =>
-                onSelectAsync({ value: '', label: '' } as Option, 'reset')
-              }
-              className="text-14 text-blue-bright cursor-pointer"
-            >
-              {t('general.clear')}
-            </span>
-          )}
-        </div>
-
-        <div data-testid={MainTableDataCy.selectPreset}>
-          <DropDown
-            options={presets}
-            value={datasetStore.activePreset}
-            onSelect={onSelectAsync}
-            placeholder={t('general.selectAnOption')}
-          />
-        </div>
+        {datasetStore.activePreset && (
+          <span
+            onClick={() =>
+              onSelectAsync({ value: '', label: '' } as Option, 'reset')
+            }
+            className="text-14 text-blue-bright cursor-pointer"
+          >
+            {t('general.clear')}
+          </span>
+        )}
       </div>
-    )
-  },
-)
+
+      <div data-testid={MainTableDataCy.selectPreset}>
+        <DropDown
+          options={presets}
+          value={datasetStore.activePreset}
+          onSelect={onSelectAsync}
+          placeholder={t('general.selectAnOption')}
+        />
+      </div>
+    </div>
+  )
+})

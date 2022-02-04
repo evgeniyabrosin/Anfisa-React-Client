@@ -21,55 +21,53 @@ const getItemStyle = (draggableStyle: any) => ({
 
 const columnListStore = new ColumnListStore()
 
-export const ColumnsList = observer(
-  (): ReactElement => {
-    const onDragEnd = (result: DropResult) => {
-      columnListStore.reorderColumns(
-        result.source.index,
-        result.destination?.index,
-      )
-    }
-
-    const { columnsToDisplay, toggleColumnHidden } = columnListStore
-
-    return (
-      <div className="mt-3 w-64 pr-4">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {provided => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {columnsToDisplay.map((column, index) => (
-                  <Draggable
-                    key={column.title}
-                    draggableId={column.title}
-                    index={index}
-                    isDragDisabled={!!columnsStore.searchColumnValue}
-                  >
-                    {providedDraggable => (
-                      <div
-                        ref={providedDraggable.innerRef}
-                        {...providedDraggable.draggableProps}
-                        {...providedDraggable.dragHandleProps}
-                        style={getItemStyle(
-                          providedDraggable.draggableProps.style,
-                        )}
-                        data-testid={MainTableDataCy.customizeTableList}
-                      >
-                        <ColumnNameItem
-                          name={column.title}
-                          isChecked={!column.hidden}
-                          onClickSwitch={() => toggleColumnHidden(column.title)}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+export const ColumnsList = observer((): ReactElement => {
+  const onDragEnd = (result: DropResult) => {
+    columnListStore.reorderColumns(
+      result.source.index,
+      result.destination?.index,
     )
-  },
-)
+  }
+
+  const { columnsToDisplay, toggleColumnHidden } = columnListStore
+
+  return (
+    <div className="mt-3 w-64 pr-4">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {provided => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {columnsToDisplay.map((column, index) => (
+                <Draggable
+                  key={column.title}
+                  draggableId={column.title}
+                  index={index}
+                  isDragDisabled={!!columnsStore.searchColumnValue}
+                >
+                  {providedDraggable => (
+                    <div
+                      ref={providedDraggable.innerRef}
+                      {...providedDraggable.draggableProps}
+                      {...providedDraggable.dragHandleProps}
+                      style={getItemStyle(
+                        providedDraggable.draggableProps.style,
+                      )}
+                      data-testid={MainTableDataCy.customizeTableList}
+                    >
+                      <ColumnNameItem
+                        name={column.title}
+                        isChecked={!column.hidden}
+                        onClickSwitch={() => toggleColumnHidden(column.title)}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </div>
+  )
+})

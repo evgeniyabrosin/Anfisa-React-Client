@@ -168,7 +168,7 @@ export const NextStepRoute = observer(
                       data-testid={DecisionTreesResultsDataCy.excludeInfo}
                     >
                       <span>
-                        {isIncluded ? `+` : `-`}
+                        {isIncluded ? '+' : '-'}
                         {isDifferenceActive ? (
                           <DifferenceCounts isIncluded={isIncluded}>
                             {differenceWithCommas}

@@ -6,7 +6,7 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Input } from '@ui//input'
-import { validateLocusCondition } from '@utils/validateLocusCondition'
+import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { DisabledVariantsAmount } from './query-builder/ui/disabled-variants-amount'
 
 export interface IGeneRegionFormValues {
@@ -62,7 +62,7 @@ export const GeneRegion = observer(
       <Form>
         <div className="mt-4">
           <span className="text-14 leading-16px text-grey-blue font-bold">
-            Locus
+            {'Locus'}
           </span>
 
           <div className="relative flex">

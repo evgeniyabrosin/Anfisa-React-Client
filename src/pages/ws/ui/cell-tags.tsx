@@ -10,7 +10,7 @@ export const CellTags = ({ cell }: CellI): ReactElement => {
     []
 
   if (tags.length === 0) {
-    return <div>-</div>
+    return <div>{'-'}</div>
   }
 
   return (

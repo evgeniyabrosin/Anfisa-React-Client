@@ -5,7 +5,7 @@ name: add-githubactions-test CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
     tags: [ stage ]
 
 jobs:

@@ -125,7 +125,7 @@ class DecisionTreesPage extends BasePage {
     })
   }
   searchForCallers(datasetName: string): void {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
   }

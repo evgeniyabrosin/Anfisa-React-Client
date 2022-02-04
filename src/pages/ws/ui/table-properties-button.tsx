@@ -23,7 +23,7 @@ export const TableProperiesButton = ({
     refEl={refEl}
     onClick={onClick}
     text={t('ds.customizeTable')}
-    variant={'secondary-dark'}
+    variant="secondary-dark"
     prepend={<Icon name="Settings" />}
     append={
       <Icon

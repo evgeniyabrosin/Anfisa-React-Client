@@ -71,7 +71,7 @@ export const CompundHet = ({
     <Form>
       <div className="text-red-secondary">{statFuncStatus?.err}</div>
       <div className="flex items-center mt-4">
-        <span className="mr-2 text-18 leading-14px">Approx:</span>
+        <span className="mr-2 text-18 leading-14px">{'Approx:'}</span>
 
         <DropDown
           value={initialApprox}

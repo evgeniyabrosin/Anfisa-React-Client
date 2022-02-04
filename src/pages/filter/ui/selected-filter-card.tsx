@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { Icon } from '@ui/icon'
+import { getNumericExpression } from '@utils/getNumericExpression'
 import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 
 interface Props {
@@ -16,10 +17,19 @@ interface Props {
 export const SelectedFilterCard = observer(
   ({ title, filters, onRemove }: Props): ReactElement => {
     const [isOpen, open, close] = useToggle(true)
-    const filterKeys = Object.keys(filters)
+    const filtersEntries = Object.entries(filters)
 
-    if (filterKeys.length === 0) {
+    if (filtersEntries.length === 0) {
       return <Fragment />
+    }
+
+    const getSelectedFilter = (
+      filterName: string,
+      filterExp: number | any[],
+    ) => {
+      return typeof filterExp === 'number'
+        ? filterName
+        : getNumericExpression(filterExp, filterName)
     }
 
     return (
@@ -41,14 +51,15 @@ export const SelectedFilterCard = observer(
 
         {isOpen && (
           <div>
-            {filterKeys.map(filterKey => (
-              <div key={filterKey} className="flex items-center pl-6 py-4">
-                <Checkbox checked onChange={() => onRemove(filterKey)} />
-                <span
-                  className="text-14 leading-16px font-bold ml-2"
+            {filtersEntries.map(([filterName, filterExpression]) => (
+              <div
+                key={filterName + filterExpression}
+                className="flex items-center pl-6 py-4"
+              >
+                <Checkbox checked onChange={() => onRemove(filterName)} />
+                <span className="text-14 leading-16px font-bold ml-2">
+                  {getSelectedFilter(filterName, filterExpression)}
                   data-testid={FilterRefinerDataCy.resultsListElement}
-                >
-                  {filterKey}
                 </span>
               </div>
             ))}

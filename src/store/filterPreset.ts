@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
+import filterStore from '@store/filter'
 import datasetStore from './dataset'
 
 class PresetStore {
@@ -14,7 +15,7 @@ class PresetStore {
       filter,
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -23,6 +24,8 @@ class PresetStore {
     })
 
     const result = await response.json()
+
+    filterStore.resetFilterCondition()
 
     runInAction(() => {
       datasetStore.updatePresetLoad(result, source)
@@ -37,7 +40,7 @@ class PresetStore {
       instr: JSON.stringify(['DELETE', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -57,7 +60,7 @@ class PresetStore {
       instr: JSON.stringify(['JOIN', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -77,7 +80,7 @@ class PresetStore {
       instr: JSON.stringify(['UPDATE', presetName]),
     })
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
+    const response = await fetch(getApiUrl('ds_stat'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

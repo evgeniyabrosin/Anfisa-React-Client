@@ -16,4 +16,5 @@ export const CommonSelectors = {
   dataCharts: 'canvas',
   anyChangeAlert: '[role="alert"]',
   redMessage: '.text-red-secondary',
+  preloader: '.loader.text-blue-bright',
 }

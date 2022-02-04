@@ -22,8 +22,8 @@ export class UIElement {
     return this.getElement().contains(text)
   }
 
-  click() {
-    this.getElement().click()
+  click(timeout?: number) {
+    this.getElement().click({ timeout })
   }
 
   forceClick() {
