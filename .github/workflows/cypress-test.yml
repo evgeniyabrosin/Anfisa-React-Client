@@ -1,12 +1,11 @@
 name: Cypress test
 on:
-  workflow_dispatch:
-  #schedule:
-    #- cron:  '27 * * * *'
+  push:
+    branches:
+    - FOROME-533
 jobs:
   cypress-run:
     runs-on: ubuntu-20.04
-    # container: cypress/browsers:node16.13.0-chrome95-ff94
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +19,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        # ref: main
         ref: FOROME-533
 
     - name: Setup Node ${{ matrix.node }}
