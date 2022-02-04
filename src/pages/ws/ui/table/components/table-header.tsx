@@ -1,7 +1,7 @@
 import React from 'react'
 import { HeaderGroup } from 'react-table'
 
-import { DEFAULT_HEADER_HEIGHT } from '../table'
+import { DEFAULT_HEADER_HEIGHT } from '../constants'
 
 export interface ITableHeaderProps {
   headerGroups: HeaderGroup[]

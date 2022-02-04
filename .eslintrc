@@ -63,6 +63,7 @@
         "react/prop-types": "off",
         "jsx-a11y/iframe-has-title": "off",
         "no-console": ["warn", {"allow": ["error"]}],
+        "@typescript-eslint/no-unused-vars": ["warn"],
         "prettier/prettier": [
           "error",
           {

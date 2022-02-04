@@ -1,13 +1,18 @@
+import { CellMeasurerCache } from 'react-virtualized'
 import { makeAutoObservable, toJS } from 'mobx'
 
+import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import zoneStore from '@store/filterZone'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
+import { RowHeight } from './constants'
 
 class TableStore {
   public rowToScroll = 0
+  public cache!: CellMeasurerCache
+  public measureFuncMap = new Map<number, Function | null>()
 
   public get isFiltered() {
     return toJS(datasetStore.filteredNo).length > 0
@@ -17,8 +22,19 @@ class TableStore {
     return variantStore.drawerVisible
   }
 
+  public get isCompactView() {
+    return columnsStore.viewType === ViewTypeEnum.Compact
+  }
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public createCache() {
+    this.cache = new CellMeasurerCache({
+      minHeight: RowHeight[columnsStore.viewType],
+      defaultHeight: RowHeight[columnsStore.viewType],
+    })
   }
 
   public setRowToScroll(index: number) {
@@ -53,11 +69,7 @@ class TableStore {
 
     if (isNeedToLoadMore) {
       await datasetStore.fetchFilteredTabReportAsync()
-
-      return
-    }
-
-    if (!datasetStore.reportsLoaded) {
+    } else if (datasetVariantsAmount === 0 && !datasetStore.reportsLoaded) {
       await datasetStore.fetchTabReportAsync()
     }
   }
@@ -67,6 +79,12 @@ class TableStore {
     zoneStore.resetAllSelectedItems()
     datasetStore.clearZone()
     datasetStore.initDatasetAsync()
+  }
+
+  public clearStore() {
+    this.measureFuncMap.clear()
+    this.cache.clearAll()
+    this.rowToScroll = 0
   }
 }
 

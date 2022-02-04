@@ -1,11 +1,7 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { Row } from 'react-table'
-import {
-  CellMeasurer,
-  CellMeasurerCache,
-  ListRowProps,
-} from 'react-virtualized'
+import { CellMeasurer, ListRowProps } from 'react-virtualized'
 import cn from 'classnames'
 import { toJS } from 'mobx'
 
@@ -15,10 +11,10 @@ import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Loader } from '@components/loader'
+import tableStore from '../table.store'
 
 export interface ITableRowProps extends Omit<ListRowProps, 'key'> {
   isLoading: boolean
-  cache: CellMeasurerCache
   row: Row
   rowKey: string
   onClickRow: (index: number) => void
@@ -39,27 +35,48 @@ const stopPropagation = (event: any) => {
 
 export const TableRow = ({
   isLoading,
-  cache,
   row,
   rowKey,
   parent,
   index,
   style,
   onClickRow,
-  isVisible,
 }: React.PropsWithChildren<ITableRowProps>) => {
+  useLayoutEffect(() => {
+    // dirty hack for rows to be re-measured after full content load
+    setTimeout(() => {
+      try {
+        tableStore.measureFuncMap.get(index)?.()
+      } catch (_e) {
+        null
+      } finally {
+        tableStore.measureFuncMap.set(index, null)
+      }
+    }, 300)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <CellMeasurer
-      cache={cache}
+      cache={tableStore.cache}
       columnIndex={0}
       key={rowKey}
       overscanRowCount={10}
       parent={parent}
       rowIndex={index}
     >
-      {({ registerChild }) => {
+      {({ registerChild, measure }) => {
+        if (
+          !tableStore.measureFuncMap.has(index) &&
+          index < datasetStore.variantsAmount - 10
+        ) {
+          tableStore.measureFuncMap.set(index, measure)
+        }
         return (
           <div
+            {...row.getRowProps({
+              style,
+            })}
             onClick={() => onClickRow(index)}
             key={rowKey}
             ref={registerChild}
