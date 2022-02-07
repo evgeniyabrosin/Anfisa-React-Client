@@ -1,34 +1,34 @@
 Feature: Use Case 1 S1
-    As a Anfisa user I want to filter the "xl_PGP3140_wgs_NIST-4_2" dataset and create a derived dataset having 41 varinats
+    As a Anfisa user I want to filter the "xl_PGP3140_wgs_NIST-4_2" dataset to create a derived dataset having 41 varinats
 
     Scenario: Open the Dataset info
         Given the "Dataset list" was opened
-        When the user clicks the "xl_PGP3140_wgs_NIST-4_2" XL dataset at the left part of the page
-        Then the information of the XL-dataset (the "Dataset info" page) should be opened at the right part of the page
+        When the user clicks the "xl_PGP3140_wgs_NIST-4_2" XL dataset in the left part of the page
+        Then the information of the XL-dataset (the "Dataset info" page) should be opened 
 
     Scenario: Open the Decision Tree Panel
         Given the "xl_PGP3140_wgs_NIST-4_2" XL dataset info was opened
-        When the user clicks the "Open in viewer" dropdown menu at the middle part of the page
+        When the user clicks the "Open in viewer" dropdown menu in the middle part of the page
         And clicks "Decision Tree Panel" in the dropdown menu
         Then the Decision Tree Panel should be opened
-        And the total number of variants in the dataset shown at the top right corner as well as in the "Results" section should equal 5,628,753
-        And the value format is "5,628,753" (not "5628753")
+        And the total number of variants in the dataset shown in the top right corner as well as in the "Results" section should equal 5,628,753
+        And the value format should be "5,628,753" (not "5628753")
         And the number of accepted variants should be 41
 
     Scenario: Load the "Hearing Loss, v.5" decision tree
         Given the "xl_PGP3140_wgs_NIST-4_2" XL dataset was opened in the Decision Tree Panel
-        When the user clicks an arrow in the "Decision Trees" section at the top right part of the page
+        When the user clicks an arrow in the "Decision Trees" section in the top right part of the page
         And chooses the "Hearing Loss, v.5" decision tree in the dropdown menu
         Then the "Hearing Loss, v.5" decision tree should be loaded
 
     Scenario: Study step 5 of the decision tree
         Given the "xl_PGP3140_wgs_NIST-4_2" XL dataset was opened in the Decision Tree Panel
         And the "Hearing Loss, v.5" decision tree was loaded
-        When the user scrolls down the decision tree at the right part of the page
+        When the user scrolls down the decision tree in the right part of the page
         And finds "Step 5 (Num_Samples < 1)"
         And clicks at excluded variants ("-3" purple value)
         And clicks the expand button in the Filtering panel (left panel with graphs)
-        Then graphs referred to 3 excluded variants should appear at the left part of the page
+        Then graphs referred to 3 excluded variants should appear in the left part of the page
 
     Background:
         Given the "xl_PGP3140_wgs_NIST-4_2" XL dataset was opened in the Decision Tree Panel
@@ -95,9 +95,14 @@ Feature: Use Case 1 S1
         Given the "View returned variants" popup menu was opened
         When the user closes the the "View returned variants" popup menu
         And clicks the "Save dataset" button
-        And typed the <dataset name> in the textbox
+        And typed the <Dataset name> in the textbox
         And clicks the "Add dataset" button
         And clicks the "Open it" textbutton
         Then the Main table filled with new dataset variants should be seen
         And the number of variants there should be 41
+    
+      Example: 
+          | <Dataset name>  |
+          | Hearing_loss_v5 | 
+
 
