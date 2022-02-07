@@ -1,6 +1,5 @@
-Feature: Filter Refiner, Filter by list-value attribute (checkboxes)
-	As a user, I want to work with list-value attributes, filter by their values, search by their values, and look at the value through pages.
-	We assume, that all attributes with checkboxes have the same behavior.
+Feature: Filter Refiner, Presets
+	As a user, I want to apply predefined presets to filter variants
 
 
 	Scenario: Open the Filter Refiner page for the secondary dataset

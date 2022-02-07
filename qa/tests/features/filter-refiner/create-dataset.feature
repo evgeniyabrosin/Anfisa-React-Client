@@ -1,17 +1,17 @@
-Feature: Decision Tree Panel, Create dataset
-  As the Anfisa user I want to create new datasets on the "Decision Tree Panel" page
+Feature: Filter Refiner, Create dataset
+  As the Anfisa user I want to create new datasets on the "Filter Refiner" page
  
 	Scenario: Create dataset: empty name
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
-		And doesn't enter a name for the dataset
+		And the user doesn't enter a name for the dataset
 		Then the "Add dataset" button should be disabled
 		
 	Scenario: Create dataset: duplicated name
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
 		And the user enters name for the dataset that already exists
@@ -20,17 +20,17 @@ Feature: Decision Tree Panel, Create dataset
 		And the validation message should be displayed
 		
 	Scenario: Create dataset: long name
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
-		And enters name for a dataset with more than 255 characters.
+		And the user enters name for a dataset with more than 255 characters.
 		Then the "Add dataset" button should be disabled
 		And the validation message should be displayed
 		
 	Scenario: Create dataset: start with numeric
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
 		And the user enters name for a dataset with name "1anfisa"
@@ -38,42 +38,41 @@ Feature: Decision Tree Panel, Create dataset
 		And the validation message should be displayed
 	
 	Scenario: Create dataset: start with special character
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
-		And the user enters name for a dataset with name "!anfisa"
+		And enters name for a dataset with name "!anfisa"
 		Then the "Add dataset" button should be disabled
 		And the validation message should be displayed
 		
 	Scenario: Create dataset: name with spaces
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded	
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
-		And the user enters name for a dataset with name "an fisa"
+		And enters name for a dataset with name "an fisa"
 		Then the "Add dataset" button should be disabled
 		And the validation message should be displayed
 
 	Scenario Outline: Create dataset: too many variants
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		When the user clicks "Add attribute" on the first step
-		And clicks the "Add Attribute" button
-		And clicks <Attribute Name>
-		And clicks <Attribute Value>
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		When the user clicks the <Attribute Name>
+		And clicks the <Attribute Value>
+		And clicks the "Add" button to apply the filter
 		And clicks "Save dataset"
 		And the "Add new dataset" dialog is displayed
-		And the user enters <Dataset name> for the dataset
+		And enters <Dataset name> for the dataset
 		And clicks the "Add dataset" button
 		Then the "Add dataset" button should be disabled
 		And the validation message should be displayed
 		
 		Examples:
-		| <Attribute Name> | <Attribute Value> | <Dataset name> |
-		| Callers          | BGM_AUTO_DOM      | anfisa         |
+		| <Attribute Name> | <Attribute Value>            | <Dataset name> |
+		| Callers          | INHERITED_FROM: Both parents | anfisa         |
 
 	Scenario: Cancel dataset creation
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
 		And the "⏚Hearing Loss, v.5" decision tree was loaded
 		When the user clicks the "Save dataset" button
 		And the "Add new dataset" dialog is displayed
@@ -82,9 +81,9 @@ Feature: Decision Tree Panel, Create dataset
 		Then dataset creation should be canceled
 		
 	Scenario: Close Create Dataset dialog before creation
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
-		When the user clicks "Save dataset"
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
+		When the user clicks the "Save dataset" button
 		And enters name for the dataset
 		And clicks "Add dataset"
 		And the "Add new dataset" dialog is displayed
@@ -92,8 +91,8 @@ Feature: Decision Tree Panel, Create dataset
 		Then creation process should not be canceled
 		
 	Scenario: Close Create Dataset dialog during creation
-		Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
-		And the "⏚Hearing Loss, v.5" decision tree was loaded
+		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
+		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And enters name for the dataset
 		And clicks "Add dataset"
