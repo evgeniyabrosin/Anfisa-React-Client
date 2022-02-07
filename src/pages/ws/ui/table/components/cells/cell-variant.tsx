@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import variantStore from '@store/variant'
 import { CopyToClipboard } from '@components/copy-to-clipboard'
+import { isRowSelected } from '../table-row'
 import { CellI } from './cell-interfaces'
-import { isRowSelected } from './table/components/table-row'
 
 export const CellVariant = observer(({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value', '').split(' ')

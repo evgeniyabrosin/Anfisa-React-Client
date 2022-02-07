@@ -1,16 +1,14 @@
 import { ReactElement, useCallback, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useBlockLayout, useTable } from 'react-table'
+import { useFlexLayout, useTable } from 'react-table'
 import { InfiniteLoader, List, ListRowProps } from 'react-virtualized'
 import Autosizer from 'react-virtualized-auto-sizer'
-import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
-import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
 import { renderNoResults } from './components/render-no-results'
@@ -24,14 +22,6 @@ interface ITableProps {
   data: any[]
 }
 
-const defaultColumn = {
-  width: variantStore.drawerVisible
-    ? 190
-    : (window.innerWidth ||
-        document.documentElement.clientWidth ||
-        document.body.clientWidth) / 8,
-}
-
 export const Table = observer(
   ({ columns, data }: ITableProps): ReactElement => {
     const params = useParams()
@@ -40,6 +30,10 @@ export const Table = observer(
     const alreadyOpened = !!params.get('variant')
     const datasetName = params.get('ds') ?? ''
     let listRef: List | null = null
+
+    const defaultColumn = {
+      minWidth: 120,
+    }
 
     const routeToVariant = useCallback(
       (variant: number) => {
@@ -51,14 +45,15 @@ export const Table = observer(
       [alreadyOpened, history, location.search],
     )
 
-    const { headerGroups, rows, prepareRow, totalColumnsWidth } = useTable(
-      {
-        columns,
-        data,
-        defaultColumn,
-      },
-      useBlockLayout,
-    )
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+      useTable(
+        {
+          columns,
+          data,
+          defaultColumn,
+        },
+        useFlexLayout,
+      )
 
     const handleOpenVariant = useCallback(
       (index: number) => {
@@ -76,22 +71,7 @@ export const Table = observer(
           tableStore.isFiltered ? 0 : Number(params.get('variant')),
         )
 
-      const handleResize = debounce(() => {
-        listRef?.forceUpdate()
-        tableStore.cache.clearAll()
-        datasetStore.setIsLoadingTabReport(true)
-
-        setTimeout(() => {
-          datasetStore.setIsLoadingTabReport(false)
-        }, 500)
-      }, 500)
-
-      window.addEventListener('resize', handleResize)
-
-      return () => {
-        window.removeEventListener('resize', handleResize)
-        tableStore.clearStore()
-      }
+      return () => tableStore.clearStore()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -125,7 +105,7 @@ export const Table = observer(
     )
 
     return (
-      <div style={{ width: totalColumnsWidth }} className="table h-full">
+      <div {...getTableProps()} className="table h-full w-full">
         <TableHeader headerGroups={headerGroups} />
 
         {renderNoResults(tableStore.resetFilters)}
@@ -133,7 +113,7 @@ export const Table = observer(
         {toJS(datasetStore.tabReport).length > 0 && (
           <Autosizer>
             {({ height, width: autosizerWidth }) => (
-              <div className="text-12 tbody">
+              <div {...getTableBodyProps()} className="text-12 tbody">
                 <InfiniteLoader
                   isRowLoaded={({ index }) => index !== rows.length}
                   rowCount={rows.length + 1}

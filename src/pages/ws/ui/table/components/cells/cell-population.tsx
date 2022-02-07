@@ -1,8 +1,8 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
+import { GnomadItem } from '@pages/ws/ui/gnomad-item'
 import { CellI, PredicationI } from './cell-interfaces'
-import { GnomadItem } from './gnomad-item'
 
 export const CellPopulation = ({ cell }: CellI): ReactElement => {
   const gnomads = get(cell, 'value', []) as PredicationI[]

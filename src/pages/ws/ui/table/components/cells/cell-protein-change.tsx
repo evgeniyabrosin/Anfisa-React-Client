@@ -1,8 +1,8 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
+import { ProteinChangeItem } from '@pages/ws/ui/protein-change-item'
 import { CellI } from './cell-interfaces'
-import { ProteinChangeItem } from './protein-change-item'
 
 export const CellProteinChange = ({ cell }: CellI): ReactElement => {
   const proteinChanges = get(cell, 'value', []) as string[]

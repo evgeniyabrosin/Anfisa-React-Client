@@ -8,9 +8,9 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { geneColorMap } from '@core/gene-color-map'
 import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
+import { PlusIcon } from '@pages/ws/ui/plus-icon'
+import { RowHeight } from '../../constants'
 import { CellI } from './cell-interfaces'
-import { PlusIcon } from './plus-icon'
-import { RowHeight } from './table/constants'
 
 export const CellGene = observer(({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value[0]', []) as string[]
