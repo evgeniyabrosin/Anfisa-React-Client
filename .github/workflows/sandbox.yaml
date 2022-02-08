@@ -30,14 +30,14 @@ jobs:
     - run: |
             git config --global user.name 'evgeniy-chernomortsev'
             git config --global user.email 'evgeniy.chernomortsev@quantori.com'
-    - run: yarn install
-      env:
-          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
-          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
-    - run: yarn build
-      env:
-          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
-          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud" 
+#    - run: yarn install
+#      env:
+#          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
+#          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
+#    - run: yarn build
+#      env:
+#          REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
+#          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud" 
     
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
@@ -55,23 +55,22 @@ jobs:
     - name: commands via ssh
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: sudo mkdir /home/forome/anfisa_front/
+        command: sudo mkdir /home/forome/anfisa_front/$GITHUB_REF
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
       env:
         branch: $GITHUB_REF_NAME
     
-    - name: Deploy to Server
-      uses: easingthemes/ssh-deploy@v2.1.5
-      env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
-          SOURCE: "build/"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: /home/forome/anfisa_front/anfisa-feature
-#          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
-          EXCLUDE: "/node_modules/"
+#    - name: Deploy to Server
+#      uses: easingthemes/ssh-deploy@v2.1.5
+#      env:
+#          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
+#          SOURCE: "build/"
+#          REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
+#          REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
+#          TARGET: /home/forome/anfisa_front/anfisa-feature
+#          EXCLUDE: "/node_modules/"
     - name: Auth AWS
       if: always()
       uses: aws-actions/configure-aws-credentials@v1
