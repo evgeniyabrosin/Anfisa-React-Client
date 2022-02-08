@@ -13,24 +13,18 @@ export const TableHeader = ({
   return (
     <div style={{ height: `${DEFAULT_HEADER_HEIGHT}px` }} className="thead">
       {headerGroups.map((headerGroup, idx) => {
-        const stylesHead = {
-          ...headerGroup.getHeaderGroupProps().style,
-        }
-
-        stylesHead.width = Number.parseFloat(stylesHead.width as string) - 8
-
         return (
           <div
             {...headerGroup.getHeaderGroupProps()}
             key={idx}
             className="tr"
-            style={stylesHead}
+            // style={stylesHead}
           >
             {headerGroup.headers.map((column: any) => {
               return (
                 <div
                   {...column.getHeaderProps()}
-                  key={Math.random()}
+                  key={column.Header}
                   className="th"
                 >
                   {column.HeaderComponent

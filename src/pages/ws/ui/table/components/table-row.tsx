@@ -105,9 +105,6 @@ export const TableRow = ({
                       'py-4':
                         cell.column.Header !== tableColumnMap.samples &&
                         columnsStore.viewType !== ViewTypeEnum.Compact,
-                      'h-full':
-                        cell.column.Header === tableColumnMap.samples &&
-                        columnsStore.viewType !== ViewTypeEnum.Compact,
                       'px-4': cell.column.Header !== tableColumnMap.samples,
                     })}
                   >
