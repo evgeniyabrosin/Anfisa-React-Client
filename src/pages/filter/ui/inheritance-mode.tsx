@@ -29,8 +29,8 @@ export const InheritanceMode = observer(
     const [problemGroups, setProblemGroups] = useState<string[]>([])
 
     const [problemGroupValues, variantsValues] = [
-      cachedValues?.problemGroups || values.problemGroups,
-      cachedValues?.variants || values.variants,
+      cachedValues?.problemGroups || [],
+      cachedValues?.variants || [],
     ]
 
     const fetchStatFuncAsync = async (
