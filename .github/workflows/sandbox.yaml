@@ -55,12 +55,13 @@ jobs:
     - name: commands via ssh
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: export branch=${{ env.GITHUB_REF_NAME }} && sudo mkdir /home/forome/anfisa_front/'$branch'   
+        command: export branch=${{ env.GITHUB_REF_NAME }} && sudo mkdir /home/forome/anfisa_front/'$branch'
+#        command: export branch="${branch##*/}" }} && sudo mkdir /home/forome/anfisa_front/'$branch'  
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
 #      env:
-#        branch: ${{ env.GITHUB_REF_NAME }}
+#        branch: ${{ github.ref }}
     
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
