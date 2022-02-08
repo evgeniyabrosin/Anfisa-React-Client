@@ -1,6 +1,6 @@
 import { ReactElement, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
-import cn, { Argument } from 'classnames'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
@@ -18,7 +18,6 @@ import { GlbPagesNames } from '@glb/glb-names'
 interface PropsButton {
   isOpen?: boolean
   refEl: any
-  className?: Argument
   onClick?: () => void
 }
 
@@ -26,12 +25,7 @@ interface PropsPanel {
   close: () => void
 }
 
-const ButtonBase = ({
-  isOpen,
-  refEl,
-  className,
-  ...rest
-}: PropsButton): ReactElement => (
+const ButtonBase = ({ isOpen, refEl, ...rest }: PropsButton): ReactElement => (
   <Button
     text={t('home.openInViewer')}
     dataTestId={DatasetInfoDataCy.openInViewer}
