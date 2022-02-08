@@ -75,7 +75,7 @@ jobs:
         username: ${{ secrets.REMOTE_USER_DEV }}
         key: ${{ secrets.SERVER_SSH_KEY_DEV }}
         port: 22
-        envs: FOO,BAR,SHA
+        envs: FOO,BAR,SHA,AWS
         script: |
           echo "I am $FOO"
           echo "I am $BAR"
