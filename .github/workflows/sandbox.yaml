@@ -67,7 +67,7 @@ jobs:
           echo "I am $SHA"
           echo "I am $BRANCH"
           mkdir /home/forome/anfisa_front/$BRANCH
-          sudo cp /etc/nginx/conf.d/sandbox/FOROME502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
           sudo sed -i 's/FOROME-502/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
           sudo systemctl reload nginx
     
