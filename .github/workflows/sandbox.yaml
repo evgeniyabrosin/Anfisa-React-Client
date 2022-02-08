@@ -64,10 +64,6 @@ jobs:
 #      env:
 #        branch: ${GITHUB_REF#refs/heads/}
 
-- name: Extract branch name
-  shell: bash
-  run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  id: extract_branch
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
