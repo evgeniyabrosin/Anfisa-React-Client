@@ -1,4 +1,4 @@
-# his workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: add-githubactions-test CI
@@ -52,7 +52,6 @@ jobs:
             aws ec2 authorize-security-group-ingress \
             --group-id $GROUP \
             --ip-permissions IpProtocol=tcp,FromPort=22,ToPort=22,IpRanges='[{CidrIp='`curl https://ipinfo.io/ip`/32',Description="GitHub_runner"}]'
-
     - name: commands via ssh
       uses: appleboy/ssh-action@master
       env:
@@ -68,10 +67,9 @@ jobs:
           echo "I am $SHA"
           echo "I am $BRANCH"
           mkdir /home/forome/anfisa_front/$BRANCH
-          cp /etc/nginx/conf.d/sandbox/FOROME502.conf /etc/nginx/conf.d/sandbox/'$BRANCH'.conf
-          sed -i 's/FOROME-502/$BRANCH/g' /etc/nginx/conf.d/sandbox/'$BRANCH'.conf
-          sudo systemctl reload nginx
-
+          sudo cp /etc/nginx/conf.d/sandbox/FOROME-503.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo sed -i 's/FOROME-503/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo systemctl restart nginx
     
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
