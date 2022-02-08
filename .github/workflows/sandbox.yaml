@@ -67,14 +67,14 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         branch: ${{ github.ref }}
-    with:
-      host: ${{ secrets.REMOTE_HOST_DEV }}
-      username: ${{ secrets.REMOTE_USER_DEV }}
-      key: ${{ secrets.SERVER_SSH_KEY_DEV }}
-      envs: branch
-      script: |
-        echo "I am $branch"
-        sudo mkdir /home/forome/anfisa_front/$branch
+      with:
+        host: ${{ secrets.REMOTE_HOST_DEV }}
+        username: ${{ secrets.REMOTE_USER_DEV }}
+        key: ${{ secrets.SERVER_SSH_KEY_DEV }}
+        envs: branch
+        script: |
+          echo "branch= $branch"
+          sudo mkdir /home/forome/anfisa_front/$branch
        
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
