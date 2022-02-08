@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Option } from 'react-dropdown'
 import { Form, FormikProps } from 'formik'
 
@@ -6,6 +6,7 @@ import { IStatFuncData } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import filterStore from '@store/filter'
 import { DropDown } from '@ui/dropdown'
+import { PanelButtons } from './panelButtons'
 
 export interface ICompoundHetFormValues {
   variants: string[]
@@ -22,6 +23,8 @@ const options = [
 export const CompundHet = ({
   setFieldValue,
   values: { approx, variants },
+  submitForm,
+  resetForm,
 }: FormikProps<ICompoundHetFormValues>): ReactElement => {
   const cachedValues = filterStore.readFilterCondition<ICompoundHetFormValues>(
     FuncStepTypesEnum.CompoundHet,
@@ -67,27 +70,45 @@ export const CompundHet = ({
     await fetchStatFuncAsync({ approx: arg.value, state: '' })
   }
 
+  const handleResetFieldsAsync = async () => {
+    setFieldValue('approx', 'shared transcript')
+    filterStore.clearFilterCondition(FuncStepTypesEnum.CompoundHet)
+
+    await fetchStatFuncAsync({ approx: '' })
+  }
+
   return (
-    <Form>
-      <div className="text-red-secondary">{statFuncStatus?.err}</div>
-      <div className="flex items-center mt-4">
-        <span className="mr-2 text-18 leading-14px">{'Approx:'}</span>
+    <React.Fragment>
+      <Form>
+        <div className="text-red-secondary">{statFuncStatus?.err}</div>
+        <div className="flex items-center mt-4">
+          <span className="mr-2 text-18 leading-14px">Approx:</span>
 
-        <DropDown
-          value={initialApprox}
-          options={options}
-          onSelect={onChangeAsync}
-        />
-      </div>
+          <DropDown
+            value={initialApprox}
+            options={options}
+            onSelect={onChangeAsync}
+          />
+        </div>
 
-      <div className="mt-4">
-        {statFuncStatus?.variants?.map(variant => (
-          <div key={variant[0]} className="text-14 leading-14px">
-            <span>{variant[0]}</span>
-            <span className="text-grey-blue ml-1">{`(${variant[1]})`}</span>
-          </div>
-        ))}
-      </div>
-    </Form>
+        <div className="mt-4">
+          {statFuncStatus?.variants?.map(variant => (
+            <div key={variant[0]} className="text-14 leading-14px">
+              <span>{variant[0]}</span>
+              <span className="text-grey-blue ml-1">{`(${variant[1]})`}</span>
+            </div>
+          ))}
+        </div>
+      </Form>
+
+      <PanelButtons
+        selectedFilterName={filterStore.selectedGroupItem.name}
+        selectedFilterGroup={filterStore.selectedGroupItem.vgroup}
+        onSubmit={submitForm}
+        resetForm={resetForm}
+        resetFields={handleResetFieldsAsync}
+        disabled={!variants}
+      />
+    </React.Fragment>
   )
 }

@@ -1,13 +1,9 @@
 import { Fragment, FunctionComponent, ReactElement } from 'react'
-import { toast } from 'react-toastify'
 import { Formik } from 'formik'
-import { isArray } from 'lodash'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { Button } from '@ui/button'
 import { CompundHet } from './compound-het'
 import { CompoundRequest } from './compound-request'
 import { CustomInheritanceMode } from './custom-inheritance-mode'
@@ -54,29 +50,13 @@ export const FunctionPanel = (): ReactElement => {
     functionsMap[selectedFilter.name]
 
   const onSubmitAsync = async (values: any) => {
-    if (filterStore.error) return
-
-    if (isArray(values.variants) && values.variants.length === 0) {
-      toast.warning(t('filter.chooseProblemGroup'), {
-        position: 'bottom-right',
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
-
-      return
-    }
-
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
     if (selectedFilter.name === FuncStepTypesEnum.InheritanceMode) {
       const noArray = await datasetStore.setConditionsAsync([
         [
           'func',
-          selectedFilter.name,
+          FuncStepTypesEnum.InheritanceMode,
           '',
           values.variants,
           {
@@ -94,15 +74,15 @@ export const FunctionPanel = (): ReactElement => {
     }
 
     if (selectedFilter.name === FuncStepTypesEnum.CustomInheritanceMode) {
-      const condition = [
-        'func',
-        FuncStepTypesEnum.CustomInheritanceMode,
-        '',
-        values.variants,
-        { scenario: values.scenario },
-      ]
-
-      const noArray = await datasetStore.setConditionsAsync(condition)
+      const noArray = await datasetStore.setConditionsAsync([
+        [
+          'func',
+          FuncStepTypesEnum.CustomInheritanceMode,
+          'OR',
+          ['True'],
+          { scenario: values.scenario },
+        ],
+      ])
 
       filterStore.addSelectedFilterGroup(
         'Inheritance',
@@ -168,22 +148,6 @@ export const FunctionPanel = (): ReactElement => {
     }
   }
 
-  const handleClear = () => {
-    datasetStore.removeFunctionConditionAsync(selectedFilter.name)
-
-    filterStore.removeSelectedFilters({
-      group: selectedFilter.vgroup,
-      groupItemName: selectedFilter.name,
-      variant: [selectedFilter.name, 0],
-    })
-
-    filterStore.resetStatFuncData()
-
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
-  }
-
   if (!Component) {
     return <Fragment />
   }
@@ -197,28 +161,7 @@ export const FunctionPanel = (): ReactElement => {
         enableReinitialize
         onSubmit={onSubmitAsync}
       >
-        {props => (
-          <div>
-            <Component {...props} />
-
-            <div className="flex items-center justify-between mt-5">
-              <Button
-                text={t('general.clear')}
-                variant="secondary"
-                onClick={() => {
-                  handleClear()
-                  props.resetForm()
-                }}
-              />
-
-              <Button
-                text={t('general.add')}
-                onClick={props.submitForm}
-                disabled={!!filterStore.error}
-              />
-            </div>
-          </div>
-        )}
+        {props => <Component {...props} />}
       </Formik>
     </div>
   )

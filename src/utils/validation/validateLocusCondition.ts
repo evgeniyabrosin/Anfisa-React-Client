@@ -31,10 +31,8 @@ export const validateLocusCondition = ({
       value.slice(lastIndexOfName + 2) !== '')
   ) {
     setIsErrorVisible(true)
-    filterStore.setError('out of choice')
   } else {
     setIsErrorVisible(false)
-    filterStore.setError('')
 
     const params = `{"locus":"${value}"}`
 
