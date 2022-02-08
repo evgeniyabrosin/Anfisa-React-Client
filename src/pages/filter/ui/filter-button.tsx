@@ -8,12 +8,8 @@ import { Button, ButtonProps } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 
-type Props = ButtonProps & {
-  isOpen?: boolean
-}
-
 export const FilterButton = observer(
-  ({ isOpen, refEl, className, ...rest }: Props): ReactElement => (
+  ({ refEl, className, ...rest }: ButtonProps): ReactElement => (
     <Button
       text={filterStore.actionName || t('filter.actions')}
       refEl={refEl}
