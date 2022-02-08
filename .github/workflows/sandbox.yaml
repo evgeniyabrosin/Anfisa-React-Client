@@ -52,50 +52,24 @@ jobs:
             aws ec2 authorize-security-group-ingress \
             --group-id $GROUP \
             --ip-permissions IpProtocol=tcp,FromPort=22,ToPort=22,IpRanges='[{CidrIp='`curl https://ipinfo.io/ip`/32',Description="GitHub_runner"}]'
-#    - name: commands via ssh
-#      uses: garygrossgarten/github-action-ssh@release
-#      with:
-#        command: export branch=${{ env.GITHUB_REF_NAME }} && sudo mkdir /home/forome/anfisa_front/'$branch'
-#        command: export branch="${branch##*/}" }} && sudo mkdir /home/forome/anfisa_front/'$branch'  
-#        host: ${{ secrets.REMOTE_HOST_DEV }}
-#        username: ${{ secrets.REMOTE_USER_DEV }}
-#        privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
-#      env:
-#        branch: ${{ github.ref }}
 
-    - name: pass environment
+    - name: commands via ssh
       uses: appleboy/ssh-action@master
       env:
-        FOO: "BAR"
-        BAR: "FOO"
         SHA: ${{ github.sha }}
-        AWS: ${{ github.ref_name }}
+        BRANCH: ${{ github.ref_name }}
       with:
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         key: ${{ secrets.SERVER_SSH_KEY_DEV }}
         port: 22
-        envs: FOO,BAR,SHA,AWS
+        envs: SHA,BRANCH
         script: |
-          echo "I am $FOO"
-          echo "I am $BAR"
           echo "I am $SHA"
-          echo "I am $AWS"
+          echo "I am $BRANCH"
+          mkdir /home/forome/anfisa_front/$BRANCH
 
-
-#    - name: pass environment
-#      uses: appleboy/ssh-action@master
-#      env:
-#        branch: forome
-#      with:
-#        host: ${{ secrets.REMOTE_HOST_DEV }}
-#        username: ${{ secrets.REMOTE_USER_DEV }}
-#        key: ${{ secrets.SERVER_SSH_KEY_DEV }}
-#        envs: branch
-#        script: |
-#          echo $branch
-#          sudo mkdir -p /home/forome/anfisa_front/$branch
-       
+    
 #    - name: Deploy to Server
 #      uses: easingthemes/ssh-deploy@v2.1.5
 #      env:
