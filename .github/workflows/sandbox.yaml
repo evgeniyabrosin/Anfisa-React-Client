@@ -69,15 +69,18 @@ jobs:
         FOO: "BAR"
         BAR: "FOO"
         SHA: ${{ github.sha }}
+        AWS: ${{ github.ref_name }}
       with:
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         key: ${{ secrets.SERVER_SSH_KEY_DEV }}
         port: 22
-        envs: FOO,BAR
+        envs: FOO,BAR,SHA
         script: |
           echo "I am $FOO"
           echo "I am $BAR"
+          echo "I am $SHA"
+          echo "I am $AWS"
 
 
 #    - name: pass environment
