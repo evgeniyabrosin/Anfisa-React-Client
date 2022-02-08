@@ -6,6 +6,7 @@ import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { RangeSlider } from '@ui/range-slider'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { DropDownSelectSign } from './dropdown-select-sign'
@@ -34,6 +35,7 @@ export const ModalSelectNumbers = observer((): ReactElement => {
 
   const minValue = attrData.min
   const maxValue = attrData.max
+  const numKind = attrData['sub-kind']
 
   const [valueFrom, setValueFrom] = useState('')
   const [valueTo, setValueTo] = useState('')
@@ -59,7 +61,7 @@ export const ModalSelectNumbers = observer((): ReactElement => {
 
   const validateValues = (value: string, type: string) => {
     if (type === 'from') {
-      value <= minValue || value > maxValue || value === '-0'
+      value < minValue || value > maxValue || value === '-0'
         ? setIsVisibleLeftError(true)
         : setIsVisibleLeftError(false)
 
@@ -67,7 +69,7 @@ export const ModalSelectNumbers = observer((): ReactElement => {
     }
 
     if (type === 'to') {
-      value > maxValue || value <= minValue || value === '-0'
+      value > maxValue || value < minValue || value === '-0'
         ? setIsVisibleRightError(true)
         : setIsVisibleRightError(false)
 
@@ -259,7 +261,18 @@ export const ModalSelectNumbers = observer((): ReactElement => {
           </div>
         )}
       </div>
-
+      <RangeSlider
+        className="mb-4"
+        min={minValue}
+        max={maxValue}
+        step={numKind === 'float' ? 0.001 : 1}
+        value={[valueFrom ? +valueFrom : null, valueTo ? +valueTo : null]}
+        scale="linear"
+        onChange={value => {
+          setValueFrom(typeof value[0] === 'number' ? value[0].toString() : '')
+          setValueTo(typeof value[1] === 'number' ? value[1].toString() : '')
+        }}
+      />
       <SelectModalButtons
         handleClose={handleClose}
         handleModals={handleModals}

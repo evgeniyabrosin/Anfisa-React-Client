@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormikProps } from 'formik'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -10,6 +10,7 @@ import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
+import { PanelButtons } from './panelButtons'
 import { CustomInheritanceModeContent } from './query-builder/ui/custom-inheritance-mode-content'
 
 export interface ICustomInheritanceModeProps {
@@ -22,36 +23,32 @@ export interface ICustomInheritanceFormValues {
   second: string
   third: string
   reset: string
+  scenario: string | undefined
 }
 
 export const CustomInheritanceMode = observer(
-  ({ setFieldValue }: FormikProps<ICustomInheritanceModeProps>) => {
+  ({
+    setFieldValue,
+    submitForm,
+    resetForm,
+  }: FormikProps<ICustomInheritanceModeProps>) => {
     const cachedValues =
       filterStore.readFilterCondition<ICustomInheritanceFormValues>(
         FuncStepTypesEnum.CustomInheritanceMode,
       )
 
-    const { first, second, third, reset } = cachedValues || {}
+    const { first, second, third, reset, scenario } = cachedValues || {}
 
-    const [firstSelectValue, setFirstSelectValue] = useState(first || '2')
-    const [secondSelectValue, setSecondSelectValue] = useState(second || '0-1')
-    const [thirdSelectValue, setThirdSelectValue] = useState(third || '0-1')
+    const [firstSelectValue, setFirstSelectValue] = useState(first || '')
+    const [secondSelectValue, setSecondSelectValue] = useState(second || '')
+    const [thirdSelectValue, setThirdSelectValue] = useState(third || '')
+    const [filterScenario, setFilterScenario] = useState(scenario || '')
 
     const selectStates = [firstSelectValue, secondSelectValue, thirdSelectValue]
     const [resetValue, setResetValue] = useState(reset || '')
     const variants = filterStore.statFuncData.variants
 
     useEffect(() => {
-      if (
-        firstSelectValue === '--' &&
-        secondSelectValue === '--' &&
-        thirdSelectValue === '--'
-      ) {
-        filterStore.setError('Out of choice')
-      } else {
-        filterStore.setError('')
-      }
-
       filterStore.setFilterCondition<ICustomInheritanceFormValues>(
         FuncStepTypesEnum.CustomInheritanceMode,
         {
@@ -59,21 +56,23 @@ export const CustomInheritanceMode = observer(
           second: secondSelectValue,
           third: thirdSelectValue,
           reset: resetValue,
+          scenario: filterScenario,
         },
       )
-    }, [firstSelectValue, secondSelectValue, thirdSelectValue, resetValue])
+    }, [
+      firstSelectValue,
+      secondSelectValue,
+      thirdSelectValue,
+      resetValue,
+      filterScenario,
+    ])
 
     useEffect(() => {
-      const params = datasetStore.isXL
-        ? '{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}'
-        : '{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}'
-
-      const scenario = datasetStore.isXL
-        ? { '2': ['HG002'], '0-1': ['HG003', 'HG004'] }
-        : { '2': ['NA24385'], '0-1': ['NA24143', 'NA24149'] }
+      const params = `{"scenario":${
+        filterScenario ? `{${filterScenario}}` : '{}'
+      }}`
 
       filterStore.fetchStatFuncAsync('Custom_Inheritance_Mode', params)
-      setFieldValue('scenario', scenario)
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -104,9 +103,18 @@ export const CustomInheritanceMode = observer(
 
       if (type && value) {
         selectedData = [
-          [type === 'first' ? value : firstSelectValue, attrData.family[0]],
-          [type === 'second' ? value : secondSelectValue, attrData.family[1]],
-          [type === 'third' ? value : thirdSelectValue, attrData.family[2]],
+          [
+            type === 'first' ? value : firstSelectValue || '--',
+            attrData.family[0],
+          ],
+          [
+            type === 'second' ? value : secondSelectValue || '--',
+            attrData.family[1],
+          ],
+          [
+            type === 'third' ? value : thirdSelectValue || '--',
+            attrData.family[2],
+          ],
         ]
       }
 
@@ -124,6 +132,8 @@ export const CustomInheritanceMode = observer(
       })
 
       const params = `{"scenario":{${scenarioString}}}`
+
+      setFilterScenario(scenarioString)
 
       filterStore.method === GlbPagesNames.Refiner &&
         setFieldValue('scenario', Object.fromEntries(newScenario))
@@ -209,14 +219,34 @@ export const CustomInheritanceMode = observer(
       setResetValue(name)
     }
 
+    const handleResetFields = () => {
+      filterStore.clearFilterCondition(FuncStepTypesEnum.CustomInheritanceMode)
+
+      setFirstSelectValue('--')
+      setSecondSelectValue('--')
+      setThirdSelectValue('--')
+      setResetValue('empty')
+    }
+
     return (
-      <CustomInheritanceModeContent
-        attrData={attrData}
-        handleSetScenario={handleSetScenario}
-        selectStates={selectStates}
-        handleReset={handleReset}
-        resetValue={resetValue}
-      />
+      <React.Fragment>
+        <CustomInheritanceModeContent
+          attrData={attrData}
+          handleSetScenario={handleSetScenario}
+          selectStates={selectStates}
+          handleReset={handleReset}
+          resetValue={resetValue}
+        />
+
+        <PanelButtons
+          selectedFilterName={filterStore.selectedGroupItem.name}
+          selectedFilterGroup={filterStore.selectedGroupItem.vgroup}
+          onSubmit={submitForm}
+          resetForm={resetForm}
+          resetFields={handleResetFields}
+          disabled={!variants}
+        />
+      </React.Fragment>
     )
   },
 )

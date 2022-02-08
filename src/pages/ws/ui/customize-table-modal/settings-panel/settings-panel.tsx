@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import columnsStore from '@store/wsColumns'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { ColumnsList } from '../columns-list/columns-list'
+import { ColumnListStore } from '../columns-list/columns-list.store'
 
 interface Props {
   close: () => void
@@ -20,11 +21,13 @@ export const SettingsPanel = observer(({ close }: Props): ReactElement => {
     cloneDeep(columnsStore.getExtendedColumns),
   )
 
+  const columnListStore = new ColumnListStore()
+
   return (
     <PopperTableModal
       title={t('ds.columns')}
       searchInputPlaceholder={t('ds.searchColumn')}
-      selectedAmount={columnsStore.columns.length}
+      selectedAmount={columnListStore.visibleColumnsAmount}
       searchValue={columnsStore.searchColumnValue}
       onChange={v => columnsStore.setSearchColumnValue(v)}
       onSelectAll={() => columnsStore.selectAllColumns()}

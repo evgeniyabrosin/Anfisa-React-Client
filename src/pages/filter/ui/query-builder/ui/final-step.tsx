@@ -28,7 +28,7 @@ export const FinalStep = observer(({ index }: IProps): ReactElement => {
     const shouldMakeActive = classList.includes('step-content-area')
 
     if (shouldMakeActive) {
-      makeStepActive(stepIndex)
+      makeStepActive(stepIndex, 'isActive', true)
     }
   }
 
