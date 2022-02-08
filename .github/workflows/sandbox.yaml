@@ -68,6 +68,9 @@ jobs:
           echo "I am $SHA"
           echo "I am $BRANCH"
           mkdir /home/forome/anfisa_front/$BRANCH
+          cp /etc/nginx/conf.d/sandbox/FOROME502.conf /etc/nginx/conf.d/sandbox/'$BRANCH'.conf
+          sed -i 's/FOROME-502/$BRANCH/g' /etc/nginx/conf.d/sandbox/'$BRANCH'.conf
+          sudo systemctl reload nginx
 
     
     - name: Deploy to Server
