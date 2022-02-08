@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
-import { IColumns } from '@declarations'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
 

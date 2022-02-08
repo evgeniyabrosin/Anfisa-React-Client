@@ -165,7 +165,7 @@ class DatasetStore {
 
   async removeFunctionConditionAsync(functionName: string) {
     this.conditions = this.conditions.filter(
-      ([_, name]) => name !== functionName,
+      ([, name]) => name !== functionName,
     )
 
     await this.fetchDsStatAsync()

@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { IColumns } from '@declarations'
 import columnsStore, { columnsToIgnore } from '@store/wsColumns'
