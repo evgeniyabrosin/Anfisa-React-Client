@@ -66,14 +66,14 @@ jobs:
     - name: pass environment
       uses: appleboy/ssh-action@master
       env:
-        branch: ${{ github.sha }}
+        branch: ${{ github.ref }}
       with:
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         key: ${{ secrets.SERVER_SSH_KEY_DEV }}
         envs: branch
         script: |
-          echo "branch= $branch"
+          echo $branch
 #          sudo mkdir -p /home/forome/anfisa_front/$branch
        
     - name: Deploy to Server
