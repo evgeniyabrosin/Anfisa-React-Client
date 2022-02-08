@@ -230,7 +230,12 @@ class DtreeStore {
 
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
-    const currentIndex = Number(indexes[index])
+    const shouldGetAnotherIndex = index === indexes.length
+
+    const currentIndex = shouldGetAnotherIndex
+      ? +indexes[index - 1] + 1
+      : +indexes[index]
+
     const stepIndex = indexes.length === 0 ? 0 : currentIndex
 
     const pointsIndexes = Object.keys(this.dtree?.points)

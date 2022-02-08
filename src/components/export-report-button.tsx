@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import cn, { Argument } from 'classnames'
+import cn from 'classnames'
 
 import { t } from '@i18n'
 import { Button } from '@ui/button'
@@ -9,14 +9,12 @@ import { MainTableDataCy } from './data-testid/main-table.cy'
 interface Props {
   isOpen?: boolean
   refEl: any
-  className?: Argument
   onClick?: () => void
 }
 
 export const ExportReportButton = ({
   isOpen,
   refEl,
-  className,
   ...rest
 }: Props): ReactElement => (
   <Button
