@@ -1,4 +1,4 @@
-# his workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: add-githubactions-test CI
@@ -38,7 +38,7 @@ jobs:
       env:
           REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
           REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud" 
-   
+    
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -62,14 +62,15 @@ jobs:
       env:
         branch: $GITHUB_REF_NAME
     
-   - name: Deploy to Server
-     uses: easingthemes/ssh-deploy@v2.1.5
-     env:
-         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
-         SOURCE: "build/"
-         REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
-         REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-         TARGET: '/home/forome/anfisa_front/$GITHUB_REF_NAME'
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
+          SOURCE: "build/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
+          TARGET: /home/forome/anfisa_front/${{ GITHUB_REF_NAME }}
+#          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
           EXCLUDE: "/node_modules/"
     - name: Auth AWS
       if: always()
