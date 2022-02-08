@@ -56,13 +56,13 @@ jobs:
       uses: garygrossgarten/github-action-ssh@release
       with:
 
-        command: export branch='${GITHUB_REF#refs/heads/}' && echo $branch
-        command: sudo mkdir /home/forome/anfisa_front/$branch
+        command: sudo export branch='${GITHUB_REF#refs/heads/}' && echo $branch
+#        command: sudo mkdir /home/forome/anfisa_front/$branch
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
       env:
-        branch: ${GITHUB_REF#refs/heads/}
+#        branch: ${GITHUB_REF#refs/heads/}
 
 - name: Extract branch name
   shell: bash
