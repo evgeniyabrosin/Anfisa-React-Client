@@ -55,7 +55,7 @@ jobs:
     - name: commands via ssh
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: sudo mkdir '/home/forome/anfisa_front/$branch' 
+        command: sudo mkdir /home/forome/anfisa_front/$GITHUB_REF_NAME
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
         privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
@@ -69,7 +69,7 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: '/home/forome/anfisa_front/$branch'
+          TARGET: '/home/forome/anfisa_front/$GITHUB_REF_NAME'
 #          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
           EXCLUDE: "/node_modules/"
     - name: Auth AWS
