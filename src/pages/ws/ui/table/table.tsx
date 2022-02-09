@@ -11,6 +11,7 @@ import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
+import { Loader } from '@components/loader'
 import { renderNoResults } from './components/render-no-results'
 import { TableHeader } from './components/table-header'
 import { TableRow } from './components/table-row'
@@ -84,14 +85,11 @@ export const Table = observer(
       (rowProps: ListRowProps) => {
         const { index, key, ...rest } = rowProps
         const row = rows[index]
-        const isLoading =
-          datasetStore.isFetchingMore && index === rows.length - 1
 
         prepareRow(row)
 
         return (
           <TableRow
-            isLoading={isLoading}
             index={index}
             row={row}
             key={key}
@@ -155,6 +153,14 @@ export const Table = observer(
               </div>
             )}
           </Autosizer>
+        )}
+        {datasetStore.isFetchingMore && (
+          <div
+            className="w-full absolute bg-white bottom-0"
+            style={{ height: '60px' }}
+          >
+            <Loader size="s" />
+          </div>
         )}
       </div>
     )

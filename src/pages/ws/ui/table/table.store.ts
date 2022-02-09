@@ -12,7 +12,6 @@ import { RowHeight } from './constants'
 class TableStore {
   public rowToScroll = 0
   public cache!: CellMeasurerCache
-  public measureFuncMap = new Map<number, Function | null>()
 
   public get isFiltered() {
     return toJS(datasetStore.filteredNo).length > 0
@@ -82,7 +81,6 @@ class TableStore {
   }
 
   public clearStore() {
-    this.measureFuncMap.clear()
     this.cache.clearAll()
     this.rowToScroll = 0
   }

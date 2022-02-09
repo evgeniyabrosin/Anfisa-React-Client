@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { Row } from 'react-table'
 import { CellMeasurer, ListRowProps } from 'react-virtualized'
@@ -10,11 +10,9 @@ import { tableColumnMap } from '@core/table-column-map'
 import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
-import { Loader } from '@components/loader'
 import tableStore from '../table.store'
 
 export interface ITableRowProps extends Omit<ListRowProps, 'key'> {
-  isLoading: boolean
   row: Row
   rowKey: string
   onClickRow: (index: number) => void
@@ -34,7 +32,6 @@ const stopPropagation = (event: any) => {
 }
 
 export const TableRow = ({
-  isLoading,
   row,
   rowKey,
   parent,
@@ -42,20 +39,6 @@ export const TableRow = ({
   style,
   onClickRow,
 }: React.PropsWithChildren<ITableRowProps>) => {
-  useLayoutEffect(() => {
-    // dirty hack for rows to be re-measured after full content load
-    setTimeout(() => {
-      try {
-        tableStore.measureFuncMap.get(index)?.()
-      } catch (_e) {
-        null
-      } finally {
-        tableStore.measureFuncMap.set(index, null)
-      }
-    }, 300)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <CellMeasurer
       cache={tableStore.cache}
@@ -65,15 +48,10 @@ export const TableRow = ({
       parent={parent}
       rowIndex={index}
     >
-      {({ registerChild, measure }) => {
-        if (
-          !tableStore.measureFuncMap.has(index) &&
-          index < datasetStore.variantsAmount - 10
-        ) {
-          tableStore.measureFuncMap.set(index, measure)
-        }
+      {({ registerChild }) => {
         return (
           <div
+            id={String(index)}
             {...row.getRowProps({
               style,
             })}
@@ -89,44 +67,40 @@ export const TableRow = ({
                 : 'text-black hover:bg-blue-light',
             )}
           >
-            {!isLoading ? (
-              row.cells.map((cell: any, cellIdx) => {
-                const isSampleColumn = cell?.column?.Header === 'Samples'
-                const valueNumber = Object.keys(cell.value).length
+            {row.cells.map((cell: any, cellIdx) => {
+              const isSampleColumn = cell?.column?.Header === 'Samples'
+              const valueNumber = Object.keys(cell.value).length
 
-                return (
-                  <div
-                    {...cell.getCellProps()}
-                    key={`${index}_${cellIdx}`}
-                    className={cn('td overflow-hidden', {
-                      'py-1':
-                        cell.column.Header !== tableColumnMap.samples &&
-                        columnsStore.viewType === ViewTypeEnum.Compact,
-                      'py-4':
-                        cell.column.Header !== tableColumnMap.samples &&
-                        columnsStore.viewType !== ViewTypeEnum.Compact,
-                      'px-4': cell.column.Header !== tableColumnMap.samples,
-                    })}
-                  >
-                    {isSampleColumn ? (
-                      <div onClick={stopPropagation}>
-                        <ScrollContainer
-                          style={{
-                            cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
-                          }}
-                        >
-                          {cell.render('Cell')}
-                        </ScrollContainer>
-                      </div>
-                    ) : (
-                      cell.render('Cell')
-                    )}
-                  </div>
-                )
-              })
-            ) : (
-              <Loader size="s" />
-            )}
+              return (
+                <div
+                  {...cell.getCellProps()}
+                  key={`${index}_${cellIdx}`}
+                  className={cn('td overflow-hidden', {
+                    'py-1':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType === ViewTypeEnum.Compact,
+                    'py-4':
+                      cell.column.Header !== tableColumnMap.samples &&
+                      columnsStore.viewType !== ViewTypeEnum.Compact,
+                    'px-4': cell.column.Header !== tableColumnMap.samples,
+                  })}
+                >
+                  {isSampleColumn ? (
+                    <div onClick={stopPropagation}>
+                      <ScrollContainer
+                        style={{
+                          cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
+                        }}
+                      >
+                        {cell.render('Cell')}
+                      </ScrollContainer>
+                    </div>
+                  ) : (
+                    cell.render('Cell')
+                  )}
+                </div>
+              )
+            })}
           </div>
         )
       }}
