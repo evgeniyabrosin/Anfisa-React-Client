@@ -24,17 +24,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Increment version
-      if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
-      uses: actions/checkout@v2
-    - run: |
-            git config --global user.name 'evgeniy-chernomortsev'
-            git config --global user.email 'evgeniy.chernomortsev@quantori.com'
-            yarn config set version-git-message "[RELEASE] %s"
-            yarn config set version-commit-hooks false
-            yarn version --patch
-            git push --tags --no-verify &&
-            git push --no-verify
     - run: yarn install
       env:
           REACT_APP_URL_BACKEND: "https://anfisa.forome.dev/app"
