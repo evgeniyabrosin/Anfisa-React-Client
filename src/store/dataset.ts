@@ -24,7 +24,7 @@ const INCREASE_INDEX = 50
 
 export type Condition = [string, string, unknown, string[]?, unknown?]
 
-class DatasetStore {
+export class DatasetStore {
   dsStat: DsStatType = {}
   variantsAmount = 0
   tabReport: TabReportType[] = []
