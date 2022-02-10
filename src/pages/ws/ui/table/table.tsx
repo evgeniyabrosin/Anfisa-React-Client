@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
+import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
 import { Loader } from '@components/loader'
@@ -99,7 +100,8 @@ export const Table = observer(
           />
         )
       },
-      [rows, prepareRow, handleOpenVariant],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [rows, prepareRow, handleOpenVariant, variantStore.index],
     )
 
     return (
@@ -129,24 +131,13 @@ export const Table = observer(
                       rowRenderer={RenderRow}
                       deferredMeasurementCache={tableStore.cache}
                       width={autosizerWidth}
-                      scrollToIndex={tableStore.rowToScroll}
+                      scrollToIndex={variantStore.index}
                       scrollToAlignment="center"
                       ref={list => {
                         listRef = list
                         registerChild(list)
                       }}
-                      onRowsRendered={params => {
-                        if (params.stopIndex === datasetStore.variantsAmount) {
-                          onRowsRendered({
-                            ...params,
-                            stopIndex: datasetStore.variantsAmount,
-                          })
-
-                          return
-                        }
-
-                        onRowsRendered(params)
-                      }}
+                      onRowsRendered={onRowsRendered}
                     />
                   )}
                 </InfiniteLoader>

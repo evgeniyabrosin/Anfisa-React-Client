@@ -10,7 +10,6 @@ import columnsStore from '@store/wsColumns'
 import { RowHeight } from './constants'
 
 class TableStore {
-  public rowToScroll = 0
   public cache!: CellMeasurerCache
 
   public get isFiltered() {
@@ -29,15 +28,15 @@ class TableStore {
     makeAutoObservable(this)
   }
 
+  public isRowSelected(index: number) {
+    return toJS(datasetStore.filteredNo)[index] === variantStore.index
+  }
+
   public createCache() {
     this.cache = new CellMeasurerCache({
       minHeight: RowHeight[columnsStore.viewType],
       defaultHeight: RowHeight[columnsStore.viewType],
     })
-  }
-
-  public setRowToScroll(index: number) {
-    this.rowToScroll = index
   }
 
   public openVariant(index: number, datasetName: string) {
@@ -55,8 +54,6 @@ class TableStore {
     datasetStore.setSelectedVariantNumber(idx)
     variantStore.setIndex(idx)
     variantStore.fetchVarinatInfoAsync()
-
-    this.setRowToScroll(index)
   }
 
   public async loadData() {
@@ -82,7 +79,6 @@ class TableStore {
 
   public clearStore() {
     this.cache.clearAll()
-    this.rowToScroll = 0
   }
 }
 

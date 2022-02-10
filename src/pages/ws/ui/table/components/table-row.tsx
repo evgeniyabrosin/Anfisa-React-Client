@@ -3,11 +3,9 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import { Row } from 'react-table'
 import { CellMeasurer, ListRowProps } from 'react-virtualized'
 import cn from 'classnames'
-import { toJS } from 'mobx'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
-import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import tableStore from '../table.store'
@@ -16,13 +14,6 @@ export interface ITableRowProps extends Omit<ListRowProps, 'key'> {
   row: Row
   rowKey: string
   onClickRow: (index: number) => void
-}
-
-export const isRowSelected = (
-  rowIndex: number,
-  activeIndex: number,
-): boolean => {
-  return toJS(datasetStore.filteredNo)[rowIndex] === activeIndex
 }
 
 const stopPropagation = (event: any) => {
@@ -61,8 +52,7 @@ export const TableRow = ({
             style={style}
             className={cn(
               'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible &&
-                isRowSelected(row.index, variantStore.index)
+              variantStore.drawerVisible && tableStore.isRowSelected(index)
                 ? 'bg-blue-bright text-white'
                 : 'text-black hover:bg-blue-light',
             )}

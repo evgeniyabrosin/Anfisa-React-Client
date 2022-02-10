@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import variantStore from '@store/variant'
 import { CopyToClipboard } from '@components/copy-to-clipboard'
-import { isRowSelected } from '../table-row'
+import tableStore from '../../table.store'
 import { CellI } from './cell-interfaces'
 
 export const CellVariant = observer(({ cell }: CellI): ReactElement => {
@@ -12,7 +12,7 @@ export const CellVariant = observer(({ cell }: CellI): ReactElement => {
   const rowIndex = get(cell, 'row.index', null)
 
   const selectedRow =
-    variantStore.drawerVisible && isRowSelected(rowIndex, variantStore.index)
+    variantStore.drawerVisible && tableStore.isRowSelected(rowIndex)
 
   return (
     <div className="leading-18px">
