@@ -21,7 +21,7 @@ interface AddSelectedFiltersI {
   variant?: [string, number]
 }
 
-class FilterStore {
+export class FilterStore {
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
