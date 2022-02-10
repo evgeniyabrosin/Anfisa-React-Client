@@ -6,11 +6,11 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
-import { DropDownSelectSign } from './dropdown-select-sign'
+import { DropDownSelectSign } from '../../query-builder/ui/dropdown-select-sign'
+import { ExpandContentButton } from '../../query-builder/ui/expand-content-button'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { ModalBase } from '../../query-builder/ui/modal-base'
 import { EditModalButtons } from './edit-modal-buttons'
-import { ExpandContentButton } from './expand-content-button'
-import { HeaderModal } from './header-modal'
-import { ModalBase } from './modal-base'
 
 export const ModalEditNumbers = observer((): ReactElement => {
   const ref = useRef(null)

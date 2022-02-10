@@ -3,10 +3,10 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { InheritanceModeContent } from '../../query-builder/ui/inheritance-mode-content'
+import { ModalBase } from '../../query-builder/ui/modal-base'
 import { EditModalButtons } from './edit-modal-buttons'
-import { HeaderModal } from './header-modal'
-import { InheritanceModeContent } from './inheritance-mode-content'
-import { ModalBase } from './modal-base'
 
 export const ModalEditInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)
