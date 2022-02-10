@@ -5,7 +5,7 @@ import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { DeferRender } from '@utils/deferRender'
-import { QueryBuilderSearch } from './query-builder-search'
+import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer((): ReactElement => {
@@ -76,7 +76,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
               <QueryBuilderSubgroup
                 groupName={groupName}
                 subGroupData={subGroupData[index]}
-                key={groupName + dtreeStore.queryBuilderRenderKey}
+                key={groupName}
                 changeIndicator={dtreeStore.filterChangeIndicator}
                 isContentExpanded={dtreeStore.isFilterContentExpanded}
               />
