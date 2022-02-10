@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite'
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
+import { GeneRegionContent } from '../../query-builder/ui/gene-region-content'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { ModalBase } from '../../query-builder/ui/modal-base'
 import { EditModalButtons } from './edit-modal-buttons'
-import { GeneRegionContent } from './gene-region-content'
-import { HeaderModal } from './header-modal'
-import { ModalBase } from './modal-base'
 
 export const ModalEditGeneRegion = observer((): ReactElement => {
   const ref = useRef(null)

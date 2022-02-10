@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
-import { AllNotModalMods } from './all-not-modal-mods'
-import { ApproxStateModalMods } from './approx-state-modal-mods'
-import { DisabledVariantsAmount } from './disabled-variants-amount'
+import { AllNotModalMods } from '../../query-builder/ui/all-not-modal-mods'
+import { ApproxStateModalMods } from '../../query-builder/ui/approx-state-modal-mods'
+import { DisabledVariantsAmount } from '../../query-builder/ui/disabled-variants-amount'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { ModalBase } from '../../query-builder/ui/modal-base'
 import { EditModalButtons } from './edit-modal-buttons'
-import { HeaderModal } from './header-modal'
-import { ModalBase } from './modal-base'
 
 export interface IParams {
   approx: any

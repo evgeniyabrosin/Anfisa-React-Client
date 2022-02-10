@@ -1,7 +1,25 @@
+import { toJS } from 'mobx'
+
 import { ActionType, AttributeType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import { getIndexWithoutEmptySteps } from '@utils/getIndexWithoutEmptySteps'
 import datasetStore from '../store/dataset'
-import { getCurrentStepIndexForApi } from './getCurrentStepIndexForApi'
+
+const getIndexForAddAttribute = (isJoin: boolean) => {
+  const indexes = toJS(dtreeStore.dtreeStepIndices)
+
+  const stepIndexWithoutEmptySteps = getIndexWithoutEmptySteps()
+
+  const { currentStepIndex } = dtreeStore
+  const index = isJoin ? stepIndexWithoutEmptySteps : currentStepIndex
+
+  const prevIndexValue = +indexes[index - 1]
+
+  const currentIndex = prevIndexValue + 2
+  const indexForApi = Number.isNaN(prevIndexValue) ? 0 : currentIndex
+
+  return indexForApi
+}
 
 export const addAttributeToStep = (
   action: ActionType,
@@ -32,8 +50,10 @@ export const addAttributeToStep = (
 
   if (params) attribute.push(params)
 
-  const stepIndexForApi = getCurrentStepIndexForApi()
-  const instruction = ['POINT', action, stepIndexForApi, attribute]
+  const isJoin = action === 'JOIN-AND' || action === 'JOIN-OR'
+  const indexForApi = getIndexForAddAttribute(isJoin)
+
+  const instruction = ['POINT', action, indexForApi, attribute]
 
   body.append('instr', JSON.stringify(instruction))
 

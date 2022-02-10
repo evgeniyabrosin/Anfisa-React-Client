@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { IParams } from '../../modal-edit/components/modal-edit-compound-het'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
-import { IParams } from './modal-edit-compound-het'
 import { SelectModalButtons } from './select-modal-buttons'
 
 export const ModalSelectCompoundHet = observer((): ReactElement => {
