@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
-import { RangeSlider } from '@ui/range-slider'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
 import { DropDownSelectSign } from './dropdown-select-sign'
 import { EditModalButtons } from './edit-modal-buttons'
@@ -37,7 +36,6 @@ export const ModalEditNumbers = observer((): ReactElement => {
 
   const minValue = attrData.min
   const maxValue = attrData.max
-  const numKind = attrData['sub-kind']
 
   const currentGroupLength: number = currentGroup.length
 
@@ -56,11 +54,11 @@ export const ModalEditNumbers = observer((): ReactElement => {
   const [valueTo, setValueTo] = useState(currentValueTo ?? '')
 
   const [leftDropType, setLeftDropType] = useState<boolean>(
-    currentValueFrom && currentValueFrom >= 0 ? currentLeftDropType : false,
+    currentValueFrom != null ? currentLeftDropType : false,
   )
 
   const [rightDropType, setRightDropType] = useState<boolean>(
-    currentValueTo && currentValueTo >= 0 ? currentRightDropType : true,
+    currentValueTo != null ? currentRightDropType : true,
   )
 
   const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
@@ -105,20 +103,12 @@ export const ModalEditNumbers = observer((): ReactElement => {
       return
     }
 
-    const numericData: any[] = [
-      valueFrom || null,
+    changeNumericAttribute([
+      valueFrom != null && valueFrom !== '' ? +valueFrom : null,
       leftDropType,
-      valueTo || null,
+      valueTo != null && valueTo !== '' ? +valueTo : null,
       rightDropType,
-    ]
-
-    numericData.map((item: any, index: number) => {
-      if (typeof item === 'string') {
-        numericData[index] = +item
-      }
-    })
-
-    changeNumericAttribute(numericData)
+    ])
     dtreeStore.closeModalEditNumbers()
   }
 
@@ -268,17 +258,6 @@ export const ModalEditNumbers = observer((): ReactElement => {
           </div>
         )}
       </div>
-      <RangeSlider
-        className="mb-4"
-        min={minValue}
-        max={maxValue}
-        step={numKind === 'float' ? 0.001 : 1}
-        value={[valueFrom ? +valueFrom : null, valueTo ? +valueTo : null]}
-        onChange={value => {
-          setValueFrom(typeof value[0] === 'number' ? value[0].toString() : '')
-          setValueTo(typeof value[1] === 'number' ? value[1].toString() : '')
-        }}
-      />
 
       <EditModalButtons
         handleClose={handleClose}
