@@ -54,11 +54,11 @@ export const ModalEditNumbers = observer((): ReactElement => {
   const [valueTo, setValueTo] = useState(currentValueTo ?? '')
 
   const [leftDropType, setLeftDropType] = useState<boolean>(
-    currentValueFrom && currentValueFrom >= 0 ? currentLeftDropType : false,
+    currentValueFrom != null ? currentLeftDropType : false,
   )
 
   const [rightDropType, setRightDropType] = useState<boolean>(
-    currentValueTo && currentValueTo >= 0 ? currentRightDropType : true,
+    currentValueTo != null ? currentRightDropType : true,
   )
 
   const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
@@ -103,20 +103,12 @@ export const ModalEditNumbers = observer((): ReactElement => {
       return
     }
 
-    const numericData: any[] = [
-      valueFrom || null,
+    changeNumericAttribute([
+      valueFrom != null && valueFrom !== '' ? +valueFrom : null,
       leftDropType,
-      valueTo || null,
+      valueTo != null && valueTo !== '' ? +valueTo : null,
       rightDropType,
-    ]
-
-    numericData.map((item: any, index: number) => {
-      if (typeof item === 'string') {
-        numericData[index] = +item
-      }
-    })
-
-    changeNumericAttribute(numericData)
+    ])
     dtreeStore.closeModalEditNumbers()
   }
 

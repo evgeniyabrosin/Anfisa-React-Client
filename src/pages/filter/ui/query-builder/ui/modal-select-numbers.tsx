@@ -80,31 +80,17 @@ export const ModalSelectNumbers = observer((): ReactElement => {
     dtreeStore.openModalAttribute(dtreeStore.currentStepIndex)
   }
 
-  const getNumericData = () => {
-    const numericData: any[] = [
-      valueFrom || null,
-      leftDropType,
-      valueTo || null,
-      rightDropType,
-    ]
-
-    numericData.map((item: any, index: number) => {
-      if (typeof item === 'string') {
-        numericData[index] = +item
-      }
-    })
-
-    return numericData
-  }
-
   const handleAddAttribute = (action: ActionType) => {
     if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
       return
     }
 
-    const numericData = getNumericData()
-
-    addAttributeToStep(action, 'numeric', numericData)
+    addAttributeToStep(action, 'numeric', [
+      valueFrom != null && valueFrom !== '' ? +valueFrom : null,
+      leftDropType,
+      valueTo != null && valueTo !== '' ? +valueTo : null,
+      rightDropType,
+    ])
 
     dtreeStore.closeModalSelectNumbers()
   }
@@ -259,7 +245,6 @@ export const ModalSelectNumbers = observer((): ReactElement => {
           </div>
         )}
       </div>
-
       <SelectModalButtons
         handleClose={handleClose}
         handleModals={handleModals}
