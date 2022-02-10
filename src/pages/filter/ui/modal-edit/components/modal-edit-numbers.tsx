@@ -78,7 +78,7 @@ export const ModalEditNumbers = observer((): ReactElement => {
 
   const validateValues = (value: string, type: string) => {
     if (type === 'from') {
-      value <= minValue || value > maxValue || value === '-0'
+      value < minValue || value > maxValue || value === '-0'
         ? setIsVisibleLeftError(true)
         : setIsVisibleLeftError(false)
 
@@ -86,7 +86,7 @@ export const ModalEditNumbers = observer((): ReactElement => {
     }
 
     if (type === 'to') {
-      value > maxValue || value <= minValue || value === '-0'
+      value > maxValue || value < minValue || value === '-0'
         ? setIsVisibleRightError(true)
         : setIsVisibleRightError(false)
 
