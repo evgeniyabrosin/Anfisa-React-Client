@@ -24,7 +24,6 @@ export const CompundHet = ({
   setFieldValue,
   values: { approx, variants },
   submitForm,
-  resetForm,
 }: FormikProps<ICompoundHetFormValues>): ReactElement => {
   const cachedValues = filterStore.readFilterCondition<ICompoundHetFormValues>(
     FuncStepTypesEnum.CompoundHet,
@@ -105,7 +104,6 @@ export const CompundHet = ({
         selectedFilterName={filterStore.selectedGroupItem.name}
         selectedFilterGroup={filterStore.selectedGroupItem.vgroup}
         onSubmit={submitForm}
-        resetForm={resetForm}
         resetFields={handleResetFieldsAsync}
         disabled={!variants}
       />

@@ -10,7 +10,7 @@ interface IPanelButtons {
   selectedFilterName: string
   selectedFilterGroup: string
   onSubmit: () => void
-  resetForm: () => void
+  resetForm?: () => void
   resetFields: () => void
   disabled?: boolean
 }
@@ -24,13 +24,20 @@ export const PanelButtons = observer(
     resetFields,
     disabled,
   }: IPanelButtons): ReactElement => {
-    const handleClear = () => {
-      datasetStore.removeFunctionConditionAsync(selectedFilterName)
+    const isFilterExistsInSelectedFilters: boolean =
+      datasetStore.activePreset !== '' &&
+      filterStore.selectedFilters[selectedFilterGroup]?.[selectedFilterName] !==
+        undefined
 
+    const handleClear = () => {
+      if (isFilterExistsInSelectedFilters) {
+        datasetStore.resetActivePreset()
+      }
+
+      datasetStore.removeFunctionConditionAsync(selectedFilterName)
       filterStore.removeSelectedFilters({
         group: selectedFilterGroup,
         groupItemName: selectedFilterName,
-        variant: [selectedFilterName, 0],
       })
 
       filterStore.resetStatFuncData()
@@ -40,6 +47,8 @@ export const PanelButtons = observer(
       }
 
       resetFields && resetFields()
+
+      resetForm && resetForm()
     }
 
     return (
@@ -47,10 +56,7 @@ export const PanelButtons = observer(
         <Button
           text={t('general.clear')}
           variant={'secondary'}
-          onClick={() => {
-            resetForm()
-            handleClear()
-          }}
+          onClick={handleClear}
         />
 
         <Button

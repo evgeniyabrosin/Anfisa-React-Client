@@ -4,11 +4,11 @@ import { Formik } from 'formik'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { CompundHet } from './compound-het'
-import { CompoundRequest } from './compound-request'
-import { CustomInheritanceMode } from './custom-inheritance-mode'
-import { GeneRegion } from './gene-region'
-import { InheritanceMode } from './inheritance-mode'
+import { CompundHet } from './components/compound-het'
+import { CompoundRequest } from './components/compound-request'
+import { CustomInheritanceMode } from './components/custom-inheritance-mode'
+import { GeneRegion } from './components/gene-region'
+import { InheritanceMode } from './components/inheritance-mode'
 
 const functionsMap: Record<string, any> = {
   GeneRegion,
@@ -19,9 +19,6 @@ const functionsMap: Record<string, any> = {
 }
 
 const initialStateMap: Record<string, any> = {
-  GeneRegion: {
-    locus: '',
-  },
   Inheritance_Mode: {
     problemGroups: [],
     variants: [],
@@ -88,18 +85,6 @@ export const FunctionPanel = (): ReactElement => {
         'Inheritance',
         FuncStepTypesEnum.CustomInheritanceMode,
         [[FuncStepTypesEnum.CustomInheritanceMode, noArray.length]],
-      )
-    }
-
-    if (selectedFilter.name === FuncStepTypesEnum.GeneRegion) {
-      const noArray = await datasetStore.setConditionsAsync([
-        ['func', selectedFilter.name, '', ['True'], values],
-      ])
-
-      filterStore.addSelectedFilterGroup(
-        'Coordinates',
-        FuncStepTypesEnum.GeneRegion,
-        [[FuncStepTypesEnum.GeneRegion, noArray.length]],
       )
     }
 

@@ -28,18 +28,48 @@ export enum ConditionJoinMode {
   NOT = 'NOT',
 }
 
+export interface IInheritanceModeArgs {
+  problem_groups: string[]
+}
+
+export interface ICustomInheritanceModeArgs {
+  scenario: [string, string[]]
+}
+
+export interface ICompoundHetArgs {
+  approx: string | null
+}
+
+export interface ICompoundRequestArgs {
+  approx: string | null
+  request: [number, { [key: string]: string[] }]
+  state?: string | null
+}
+
+export interface IGeneRegionArgs {
+  locus: string
+}
+
 export type TEnumCondition = [
   conditionType: 'enum',
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
 ]
+
+export type TFuncArgs =
+  | ICustomInheritanceModeArgs
+  | IInheritanceModeArgs
+  | ICompoundHetArgs
+  | ICompoundRequestArgs
+  | IGeneRegionArgs
+
 export type TFuncCondition = [
   conditionType: 'func',
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
-  functionArguments: unknown,
+  functionArguments: TFuncArgs,
 ]
 
 export type TCondition = TNumericCondition | TEnumCondition | TFuncCondition

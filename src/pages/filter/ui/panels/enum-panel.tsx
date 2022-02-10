@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
-import filterAttributesStore from './filterAttributes.store'
-import { QueryBuilderSearch } from './query-builder/query-builder-search'
-import { SelectedGroupItem } from './selected-group-item'
+import filterAttributesStore from '../filterAttributes.store'
+import { QueryBuilderSearch } from '../query-builder/query-builder-search'
+import { SelectedGroupItem } from '../selected-group-item'
 
 const variantsPerPage = 12
 
