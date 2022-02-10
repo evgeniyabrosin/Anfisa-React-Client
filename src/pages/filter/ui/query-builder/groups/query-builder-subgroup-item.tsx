@@ -12,7 +12,7 @@ import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
-import { QueryBuilderSubgroupChart } from './query-builder-subgroup-chart'
+import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {
   subGroupItem: StatList
