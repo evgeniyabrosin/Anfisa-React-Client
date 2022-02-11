@@ -65,8 +65,6 @@ class TableStore {
 
     if (isNeedToLoadMore) {
       await datasetStore.fetchFilteredTabReportAsync()
-    } else if (datasetVariantsAmount === 0 && !datasetStore.reportsLoaded) {
-      await datasetStore.fetchTabReportAsync()
     }
   }
 
