@@ -1,17 +1,20 @@
 import { ReactElement, useEffect } from 'react'
 
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { FilterRefinerGroups } from './filter-refiner-groups'
 import { QuerySelected } from './query-selected'
 import { SelectedGroup } from './selected-group'
 
 export const FilterRefiner = (): ReactElement => {
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    datasetStore.memorizeFilterConditions()
+    filterStore.memorizeSelectedFilters()
+
+    return () => {
       filterStore.filterCondition = {}
-    },
-    [],
-  )
+    }
+  }, [])
 
   return (
     <div

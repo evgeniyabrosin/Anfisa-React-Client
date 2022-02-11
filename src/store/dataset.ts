@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import {
   DsStatType,
@@ -44,6 +44,9 @@ export class DatasetStore {
   conditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
+  memorizedConditions:
+    | { conditions: Condition[]; activePreset: string; zone: any[] }
+    | undefined = undefined
 
   indexTabReport = 0
   indexFilteredNo = 0
@@ -585,6 +588,24 @@ export class DatasetStore {
 
   setStatList(statList: StatListType) {
     this.dsStat['stat-list'] = statList
+  }
+
+  memorizeFilterConditions() {
+    this.memorizedConditions = {
+      conditions: toJS(this.conditions),
+      activePreset: this.activePreset,
+      zone: toJS(this.zone),
+    }
+  }
+
+  applyMemorizedConditions() {
+    const { memorizedConditions } = this
+
+    if (memorizedConditions) {
+      Object.keys(memorizedConditions).forEach((key: string) => {
+        ;(this as any)[key] = (memorizedConditions as any)[key]
+      })
+    }
   }
 }
 
