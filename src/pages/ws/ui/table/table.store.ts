@@ -49,10 +49,8 @@ class TableStore {
       variantStore.setDrawerVisible(true)
     }
 
-    const idx = this.isFiltered ? toJS(datasetStore.filteredNo)[index] : index
-
-    datasetStore.setSelectedVariantNumber(idx)
-    variantStore.setIndex(idx)
+    datasetStore.setSelectedVariantNumber(index)
+    variantStore.setIndex(index)
     variantStore.fetchVarinatInfoAsync()
   }
 

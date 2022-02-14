@@ -31,7 +31,6 @@ export const Table = observer(
     const history = useHistory()
     const alreadyOpened = !!params.get('variant')
     const datasetName = params.get('ds') ?? ''
-    let listRef: List | null = null
 
     const defaultColumn = {
       minWidth: 120,
@@ -59,8 +58,11 @@ export const Table = observer(
 
     const handleOpenVariant = useCallback(
       (index: number) => {
-        tableStore.openVariant(index, datasetName)
-        routeToVariant(index)
+        const idx = tableStore.isFiltered
+          ? toJS(datasetStore.filteredNo)[index]
+          : index
+        tableStore.openVariant(idx, datasetName)
+        routeToVariant(idx)
       },
       [datasetName, routeToVariant],
     )
@@ -76,11 +78,6 @@ export const Table = observer(
       return () => tableStore.clearStore()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    useEffect(() => {
-      listRef?.recomputeRowHeights()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tableStore.isDrawerActive, tableStore.isCompactView])
 
     const RenderRow = useCallback(
       (rowProps: ListRowProps) => {
@@ -101,7 +98,7 @@ export const Table = observer(
         )
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [rows, prepareRow, handleOpenVariant, variantStore.index],
+      [rows],
     )
 
     return (
@@ -133,10 +130,7 @@ export const Table = observer(
                       width={autosizerWidth}
                       scrollToIndex={variantStore.index}
                       scrollToAlignment="center"
-                      ref={list => {
-                        listRef = list
-                        registerChild(list)
-                      }}
+                      ref={registerChild}
                       onRowsRendered={onRowsRendered}
                     />
                   )}

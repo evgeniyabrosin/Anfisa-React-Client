@@ -3,6 +3,7 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import { Row } from 'react-table'
 import { CellMeasurer, ListRowProps } from 'react-virtualized'
 import cn from 'classnames'
+import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
@@ -22,78 +23,85 @@ const stopPropagation = (event: any) => {
   event.nativeEvent.stopImmediatePropagation()
 }
 
-export const TableRow = ({
-  row,
-  rowKey,
-  parent,
-  index,
-  style,
-  onClickRow,
-}: React.PropsWithChildren<ITableRowProps>) => {
-  return (
-    <CellMeasurer
-      cache={tableStore.cache}
-      columnIndex={0}
-      key={rowKey}
-      overscanRowCount={10}
-      parent={parent}
-      rowIndex={index}
-    >
-      {({ registerChild }) => {
-        return (
-          <div
-            id={String(index)}
-            {...row.getRowProps({
-              style,
-            })}
-            onClick={() => onClickRow(index)}
-            key={rowKey}
-            ref={registerChild}
-            style={style}
-            className={cn(
-              'cursor-pointer flex items-center tr',
-              variantStore.drawerVisible && tableStore.isRowSelected(index)
-                ? 'bg-blue-bright text-white'
-                : 'text-black hover:bg-blue-light',
-            )}
-          >
-            {row.cells.map((cell: any, cellIdx) => {
-              const isSampleColumn = cell?.column?.Header === 'Samples'
-              const valueNumber = Object.keys(cell.value).length
+// eslint-disable-next-line react/display-name
+export const TableRow = observer(
+  ({
+    row,
+    rowKey,
+    parent,
+    index,
+    style,
+    onClickRow,
+  }: React.PropsWithChildren<ITableRowProps>) => {
+    const isSelected =
+      variantStore.drawerVisible &&
+      variantStore.index != null &&
+      tableStore.isRowSelected(index)
+    return (
+      <CellMeasurer
+        cache={tableStore.cache}
+        columnIndex={0}
+        key={rowKey}
+        overscanRowCount={4}
+        parent={parent}
+        rowIndex={index}
+      >
+        {({ registerChild }) => {
+          return (
+            <div
+              id={String(index)}
+              {...row.getRowProps({
+                style,
+              })}
+              onClick={() => onClickRow(index)}
+              key={rowKey}
+              ref={registerChild}
+              style={style}
+              className={cn(
+                'cursor-pointer flex items-center tr',
+                isSelected
+                  ? 'bg-blue-bright text-white'
+                  : 'text-black hover:bg-blue-light',
+              )}
+            >
+              {row.cells.map((cell: any, cellIdx) => {
+                const isSampleColumn = cell?.column?.Header === 'Samples'
+                const valueNumber = Object.keys(cell.value).length
 
-              return (
-                <div
-                  {...cell.getCellProps()}
-                  key={`${index}_${cellIdx}`}
-                  className={cn('td overflow-hidden', {
-                    'py-1':
-                      cell.column.Header !== tableColumnMap.samples &&
-                      columnsStore.viewType === ViewTypeEnum.Compact,
-                    'py-4':
-                      cell.column.Header !== tableColumnMap.samples &&
-                      columnsStore.viewType !== ViewTypeEnum.Compact,
-                    'px-4': cell.column.Header !== tableColumnMap.samples,
-                  })}
-                >
-                  {isSampleColumn ? (
-                    <div onClick={stopPropagation}>
-                      <ScrollContainer
-                        style={{
-                          cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
-                        }}
-                      >
-                        {cell.render('Cell')}
-                      </ScrollContainer>
-                    </div>
-                  ) : (
-                    cell.render('Cell')
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        )
-      }}
-    </CellMeasurer>
-  )
-}
+                return (
+                  <div
+                    {...cell.getCellProps()}
+                    key={`${index}_${cellIdx}`}
+                    className={cn('td overflow-hidden', {
+                      'py-1':
+                        cell.column.Header !== tableColumnMap.samples &&
+                        columnsStore.viewType === ViewTypeEnum.Compact,
+                      'py-4':
+                        cell.column.Header !== tableColumnMap.samples &&
+                        columnsStore.viewType !== ViewTypeEnum.Compact,
+                      'px-4': cell.column.Header !== tableColumnMap.samples,
+                    })}
+                  >
+                    {isSampleColumn ? (
+                      <div onClick={stopPropagation}>
+                        <ScrollContainer
+                          style={{
+                            cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </ScrollContainer>
+                      </div>
+                    ) : (
+                      cell.render('Cell')
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }}
+      </CellMeasurer>
+    )
+  },
+)
