@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
@@ -30,7 +31,12 @@ export const FilterControl = observer((): ReactElement => {
   const isUndoLocked = isFirstActionHistoryIndex
   const isRedoLocked = isLastActionHistoryIndex
   const history = useHistory()
-  const handleClose = () => history.goBack()
+  const handleClose = () => {
+    datasetStore.applyMemorizedConditions()
+    filterStore.applyMemorizedFilters()
+    datasetStore.fetchWsListAsync()
+    history.goBack()
+  }
   const params = useParams()
   const dsName = params.get('ds') || ''
   const page: FilterControlOptions = filterStore.method as FilterControlOptions

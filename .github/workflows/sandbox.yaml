@@ -53,14 +53,23 @@ jobs:
             --group-id $GROUP \
             --ip-permissions IpProtocol=tcp,FromPort=22,ToPort=22,IpRanges='[{CidrIp='`curl https://ipinfo.io/ip`/32',Description="GitHub_runner"}]'
     - name: commands via ssh
-      uses: garygrossgarten/github-action-ssh@release
+      uses: appleboy/ssh-action@master
+      env:
+        SHA: ${{ github.sha }}
+        BRANCH: ${{ github.ref_name }}
       with:
-        command: cd /home/forome/anfisa_front/ && echo $GITHUB_REF_NAME && echo $branch
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
-        privateKey: ${{ secrets.SERVER_SSH_KEY_DEV }}
-      env:
-        branch: $GITHUB_REF_NAME
+        key: ${{ secrets.SERVER_SSH_KEY_DEV }}
+        port: 22
+        envs: SHA,BRANCH
+        script: |
+          echo "I am $SHA"
+          echo "I am $BRANCH"
+          mkdir /home/forome/anfisa_front/$BRANCH
+          sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo sed -i 's/FOROME-502/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo systemctl reload nginx
     
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
@@ -69,9 +78,9 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: '/home/forome/anfisa_front/anfisa-feature'
-#          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
+          TARGET: /home/forome/anfisa_front/'${{ github.ref_name }}'
           EXCLUDE: "/node_modules/"
+
     - name: Auth AWS
       if: always()
       uses: aws-actions/configure-aws-credentials@v1

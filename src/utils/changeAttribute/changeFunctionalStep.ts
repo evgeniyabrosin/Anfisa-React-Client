@@ -1,5 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 
 export const changeFunctionalStep = (
   params: any,
@@ -12,13 +13,12 @@ export const changeFunctionalStep = (
     code,
   })
 
-  const stepIndex = dtreeStore.currentStepIndex
-  const locationIndex = dtreeStore.groupIndexToChange
+  const { currentStepIndex, groupIndexToChange } = dtreeStore
 
-  const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
-  const location = [indexForApi, locationIndex]
+  const { location } = modalEditStore
 
-  const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
+  const attribute: any[] =
+    dtreeStore.stepData[currentStepIndex].groups[groupIndexToChange]
 
   const filteredAttribute: any[] = []
 

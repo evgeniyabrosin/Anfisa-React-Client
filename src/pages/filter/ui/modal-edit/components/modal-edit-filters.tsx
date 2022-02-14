@@ -7,11 +7,11 @@ import dtreeStore from '@store/dtree'
 import { Pagintaion } from '@components/pagintaion'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { createChunks } from '@utils/createChunks'
-import { QueryBuilderSearch } from '../query-builder-search'
+import { QueryBuilderSearch } from '../../query-builder/query-builder-search'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { ModalBase } from '../../query-builder/ui/modal-base'
+import { ModsDivider } from '../../query-builder/ui/mods-divider'
 import { EditModalButtons } from './edit-modal-buttons'
-import { HeaderModal } from './header-modal'
-import { ModalBase } from './modal-base'
-import { ModsDivider } from './mods-divider'
 
 export const ModalEditFilters = observer((): ReactElement => {
   const ref = useRef(null)

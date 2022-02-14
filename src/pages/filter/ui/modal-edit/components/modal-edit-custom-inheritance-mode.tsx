@@ -7,10 +7,10 @@ import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalSte
 import { getFuncParams } from '@utils/getFuncParams'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
-import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
+import { CustomInheritanceModeContent } from '../../query-builder/ui/custom-inheritance-mode-content'
+import { HeaderModal } from '../../query-builder/ui/header-modal'
+import { ModalBase } from '../../query-builder/ui/modal-base'
 import { EditModalButtons } from './edit-modal-buttons'
-import { HeaderModal } from './header-modal'
-import { ModalBase } from './modal-base'
 
 export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)

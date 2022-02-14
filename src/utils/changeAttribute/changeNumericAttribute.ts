@@ -1,5 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 
 export const changeNumericAttribute = (numericData: any[]) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -9,13 +10,12 @@ export const changeNumericAttribute = (numericData: any[]) => {
     code,
   })
 
-  const stepIndex = dtreeStore.currentStepIndex
-  const locationIndex = dtreeStore.groupIndexToChange
+  const { currentStepIndex, groupIndexToChange } = dtreeStore
 
-  const stepIndexForApi = dtreeStore.getStepIndexForApi(stepIndex)
-  const location = [stepIndexForApi, locationIndex]
+  const { location } = modalEditStore
 
-  const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
+  const attribute: any[] =
+    dtreeStore.stepData[currentStepIndex].groups[groupIndexToChange]
 
   const filteredAttribute: any[] = []
 

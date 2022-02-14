@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -21,7 +21,7 @@ interface AddSelectedFiltersI {
   variant?: [string, number]
 }
 
-class FilterStore {
+export class FilterStore {
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
@@ -29,6 +29,7 @@ class FilterStore {
   actionName?: ActionFilterEnum
   statFuncData: any = []
   filterCondition: Record<string, any> = {}
+  memorizedSelectedFilters: SelectedFiltersType | undefined = undefined
 
   selectedFiltersHistory: SelectedFiltersType[] = []
 
@@ -196,6 +197,16 @@ class FilterStore {
 
   clearFilterCondition(filterName: string) {
     delete this.filterCondition[filterName]
+  }
+
+  memorizeSelectedFilters() {
+    this.memorizedSelectedFilters = toJS(this.selectedFilters)
+  }
+
+  applyMemorizedFilters() {
+    if (this.memorizedSelectedFilters) {
+      this.selectedFilters = this.memorizedSelectedFilters
+    }
   }
 }
 

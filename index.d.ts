@@ -1,14 +1,3 @@
-declare global {
-  interface Window {
-    requestIdleCallback: (
-      callback: IdleRequestCallback,
-      options?: IdleRequestOptions,
-    ) => number
-  }
-}
-
-const requestIdleCallback = window.requestIdleCallback
-
 export interface DsDistItem {
   name: string
   'upd-time': Date
@@ -125,7 +114,7 @@ export interface StatList {
   vgroup: string
   'sub-kind': string
   detailed: boolean
-  variants: any[][]
+  variants: [string, number][]
   title: string
   family: string[]
   affected: string[]
