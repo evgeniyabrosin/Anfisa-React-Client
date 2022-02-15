@@ -1,0 +1,178 @@
+export enum DatasetKinds {
+  WS = 'ws',
+  XL = 'xl',
+}
+
+export type TCount = [
+  variantCounts: [number],
+  dnaVariantsCounts?: [number],
+  transcriptsCounts?: [number],
+]
+
+export type TDateISOString = string
+
+export type TNumericCondition = [
+  conditionType: 'numeric',
+  propertyName: string,
+  bounds: [
+    minimalBound: number | null,
+    isMinimalBound: boolean,
+    maximumBound: number | null,
+    isMaximalBound: boolean,
+  ],
+]
+
+export enum ConditionJoinMode {
+  OR = 'OR',
+  AND = 'AND',
+  NOT = 'NOT',
+}
+
+export type TEnumCondition = [
+  conditionType: 'enum',
+  propertyName: string,
+  joinMode: ConditionJoinMode,
+  valueVariants: string[],
+]
+export type TFuncCondition = [
+  conditionType: 'func',
+  propertyName: string,
+  joinMode: ConditionJoinMode,
+  valueVariants: string[],
+  functionArguments: unknown,
+]
+
+export type TCondition = TNumericCondition | TEnumCondition | TFuncCondition
+
+export type TVariant = [
+  value: string,
+  variantCounts: number,
+  dnaVariantsCounts?: number,
+  transcriptsCounts?: number,
+]
+
+export enum HistogramTypes {
+  LIN = 'LIN',
+  LOG = 'LOG',
+}
+
+export enum NumericPropertyStatusSubKinds {
+  INT = 'int',
+  FLOAT = 'float',
+  'TRANSCRIPT_INT' = 'transcript-int',
+  'TRANSCRIPT_FLOAT' = 'transcript-float',
+}
+
+export enum AttribueKinds {
+  NUMERIC = 'numeric',
+  ENUM = 'enum',
+  FUNC = 'func',
+}
+
+export interface IBasePropertyStatus {
+  name: string
+  kind: AttribueKinds
+  vgroup: string
+  title?: string
+  'sub-kind'?: string
+  'render-mode'?: string
+  tooltip?: string
+  incomplete?: true
+  detailed?: true
+  classes?: number[][]
+}
+
+export interface INumericPropertyStatus extends IBasePropertyStatus {
+  min?: number
+  max?: number
+  counts?: TCount[]
+  histogram?: [
+    histogramType: HistogramTypes,
+    minimalBound: number,
+    maximumBound: number,
+    numericCounts: number[],
+  ]
+  'sub-kind': NumericPropertyStatusSubKinds
+}
+
+export enum EnumPropertyStatusSubKinds {
+  STATUS = 'status',
+  MULTI = 'multi',
+  TRANSCRIPTS_STATUS = 'transcript-status',
+  TRANSCRIPTS_MULTI = 'transcript-multi',
+}
+
+export interface IEnumPropertyStatus extends IBasePropertyStatus {
+  variants?: TVariant[]
+  'sub-kind': EnumPropertyStatusSubKinds
+}
+
+export interface IFuncPropertyStatus extends IBasePropertyStatus {
+  variants?: TVariant[]
+  err?: string
+  'rq-id': string
+  no?: string
+}
+
+export type TPropertyStatus =
+  | INumericPropertyStatus
+  | IEnumPropertyStatus
+  | IFuncPropertyStatus
+
+export type TDocumentDescriptor = [
+  documentName: string,
+  pathToDocument: string,
+  contentInformation?: unknown,
+]
+
+export interface IBaseDatasetDescriptor {
+  name: string
+  kind: 'ws' | 'xl'
+  'create-time': TDateISOString
+  'upd-time': null | TDateISOString
+  note: null | string
+  'date-note': null | TDateISOString
+  total: number
+  doc: TDocumentDescriptor
+  ancestors: [
+    ancestorDatasetName: string,
+    datasetDocumentantion?: TDocumentDescriptor,
+  ][]
+}
+
+export enum SolutionEntryDescriptionEvalStatuses {
+  OK = 'ok',
+  RUNTIME = 'runtime',
+  ERROR = 'error',
+}
+
+export interface ISolutionEntryDescription {
+  name: string
+  standard: boolean
+  'eval-status': SolutionEntryDescriptionEvalStatuses
+  'upd-time'?: string
+  'upd-from'?: string
+  'sol-version': string
+}
+
+export type TZoneSetting = [
+  zoneName: string,
+  variants: string[],
+  isNegationRequired?: false,
+]
+
+export enum TableColorCodes {
+  GREY = 'grey',
+  GREEN = 'green',
+  YELLOW = 'yellow',
+  YELLOW_CROSS = 'yellow-cross',
+  RED = 'red',
+  RED_CROSS = 'red-cross',
+}
+
+export interface IRecordDescriptor {
+  cl: TableColorCodes
+  lb: string
+  no: number
+  dt?: string
+}
