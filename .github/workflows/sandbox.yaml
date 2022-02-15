@@ -6,7 +6,7 @@ name: add-githubactions-test CI
 on:
   push:
     branches:
-      - 'FOROME-*'
+      - '*FOROME-*'
       - '!main'
       - '!develop'
     tags: [ stage ]
