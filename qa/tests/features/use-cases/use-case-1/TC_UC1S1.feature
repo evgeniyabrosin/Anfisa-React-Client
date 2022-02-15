@@ -102,7 +102,7 @@ Feature: Use Case 1 S1
         And the number of variants there should be 41
     
       Example: 
-          | <Dataset name>  |
+          | Dataset name  |
           | Hearing_loss_v5 | 
 
 

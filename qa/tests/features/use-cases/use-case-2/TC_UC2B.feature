@@ -1,13 +1,13 @@
 Feature: Use Case 2 using the Filter Refiner
-  As a Anfisa user I want to study data of the "Predictions" section
+  As an Anfisa user I want to study data of the "Predictions" section
 
   Scenario: 1. Open the Dataset info
     Given the "Dataset list" was opened
     When the user clicks the "xl PF0005_WES" Dataset 
     Then the information of the XL-dataset (the "Dataset info" page) should be opened at the right part of the page   
 
-  Scenario: 2. Open Decision Tree Panel
-    Given "xl PF0005_WES" XL Dataset info was opened
+  Scenario: 2. Open the Decision Tree Panel
+    Given the "xl PF0005_WES" XL Dataset info was opened
     When the user clicks the "Open in viewer" dropdown menu at the middle part of the page
     And clicks the "Filter Refiner" option in the dropdown menu
     Then the Filter Refiner should be opened
@@ -15,10 +15,10 @@ Feature: Use Case 2 using the Filter Refiner
     And the value format should be "1,317,673" 
 
   Background: 
-    Given The Filter Refiner referred to the xl PF0005_WES dataset was opened
+    Given The Filter Refiner referred to the "xl PF0005_WES" dataset was opened
 
   Scenario Outline: 3. Add "gnomAD_AF <= 0.05" attribute
-    When the user types "gnom" in the search field of Filter Refiner
+    When the user types "gnom" in the search box of Filter Refiner
     And clicks "gnomAD_AF"
     And types <attribute value> in the field referred to the maximum value
     And clicks the "Add" button

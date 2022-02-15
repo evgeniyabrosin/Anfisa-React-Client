@@ -1,12 +1,12 @@
 Feature: Use Case 2 using the Decision Tree
-  As a Anfisa user I want to study data of the "Predictions" section
+  As an Anfisa user I want to study data of the "Predictions" section
 
   Scenario: 1. Open the Dataset info
     Given the "Dataset list" was opened
     When the user clicks the "xl PF0005_WES" Dataset 
     Then the information of the XL-dataset which displayed as the "Dataset info" page should be opened   
 
-  Scenario: 2. Open Decision Tree Panel
+  Scenario: 2. Open the Decision Tree Panel
     Given the "xl PF0005_WES" XL Dataset info was opened
     When the user clicks the "Open in viewer" dropdown menu at the middle part of the page
     And clicks the "Decision Tree Panel" option in the dropdown menu
