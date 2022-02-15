@@ -6,6 +6,7 @@ import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { RangeSlider } from '@ui/range-slider'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { DropDownSelectSign } from './dropdown-select-sign'
@@ -34,6 +35,7 @@ export const ModalSelectNumbers = observer((): ReactElement => {
 
   const minValue = attrData.min
   const maxValue = attrData.max
+  const subKind = attrData['sub-kind']
 
   const [valueFrom, setValueFrom] = useState('')
   const [valueTo, setValueTo] = useState('')
@@ -245,6 +247,17 @@ export const ModalSelectNumbers = observer((): ReactElement => {
           </div>
         )}
       </div>
+      <RangeSlider
+        mode="range"
+        min={minValue}
+        max={maxValue}
+        value={[valueFrom ? +valueFrom : null, valueTo ? +valueTo : null]}
+        onChange={value => {
+          setValueFrom(value[0] != null ? value[0].toString() : '')
+          setValueTo(value[1] != null ? value[1].toString() : '')
+        }}
+        step={subKind === 'float' ? 0.001 : 1}
+      />
       <SelectModalButtons
         handleClose={handleClose}
         handleModals={handleModals}

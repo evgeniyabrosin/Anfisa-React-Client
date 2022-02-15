@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
+import { RangeSlider } from '@ui/range-slider'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
 import { DropDownSelectSign } from '../../query-builder/ui/dropdown-select-sign'
 import { ExpandContentButton } from '../../query-builder/ui/expand-content-button'
@@ -36,6 +37,7 @@ export const ModalEditNumbers = observer((): ReactElement => {
 
   const minValue = attrData.min
   const maxValue = attrData.max
+  const subKind = attrData['sub-kind']
 
   const currentGroupLength: number = currentGroup.length
 
@@ -258,7 +260,20 @@ export const ModalEditNumbers = observer((): ReactElement => {
           </div>
         )}
       </div>
-
+      <RangeSlider
+        mode="range"
+        min={minValue}
+        max={maxValue}
+        value={[
+          valueFrom != null && valueFrom !== '' ? +valueFrom : null,
+          valueTo != null && valueTo !== '' ? +valueTo : null,
+        ]}
+        onChange={value => {
+          setValueFrom(value[0] != null ? value[0].toString() : '')
+          setValueTo(value[1] != null ? value[1].toString() : '')
+        }}
+        step={subKind === 'float' ? 0.001 : 1}
+      />
       <EditModalButtons
         handleClose={handleClose}
         handleSaveChanges={handleSaveChanges}
