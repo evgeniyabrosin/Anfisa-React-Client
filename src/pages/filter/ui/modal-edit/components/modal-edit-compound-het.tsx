@@ -9,6 +9,7 @@ import { ApproxStateModalMods } from '../../query-builder/ui/approx-state-modal-
 import { DisabledVariantsAmount } from '../../query-builder/ui/disabled-variants-amount'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { ModalBase } from '../../query-builder/ui/modal-base'
+import { getApprox } from '../../query-builder/ui/modal-select-compound-het'
 import { EditModalButtons } from './edit-modal-buttons'
 
 export interface IParams {
@@ -92,7 +93,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
   useEffect(() => {
     const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-    const params = `{"approx":"${approxCondition}","state":${
+    const params = `{"approx":${getApprox(approxCondition)},"state":${
       stateCondition === '-current-' || !stateCondition
         ? null
         : `"${stateCondition}"`
@@ -129,7 +130,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
     if (type === 'approx') {
       setApproxCondition(value)
 
-      const params = `{"approx":"${value}","state":${
+      const params = `{"approx":${getApprox(value)},"state":${
         stateCondition !== '-current-' ? `"${stateCondition}"` : null
       }}`
 
@@ -141,7 +142,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
     if (type === 'state') {
       setStateCondition(value)
 
-      const params = `{"approx":"${approxCondition}","state":${
+      const params = `{"approx":${getApprox(approxCondition)},"state":${
         value !== '-current-' ? `"${value}"` : null
       }}`
 
