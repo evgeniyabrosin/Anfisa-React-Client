@@ -14,7 +14,8 @@
       "@declarations": ["../index.d.ts"],
       "@theme": ["./theme/index.ts"],
       "@utils/*": ["./utils/*"],
-      "@i18n": ["./i18n/index.ts"]
+      "@i18n": ["./i18n/index.ts"],
+      "@service-providers/*": ["./service-providers/*"]
     }
   }
 }
