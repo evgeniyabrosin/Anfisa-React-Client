@@ -12,6 +12,10 @@ import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
 import { SelectModalButtons } from './select-modal-buttons'
 
+export const getApprox = (approxValue: string) => {
+  return approxValue === 'transcript' ? null : `${approxValue}`
+}
+
 export const ModalSelectCompoundHet = observer((): ReactElement => {
   const ref = useRef(null)
 
@@ -52,7 +56,7 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
   useEffect(() => {
     const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
 
-    const params = `{"approx":"${approxCondition}","state":${
+    const params = `{"approx":${getApprox(approxCondition)},"state":${
       stateCondition === '-current-' || !stateCondition
         ? null
         : `"${stateCondition}"`
@@ -77,7 +81,7 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
     if (type === 'approx') {
       setApproxCondition(value)
 
-      const params = `{"approx":"${value}","state":${
+      const params = `{"approx":${getApprox(value)},"state":${
         stateCondition !== '-current-' ? `"${stateCondition}"` : null
       }}`
 
@@ -89,7 +93,7 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
     if (type === 'state') {
       setStateCondition(value)
 
-      const params = `{"approx":"${approxCondition}","state":${
+      const params = `{"approx":${getApprox(approxCondition)},"state":${
         value !== '-current-' ? `"${value}"` : null
       }}`
 
