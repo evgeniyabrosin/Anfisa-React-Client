@@ -14,6 +14,7 @@ import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import { IRecordDescriptor } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
@@ -34,7 +35,7 @@ export class DatasetStore {
   samples: string[] = []
   selectedVariantNumber?: number
 
-  wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
+  wsRecords: IRecordDescriptor[] = []
   offset = 0
   filteredNo: number[] = []
 

@@ -8,6 +8,7 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
+import { IAttributeDescriptors } from '@service-providers/dataset-level/dataset-level.interface'
 
 export const IgvButton = observer((): ReactElement => {
   const variant = toJS(variantStore.variant)
@@ -24,7 +25,9 @@ export const IgvButton = observer((): ReactElement => {
     return sampleName
   })
 
-  const locus: string = get(variant, '[0].rows[2].cells[0][0]', '')
+  const rows: IAttributeDescriptors[] = get(variant, '[0].rows', [])
+  const hg38Row = rows.find(element => element.name === 'hg38')
+  const locus = hg38Row?.cells[0][0] ?? ''
 
   const fixedLocus = locus.split(' ')[0]
 

@@ -1,8 +1,9 @@
 import { get } from 'lodash'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { IGridLayout, ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import { IReccntArguments } from '@service-providers/dataset-level/dataset-level.interface'
 import datasetStore from './dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
@@ -126,21 +127,38 @@ export class VariantStore {
   async fetchVarinatInfoAsync() {
     if (datasetStore.isXL) return
 
-    const details = datasetStore.wsRecords.find(
-      record => record.no === this.index,
+    const details = toJS(
+      datasetStore.wsRecords.find(record => record.no === this.index),
     )
 
+    const label = details?.lb
+    const geneNameInBrackets = label?.split(' ')[0] ?? ''
+    const geneName = geneNameInBrackets.slice(1, geneNameInBrackets.length - 1)
+
+    const isVariantWithoutGene = geneName === 'None'
+
+    // create reccntBody with URLSearchParams
+    const reccntArguments: IReccntArguments = {
+      ds: this.dsName,
+      rec: String(this.index),
+    }
+
+    if (!isVariantWithoutGene) {
+      reccntArguments.details = details?.dt
+    }
+
+    const reccntArgumentsList = Object.entries(reccntArguments)
+    const reccntBody = new URLSearchParams()
+
+    reccntArgumentsList.forEach(element => {
+      reccntBody.append(element[0], element[1])
+    })
+
     const [variantResponse, tagsResponse] = await Promise.all([
-      fetch(
-        getApiUrl(
-          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${
-            details ? details.dt : ''
-          }`,
-        ),
-        {
-          method: 'POST',
-        },
-      ),
+      fetch(getApiUrl('reccnt'), {
+        method: 'POST',
+        body: reccntBody,
+      }),
       fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
     ])
 

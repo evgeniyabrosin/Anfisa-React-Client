@@ -41,8 +41,8 @@ export interface IDsList {
 
 export interface IReccntArguments {
   ds: string
-  rec: number
-  details?: number
+  rec: string
+  details?: string
   samples?: number[]
 }
 
