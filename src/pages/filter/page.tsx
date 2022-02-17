@@ -145,7 +145,7 @@ const FilterPage = observer((): ReactElement => {
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
       <div className="overflow-hidden">
-        <Header source="filter">
+        <Header>
           <div className="text-white flex-grow flex justify-end pr-6">
             <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
               {t('filter.variants', {

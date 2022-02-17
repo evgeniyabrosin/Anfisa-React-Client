@@ -33,11 +33,11 @@ jobs:
     - run: yarn install
       env:
           REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
-          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud"
+          REACT_APP_IGV_SERVICE_URL: "https://anfisa-bams.s3.us-south.cloud-object-storage.appdomain.cloud"
     - run: yarn build
       env:
           REACT_APP_URL_BACKEND: "https://feature-sandbox.forome.dev/app"
-          REACT_APP_IGV_SERVICE_URL: "https://anfisa-druid.s3.us-south.cloud-object-storage.appdomain.cloud" 
+          REACT_APP_IGV_SERVICE_URL: "https://anfisa-bams.s3.us-south.cloud-object-storage.appdomain.cloud" 
     
     - name: Auth AWS
       uses: aws-actions/configure-aws-credentials@v1
