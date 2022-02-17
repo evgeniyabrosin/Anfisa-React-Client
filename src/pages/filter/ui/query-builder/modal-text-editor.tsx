@@ -12,6 +12,7 @@ import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import Editor from '@monaco-editor/react'
+import { IDtreeCheck } from '@service-providers/decision-trees/decision-trees.interface'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
 import { HeaderModal } from './ui/header-modal'
 import { ModalBase } from './ui/modal-base'
@@ -42,7 +43,7 @@ const emptyError = {
 }
 
 const hasError = function (error: typeof emptyError) {
-  return error.error.length > 0
+  return error.error?.length > 0
 }
 
 export const ModalTextEditor = observer((): ReactElement => {
@@ -90,7 +91,7 @@ export const ModalTextEditor = observer((): ReactElement => {
     )
 
     if (response.ok) {
-      const result = await response.json()
+      const result: IDtreeCheck = await response.json()
 
       setError(
         result.error
