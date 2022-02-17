@@ -22,10 +22,9 @@ import userIcon from '@images/thomas-hunt.jpg'
 
 interface Props {
   children?: ReactElement | ReactNode
-  source?: string
 }
 
-export const Header = observer(({ children, source }: Props): ReactElement => {
+export const Header = observer(({ children }: Props): ReactElement => {
   const [datasets, setDatasets] = useState([])
   const [xlDatasetName, setXlDatasetName] = useState('')
   const params = useParams()
