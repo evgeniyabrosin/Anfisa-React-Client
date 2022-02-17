@@ -20,6 +20,22 @@ import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
+//TODO: Delete interfaces when merge service providers
+enum TableColorCodes {
+  GREY = 'grey',
+  GREEN = 'green',
+  YELLOW = 'yellow',
+  YELLOW_CROSS = 'yellow-cross',
+  RED = 'red',
+  RED_CROSS = 'red-cross',
+}
+interface IRecordDescriptor {
+  cl: TableColorCodes
+  lb: string
+  no: number
+  dt?: string
+}
+
 const INCREASE_INDEX = 50
 
 export type Condition = [string, string, unknown, string[]?, unknown?]
@@ -34,7 +50,7 @@ export class DatasetStore {
   samples: string[] = []
   selectedVariantNumber?: number
 
-  wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
+  wsRecords: IRecordDescriptor[] = []
   offset = 0
   filteredNo: number[] = []
 
