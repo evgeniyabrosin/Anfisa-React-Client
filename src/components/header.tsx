@@ -56,8 +56,8 @@ export const Header = observer(({ children }: Props): ReactElement => {
       )
     }
 
-    source !== 'filter' && initAsync()
-  }, [ds, source])
+    initAsync()
+  }, [ds])
 
   const handleChangeDataset = (arg: Option) => {
     if (arg.value === ds) return
