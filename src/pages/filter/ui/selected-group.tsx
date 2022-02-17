@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import filterStore from '@store/filter'
 import { EmptySelectedGroup } from './empty-selected-group'
-import { EnumPanel } from './enum-panel'
-import { FunctionPanel } from './function-panel'
-import { RangePanel } from './range-panel'
+import { EnumPanel } from './panels/enum-panel'
+import { FunctionPanel } from './panels/function-panel/function-panel'
+import { RangePanel } from './panels/range-panel'
 import { SelectedGroupHeader } from './selected-group-header'
 
 export const SelectedGroup = observer((): ReactElement => {

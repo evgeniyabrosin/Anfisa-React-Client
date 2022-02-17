@@ -10,8 +10,8 @@ import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getSortedArray } from '@utils/getSortedArray'
+import { CustomInheritanceModeContent } from '../../../query-builder/ui/custom-inheritance-mode-content'
 import { PanelButtons } from './panelButtons'
-import { CustomInheritanceModeContent } from './query-builder/ui/custom-inheritance-mode-content'
 
 export interface ICustomInheritanceModeProps {
   scenario: any
@@ -231,7 +231,7 @@ export const CustomInheritanceMode = observer(
     return (
       <React.Fragment>
         <CustomInheritanceModeContent
-          attrData={attrData}
+          problemGroups={attrData.family}
           handleSetScenario={handleSetScenario}
           selectStates={selectStates}
           handleReset={handleReset}

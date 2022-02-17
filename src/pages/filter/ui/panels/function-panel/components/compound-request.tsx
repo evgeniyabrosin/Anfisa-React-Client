@@ -18,10 +18,10 @@ import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import { AllNotModalMods } from '../../../query-builder/ui/all-not-modal-mods'
+import { DisabledVariantsAmount } from '../../../query-builder/ui/disabled-variants-amount'
+import { selectOptions } from '../../../query-builder/ui/modal-select-custom-inheritance-mode'
 import { PanelButtons } from './panelButtons'
-import { AllNotModalMods } from './query-builder/ui/all-not-modal-mods'
-import { DisabledVariantsAmount } from './query-builder/ui/disabled-variants-amount'
-import { selectOptions } from './query-builder/ui/modal-select-custom-inheritance-mode'
 
 export interface ICompoundRequestFormValues {
   requestCondition: TRequestCondition[]
@@ -55,7 +55,6 @@ export const CompoundRequest = observer(
   ({
     setFieldValue,
     submitForm,
-    resetForm,
   }: FormikProps<ICompoundRequestProps>): ReactElement => {
     const cachedValues =
       filterStore.readFilterCondition<ICompoundRequestFormValues>(
@@ -373,7 +372,6 @@ export const CompoundRequest = observer(
           selectedFilterName={filterStore.selectedGroupItem.name}
           selectedFilterGroup={filterStore.selectedGroupItem.vgroup}
           onSubmit={submitForm}
-          resetForm={resetForm}
           resetFields={handleResetFields}
           disabled={!variants}
         />

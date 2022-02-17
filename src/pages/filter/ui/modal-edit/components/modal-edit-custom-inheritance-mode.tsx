@@ -221,7 +221,7 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
       />
 
       <CustomInheritanceModeContent
-        attrData={attrData}
+        problemGroups={attrData.family}
         handleSetScenario={handleSetScenario}
         selectStates={selectStates}
         handleReset={handleReset}
