@@ -3,8 +3,15 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { IGridLayout, ReccntCommon, ReccntDisplayItem } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
-import { IReccntArguments } from '@service-providers/dataset-level/dataset-level.interface'
 import datasetStore from './dataset'
+
+//TODO: Delete interface when merge service providers
+interface IReccntArguments {
+  ds: string
+  rec: string
+  details?: string
+  samples?: number[]
+}
 
 const DRAWER_DEFAULT_WIDTH = 6
 const DRAWER_DEFAULT_HEIGHT = 1
