@@ -208,7 +208,7 @@ export const en = {
     showReturnedVariantsForStep: 'Show {returnValue} varants for step {index}',
   },
   error: {
-    getBack: 'Get back to start page',
+    getBack: 'Back to home',
     smthWentWrong: 'Sorry, something went wrong...',
     noFirstSymbols: 'No symbols at the first position',
     tooLongNote: 'Note is too long',
@@ -218,5 +218,9 @@ export const en = {
   igv: {
     openIgv: 'Open igv',
     filesNotFound: 'Files not found',
+  },
+  notFound: {
+    somethingIsWrong: 'Something is wrong',
+    info: 'The page you are looking for was moved, removed, renamed or might never existed',
   },
 }
