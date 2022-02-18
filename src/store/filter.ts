@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -18,7 +19,7 @@ export type SelectedFiltersType = Record<
 interface AddSelectedFiltersI {
   group: string
   groupItemName: string
-  variant?: [string, number]
+  variant?: TVariant
 }
 
 export class FilterStore {
@@ -86,6 +87,8 @@ export class FilterStore {
 
     if (isEmpty(this.selectedFilters[group])) {
       delete this.selectedFilters[group]
+    } else {
+      delete this.selectedFilters[group][groupItemName]
     }
   }
 
@@ -195,8 +198,10 @@ export class FilterStore {
     this.filterCondition = {}
   }
 
-  clearFilterCondition(filterName: string) {
-    delete this.filterCondition[filterName]
+  clearFilterCondition(filterName: string, subFilterName?: string) {
+    subFilterName
+      ? delete this.filterCondition[filterName][subFilterName]
+      : delete this.filterCondition[filterName]
   }
 
   memorizeSelectedFilters() {

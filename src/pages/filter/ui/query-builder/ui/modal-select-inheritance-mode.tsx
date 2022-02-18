@@ -51,7 +51,10 @@ export const ModalSelectInheritanceMode = observer((): ReactElement => {
 
     initAsync()
 
-    return () => dtreeStore.resetSelectedFilters()
+    return () => {
+      dtreeStore.resetSelectedFilters()
+      dtreeStore.resetStatFuncData()
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

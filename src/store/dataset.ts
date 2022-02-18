@@ -14,9 +14,16 @@ import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import {
+  ICustomInheritanceModeArgs,
+  IRecordDescriptor,
+  TFuncCondition,
+} from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
+import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
+import { TFuncArgs } from './../service-providers/common/common.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -34,7 +41,7 @@ export class DatasetStore {
   samples: string[] = []
   selectedVariantNumber?: number
 
-  wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
+  wsRecords: IRecordDescriptor[] = []
   offset = 0
   filteredNo: number[] = []
 
@@ -322,35 +329,97 @@ export class DatasetStore {
     })
   }
 
+  getVariantValue(groupItemName: string, condition: TFuncCondition) {
+    switch (groupItemName) {
+      case FuncStepTypesEnum.GeneRegion:
+        return JSON.stringify(condition[condition.length - 1])
+      case FuncStepTypesEnum.CustomInheritanceMode:
+        return JSON.stringify(condition[condition.length - 1]).replace(
+          /[{}]/g,
+          '',
+        )
+      default:
+        return condition[condition.length - 2] as string
+    }
+  }
+
+  getConditionValue(
+    groupItemName: FuncStepTypesEnum,
+    condition: TFuncCondition,
+  ) {
+    const conditionArgs = condition[4]
+    const isConditionArgsTypeOf = <T extends TFuncArgs>(
+      args: TFuncArgs,
+      funcType: FuncStepTypesEnum,
+    ): args is T => groupItemName === funcType
+
+    if (
+      isConditionArgsTypeOf<ICustomInheritanceModeArgs>(
+        conditionArgs,
+        FuncStepTypesEnum.CustomInheritanceMode,
+      )
+    ) {
+      return { scenario: Object.entries(conditionArgs.scenario) }
+    }
+
+    return conditionArgs
+  }
+
   updatePresetLoad(dsStatData: any, source?: string) {
     this.conditions = dsStatData.conditions
     filterStore.selectedFilters = {}
 
     dsStatData.conditions?.forEach((condition: any[]) => {
-      const name = condition[1]
+      const groupItemName = condition[1]
 
       const filterItem = dsStatData['stat-list']?.find(
-        (item: any) => item.name === name,
+        (item: any) => item.name === groupItemName,
       )
 
-      if (
-        condition[0] === FilterKindEnum.Enum ||
-        condition[0] === FilterKindEnum.Func
-      ) {
+      if (condition[0] === FilterKindEnum.Enum) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
             group: filterItem.vgroup,
-            groupItemName: name,
+            groupItemName,
             variant: [value, 0],
           })
         })
-      } else {
+      }
+
+      if (condition[0] === FilterKindEnum.Func) {
+        const variantValue = this.getVariantValue(
+          groupItemName,
+          condition as TFuncCondition,
+        )
+
         filterStore.addSelectedFilters({
           group: filterItem.vgroup,
-          groupItemName: name,
-          variant: [name, condition[condition.length - 1]],
+          groupItemName,
+          variant: [variantValue, 0],
         })
-        filterStore.setFilterCondition(name, condition[condition.length - 1])
+
+        const conditionValue = this.getConditionValue(
+          groupItemName,
+          condition as TFuncCondition,
+        )
+
+        filterStore.setFilterCondition(groupItemName, {
+          conditions: conditionValue,
+          variants: condition[3],
+        })
+      }
+
+      if (condition[0] === FilterKindEnum.Numeric) {
+        filterStore.addSelectedFilters({
+          group: filterItem.vgroup,
+          groupItemName,
+          variant: [groupItemName, condition[condition.length - 1]],
+        })
+
+        filterStore.setFilterCondition(
+          groupItemName,
+          condition[condition.length - 1],
+        )
       }
     })
 

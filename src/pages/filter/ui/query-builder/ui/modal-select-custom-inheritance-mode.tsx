@@ -48,6 +48,8 @@ export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 
+    return () => dtreeStore.resetStatFuncData()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -204,7 +206,7 @@ export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
       />
 
       <CustomInheritanceModeContent
-        attrData={attrData}
+        problemGroups={attrData.family}
         handleSetScenario={handleSetScenario}
         selectStates={selectStates}
         handleReset={handleReset}
