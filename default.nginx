@@ -5,18 +5,18 @@ upstream backend {
 server {
     listen 80;
 
-    location /anfisa/app {
+    location /app {
         include uwsgi_params;
         uwsgi_read_timeout 3000;
         uwsgi_buffering off;
         uwsgi_pass anfisa-backend:80;
     }
 
-    location ~ /anfisa/app/ui/images {
+    location ~ /app/ui/images {
         proxy_pass http://anfisa-backend:80;
     }
 
-    location ~ /anfisa/app/ui {
+    location ~ /app/ui {
         proxy_pass http://anfisa-backend:80;
     }
     
