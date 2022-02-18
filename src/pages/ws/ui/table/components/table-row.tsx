@@ -28,8 +28,8 @@ export const TableRow = observer(
   ({
     row,
     rowKey,
-    parent,
     index,
+    parent,
     style,
     onClickRow,
   }: React.PropsWithChildren<ITableRowProps>) => {
