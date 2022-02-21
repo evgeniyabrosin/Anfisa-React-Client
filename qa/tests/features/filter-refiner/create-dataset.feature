@@ -85,10 +85,8 @@ Feature: Filter Refiner, Create dataset
 		And the "⏚Loss_Of_Function" preset was loaded
 		When the user clicks the "Save dataset" button
 		And enters name for the dataset
-		And clicks "Add dataset"
-		And the "Add new dataset" dialog is displayed
 		And user clicks "X" button
-		Then creation process should not be canceled
+		Then creation process should  be canceled
 		
 	Scenario: Close Create Dataset dialog during creation
 		Given "Filter Refiner" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
@@ -96,6 +94,5 @@ Feature: Filter Refiner, Create dataset
 		When the user clicks the "Save dataset" button
 		And enters name for the dataset
 		And clicks "Add dataset"
-		And the "Add new dataset" dialog is displayed
 		And user clicks "X" button
 		Then creation process should not be canceled
