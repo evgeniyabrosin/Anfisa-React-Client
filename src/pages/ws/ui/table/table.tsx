@@ -231,7 +231,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
                 <div
                   {...cell.getCellProps()}
                   key={Math.random()}
-                  className={cn('td overflow-hidden', {
+                  className={cn('td ', {
                     'py-1':
                       cell.column.Header !== tableColumnMap.samples &&
                       columnsStore.viewType === ViewTypeEnum.Compact,
@@ -242,13 +242,15 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
                       cell.column.Header === tableColumnMap.samples &&
                       columnsStore.viewType !== ViewTypeEnum.Compact,
                     'px-4': cell.column.Header !== tableColumnMap.samples,
+                    'overflow-hidden': !isSampleColumn,
                   })}
                 >
                   {isSampleColumn ? (
                     <div onClick={stopPropagation}>
                       <ScrollContainer
                         style={{
-                          cursor: `${valueNumber > 3 ? 'grabbing' : 'auto'}`,
+                          cursor: `${valueNumber > 3 ? 'grabbing' : 'pointer'}`,
+                          overflow: `${valueNumber > 3 ? 'hidden' : 'visible'}`,
                         }}
                       >
                         {cell.render('Cell')}
