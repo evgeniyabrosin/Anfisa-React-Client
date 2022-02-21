@@ -32,8 +32,8 @@ Feature: Main table, Filter by Gene
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Gene" section
         And the "Gene" dialog is opened
-        And  User clicks a gene lists
-        Then  Gene list should be checked but should not be added to the panel
+        And  User clicks a gene
+        Then  Gene should be checked but should not be added to the panel
     ​
     Scenario: Add filter by one gene
         Given The "Main table" for WS dataset was open
@@ -52,14 +52,14 @@ Feature: Main table, Filter by Gene
         Then Variants list should be filtered by selected genes
     ​
     Scenario: Edit filter
-        Given Some gene lists were added to the "Gene"
+        Given Some genes were added to the "Gene"
         When User clicks "Edit" button near "Gene"
         And adds/removes some Genes from the "Gene"
         And clicks the "Apply" button
         Then Variants list should be filtered by newly selected genes
     ​
     Scenario: Clear All
-        Given Some Samples were added to the "Gene"
+        Given Some genes were added to the "Gene"
         When User clicks "Edit" button near "Gene"
         And clicks the "Clear all" button
         And clicks the "Apply" button
@@ -100,7 +100,7 @@ Feature: Main table, Filter by Gene
         And the "Gene" dialog is opened
         And  User enters existed gene with upper-case in the Search field
         Then  The gene should be searched
-    ​
+    
     Scenario: Search by random row
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Gene" section

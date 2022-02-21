@@ -1,5 +1,5 @@
-Feature: Filter Refiner, Presets
-	As a user, I want to apply predefined presets to filter variants
+Feature: Filter Refiner, Filter by List-value attributes
+	As a user, I want to apply filters with list-value attributes
 
 
 	Scenario: Open the Filter Refiner page for the secondary dataset
