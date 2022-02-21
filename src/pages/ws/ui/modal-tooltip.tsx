@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactElement, ReactNode } from 'react'
+import { PropsWithChildren, ReactElement } from 'react'
 
 export const ModalTooltip = ({
   children,
