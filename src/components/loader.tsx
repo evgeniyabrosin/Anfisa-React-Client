@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 export interface ILoaderProps {
   size: 'xl' | 'l' | 'm' | 's' | 'xs'
+  color: 'default' | 'white'
 }
 
 const loaderSizes: Record<
@@ -110,10 +111,17 @@ const Root = styled.div<{ size: ILoaderProps['size'] }>`
 
 export const Loader = ({
   size = 'l',
+  color = 'default',
 }: React.PropsWithChildren<Partial<ILoaderProps>>): ReactElement => {
   return (
     <Root size={size}>
-      <div className="loader text-blue-bright">Loading...</div>
+      <div
+        className={`loader ${
+          color === 'default' ? 'text-blue-bright' : 'text-white'
+        }`}
+      >
+        Loading...
+      </div>
     </Root>
   )
 }
