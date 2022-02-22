@@ -7,6 +7,8 @@ Feature: Main table, IGV
 		And Drawer is open
 		And user looks at the header of the "General" section
 		Then the "Open IGV" button should not be present.
+		And Empty screen should be displayed
+        And "Back to Home" button should return on the Main Page
 ​
 	Scenario: The "Open IGV" button is present
 		Given Main Table was opened
