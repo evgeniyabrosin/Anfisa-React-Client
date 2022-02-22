@@ -41,7 +41,7 @@ Feature: Use Case 2 using the Decision Tree
     Then the attribute should be added to Step 1
     And the <value> value in this particular format should appear near the green plus referred to Step 1
   
-  Example:
+  Examples:
       | att_name   | attribute | subattribute      | value |
       | pan        | Panels    | Complement_System | 2,331 |
       | var        | Varian_in | PF                | 2,020 | 
@@ -61,7 +61,7 @@ Feature: Use Case 2 using the Decision Tree
     And the <bar_1> should have <num_variants_1>
     And the <bar_2> should have <num_variants_2>
     
-    Example: 
+    Examples: 
       | graph name | graph           | bars | bar_1       | num_variants_1 | bar_2     | num_variants_2 |
       | poly       | Polyphen_2_HVAR | 4    | D           | 51             | B         | 86             |
       | poly       | Polyphen_2_HDIV | 4    | D           | 61             | B         | 66             |
@@ -96,7 +96,7 @@ Feature: Use Case 2 using the Decision Tree
     And the <bar_1> should have <num_variants_1>
     And the <bar_2> should have <num_variants_2>
     
-    Example: 
+    Examples: 
       | graph name | graph           | bars | bar_1       | num_variants_1 | bar_2     | num_variants_2 |
       | poly       | Polyphen_2_HVAR | 4    | D           | 20             | B         | 54             |
       | poly       | Polyphen_2_HDIV | 4    | D           | 28             | B         | 41             |
@@ -134,7 +134,7 @@ Feature: Use Case 2 using the Decision Tree
     And the <bar_1> should have <num_variants_1>
     And the <bar_2> should have <num_variants_2>
     
-    Example: 
+    Examples: 
       | graph name | graph           | bars | bar_1       | num_variants_1 | bar_2     | num_variants_2 |
       | poly       | Polyphen_2_HVAR | 4    | D           | 35             | B         | 66             |
       | poly       | Polyphen_2_HDIV | 4    | D           | 49             | B         | 49             |
@@ -169,7 +169,7 @@ Feature: Use Case 2 using the Decision Tree
     And the <bar_1> should have <num_variants_1>
     And the <bar_2> should have <num_variants_2>
     
-    Example: 
+    Examples: 
       | graph name | graph           | bars | bar_1       | num_variants_1 | bar_2     | num_variants_2 |
       | poly       | Polyphen_2_HVAR | 4    | D           | 12             | B         | 30             |
       | poly       | Polyphen_2_HDIV | 4    | D           | 16             | B         | 24             |

@@ -105,6 +105,8 @@ Feature: Decision Tree, Locus attributes
 		And 163,295 variants should be included to the third step
 		And 5,113,414 variants should be in the final step
 
+#	Scenario: Replace
+
 	Scenario: Negate full step
 		Given the Decision Tree page was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
 		And three steps with Gene Region attributes were added to the tree
@@ -174,5 +176,5 @@ Feature: Decision Tree, Locus attributes
 
 #	Scenario Outline: Include step with Gene Region
 
-#	Scenario Ountline: Include final step
+#	Scenario Outline: Include final step
 
