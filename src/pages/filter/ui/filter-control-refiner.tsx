@@ -1,5 +1,4 @@
 import { Fragment, ReactElement, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { reaction } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -15,6 +14,7 @@ import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
+import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { FilterButton } from './filter-button'
 import { FilterModal } from './filter-modal'
@@ -64,40 +64,28 @@ export const FilterControlRefiner = observer((): ReactElement => {
     if (filterStore.actionName === ActionFilterEnum.Delete) {
       presetStore.deletePresetAsync(activePreset)
       setActivePreset('')
+
+      filterStore.resetActionName()
+      showToast(t('header.presetFilterAction.delete'), 'success')
     }
 
     if (filterStore.actionName === ActionFilterEnum.Join) {
       presetStore.joinPresetAsync(activePreset)
+      filterStore.resetActionName()
+      showToast(t('header.presetFilterAction.join'), 'success')
     }
 
     if (filterStore.actionName === ActionFilterEnum.Create) {
       const isPresetNameValid = validatePresetName(createPresetName)
 
       if (!isPresetNameValid) {
-        toast.error(t('filter.notValidName'), {
-          position: 'bottom-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        })
+        showToast(t('filter.notValidName'), 'error')
 
         return
       }
 
       createPresetName && presetStore.updatePresetAsync(createPresetName)
-
-      toast.info(t('general.presetCreated'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('general.presetCreated'), 'success')
 
       setCreatePresetName('')
 
@@ -106,6 +94,9 @@ export const FilterControlRefiner = observer((): ReactElement => {
 
     if (filterStore.actionName === ActionFilterEnum.Modify) {
       presetStore.updatePresetAsync(activePreset)
+      filterStore.resetActionName()
+
+      showToast(t('header.presetFilterAction.modify'), 'success')
     }
   }
 

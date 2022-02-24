@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import isBoolean from 'lodash/isBoolean'
 import { observer } from 'mobx-react-lite'
@@ -12,6 +11,7 @@ import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { showToast } from '@utils/notifications/showToast'
 import { noFirstSymbolsPattern } from '@utils/validation/validationPatterns'
 import { TagsContainer } from './tags-container'
 
@@ -78,15 +78,7 @@ const DrawerTagModal = observer(({ close }: any) => {
 
   const handleSetCustomTag = () => {
     if (variantStore.generalTags.includes(customTag)) {
-      toast.error(t('variant.tagExists'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('variant.tagExists'), 'error')
     } else {
       variantStore.updateGeneralTags(customTag)
       variantStore.updateTagsWithNotes([customTag, true])

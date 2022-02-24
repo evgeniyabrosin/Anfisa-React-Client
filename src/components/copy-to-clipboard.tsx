@@ -1,10 +1,10 @@
 import { ReactElement } from 'react'
-import { toast } from 'react-toastify'
 import cn, { Argument } from 'classnames'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { t } from '@i18n'
 import { Icon } from '@ui/icon'
+import { showToast } from '@utils/notifications/showToast'
 
 interface Props {
   text: string
@@ -17,15 +17,7 @@ export const CopyToClipboard = ({ text, className }: Props): ReactElement => {
 
     copyToClipboard(text)
 
-    toast.info(t('ds.copied'), {
-      position: 'bottom-right',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-    })
+    showToast(t('ds.copied'), 'info')
   }
 
   return (

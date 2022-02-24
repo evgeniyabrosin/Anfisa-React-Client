@@ -1,5 +1,4 @@
 import { Fragment, ReactElement, useState } from 'react'
-import { toast } from 'react-toastify'
 import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -16,6 +15,7 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
+import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { DtreeModal } from './dtree-modal'
 import { FilterButton } from './filter-button'
@@ -55,15 +55,7 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
 
   const handleCreateTree = () => {
     if (dtreeStore.dtreeCode.length < 13) {
-      toast.error(t('dtree.dtreeIsEmpty'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('dtree.dtreeIsEmpty'), 'error')
     } else {
       filterStore.setActionName(ActionFilterEnum.Create)
     }
@@ -89,15 +81,7 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
       const isDtreeNameValid = validatePresetName(createTreeName)
 
       if (!isDtreeNameValid) {
-        toast.error(t('error.dtreeNameIsNotValid'), {
-          position: 'bottom-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        })
+        showToast(t('error.dtreeNameIsNotValid'), 'error')
 
         return
       }
@@ -125,15 +109,7 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
 
     dtreeStore.fetchDtreeSetAsync(body)
 
-    toast.success(notification, {
-      position: 'bottom-right',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-    })
+    notification && showToast(notification, 'success')
 
     filterStore.setActionName()
   }

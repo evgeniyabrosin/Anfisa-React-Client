@@ -1,6 +1,5 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -12,6 +11,7 @@ import dtreeStore from '@store/dtree'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
+import { showToast } from '@utils/notifications/showToast'
 import { QueryResults } from './query-results'
 
 export const QuerySelected = observer((): ReactElement => {
@@ -43,15 +43,7 @@ export const QuerySelected = observer((): ReactElement => {
     }
 
     allVariants > 2600
-      ? toast.error(t('filter.tooMuchVariants'), {
-          position: 'bottom-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        })
+      ? showToast(t('filter.tooMuchVariants'), 'error')
       : history.push(`${Routes.WS}?ds=${params.get('ds')}${conditionsUrl}`, {
           prevPage: 'refiner',
         })

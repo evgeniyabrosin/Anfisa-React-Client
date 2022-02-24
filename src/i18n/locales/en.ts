@@ -28,6 +28,11 @@ export const en = {
       frontend: 'Frontend: Anfisa {version}',
       backend: 'Backend: {version}',
     },
+    presetFilterAction: {
+      modify: 'Preset has been modified',
+      join: 'Preset has been joined',
+      delete: 'Preset has been deleted',
+    },
   },
   home: {
     title: 'Home',

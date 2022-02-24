@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -19,6 +18,7 @@ import { Attention } from '@ui/icons/attention'
 import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
+import { showToast } from '@utils/notifications/showToast'
 import {
   noFirstNumberPattern,
   noSymbolPattern,
@@ -103,15 +103,7 @@ export const ModalSaveDataset = observer(() => {
 
       operations.resetSavingStatus()
     } else {
-      toast.warning(t('general.creaitionIsInProcess'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('general.creaitionIsInProcess'), 'warning')
     }
   }
 
