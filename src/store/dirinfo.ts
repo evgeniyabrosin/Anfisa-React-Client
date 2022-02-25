@@ -7,6 +7,7 @@ import { DirInfoType, DsDistItem, DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
+import { HgModes } from '@service-providers/dataset-level/dataset-level.interface'
 import datasetStore from './dataset'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
@@ -174,6 +175,13 @@ class DirInfoStore {
     this.infoFrameLink = ''
     this.iframeInfoFullscreen = false
     this.activeInfoName = ''
+  }
+
+  // TODO: update type after implantion IDsInfo interface
+  get locusMode(): HgModes {
+    const meta: any = this.dsinfo.meta
+    const hgModeValue: HgModes = meta?.modes?.[0]
+    return hgModeValue
   }
 }
 

@@ -14,8 +14,26 @@ export interface IDsInfoClass {
   values: string[]
 }
 
+export enum HgModes {
+  HG19 = 'hg19',
+  HG38 = 'hg38',
+}
+
+// this is an auto-generated interface and is not in the documentation
+export interface IDsInfoMeta {
+  case?: string
+  cohorts?: any[]
+  data_schema?: string
+  modes?: HgModes[]
+  proband?: string
+  record_type?: string
+  samples?: unknown
+  versions?: unknown
+  [key: string]: unknown
+}
+
 export interface IDsInfo extends IBaseDatasetDescriptor {
-  meta: Record<string, unknown>
+  meta: IDsInfoMeta
   classes: IDsInfoClass[]
   'unit-groups': string[]
   cohorts: string[]
