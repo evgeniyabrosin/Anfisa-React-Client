@@ -71,7 +71,10 @@ export const FilterControlRefiner = observer((): ReactElement => {
 
     if (filterStore.actionName === ActionFilterEnum.Join) {
       presetStore.joinPresetAsync(activePreset)
+
       filterStore.resetActionName()
+      setActivePreset('')
+
       showToast(t('header.presetFilterAction.join'), 'success')
     }
 
