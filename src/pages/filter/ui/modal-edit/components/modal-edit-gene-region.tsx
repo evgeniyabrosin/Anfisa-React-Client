@@ -3,6 +3,7 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { GeneRegionContent } from '../../query-builder/ui/gene-region-content'
@@ -13,7 +14,7 @@ import { EditModalButtons } from './edit-modal-buttons'
 export const ModalEditGeneRegion = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeStore.groupIndexToChange
 
   const currentGroup =
@@ -47,11 +48,7 @@ export const ModalEditGeneRegion = observer((): ReactElement => {
   }
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"locus":"${getDefaultValue()}"}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 

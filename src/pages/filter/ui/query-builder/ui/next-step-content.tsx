@@ -4,8 +4,10 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@store/dtree/active-step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { makeStepActive } from '@utils/makeStepActive'
 import { NextStepContentItem } from './next-step-content-item'
 
 interface IProps {
@@ -69,14 +71,16 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const wordList = getWords(condition)
 
   const openModal = () => {
-    makeStepActive(index)
-    dtreeStore.openModalAttribute(index)
+    activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+
+    dtreeStore.openModalAttribute()
   }
 
   return (
     <div className="flex flex-col items-start py-2 h-auto w-full">
       <Content>
         <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
+          {/* TODO: add variable "isEmptyStep" instead of "groups && groups.length > 0" */}
           {groups && groups.length > 0 ? (
             groups.map((group: any, currNo: number) => (
               <NextStepContentItem

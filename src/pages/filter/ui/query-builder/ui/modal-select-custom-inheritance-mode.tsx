@@ -5,6 +5,7 @@ import { ActionType } from '@declarations'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getSortedArray } from '@utils/getSortedArray'
 import { CustomInheritanceModeContent } from './custom-inheritance-mode-content'
@@ -17,7 +18,7 @@ export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
 export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
@@ -38,13 +39,9 @@ export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
   })
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = datasetStore.isXL
       ? '{"scenario":{"2":["HG002"],"0-1":["HG003","HG004"]}}'
       : '{"scenario":{"2":["NA24385"],"0-1":["NA24143","NA24149"]}}'
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -87,11 +84,7 @@ export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
       if (newScenario[index + 1]) scenarioString += ','
     })
 
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"scenario":{${scenarioString}}}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }
@@ -181,7 +174,7 @@ export const ModalSelectCustomInheritanceMode = observer((): ReactElement => {
 
   const handleModals = () => {
     dtreeStore.closeModalSelectCustomInheritanceMode()
-    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 

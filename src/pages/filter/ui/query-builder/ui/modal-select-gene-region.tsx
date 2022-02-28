@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { GeneRegionContent } from './gene-region-content'
@@ -17,7 +18,7 @@ export const ModalSelectGeneRegion = observer((): ReactElement => {
     return () => dtreeStore.resetStatFuncData()
   }, [])
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
@@ -48,7 +49,7 @@ export const ModalSelectGeneRegion = observer((): ReactElement => {
 
   const handleModals = () => {
     dtreeStore.closeModalSelectGeneRegion()
-    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 

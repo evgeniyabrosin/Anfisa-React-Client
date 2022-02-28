@@ -37,10 +37,6 @@ export const validateLocusCondition = ({
     const params = `{"locus":"${value}"}`
 
     if ((currentStepIndex || currentStepIndex === 0) && groupName) {
-      const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
       dtreeStore.fetchStatFuncAsync(groupName, params)
     } else {
       filterStore.fetchStatFuncAsync(FuncStepTypesEnum.GeneRegion, params)

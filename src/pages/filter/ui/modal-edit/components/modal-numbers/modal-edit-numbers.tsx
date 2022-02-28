@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { InputNumber } from '@ui/input-number'
 import { RangeSlider } from '@ui/range-slider'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
@@ -22,11 +23,10 @@ export const ModalEditNumbers = observer((): ReactElement => {
   const ref = useRef(null)
 
   const groupName = dtreeStore.groupNameToChange
+  const { activeStepIndex } = activeStepStore
 
   const currentGroup =
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-      dtreeStore.groupIndexToChange
-    ]
+    dtreeStore.stepData[activeStepIndex].groups[dtreeStore.groupIndexToChange]
 
   const subGroups = Object.values(dtreeStore.getQueryBuilder)
 

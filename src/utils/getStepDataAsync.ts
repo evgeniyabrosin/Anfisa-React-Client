@@ -1,9 +1,10 @@
 import dtreeStore, { IStepData } from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
 import { getDataFromCode } from './getDataFromCode'
 
 export const getStepDataAsync = async (
-  activeStepIndex: number,
+  isLoadingNewTree: boolean,
 ): Promise<IStepData[]> => {
   const dtreeSteps = Object.values(dtreeStore.dtree['cond-atoms'])
 
@@ -29,13 +30,14 @@ export const getStepDataAsync = async (
   const stepCodes = getDataFromCode(dtreeStore.dtreeCode)
 
   const localStepData: IStepData[] = []
+  const { activeStepIndex } = activeStepStore
 
   dtreeSteps.map((item: any, index: number) => {
     localStepData.push({
       step: index + 1,
       groups: item.filter((elem: any[]) => elem.length > 0),
       excluded: !stepCodes[index].result,
-      isActive: index === activeStepIndex,
+      isActive: isLoadingNewTree ? false : index === activeStepIndex,
       isReturnedVariantsActive: false,
       startFilterCounts: '...',
       finishFilterCounts: '...',

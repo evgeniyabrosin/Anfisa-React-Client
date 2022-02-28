@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
@@ -35,7 +36,7 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
 
   // important variables
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
@@ -76,8 +77,6 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
   const stateOptions: string[] = [stateCondition]
 
   const handleSetCondition = (value: string, type: string) => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     if (type === 'approx') {
       setApproxCondition(value)
 
@@ -94,8 +93,6 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
         stateCondition !== '-current-' ? `"${stateCondition}"` : null
       },"request":${request}}`
 
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
 
@@ -108,8 +105,6 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
       const params = `{"approx":${approx},"state":${
         value !== '-current-' ? `"${value}"` : null
       }}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
@@ -243,8 +238,6 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
   }
 
   function sendRequest(newRequestCondition: any[]) {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const requestString = getFuncParams(groupName, {
       request: newRequestCondition,
     })
@@ -260,14 +253,12 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
         : `"${stateCondition}"`
     },"request":${requestString}}`
 
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }
 
   const handleModals = () => {
     dtreeStore.closeModalSelectCompoundRequest()
-    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 

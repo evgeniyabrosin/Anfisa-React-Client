@@ -9,13 +9,15 @@ import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@store/dtree/active-step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getNumericExpression } from '@utils/getNumericExpression'
-import { makeStepActive } from '@utils/makeStepActive'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`
@@ -59,7 +61,7 @@ export const NextStepContentItem = observer(
     const currentStep = dtreeStore.getStepData[index]
 
     const handleModals = () => {
-      makeStepActive(index)
+      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       group[0] === StepTypeEnum.Enum &&
         dtreeStore.openModalEditFilters(group[1], index, currNo)

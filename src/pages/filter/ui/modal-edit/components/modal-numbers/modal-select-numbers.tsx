@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { InputNumber } from '@ui/input-number'
 import { RangeSlider } from '@ui/range-slider'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
@@ -23,7 +24,9 @@ import {
 export const ModalSelectNumbers = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
+  const { activeStepIndex } = activeStepStore
+
+  const currentGroup = dtreeStore.stepData[activeStepIndex].groups
 
   const subGroups = Object.values(dtreeStore.getQueryBuilder)
   const groupName = dtreeStore.groupNameToChange
@@ -83,7 +86,7 @@ export const ModalSelectNumbers = observer((): ReactElement => {
 
   const handleModals = () => {
     dtreeStore.closeModalSelectNumbers()
-    dtreeStore.openModalAttribute(dtreeStore.currentStepIndex)
+    dtreeStore.openModalAttribute()
   }
 
   const handleAddAttribute = (action: ActionType) => {

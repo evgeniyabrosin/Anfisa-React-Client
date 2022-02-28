@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { HeaderModal } from './header-modal'
 import { InheritanceModeContent } from './inheritance-mode-content'
@@ -12,7 +13,7 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
@@ -36,14 +37,10 @@ export const ModalSelectInheritanceMode = observer((): ReactElement => {
     useState<string[]>(problemGroup)
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"problem_group":["${problemGroup
       .toString()
       .split(',')
       .join('","')}"]}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     const initAsync = async () => {
       await dtreeStore.fetchStatFuncAsync(groupName, params)
@@ -109,7 +106,7 @@ export const ModalSelectInheritanceMode = observer((): ReactElement => {
 
   const handleModals = () => {
     dtreeStore.closeModalSelectInheritanceMode()
-    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 

@@ -9,6 +9,7 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
@@ -54,39 +55,41 @@ export const QueryBuilderSubgroupItem = observer(
         dtreeStore.openModalSelectNumbers(group.name, source)
       }
 
+      const { activeStepIndex } = activeStepStore
+
       if (group.kind === FilterKindEnum.Func) {
         group.name === FuncStepTypesEnum.InheritanceMode &&
           dtreeStore.openModalSelectInheritanceMode(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CustomInheritanceMode &&
           dtreeStore.openModalSelectCustomInheritanceMode(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CompoundHet &&
           dtreeStore.openModalSelectCompoundHet(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CompoundRequest &&
           dtreeStore.openModalSelectCompoundRequest(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.GeneRegion &&
           dtreeStore.openModalSelectGeneRegion(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
       }

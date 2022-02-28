@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { InheritanceModeContent } from '../../query-builder/ui/inheritance-mode-content'
@@ -11,7 +12,7 @@ import { EditModalButtons } from './edit-modal-buttons'
 export const ModalEditInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeStore.groupIndexToChange
 
   const currentGroup =
@@ -56,14 +57,10 @@ export const ModalEditInheritanceMode = observer((): ReactElement => {
   }, [currentGroupIndex, currentGroupLength, currentStepIndex])
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"problem_group":["${problemGroup
       .toString()
       .split(',')
       .join('","')}"]}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     const initAsync = async () => {
       await dtreeStore.fetchStatFuncAsync(groupName, params)

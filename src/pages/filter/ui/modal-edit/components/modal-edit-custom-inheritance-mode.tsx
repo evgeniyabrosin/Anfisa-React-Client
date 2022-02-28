@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getResetType } from '@utils/getResetType'
@@ -17,7 +18,7 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
 
   const [resetValue, setResetValue] = useState('')
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeStore.groupIndexToChange
 
   const currentGroup =
@@ -40,8 +41,6 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
   })
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const scenarioString = getFuncParams(
       groupName,
       currentGroup[currentGroup.length - 1],
@@ -52,8 +51,6 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
     setResetValue(getResetType(currentGroup[currentGroup.length - 1].scenario))
 
     const params = `{"scenario":${scenarioString}}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -98,11 +95,7 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
       if (newScenario[index + 1]) scenarioString += ','
     })
 
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"scenario":{${scenarioString}}}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }

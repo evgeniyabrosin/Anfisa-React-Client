@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { Pagintaion } from '@components/pagintaion'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { createChunks } from '@utils/createChunks'
@@ -16,10 +17,10 @@ import { EditModalButtons } from './edit-modal-buttons'
 export const ModalEditFilters = observer((): ReactElement => {
   const ref = useRef(null)
 
+  const { activeStepIndex } = activeStepStore
+
   const currentGroup =
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-      dtreeStore.groupIndexToChange
-    ]
+    dtreeStore.stepData[activeStepIndex].groups[dtreeStore.groupIndexToChange]
 
   const indexOfCurrentGroup = dtreeStore.groupIndexToChange
   const groupName = dtreeStore.groupNameToChange
@@ -28,19 +29,17 @@ export const ModalEditFilters = observer((): ReactElement => {
     currentGroup.length > 0 ? dtreeStore.selectedFilters : []
 
   const currentGroupLength =
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[indexOfCurrentGroup]
-      .length
+    dtreeStore.stepData[activeStepIndex].groups[indexOfCurrentGroup].length
 
   useEffect(() => {
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-      indexOfCurrentGroup
-    ][currentGroupLength - 1].map((item: string) =>
-      dtreeStore.addSelectedFilter(item),
-    )
+    dtreeStore.stepData[activeStepIndex].groups[indexOfCurrentGroup][
+      currentGroupLength - 1
+    ].map((item: string) => dtreeStore.addSelectedFilter(item))
 
     return () => {
       dtreeStore.resetSelectedFilters()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indexOfCurrentGroup, currentGroupLength])
 
   const handleCheckGroupItem = (checked: boolean, name: string) => {
