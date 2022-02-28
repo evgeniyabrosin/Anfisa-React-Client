@@ -9,6 +9,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
+import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
 import { ViewTypeTable } from '@components/view-type-table'
 import { FilterMods } from '@pages/ws/ui/filter-mods'
@@ -84,18 +85,24 @@ export const PopperTableModal = observer(
     return (
       <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
         <div className="px-4 pt-4">
-          <p className="text-blue-dark mb-5 font-medium">{title}</p>
+          <div className="flex justify-between mb-5 items-center">
+            <p className="text-blue-dark  font-medium ">{title}</p>
+            <Icon
+              name="Close"
+              onClick={handleClose}
+              size={16}
+              className="cursor-pointer"
+            />
+          </div>
 
           <InputSearch
             value={searchValue}
             placeholder={searchInputPlaceholder}
             onChange={e => onChange && onChange(e.target.value)}
           />
-
           {viewType && setViewType && (
             <ViewTypeTable setViewType={setViewType} viewType={viewType} />
           )}
-
           <div className="flex justify-between mt-5">
             {viewType ? (
               <span className="text-14 text-grey-blue">
@@ -118,12 +125,9 @@ export const PopperTableModal = observer(
               </span>
             </span>
           </div>
-
           {isTags && <FilterMods />}
         </div>
-
         <div className="w-full pl-4">{children}</div>
-
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
