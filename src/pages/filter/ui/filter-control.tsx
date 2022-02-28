@@ -84,20 +84,25 @@ export const FilterControl = observer((): ReactElement => {
                 dataTestId={DecisionTreesMenuDataCy.textEditor}
               />
             )}
-            <Button
-              text="Undo"
-              className="ml-2"
-              variant={'secondary-dark'}
-              disabled={isUndoLocked}
-              onClick={() => moveActionHistory(-1)}
-            />
-            <Button
-              text="Redo"
-              className="ml-2"
-              variant={'secondary-dark'}
-              disabled={isRedoLocked}
-              onClick={() => moveActionHistory(1)}
-            />
+            {/* Temporarily removed in Refiner page */}
+            {page === GlbPagesNames.Filter && (
+              <>
+                <Button
+                  text="Undo"
+                  className="ml-2"
+                  variant={'secondary-dark'}
+                  disabled={isUndoLocked}
+                  onClick={() => moveActionHistory(-1)}
+                />
+                <Button
+                  text="Redo"
+                  className="ml-2"
+                  variant={'secondary-dark'}
+                  disabled={isRedoLocked}
+                  onClick={() => moveActionHistory(1)}
+                />
+              </>
+            )}
           </div>
           <div className="flex flex-wrap">
             <Icon

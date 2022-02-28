@@ -110,12 +110,12 @@ export const ModalSelectFilters = observer((): ReactElement => {
         </div>
 
         <div className="flex">
-          <div className="flex items-center">
+          {/* Temporarily removed. Not yet implemented */}
+          {/* <div className="flex items-center">
             <Checkbox checked={false} className="mr-1 cursor-pointer" />
             <div className="font-normal">{t('ds.notMode')}</div>
           </div>
-
-          <ModsDivider />
+          <ModsDivider /> */}
 
           <div
             className="cursor-pointer text-blue-bright"
