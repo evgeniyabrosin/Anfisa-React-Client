@@ -1,5 +1,17 @@
 import { RangeSliderScale } from './types'
 
+export const normalizeValue = (
+  value: number | null | undefined,
+  min: number,
+  max: number,
+): number | null => {
+  if (value != null && !Number.isNaN(value) && min <= value && value <= max) {
+    return value
+  }
+
+  return null
+}
+
 type GetScaleTransformsParams = {
   min: number
   max: number

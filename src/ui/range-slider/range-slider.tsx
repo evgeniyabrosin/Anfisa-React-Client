@@ -8,17 +8,30 @@ import React, {
 } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { RangeSliderTicks } from './range-slider-ticks'
+import { RangeSliderHistogram } from './range-slider-histogram'
 import {
   RangeSliderHandle,
   RangeSliderLabel,
   RangeSliderRange,
   RangeSliderRoot,
+  RangeSliderRuler,
+  RangeSliderTick,
 } from './styles'
-import { RangeSliderMode, RangeSliderScale, RangeSliderValue } from './types'
-import { adjustLabels, getScaleTransform } from './utils'
+import {
+  RangeSliderColor,
+  RangeSliderMode,
+  RangeSliderScale,
+  RangeSliderSide,
+  RangeSliderValue,
+} from './types'
+import {
+  adjustLabels,
+  getScaleTransform,
+  getSliderTicks,
+  normalizeValue,
+} from './utils'
 
-interface RangeSliderProps {
+export interface IRangeSliderProps {
   className?: Argument
   min: number
   max: number
@@ -27,7 +40,10 @@ interface RangeSliderProps {
   scale?: RangeSliderScale
   value: RangeSliderValue | null
   onChange: (value: RangeSliderValue) => void
-  disabled?: boolean | 'left' | 'right'
+  disabled?: RangeSliderSide
+  strong?: RangeSliderSide
+  color?: RangeSliderColor
+  histogram?: number[]
 }
 
 type DragState = {
@@ -38,14 +54,17 @@ type DragState = {
 export const RangeSlider = ({
   className,
   value,
+  onChange,
   max,
   min,
   mode = RangeSliderMode.Range,
   step = 1,
   scale = RangeSliderScale.Linear,
-  onChange,
+  color = RangeSliderColor.Primary,
   disabled,
-}: RangeSliderProps): ReactElement => {
+  strong,
+  histogram,
+}: IRangeSliderProps): ReactElement => {
   const rootRef = useRef<HTMLDivElement>(null)
   const leftLabelRef = useRef<HTMLDivElement>(null)
   const rightLabelRef = useRef<HTMLDivElement>(null)
@@ -54,10 +73,8 @@ export const RangeSlider = ({
   const [rootWidth, setRootWidth] = useState(0)
   const [dragState, setDragState] = useState<DragState | null>(null)
 
-  const isRangeMode = mode === 'range'
-
-  const leftValue = value ? value[0] : null
-  const rightValue = isRangeMode && value ? value[1] : null
+  const isRangeMode = mode === RangeSliderMode.Range
+  const hasHistogram = !!histogram
 
   const { getOffset, getValue, alignValue } = useMemo(
     () =>
@@ -71,21 +88,59 @@ export const RangeSlider = ({
     [min, max, rootWidth, step, scale],
   )
 
-  const leftOffset =
-    leftValue != null &&
-    !Number.isNaN(leftValue) &&
-    leftValue >= min &&
-    leftValue <= max
-      ? getOffset(leftValue)
-      : null
+  const ticks = useMemo(
+    () =>
+      getSliderTicks({
+        min,
+        max,
+        width: rootWidth,
+        scale,
+        step,
+      }),
+    [min, max, rootWidth, step, scale],
+  )
 
-  const rightOffset =
+  const histogramBarPositions = useMemo(
+    // in logarithmic scale we have first fake interval from 0 (-∞),
+    // so take it and every 9th tick
+    () =>
+      hasHistogram && scale === RangeSliderScale.Logarithmic
+        ? ticks
+            .map(tick => tick.offset)
+            .filter((_, i) => i === 0 || (i - 1) % 9 === 0)
+        : undefined,
+    [scale, hasHistogram, ticks],
+  )
+
+  let leftValue = normalizeValue(value?.[0], min, max)
+  // in single mode second part of the value is used for a histogram fill radius
+  let rightValue = normalizeValue(value?.[1], isRangeMode ? min : 0, max)
+
+  if (
+    isRangeMode &&
+    leftValue != null &&
     rightValue != null &&
-    !Number.isNaN(rightValue) &&
-    rightValue >= min &&
-    rightValue <= max
-      ? getOffset(rightValue)
-      : null
+    rightValue < leftValue
+  ) {
+    leftValue = null
+    rightValue = null
+  }
+
+  let histogramSelectedArea: [number, number] | null = null
+
+  if (hasHistogram) {
+    if (isRangeMode) {
+      histogramSelectedArea =
+        leftValue !== null || rightValue !== null
+          ? [getOffset(leftValue ?? min), getOffset(rightValue ?? max)]
+          : null
+    } else if (leftValue !== null && rightValue !== null) {
+      histogramSelectedArea = [
+        getOffset(leftValue - rightValue),
+        getOffset(leftValue + rightValue),
+      ]
+    }
+  }
 
   useEffect(() => {
     if (rootRef.current) {
@@ -125,6 +180,10 @@ export const RangeSlider = ({
     }
   }, [dragState, getValue, alignValue])
 
+  const leftOffset = leftValue !== null ? getOffset(leftValue) : null
+  const rightOffset =
+    isRangeMode && rightValue !== null ? getOffset(rightValue) : null
+
   useLayoutEffect(
     () =>
       adjustLabels({
@@ -150,9 +209,9 @@ export const RangeSlider = ({
 
       const isRightHandle =
         isRangeMode &&
-        disabled !== 'right' &&
+        disabled !== RangeSliderSide.Right &&
         handle !== 'left' &&
-        (disabled === 'left' ||
+        (disabled === RangeSliderSide.Left ||
           handle === 'right' ||
           (leftValue != null && rightValue == null && newValue > leftValue) ||
           (leftValue != null &&
@@ -167,7 +226,7 @@ export const RangeSlider = ({
             onChange([leftValue, handleValue])
           }
         } else {
-          if (rightValue == null || handleValue < rightValue) {
+          if (!isRangeMode || rightValue == null || handleValue < rightValue) {
             onChange([handleValue, rightValue])
           }
         }
@@ -184,67 +243,92 @@ export const RangeSlider = ({
     }
   }
 
+  const isDisabled = disabled === RangeSliderSide.Both
+
   return (
-    <RangeSliderRoot
-      className={cn('text-xs text-blue-dark', className)}
-      ref={rootRef}
-      onMouseDown={disabled !== true ? handleMouseDown : undefined}
-      isActive={!!dragState}
-      isDisabled={disabled === true}
-    >
-      <RangeSliderTicks
-        min={min}
-        max={max}
-        step={step}
-        scale={scale}
-        width={rootWidth}
-      />
-      {leftOffset !== null && (
-        <RangeSliderLabel ref={leftLabelRef}>{leftValue}</RangeSliderLabel>
-      )}
-      {rightOffset !== null && (
-        <RangeSliderLabel ref={rightLabelRef}>{rightValue}</RangeSliderLabel>
-      )}
-      <RangeSliderLabel
-        ref={dividerLabelRef}
-        style={{
-          textAlign: 'center',
-          visibility: 'hidden',
-        }}
+    <div className={cn('text-xs text-blue-dark', className)}>
+      <RangeSliderRoot
+        ref={rootRef}
+        onMouseDown={!isDisabled ? handleMouseDown : undefined}
+        hasHistogram={hasHistogram}
+        isActive={!!dragState}
+        isDisabled={isDisabled}
       >
-        –
-      </RangeSliderLabel>
-      {isRangeMode && (leftValue != null || rightValue != null) && (
-        <RangeSliderRange
-          isDisabled={disabled === true}
-          isLeftHandle={leftOffset != null}
-          isRightHandle={rightOffset != null}
-          style={{
-            left: `${leftOffset != null ? leftOffset : 0}px`,
-            right: `${rightOffset != null ? rootWidth - rightOffset : 0}px`,
-          }}
-        />
-      )}
-      {leftOffset !== null && (
-        <RangeSliderHandle
-          data-handle="left"
-          isActive={!!(dragState && !dragState.isRightHandle)}
-          isDisabled={disabled === true || disabled === 'left'}
-          style={{
-            transform: `translateX(${leftOffset}px)`,
-          }}
-        />
-      )}
-      {rightOffset !== null && (
-        <RangeSliderHandle
-          data-handle="right"
-          isActive={!!(dragState && dragState.isRightHandle)}
-          isDisabled={disabled === true || disabled === 'right'}
-          style={{
-            transform: `translateX(${rightOffset}px)`,
-          }}
-        />
-      )}
-    </RangeSliderRoot>
+        {histogram && (
+          <RangeSliderHistogram
+            width={rootWidth}
+            data={histogram}
+            selectedArea={histogramSelectedArea}
+            color={color}
+            barPositions={histogramBarPositions}
+          />
+        )}
+        <RangeSliderRuler>
+          {ticks.map(({ value, offset }) => (
+            <RangeSliderTick
+              key={value}
+              style={{
+                left: `${offset}px`,
+              }}
+            />
+          ))}
+          {leftValue !== null && (
+            <RangeSliderLabel ref={leftLabelRef}>{leftValue}</RangeSliderLabel>
+          )}
+          {isRangeMode && rightValue !== null && (
+            <RangeSliderLabel ref={rightLabelRef}>
+              {rightValue}
+            </RangeSliderLabel>
+          )}
+          {isRangeMode && (
+            <RangeSliderLabel
+              ref={dividerLabelRef}
+              style={{
+                textAlign: 'center',
+                visibility: 'hidden',
+              }}
+            >
+              –
+            </RangeSliderLabel>
+          )}
+          {isRangeMode && (leftValue != null || rightValue != null) && (
+            <RangeSliderRange
+              color={color}
+              isDisabled={isDisabled}
+              isLeftHandle={leftOffset != null}
+              isRightHandle={rightOffset != null}
+              style={{
+                left: `${leftOffset != null ? leftOffset : 0}px`,
+                right: `${rightOffset != null ? rootWidth - rightOffset : 0}px`,
+              }}
+            />
+          )}
+          {leftOffset !== null && (
+            <RangeSliderHandle
+              data-handle="left"
+              color={color}
+              isActive={!!(dragState && !dragState.isRightHandle)}
+              isDisabled={isDisabled || disabled === RangeSliderSide.Left}
+              isStrong={strong === RangeSliderSide.Left}
+              style={{
+                transform: `translateX(${leftOffset}px)`,
+              }}
+            />
+          )}
+          {isRangeMode && rightOffset !== null && (
+            <RangeSliderHandle
+              data-handle="right"
+              color={color}
+              isActive={!!(dragState && dragState.isRightHandle)}
+              isDisabled={isDisabled || disabled === RangeSliderSide.Right}
+              isStrong={strong === RangeSliderSide.Right}
+              style={{
+                transform: `translateX(${rightOffset}px)`,
+              }}
+            />
+          )}
+        </RangeSliderRuler>
+      </RangeSliderRoot>
+    </div>
   )
 }

@@ -13,6 +13,10 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Header } from '@components/header'
 import { GlbPagesNames } from '@glb/glb-names'
+import {
+  ModalEditNumbers,
+  ModalSelectNumbers,
+} from '@pages/filter/ui/modal-edit/components/modal-numbers'
 import { ErrorPage } from '../error/error'
 import { FilterControl } from './ui/filter-control'
 import { ModalEditCompoundHet } from './ui/modal-edit/components/modal-edit-compound-het'
@@ -21,7 +25,6 @@ import { ModalEditCustomInheritanceMode } from './ui/modal-edit/components/modal
 import { ModalEditFilters } from './ui/modal-edit/components/modal-edit-filters'
 import { ModalEditGeneRegion } from './ui/modal-edit/components/modal-edit-gene-region'
 import { ModalEditInheritanceMode } from './ui/modal-edit/components/modal-edit-inheritance-mode'
-import { ModalEditNumbers } from './ui/modal-edit/components/modal-edit-numbers'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
 import { QueryBuilder } from './ui/query-builder/query-builder'
 import { ModalSaveDataset } from './ui/query-builder/ui/modal-save-dataset'
@@ -32,7 +35,6 @@ import { ModalSelectCustomInheritanceMode } from './ui/query-builder/ui/modal-se
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
 import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-region'
 import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
-import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
 import { TableModal } from './ui/TableModal'
 
 const FilterPage = observer((): ReactElement => {

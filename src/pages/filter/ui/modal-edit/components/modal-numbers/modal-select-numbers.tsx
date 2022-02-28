@@ -1,35 +1,38 @@
-import { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { InputNumber } from '@ui/input-number'
 import { RangeSlider } from '@ui/range-slider'
-import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
-import { DropDownSelectSign } from '../../query-builder/ui/dropdown-select-sign'
-import { ExpandContentButton } from '../../query-builder/ui/expand-content-button'
-import { HeaderModal } from '../../query-builder/ui/header-modal'
-import { ModalBase } from '../../query-builder/ui/modal-base'
-import { EditModalButtons } from './edit-modal-buttons'
+import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { DropDownSelectSign } from '../../../query-builder/ui/dropdown-select-sign'
+import { ExpandContentButton } from '../../../query-builder/ui/expand-content-button'
+import { HeaderModal } from '../../../query-builder/ui/header-modal'
+import { ModalBase } from '../../../query-builder/ui/modal-base'
+import { SelectModalButtons } from '../../../query-builder/ui/select-modal-buttons'
+import {
+  getNumericValue,
+  getRangeSliderProps,
+  getRangeSliderStrongSide,
+} from './utils'
 
-export const ModalEditNumbers = observer((): ReactElement => {
+export const ModalSelectNumbers = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const groupName = dtreeStore.groupNameToChange
-
-  const currentGroup =
-    dtreeStore.stepData[dtreeStore.currentStepIndex].groups[
-      dtreeStore.groupIndexToChange
-    ]
+  const currentGroup = dtreeStore.stepData[dtreeStore.currentStepIndex].groups
 
   const subGroups = Object.values(dtreeStore.getQueryBuilder)
+  const groupName = dtreeStore.groupNameToChange
 
-  let attrData: any = {}
+  let attrData: any
 
   subGroups.map(subGroup => {
     subGroup.map((item, index) => {
-      if (item.name === groupName) {
+      if (item.name === dtreeStore.selectedGroups[1]) {
         attrData = subGroup[index]
       }
     })
@@ -37,31 +40,13 @@ export const ModalEditNumbers = observer((): ReactElement => {
 
   const minValue = attrData.min
   const maxValue = attrData.max
-  const subKind = attrData['sub-kind']
 
-  const currentGroupLength: number = currentGroup.length
+  const [valueFrom, setValueFrom] = useState('')
+  const [valueTo, setValueTo] = useState('')
 
-  const currentValueFrom: number | undefined =
-    currentGroup[currentGroupLength - 1][0]
+  const [leftDropType, setLeftDropType] = useState<boolean>(false)
 
-  const currentLeftDropType: boolean = currentGroup[currentGroupLength - 1][1]
-
-  const currentValueTo: number | undefined =
-    currentGroup[currentGroupLength - 1][2]
-
-  const currentRightDropType: boolean = currentGroup[currentGroupLength - 1][3]
-
-  const [valueFrom, setValueFrom] = useState(currentValueFrom ?? '')
-
-  const [valueTo, setValueTo] = useState(currentValueTo ?? '')
-
-  const [leftDropType, setLeftDropType] = useState<boolean>(
-    currentValueFrom != null ? currentLeftDropType : false,
-  )
-
-  const [rightDropType, setRightDropType] = useState<boolean>(
-    currentValueTo != null ? currentRightDropType : true,
-  )
+  const [rightDropType, setRightDropType] = useState<boolean>(true)
 
   const [isVisibleLeftDrop, setIsVisibleLeftDrop] = useState(false)
   const [isVisibleRightDrop, setIsVisibleRightDrop] = useState(false)
@@ -96,22 +81,32 @@ export const ModalEditNumbers = observer((): ReactElement => {
     }
   }
 
-  const handleClose = () => {
-    dtreeStore.closeModalEditNumbers()
+  const handleModals = () => {
+    dtreeStore.closeModalSelectNumbers()
+    dtreeStore.openModalAttribute(dtreeStore.currentStepIndex)
   }
 
-  const handleSaveChanges = () => {
+  const handleAddAttribute = (action: ActionType) => {
     if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
       return
     }
 
-    changeNumericAttribute([
+    addAttributeToStep(action, 'numeric', [
       valueFrom != null && valueFrom !== '' ? +valueFrom : null,
       leftDropType,
       valueTo != null && valueTo !== '' ? +valueTo : null,
       rightDropType,
     ])
-    dtreeStore.closeModalEditNumbers()
+
+    dtreeStore.closeModalSelectNumbers()
+  }
+
+  const handleModalJoin = () => {
+    if (isVisibleLeftError || isVisibleRightError || isVisibleCenterError) {
+      return
+    }
+
+    dtreeStore.openModalJoin()
   }
 
   useEffect(() => {
@@ -134,26 +129,23 @@ export const ModalEditNumbers = observer((): ReactElement => {
     setIsVisibleCenterError(false)
   }, [valueFrom, valueTo, leftDropType, rightDropType])
 
-  const formatValue = (value: number) => {
-    if (value < 1 && value > 0) return value.toFixed(5)
-
-    return value
+  const handleClose = () => {
+    dtreeStore.closeModalSelectNumbers()
   }
 
   return (
     <ModalBase refer={ref} minHeight={200}>
       <HeaderModal groupName={groupName} handleClose={handleClose} />
 
-      <div className="relative flex flex-1 items-center my-4">
+      <div className="relative flex items-center h-3/5 pt-3">
         <div className="relative flex items-center justify-start w-1/2 h-20 pr-1 pl-px">
           <div className="absolute top-0 left-0 flex justify-start w-1/2 truncate">
-            {dtreeStore.isFiltersLoading
-              ? t('dtree.loading')
-              : formatValue(minValue)}
+            {minValue}
           </div>
 
           <div className="flex w-full flex-col h-8">
             <InputNumber
+              data-testId={DecisionTreeModalDataCy.leftInput}
               value={valueFrom}
               onChange={(e: any) => {
                 setValueFrom(e.target.value)
@@ -175,9 +167,9 @@ export const ModalEditNumbers = observer((): ReactElement => {
                 'flex items-center justify-center w-3/5 h-full rounded',
                 {
                   'bg-blue-medium text-blue-bright':
-                    valueFrom >= 0 && !isVisibleLeftError,
+                    valueFrom && !isVisibleLeftError,
                   'bg-grey-light text-grey-blue':
-                    (!valueFrom && valueFrom !== 0) || isVisibleLeftError,
+                    !valueFrom || isVisibleLeftError,
                 },
               )}
             >
@@ -203,9 +195,7 @@ export const ModalEditNumbers = observer((): ReactElement => {
 
         <div className="relative flex items-center justify-end h-20 w-1/2 pl-1 pr-px">
           <div className="absolute top-0 right-0 w-1/2 flex justify-end truncate">
-            {dtreeStore.isFiltersLoading
-              ? t('dtree.loading')
-              : formatValue(maxValue)}
+            {maxValue}
           </div>
 
           <div className="flex items-center w-12 p-1 mr-2 shadow-dark rounded">
@@ -214,9 +204,9 @@ export const ModalEditNumbers = observer((): ReactElement => {
                 'flex items-center justify-center w-3/5 h-full rounded',
                 {
                   'bg-blue-medium text-blue-bright':
-                    valueTo >= 0 && !isVisibleRightError,
+                    valueTo && !isVisibleRightError,
                   'bg-grey-light text-grey-blue':
-                    (!valueTo && valueTo !== 0) || isVisibleRightError,
+                    !valueTo || isVisibleRightError,
                 },
               )}
             >
@@ -238,6 +228,7 @@ export const ModalEditNumbers = observer((): ReactElement => {
           </div>
           <div className="flex flex-col w-full h-8">
             <InputNumber
+              data-testId={DecisionTreeModalDataCy.rightInput}
               value={valueTo}
               onChange={(e: any) => {
                 setValueTo(e.target.value)
@@ -255,29 +246,27 @@ export const ModalEditNumbers = observer((): ReactElement => {
         </div>
 
         {isVisibleCenterError && (
-          <div className="absolute top-0 flex justify-center items-center w-full h-5 px-5 text-10 text-red-secondary">
+          <div className="absolute top-3 flex justify-center items-center w-full h-5 px-5 text-10 text-red-secondary">
             <div className="w-1/2 text-center">{t('dtree.conditionError')}</div>
           </div>
         )}
       </div>
       <RangeSlider
-        mode="range"
-        min={minValue}
-        max={maxValue}
-        value={[
-          valueFrom != null && valueFrom !== '' ? +valueFrom : null,
-          valueTo != null && valueTo !== '' ? +valueTo : null,
-        ]}
+        value={[getNumericValue(valueFrom), getNumericValue(valueTo)]}
         onChange={value => {
           setValueFrom(value[0] != null ? value[0].toString() : '')
           setValueTo(value[1] != null ? value[1].toString() : '')
         }}
-        step={subKind === 'float' ? 0.001 : 1}
+        strong={getRangeSliderStrongSide(leftDropType, rightDropType)}
+        {...getRangeSliderProps(attrData)}
       />
-      <EditModalButtons
+      <SelectModalButtons
         handleClose={handleClose}
-        handleSaveChanges={handleSaveChanges}
-        disabled={!valueFrom && valueFrom !== 0 && !valueTo && valueTo !== 0}
+        handleModals={handleModals}
+        handleModalJoin={handleModalJoin}
+        disabled={!valueFrom && !valueTo}
+        currentGroup={currentGroup}
+        handleAddAttribute={handleAddAttribute}
       />
     </ModalBase>
   )

@@ -21,6 +21,7 @@ module.exports = {
     light: '#e4e4e4',
     lighter: '#fafafa',
     disabled: '#e2e7ec',
+    tertiary: '#f5f7f9',
   },
   yellow: {
     bright: '#ffff00',
@@ -31,6 +32,8 @@ module.exports = {
   purple: {
     bright: '#aa23fb',
     light: '#f7eaff',
+    static: '#8411c9',
+    hover: '#580988',
   },
   red: {
     secondary: '#dc3737',
