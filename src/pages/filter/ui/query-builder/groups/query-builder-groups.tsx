@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
@@ -56,16 +58,18 @@ export const QueryBuilderGroups = observer((): ReactElement => {
           />
         </div>
 
-        <div className="flex items-center justify-between w-full h-8 mb-2">
-          <div className="text-blue-bright font-medium">
-            {activeStep &&
-              (activeStep.isFinalStep
-                ? t('dtree.showingResultsForFinalStep')
-                : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
+        {filterStore.method === GlbPagesNames.Filter && (
+          <div className="flex items-center justify-between w-full h-8 mb-2">
+            <div className="text-blue-bright font-medium">
+              {activeStep &&
+                (activeStep.isFinalStep
+                  ? t('dtree.showingResultsForFinalStep')
+                  : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
 
-            {shouldShowVariantsPrompt && returnedVariantsPrompt}
+              {shouldShowVariantsPrompt && returnedVariantsPrompt}
+            </div>
           </div>
-        </div>
+        )}
 
         <div
           className="overflow-y-auto"
