@@ -65,10 +65,11 @@ jobs:
         envs: SHA,BRANCH
         script: |
           echo "I am $SHA"
+          BRANCH=${BRANCH##*/}
           echo "I am ${BRANCH##*/}"
-          mkdir /home/forome/anfisa_front/${BRANCH##*/}
-          sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/${BRANCH##*/}.conf
-          sudo sed -i 's/FOROME-502/'${BRANCH##*/}'/g' /etc/nginx/conf.d/sandbox/${BRANCH##*/}.conf
+          mkdir /home/forome/anfisa_front/$BRANCH
+          sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
+          sudo sed -i 's/FOROME-502/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
           sudo systemctl reload nginx
     
     - name: Deploy to Server
