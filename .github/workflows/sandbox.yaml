@@ -79,7 +79,7 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: /home/forome/anfisa_front/${{ github.ref_name##*/ }}
+          TARGET: /home/forome/anfisa_front/${GITHUB_REF##*/}
           EXCLUDE: "/node_modules/"
 
     - name: Auth AWS
