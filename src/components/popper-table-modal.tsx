@@ -57,7 +57,13 @@ export const PopperTableModal = observer(
   }: Props) => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, onClose ?? noop)
+    const onOutsideClick = () => {
+      isTags && zoneStore.unselectAllTags()
+
+      onClose && onClose()
+    }
+
+    useOutsideClick(ref, onOutsideClick ?? noop)
 
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
