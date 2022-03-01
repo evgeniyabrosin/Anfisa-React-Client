@@ -75,7 +75,7 @@ jobs:
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
-          BRANCH: ${{{ github.ref_name }} ##*/}
+          BRANCH: ${ {{ github.ref_name }} ##*/}
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
