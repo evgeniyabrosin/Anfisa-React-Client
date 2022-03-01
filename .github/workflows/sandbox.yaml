@@ -6,10 +6,10 @@ name: add-githubactions-test CI
 on:
   push:
     branches:
-      - '*FOROME-*'
+      - '*/FOROME-*'
       - '!main'
       - '!develop'
-    tags: [ dev ]
+    tags: [ stage ]
     
 jobs:
   build:
@@ -65,7 +65,8 @@ jobs:
         envs: SHA,BRANCH
         script: |
           echo "I am $SHA"
-          echo "I am $BRANCH"
+          export BRANCH="${BRANCH##*/}"
+          echo "I am ${BRANCH}"
           mkdir /home/forome/anfisa_front/$BRANCH
           sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
           sudo sed -i 's/FOROME-502/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
@@ -78,7 +79,7 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: /home/forome/anfisa_front/'${{ github.ref_name }}'
+          TARGET: /home/forome/anfisa_front/${GITHUB_REF##*/}
           EXCLUDE: "/node_modules/"
 
     - name: Auth AWS
