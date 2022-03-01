@@ -73,7 +73,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
 
         <div
           className="overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 300px)' }}
+          style={{ maxHeight: 'calc(100vh - 265px)' }}
         >
           <DeferRender chunkSize={chunkSize} renderId={decrement}>
             {groupNames.map((groupName, index) => (
