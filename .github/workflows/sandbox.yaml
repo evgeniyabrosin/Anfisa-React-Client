@@ -75,12 +75,11 @@ jobs:
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
-          BRANCH: ${ {{ github.ref_name }} ##*/}
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
           REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
-          TARGET: /home/forome/anfisa_front/$BRANCH
+          TARGET: /home/forome/anfisa_front/${{ github.ref_name##*/ }}
           EXCLUDE: "/node_modules/"
 
     - name: Auth AWS
