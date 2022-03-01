@@ -56,7 +56,7 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         SHA: ${{ github.sha }}
-        BRANCH: ${{ github.ref_name }}
+        BRANCH: 'F.*$ ${{ github.ref_name }}'
       with:
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
