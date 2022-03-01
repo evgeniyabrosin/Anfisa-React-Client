@@ -56,7 +56,7 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         SHA: ${{ github.sha }}
-        BRANCH: ${{ github.ref_name }}
+        BRANCH: $(echo ${{ github.ref_name }} | cut -f2 -d "/")
       with:
         host: ${{ secrets.REMOTE_HOST_DEV }}
         username: ${{ secrets.REMOTE_USER_DEV }}
@@ -65,8 +65,8 @@ jobs:
         envs: SHA,BRANCH
         script: |
           echo "I am $SHA"
-          BRANCH=${BRANCH##*/}
-          echo "I am ${BRANCH##*/}"
+#          BRANCH=${BRANCH##*/}
+          echo "I am ${BRANCH}"
           mkdir /home/forome/anfisa_front/$BRANCH
           sudo cp /etc/nginx/conf.d/sandbox/FOROME-502.conf /etc/nginx/conf.d/sandbox/$BRANCH.conf
           sudo sed -i 's/FOROME-502/'$BRANCH'/g' /etc/nginx/conf.d/sandbox/$BRANCH.conf
