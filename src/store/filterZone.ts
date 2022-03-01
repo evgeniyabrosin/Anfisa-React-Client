@@ -20,7 +20,9 @@ class ZoneStore {
   isProband: boolean | undefined = false
 
   isModeNOT = false
+  modeNotSubmitted = false
   isModeWithNotes = false
+  modeWithNotesSubmitted = false
 
   constructor() {
     makeAutoObservable(this)
@@ -123,7 +125,7 @@ class ZoneStore {
   removeLocalTag(tagName: string, type: string) {
     this.localTags = this.localTags.filter(tag => tag !== tagName)
 
-    tagName === '_note' && this.resetModeWithNotes()
+    tagName === '_note' && this.setModeWithNotes(false)
 
     if (type === 'fast') {
       this.createSelectedZoneFilter('isTags')
@@ -210,20 +212,25 @@ class ZoneStore {
     await datasetStore.fetchFilteredTabReportAsync()
   }
 
-  setModeNOT() {
-    this.isModeNOT = true
+  setModeNOT(value: boolean) {
+    this.isModeNOT = value
   }
 
   resetModeNOT() {
-    this.isModeNOT = false
+    this.isModeNOT = this.modeNotSubmitted
   }
 
-  setModeWithNotes() {
-    this.isModeWithNotes = true
+  setModeWithNotes(value: boolean) {
+    this.isModeWithNotes = value
   }
 
   resetModeWithNotes() {
-    this.isModeWithNotes = false
+    this.isModeWithNotes = this.modeWithNotesSubmitted
+  }
+
+  submitTagsMode() {
+    this.modeNotSubmitted = this.isModeNOT
+    this.modeWithNotesSubmitted = this.isModeWithNotes
   }
 }
 

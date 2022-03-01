@@ -82,6 +82,12 @@ export const PopperTableModal = observer(
       onClose && onClose()
     }
 
+    const handleApply = () => {
+      zoneStore.submitTagsMode()
+
+      onApply && onApply()
+    }
+
     return (
       <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
         <div className="px-4 pt-4">
@@ -138,7 +144,7 @@ export const PopperTableModal = observer(
           <Button
             text={t('general.apply')}
             className="ml-3"
-            onClick={onApply}
+            onClick={handleApply}
             dataTestId={MainTableDataCy.applyButton}
           />
         </div>
