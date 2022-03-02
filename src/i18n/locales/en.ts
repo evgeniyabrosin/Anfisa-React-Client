@@ -110,7 +110,7 @@ export const en = {
     notesFor: 'Notes for',
     tagExists: 'That tag already exists',
     showSelectionOnly: 'Show selection only',
-    saveNote: 'Save notes',
+    saveNote: 'Save note',
   },
   filter: {
     method: 'Filtering method',
