@@ -29,7 +29,7 @@ export enum ConditionJoinMode {
 }
 
 export interface IInheritanceModeArgs {
-  problem_groups: string[]
+  problem_group: string[] | null
 }
 
 export interface ICustomInheritanceModeArgs {

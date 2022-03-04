@@ -1,7 +1,7 @@
 export const getRequestData = (
   target: any,
   selectIndex: number,
-  attrData: any,
+  problemGroups: string[],
 ) => {
   let firstSiblingValue: string
   let secondSiblingValue: string
@@ -13,9 +13,9 @@ export const getRequestData = (
     secondSiblingValue = parent.lastChild.lastChild.value
 
     requestData = [
-      [target.value, attrData.family[0]],
-      [firstSiblingValue, attrData.family[1]],
-      [secondSiblingValue, attrData.family[2]],
+      [target.value, problemGroups[0]],
+      [firstSiblingValue, problemGroups[1]],
+      [secondSiblingValue, problemGroups[2]],
     ]
   }
 
@@ -24,9 +24,9 @@ export const getRequestData = (
     secondSiblingValue = target.parentNode.nextElementSibling.lastChild.value
 
     requestData = [
-      [firstSiblingValue, attrData.family[0]],
-      [target.value, attrData.family[1]],
-      [secondSiblingValue, attrData.family[2]],
+      [firstSiblingValue, problemGroups[0]],
+      [target.value, problemGroups[1]],
+      [secondSiblingValue, problemGroups[2]],
     ]
   }
 
@@ -36,9 +36,9 @@ export const getRequestData = (
       target.parentNode.previousElementSibling.lastChild.value
 
     requestData = [
-      [firstSiblingValue, attrData.family[0]],
-      [secondSiblingValue, attrData.family[1]],
-      [target.value, attrData.family[2]],
+      [firstSiblingValue, problemGroups[0]],
+      [secondSiblingValue, problemGroups[1]],
+      [target.value, problemGroups[2]],
     ]
   }
 

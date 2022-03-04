@@ -15,12 +15,14 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import {
+  ICompoundRequestArgs,
   ICustomInheritanceModeArgs,
   IRecordDescriptor,
   TFuncCondition,
 } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
+import { isConditionArgsTypeOf } from '@utils/function-panel/isConditionArgsTypeOf'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
 import { TFuncArgs } from './../service-providers/common/common.interface'
@@ -330,17 +332,30 @@ export class DatasetStore {
   }
 
   getVariantValue(groupItemName: string, condition: TFuncCondition) {
-    switch (groupItemName) {
-      case FuncStepTypesEnum.GeneRegion:
-        return JSON.stringify(condition[condition.length - 1])
-      case FuncStepTypesEnum.CustomInheritanceMode:
-        return JSON.stringify(condition[condition.length - 1]).replace(
-          /[{}]/g,
-          '',
-        )
-      default:
-        return condition[condition.length - 2] as string
+    const conditionArgs = condition[4] as TFuncArgs
+
+    if (groupItemName === FuncStepTypesEnum.GeneRegion) {
+      return JSON.stringify(conditionArgs)
     }
+
+    if (groupItemName === FuncStepTypesEnum.CustomInheritanceMode) {
+      return JSON.stringify(conditionArgs).replace(/[{}]/g, '')
+    }
+
+    if (
+      isConditionArgsTypeOf<ICompoundRequestArgs>(
+        groupItemName,
+        conditionArgs,
+        FuncStepTypesEnum.CompoundRequest,
+      )
+    ) {
+      return `"request:" ${JSON.stringify(conditionArgs.request).replace(
+        /[{}]/g,
+        '',
+      )}`
+    }
+
+    return condition[condition.length - 2] as string
   }
 
   getConditionValue(
@@ -348,13 +363,10 @@ export class DatasetStore {
     condition: TFuncCondition,
   ) {
     const conditionArgs = condition[4]
-    const isConditionArgsTypeOf = <T extends TFuncArgs>(
-      args: TFuncArgs,
-      funcType: FuncStepTypesEnum,
-    ): args is T => groupItemName === funcType
 
     if (
       isConditionArgsTypeOf<ICustomInheritanceModeArgs>(
+        groupItemName,
         conditionArgs,
         FuncStepTypesEnum.CustomInheritanceMode,
       )
