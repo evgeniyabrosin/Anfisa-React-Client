@@ -11,11 +11,11 @@ export const FilterMods = (): ReactElement => {
     name: string,
   ) => {
     if (target.checked && name) {
-      name === FilterModsEnum.NOTMode && zoneStore.setModeNOT()
+      name === FilterModsEnum.NOTMode && zoneStore.setModeNOT(true)
       name === FilterModsEnum.VariantsWithNotesOnly &&
-        zoneStore.setModeWithNotes()
+        zoneStore.setModeWithNotes(true)
     } else if (name) {
-      name === FilterModsEnum.NOTMode && zoneStore.resetModeNOT()
+      name === FilterModsEnum.NOTMode && zoneStore.setModeNOT(false)
       name === FilterModsEnum.VariantsWithNotesOnly &&
         zoneStore.removeLocalTag('_note', 'slow')
     }

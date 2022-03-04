@@ -57,7 +57,13 @@ export const PopperTableModal = observer(
   }: Props) => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, onClose ?? noop)
+    const onOutsideClick = () => {
+      isTags && zoneStore.unselectAllTags()
+
+      onClose && onClose()
+    }
+
+    useOutsideClick(ref, onOutsideClick ?? noop)
 
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
@@ -80,6 +86,12 @@ export const PopperTableModal = observer(
       defineClearFilter()
 
       onClose && onClose()
+    }
+
+    const handleApply = () => {
+      zoneStore.submitTagsMode()
+
+      onApply && onApply()
     }
 
     return (
@@ -138,7 +150,7 @@ export const PopperTableModal = observer(
           <Button
             text={t('general.apply')}
             className="ml-3"
-            onClick={onApply}
+            onClick={handleApply}
             dataTestId={MainTableDataCy.applyButton}
           />
         </div>
