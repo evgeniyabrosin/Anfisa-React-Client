@@ -59,7 +59,9 @@ class TableStore {
     const lastLoadedVariant = datasetStore.indexFilteredNo
 
     const isNeedToLoadMore =
-      datasetVariantsAmount > 0 && lastLoadedVariant < datasetVariantsAmount
+      datasetVariantsAmount > 0 &&
+      lastLoadedVariant > 0 &&
+      lastLoadedVariant < datasetVariantsAmount
 
     if (isNeedToLoadMore) {
       await datasetStore.fetchFilteredTabReportAsync()

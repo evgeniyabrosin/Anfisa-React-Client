@@ -517,6 +517,7 @@ export class DatasetStore {
     await this._fetchTabReportAsync(this.datasetName, seq)
 
     this.indexFilteredNo += INCREASE_INDEX
+
     this.isFetchingMore = false
     // eslint-disable-next-line unicorn/no-useless-undefined
     this.setSelectedVariantNumber(undefined)
