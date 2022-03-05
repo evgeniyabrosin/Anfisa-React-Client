@@ -45,7 +45,7 @@ interface IRangeSliderHandleProps {
   color: RangeSliderColor
   isActive?: boolean
   isDisabled?: boolean
-  isStrong?: boolean
+  isStrict?: boolean
 }
 
 const getHandleColor = ({
@@ -82,9 +82,9 @@ export const RangeSliderHandle = styled.div<IRangeSliderHandleProps>`
     top: 2px;
     right: 2px;
     bottom: 2px;
-    ${props => props.isStrong && `border: 1px solid ${getHandleColor(props)};`}
+    ${props => props.isStrict && `border: 1px solid ${getHandleColor(props)};`}
     background: ${props =>
-      props.isStrong ? 'rgba(255,255,255,0.5)' : getHandleColor(props)};
+      props.isStrict ? 'rgba(255,255,255,0.5)' : getHandleColor(props)};
     border-radius: 50%;
   }
 
@@ -98,7 +98,7 @@ export const RangeSliderHandle = styled.div<IRangeSliderHandleProps>`
       };
   
       ::before {
-        ${props.isStrong ? 'border-color' : 'background'}: ${
+        ${props.isStrict ? 'border-color' : 'background'}: ${
       props.color === RangeSliderColor.Primary
         ? controlPrimaryActiveColor
         : controlSecondaryActiveColor

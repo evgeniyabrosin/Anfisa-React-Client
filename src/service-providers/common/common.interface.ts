@@ -11,15 +11,17 @@ export type TCount = [
 
 export type TDateISOString = string
 
+export type TNumericConditionBounds = [
+  minimalBound: number | null,
+  isMinimalNonStrict: boolean,
+  maximumBound: number | null,
+  isMaximalNonStrict: boolean,
+]
+
 export type TNumericCondition = [
   conditionType: 'numeric',
   propertyName: string,
-  bounds: [
-    minimalBound: number | null,
-    isMinimalBound: boolean,
-    maximumBound: number | null,
-    isMaximalBound: boolean,
-  ],
+  bounds: TNumericConditionBounds,
 ]
 
 export enum ConditionJoinMode {
@@ -93,18 +95,17 @@ export enum NumericPropertyStatusSubKinds {
   'TRANSCRIPT_FLOAT' = 'transcript-float',
 }
 
-export enum AttribueKinds {
+export enum AttributeKinds {
   NUMERIC = 'numeric',
   ENUM = 'enum',
   FUNC = 'func',
 }
 
-export interface IBasePropertyStatus {
+export interface IBasePropertyStatus<Kind extends AttributeKinds> {
   name: string
-  kind: AttribueKinds
+  kind: Kind
   vgroup: string
   title?: string
-  'sub-kind'?: string
   'render-mode'?: string
   tooltip?: string
   incomplete?: true
@@ -112,16 +113,19 @@ export interface IBasePropertyStatus {
   classes?: number[][]
 }
 
-export interface INumericPropertyStatus extends IBasePropertyStatus {
+export type TNumericPropertyHistogram = [
+  histogramType: HistogramTypes,
+  minimalBound: number,
+  maximumBound: number,
+  numericCounts: number[],
+]
+
+export interface INumericPropertyStatus
+  extends IBasePropertyStatus<AttributeKinds.NUMERIC> {
   min?: number
   max?: number
   counts?: TCount[]
-  histogram?: [
-    histogramType: HistogramTypes,
-    minimalBound: number,
-    maximumBound: number,
-    numericCounts: number[],
-  ]
+  histogram?: TNumericPropertyHistogram
   'sub-kind': NumericPropertyStatusSubKinds
 }
 
@@ -132,12 +136,14 @@ export enum EnumPropertyStatusSubKinds {
   TRANSCRIPTS_MULTI = 'transcript-multi',
 }
 
-export interface IEnumPropertyStatus extends IBasePropertyStatus {
+export interface IEnumPropertyStatus
+  extends IBasePropertyStatus<AttributeKinds.ENUM> {
   variants?: TVariant[]
   'sub-kind': EnumPropertyStatusSubKinds
 }
 
-export interface IFuncPropertyStatus extends IBasePropertyStatus {
+export interface IFuncPropertyStatus
+  extends IBasePropertyStatus<AttributeKinds.FUNC> {
   variants?: TVariant[]
   err?: string
   'rq-id': string

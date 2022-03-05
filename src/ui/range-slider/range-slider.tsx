@@ -41,7 +41,7 @@ export interface IRangeSliderProps {
   value: RangeSliderValue | null
   onChange: (value: RangeSliderValue) => void
   disabled?: RangeSliderSide
-  strong?: RangeSliderSide
+  strict?: RangeSliderSide
   color?: RangeSliderColor
   histogram?: number[]
 }
@@ -62,7 +62,7 @@ export const RangeSlider = ({
   scale = RangeSliderScale.Linear,
   color = RangeSliderColor.Primary,
   disabled,
-  strong,
+  strict,
   histogram,
 }: IRangeSliderProps): ReactElement => {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -309,7 +309,10 @@ export const RangeSlider = ({
               color={color}
               isActive={!!(dragState && !dragState.isRightHandle)}
               isDisabled={isDisabled || disabled === RangeSliderSide.Left}
-              isStrong={strong === RangeSliderSide.Left}
+              isStrict={
+                strict === RangeSliderSide.Left ||
+                strict === RangeSliderSide.Both
+              }
               style={{
                 transform: `translateX(${leftOffset}px)`,
               }}
@@ -321,7 +324,10 @@ export const RangeSlider = ({
               color={color}
               isActive={!!(dragState && dragState.isRightHandle)}
               isDisabled={isDisabled || disabled === RangeSliderSide.Right}
-              isStrong={strong === RangeSliderSide.Right}
+              isStrict={
+                strict === RangeSliderSide.Right ||
+                strict === RangeSliderSide.Both
+              }
               style={{
                 transform: `translateX(${rightOffset}px)`,
               }}

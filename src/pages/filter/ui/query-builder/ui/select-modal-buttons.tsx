@@ -11,6 +11,9 @@ import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { ModalJoin } from './modal-join'
 
+// TODO: `currentGroup` prop is used only for empty group test
+//       may be we can use `isEmptyGroup` boolean prop or
+//       isEmptyCurrentGroup getter from dtreeStore
 interface IProps {
   handleModals: () => void
   handleClose: () => void

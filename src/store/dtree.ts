@@ -6,6 +6,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { DtreeStatType, FilterCountsType, StatListType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import { TPropertyStatus } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
@@ -92,8 +93,7 @@ class DtreeStore {
   isModalSelectFilterVisible = false
   isModalEditFiltersVisible = false
   isModalJoinVisible = false
-  isModalEditNumbersVisible = false
-  isModalSelectNumbersVisible = false
+  isModalNumbersVisible = false
 
   isModalTextEditorVisible = false
   isModalSaveDatasetVisible = false
@@ -224,6 +224,36 @@ class DtreeStore {
       this.dtreeStat['stat-list'] ?? datasetStore.dsStat['stat-list']
 
     return getQueryBuilder(toJS(statList))
+  }
+
+  getAttributeStatus(name: string): TPropertyStatus | undefined {
+    return toJS(
+      this.dtreeStat['stat-list']?.find(
+        (attr: TPropertyStatus) => attr.name === name,
+      ),
+    )
+  }
+
+  get attributeStatusToChange(): TPropertyStatus | undefined {
+    return this.groupNameToChange
+      ? this.getAttributeStatus(this.groupNameToChange)
+      : undefined
+  }
+
+  get currentStepGroups() {
+    return toJS(this.stepData[activeStepStore.activeStepIndex].groups)
+  }
+
+  get currentStepGroupToChange() {
+    if (this.groupIndexToChange < 0) {
+      return undefined
+    }
+
+    return toJS(
+      this.stepData[activeStepStore.activeStepIndex].groups[
+        this.groupIndexToChange
+      ],
+    )
   }
 
   getStepIndexForApi = (index: number) => {
@@ -486,15 +516,20 @@ class DtreeStore {
 
   // 3.1.2 Modal for numeric attr
 
-  openModalSelectNumbers(groupName: string, source: string) {
+  openModalNumbers(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
 
-    this.isModalSelectNumbersVisible = true
+    this.isModalNumbersVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  closeModalSelectNumbers() {
-    this.isModalSelectNumbersVisible = false
+  closeModalNumbers() {
+    this.isModalNumbersVisible = false
   }
 
   // 3.1.3 Modals for func attr
@@ -595,22 +630,6 @@ class DtreeStore {
   closeModalEditFilters() {
     this.isModalEditFiltersVisible = false
     this.selectedFilters = []
-  }
-
-  // 3.2.2 Modal for numeric attr
-
-  openModalEditNumbers(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditNumbersVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  closeModalEditNumbers() {
-    this.isModalEditNumbersVisible = false
   }
 
   // 3.2.3 Modals for func attr

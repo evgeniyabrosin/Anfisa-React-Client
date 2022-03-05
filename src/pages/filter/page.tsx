@@ -13,10 +13,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Header } from '@components/header'
 import { GlbPagesNames } from '@glb/glb-names'
-import {
-  ModalEditNumbers,
-  ModalSelectNumbers,
-} from '@pages/filter/ui/modal-edit/components/modal-numbers'
+import { ModalNumbers } from '@pages/filter/ui/modal-edit/components/modal-numbers'
 import { ErrorPage } from '../error/error'
 import { FilterControl } from './ui/filter-control'
 import { ModalEditCompoundHet } from './ui/modal-edit/components/modal-edit-compound-het'
@@ -112,8 +109,7 @@ const FilterPage = observer((): ReactElement => {
       {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
       {dtreeStore.isModalSelectFilterVisible && <ModalSelectFilters />}
 
-      {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
-      {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
+      {dtreeStore.isModalNumbersVisible && <ModalNumbers />}
 
       {dtreeStore.isModalEditInheritanceModeVisible && (
         <ModalEditInheritanceMode />

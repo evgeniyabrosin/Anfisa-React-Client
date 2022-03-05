@@ -54,7 +54,7 @@ export const QueryBuilderSubgroupItem = observer(
       }
 
       if (group.kind === FilterKindEnum.Numeric) {
-        dtreeStore.openModalSelectNumbers(group.name, source)
+        dtreeStore.openModalNumbers(group.name, undefined, source)
       }
 
       const { activeStepIndex } = activeStepStore

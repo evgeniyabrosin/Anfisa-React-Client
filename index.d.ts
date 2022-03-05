@@ -133,7 +133,6 @@ export interface StatList {
   'trio-variants': string[]
   'approx-modes': string[][]
   labels: any[]
-  render: string
   'render-mode'?: string
   histogram?: StatHistogram
   incomplete?: boolean

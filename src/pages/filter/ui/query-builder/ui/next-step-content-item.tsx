@@ -67,7 +67,7 @@ export const NextStepContentItem = observer(
         dtreeStore.openModalEditFilters(group[1], index, currNo)
 
       group[0] === StepTypeEnum.Numeric &&
-        dtreeStore.openModalEditNumbers(group[1], index, currNo)
+        dtreeStore.openModalNumbers(group[1], currNo)
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
