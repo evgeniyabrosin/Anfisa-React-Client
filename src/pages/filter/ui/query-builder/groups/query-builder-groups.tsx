@@ -47,6 +47,9 @@ export const QueryBuilderGroups = observer((): ReactElement => {
     activeStep?.isReturnedVariantsActive || activeStep?.isFinalStep,
   )
 
+  const additionalHeight: number =
+    filterStore.method === GlbPagesNames.Filter ? 300 : 260
+
   return (
     <Fragment>
       <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -73,7 +76,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
 
         <div
           className="overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 300px)' }}
+          style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
         >
           <DeferRender chunkSize={chunkSize} renderId={decrement}>
             {groupNames.map((groupName, index) => (
