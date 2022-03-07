@@ -282,8 +282,8 @@ Feature: Filter Refiner, Filter by List-value attributes
 		Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was opened
 		When the user clicks the <Attribute #1>
 		And clicks the <Value #1>
-		And clicks the <Attribute #2>
 		And clicks the "Add" button
+		And clicks the <Attribute #2>
 		And clicks the <Value #2>
 		And clicks the "Add" button
 		Then the <Attribute #1> group should be added to the right part of the screen
