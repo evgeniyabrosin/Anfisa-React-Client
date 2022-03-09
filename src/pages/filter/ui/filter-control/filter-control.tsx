@@ -19,8 +19,8 @@ import {
   FilterControlOptions,
   FilterControlOptionsNames,
 } from './filter-control.const'
-import { FilterControlQueryBuilder } from './filter-control-query-builder'
-import { FilterControlRefiner } from './filter-control-refiner'
+import { FilterControlQueryBuilder } from './filter-control-query-builder/filter-control-query-builder'
+import { FilterControlRefiner } from './filter-control-refiner/filter-control-refiner'
 
 export const FilterControl = observer((): ReactElement => {
   const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0

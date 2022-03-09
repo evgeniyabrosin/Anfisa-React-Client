@@ -17,8 +17,8 @@ import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
-import { DtreeModal } from './dtree-modal'
-import { FilterButton } from './filter-button'
+import { DtreeModal } from '../../dtree-modal'
+import { FilterButton } from '../../filter-button'
 
 export const FilterControlQueryBuilder = observer((): ReactElement => {
   const [activeTree, setActiveTree] = useState('')

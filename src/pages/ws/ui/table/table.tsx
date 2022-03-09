@@ -137,7 +137,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     zoneStore.resetAllSelectedItems()
     datasetStore.clearZone()
     datasetStore.resetActivePreset()
-    datasetStore.resetHasPreset()
+    datasetStore.resetPrevPreset()
     datasetStore.fetchWsListAsync(false, 'reset')
   }
 

@@ -35,6 +35,7 @@ export type Condition = [string, string, unknown, string[]?, unknown?]
 
 export class DatasetStore {
   dsStat: DsStatType = {}
+  startDsStat: DsStatType = {}
   variantsAmount = 0
   tabReport: TabReportType[] = []
   genes: string[] = []
@@ -51,6 +52,7 @@ export class DatasetStore {
   activePreset = ''
   prevPreset = ''
   conditions: Condition[] = []
+  startPresetConditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
   memorizedConditions:
@@ -98,6 +100,10 @@ export class DatasetStore {
 
   setActivePreset(value: string) {
     this.activePreset = value
+  }
+
+  setPrevPreset(value: string) {
+    this.prevPreset = value
   }
 
   setSelectedVariantNumber(index: number | undefined) {
@@ -229,7 +235,7 @@ export class DatasetStore {
     this.fetchDsStatAsync()
   }
 
-  resetHasPreset() {
+  resetPrevPreset() {
     this.prevPreset = ''
   }
 
@@ -240,6 +246,7 @@ export class DatasetStore {
     this.samples = []
     this.tags = []
     this.dsStat = {}
+    this.startDsStat = {}
     this.variantsAmount = 0
     this.statAmount = []
     this.prevPreset = ''
@@ -249,6 +256,7 @@ export class DatasetStore {
 
   resetConditions() {
     this.conditions = []
+    this.startPresetConditions = []
   }
 
   async initDatasetAsync(
@@ -273,7 +281,7 @@ export class DatasetStore {
   async fetchDsStatAsync(
     shouldSaveInHistory = true,
     bodyFromHistory?: URLSearchParams,
-  ) {
+  ): Promise<DsStatType> {
     this.isLoadingDsStat = true
 
     const localBody = new URLSearchParams({
@@ -322,6 +330,10 @@ export class DatasetStore {
     runInAction(() => {
       this.dsStat = result
 
+      if (Object.keys(this.startDsStat).length === 0) {
+        this.startDsStat = this.dsStat
+      }
+
       if (this.isXL) {
         this.statAmount = get(result, 'filtered-counts', [])
       }
@@ -329,6 +341,8 @@ export class DatasetStore {
       this.variantsAmount = result['total-counts']['0']
       this.isLoadingDsStat = false
     })
+
+    return result
   }
 
   getVariantValue(groupItemName: string, condition: TFuncCondition) {
@@ -380,11 +394,12 @@ export class DatasetStore {
   updatePresetLoad(dsStatData: any, source?: string) {
     this.conditions = dsStatData.conditions
     filterStore.selectedFilters = {}
+    this.startPresetConditions = [...this.conditions]
 
     dsStatData.conditions?.forEach((condition: any[]) => {
       const groupItemName = condition[1]
 
-      const filterItem = dsStatData['stat-list']?.find(
+      const filterItem = this.startDsStat['stat-list']?.find(
         (item: any) => item.name === groupItemName,
       )
 
@@ -585,7 +600,6 @@ export class DatasetStore {
       body.append('zone', JSON.stringify(this.zone))
     }
 
-    this.prevPreset = this.activePreset
     body.append('filter', this.activePreset)
 
     const response = await fetch(getApiUrl(isXL ? 'ds_list' : 'ws_list'), {

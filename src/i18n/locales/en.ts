@@ -219,6 +219,10 @@ export const en = {
     tooLongNote: 'Note is too long',
     tagNameIsTooLong: 'Tag name is too long',
     dtreeNameIsNotValid: 'Decision tree name is not valid',
+    noChangesToModify: 'There are no changes to modify',
+    choosePresetFirst: 'Choose preset first',
+    chooseFiltersFirst: 'Choose filters first',
+    cantJoinTheSamePreset: 'Cant join the same preset',
   },
   igv: {
     openIgv: 'Open igv',

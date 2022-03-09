@@ -8,7 +8,7 @@ import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
-import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
+import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
