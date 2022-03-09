@@ -1,7 +1,6 @@
 import { Fragment, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Option } from 'react-dropdown'
 import { Link, useHistory } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -19,6 +18,7 @@ import { Icon } from '@ui/icon'
 import { Logo } from '@components/logo'
 import { GlbPagesNames } from '@glb/glb-names'
 import userIcon from '@images/thomas-hunt.jpg'
+import { showToast } from '@utils/notifications/showToast'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -84,15 +84,7 @@ export const Header = observer(({ children }: Props): ReactElement => {
       }`,
     )
 
-    toast.info(t('ds.copied'), {
-      position: 'bottom-right',
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-    })
+    showToast(t('ds.copied'), 'info')
   }
 
   return (

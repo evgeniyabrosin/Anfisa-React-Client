@@ -1,5 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 
 export const deleteAttribute = (): void => {
@@ -10,14 +11,14 @@ export const deleteAttribute = (): void => {
     code,
   })
 
-  const { currentStepIndex } = dtreeStore
+  const { activeStepIndex } = activeStepStore
 
   const { location } = modalEditStore
 
   const [indexForApi] = location
 
   const hasOneAttribute =
-    dtreeStore.stepData[currentStepIndex].groups.length === 1
+    dtreeStore.stepData[activeStepIndex].groups.length === 1
   const action = hasOneAttribute ? 'POINT' : 'ATOM'
 
   const currentLocation = hasOneAttribute ? indexForApi : location

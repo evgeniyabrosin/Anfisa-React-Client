@@ -7,10 +7,16 @@ import { observer } from 'mobx-react-lite'
 import { useKeydown } from '@core/hooks/use-keydown'
 import { useVariantIndex } from '@core/hooks/use-variant-index'
 import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
+import {
+  HgModes,
+  IAttributeDescriptors,
+} from '@service-providers/dataset-level/dataset-level.interface'
+import { findElementInRow } from '@utils/mian-table/find-element-in-row'
 import { closeHandler } from '../drawer'
 import { DrawerNote } from './drawer-note'
 import { DrawerTags } from './drawer-tags'
@@ -23,9 +29,18 @@ export const VariantHeader = observer(({ setLayout }: Props): ReactElement => {
   const history = useHistory()
   const location = useLocation()
 
-  const genInfo = get(toJS(variantStore.variant), '[0].rows[0].cells[0][0]', '')
+  const variant = toJS(variantStore.variant)
+  const rows: IAttributeDescriptors[] = get(variant, '[0].rows', [])
 
-  const hg19 = get(toJS(variantStore.variant), '[0].rows[1].cells[0][0]', '')
+  const variantWithoutGenesName = 'None'
+  const genes = findElementInRow(rows, 'genes') || variantWithoutGenesName
+
+  const hg19locus = findElementInRow(rows, 'hg19')
+  const hg38locus = findElementInRow(rows, 'hg38')
+
+  const { locusMode } = dirinfoStore
+  const currentLocus = locusMode === HgModes.HG19 ? hg19locus : hg38locus
+
   const filteredNo = toJS(datasetStore.filteredNo)
 
   const canGetPrevVariant = (): boolean => {
@@ -88,8 +103,8 @@ export const VariantHeader = observer(({ setLayout }: Props): ReactElement => {
             />
           </div>
           <div className="text-blue-bright font-bold leading-18px">
-            {`[${genInfo}] `}
-            <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+            {`[${genes}] `}
+            <span dangerouslySetInnerHTML={{ __html: currentLocus }} />
           </div>
           <DrawerTags />
 

@@ -1,8 +1,9 @@
 import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
+import { CSSProperties } from 'styled-components'
 
 export interface ButtonProps {
-  text?: string
+  text?: string | JSX.Element
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   variant?:
@@ -18,6 +19,7 @@ export interface ButtonProps {
   icon?: ReactElement
   refEl?: any
   dataTestId?: string
+  style?: CSSProperties
 }
 
 export const Button = ({
@@ -32,6 +34,7 @@ export const Button = ({
   icon,
   refEl,
   dataTestId,
+  style = {},
 }: ButtonProps): ReactElement => {
   let padding = ''
   const classNameString: string = cn(className)
@@ -57,7 +60,7 @@ export const Button = ({
   }
 
   const cnButton = cn(
-    'flex items-center justify-center rounded-full',
+    'flex items-center justify-between rounded-full',
     padding,
     {
       //default primary
@@ -112,6 +115,7 @@ export const Button = ({
       className={cnButton}
       ref={refEl}
       onClick={clickHandler}
+      style={style}
     >
       {prepend}
       {text && <span className="mx-2 text-xs leading-14px">{text}</span>}

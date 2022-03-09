@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, ReactElement } from 'react'
+import { ChangeEvent, Fragment, MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -8,6 +8,7 @@ interface Props {
   placeholder?: string
   className?: Argument
   onChange?: (e: ChangeEvent<HTMLSelectElement>) => void
+  onClick?: (e: MouseEvent<HTMLElement>) => void
   options?: string[]
   reset?: boolean
   value?: any

@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
@@ -11,6 +12,7 @@ import dirinfoStore from './dirinfo'
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true
+  isExportingReport = false
 
   constructor() {
     makeAutoObservable(this)
@@ -65,51 +67,59 @@ class OperationsStore {
       body.append('zone', zone)
     }
 
-    if (exportType === ExportTypeEnum.Excel) {
-      const response = await fetch(getApiUrl('export'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body,
-      })
+    try {
+      this.isExportingReport = true
 
-      const result = await response.json()
-      const responseFile = await fetch(getApiUrl(result.fname))
+      if (exportType === ExportTypeEnum.Excel) {
+        const response = await fetch(getApiUrl('export'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        })
 
-      await responseFile.blob().then(blob => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
+        const result = await response.json()
+        const responseFile = await fetch(getApiUrl(result.fname))
 
-        a.href = url
-        a.download = `${datasetStore.datasetName}.xlsx`
-        a.click()
+        await responseFile.blob().then(blob => {
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
 
-        return
-      })
-    }
+          a.href = url
+          a.download = `${datasetStore.datasetName}.xlsx`
+          a.click()
 
-    if (exportType === ExportTypeEnum.CSV) {
-      body.append('schema', 'xbr')
+          return
+        })
+      }
 
-      const response = await fetch(getApiUrl('csv_export'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body,
-      })
+      if (exportType === ExportTypeEnum.CSV) {
+        body.append('schema', 'xbr')
 
-      await response.blob().then(blob => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
+        const response = await fetch(getApiUrl('csv_export'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        })
 
-        a.href = url
-        a.download = `${datasetStore.datasetName}.csv`
-        a.click()
+        await response.blob().then(blob => {
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
 
-        return
-      })
+          a.href = url
+          a.download = `${datasetStore.datasetName}.csv`
+          a.click()
+
+          return
+        })
+      }
+    } catch (error) {
+      toast.error(String(error))
+    } finally {
+      this.isExportingReport = false
     }
   }
 

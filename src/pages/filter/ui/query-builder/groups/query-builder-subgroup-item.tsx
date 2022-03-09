@@ -9,9 +9,12 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
+import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
+import { GlbPagesNames } from '@glb/glb-names'
 import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {
@@ -39,7 +42,7 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeStore.addSelectedGroup(filterGroup)
     }
 
-    const handleAttrClick = (group: StatList) => {
+    const openAttrListForDtree = (group: StatList) => {
       const source = isModal ? ModalSources.TreeStep : ModalSources.TreeStat
 
       writeScrollPosition()
@@ -51,44 +54,56 @@ export const QueryBuilderSubgroupItem = observer(
       }
 
       if (group.kind === FilterKindEnum.Numeric) {
-        dtreeStore.openModalSelectNumbers(group.name, source)
+        dtreeStore.openModalNumbers(group.name, undefined, source)
       }
+
+      const { activeStepIndex } = activeStepStore
 
       if (group.kind === FilterKindEnum.Func) {
         group.name === FuncStepTypesEnum.InheritanceMode &&
           dtreeStore.openModalSelectInheritanceMode(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CustomInheritanceMode &&
           dtreeStore.openModalSelectCustomInheritanceMode(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CompoundHet &&
           dtreeStore.openModalSelectCompoundHet(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.CompoundRequest &&
           dtreeStore.openModalSelectCompoundRequest(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
 
         group.name === FuncStepTypesEnum.GeneRegion &&
           dtreeStore.openModalSelectGeneRegion(
             group.name,
-            dtreeStore.currentStepIndex,
+            activeStepIndex,
             source,
           )
+      }
+    }
+
+    const handleAttrClick = (group: StatList) => {
+      const page = filterStore.method
+
+      if (page === GlbPagesNames.Filter) {
+        openAttrListForDtree(group)
+      } else if (page === GlbPagesNames.Refiner) {
+        filterStore.setSelectedGroupItem(group)
       }
     }
 

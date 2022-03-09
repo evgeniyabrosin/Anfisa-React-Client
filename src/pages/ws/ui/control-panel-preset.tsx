@@ -26,7 +26,7 @@ export const Preset = observer((): ReactElement => {
       datasetStore.setIsLoadingTabReport(true)
 
       reset && datasetStore.resetActivePreset()
-      reset && datasetStore.resetHasPreset()
+      reset && datasetStore.resetPrevPreset()
     }
   }
 

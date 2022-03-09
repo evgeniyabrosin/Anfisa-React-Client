@@ -19,8 +19,8 @@ import {
   FilterControlOptions,
   FilterControlOptionsNames,
 } from './filter-control.const'
-import { FilterControlQueryBuilder } from './filter-control-query-builder'
-import { FilterControlRefiner } from './filter-control-refiner'
+import { FilterControlQueryBuilder } from './filter-control-query-builder/filter-control-query-builder'
+import { FilterControlRefiner } from './filter-control-refiner/filter-control-refiner'
 
 export const FilterControl = observer((): ReactElement => {
   const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0
@@ -84,20 +84,25 @@ export const FilterControl = observer((): ReactElement => {
                 dataTestId={DecisionTreesMenuDataCy.textEditor}
               />
             )}
-            <Button
-              text="Undo"
-              className="ml-2"
-              variant={'secondary-dark'}
-              disabled={isUndoLocked}
-              onClick={() => moveActionHistory(-1)}
-            />
-            <Button
-              text="Redo"
-              className="ml-2"
-              variant={'secondary-dark'}
-              disabled={isRedoLocked}
-              onClick={() => moveActionHistory(1)}
-            />
+            {/* Temporarily removed in Refiner page */}
+            {page === GlbPagesNames.Filter && (
+              <>
+                <Button
+                  text="Undo"
+                  className="ml-2"
+                  variant={'secondary-dark'}
+                  disabled={isUndoLocked}
+                  onClick={() => moveActionHistory(-1)}
+                />
+                <Button
+                  text="Redo"
+                  className="ml-2"
+                  variant={'secondary-dark'}
+                  disabled={isRedoLocked}
+                  onClick={() => moveActionHistory(1)}
+                />
+              </>
+            )}
           </div>
           <div className="flex flex-wrap">
             <Icon

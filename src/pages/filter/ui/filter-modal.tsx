@@ -9,7 +9,6 @@ interface Props {
 }
 
 const actions = [
-  ActionFilterEnum.Load,
   ActionFilterEnum.Create,
   ActionFilterEnum.Modify,
   ActionFilterEnum.Join,

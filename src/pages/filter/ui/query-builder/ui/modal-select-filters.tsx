@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { Pagintaion } from '@components/pagintaion'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
@@ -19,7 +20,7 @@ import { SelectModalButtons } from './select-modal-buttons'
 export const ModalSelectFilters = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const index = dtreeStore.currentStepIndex
+  const index = activeStepStore.activeStepIndex
   const currentGroup = dtreeStore.stepData[index].groups
   const groupName = dtreeStore.groupNameToChange
 
@@ -45,7 +46,7 @@ export const ModalSelectFilters = observer((): ReactElement => {
 
   const handleModals = () => {
     dtreeStore.closeModalSelectFilter()
-    dtreeStore.openModalAttribute(index)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 
@@ -109,12 +110,12 @@ export const ModalSelectFilters = observer((): ReactElement => {
         </div>
 
         <div className="flex">
-          <div className="flex items-center">
+          {/* Temporarily removed. Not yet implemented */}
+          {/* <div className="flex items-center">
             <Checkbox checked={false} className="mr-1 cursor-pointer" />
             <div className="font-normal">{t('ds.notMode')}</div>
           </div>
-
-          <ModsDivider />
+          <ModsDivider /> */}
 
           <div
             className="cursor-pointer text-blue-bright"

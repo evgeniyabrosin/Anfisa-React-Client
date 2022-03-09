@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
 import dtreeStore from '@store/dtree'
-import { getIndexWithoutEmptySteps } from '@utils/getIndexWithoutEmptySteps'
+import activeStepStore from '@store/dtree/active-step.store'
 
 class ModalEditStore {
   constructor() {
@@ -10,10 +10,9 @@ class ModalEditStore {
 
   public get location(): [number, number] {
     const locationIndex = dtreeStore.groupIndexToChange
-    const calculatedIndex = getIndexWithoutEmptySteps()
+    const { stepIndexForApi } = activeStepStore
 
-    const indexForApi = dtreeStore.getStepIndexForApi(calculatedIndex)
-    const location: [number, number] = [indexForApi, locationIndex]
+    const location: [number, number] = [+stepIndexForApi, locationIndex]
     return location
   }
 }

@@ -8,6 +8,7 @@ import { Routes } from '@router/routes.enum'
 import FilterPage from '@pages/filter/page'
 import IgvPage from '@pages/igv/igv.page'
 import MainPage from '@pages/main/page'
+import notFoundPage from '@pages/not-found/not-found.page'
 import RefinerPage from '@pages/refiner/page'
 import WSPage from '@pages/ws/page'
 
@@ -31,6 +32,7 @@ export const RouterBase = (): ReactElement => {
           <Route path={Routes.Filter} exact component={FilterPage} />
           <Route path={Routes.Refiner} exact component={RefinerPage} />
           <Route path={Routes.IGV} exact component={IgvPage} />
+          <Route component={notFoundPage} />
         </Switch>
       </QueryParamProvider>
     </Router>

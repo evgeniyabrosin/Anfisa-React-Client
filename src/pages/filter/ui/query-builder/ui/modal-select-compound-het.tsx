@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { IParams } from '../../modal-edit/components/modal-edit-compound-het'
 import { AllNotModalMods } from './all-not-modal-mods'
@@ -19,7 +20,7 @@ export const getApprox = (approxValue: string) => {
 export const ModalSelectCompoundHet = observer((): ReactElement => {
   const ref = useRef(null)
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
@@ -54,15 +55,11 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
   const stateOptions: string[] = [stateCondition]
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const params = `{"approx":${getApprox(approxCondition)},"state":${
       stateCondition === '-current-' || !stateCondition
         ? null
         : `"${stateCondition}"`
     }}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -76,16 +73,12 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
   }
 
   const handleSetCondition = (value: string, type: string) => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     if (type === 'approx') {
       setApproxCondition(value)
 
       const params = `{"approx":${getApprox(value)},"state":${
         stateCondition !== '-current-' ? `"${stateCondition}"` : null
       }}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
@@ -97,15 +90,13 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
         value !== '-current-' ? `"${value}"` : null
       }}`
 
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
   }
 
   const handleModals = () => {
     dtreeStore.closeModalSelectCompoundHet()
-    dtreeStore.openModalAttribute(currentStepIndex)
+    dtreeStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 

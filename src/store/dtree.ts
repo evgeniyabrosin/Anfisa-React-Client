@@ -6,6 +6,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { DtreeStatType, FilterCountsType, StatListType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import { TPropertyStatus } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
@@ -13,8 +14,8 @@ import { getDataFromCode } from '@utils/getDataFromCode'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
-import { makeStepActive } from '@utils/makeStepActive'
 import datasetStore from './dataset'
+import activeStepStore, { ActiveStepOptions } from './dtree/active-step.store'
 
 export type IStepData = {
   step: number
@@ -92,8 +93,7 @@ class DtreeStore {
   isModalSelectFilterVisible = false
   isModalEditFiltersVisible = false
   isModalJoinVisible = false
-  isModalEditNumbersVisible = false
-  isModalSelectNumbersVisible = false
+  isModalNumbersVisible = false
 
   isModalTextEditorVisible = false
   isModalSaveDatasetVisible = false
@@ -116,17 +116,12 @@ class DtreeStore {
   groupNameToChange = ''
   groupIndexToChange = 0
 
-  currentStepIndex = 0
-  currentStepIndexForApi = 0
-
   requestData: IRequestData[] = []
 
   modalSource = ''
 
   actionHistory: URLSearchParams[] = []
   actionHistoryIndex = -1
-
-  activeStepIndex = -1
 
   constructor() {
     makeAutoObservable(this)
@@ -148,24 +143,18 @@ class DtreeStore {
       },
     ]
 
-    const currentStepIndex = isLoadingNewTree ? -1 : this.activeStepIndex
-
-    const computedStepData = await getStepDataAsync(currentStepIndex)
+    const computedStepData = await getStepDataAsync(isLoadingNewTree)
 
     const newStepData =
       computedStepData.length === 0 ? initialStepData : computedStepData
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
-    const newActiveStepIndex = newStepData.findIndex(
-      element => element.isActive || element.isReturnedVariantsActive,
-    )
-
     const finalStep = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
-      isActive: newActiveStepIndex === -1,
+      isActive: false,
       isReturnedVariantsActive: false,
       startFilterCounts: null,
       finishFilterCounts: null,
@@ -173,15 +162,24 @@ class DtreeStore {
       isFinalStep: true,
     }
 
+    newStepData.push(finalStep)
+
     runInAction(() => {
-      this.stepData = [...newStepData, finalStep]
+      this.stepData = [...newStepData]
       this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
-      this.activeStepIndex = newActiveStepIndex
     })
 
-    const stepIndexForApi = this.getStepIndexForApi(newActiveStepIndex)
+    const stepDataActiveIndex = newStepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
 
-    this.fetchDtreeStatAsync(this.dtreeCode, String(stepIndexForApi))
+    const nextActiveStep =
+      stepDataActiveIndex === -1 ? newStepData.length - 1 : stepDataActiveIndex
+
+    activeStepStore.makeStepActive(
+      nextActiveStep,
+      ActiveStepOptions.StartedVariants,
+    )
   }
 
   async fetchDtreeStatAsync(code = 'return False', no = '0') {
@@ -228,6 +226,36 @@ class DtreeStore {
     return getQueryBuilder(toJS(statList))
   }
 
+  getAttributeStatus(name: string): TPropertyStatus | undefined {
+    return toJS(
+      this.dtreeStat['stat-list']?.find(
+        (attr: TPropertyStatus) => attr.name === name,
+      ),
+    )
+  }
+
+  get attributeStatusToChange(): TPropertyStatus | undefined {
+    return this.groupNameToChange
+      ? this.getAttributeStatus(this.groupNameToChange)
+      : undefined
+  }
+
+  get currentStepGroups() {
+    return toJS(this.stepData[activeStepStore.activeStepIndex].groups)
+  }
+
+  get currentStepGroupToChange() {
+    if (this.groupIndexToChange < 0) {
+      return undefined
+    }
+
+    return toJS(
+      this.stepData[activeStepStore.activeStepIndex].groups[
+        this.groupIndexToChange
+      ],
+    )
+  }
+
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
     const shouldGetAnotherIndex = index === indexes.length
@@ -244,12 +272,6 @@ class DtreeStore {
     const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
 
     return stepIndexForApi
-  }
-
-  setCurrentStepIndexForApi = (index: number) => {
-    runInAction(() => {
-      this.currentStepIndexForApi = index
-    })
   }
 
   async fetchDtreeSetAsync(body: URLSearchParams, shouldSaveInHistory = true) {
@@ -290,7 +312,7 @@ class DtreeStore {
   async fetchStatFuncAsync(subGroupName: string, param: string) {
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      no: this.currentStepIndexForApi.toString(),
+      no: activeStepStore.stepIndexForApi,
       code: this.dtreeCode,
       rq_id: Math.random().toString(),
       unit: subGroupName,
@@ -376,8 +398,6 @@ class DtreeStore {
         difference: 0,
       })
     } else {
-      this.currentStepIndex = index + 1
-
       const startFilterCounts = localStepData[index].finishFilterCounts
 
       localStepData.splice(index + 1, 0, {
@@ -420,7 +440,10 @@ class DtreeStore {
     this.stepData.map((item, currNo: number) => {
       item.step = currNo + 1
     })
-    makeStepActive(this.stepData.length - 1)
+    activeStepStore.makeStepActive(
+      this.stepData.length - 1,
+      ActiveStepOptions.StartedVariants,
+    )
 
     this.resetLocalDtreeCode()
   }
@@ -462,10 +485,8 @@ class DtreeStore {
 
   // 3.1 Modals for creation brand new tree
 
-  openModalAttribute(index: number) {
+  openModalAttribute() {
     this.isModalAttributeVisible = true
-
-    this.currentStepIndex = index
   }
 
   closeModalAttribute() {
@@ -495,15 +516,20 @@ class DtreeStore {
 
   // 3.1.2 Modal for numeric attr
 
-  openModalSelectNumbers(groupName: string, source: string) {
+  openModalNumbers(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
 
-    this.isModalSelectNumbersVisible = true
+    this.isModalNumbersVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  closeModalSelectNumbers() {
-    this.isModalSelectNumbersVisible = false
+  closeModalNumbers() {
+    this.isModalNumbersVisible = false
   }
 
   // 3.1.3 Modals for func attr
@@ -518,8 +544,6 @@ class DtreeStore {
     this.isModalSelectInheritanceModeVisible = true
 
     this.groupNameToChange = groupName
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalSelectInheritanceMode() {
@@ -536,8 +560,6 @@ class DtreeStore {
     this.isModalSelectCustomInheritanceModeVisible = true
 
     this.groupNameToChange = groupName
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalSelectCustomInheritanceMode() {
@@ -554,8 +576,6 @@ class DtreeStore {
     this.isModalSelectCompoundHetVisible = true
 
     this.groupNameToChange = groupName
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalSelectCompoundHet() {
@@ -572,8 +592,6 @@ class DtreeStore {
     this.isModalSelectCompoundRequestVisible = true
 
     this.groupNameToChange = groupName
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalSelectCompoundRequest() {
@@ -589,8 +607,6 @@ class DtreeStore {
 
     this.isModalSelectGeneRegionVisible = true
     this.groupNameToChange = groupName
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalSelectGeneRegion() {
@@ -609,31 +625,11 @@ class DtreeStore {
     this.isModalEditFiltersVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditFilters() {
     this.isModalEditFiltersVisible = false
     this.selectedFilters = []
-  }
-
-  // 3.2.2 Modal for numeric attr
-
-  openModalEditNumbers(
-    groupName: string,
-    stepIndex: number,
-    groupIndex: number,
-  ) {
-    this.isModalEditNumbersVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
-  }
-
-  closeModalEditNumbers() {
-    this.isModalEditNumbersVisible = false
   }
 
   // 3.2.3 Modals for func attr
@@ -648,8 +644,6 @@ class DtreeStore {
     this.groupNameToChange = groupName
 
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditInheritanceMode() {
@@ -664,8 +658,6 @@ class DtreeStore {
     this.isModalEditCustomInheritanceModeVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditCustomInheritanceMode() {
@@ -680,8 +672,6 @@ class DtreeStore {
     this.isModalEditCompoundHetVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditCompoundHet() {
@@ -696,8 +686,6 @@ class DtreeStore {
     this.isModalEditCompoundRequestVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   openModalEditCustomInheritanceModeFunc(
@@ -708,8 +696,6 @@ class DtreeStore {
     this.isModalEditCompoundRequestVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditCompoundRequest() {
@@ -724,8 +710,6 @@ class DtreeStore {
     this.isModalEditGeneRegionVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex
-
-    this.currentStepIndex = stepIndex
   }
 
   closeModalEditGeneRegion() {
@@ -912,17 +896,17 @@ class DtreeStore {
     this.resetLocalDtreeCode()
   }
 
-  setStepActive = (
-    index: number,
-    option: 'isActive' | 'isReturnedVariantsActive',
-  ) => {
+  changeStepDataAcitveStep = (index: number, option: ActiveStepOptions) => {
     this.stepData.forEach(element => {
       element.isActive = false
       element.isReturnedVariantsActive = false
     })
 
-    this.stepData[index][option] = !this.stepData[index][option]
-    this.activeStepIndex = index
+    if (option === ActiveStepOptions.StartedVariants) {
+      this.stepData[index].isActive = true
+    } else {
+      this.stepData[index].isReturnedVariantsActive = true
+    }
   }
 
   openTableModal(index?: number) {

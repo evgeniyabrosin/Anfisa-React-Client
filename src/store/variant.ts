@@ -110,14 +110,8 @@ export class VariantStore {
     })
   }
 
-  setDsName(dsName: string) {
-    const oldDsName = this.dsName
-
-    this.dsName = dsName
-
-    if (oldDsName !== dsName) {
-      this.fetchVarinatInfoAsync()
-    }
+  setDsName(settedDsName: string) {
+    this.dsName = settedDsName
   }
 
   updateGeneralTags(tagName: string) {

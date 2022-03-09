@@ -28,6 +28,11 @@ export const en = {
       frontend: 'Frontend: Anfisa {version}',
       backend: 'Backend: {version}',
     },
+    presetFilterAction: {
+      modify: 'Preset has been modified',
+      join: 'Preset has been joined',
+      delete: 'Preset has been deleted',
+    },
   },
   home: {
     title: 'Home',
@@ -105,7 +110,7 @@ export const en = {
     notesFor: 'Notes for',
     tagExists: 'That tag already exists',
     showSelectionOnly: 'Show selection only',
-    saveNote: 'Save notes',
+    saveNote: 'Save note',
   },
   filter: {
     method: 'Filtering method',
@@ -208,15 +213,23 @@ export const en = {
     showReturnedVariantsForStep: 'Show {returnValue} varants for step {index}',
   },
   error: {
-    getBack: 'Get back to start page',
+    getBack: 'Back to home',
     smthWentWrong: 'Sorry, something went wrong...',
     noFirstSymbols: 'No symbols at the first position',
     tooLongNote: 'Note is too long',
     tagNameIsTooLong: 'Tag name is too long',
     dtreeNameIsNotValid: 'Decision tree name is not valid',
+    noChangesToModify: 'There are no changes to modify',
+    choosePresetFirst: 'Choose preset first',
+    chooseFiltersFirst: 'Choose filters first',
+    cantJoinTheSamePreset: 'Cant join the same preset',
   },
   igv: {
     openIgv: 'Open igv',
     filesNotFound: 'Files not found',
+  },
+  notFound: {
+    somethingIsWrong: 'Something is wrong',
+    info: 'The page you are looking for was moved, removed, renamed or might never existed',
   },
 }

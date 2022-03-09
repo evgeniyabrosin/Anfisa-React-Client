@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@store/dtree/active-step.store'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
@@ -15,7 +16,7 @@ import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
-import { resetOptions } from '../../panels/function-panel/components/compound-request'
+import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
 import { AllNotModalMods } from '../../query-builder/ui/all-not-modal-mods'
 import { ApproxStateModalMods } from '../../query-builder/ui/approx-state-modal-mods'
 import { DisabledVariantsAmount } from '../../query-builder/ui/disabled-variants-amount'
@@ -30,7 +31,7 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
 
   // important variables
 
-  const currentStepIndex = dtreeStore.currentStepIndex
+  const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeStore.groupIndexToChange
 
   const currentGroup =
@@ -108,8 +109,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
   }
 
   const handleSetCondition = (value: string, type: string) => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     if (type === 'approx') {
       setApproxCondition(value)
 
@@ -126,8 +125,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
         stateCondition !== '-current-' ? `"${stateCondition}"` : null
       },"request":${request}}`
 
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
-
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
 
@@ -140,8 +137,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
       const params = `{"approx":${approx},"state":${
         value !== '-current-' ? `"${value}"` : null
       }}`
-
-      dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
       dtreeStore.fetchStatFuncAsync(groupName, params)
     }
@@ -227,7 +222,11 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
     currentSelectIndex: number,
     target: any,
   ) => {
-    const requestData = getRequestData(target, currentSelectIndex, attrData)
+    const requestData = getRequestData(
+      target,
+      currentSelectIndex,
+      attrData.family,
+    )
 
     const newRequest = Object.fromEntries(getSortedArray(requestData))
 
@@ -247,7 +246,7 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
   }
 
   const handleReset = (name: string) => {
-    const resetRequestData = getResetRequestData(name, attrData)
+    const resetRequestData = getResetRequestData(name, attrData.family)
 
     const newRequest = Object.fromEntries(getSortedArray(resetRequestData))
 
@@ -269,8 +268,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
   // get start variants
 
   useEffect(() => {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const approx =
       approxCondition === 'transcript' ? null : `"${approxCondition}"`
 
@@ -294,8 +291,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
         ? null
         : `"${stateCondition}"`
     },"request":${requestString}}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
 
@@ -332,8 +327,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
   }
 
   function sendRequest(newRequestCondition: any[]) {
-    const indexForApi = dtreeStore.getStepIndexForApi(currentStepIndex)
-
     const requestString = getFuncParams(groupName, {
       request: newRequestCondition,
     })
@@ -351,8 +344,6 @@ export const ModalEditCompoundRequest = observer((): ReactElement => {
         : `"${stateCondition}"`
 
     const params = `{"approx":${approx},"state":${state},"request":${requestString}}`
-
-    dtreeStore.setCurrentStepIndexForApi(indexForApi)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }

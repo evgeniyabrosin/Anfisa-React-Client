@@ -1,5 +1,4 @@
 import { ReactElement, useRef } from 'react'
-import { toast } from 'react-toastify'
 import cn from 'classnames'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -8,6 +7,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
+import { showToast } from '@utils/notifications/showToast'
 
 interface Props {
   close: () => void
@@ -49,16 +49,7 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
       !notification && filterStore.setActionName(action)
     }
 
-    notification &&
-      toast.error(notification, {
-        position: 'bottom-right',
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+    notification && showToast(notification, 'error')
 
     close()
   }

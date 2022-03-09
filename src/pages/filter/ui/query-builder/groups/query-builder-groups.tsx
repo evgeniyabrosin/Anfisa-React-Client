@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
@@ -45,6 +47,9 @@ export const QueryBuilderGroups = observer((): ReactElement => {
     activeStep?.isReturnedVariantsActive || activeStep?.isFinalStep,
   )
 
+  const additionalHeight: number =
+    filterStore.method === GlbPagesNames.Filter ? 300 : 260
+
   return (
     <Fragment>
       <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -56,20 +61,22 @@ export const QueryBuilderGroups = observer((): ReactElement => {
           />
         </div>
 
-        <div className="flex items-center justify-between w-full h-8 mb-2">
-          <div className="text-blue-bright font-medium">
-            {activeStep &&
-              (activeStep.isFinalStep
-                ? t('dtree.showingResultsForFinalStep')
-                : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
+        {filterStore.method === GlbPagesNames.Filter && (
+          <div className="flex items-center justify-between w-full h-8 mb-2">
+            <div className="text-blue-bright font-medium">
+              {activeStep &&
+                (activeStep.isFinalStep
+                  ? t('dtree.showingResultsForFinalStep')
+                  : t('dtree.showingResultsForStep') + ' ' + activeStep.step)}
 
-            {shouldShowVariantsPrompt && returnedVariantsPrompt}
+              {shouldShowVariantsPrompt && returnedVariantsPrompt}
+            </div>
           </div>
-        </div>
+        )}
 
         <div
           className="overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 300px)' }}
+          style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
         >
           <DeferRender chunkSize={chunkSize} renderId={decrement}>
             {groupNames.map((groupName, index) => (

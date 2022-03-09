@@ -108,6 +108,13 @@ export interface DsinfoI {
   'unit-groups': any[][]
 }
 
+export type StatHistogram = [
+  type: 'LIN' | 'LOG',
+  min: number,
+  max: number,
+  values: number[],
+]
+
 export interface StatList {
   kind: string
   name: string
@@ -126,8 +133,8 @@ export interface StatList {
   'trio-variants': string[]
   'approx-modes': string[][]
   labels: any[]
-  render: string
-  histogram?: any[][]
+  'render-mode'?: string
+  histogram?: StatHistogram
   incomplete?: boolean
 }
 
