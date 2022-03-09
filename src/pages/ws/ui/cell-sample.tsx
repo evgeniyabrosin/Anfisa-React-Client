@@ -3,8 +3,8 @@ import cn from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import filterZone from '@store/filterZone'
-import { IQualities } from './cell-samples'
 import { ModalTooltip } from './modal-tooltip'
+import { IQualities } from './table/components/cells/cell-samples'
 
 interface ICellSamplesProps {
   qualities: IQualities

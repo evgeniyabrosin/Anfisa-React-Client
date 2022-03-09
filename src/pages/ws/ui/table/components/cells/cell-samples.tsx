@@ -2,8 +2,8 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { CellSample } from '@pages/ws/ui/cell-sample'
 import { CellI } from './cell-interfaces'
-import { CellSample } from './cell-sample'
 
 export interface IQualities {
   [key: string]: {
