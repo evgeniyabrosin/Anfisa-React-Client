@@ -87,7 +87,10 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div ref={ref} className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
+    <div
+      ref={ref}
+      className="w-96 bg-blue-light flex flex-col py-5 px-4 rounded-xl"
+    >
       <span className="w-full">
         <span>{t('variant.notesFor')} </span>
 
@@ -106,7 +109,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
         <textarea
           placeholder="Enter text"
-          className="w-96 mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
+          className="w-full mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
           rows={15}
           value={value}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
