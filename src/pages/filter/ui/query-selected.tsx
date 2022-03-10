@@ -12,6 +12,7 @@ import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
 import { showToast } from '@utils/notifications/showToast'
+import { getNumberWithCommas } from './query-builder/ui/next-step-route'
 import { QueryResults } from './query-results'
 
 export const QuerySelected = observer((): ReactElement => {
@@ -64,14 +65,14 @@ export const QuerySelected = observer((): ReactElement => {
 
           <span className="text-12 leading-14px text-white mt-2">
             {t('filter.variants', {
-              all: allVariants,
+              all: getNumberWithCommas(allVariants),
             })}
           </span>
 
           {transcribedVariants > 0 && (
             <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcribedVariants', {
-                all: transcribedVariants,
+                all: getNumberWithCommas(transcribedVariants),
               })}
             </span>
           )}
@@ -79,7 +80,7 @@ export const QuerySelected = observer((): ReactElement => {
           {allTranscripts > 0 && (
             <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcripts', {
-                all: allTranscripts,
+                all: getNumberWithCommas(allTranscripts),
               })}
             </span>
           )}
@@ -95,7 +96,7 @@ export const QuerySelected = observer((): ReactElement => {
           <Button
             className="ml-auto"
             text={t('general.apply', {
-              amount: selectedVariants,
+              amount: getNumberWithCommas(selectedVariants),
             })}
             onClick={handleClick}
           />

@@ -25,6 +25,7 @@ import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
+import { getNumberWithCommas } from '@pages/filter/ui/query-builder/ui/next-step-route'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
@@ -98,19 +99,19 @@ const WSPage = observer((): ReactElement => {
               data-testid={MainTableDataCy.numVariants}
             >
               {t('filter.variants', {
-                all: allVariants,
+                all: getNumberWithCommas(allVariants),
               })}
             </span>
 
             <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold">
               {t('filter.transcribedVariants', {
-                all: transcribedVariants,
+                all: getNumberWithCommas(transcribedVariants),
               })}
             </span>
 
             <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 mr-6 font-bold">
               {t('filter.transcripts', {
-                all: allTranscripts,
+                all: getNumberWithCommas(allTranscripts),
               })}
             </span>
 

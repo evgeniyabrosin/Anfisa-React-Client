@@ -32,6 +32,7 @@ import { ModalSelectCustomInheritanceMode } from './ui/query-builder/ui/modal-se
 import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
 import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-region'
 import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
+import { getNumberWithCommas } from './ui/query-builder/ui/next-step-route'
 import { TableModal } from './ui/TableModal'
 
 const FilterPage = observer((): ReactElement => {
@@ -73,31 +74,31 @@ const FilterPage = observer((): ReactElement => {
       if (isXL) return toJS(dirinfoStore.dsinfo.total)
 
       if (filterStore.method === GlbPagesNames.Filter) {
-        return toJS(dtreeStore.statAmount[0])
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[0]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return toJS(datasetStore.statAmount[0])
+        return getNumberWithCommas(toJS(datasetStore.statAmount[0]))
       }
     }
 
     if (type === 'transcribedVariants') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return toJS(dtreeStore.statAmount[1])
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[1]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return toJS(datasetStore.statAmount[1])
+        return getNumberWithCommas(toJS(datasetStore.statAmount[1]))
       }
     }
 
     if (type === 'transcripts') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return toJS(dtreeStore.statAmount[2])
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[2]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return toJS(datasetStore.statAmount[2])
+        return getNumberWithCommas(toJS(datasetStore.statAmount[2]))
       }
     }
   }

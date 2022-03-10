@@ -16,6 +16,7 @@ import { ErrorPage } from '@pages/error/error'
 import { FilterControl } from '@pages/filter/ui/filter-control/filter-control'
 import { FilterRefiner } from '@pages/filter/ui/filter-refiner'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
+import { getNumberWithCommas } from '@pages/filter/ui/query-builder/ui/next-step-route'
 import { TableModal } from '@pages/filter/ui/TableModal'
 
 const RefinerPage = observer((): ReactElement => {
@@ -51,7 +52,11 @@ const RefinerPage = observer((): ReactElement => {
         <div className="text-white flex-grow flex justify-end pr-6">
           <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
             {t('filter.variants', {
-              all: isXL ? toJS(dirinfoStore.dsinfo).total : statAmount[0],
+              all: getNumberWithCommas(
+                isXL
+                  ? (toJS(dirinfoStore.dsinfo).total as number)
+                  : statAmount[0],
+              ),
             })}
           </span>
 
@@ -59,13 +64,13 @@ const RefinerPage = observer((): ReactElement => {
             <React.Fragment>
               <span className="header-variants-info">
                 {t('filter.transcribedVariants', {
-                  all: statAmount[1],
+                  all: getNumberWithCommas(statAmount[1]),
                 })}
               </span>
 
               <span className="header-variants-info">
                 {t('filter.transcripts', {
-                  all: statAmount[2],
+                  all: getNumberWithCommas(statAmount[2]),
                 })}
               </span>
             </React.Fragment>
