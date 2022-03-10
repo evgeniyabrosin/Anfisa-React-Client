@@ -7,43 +7,43 @@ import {
   RangeSliderScale,
   RangeSliderSide,
 } from '@ui/range-slider'
-import {
-  INumericPropertyStatus,
-  NumericPropertyStatusSubKinds,
-  TNumericConditionBounds,
-} from '@service-providers/common/common.interface'
+import { TExtendedNumericConditionValue } from '../utils'
 import { getHistogram } from './utils'
 
 export interface INumericConditionRangeSliderProps {
   className?: string
-  attrData: INumericPropertyStatus
-  value: TNumericConditionBounds
+  min: number
+  max: number
+  isFloat: boolean
+  isLogarithmic: boolean
+  isZeroSkipped: boolean
+  histogramData: number[] | undefined
+  value: TExtendedNumericConditionValue
+  disabled: RangeSliderSide
   onChange: IRangeSliderProps['onChange']
 }
 
 export const NumericConditionRangeSlider = React.memo(
   ({
     className,
-    attrData,
+    min,
+    max,
+    isFloat,
+    isLogarithmic,
+    isZeroSkipped,
+    histogramData,
     value,
+    disabled,
     onChange,
   }: INumericConditionRangeSliderProps): ReactElement | null => {
-    const { min, max } = attrData
-
-    if (min == null || max == null || min >= max) {
-      return null
-    }
-    const [renderModeScale] = (attrData['render-mode'] ?? '').split(',')
-    const isFloat = attrData['sub-kind'] === NumericPropertyStatusSubKinds.FLOAT
-    const isLogarithmic = renderModeScale === 'log'
-
     const [minValue, minStrictness, maxValue, maxStrictness] = value
     const [histogram, histogramStep] = getHistogram({
       min,
       max,
-      histogramData: attrData.histogram?.[3],
+      histogramData,
       isFloat,
       isLogarithmic,
+      isZeroSkipped,
     })
 
     let strict = RangeSliderSide.None
@@ -59,7 +59,7 @@ export const NumericConditionRangeSlider = React.memo(
     return (
       <RangeSlider
         className={className}
-        min={min}
+        min={isZeroSkipped && histogramStep ? histogramStep : min}
         max={max}
         onChange={onChange}
         value={[minValue, maxValue]}
@@ -70,8 +70,9 @@ export const NumericConditionRangeSlider = React.memo(
           isLogarithmic ? RangeSliderColor.Secondary : RangeSliderColor.Primary
         }
         strict={strict}
-        step={histogramStep || isFloat ? 0.001 : 1}
+        step={histogramStep || (isFloat ? 0.001 : 1)}
         histogram={histogram}
+        disabled={disabled}
       />
     )
   },

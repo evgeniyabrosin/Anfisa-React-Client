@@ -5,13 +5,17 @@ type TGetHistogramParams = {
   max: number
   isFloat: boolean
   isLogarithmic: boolean
+  isZeroSkipped: boolean
   histogramData: number[] | undefined
 }
+
+const HISTOGRAM_LOG_MIN_EXP = -16
 
 export const getHistogram = ({
   max,
   isFloat,
   isLogarithmic,
+  isZeroSkipped,
   histogramData,
 }: TGetHistogramParams): [
   IRangeSliderProps['histogram'],
@@ -29,17 +33,17 @@ export const getHistogram = ({
 
   let needSetFloatStep = isFloat
   let i = 0
-  const histogramMin = isFloat ? -16 : -1
+  const histogramMin = isFloat ? HISTOGRAM_LOG_MIN_EXP : -1
 
   while (Math.pow(10, i + histogramMin) <= max && i < histogramData.length) {
     const value = histogramData[i]
 
     if (needSetFloatStep && i > 0 && value > 0) {
       needSetFloatStep = false
-      step = Math.pow(10, i - 17)
+      step = Math.pow(10, i + HISTOGRAM_LOG_MIN_EXP - 1)
     }
 
-    if (i === 0 || !needSetFloatStep) {
+    if ((i === 0 && !isZeroSkipped) || !needSetFloatStep) {
       data.push(value)
     }
 

@@ -17,7 +17,7 @@ type GetScaleTransformsParams = {
   max: number
   scale: RangeSliderScale
   step: number
-  width: number
+  size: number
 }
 
 type ScaleTransform = {
@@ -35,11 +35,11 @@ type ScaleTransform = {
 export const getScaleTransform = ({
   min,
   max,
-  width,
+  size,
   step,
   scale,
 }: GetScaleTransformsParams): ScaleTransform => {
-  if (width <= 0) {
+  if (size <= 0) {
     return {
       getValue: () => 0,
       getOffset: () => 0,
@@ -67,7 +67,7 @@ export const getScaleTransform = ({
 
   if (scale === 'logarithmic') {
     let pad = 0
-    let calcWidth = width
+    let calcWidth = size
     let logMin = min
 
     if (min <= 0) {
@@ -76,9 +76,9 @@ export const getScaleTransform = ({
        * from 0 to `step` value, because `log10(0) = -∞`
        */
       logMin = step
-      const stepK = Math.log10(max / step) / width
+      const stepK = Math.log10(max / step) / size
       pad = Math.log10(2) / stepK
-      calcWidth = width - pad
+      calcWidth = size - pad
     }
 
     const k = Math.log10(max / logMin) / calcWidth
@@ -94,7 +94,7 @@ export const getScaleTransform = ({
     }
   }
 
-  const k = (max - min) / width
+  const k = (max - min) / size
 
   /**
    * for linear scale use simple linear transform
@@ -112,7 +112,8 @@ type AdjustLabelsParams = {
   dividerLabel: HTMLDivElement | null
   leftOffset: number | null
   rightOffset: number | null
-  width: number
+  size: number
+  isVertical?: boolean
 }
 
 const VALUE_LABELS_SPACING = 20
@@ -128,37 +129,41 @@ export const adjustLabels = ({
   dividerLabel,
   leftOffset,
   rightOffset,
-  width,
+  size,
+  isVertical,
 }: AdjustLabelsParams): void => {
   let leftWidth = 0
   let rightWidth = 0
-  let leftX = 0
-  let rightX = 0
+  let leftPos = 0
+  let rightPos = 0
 
   if (leftLabel && leftOffset !== null) {
     leftWidth = leftLabel.offsetWidth
-    leftX = Math.min(Math.max(0, leftOffset - leftWidth / 2), width - leftWidth)
+    leftPos = Math.min(
+      Math.max(0, leftOffset - leftWidth / 2),
+      size - leftWidth,
+    )
   }
 
   if (rightLabel && rightOffset !== null) {
     rightWidth = rightLabel.offsetWidth
-    rightX = Math.min(rightOffset - rightWidth / 2, width - rightWidth)
+    rightPos = Math.min(rightOffset - rightWidth / 2, size - rightWidth)
   }
 
   if (
     leftOffset !== null &&
     rightOffset !== null &&
-    leftX + leftWidth + VALUE_LABELS_SPACING > rightX
+    leftPos + leftWidth + VALUE_LABELS_SPACING > rightPos
   ) {
     const totalWidth = leftWidth + rightWidth + VALUE_LABELS_SPACING
     const center = (leftOffset + rightOffset) / 2
 
-    leftX = Math.max(Math.min(center - totalWidth / 2, width - totalWidth), 0)
-    rightX = leftX + leftWidth + VALUE_LABELS_SPACING
+    leftPos = Math.max(Math.min(center - totalWidth / 2, size - totalWidth), 0)
+    rightPos = leftPos + leftWidth + VALUE_LABELS_SPACING
 
     if (dividerLabel) {
       dividerLabel.style.visibility = 'visible'
-      dividerLabel.style.left = `${leftX + leftWidth}px`
+      dividerLabel.style.left = `${leftPos + leftWidth}px`
       dividerLabel.style.width = `${VALUE_LABELS_SPACING}px`
     }
   } else {
@@ -168,11 +173,15 @@ export const adjustLabels = ({
   }
 
   if (leftLabel) {
-    leftLabel.style.left = `${leftX}px`
+    if (isVertical) {
+      leftLabel.style.bottom = `${leftPos}px`
+    } else {
+      leftLabel.style.left = `${leftPos}px`
+    }
   }
 
   if (rightLabel) {
-    rightLabel.style.left = `${rightX}px`
+    rightLabel.style.left = `${rightPos}px`
   }
 }
 
@@ -181,7 +190,7 @@ type GetSliderTicksParams = {
   max: number
   step: number
   scale: RangeSliderScale
-  width: number
+  size: number
 }
 
 type SliderTick = {
@@ -199,9 +208,9 @@ export const getSliderTicks = ({
   max,
   step,
   scale,
-  width,
+  size,
 }: GetSliderTicksParams): SliderTick[] => {
-  const { getOffset } = getScaleTransform({ min, max, step, scale, width })
+  const { getOffset } = getScaleTransform({ min, max, step, scale, size: size })
   const diff = max - min
 
   const ticks: SliderTick[] = [
@@ -275,7 +284,7 @@ export const getSliderTicks = ({
 
   ticks.push({
     value: max,
-    offset: width,
+    offset: size,
   })
 
   return ticks

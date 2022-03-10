@@ -39,7 +39,10 @@ export const ModalNumbers = observer((): ReactElement | null => {
 
   return (
     <ModalBase minHeight={200}>
-      <HeaderModal groupName={attr.name} handleClose={handleClose} />
+      <HeaderModal
+        groupName={attr.title ?? attr.name}
+        handleClose={handleClose}
+      />
       <NumericCondition
         className="pt-3"
         attrData={attr}

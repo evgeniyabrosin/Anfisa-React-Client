@@ -10,7 +10,7 @@ import { drawHistogram, getYAxis, prepareCanvas } from './utils'
 export interface IRangeSliderHistogramProps {
   className?: string
   width: number
-  height?: number
+  height: number
   data: number[]
   barPositions?: number[]
   selectedArea?: [number, number] | null
@@ -18,7 +18,7 @@ export interface IRangeSliderHistogramProps {
 }
 
 export const RangeSliderHistogram = ({
-  height = 80,
+  height,
   width,
   data,
   barPositions: barPositionsProp,

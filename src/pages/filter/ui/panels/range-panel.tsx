@@ -175,7 +175,7 @@ export const RangePanel = observer((): ReactElement => {
 
         {isVisibleMinError && (
           <span className="text-12 text-red-secondary">
-            {t('dtree.lowerBoundError')}
+            {t('numericCondition.lowerBoundError')}
           </span>
         )}
       </div>
@@ -194,7 +194,7 @@ export const RangePanel = observer((): ReactElement => {
 
         {isVisibleMaxError && (
           <span className="text-12 text-red-secondary">
-            {t('dtree.upperBoundError')}
+            {t('numericCondition.upperBoundError')}
           </span>
         )}
       </div>
@@ -210,7 +210,7 @@ export const RangePanel = observer((): ReactElement => {
         />
         {isVisibleMixedError && (
           <div className="flex justify-center w-full mt-px text-12 text-red-secondary">
-            {t('dtree.conditionError')}
+            {t('numericCondition.conditionError')}
           </div>
         )}
       </div>

@@ -16,10 +16,12 @@ import {
   RangeSliderRoot,
   RangeSliderRuler,
   RangeSliderTick,
+  RangeSliderVerticalRuler,
 } from './styles'
 import {
   RangeSliderColor,
   RangeSliderMode,
+  RangeSliderOrientation,
   RangeSliderScale,
   RangeSliderSide,
   RangeSliderValue,
@@ -44,12 +46,18 @@ export interface IRangeSliderProps {
   strict?: RangeSliderSide
   color?: RangeSliderColor
   histogram?: number[]
+  histogramHeight?: number
+  orientation?: RangeSliderOrientation
 }
 
 type DragState = {
   onMouseMove: (event: MouseEvent) => void
   isRightHandle: boolean
 }
+
+const DEFAULT_RANGE_SLIDER_HISTOGRAM = 80
+
+// TODO: vertical histogram
 
 export const RangeSlider = ({
   className,
@@ -64,13 +72,15 @@ export const RangeSlider = ({
   disabled,
   strict,
   histogram,
+  histogramHeight = DEFAULT_RANGE_SLIDER_HISTOGRAM,
+  orientation = RangeSliderOrientation.Horizontal,
 }: IRangeSliderProps): ReactElement => {
   const rootRef = useRef<HTMLDivElement>(null)
   const leftLabelRef = useRef<HTMLDivElement>(null)
   const rightLabelRef = useRef<HTMLDivElement>(null)
   const dividerLabelRef = useRef<HTMLDivElement>(null)
 
-  const [rootWidth, setRootWidth] = useState(0)
+  const [size, setSize] = useState(0)
   const [dragState, setDragState] = useState<DragState | null>(null)
 
   const isRangeMode = mode === RangeSliderMode.Range
@@ -81,11 +91,11 @@ export const RangeSlider = ({
       getScaleTransform({
         min,
         max,
-        width: rootWidth,
+        size,
         scale,
         step,
       }),
-    [min, max, rootWidth, step, scale],
+    [min, max, size, step, scale],
   )
 
   const ticks = useMemo(
@@ -93,23 +103,30 @@ export const RangeSlider = ({
       getSliderTicks({
         min,
         max,
-        width: rootWidth,
+        size,
         scale,
         step,
       }),
-    [min, max, rootWidth, step, scale],
+    [min, max, size, step, scale],
   )
+
+  const isVertical = orientation === RangeSliderOrientation.Vertical
+
+  const isLogarithmicHistogram =
+    hasHistogram && scale === RangeSliderScale.Logarithmic
 
   const histogramBarPositions = useMemo(
     // in logarithmic scale we have first fake interval from 0 (-∞),
     // so take it and every 9th tick
     () =>
-      hasHistogram && scale === RangeSliderScale.Logarithmic
+      isLogarithmicHistogram
         ? ticks
             .map(tick => tick.offset)
-            .filter((_, i) => i === 0 || (i - 1) % 9 === 0)
+            .filter((_, i) =>
+              min > 0 ? i % 9 === 0 : i === 0 || (i - 1) % 9 === 0,
+            )
         : undefined,
-    [scale, hasHistogram, ticks],
+    [isLogarithmicHistogram, ticks, min],
   )
 
   let leftValue = normalizeValue(value?.[0], min, max)
@@ -144,11 +161,15 @@ export const RangeSlider = ({
 
   useEffect(() => {
     if (rootRef.current) {
-      setRootWidth(rootRef.current.clientWidth)
+      setSize(rootRef.current.clientWidth)
 
       if ('ResizeObserver' in window) {
         const observer = new ResizeObserver(entries => {
-          setRootWidth(entries[0].target.clientWidth)
+          setSize(
+            isVertical
+              ? entries[0].target.clientHeight
+              : entries[0].target.clientWidth,
+          )
         })
 
         observer.observe(rootRef.current)
@@ -158,7 +179,7 @@ export const RangeSlider = ({
         }
       }
     }
-  }, [])
+  }, [isVertical])
 
   useEffect(() => {
     if (dragState) {
@@ -192,9 +213,10 @@ export const RangeSlider = ({
         dividerLabel: dividerLabelRef.current,
         leftOffset,
         rightOffset,
-        width: rootWidth,
+        size,
+        isVertical,
       }),
-    [leftOffset, rightOffset, rootWidth],
+    [leftOffset, rightOffset, size, isVertical],
   )
 
   const handleMouseDown = (event: React.MouseEvent) => {
@@ -203,9 +225,18 @@ export const RangeSlider = ({
 
     if (rootRef.current && !dragState) {
       const handle = (event.target as HTMLElement).dataset?.handle
-      const { x: rootX } = rootRef.current.getBoundingClientRect()
+      const rootRect = rootRef.current.getBoundingClientRect()
+      const origin = isVertical ? rootRect.bottom : rootRect.x
 
-      const newValue = getValue(event.clientX - rootX)
+      const getValueFromEvent = (
+        event: MouseEvent | React.MouseEvent,
+      ): number => {
+        return getValue(
+          isVertical ? origin - event.clientY : event.clientX - origin,
+        )
+      }
+
+      const newValue = getValueFromEvent(event)
 
       const isRightHandle =
         isRangeMode &&
@@ -219,7 +250,7 @@ export const RangeSlider = ({
             Math.abs(rightValue - newValue) < Math.abs(leftValue - newValue)))
 
       const onMouseMove = (moveEvent: MouseEvent) => {
-        const handleValue = alignValue(getValue(moveEvent.clientX - rootX))
+        const handleValue = alignValue(getValueFromEvent(moveEvent))
 
         if (isRightHandle) {
           if (leftValue == null || handleValue > leftValue) {
@@ -245,6 +276,8 @@ export const RangeSlider = ({
 
   const isDisabled = disabled === RangeSliderSide.Both
 
+  const Ruler = isVertical ? RangeSliderVerticalRuler : RangeSliderRuler
+
   return (
     <div className={cn('text-xs text-blue-dark', className)}>
       <RangeSliderRoot
@@ -253,23 +286,25 @@ export const RangeSlider = ({
         hasHistogram={hasHistogram}
         isActive={!!dragState}
         isDisabled={isDisabled}
+        isVertical={isVertical}
       >
         {histogram && (
           <RangeSliderHistogram
-            width={rootWidth}
+            width={size}
+            height={histogramHeight}
             data={histogram}
             selectedArea={histogramSelectedArea}
             color={color}
             barPositions={histogramBarPositions}
           />
         )}
-        <RangeSliderRuler>
+        <Ruler>
           {ticks.map(({ value, offset }) => (
             <RangeSliderTick
               key={value}
-              style={{
-                left: `${offset}px`,
-              }}
+              style={
+                isVertical ? { bottom: `${offset}px` } : { left: `${offset}px` }
+              }
             />
           ))}
           {leftValue !== null && (
@@ -297,10 +332,19 @@ export const RangeSlider = ({
               isDisabled={isDisabled}
               isLeftHandle={leftOffset != null}
               isRightHandle={rightOffset != null}
-              style={{
-                left: `${leftOffset != null ? leftOffset : 0}px`,
-                right: `${rightOffset != null ? rootWidth - rightOffset : 0}px`,
-              }}
+              style={
+                isVertical
+                  ? {
+                      top: `${rightOffset != null ? rightOffset : 0}px`,
+                      bottom: `${leftOffset != null ? leftOffset : 0}px`,
+                    }
+                  : {
+                      left: `${leftOffset != null ? leftOffset : 0}px`,
+                      right: `${
+                        rightOffset != null ? size - rightOffset : 0
+                      }px`,
+                    }
+              }
             />
           )}
           {leftOffset !== null && (
@@ -314,7 +358,9 @@ export const RangeSlider = ({
                 strict === RangeSliderSide.Both
               }
               style={{
-                transform: `translateX(${leftOffset}px)`,
+                transform: isVertical
+                  ? `translateY(${size - leftOffset}px)`
+                  : `translateX(${leftOffset}px)`,
               }}
             />
           )}
@@ -329,11 +375,13 @@ export const RangeSlider = ({
                 strict === RangeSliderSide.Both
               }
               style={{
-                transform: `translateX(${rightOffset}px)`,
+                transform: isVertical
+                  ? `translateY(${size - rightOffset}px)`
+                  : `translateX(${rightOffset}px)`,
               }}
             />
           )}
-        </RangeSliderRuler>
+        </Ruler>
       </RangeSliderRoot>
     </div>
   )
