@@ -103,8 +103,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                       <td
                         key={cIndex}
                         className={cn(
-                          'py-3 pr-3 font-medium',
-                          !cell[1]?.includes(noTrHitClass) && 'text-white',
+                          'py-3 pr-3 font-normal',
+                          cell[0].includes('</a>')
+                            ? 'text-blue-bright'
+                            : !cell[1]?.includes(noTrHitClass) &&
+                                'text-grey-blue',
                         )}
                         dangerouslySetInnerHTML={{ __html: cell[0] }}
                       />
