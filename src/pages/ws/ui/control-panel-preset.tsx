@@ -19,7 +19,7 @@ export const Preset = observer((): ReactElement => {
   const onSelectAsync = async (arg: Option, reset?: string) => {
     datasetStore.setActivePreset(arg.value)
 
-    if (datasetStore.prevPreset !== datasetStore.activePreset) {
+    if (datasetStore.prevPreset !== datasetStore.activePreset || reset) {
       filterPresetStore.loadPresetAsync(arg.value, 'ws')
 
       datasetStore.fetchWsListAsync(false, 'reset')

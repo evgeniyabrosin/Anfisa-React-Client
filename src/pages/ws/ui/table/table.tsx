@@ -1,9 +1,9 @@
 import { ReactElement, useCallback, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useFlexLayout, useTable } from 'react-table'
+import { Column, useFlexLayout, useTable } from 'react-table'
 import { InfiniteLoader, List, ListRowProps } from 'react-virtualized'
 import Autosizer from 'react-virtualized-auto-sizer'
-import { toJS } from 'mobx'
+import { reaction, toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
@@ -32,7 +32,7 @@ export const Table = observer(
     const alreadyOpened = !!params.get('variant')
     const datasetName = params.get('ds') ?? ''
 
-    const defaultColumn = {
+    const defaultColumn: Partial<Column<any>> = {
       minWidth: 120,
     }
 
@@ -75,7 +75,21 @@ export const Table = observer(
           tableStore.isFiltered ? 0 : Number(params.get('variant')),
         )
 
-      return () => tableStore.clearStore()
+      const dispose = reaction(
+        () => tableStore.isCompactView,
+        () => {
+          datasetStore.isLoadingTabReport = true
+
+          setTimeout(() => {
+            datasetStore.isLoadingTabReport = false
+          }, 100)
+        },
+      )
+
+      return () => {
+        dispose()
+        tableStore.clearStore()
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -128,7 +142,11 @@ export const Table = observer(
                       rowRenderer={RenderRow}
                       deferredMeasurementCache={tableStore.cache}
                       width={autosizerWidth}
-                      scrollToIndex={variantStore.index}
+                      scrollToIndex={
+                        tableStore.isDrawerActive
+                          ? undefined
+                          : variantStore.index
+                      }
                       scrollToAlignment="center"
                       ref={registerChild}
                       onRowsRendered={onRowsRendered}
