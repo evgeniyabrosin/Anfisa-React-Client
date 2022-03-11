@@ -103,10 +103,11 @@ const DrawerTagModal = observer(({ close }: any) => {
     close()
   }
 
-  const handleClick = (tag: string) => {
-    variantStore.showModalNotes()
-    variantStore.setCurrentTag(tag)
-  }
+  // TODO: The need of this feature is in doubt
+  // const handleClick = (tag: string) => {
+  //   variantStore.showModalNotes()
+  //   // variantStore.setCurrentTag(tag)
+  // }
 
   return (
     <div
@@ -137,12 +138,14 @@ const DrawerTagModal = observer(({ close }: any) => {
 
             <span className="text-12 ml-1">{tag}</span>
 
-            <span
+            {/* TODO: The need of this feature is in doubt  */}
+
+            {/* <span
               className="ml-2 cursor-pointer hover:text-blue-bright"
               onClick={() => handleClick(tag)}
             >
               {Object.keys(variantStore.tagsWithNotes).includes(tag) && '(#)'}
-            </span>
+            </span> */}
           </div>
         ))}
       </div>
