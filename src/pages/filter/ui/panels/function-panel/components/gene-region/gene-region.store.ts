@@ -24,6 +24,10 @@ class GeneRegionStore {
     return this.cachedValues?.conditions.locus || ''
   }
 
+  public get selectedFilterValue(): string {
+    return `{"locus":"${this.locusValue}"}`
+  }
+
   public setConditions = (value: string): void => {
     functionPanelStore.setCachedValues(FuncStepTypesEnum.GeneRegion, {
       conditions: { locus: value },
@@ -41,7 +45,7 @@ class GeneRegionStore {
 
     const variant: TVariant = [`{"locus":"${this.locusValue}"}`, 0]
 
-    functionPanelStore.handleSumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant)
   }
 }
 

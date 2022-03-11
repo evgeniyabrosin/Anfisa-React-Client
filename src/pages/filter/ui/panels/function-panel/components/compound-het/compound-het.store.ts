@@ -86,7 +86,7 @@ class CompoundHetStore {
 
     const variant: TVariant = ['Proband', 0]
 
-    functionPanelStore.handleSumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant)
   }
 
   public handleResetFields(): void {

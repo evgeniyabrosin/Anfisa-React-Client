@@ -14,7 +14,7 @@ import compoundHetStore, {
 export const CompundHet = observer((): ReactElement => {
   const { cachedValues, initialApprox } = compoundHetStore
 
-  const { simpleVariants, filterName, filterGroup } = functionPanelStore
+  const { simpleVariants } = functionPanelStore
 
   useEffect(() => {
     compoundHetStore.getStatFuncStatusAsync()
@@ -46,11 +46,10 @@ export const CompundHet = observer((): ReactElement => {
       </div>
 
       <PanelButtons
-        selectedFilterName={filterName}
-        selectedFilterGroup={filterGroup}
         onSubmit={() => compoundHetStore.handleSumbitCondtions()}
         resetFields={() => compoundHetStore.handleResetFields()}
         disabled={!simpleVariants}
+        selectedFilterValue={'Proband'}
       />
     </React.Fragment>
   )

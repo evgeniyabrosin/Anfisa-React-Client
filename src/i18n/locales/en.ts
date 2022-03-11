@@ -13,6 +13,7 @@ export const en = {
     cancel: 'Cancel',
     apply: 'Apply',
     clear: 'Clear',
+    replace: 'Replace',
     add: 'Add',
     selectAnOption: 'Select...',
     filter: '+ Filter',

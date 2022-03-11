@@ -41,6 +41,18 @@ class CompoundRequestStore {
     return this.cachedValues?.reset || ''
   }
 
+  public get selectedFilterValue(): string {
+    const filteredRequestCondition = getFilteredRequestCondition(
+      this.cachedValues?.conditions.request || this.requestCondition,
+    )
+
+    const requestString = getFuncParams(FuncStepTypesEnum.CompoundRequest, {
+      request: filteredRequestCondition,
+    }).replace(/\s+/g, '')
+
+    return `"request":${getPureRequestString(requestString)}}`
+  }
+
   // request creation step by step
   public handleSetSingleRequest(
     requestBlockIndex: number,
@@ -204,7 +216,7 @@ class CompoundRequestStore {
       0,
     ]
 
-    functionPanelStore.handleSumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant)
   }
 }
 

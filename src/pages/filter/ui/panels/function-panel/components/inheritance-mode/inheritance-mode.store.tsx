@@ -29,6 +29,10 @@ class InheritanceModeStore {
     return this.cachedValues?.variants || []
   }
 
+  public get selectedFilterValue(): string {
+    return this.variantsValues.toString()
+  }
+
   public handleChangeProblemGroups(
     e: ChangeEvent<HTMLInputElement>,
     problemGroup: string,
@@ -129,7 +133,7 @@ class InheritanceModeStore {
 
     const variant: TVariant = [`${this.variantsValues}`, 0]
 
-    functionPanelStore.handleSumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant)
 
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.InheritanceMode,

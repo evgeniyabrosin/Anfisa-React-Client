@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import { makeAutoObservable, toJS } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
@@ -39,7 +40,7 @@ class FunctionPanelStore {
   public get problemGroups(): string[] {
     let attrData: any
 
-    const statList = toJS(datasetStore.dsStat['stat-list'])
+    const statList = toJS(datasetStore.startDsStat['stat-list'])
     const subGroups = Object.values(getQueryBuilder(statList))
 
     subGroups.map(subGroup => {
@@ -66,7 +67,7 @@ class FunctionPanelStore {
   }
 
   public async applyConditions(conditions: TFuncCondition): Promise<void> {
-    await datasetStore.setConditionsAsync([conditions])
+    await datasetStore.setConditionsAsync([conditions], 'func')
   }
 
   public addSelectedFilters(variant: TVariant): void {
@@ -77,10 +78,7 @@ class FunctionPanelStore {
     })
   }
 
-  public handleSumbitConditions(
-    conditions: TFuncCondition,
-    variant: TVariant,
-  ): void {
+  public sumbitConditions(conditions: TFuncCondition, variant: TVariant): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
     this.applyConditions(conditions)
@@ -94,6 +92,34 @@ class FunctionPanelStore {
 
   public fetchStatFunc(componentName: string, params: string) {
     return filterStore.fetchStatFuncAsync(componentName, params)
+  }
+
+  public clearGroupFilter(): void {
+    const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
+
+    if (localSelectedFilters[this.filterGroup]?.[this.filterName]) {
+      delete localSelectedFilters[this.filterGroup][this.filterName]
+    }
+
+    filterStore.setSelectedFilters(localSelectedFilters)
+  }
+
+  public get isFilterExistsInAppliedPreset(): boolean {
+    return (
+      datasetStore.activePreset !== '' &&
+      filterStore.selectedFilters[this.filterGroup]?.[this.filterName] !==
+        undefined
+    )
+  }
+
+  public isFilterInSelectedFilters(selectedFilterValue: string): boolean {
+    const selectedFilter =
+      filterStore.selectedFilters?.[this.filterGroup]?.[this.filterName]
+
+    return selectedFilter && selectedFilterValue
+      ? selectedFilterValue in
+          filterStore.selectedFilters[this.filterGroup][this.filterName]
+      : false
   }
 }
 

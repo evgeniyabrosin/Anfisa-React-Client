@@ -5,40 +5,30 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
+import functionPanelStore from '../function-panel.store'
 
 interface IPanelButtons {
-  selectedFilterName: string
-  selectedFilterGroup: string
   onSubmit: () => void
-  resetForm?: () => void
   resetFields: () => void
   disabled?: boolean
+  selectedFilterValue?: string
 }
 
 export const PanelButtons = observer(
   ({
-    selectedFilterName,
-    selectedFilterGroup,
     onSubmit,
-    resetForm,
     resetFields,
     disabled,
+    selectedFilterValue,
   }: IPanelButtons): ReactElement => {
-    const isFilterExistsInSelectedFilters: boolean =
-      datasetStore.activePreset !== '' &&
-      filterStore.selectedFilters[selectedFilterGroup]?.[selectedFilterName] !==
-        undefined
-
     const handleClear = () => {
-      if (isFilterExistsInSelectedFilters) {
+      if (functionPanelStore.isFilterExistsInAppliedPreset) {
         datasetStore.resetActivePreset()
       }
 
-      datasetStore.removeFunctionConditionAsync(selectedFilterName)
-      filterStore.removeSelectedFilters({
-        group: selectedFilterGroup,
-        groupItemName: selectedFilterName,
-      })
+      datasetStore.removeFunctionConditionAsync(functionPanelStore.filterName)
+
+      functionPanelStore.clearGroupFilter()
 
       filterStore.resetStatFuncData()
 
@@ -46,9 +36,7 @@ export const PanelButtons = observer(
         datasetStore.fetchWsListAsync()
       }
 
-      resetFields && resetFields()
-
-      resetForm && resetForm()
+      resetFields()
     }
 
     return (
@@ -59,11 +47,18 @@ export const PanelButtons = observer(
           onClick={handleClear}
         />
 
-        <Button
-          text={t('general.add')}
-          onClick={onSubmit}
-          disabled={disabled}
-        />
+        <div className="flex justify-end">
+          <Button
+            text={t('general.add')}
+            onClick={onSubmit}
+            disabled={
+              disabled ||
+              functionPanelStore.isFilterInSelectedFilters(
+                selectedFilterValue || '',
+              )
+            }
+          />
+        </div>
       </div>
     )
   },

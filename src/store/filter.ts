@@ -87,8 +87,6 @@ export class FilterStore {
 
     if (isEmpty(this.selectedFilters[group])) {
       delete this.selectedFilters[group]
-    } else {
-      delete this.selectedFilters[group][groupItemName]
     }
   }
 
