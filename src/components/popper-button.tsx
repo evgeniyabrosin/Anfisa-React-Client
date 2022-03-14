@@ -21,7 +21,7 @@ export const PopperButton = ({
   data,
   type,
 }: Props): ReactElement => {
-  const [isOpen, close, click] = useToggle(false)
+  const [isOpen, _, close, click] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState<any>(null)
 
