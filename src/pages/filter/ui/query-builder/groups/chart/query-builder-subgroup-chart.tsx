@@ -1,17 +1,28 @@
 import { FC, memo, useEffect, useRef } from 'react'
 import isEqual from 'lodash/isEqual'
 
+import { StatList } from '@declarations'
+import { ChartRenderModes } from './chart.interface'
+import chartStore from './chart.store'
 import Chart from './chart-register'
-import { getChartConfig, getChartData } from './utils'
+import { PieChartWrapper } from './pie-chart-wrapper'
 
 interface IQueryBuilderSubgroupChartProps {
-  variants?: any[][]
-  histogram?: any[]
+  // TODO: change types when refactoring
+  // subGroupItem: TPropertyStatus
+  subGroupItem: StatList
 }
 
 export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
   memo(
-    ({ variants, histogram }) => {
+    ({ subGroupItem }) => {
+      const { getBarChartConfig, getPieChartConfig, getChartData } = chartStore
+
+      const chartData = getChartData(subGroupItem)
+
+      const { 'render-mode': renderMode } = subGroupItem
+      const isPieChart = renderMode === ChartRenderModes.Pie
+
       const canvasRef = useRef<HTMLCanvasElement>(null)
       const chartRef = useRef<Chart>()
 
@@ -20,16 +31,15 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
           return
         }
 
-        const chartData = getChartData({ variants, histogram })
-
         if (chartData) {
           const chart = chartRef.current
 
+          const currentChartConfig = isPieChart
+            ? getPieChartConfig(chartData)
+            : getBarChartConfig(chartData)
+
           if (!chart) {
-            chartRef.current = new Chart(
-              canvasRef.current,
-              getChartConfig(chartData),
-            )
+            chartRef.current = new Chart(canvasRef.current, currentChartConfig)
           } else {
             chart.data = chartData
             chart.update()
@@ -40,7 +50,8 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
             chartRef.current = undefined
           }
         }
-      }, [variants, histogram])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [subGroupItem])
 
       useEffect(() => {
         return () => {
@@ -50,13 +61,18 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
 
       return (
         <div className="rounded-md bg-blue-secondary p-2 mr-5">
-          <canvas ref={canvasRef} />
+          {isPieChart ? (
+            <PieChartWrapper subGroupItem={subGroupItem}>
+              <canvas ref={canvasRef} />
+            </PieChartWrapper>
+          ) : (
+            <canvas ref={canvasRef} />
+          )}
         </div>
       )
     },
     (prevProps, nextProps) =>
-      isEqual(prevProps.variants, nextProps.variants) &&
-      isEqual(prevProps.histogram, nextProps.histogram),
+      isEqual(prevProps.subGroupItem, nextProps.subGroupItem),
   )
 
 QueryBuilderSubgroupChart.displayName = 'QueryBuilderSubgroupChart'

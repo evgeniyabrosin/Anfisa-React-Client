@@ -148,10 +148,10 @@ export const QueryBuilderSubgroupItem = observer(
           subGroupItem.variants &&
           subGroupItem.variants.length > 0 &&
           subGroupItem.variants.length < 100 && (
-            <QueryBuilderSubgroupChart variants={toJS(subGroupItem.variants)} />
+            <QueryBuilderSubgroupChart subGroupItem={toJS(subGroupItem)} />
           )}
         {isVisibleSubGroupItem && !isModal && subGroupItem.max > 0 && (
-          <QueryBuilderSubgroupChart histogram={toJS(subGroupItem.histogram)} />
+          <QueryBuilderSubgroupChart subGroupItem={toJS(subGroupItem)} />
         )}
       </div>
     )

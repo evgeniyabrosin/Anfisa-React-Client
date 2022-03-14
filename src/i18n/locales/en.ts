@@ -139,6 +139,10 @@ export const en = {
     prohibitToOpen: 'You cannot open XL-dataset on Filter Refiner',
     chooseProblemGroup: 'Choose any problem group first',
     notValidName: 'Preset name is not valid',
+    chart: {
+      seeAll: 'See all',
+      collapse: 'Collapse',
+    },
   },
   dtree: {
     variants: 'variants',
