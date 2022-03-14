@@ -21,7 +21,7 @@ export const PopperButton = ({
   data,
   type,
 }: Props): ReactElement => {
-  const [isOpen, open, close] = useToggle(false)
+  const [isOpen, close, click] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState<any>(null)
 
@@ -34,7 +34,7 @@ export const PopperButton = ({
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
-          onClick={isOpen ? close : open}
+          onClick={click}
         />
       )}
       {!type && (
@@ -42,7 +42,7 @@ export const PopperButton = ({
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
-          onClick={isOpen ? close : open}
+          onClick={click}
         />
       )}
 
@@ -53,7 +53,11 @@ export const PopperButton = ({
           style={styles.popper}
           {...attributes.popper}
         >
-          <ModalElement close={close} title={title} />
+          <ModalElement
+            close={close}
+            title={title}
+            refs={[setReferenceElement]}
+          />
         </div>
       )}
     </Fragment>

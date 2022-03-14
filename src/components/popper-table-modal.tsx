@@ -1,4 +1,4 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement, RefObject, useRef } from 'react'
 import cn, { Argument } from 'classnames'
 import noop from 'lodash/noop'
 import { toJS } from 'mobx'
@@ -33,6 +33,7 @@ interface Props {
   isSamples?: boolean
   isTags?: boolean
   className?: Argument
+  refs?: RefObject<HTMLElement>[]
 }
 
 export const PopperTableModal = observer(
@@ -54,6 +55,7 @@ export const PopperTableModal = observer(
     isSamples,
     isTags,
     className,
+    refs,
   }: Props) => {
     const ref = useRef(null)
 
@@ -63,7 +65,7 @@ export const PopperTableModal = observer(
       onClose && onClose()
     }
 
-    useOutsideClick(ref, onOutsideClick ?? noop)
+    useOutsideClick(ref, onOutsideClick ?? noop, refs)
 
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
