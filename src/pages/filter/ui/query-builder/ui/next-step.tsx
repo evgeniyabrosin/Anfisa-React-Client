@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
-} from '@store/dtree/active-step.store'
-import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+} from '@pages/filter/active-step.store'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'

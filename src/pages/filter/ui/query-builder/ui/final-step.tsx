@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { Button } from '@ui/button'
+import { RadioButton } from '@ui/radio-button'
 import activeStepStore, {
   ActiveStepOptions,
   CreateEmptyStepPositions,
-} from '@store/dtree/active-step.store'
-import { Button } from '@ui/button'
-import { RadioButton } from '@ui/radio-button'
+} from '@pages/filter/active-step.store'
 import { changeStep } from '@utils/changeStep'
 import { ResultsView, TreeView } from './next-step'
 import { Operation, Step } from './next-step-header'

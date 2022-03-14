@@ -3,11 +3,12 @@ import { observer } from 'mobx-react-lite'
 
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import dtreeModalStore from '../../../modals.store'
 import { CustomInheritanceModeContent } from '../../query-builder/ui/custom-inheritance-mode-content'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { ModalBase } from '../../query-builder/ui/modal-base'
@@ -19,12 +20,12 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
   const [resetValue, setResetValue] = useState('')
 
   const currentStepIndex = activeStepStore.activeStepIndex
-  const currentGroupIndex = dtreeStore.groupIndexToChange
+  const currentGroupIndex = dtreeModalStore.groupIndexToChange
 
   const currentGroup =
     dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -196,20 +197,20 @@ export const ModalEditCustomInheritanceMode = observer((): ReactElement => {
   }
 
   const handleClose = () => {
-    dtreeStore.closeModalEditCustomInheritanceMode()
+    dtreeModalStore.closeModalEditCustomInheritanceMode()
   }
 
   const handleSaveChanges = () => {
     const params = { scenario: dtreeStore.scenario }
 
     changeFunctionalStep(params)
-    dtreeStore.closeModalEditCustomInheritanceMode()
+    dtreeModalStore.closeModalEditCustomInheritanceMode()
   }
 
   return (
     <ModalBase refer={ref} minHeight={250}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

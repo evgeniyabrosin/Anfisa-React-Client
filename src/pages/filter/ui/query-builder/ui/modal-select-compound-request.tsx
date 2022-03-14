@@ -6,17 +6,18 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
+import activeStepStore from '@pages/filter/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
+import dtreeModalStore from '../../../modals.store'
 import { IParams } from '../../modal-edit/components/modal-edit-compound-het'
 import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
@@ -40,7 +41,7 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -238,7 +239,7 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
   // common UI functions
 
   const handleClose = () => {
-    dtreeStore.closeModalSelectCompoundRequest()
+    dtreeModalStore.closeModalSelectCompoundRequest()
   }
 
   function sendRequest(newRequestCondition: any[]) {
@@ -261,13 +262,13 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
   }
 
   const handleModals = () => {
-    dtreeStore.closeModalSelectCompoundRequest()
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.closeModalSelectCompoundRequest()
+    dtreeModalStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 
   const handleModalJoin = () => {
-    dtreeStore.openModalJoin()
+    dtreeModalStore.openModalJoin()
   }
 
   const handleAddAttribute = (action: ActionType) => {
@@ -289,13 +290,13 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
 
     addAttributeToStep(action, 'func', null, params)
     dtreeStore.resetSelectedFilters()
-    dtreeStore.closeModalSelectCompoundRequest()
+    dtreeModalStore.closeModalSelectCompoundRequest()
   }
 
   return (
     <ModalBase refer={ref} minHeight={300}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

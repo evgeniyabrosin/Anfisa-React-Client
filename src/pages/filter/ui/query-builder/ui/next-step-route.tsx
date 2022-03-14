@@ -10,11 +10,11 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/active-step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 
 const StartAmount = styled.div`
   font-size: 13px;

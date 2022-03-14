@@ -3,9 +3,10 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
+import dtreeModalStore from '../../../modals.store'
 import { GeneRegionContent } from './gene-region-content'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
@@ -22,7 +23,7 @@ export const ModalSelectGeneRegion = observer((): ReactElement => {
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -44,17 +45,17 @@ export const ModalSelectGeneRegion = observer((): ReactElement => {
   }
 
   const handleClose = () => {
-    dtreeStore.closeModalSelectGeneRegion()
+    dtreeModalStore.closeModalSelectGeneRegion()
   }
 
   const handleModals = () => {
-    dtreeStore.closeModalSelectGeneRegion()
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.closeModalSelectGeneRegion()
+    dtreeModalStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 
   const handleModalJoin = () => {
-    dtreeStore.openModalJoin()
+    dtreeModalStore.openModalJoin()
   }
 
   const handleAddAttribute = (action: ActionType) => {
@@ -63,13 +64,13 @@ export const ModalSelectGeneRegion = observer((): ReactElement => {
 
     addAttributeToStep(action, 'func', null, params)
     dtreeStore.resetSelectedFilters()
-    dtreeStore.closeModalSelectGeneRegion()
+    dtreeModalStore.closeModalSelectGeneRegion()
   }
 
   return (
     <ModalBase refer={ref} minHeight={250}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

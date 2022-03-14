@@ -221,6 +221,7 @@ export const en = {
     viewVariants: 'View variants',
     viewReturnedVariants: 'View returned variants',
     showReturnedVariantsForStep: 'Show {returnValue} varants for step {index}',
+    dtreeDeleteConfirmation: 'Do you really want to delete this tree?',
   },
   error: {
     getBack: 'Back to home',

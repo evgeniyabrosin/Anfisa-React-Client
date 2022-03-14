@@ -3,8 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
+import dtreeModalStore from '../../../modals.store'
 import { IParams } from '../../modal-edit/components/modal-edit-compound-het'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { ApproxStateModalMods } from './approx-state-modal-mods'
@@ -24,7 +25,7 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
 
   const currentGroup = dtreeStore.stepData[currentStepIndex].groups
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -69,7 +70,7 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
   }, [])
 
   const handleClose = () => {
-    dtreeStore.closeModalSelectCompoundHet()
+    dtreeModalStore.closeModalSelectCompoundHet()
   }
 
   const handleSetCondition = (value: string, type: string) => {
@@ -95,13 +96,13 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
   }
 
   const handleModals = () => {
-    dtreeStore.closeModalSelectCompoundHet()
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.closeModalSelectCompoundHet()
+    dtreeModalStore.openModalAttribute()
     dtreeStore.resetSelectedFilters()
   }
 
   const handleModalJoin = () => {
-    dtreeStore.openModalJoin()
+    dtreeModalStore.openModalJoin()
   }
 
   const handleAddAttribute = (action: ActionType) => {
@@ -119,13 +120,13 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
     addAttributeToStep(action, 'func', null, params)
 
     dtreeStore.resetSelectedFilters()
-    dtreeStore.closeModalSelectCompoundHet()
+    dtreeModalStore.closeModalSelectCompoundHet()
   }
 
   return (
     <ModalBase refer={ref} minHeight={250}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

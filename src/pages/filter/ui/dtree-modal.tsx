@@ -2,13 +2,14 @@ import { ReactElement, useRef } from 'react'
 import cn from 'classnames'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
+import { DtreeOperations } from '@core/enum/dtree-operations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { showToast } from '@utils/notifications/showToast'
-
+import dtreeModalStore from '../modals.store'
 interface Props {
   close: () => void
 }
@@ -30,7 +31,8 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
         notification = t('dtree.cantDeleteModifyDefaultTree')
       }
 
-      !notification && filterStore.setActionName(action)
+      !notification &&
+        dtreeModalStore.openModalConfirmation(DtreeOperations.DeleteTree)
     }
 
     if (action === ActionFilterEnum.Modify) {

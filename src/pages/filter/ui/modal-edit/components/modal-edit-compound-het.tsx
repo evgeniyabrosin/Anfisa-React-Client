@@ -3,8 +3,9 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import dtreeModalStore from '../../../modals.store'
 import { AllNotModalMods } from '../../query-builder/ui/all-not-modal-mods'
 import { ApproxStateModalMods } from '../../query-builder/ui/approx-state-modal-mods'
 import { DisabledVariantsAmount } from '../../query-builder/ui/disabled-variants-amount'
@@ -24,12 +25,12 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
   const ref = useRef(null)
 
   const currentStepIndex = activeStepStore.activeStepIndex
-  const currentGroupIndex = dtreeStore.groupIndexToChange
+  const currentGroupIndex = dtreeModalStore.groupIndexToChange
 
   const currentGroup =
     dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -104,7 +105,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
   }, [])
 
   const handleClose = () => {
-    dtreeStore.closeModalEditCompoundHet()
+    dtreeModalStore.closeModalEditCompoundHet()
   }
 
   const handleSaveChanges = () => {
@@ -118,7 +119,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
     }
 
     changeFunctionalStep(params)
-    dtreeStore.closeModalEditCompoundHet()
+    dtreeModalStore.closeModalEditCompoundHet()
   }
 
   const handleSetCondition = (value: string, type: string) => {
@@ -146,7 +147,7 @@ export const ModalEditCompoundHet = observer((): ReactElement => {
   return (
     <ModalBase refer={ref} minHeight={250}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

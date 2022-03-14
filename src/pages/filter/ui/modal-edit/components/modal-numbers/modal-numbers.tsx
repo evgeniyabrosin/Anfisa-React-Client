@@ -6,6 +6,7 @@ import { NumericCondition } from '@components/numeric-condition'
 import { EditModalButtons } from '@pages/filter/ui/modal-edit/components/edit-modal-buttons'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
+import dtreeModalStore from '../../../../modals.store'
 import { HeaderModal } from '../../../query-builder/ui/header-modal'
 import { ModalBase } from '../../../query-builder/ui/modal-base'
 import { SelectModalButtons } from '../../../query-builder/ui/select-modal-buttons'
@@ -25,16 +26,16 @@ export const ModalNumbers = observer((): ReactElement | null => {
   }
 
   const handleClose = () => {
-    dtreeStore.closeModalNumbers()
+    dtreeModalStore.closeModalNumbers()
   }
 
   const handleModals = () => {
     handleClose()
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.openModalAttribute()
   }
 
   const handleModalJoin = () => {
-    dtreeStore.openModalJoin()
+    dtreeModalStore.openModalJoin()
   }
 
   return (

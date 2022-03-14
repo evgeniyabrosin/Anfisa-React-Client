@@ -9,15 +9,16 @@ import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/active-step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getNumericExpression } from '@utils/getNumericExpression'
+import dtreeModalStore from '../../../modals.store'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`
@@ -64,26 +65,26 @@ export const NextStepContentItem = observer(
       activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       group[0] === StepTypeEnum.Enum &&
-        dtreeStore.openModalEditFilters(group[1], index, currNo)
+        dtreeModalStore.openModalEditFilters(group[1], currNo)
 
       group[0] === StepTypeEnum.Numeric &&
-        dtreeStore.openModalNumbers(group[1], currNo)
+        dtreeModalStore.openModalNumbers(group[1], currNo)
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalEditInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalEditCustomInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundHet &&
-          dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
+          dtreeModalStore.openModalEditCompoundHet(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundRequest &&
-          dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
+          dtreeModalStore.openModalEditCompoundRequest(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
-          dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
+          dtreeModalStore.openModalEditGeneRegion(group[1], currNo)
       }
     }
 

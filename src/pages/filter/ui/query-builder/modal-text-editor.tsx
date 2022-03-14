@@ -14,6 +14,7 @@ import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-m
 import Editor from '@monaco-editor/react'
 import { IDtreeCheck } from '@service-providers/decision-trees/decision-trees.interface'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
+import dtreeModalStore from '../../modals.store'
 import { HeaderModal } from './ui/header-modal'
 import { ModalBase } from './ui/modal-base'
 
@@ -128,7 +129,7 @@ export const ModalTextEditor = observer((): ReactElement => {
       dtreeStore.setLocalDtreeCode(code)
     }
 
-    dtreeStore.closeModalTextEditor()
+    dtreeModalStore.closeModalTextEditor()
   }
 
   const handleSave = () => {
@@ -141,7 +142,7 @@ export const ModalTextEditor = observer((): ReactElement => {
 
     dtreeStore.fetchDtreeSetAsync(body)
 
-    dtreeStore.closeModalTextEditor()
+    dtreeModalStore.closeModalTextEditor()
   }
 
   const handleChangeTheme = () => {
@@ -158,7 +159,7 @@ export const ModalTextEditor = observer((): ReactElement => {
     <ModalBase refer={ref} minHeight="80%" width="65%" theme={theme}>
       <HeaderModal
         groupName={t('dtree.editCurrentDecisionTreeCode')}
-        handleClose={() => dtreeStore.closeModalTextEditor()}
+        handleClose={() => dtreeModalStore.closeModalTextEditor()}
         theme={theme}
         isTextEditor
         handleChangeTheme={handleChangeTheme}

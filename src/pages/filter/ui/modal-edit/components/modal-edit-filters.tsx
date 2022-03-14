@@ -4,10 +4,11 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
 import { Pagintaion } from '@components/pagintaion'
+import activeStepStore from '@pages/filter/active-step.store'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { createChunks } from '@utils/createChunks'
+import dtreeModalStore from '../../../modals.store'
 import { QueryBuilderSearch } from '../../query-builder/query-builder-search'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { ModalBase } from '../../query-builder/ui/modal-base'
@@ -20,10 +21,12 @@ export const ModalEditFilters = observer((): ReactElement => {
   const { activeStepIndex } = activeStepStore
 
   const currentGroup =
-    dtreeStore.stepData[activeStepIndex].groups[dtreeStore.groupIndexToChange]
+    dtreeStore.stepData[activeStepIndex].groups[
+      dtreeModalStore.groupIndexToChange
+    ]
 
-  const indexOfCurrentGroup = dtreeStore.groupIndexToChange
-  const groupName = dtreeStore.groupNameToChange
+  const indexOfCurrentGroup = dtreeModalStore.groupIndexToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const selectedGroupsAmount =
     currentGroup.length > 0 ? dtreeStore.selectedFilters : []
@@ -52,11 +55,11 @@ export const ModalEditFilters = observer((): ReactElement => {
 
   const handleSaveChanges = () => {
     changeEnumAttribute()
-    dtreeStore.closeModalEditFilters()
+    dtreeModalStore.closeModalEditFilters()
   }
 
   const handleClose = () => {
-    dtreeStore.closeModalEditFilters()
+    dtreeModalStore.closeModalEditFilters()
     dtreeStore.resetSelectedFilters()
   }
 

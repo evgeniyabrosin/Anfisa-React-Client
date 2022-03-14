@@ -4,10 +4,11 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
-} from '@store/dtree/active-step.store'
-import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+} from '@pages/filter/active-step.store'
+import dtreeModalStore from '../../../modals.store'
 import { NextStepContentItem } from './next-step-content-item'
 
 interface IProps {
@@ -73,7 +74,7 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const openModal = () => {
     activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.openModalAttribute()
   }
 
   return (

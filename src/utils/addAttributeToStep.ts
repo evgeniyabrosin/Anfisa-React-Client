@@ -1,6 +1,6 @@
 import { ActionType, AttributeType } from '@declarations'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import datasetStore from '../store/dataset'
 
 export const addAttributeToStep = (

@@ -2,8 +2,9 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import dtreeModalStore from '../../../modals.store'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { InheritanceModeContent } from '../../query-builder/ui/inheritance-mode-content'
 import { ModalBase } from '../../query-builder/ui/modal-base'
@@ -13,12 +14,12 @@ export const ModalEditInheritanceMode = observer((): ReactElement => {
   const ref = useRef(null)
 
   const currentStepIndex = activeStepStore.activeStepIndex
-  const currentGroupIndex = dtreeStore.groupIndexToChange
+  const currentGroupIndex = dtreeModalStore.groupIndexToChange
 
   const currentGroup =
     dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const selectedGroupsAmount =
     currentGroup && currentGroup.length > 0 ? dtreeStore.selectedFilters : []
@@ -72,14 +73,14 @@ export const ModalEditInheritanceMode = observer((): ReactElement => {
   }, [])
 
   const handleClose = () => {
-    dtreeStore.closeModalEditInheritanceMode()
+    dtreeModalStore.closeModalEditInheritanceMode()
   }
 
   const handleSaveChanges = () => {
     const params = { problem_group: problemGroupData }
 
     changeFunctionalStep(params, true)
-    dtreeStore.closeModalEditInheritanceMode()
+    dtreeModalStore.closeModalEditInheritanceMode()
     dtreeStore.resetSelectedFilters()
   }
 
@@ -130,7 +131,7 @@ export const ModalEditInheritanceMode = observer((): ReactElement => {
   return (
     <ModalBase refer={ref} minHeight={340}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 

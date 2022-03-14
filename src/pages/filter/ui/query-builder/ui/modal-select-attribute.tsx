@@ -5,6 +5,7 @@ import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import dtreeModalStore from '../../../modals.store'
 import { QueryBuilderSubgroup } from '../groups/query-builder-subgroup'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { HeaderModal } from './header-modal'
@@ -26,7 +27,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
   const modalBaseRef = useRef(null)
 
   const handleClose = () => {
-    dtreeStore.closeModalAttribute()
+    dtreeModalStore.closeModalAttribute()
     dtreeStore.resetFilterModalValue()
   }
 

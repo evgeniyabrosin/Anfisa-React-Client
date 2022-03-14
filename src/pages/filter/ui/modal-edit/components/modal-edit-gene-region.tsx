@@ -3,9 +3,10 @@ import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
+import dtreeModalStore from '../../../modals.store'
 import { GeneRegionContent } from '../../query-builder/ui/gene-region-content'
 import { HeaderModal } from '../../query-builder/ui/header-modal'
 import { ModalBase } from '../../query-builder/ui/modal-base'
@@ -15,12 +16,12 @@ export const ModalEditGeneRegion = observer((): ReactElement => {
   const ref = useRef(null)
 
   const currentStepIndex = activeStepStore.activeStepIndex
-  const currentGroupIndex = dtreeStore.groupIndexToChange
+  const currentGroupIndex = dtreeModalStore.groupIndexToChange
 
   const currentGroup =
     dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
 
-  const groupName = dtreeStore.groupNameToChange
+  const groupName = dtreeModalStore.groupNameToChange
 
   const variants = dtreeStore.statFuncData.variants
 
@@ -58,20 +59,20 @@ export const ModalEditGeneRegion = observer((): ReactElement => {
   }, [])
 
   const handleClose = () => {
-    dtreeStore.closeModalEditGeneRegion()
+    dtreeModalStore.closeModalEditGeneRegion()
   }
 
   const handleSaveChanges = () => {
     const params = { locus: locusCondition }
 
     changeFunctionalStep(params)
-    dtreeStore.closeModalEditGeneRegion()
+    dtreeModalStore.closeModalEditGeneRegion()
   }
 
   return (
     <ModalBase refer={ref} minHeight={250}>
       <HeaderModal
-        groupName={dtreeStore.groupNameToChange}
+        groupName={dtreeModalStore.groupNameToChange}
         handleClose={handleClose}
       />
 
