@@ -43,7 +43,7 @@ const DatasetName = ({
     235
 
   return (
-    <Tooltip overlay={dsName} trigger={isTooltip ? ['hover'] : []}>
+    <Tooltip overlay={dsName} trigger={isTooltip ? ['click'] : []}>
       <div
         ref={datasetRef}
         className={cn(

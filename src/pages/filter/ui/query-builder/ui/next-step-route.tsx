@@ -160,7 +160,7 @@ export const NextStepRoute = observer(
                 >
                   <Tooltip
                     overlay={tooltipConent}
-                    trigger={shouldTooltipAppear ? ['hover'] : []}
+                    trigger={shouldTooltipAppear ? ['click'] : []}
                   >
                     <ExcludeAmount
                       isIncluded={isIncluded}

@@ -90,7 +90,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                   <Tooltip
                     overlay={row.tooltip}
                     placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
+                    trigger={row.tooltip ? ['click'] : []}
                   >
                     <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
                       {row.title}
