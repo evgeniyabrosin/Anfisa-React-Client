@@ -7,8 +7,8 @@ Feature: Filter Refiner, Filter by Custom_Inheritance_Mode
 		When user clicks the "Custom_Inheritance_Mode" functional attribute
 		Then Settings for the "Custom_Inheritance_Mode" should be displayed
 		And "Reset" value should be empty
-		And "Scenario" values should be HG002=2, HG003=0-1, HG004=0-1
-		And "True" checkbox should be checked and disabled
+		And "Scenario" values  HG002, HG003, HG004 should be empty
+
 
 	Scenario: The "Reset" value equals "Homozygous/X-linked"
 		Given The "Custom_Inheritance_Mode" filter is selected
