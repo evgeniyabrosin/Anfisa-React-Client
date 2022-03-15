@@ -75,9 +75,9 @@ Feature: Filter Refiner, Filter by Compound_Request
 
 		Examples: 
 		| <Reset #1>                      | <MIN Count#1> | <Proband#1> | <Father#1> | <Mother#1> | <Reset #2>                      | <MIN Count#2> | <Proband#2> | <Father#2> | <Mother#2> | <Variants Number> |
-		| Compensational                  | 1             | 0           | 1-2        | 1-2        | Autosomal Dominant              | 2             | 1-2         | 0          | 4          | 110102            |
-		| Homozygous Recessive / X-Linked | 2             | 2           | 0-1        | 0-1        | Compensational                  | 3             | 1           | 0          | 1-2        | 169456            |
-		| Autosomal Dominant              | 4             | 1-2         | 0          | 4          | Homozygous Recessive / X-Linked | 1             | 2           | 0-1        | 0-1        | 91777             |
+		| Compensational                  | 1             | 0           | 1-2        | 1-2        | Autosomal Dominant              | 2             | 1-2         | 0          | 0          | 110102            |
+		| Homozygous Recessive / X-Linked | 2             | 2           | 0-1        | 0-1        | Compensational                  | 3             | 0           | 1-2          | 1-2        | 169456            |
+		| Autosomal Dominant              | 4             | 1-2         | 0          | 0          | Homozygous Recessive / X-Linked | 1             | 2           | 0-1        | 0-1        | 91777             |
 
 	Scenario: XL dataset - 5 rows
 		Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was open

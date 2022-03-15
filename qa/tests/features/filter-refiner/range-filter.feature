@@ -10,7 +10,7 @@ Feature: Filter Refiner, Filter by range attribute
 		And clicks the "Add" button to apply the filter
 		Then filter should be applied
 		And the range <Minimum Value> < <Attribute Name> <  <Maximum Value> should be displayed in the right part of the screen
-		And number of variants should be equal to <Variants Number>
+		And number of variants should be equal to <Total variants>
 		And the "View Variants" dialog can be open
 		And the "Full List" view should be disabled
 
@@ -33,7 +33,7 @@ Feature: Filter Refiner, Filter by range attribute
 		And clicks the "Add" button to apply the filter
 		Then filter should be applied
 		And the range <Minimum Value> < <Attribute Name> <  <Maximum Value> should be displayed in the right part of the screen
-		And number of variants should be equal to <Variants Number>
+		And number of variants should be equal to <Total variants>
 		And the "View Variants" dialog can be open
 		And the "Full List" view should be disabled
 
@@ -80,7 +80,7 @@ Feature: Filter Refiner, Filter by range attribute
 		And the filter should not be applied
 
 		Examples:
-		| <Filter name>                | <Minimum value> | <Maximum value> |
+		| <Attribute Name>                | <Minimum value> | <Maximum value> |
 		| Num_Samples                  | -1              | 3               |
 		| Num_Genes                    | -1              | 23              |
 		| Start_Pos                    | 0               | 248930384       |

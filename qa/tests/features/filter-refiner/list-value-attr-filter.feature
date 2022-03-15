@@ -200,20 +200,6 @@ Feature: Filter Refiner, Filter by List-value attributes
 		| Diseases         | Acute               | Mesothelioma        | 22                |
 		| Clinvar_stars    | 2                   | 4                   | 4638              |
                 
-	Scenario Outline: Check all attribute values automatically
-		Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was opened
-		When the user clicks the checkbox near the "<Attribute Name>"
-		Then the <Attribute Name> group should be added to the right part of the screen
-		And all <Attribute Name> values should be added to the group
-		And the variants should be filtered by values
-		And the number of variants should be equal to <Variants Number>
-		And the "View variants" dialog can be opened
-		And the "Full list" radio-button is disabled
-
-		Examples:
-		| <Attribute Name>       | <Variants Number> |
-		| Callers                | 5041176           |
-		| Proband_Zygosity       | 5628753           |
 
 	Scenario Outline: Check all attribute values manually
 		Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was opened

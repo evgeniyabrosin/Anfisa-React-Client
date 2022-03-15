@@ -127,7 +127,7 @@ Feature: Filter Refiner, Presets
 		And clisks the "Apply" button
 		Then the information message about successful joining should be displayed
 		And filters from "Loss_Of_Functions" and "In_Silico_Damaging" presets should be merged
-		And the number of variants should be 1774
+		And the number of variants should be 1
 
 	Scenario: Delete a custom preset
 		Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was open
