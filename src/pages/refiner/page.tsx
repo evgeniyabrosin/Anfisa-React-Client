@@ -39,7 +39,6 @@ const RefinerPage = observer((): ReactElement => {
 
     return () => {
       dirinfoStore.resetData()
-      datasetStore.resetData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
