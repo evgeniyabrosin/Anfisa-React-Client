@@ -12,6 +12,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { getParsedValue } from '@utils/drawer/getParsedValue'
 import { validateNotes } from '@utils/validation/validateNotes'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
@@ -63,7 +64,11 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   const handleSaveNoteAsync = async () => {
-    variantStore.updateTagsWithNotes(['_note', value])
+    const noteValue: string = value.includes('"')
+      ? getParsedValue(value)
+      : value
+
+    variantStore.updateTagsWithNotes(['_note', noteValue])
 
     variantStore.setNoteText(value)
 
