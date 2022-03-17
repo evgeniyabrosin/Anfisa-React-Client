@@ -30,7 +30,7 @@ export const NumericConditionRange = ({
   const isZeroSkipped = useMemo(() => getIsZeroSkipped(attrData), [attrData])
   const [value, setValue] = useConditionBoundsValue(initialValue, isZeroSkipped)
 
-  const [scale, valuesSide] = (attrData['render-mode'] || '').split(',')
+  const [scale] = (attrData['render-mode'] || '').split(',')
   const { min, max, histogram } = attrData
   const isLogarithmic = scale === 'log'
   const isFloat = attrData['sub-kind'] === NumericPropertyStatusSubKinds.FLOAT
@@ -61,17 +61,6 @@ export const NumericConditionRange = ({
     setValue(NumericValueIndex.MinStrictness, false)
   }
 
-  const isMinDisabled = isZeroIncluded || valuesSide === '<'
-  const isMaxDisabled = valuesSide === '>'
-
-  let disabledSide: RangeSliderSide = RangeSliderSide.None
-
-  if (isMinDisabled) {
-    disabledSide = RangeSliderSide.Left
-  } else if (isMaxDisabled) {
-    disabledSide = RangeSliderSide.Right
-  }
-
   return (
     <Fragment>
       <div className={className}>
@@ -83,7 +72,7 @@ export const NumericConditionRange = ({
             <div className="grow">
               <InputNumber
                 data-test-id={DecisionTreeModalDataCy.leftInput}
-                disabled={isMinDisabled}
+                disabled={isZeroIncluded}
                 className="h-8 w-full shadow-dark"
                 min={min}
                 max={max}
@@ -103,7 +92,7 @@ export const NumericConditionRange = ({
             )}
             <div className="grow-0 mx-2">
               <StrictnessSelect
-                isDisabled={isMinDisabled}
+                isDisabled={isZeroIncluded}
                 value={minStrictness}
                 onChange={v => setValue(NumericValueIndex.MinStrictness, v)}
               />
@@ -116,7 +105,6 @@ export const NumericConditionRange = ({
             </div>
             <div className="grow-0 mx-2">
               <StrictnessSelect
-                isDisabled={isMaxDisabled}
                 value={maxStrictness}
                 onChange={v => setValue(NumericValueIndex.MaxStrictness, v)}
               />
@@ -124,7 +112,6 @@ export const NumericConditionRange = ({
             <div className="grow">
               <InputNumber
                 data-test-id={DecisionTreeModalDataCy.rightInput}
-                disabled={isMaxDisabled}
                 className="h-8 w-full shadow-dark"
                 min={min}
                 max={max}
@@ -172,7 +159,9 @@ export const NumericConditionRange = ({
             isZeroSkipped={isZeroSkipped}
             histogramData={histogram?.[3]}
             value={value}
-            disabled={disabledSide}
+            disabled={
+              isZeroIncluded ? RangeSliderSide.Left : RangeSliderSide.None
+            }
             onChange={handleRangeSliderChange}
           />
         )}
