@@ -116,7 +116,6 @@ export const ModalSelectCompoundHet = observer((): ReactElement => {
           ? null
           : stateOptions
     }
-  }
 
     addAttributeToStep(action, 'func', null, params)
 
