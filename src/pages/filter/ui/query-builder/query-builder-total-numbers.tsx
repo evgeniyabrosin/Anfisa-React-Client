@@ -7,9 +7,10 @@ import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import { DsinfoI } from '@declarations'
 
 export const QueryBuilderTotalNumbers = observer((): ReactElement => {
-  const variants = toJS(dirinfoStore.dsinfo).total
+  const variants = toJS<DsinfoI>(dirinfoStore.dsinfo as DsinfoI).total
 
   const stepData = toJS(dtreeStore.stepData)
 
@@ -59,7 +60,7 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
 
         <span className="text-12 leading-14px text-grey-blue mt-2">
           {t('ds.totalVariants')}
-          {variants}
+          {variants.toLocaleString()}
         </span>
 
         {toJS(dtreeStore.stepData).length > 0 && (
@@ -67,13 +68,17 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
             <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
               <span>{t('dtree.acceptedVariants')}</span>
 
-              <span>{getDerivedVariants('included') || 0}</span>
+              <span>
+                {(getDerivedVariants('included') || 0).toLocaleString()}
+              </span>
             </div>
 
             <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
               <span>{t('dtree.rejectedVariants')}</span>
 
-              <span>{getDerivedVariants('excluded') || 0}</span>
+              <span>
+                {(getDerivedVariants('excluded') || 0).toLocaleString()}
+              </span>
             </div>
           </Fragment>
         )}
