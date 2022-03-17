@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 import { CSSProperties } from 'styled-components'
 
@@ -13,7 +13,9 @@ export interface ButtonProps {
     | 'primary-dark'
     | 'diestruction'
   className?: Argument
-  onClick?: () => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseDown?: (event: MouseEvent<HTMLButtonElement>) => void
   append?: ReactElement
   prepend?: ReactElement
   icon?: ReactElement
@@ -28,6 +30,8 @@ export const Button = ({
   disabled = false,
   variant = 'primary',
   onClick,
+  onMouseUp,
+  onMouseDown,
   className,
   append,
   prepend,
@@ -104,8 +108,16 @@ export const Button = ({
     className,
   )
 
-  const clickHandler = () => {
-    !disabled && onClick && onClick()
+  const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onClick && onClick(event)
+  }
+
+  const onMouseUpHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onMouseUp && onMouseUp(event)
+  }
+
+  const onMouseDownHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onMouseDown && onMouseDown(event)
   }
 
   return (
@@ -115,6 +127,8 @@ export const Button = ({
       className={cnButton}
       ref={refEl}
       onClick={clickHandler}
+      onMouseUp={onMouseUpHandler}
+      onMouseDown={onMouseDownHandler}
       style={style}
     >
       {prepend}
