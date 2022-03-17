@@ -102,6 +102,9 @@ export interface IPreAspectDescriptor extends ICommonAspectDescriptor {
   content: string
 }
 
+export type TRecCntResponse = ICommonAspectDescriptor &
+  (ITableAspectDescriptor | IPreAspectDescriptor)
+
 // recdata
 
 export interface IRecdataArguments {
