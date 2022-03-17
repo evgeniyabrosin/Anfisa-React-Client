@@ -410,17 +410,3 @@ export const ModalSelectCompoundRequest = observer((): ReactElement => {
     </ModalBase>
   )
 })
-
-      <DisabledVariantsAmount variants={variants} disabled={true} />
-
-      <SelectModalButtons
-        handleClose={handleClose}
-        handleModals={handleModals}
-        handleModalJoin={handleModalJoin}
-        disabled={!variants}
-        currentGroup={currentGroup}
-        handleAddAttribute={handleAddAttribute}
-      />
-    </ModalBase>
-  )
-})
