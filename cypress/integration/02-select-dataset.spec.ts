@@ -29,6 +29,12 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.intercept('POST', statUnits).as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.stepCard.element.should(
+        'have.length',
+        18,
+      ),
+    )
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.groupGraphHeaders
       .contains('Variant')
@@ -41,6 +47,12 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.intercept('POST', statUnits).as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.stepCard.element.should(
+        'have.length',
+        18,
+      ),
+    )
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.treeToolptip.checkLabelText()
     decisionTreesPage.decisionTreeResults.graphHeaders
@@ -53,6 +65,12 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.intercept('POST', statUnits).as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.stepCard.element.should(
+        'have.length',
+        18,
+      ),
+    )
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.groupGraphHeaders
       .contains('Variant')
@@ -69,6 +87,9 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.intercept('POST', statUnits).as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.stepCard.element.contains('Step 5'),
+    )
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.groupGraphHeaders
       .contains('Predictions')
@@ -83,6 +104,12 @@ describe('XL Dataset should be opened in decision tree', () => {
     cy.intercept('POST', statUnits).as('filterLoad')
     visitWithFilter()
     cy.wait('@filterLoad')
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.stepCard.element.should(
+        'have.length',
+        18,
+      ),
+    )
     decisionTreesPage.decisionTreeResults.stepCard.findStepAndExclude('Step 5')
     decisionTreesPage.decisionTreeResults.groupGraphHeaders
       .contains('Coordinates')

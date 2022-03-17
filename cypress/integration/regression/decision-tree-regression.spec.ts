@@ -166,7 +166,6 @@ describe('Regression test of the decision tree', () => {
     decisionTreesPage.decisionTreeResults.stepCard.countElements(3)
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should add attributes to step 3 | step 10', () => {
     decisionTreesPage.searchForCallers(datasetName)
     decisionTreesPage.decisionTreeResults.graphHeaders.eq(0).click()

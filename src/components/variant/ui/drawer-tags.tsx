@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import { toast } from 'react-toastify'
 import get from 'lodash/get'
 import isBoolean from 'lodash/isBoolean'
 import { observer } from 'mobx-react-lite'
@@ -12,16 +11,17 @@ import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import { noFirstSymbolsPattern } from '@utils/validateNotes'
+import { showToast } from '@utils/notifications/showToast'
+import { noFirstSymbolsPattern } from '@utils/validation/validationPatterns'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {
   return (
     <Button
       refEl={refEl}
-      text={'+ Add'}
+      text="+ Add"
       size="xs"
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addTag}
     />
@@ -78,15 +78,7 @@ const DrawerTagModal = observer(({ close }: any) => {
 
   const handleSetCustomTag = () => {
     if (variantStore.generalTags.includes(customTag)) {
-      toast.error(t('variant.tagExists'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('variant.tagExists'), 'error')
     } else {
       variantStore.updateGeneralTags(customTag)
       variantStore.updateTagsWithNotes([customTag, true])
@@ -103,7 +95,7 @@ const DrawerTagModal = observer(({ close }: any) => {
       }`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += `,`
+        params += ','
       }
     })
 
@@ -111,10 +103,11 @@ const DrawerTagModal = observer(({ close }: any) => {
     close()
   }
 
-  const handleClick = (tag: string) => {
-    variantStore.showModalNotes()
-    variantStore.setCurrentTag(tag)
-  }
+  // TODO: The need of this feature is in doubt
+  // const handleClick = (tag: string) => {
+  //   variantStore.showModalNotes()
+  //   // variantStore.setCurrentTag(tag)
+  // }
 
   return (
     <div
@@ -145,12 +138,14 @@ const DrawerTagModal = observer(({ close }: any) => {
 
             <span className="text-12 ml-1">{tag}</span>
 
-            <span
+            {/* TODO: The need of this feature is in doubt  */}
+
+            {/* <span
               className="ml-2 cursor-pointer hover:text-blue-bright"
               onClick={() => handleClick(tag)}
             >
-              {Object.keys(variantStore.tagsWithNotes).includes(tag) && `(#)`}
-            </span>
+              {Object.keys(variantStore.tagsWithNotes).includes(tag) && '(#)'}
+            </span> */}
           </div>
         ))}
       </div>
@@ -184,7 +179,7 @@ const DrawerTagModal = observer(({ close }: any) => {
         <Button
           text={t('general.cancel')}
           onClick={close}
-          variant={'secondary'}
+          variant="secondary"
           className="mr-2 ml-auto"
         />
 

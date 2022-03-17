@@ -18,23 +18,21 @@ const ResultsHeader = styled.div`
   align-items: center;
 `
 
-export const QueryBuilderTreeHeader = observer(
-  (): ReactElement => {
-    return (
-      <div className="flex border-b border-grey-light h-auto min-h-50">
-        <TreeHeader className="border-r border-grey-light pl-4">
-          <div className="font-medium mr-2">{t('dtree.tree')}</div>
-        </TreeHeader>
+export const QueryBuilderTreeHeader = observer((): ReactElement => {
+  return (
+    <div className="flex border-b border-grey-light h-auto min-h-50">
+      <TreeHeader className="border-r border-grey-light pl-4">
+        <div className="font-medium mr-2">{t('dtree.tree')}</div>
+      </TreeHeader>
 
-        <ResultsHeader className="px-4">
-          <div className="font-medium mr-3">{t('dtree.algorithm')}</div>
+      <ResultsHeader className="px-4">
+        <div className="font-medium mr-3">{t('dtree.algorithm')}</div>
 
-          <QueryBuilderSearch
-            value={dtreeStore.algorithmFilterValue}
-            onChange={(e: string) => dtreeStore.setAlgorithmFilterValue(e)}
-          />
-        </ResultsHeader>
-      </div>
-    )
-  },
-)
+        <QueryBuilderSearch
+          value={dtreeStore.algorithmFilterValue}
+          onChange={(e: string) => dtreeStore.setAlgorithmFilterValue(e)}
+        />
+      </ResultsHeader>
+    </div>
+  )
+})

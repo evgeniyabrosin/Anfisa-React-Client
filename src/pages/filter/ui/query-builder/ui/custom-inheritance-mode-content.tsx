@@ -1,19 +1,18 @@
 import { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
-import { resetOptions } from '../../compound-request'
+import { resetOptions } from '../../panels/function-panel/components/compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
 import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
-  attrData: StatListType
+  problemGroups: string[]
   handleSetScenario: (group: string, e: string) => void
   selectStates: string[]
   handleReset: (e: string) => void
@@ -22,7 +21,7 @@ interface IProps {
 
 export const CustomInheritanceModeContent = observer(
   ({
-    attrData,
+    problemGroups,
     handleSetScenario,
     selectStates,
     handleReset,
@@ -36,7 +35,7 @@ export const CustomInheritanceModeContent = observer(
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div>{t('dtree.scenario')}</div>
 
-          {attrData.family.map((group: string, index: number) => (
+          {problemGroups.map((group: string, index: number) => (
             <div key={group}>
               <span>{group}</span>
 

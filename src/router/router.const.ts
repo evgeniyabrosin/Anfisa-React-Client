@@ -1,5 +1,5 @@
 import { GlbPagesNames } from '@glb/glb-names'
-import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
+import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
 import { PageRoute, Routes } from './routes.enum'
 
 export const getPageRoute = (

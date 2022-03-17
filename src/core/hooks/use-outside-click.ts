@@ -1,14 +1,16 @@
-import { RefObject, useEffect } from 'react'
+import { RefObject, useEffect, useRef } from 'react'
 
 export const useOutsideClick = (
   ref: RefObject<HTMLElement>,
   handleOutsideClick: () => void,
 ): void => {
+  const handlerRef = useRef(handleOutsideClick)
+  handlerRef.current = handleOutsideClick
+
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleClickOutside = (event: any) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        handleOutsideClick()
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        handlerRef.current()
       }
     }
 
@@ -17,5 +19,5 @@ export const useOutsideClick = (
     return () => {
       document.removeEventListener('mouseup', handleClickOutside)
     }
-  }, [ref, handleOutsideClick])
+  }, [ref])
 }

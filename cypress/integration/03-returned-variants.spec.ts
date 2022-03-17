@@ -24,7 +24,7 @@ describe('Test on table of returned variants', () => {
     ).as('returnedVariantsTable')
     decisionTreesPage.decisionTreeResults.viewReturnedVariants.click()
     cy.wait('@returnedVariantsTable', {
-      timeout: Timeouts.FifteenSecondsTimeout,
+      timeout: Timeouts.TwentySecondsTimeout,
     })
     returnedVariantsPage.returnedVariantsTable.sampleButton.countElements(3)
     returnedVariantsPage.returnedVariantsTable.returnedVariantsHeader.haveText(
@@ -52,13 +52,18 @@ describe('Test on table of returned variants', () => {
     cy.intercept('POST', selectList).as('selectList')
     decisionTreesPage.decisionTreeMenu.selectDecision.first().click()
     cy.wait('@selectList', {
-      timeout: Timeouts.TenSecondsTimeout,
+      timeout: Timeouts.TwentySecondsTimeout,
     })
     cy.intercept('POST', decTreeUpload).as('decTreeUpload')
     decisionTreesPage.decisionTreeMenu.selectDecision.getFilter(filterName)
     cy.wait('@decTreeUpload', {
       timeout: Timeouts.TenSecondsTimeout,
     })
+    cy.waitUntil(() =>
+      decisionTreesPage.decisionTreeResults.gearButton.element.should(
+        'be.visible',
+      ),
+    )
     decisionTreesPage.decisionTreeMenu.saveDataset.click()
     decisionTreesPage.decisionTreeMenu.datasetNameInput.type(
       'Dataset_from_autotests',
@@ -71,6 +76,11 @@ describe('Test on table of returned variants', () => {
       .getButtonByText('xl_PGP3140_wgs_NIST-4_2')
       .click()
     datasetPage.datasetInfo.datasetHeader.haveText(datasetName)
+    cy.waitUntil(() =>
+      datasetPage.leftPanel.datasetsListElem.element.contains(
+        'Dataset_from_autotests',
+      ),
+    )
     datasetPage.leftPanel.datasetsListElem
       .getButtonByText('Dataset_from_autotests')
       .should('exist')

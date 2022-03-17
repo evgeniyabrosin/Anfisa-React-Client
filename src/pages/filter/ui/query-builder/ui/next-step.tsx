@@ -5,7 +5,9 @@ import styled from 'styled-components'
 
 import dtreeStore from '@store/dtree'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { makeStepActive } from '@utils/makeStepActive'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'
@@ -50,7 +52,10 @@ export const NextStep = observer(
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        makeStepActive(stepIndex)
+        activeStepStore.makeStepActive(
+          stepIndex,
+          ActiveStepOptions.StartedVariants,
+        )
       }
     }
 

@@ -18,6 +18,6 @@ export class MainTableCheckbox extends Checkbox {
       .find(CommonSelectors.tagNameInDrawer)
       .contains(substring!)
       .siblings(CommonSelectors.checkbox)
-      .click({ force: true })
+      .click()
   }
 }

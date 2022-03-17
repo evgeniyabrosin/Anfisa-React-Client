@@ -31,7 +31,11 @@ export const FilterItem = ({ group, variants }: Props): ReactElement => {
                 <div className="text-white mr-1">{groupItemKey}</div>
 
                 {amountValues.length > 0 && sum !== 0 && (
-                  <div className="text-grey-blue">({sum})</div>
+                  <div className="text-grey-blue">
+                    {'('}
+                    {sum}
+                    {')'}
+                  </div>
                 )}
               </div>
 

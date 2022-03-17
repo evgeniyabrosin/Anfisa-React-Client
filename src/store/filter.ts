@@ -1,13 +1,14 @@
 import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
-import { FilterControlOptions } from '@pages/filter/ui/filter-control.const'
+import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
@@ -18,18 +19,18 @@ export type SelectedFiltersType = Record<
 interface AddSelectedFiltersI {
   group: string
   groupItemName: string
-  variant?: [string, number]
+  variant?: TVariant
 }
 
-class FilterStore {
+export class FilterStore {
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
   actionName?: ActionFilterEnum
   statFuncData: any = []
-  error = ''
   filterCondition: Record<string, any> = {}
+  memorizedSelectedFilters: SelectedFiltersType | undefined = undefined
 
   selectedFiltersHistory: SelectedFiltersType[] = []
 
@@ -86,13 +87,15 @@ class FilterStore {
 
     if (isEmpty(this.selectedFilters[group])) {
       delete this.selectedFilters[group]
+    } else {
+      delete this.selectedFilters[group][groupItemName]
     }
   }
 
   addSelectedFilterGroup(
     group: string,
     groupItemName: string,
-    variants: [string, number][],
+    variants: any[],
   ) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
@@ -145,7 +148,7 @@ class FilterStore {
 
     param && body.append('param', param)
 
-    const response = await fetch(getApiUrl(`statfunc`), {
+    const response = await fetch(getApiUrl('statfunc'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -160,10 +163,6 @@ class FilterStore {
     })
 
     return result
-  }
-
-  setError(value: string) {
-    this.error = value
   }
 
   resetData() {
@@ -193,6 +192,26 @@ class FilterStore {
     return this.filterCondition[filterName]
       ? (this.filterCondition[filterName] as T)
       : undefined
+  }
+
+  resetFilterCondition() {
+    this.filterCondition = {}
+  }
+
+  clearFilterCondition(filterName: string, subFilterName?: string) {
+    subFilterName
+      ? delete this.filterCondition[filterName][subFilterName]
+      : delete this.filterCondition[filterName]
+  }
+
+  memorizeSelectedFilters() {
+    this.memorizedSelectedFilters = toJS(this.selectedFilters)
+  }
+
+  applyMemorizedFilters() {
+    if (this.memorizedSelectedFilters) {
+      this.selectedFilters = this.memorizedSelectedFilters
+    }
   }
 }
 

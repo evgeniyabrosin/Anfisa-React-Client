@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { MainTableDataCy } from '../../../src/components/data-testid/main-table.cy'
 import { BasePage } from '../lib/base-page'
@@ -30,12 +31,14 @@ export interface MainTableSelectors {
   columnHeader: string
   checkboxListElement: string
   customizeTableList: string
+  preloader: string
 }
 export interface MainTableLables {
   numVariants: string
   columnHeader?: string
   checkboxListElement?: string
   customizeTableList: string
+  preloader: string
 }
 
 export class MainTableWidget extends UIWidget {
@@ -60,6 +63,7 @@ export class MainTableWidget extends UIWidget {
   readonly columnHeader: Label
   readonly checkboxListElement: Label
   readonly customizeTableList: Label
+  readonly preloader: Label
 
   constructor(options: {
     selectors: MainTableSelectors
@@ -97,6 +101,7 @@ export class MainTableWidget extends UIWidget {
       labels.customizeTableList,
     )
     this.exportCsv = new Button(selectors.exportCsv)
+    this.preloader = new Label(selectors.preloader, labels.preloader)
   }
 }
 class MainTablePage extends BasePage {
@@ -130,14 +135,25 @@ class MainTablePage extends BasePage {
         customizeTableList: Helper.getDataId(
           MainTableDataCy.customizeTableList,
         ),
+        preloader: `${CommonSelectors.preloader}`,
       },
       labels: {
         numVariants: 'number-of-variants',
         columnHeader: labelContent,
         checkboxListElement: labelContent,
         customizeTableList: 'In-Silico',
+        preloader: '',
       },
     })
+  }
+  openDrawer(proteinChange: string) {
+    // cy.waitUntil(() =>
+    //   mainTablePage.mainTable.preloader.element.then($el => $el.length),
+    // )
+    mainTablePage.mainTable.preloader.element.should('not.exist')
+    mainTablePage.mainTable.tableRow
+      .getButtonByText(proteinChange)
+      .click({ force: true })
   }
 }
 export const mainTablePage = new MainTablePage()

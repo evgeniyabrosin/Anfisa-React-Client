@@ -1,14 +1,3 @@
-declare global {
-  interface Window {
-    requestIdleCallback: (
-      callback: IdleRequestCallback,
-      options?: IdleRequestOptions,
-    ) => number
-  }
-}
-
-const requestIdleCallback = window.requestIdleCallback
-
 export interface DsDistItem {
   name: string
   'upd-time': Date
@@ -119,13 +108,20 @@ export interface DsinfoI {
   'unit-groups': any[][]
 }
 
+export type StatHistogram = [
+  type: 'LIN' | 'LOG',
+  min: number,
+  max: number,
+  values: number[],
+]
+
 export interface StatList {
   kind: string
   name: string
   vgroup: string
   'sub-kind': string
   detailed: boolean
-  variants: any[][]
+  variants: [string, number][]
   title: string
   family: string[]
   affected: string[]
@@ -137,8 +133,8 @@ export interface StatList {
   'trio-variants': string[]
   'approx-modes': string[][]
   labels: any[]
-  render: string
-  histogram?: any[][]
+  'render-mode'?: string
+  histogram?: StatHistogram
   incomplete?: boolean
 }
 

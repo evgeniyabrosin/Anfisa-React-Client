@@ -69,17 +69,14 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.M541L').click()
+    mainTablePage.openDrawer('p.M541L')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
-    variantDrawerPage.variantDrawer.tagInput.type(likelyBenign)
+    waitListOfCheckboxes()
+    variantDrawerPage.variantDrawer.tagInput.type(likelyBenign, 100)
+    variantDrawerPage.waitWhileDisabled()
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(likelyBenign)
   })
@@ -96,13 +93,13 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.M541L').click()
+    mainTablePage.openDrawer('p.M541L')
     variantDrawerPage.variantDrawer.addNote.click()
     cy.intercept('POST', addNote).as('addNote')
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: DM in HGMD but benign in ClinVar, common in AS',
     )
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
@@ -119,18 +116,14 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    cy.wait(10000)
-    mainTablePage.mainTable.tableRow.getButtonByText('p.A1685P').click()
+    mainTablePage.openDrawer('p.A1685P')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
-    variantDrawerPage.variantDrawer.tagInput.type(forSecondaryReview)
+    waitListOfCheckboxes()
+    variantDrawerPage.variantDrawer.tagInput.type(forSecondaryReview, 100)
+    variantDrawerPage.waitWhileDisabled()
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(forSecondaryReview)
   })
@@ -147,18 +140,19 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.A1685P').click()
+    mainTablePage.openDrawer('p.A1685P')
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: more common in Ashkenazi Jews than in other populations, is not present in ClinVar',
+      100,
     )
     cy.intercept('POST', addNote).as('addNote')
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
 
-  it('should add tag to the variant | test #10/1', () => {
+  it.skip('should add tag to the variant | test #10/1', () => {
     loginWithPreset()
     mainTablePage.mainTable.addGene.click()
     mainTablePage.mainTable.searchFilter.type('KCNQ1')
@@ -167,22 +161,24 @@ describe('Open saved dataset in MainTable', () => {
         return el.text() === 'KCNQ1'
       }),
     )
-    mainTablePage.mainTable.geneCheckbox.eq(1).check({ force: true })
+    mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('KCNQ1').click()
+    mainTablePage.openDrawer('p.Y662=')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
+    cy.intercept('/app/ws_tags?ds=Dataset_from_autotests&rec=*').as('upload')
+    waitListOfCheckboxes()
+    cy.wait('@upload').its('response.statusCode').should('eq', 200)
+    //some pause here before checking the checkbox
+    cy.wait(300)
     variantDrawerPage.variantDrawer.tagCheckbox.checkTagInDrawer(
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
+    cy.get('.ml-2.cursor-pointer').should('have.text', '(#)')
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click(Timeouts.TenSecondsTimeout)
+
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
   })
@@ -199,20 +195,19 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.eq(1).check({ force: true })
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow
-      .getButtonByText('KCNQ1')
-      .click({ force: true })
+    mainTablePage.openDrawer('KCNQ1')
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: DM in HGMD but benign in ClinVar, common in AS',
+      100,
     )
     cy.intercept('POST', addNote).as('addNote')
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
 
-  it('should add tag to the variant | test #11/1', () => {
+  it.skip('should add tag to the variant | test #11/1', () => {
     loginWithPreset()
     mainTablePage.mainTable.addGene.click()
     mainTablePage.mainTable.searchFilter.type('KBTBD4')
@@ -224,19 +219,17 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.E85D').click()
+    mainTablePage.openDrawer('p.E85D')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
+    cy.intercept('/app/ws_tags?ds=Dataset_from_autotests&rec=*').as('upload')
+    waitListOfCheckboxes()
+    //cy.wait('@upload')
     variantDrawerPage.variantDrawer.tagCheckbox.checkTagInDrawer(
       'For_secondary_review',
       Timeouts.TenSecondsTimeout,
     )
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click(Timeouts.TenSecondsTimeout)
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('For_secondary_review')
   })
@@ -253,18 +246,19 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.E85D').click()
+    mainTablePage.openDrawer('p.E85D')
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21:  coding in NDUFS3 only, a very rare variant that does not have any clinical annotations, but  It does have damaging in-silico predictions from Polyphen and SIFT',
+      100,
     )
     cy.intercept('POST', addNote).as('addNote')
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
 
-  it('should add tag to the variant | test #12', () => {
+  it.skip('should add tag to the variant | test #12', () => {
     loginWithPreset()
     mainTablePage.mainTable.addGene.click()
     mainTablePage.mainTable.searchFilter.type('CABP2')
@@ -276,19 +270,17 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('CABP2').click()
+    mainTablePage.openDrawer('CABP2')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
+    waitListOfCheckboxes()
+    cy.intercept('/app/ws_tags?ds=Dataset_from_autotests&rec=*').as('upload')
+    //cy.wait('@upload')
     variantDrawerPage.variantDrawer.tagCheckbox.checkTagInDrawer(
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click(Timeouts.TenSecondsTimeout)
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
   })
@@ -305,22 +297,18 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('RNF10').click()
+    mainTablePage.openDrawer('RNF10')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
-    variantDrawerPage.variantDrawer.tagInput.type(polyphenHDIV)
-    variantDrawerPage.variantDrawer.addCustomTag.forceClick()
+    waitListOfCheckboxes()
+    variantDrawerPage.variantDrawer.tagInput.type(polyphenHDIV, 100)
+    variantDrawerPage.waitWhileDisabled()
+    variantDrawerPage.variantDrawer.addCustomTag.click()
     variantDrawerPage.variantDrawer.tagCheckbox.checkTagInDrawer(
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
-
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
     variantDrawerPage.variantDrawer.addedTag.contains(polyphenHDIV)
@@ -338,13 +326,14 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('RNF10').click()
+    mainTablePage.openDrawer('RNF10')
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21:  a damaging prediction by Polyphen HDIV',
+      100,
     )
     cy.intercept('POST', addNote).as('addNote')
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
@@ -361,19 +350,17 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getElement().eq(1).click()
+    mainTablePage.mainTable.tableRow.getElement().eq(1).click({ force: true })
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
+    cy.intercept('/app/ws_tags?ds=Dataset_from_autotests&rec=*').as('upload')
+    waitListOfCheckboxes()
+    //cy.wait('@upload')
     variantDrawerPage.variantDrawer.tagCheckbox.checkTagInDrawer(
       'Likely Benign',
       Timeouts.TenSecondsTimeout,
     )
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click(Timeouts.TenSecondsTimeout)
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains('Likely Benign')
   })
@@ -390,17 +377,14 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.Y255=').click()
+    mainTablePage.openDrawer('p.Y255=')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
-        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
-      ),
-    )
-    variantDrawerPage.variantDrawer.tagInput.type(benign)
-    variantDrawerPage.variantDrawer.addCustomTag.forceClick()
+    waitListOfCheckboxes()
+    variantDrawerPage.variantDrawer.tagInput.type(benign, 100)
+    variantDrawerPage.waitWhileDisabled()
+    variantDrawerPage.variantDrawer.addCustomTag.click()
     cy.intercept('POST', addTags).as('addTags')
-    variantDrawerPage.variantDrawer.saveTags.forceClick()
+    variantDrawerPage.variantDrawer.saveTags.click()
     cy.wait('@addTags').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addedTag.contains(benign)
   })
@@ -417,13 +401,14 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.geneCheckbox.check()
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.numVariants.haveText('Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.Y255=').click()
+    mainTablePage.openDrawer('p.Y255=')
     variantDrawerPage.variantDrawer.addNote.click()
     variantDrawerPage.variantDrawer.fillSpace.type(
       'MS, 11/10/21: it is possibly de-novo',
+      100,
     )
     cy.intercept('POST', addNote).as('addNote')
-    variantDrawerPage.variantDrawer.saveNote.forceClick()
+    variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote').its('response.statusCode').should('eq', 200)
     variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
@@ -436,14 +421,14 @@ describe('Open saved dataset in MainTable', () => {
       'Benign/Likely benign',
     )
     cy.intercept('POST', '/app/ws_list').as('addTag')
-    mainTablePage.mainTable.applyButton.forceClick()
+    mainTablePage.mainTable.applyButton.click()
     cy.wait('@addTag').its('response.statusCode').should('eq', 200)
     mainTablePage.mainTable.tableRow.element
       .its('length')
       .should('be.not.gt', 7)
   })
 
-  it('should save Excel file | test #17', () => {
+  it.skip('should save Excel file | test #17', () => {
     mainTablePage.visit('ws?ds=Dataset_from_autotests')
     mainTablePage.mainTable.selectPreset.click()
     cy.intercept('POST', loadPreset).as('loadPreset')
@@ -470,5 +455,13 @@ describe('Open saved dataset in MainTable', () => {
     mainTablePage.mainTable.preset.getButtonByText(presetName).click()
     cy.wait('@loadPreset')
     mainTablePage.mainTable.numVariants.haveText(variants2)
+  }
+
+  function waitListOfCheckboxes() {
+    cy.waitUntil(() =>
+      variantDrawerPage.variantDrawer.tagCheckbox.element.then(
+        () => Cypress.$(CommonSelectors.tagNameInDrawer).length,
+      ),
+    )
   }
 })

@@ -13,9 +13,12 @@ import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 import { editStepAttribute } from '@utils/editStepAttribute'
-import { getExpression } from '@utils/getExpression'
-import { makeStepActive } from '@utils/makeStepActive'
+import { getNumericExpression } from '@utils/getNumericExpression'
+import dtreeModalStore from '../../../modals.store'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`
@@ -59,29 +62,29 @@ export const NextStepContentItem = observer(
     const currentStep = dtreeStore.getStepData[index]
 
     const handleModals = () => {
-      makeStepActive(index)
+      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       group[0] === StepTypeEnum.Enum &&
-        dtreeStore.openModalEditFilters(group[1], index, currNo)
+        dtreeModalStore.openModalEditFilters(group[1], currNo)
 
       group[0] === StepTypeEnum.Numeric &&
-        dtreeStore.openModalEditNumbers(group[1], index, currNo)
+        dtreeModalStore.openModalNumbers(group[1], currNo)
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalEditInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalEditCustomInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundHet &&
-          dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
+          dtreeModalStore.openModalEditCompoundHet(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundRequest &&
-          dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
+          dtreeModalStore.openModalEditCompoundRequest(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
-          dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
+          dtreeModalStore.openModalEditGeneRegion(group[1], currNo)
       }
     }
 
@@ -142,7 +145,7 @@ export const NextStepContentItem = observer(
 
             {isNegateStep && (
               <NegateWrapper className="flex items-center justify-center">
-                NOT
+                {'NOT'}
               </NegateWrapper>
             )}
 
@@ -173,13 +176,13 @@ export const NextStepContentItem = observer(
           <div className="flex flex-row step-content-area">
             {isNegateAttribute && (
               <NegateWrapper className="flex items-center justify-center">
-                NOT
+                {'NOT'}
               </NegateWrapper>
             )}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
               {group[0] === StepTypeEnum.Numeric &&
-                getExpression(
+                getNumericExpression(
                   group.find((elem: any) => Array.isArray(elem)),
                   group[1],
                 )}

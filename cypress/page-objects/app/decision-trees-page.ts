@@ -40,8 +40,9 @@ class DecisionTreesPage extends BasePage {
         applyNewTree: Helper.getDataId(DecisionTreesMenuDataCy.applyNewTree),
         newDecisionTreeNameInput:
           DecisionTreesMenuDataCy.newDecisionTreeNameInput,
+        placeHolder: CommonSelectors.placeHolder,
       },
-      labels: {},
+      labels: { placeHolder: '' },
     })
     this.decisionTreeResults = new DecisionTreeResultsWidget({
       selectors: {
@@ -125,7 +126,7 @@ class DecisionTreesPage extends BasePage {
     })
   }
   searchForCallers(datasetName: string): void {
-    decisionTreesPage.visit(`/filter?ds=${datasetName}`)
+    decisionTreesPage.visit(`filter?ds=${datasetName}`)
     decisionTreesPage.decisionTreeResults.addAttribute.click()
     decisionTreesPage.attributesList.searchForAttr.eq(0).type('aller')
   }

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { datasetPage } from '../../page-objects/app/datasets-page'
 import { mainTablePage } from '../../page-objects/app/main-table-page'
@@ -51,7 +50,6 @@ describe('Regression test of the main table', () => {
     cy.wait('@loadPreset', { timeout: Timeouts.TwentySecondsTimeout })
     //number of variants changes
     mainTablePage.mainTable.numVariants.haveText('Variants: 2')
-
     filterByGene('CHSY1', 'Variants: 1')
   })
 
@@ -67,14 +65,10 @@ describe('Regression test of the main table', () => {
     //number of variants changes
     mainTablePage.mainTable.numVariants.haveText('Variants: 2')
     filterByGene('CHSY1', 'Variants: 1')
-    mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
+    mainTablePage.openDrawer('p.Y434=')
     variantDrawerPage.variantDrawer.addTag.eq(1).click()
     variantDrawerPage.variantDrawer.tagInput.type(customTag, 100)
-    cy.waitUntil(() =>
-      variantDrawerPage.variantDrawer.addCustomTag.element.should(
-        'not.be.disabled',
-      ),
-    )
+    variantDrawerPage.waitWhileDisabled()
     variantDrawerPage.variantDrawer.addCustomTag.forceClick()
     cy.intercept('POST', addTags).as('addTags')
     variantDrawerPage.variantDrawer.saveTags.forceClick()
@@ -101,12 +95,16 @@ describe('Regression test of the main table', () => {
         () => Cypress.$(CommonSelectors.tableCell).length,
       ),
     )
-    mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
+    mainTablePage.mainTable.tableRow
+      .getButtonByText('p.Y434=')
+      .click({ force: true })
+    //mainTablePage.openDrawer('p.Y434=')
     variantDrawerPage.variantDrawer.addNote.click()
-    variantDrawerPage.variantDrawer.fillSpace.type(testData.getFakeData(4))
+    variantDrawerPage.variantDrawer.fillSpace.type(testData.getFakeData(4), 100)
     cy.intercept('POST', addNote).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote', { timeout: Timeouts.TwentySecondsTimeout })
+    variantDrawerPage.variantDrawer.addNote.getChildren('svg')
   })
 
   it('should filter main table by custom tag | step 6', () => {
@@ -133,7 +131,7 @@ describe('Regression test of the main table', () => {
     cy.wait('@dsUpload', { timeout: Timeouts.TwentySecondsTimeout })
     mainTablePage.mainTable.numVariants.haveText('Variants: 2592')
     mainTablePage.mainTable.customizeTable.click()
-    mainTablePage.mainTable.searchColumn.type('Gene')
+    mainTablePage.mainTable.searchColumn.type('Tag')
     mainTablePage.mainTable.columnSwitch.eq(1).click({ force: true })
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.columnHeader.countElements(7)
@@ -145,13 +143,13 @@ describe('Regression test of the main table', () => {
     cy.wait('@dsUpload', { timeout: Timeouts.TwentySecondsTimeout })
     mainTablePage.mainTable.numVariants.haveText('Variants: 2592')
     mainTablePage.mainTable.customizeTable.click()
-    mainTablePage.mainTable.searchColumn.type('Gene')
+    mainTablePage.mainTable.searchColumn.type('Tag')
     mainTablePage.mainTable.columnSwitch.eq(1).click({ force: true })
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.columnHeader.countElements(7)
     mainTablePage.mainTable.customizeTable.click()
     mainTablePage.mainTable.searchColumn.clear()
-    mainTablePage.mainTable.searchColumn.type('Gene')
+    mainTablePage.mainTable.searchColumn.type('Tag')
     mainTablePage.mainTable.columnSwitch.eq(1).click({ force: true })
     mainTablePage.mainTable.applyButton.click()
     mainTablePage.mainTable.columnHeader.countElements(8)
@@ -189,7 +187,7 @@ describe('Regression test of the main table', () => {
     mainTablePage.mainTable.columnHeader.countElements(8)
   })
 
-  it('should save Excel file | test #12', () => {
+  it.skip('should save Excel file | test #12', () => {
     mainTablePage.visit(link)
     cy.intercept('POST', dataUpload).as('dsUpload')
     cy.wait('@dsUpload', { timeout: Timeouts.TwentySecondsTimeout })

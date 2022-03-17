@@ -6,8 +6,10 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import activeStepStore, {
+  CreateEmptyStepPositions,
+} from '@pages/filter/active-step.store'
 import { changeStep } from '@utils/changeStep'
-import { createEmptyStep } from '@utils/createEmptyStep'
 
 interface IProps {
   hideModal: () => void
@@ -20,8 +22,11 @@ export const ModalOperation = observer(
 
     useOutsideClick(ref, hideModal)
 
-    const createStep = (stepIndex: number, position: 'BEFORE' | 'AFTER') => {
-      createEmptyStep(stepIndex, position)
+    const createStep = (
+      stepIndex: number,
+      position: CreateEmptyStepPositions,
+    ) => {
+      activeStepStore.createEmptyStep(stepIndex, position)
 
       hideModal()
     }
@@ -56,14 +61,14 @@ export const ModalOperation = observer(
         <div className="absolute z-50 top-8 w-32 flex flex-col justify-between px-0 py-0 bg-white rounded-md text-14 cursor-pointer shadow-dark">
           <Fragment>
             <div
-              onClick={() => createStep(index, 'BEFORE')}
+              onClick={() => createStep(index, CreateEmptyStepPositions.BEFORE)}
               className="rounded-br-none rounded-bl-none rounded-l-md rounded-r-md font-normal py-2 px-2 hover:bg-grey-light"
             >
               {t('dtree.addStepBefore')}
             </div>
 
             <div
-              onClick={() => createStep(index, 'AFTER')}
+              onClick={() => createStep(index, CreateEmptyStepPositions.AFTER)}
               className="font-normal py-2 px-2 hover:bg-grey-light"
               data-testid={DecisionTreesResultsDataCy.addStepAfter}
             >

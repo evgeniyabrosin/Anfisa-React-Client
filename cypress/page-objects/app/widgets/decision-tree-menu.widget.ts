@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { Button } from '../../lib/button'
 import { Input } from '../../lib/input'
+import { Label } from '../../lib/label'
 import { UIWidget } from '../../lib/ui-widget'
 
 export interface DecisionTreeMenuSelectors {
@@ -16,9 +17,12 @@ export interface DecisionTreeMenuSelectors {
   createNew: string
   applyNewTree: string
   newDecisionTreeNameInput: string
+  placeHolder: string
 }
 
-export interface DecisionTreeLabels {}
+export interface DecisionTreeLabels {
+  placeHolder: string
+}
 
 export class DecisionTreeWidget extends UIWidget {
   readonly selectDecision: Button
@@ -33,6 +37,7 @@ export class DecisionTreeWidget extends UIWidget {
   readonly createNew: Button
   readonly applyNewTree: Button
   readonly newDecisionTreeNameInput: Input
+  readonly placeHolder: Label
 
   constructor(options: {
     selectors: DecisionTreeMenuSelectors
@@ -41,6 +46,7 @@ export class DecisionTreeWidget extends UIWidget {
     super(options)
 
     const selectors = options.selectors
+    const labels = options.labels
 
     this.selectDecision = new Button(selectors.selectDecision)
     this.decisionActions = new Button(selectors.decisionActions)
@@ -56,5 +62,6 @@ export class DecisionTreeWidget extends UIWidget {
     this.newDecisionTreeNameInput = new Input(
       selectors.newDecisionTreeNameInput,
     )
+    this.placeHolder = new Label(selectors.placeHolder, labels.placeHolder)
   }
 }

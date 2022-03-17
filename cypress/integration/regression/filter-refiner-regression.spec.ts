@@ -90,8 +90,8 @@ describe('Filter refiner regression test', () => {
     selectElementInLeftPanel('Compound_Het')
     cy.get('form > .flex > .Dropdown-root > .Dropdown-control').click()
     cy.get('[role="option"]').contains('shared gene').click()
-    filterRefinerPage.filter.addButton.click()
-    cy.get('.text-red-secondary').should(
+    filterRefinerPage.filter.addButton.element.should('be.disabled')
+    filterRefinerPage.filter.redMessage.element.should(
       'have.text',
       'Improper approx mode gene',
     )
@@ -108,7 +108,6 @@ describe('Filter refiner regression test', () => {
     filterRefinerPage.total.resultsListElement.countElements(0)
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should add new row | step 9', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('Compound_Request')
@@ -122,7 +121,6 @@ describe('Filter refiner regression test', () => {
     //TODO count the number of smth
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should delete first row | step 10', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('Compound_Request')
@@ -149,7 +147,6 @@ describe('Filter refiner regression test', () => {
     countAddedElements(1, 'Num_Samples')
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should add filter | step 12', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('GeneRegion')
@@ -174,7 +171,6 @@ describe('Filter refiner regression test', () => {
   })
 
   //skip until redo button is fixed
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should redo undone steps| step 14', () => {
     filterRefinerPage.visit(link)
     selectElementInLeftPanel('Callers')
@@ -192,7 +188,6 @@ describe('Filter refiner regression test', () => {
     )
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should apply every filter | step 15', () => {
     filterRefinerPage.visit(link)
     //there is no apply button

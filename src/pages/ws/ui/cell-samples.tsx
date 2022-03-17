@@ -1,34 +1,33 @@
 import { ReactElement } from 'react'
-import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import filterZone from '@store/filterZone'
 import { CellI } from './cell-interfaces'
+import { CellSample } from './cell-sample'
 
-export const CellSamples = observer(
-  ({ cell }: CellI): ReactElement => {
-    const qualities = get(cell, 'value', {}) as any
+export interface IQualities {
+  [key: string]: {
+    genotype: string
+    g_quality: number
+  }
+}
 
-    return (
-      <div className="h-full flex text-10">
-        {Object.keys(qualities).map((item, index) => (
-          <div
-            key={item}
-            className={cn('w-1/3 px-4 py-4', {
-              'bg-orange-light': filterZone.isFather && index === 2,
-              'bg-yellow-light': filterZone.isMother && index === 1,
-              'bg-purple-light': filterZone.isProband && index === 0,
-            })}
-          >
-            <div>{item}</div>
+export const CellSamples = observer(({ cell }: CellI): ReactElement => {
+  const qualities = get(cell, 'value', {}) as IQualities
 
-            <div className="truncate">{qualities[item].genotype}</div>
+  const samplesAmount: number = Object.keys(cell.value).length
 
-            <div>{qualities[item].g_quality}</div>
-          </div>
-        ))}
-      </div>
-    )
-  },
-)
+  return (
+    <div className="h-full flex text-10">
+      {Object.keys(qualities).map((item, index) => (
+        <CellSample
+          key={item + index}
+          qualities={qualities}
+          sample={item}
+          samplesAmount={samplesAmount}
+          index={index}
+        />
+      ))}
+    </div>
+  )
+})

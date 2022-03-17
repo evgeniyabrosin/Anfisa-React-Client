@@ -12,7 +12,8 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import { validateNotes } from '@utils/validateNotes'
+import { getParsedValue } from '@utils/drawer/getParsedValue'
+import { validateNotes } from '@utils/validation/validateNotes'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
   return (
@@ -24,7 +25,7 @@ const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
       })}
       size="xs"
       icon={variantStore.noteText ? <Icon name="File" /> : undefined}
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addNote}
     />
@@ -54,7 +55,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
       }`
 
       if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += `,`
+        params += ','
       }
     })
 
@@ -63,7 +64,11 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   const handleSaveNoteAsync = async () => {
-    variantStore.updateTagsWithNotes(['_note', value])
+    const noteValue: string = value.includes('"')
+      ? getParsedValue(value)
+      : value
+
+    variantStore.updateTagsWithNotes(['_note', noteValue])
 
     variantStore.setNoteText(value)
 
@@ -87,7 +92,10 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div ref={ref} className="bg-blue-light flex flex-col py-5 px-4 rounded-xl">
+    <div
+      ref={ref}
+      className="w-96 bg-blue-light flex flex-col py-5 px-4 rounded-xl"
+    >
       <span className="w-full">
         <span>{t('variant.notesFor')} </span>
 
@@ -106,7 +114,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
         <textarea
           placeholder="Enter text"
-          className="w-96 mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
+          className="w-full mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
           rows={15}
           value={value}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -121,7 +129,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             <Button
               text={t('general.delete')}
               onClick={deleteNoteAsync}
-              variant={'diestruction'}
+              variant="diestruction"
             />
           )}
         </div>
@@ -130,7 +138,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
           <Button
             text={t('general.cancel')}
             onClick={close}
-            variant={'secondary'}
+            variant="secondary"
           />
 
           <Button

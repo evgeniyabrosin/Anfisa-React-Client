@@ -12,7 +12,9 @@ import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { makeStepActive } from '@utils/makeStepActive'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 
 const StartAmount = styled.div`
   font-size: 13px;
@@ -163,12 +165,15 @@ export const NextStepRoute = observer(
                     <ExcludeAmount
                       isIncluded={isIncluded}
                       onClick={() =>
-                        makeStepActive(index, 'isReturnedVariantsActive')
+                        activeStepStore.makeStepActive(
+                          index,
+                          ActiveStepOptions.ReturnedVariants,
+                        )
                       }
                       data-testid={DecisionTreesResultsDataCy.excludeInfo}
                     >
                       <span>
-                        {isIncluded ? `+` : `-`}
+                        {isIncluded ? '+' : '-'}
                         {isDifferenceActive ? (
                           <DifferenceCounts isIncluded={isIncluded}>
                             {differenceWithCommas}

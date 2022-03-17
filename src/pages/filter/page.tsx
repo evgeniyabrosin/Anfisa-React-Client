@@ -14,173 +14,116 @@ import filterStore from '@store/filter'
 import { Header } from '@components/header'
 import { GlbPagesNames } from '@glb/glb-names'
 import { ErrorPage } from '../error/error'
-import { FilterControl } from './ui/filter-control'
-import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
+import { ModalsBlock } from './modals-block'
+import { FilterControl } from './ui/filter-control/filter-control'
 import { QueryBuilder } from './ui/query-builder/query-builder'
-import { ModalEditCompoundHet } from './ui/query-builder/ui/modal-edit-compound-het'
-import { ModalEditCompoundRequest } from './ui/query-builder/ui/modal-edit-compound-request'
-import { ModalEditCustomInheritanceMode } from './ui/query-builder/ui/modal-edit-custom-inheritance-mode'
-import { ModalEditFilters } from './ui/query-builder/ui/modal-edit-filters'
-import { ModalEditGeneRegion } from './ui/query-builder/ui/modal-edit-gene-region'
-import { ModalEditInheritanceMode } from './ui/query-builder/ui/modal-edit-inheritance-mode'
-import { ModalEditNumbers } from './ui/query-builder/ui/modal-edit-numbers'
-import { ModalSaveDataset } from './ui/query-builder/ui/modal-save-dataset'
-import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
-import { ModalSelectCompoundHet } from './ui/query-builder/ui/modal-select-compound-het'
-import { ModalSelectCompoundRequest } from './ui/query-builder/ui/modal-select-compound-request'
-import { ModalSelectCustomInheritanceMode } from './ui/query-builder/ui/modal-select-custom-inheritance-mode'
-import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
-import { ModalSelectGeneRegion } from './ui/query-builder/ui/modal-select-gene-region'
-import { ModalSelectInheritanceMode } from './ui/query-builder/ui/modal-select-inheritance-mode'
-import { ModalSelectNumbers } from './ui/query-builder/ui/modal-select-numbers'
-import { TableModal } from './ui/TableModal'
+import { getNumberWithCommas } from './ui/query-builder/ui/next-step-route'
 
-const FilterPage = observer(
-  (): ReactElement => {
-    const isXL = datasetStore.isXL
+const FilterPage = observer((): ReactElement => {
+  const isXL = datasetStore.isXL
 
-    const history = useHistory()
+  const history = useHistory()
 
-    useDatasetName()
-    const params = useParams()
-    const dsName = params.get('ds') || ''
+  useDatasetName()
+  const params = useParams()
+  const dsName = params.get('ds') || ''
 
-    useEffect(() => {
-      const initAsync = async () => {
-        const body = new URLSearchParams({
-          ds: dsName,
-          tm: '0',
-          code: 'return False',
-        })
+  useEffect(() => {
+    const initAsync = async () => {
+      const body = new URLSearchParams({
+        ds: dsName,
+        tm: '0',
+        code: 'return False',
+      })
 
-        await dirinfoStore.fetchDsinfoAsync(dsName)
+      await dirinfoStore.fetchDsinfoAsync(dsName)
 
-        await dtreeStore.fetchDtreeSetAsync(body)
+      await dtreeStore.fetchDtreeSetAsync(body)
+    }
+
+    initAsync()
+
+    return () => {
+      dtreeStore.resetFilterValue()
+      dtreeStore.resetAlgorithmFilterValue()
+      dtreeStore.resetData()
+      dirinfoStore.resetData()
+      datasetStore.resetData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dsName, history])
+
+  const getFiltersValue = (type: string) => {
+    if (type === 'all') {
+      if (isXL) return toJS(dirinfoStore.dsinfo.total)
+
+      if (filterStore.method === GlbPagesNames.Filter) {
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[0]))
       }
 
-      initAsync()
-
-      return () => {
-        dtreeStore.resetFilterValue()
-        dtreeStore.resetAlgorithmFilterValue()
-        dtreeStore.resetData()
-        dirinfoStore.resetData()
-        datasetStore.resetData()
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dsName, history])
-
-    const getFiltersValue = (type: string) => {
-      if (type === 'all') {
-        if (isXL) return toJS(dirinfoStore.dsinfo.total)
-
-        if (filterStore.method === GlbPagesNames.Filter) {
-          return toJS(dtreeStore.statAmount[0])
-        }
-
-        if (filterStore.method === GlbPagesNames.Refiner) {
-          return toJS(datasetStore.statAmount[0])
-        }
-      }
-
-      if (type === 'transcribedVariants') {
-        if (filterStore.method === GlbPagesNames.Filter) {
-          return toJS(dtreeStore.statAmount[1])
-        }
-
-        if (filterStore.method === GlbPagesNames.Refiner) {
-          return toJS(datasetStore.statAmount[1])
-        }
-      }
-
-      if (type === 'transcripts') {
-        if (filterStore.method === GlbPagesNames.Filter) {
-          return toJS(dtreeStore.statAmount[2])
-        }
-
-        if (filterStore.method === GlbPagesNames.Refiner) {
-          return toJS(datasetStore.statAmount[2])
-        }
+      if (filterStore.method === GlbPagesNames.Refiner) {
+        return getNumberWithCommas(toJS(datasetStore.statAmount[0]))
       }
     }
 
-    return (
-      <Fragment>
-        {dtreeStore.isModalAttributeVisible && <ModalSelectAttribute />}
+    if (type === 'transcribedVariants') {
+      if (filterStore.method === GlbPagesNames.Filter) {
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[1]))
+      }
 
-        {dtreeStore.isModalEditFiltersVisible && <ModalEditFilters />}
-        {dtreeStore.isModalSelectFilterVisible && <ModalSelectFilters />}
+      if (filterStore.method === GlbPagesNames.Refiner) {
+        return getNumberWithCommas(toJS(datasetStore.statAmount[1]))
+      }
+    }
 
-        {dtreeStore.isModalEditNumbersVisible && <ModalEditNumbers />}
-        {dtreeStore.isModalSelectNumbersVisible && <ModalSelectNumbers />}
+    if (type === 'transcripts') {
+      if (filterStore.method === GlbPagesNames.Filter) {
+        return getNumberWithCommas(toJS(dtreeStore.statAmount[2]))
+      }
 
-        {dtreeStore.isModalEditInheritanceModeVisible && (
-          <ModalEditInheritanceMode />
-        )}
-        {dtreeStore.isModalSelectInheritanceModeVisible && (
-          <ModalSelectInheritanceMode />
-        )}
+      if (filterStore.method === GlbPagesNames.Refiner) {
+        return getNumberWithCommas(toJS(datasetStore.statAmount[2]))
+      }
+    }
+  }
 
-        {dtreeStore.isModalEditCustomInheritanceModeVisible && (
-          <ModalEditCustomInheritanceMode />
-        )}
-        {dtreeStore.isModalSelectCustomInheritanceModeVisible && (
-          <ModalSelectCustomInheritanceMode />
-        )}
+  return (
+    <Fragment>
+      <ModalsBlock />
 
-        {dtreeStore.isModalEditCompoundHetVisible && <ModalEditCompoundHet />}
-        {dtreeStore.isModalSelectCompoundHetVisible && (
-          <ModalSelectCompoundHet />
-        )}
+      <div className="overflow-hidden">
+        <Header>
+          <div className="text-white flex-grow flex justify-end pr-6">
+            <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
+              {t('filter.variants', {
+                all: getFiltersValue('all'),
+              })}
+            </span>
 
-        {dtreeStore.isModalEditCompoundRequestVisible && (
-          <ModalEditCompoundRequest />
-        )}
-        {dtreeStore.isModalSelectCompoundRequestVisible && (
-          <ModalSelectCompoundRequest />
-        )}
+            {!isXL && (
+              <React.Fragment>
+                <span className="header-variants-info">
+                  {t('filter.transcribedVariants', {
+                    all: getFiltersValue('transcribedVariants'),
+                  })}
+                </span>
 
-        {dtreeStore.isModalEditGeneRegionVisible && <ModalEditGeneRegion />}
-        {dtreeStore.isModalSelectGeneRegionVisible && <ModalSelectGeneRegion />}
+                <span className="header-variants-info">
+                  {t('filter.transcripts', {
+                    all: getFiltersValue('transcripts'),
+                  })}
+                </span>
+              </React.Fragment>
+            )}
+          </div>
+        </Header>
 
-        {dtreeStore.isTableModalVisible && <TableModal />}
-        {dtreeStore.isModalTextEditorVisible && <ModalTextEditor />}
-        {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
-
-        <div className="overflow-hidden">
-          <Header source="filter">
-            <div className="text-white flex-grow flex justify-end pr-6">
-              <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
-                {t('filter.variants', {
-                  all: getFiltersValue('all'),
-                })}
-              </span>
-
-              {!isXL && (
-                <React.Fragment>
-                  <span className="header-variants-info">
-                    {t('filter.transcribedVariants', {
-                      all: getFiltersValue('transcribedVariants'),
-                    })}
-                  </span>
-
-                  <span className="header-variants-info">
-                    {t('filter.transcripts', {
-                      all: getFiltersValue('transcripts'),
-                    })}
-                  </span>
-                </React.Fragment>
-              )}
-            </div>
-          </Header>
-
-          <FilterControl />
-          <QueryBuilder />
-        </div>
-      </Fragment>
-    )
-  },
-)
+        <FilterControl />
+        <QueryBuilder />
+      </div>
+    </Fragment>
+  )
+})
 
 export default withErrorBoundary(FilterPage, {
   fallback: <ErrorPage />,

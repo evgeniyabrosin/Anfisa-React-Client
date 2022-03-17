@@ -25,5 +25,13 @@ class VariantDrawerPage extends BasePage {
       },
     })
   }
+  waitWhileDisabled(): void {
+    cy.waitUntil(() =>
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      variantDrawerPage.variantDrawer.addCustomTag.element.should(
+        'not.be.disabled',
+      ),
+    )
+  }
 }
 export const variantDrawerPage = new VariantDrawerPage()

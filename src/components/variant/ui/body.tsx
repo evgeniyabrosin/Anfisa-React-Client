@@ -54,7 +54,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
     <div>
       {rows?.length === 0 ? (
         <div className="flex justify-center text-center w-full">
-          No data to show
+          {'No data to show'}
         </div>
       ) : (
         <table className="min-w-full">
@@ -103,8 +103,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                       <td
                         key={cIndex}
                         className={cn(
-                          'py-3 pr-3 font-medium',
-                          !cell[1]?.includes(noTrHitClass) && 'text-white',
+                          'py-3 pr-3 font-normal',
+                          cell[0].includes('</a>')
+                            ? 'text-blue-bright'
+                            : !cell[1]?.includes(noTrHitClass) &&
+                                'text-grey-blue',
                         )}
                         dangerouslySetInnerHTML={{ __html: cell[0] }}
                       />

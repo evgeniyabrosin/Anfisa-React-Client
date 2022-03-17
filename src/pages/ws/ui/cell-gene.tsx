@@ -12,52 +12,50 @@ import { CellI } from './cell-interfaces'
 import { PlusIcon } from './plus-icon'
 import { RowHeight } from './table/table'
 
-export const CellGene = observer(
-  ({ cell }: CellI): ReactElement => {
-    const value = get(cell, 'value[0]', []) as string[]
-    const rowIndex = get(cell, 'row.index', -1)
+export const CellGene = observer(({ cell }: CellI): ReactElement => {
+  const value = get(cell, 'value[0]', []) as string[]
+  const rowIndex = get(cell, 'row.index', -1)
 
-    const records = toJS(datasetStore?.wsRecords)
-    const iconColor = records?.[rowIndex]?.cl.split('-')[0]
+  const records = toJS(datasetStore?.wsRecords)
+  const iconColor = records?.[rowIndex]?.cl.split('-')[0]
 
-    const geneCellHeight =
-      columnsStore.viewType === ViewTypeEnum.Compact
-        ? RowHeight.Compact
-        : RowHeight.Basic
+  const geneCellHeight =
+    columnsStore.viewType === ViewTypeEnum.Compact
+      ? RowHeight.Compact
+      : RowHeight.Basic
 
-    return (
-      <div className="flex items-center">
-        {records?.[rowIndex]?.cl && (
-          <Fragment>
-            {records?.[rowIndex]?.cl.includes('cross') ? (
-              <PlusIcon color={geneColorMap[iconColor]} />
-            ) : (
-              <div
-                className={cn(
-                  'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
-                  {
-                    'bg-grey-blue': iconColor === 'grey',
-                  },
-                )}
-                style={{
-                  border: `2px solid ${geneColorMap[iconColor]}`,
-                }}
-              />
-            )}
-          </Fragment>
-        )}
+  return (
+    <div className="flex items-center">
+      {records?.[rowIndex]?.cl && (
+        <Fragment>
+          {records?.[rowIndex]?.cl.includes('cross') ? (
+            <PlusIcon color={geneColorMap[iconColor]} />
+          ) : (
+            <div
+              className={cn(
+                'flex-shrink-0 w-2.5 h-2.5 rounded-full mr-1.5 border-2',
+                {
+                  'bg-grey-blue': iconColor === 'grey',
+                },
+              )}
+              style={{
+                border: `2px solid ${geneColorMap[iconColor]}`,
+              }}
+            />
+          )}
+        </Fragment>
+      )}
 
-        <div
-          className="flex flex-col flex-wrap w-full"
-          style={{ maxHeight: `${geneCellHeight}px` }}
-        >
-          {value.map(gene => (
-            <div className="text-14 leading-18px" key={gene}>
-              {gene}
-            </div>
-          ))}
-        </div>
+      <div
+        className="flex flex-col flex-wrap w-full"
+        style={{ maxHeight: `${geneCellHeight}px` }}
+      >
+        {value.map(gene => (
+          <div className="text-14 leading-18px" key={gene}>
+            {gene}
+          </div>
+        ))}
       </div>
-    )
-  },
-)
+    </div>
+  )
+})

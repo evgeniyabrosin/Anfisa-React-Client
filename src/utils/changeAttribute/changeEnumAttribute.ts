@@ -2,6 +2,9 @@ import uniq from 'lodash/uniq'
 
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@pages/filter/active-step.store'
+import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import dtreeModalStore from '../../pages/filter/modals.store'
 
 export const changeEnumAttribute = () => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -11,13 +14,12 @@ export const changeEnumAttribute = () => {
     code,
   })
 
-  const stepIndex = dtreeStore.currentStepIndex
-  const locationIndex = dtreeStore.groupIndexToChange
+  const { groupIndexToChange } = dtreeModalStore
+  const { activeStepIndex } = activeStepStore
+  const { location } = modalEditStore
 
-  const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
-  const location = [indexForApi, locationIndex]
-
-  const attribute: any[] = dtreeStore.stepData[stepIndex].groups[locationIndex]
+  const attribute: any[] =
+    dtreeStore.stepData[activeStepIndex].groups[groupIndexToChange]
 
   const filteredAttribute: any[] = []
 

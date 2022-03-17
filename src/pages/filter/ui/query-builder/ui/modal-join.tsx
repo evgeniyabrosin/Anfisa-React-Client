@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import dtreeStore from '@store/dtree'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
+import dtreeModalStore from '../../../modals.store'
 
 interface IProps {
   handleAddAttribute: (action: ActionType) => void
@@ -15,16 +15,16 @@ export const ModalJoin = observer(
   ({ handleAddAttribute }: IProps): ReactElement => {
     const ref = useRef(null)
 
-    useOutsideClick(ref, () => dtreeStore.closeModalJoin())
+    useOutsideClick(ref, () => dtreeModalStore.closeModalJoin())
 
     const handleJoin = (typeOfJoin: 'JOIN-AND' | 'JOIN-OR') => {
       handleAddAttribute(typeOfJoin)
 
-      dtreeStore.closeModalJoin()
-      dtreeStore.closeModalSelectFilter()
-      dtreeStore.closeModalSelectNumbers()
-      dtreeStore.closeModalSelectInheritanceMode()
-      dtreeStore.closeModalSelectCustomInheritanceMode()
+      dtreeModalStore.closeModalJoin()
+      dtreeModalStore.closeModalSelectFilter()
+      dtreeModalStore.closeModalNumbers()
+      dtreeModalStore.closeModalSelectInheritanceMode()
+      dtreeModalStore.closeModalSelectCustomInheritanceMode()
     }
 
     return (

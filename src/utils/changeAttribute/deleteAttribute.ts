@@ -1,5 +1,7 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@pages/filter/active-step.store'
+import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 
 export const deleteAttribute = (): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -9,18 +11,19 @@ export const deleteAttribute = (): void => {
     code,
   })
 
-  const stepIndex = dtreeStore.currentStepIndex
-  const locationIndex = dtreeStore.groupIndexToChange
+  const { activeStepIndex } = activeStepStore
 
-  const hasOneAttribute = dtreeStore.stepData[stepIndex].groups.length === 1
+  const { location } = modalEditStore
 
+  const [indexForApi] = location
+
+  const hasOneAttribute =
+    dtreeStore.stepData[activeStepIndex].groups.length === 1
   const action = hasOneAttribute ? 'POINT' : 'ATOM'
-  const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
 
-  const atomLocation = [indexForApi, locationIndex]
-  const location = hasOneAttribute ? indexForApi : atomLocation
+  const currentLocation = hasOneAttribute ? indexForApi : location
 
-  body.append('instr', JSON.stringify([action, 'DELETE', location]))
+  body.append('instr', JSON.stringify([action, 'DELETE', currentLocation]))
 
   dtreeStore.fetchDtreeSetAsync(body)
 }

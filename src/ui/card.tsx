@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react'
+import { CSSProperties, ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
 interface CardProps {
@@ -11,6 +11,11 @@ interface CardTitleProps {
   size?: 'md' | 'sm'
   className?: Argument
   dataTestId?: string
+  style?: CSSProperties
+}
+
+const addWordBreaks = (txt: string) => {
+  return txt.replace(/_/g, '_<wbr>')
 }
 
 export const Card = ({ children, className }: CardProps): ReactElement => (
@@ -22,6 +27,7 @@ export const CardTitle = ({
   className,
   size = 'md',
   dataTestId,
+  style = {},
 }: CardTitleProps): ReactElement => {
   const sizeClass =
     size === 'md'
@@ -29,8 +35,11 @@ export const CardTitle = ({
       : 'text-sm leading-16px mb-3'
 
   return (
-    <div data-testid={dataTestId} className={cn(sizeClass, className)}>
-      {text}
-    </div>
+    <div
+      data-testid={dataTestId}
+      className={cn(sizeClass, className)}
+      dangerouslySetInnerHTML={{ __html: addWordBreaks(text) }}
+      style={style}
+    ></div>
   )
 }
