@@ -59,22 +59,31 @@ export const QueryBuilderSubgroupItem = observer(
 
       if (group.kind === FilterKindEnum.Func) {
         group.name === FuncStepTypesEnum.InheritanceMode &&
-          dtreeModalStore.openModalSelectInheritanceMode(group.name, source)
+          dtreeModalStore.openModalInheritanceMode(
+            group.name,
+            undefined,
+            source,
+          )
 
         group.name === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeModalStore.openModalSelectCustomInheritanceMode(
+          dtreeModalStore.openModalCustomInheritanceMode(
             group.name,
+            undefined,
             source,
           )
 
         group.name === FuncStepTypesEnum.CompoundHet &&
-          dtreeModalStore.openModalSelectCompoundHet(group.name, source)
+          dtreeModalStore.openModalCompoundHet(group.name, undefined, source)
 
         group.name === FuncStepTypesEnum.CompoundRequest &&
-          dtreeModalStore.openModalSelectCompoundRequest(group.name, source)
+          dtreeModalStore.openModalCompoundRequest(
+            group.name,
+            undefined,
+            source,
+          )
 
         group.name === FuncStepTypesEnum.GeneRegion &&
-          dtreeModalStore.openModalSelectGeneRegion(group.name, source)
+          dtreeModalStore.openModalGeneRegion(group.name, undefined, source)
       }
     }
 

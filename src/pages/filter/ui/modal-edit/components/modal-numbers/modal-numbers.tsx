@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { NumericCondition } from '@components/numeric-condition'
+import activeStepStore from '@pages/filter/active-step.store'
 import { EditModalButtons } from '@pages/filter/ui/modal-edit/components/edit-modal-buttons'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
@@ -13,7 +14,14 @@ import { SelectModalButtons } from '../../../query-builder/ui/select-modal-butto
 
 export const ModalNumbers = observer((): ReactElement | null => {
   const groups = dtreeStore.currentStepGroups
-  const currentGroup = dtreeStore.currentStepGroupToChange
+
+  const currentStepIndex = activeStepStore.activeStepIndex
+  const currentGroupIndex = dtreeModalStore.groupIndexToChange
+
+  const currentGroup =
+    dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+
+  const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
 
   const initialValue = currentGroup
     ? currentGroup[currentGroup.length - 1]
@@ -62,7 +70,7 @@ export const ModalNumbers = observer((): ReactElement | null => {
             />
           ) : (
             <SelectModalButtons
-              currentGroup={groups}
+              currentGroup={currentGroupToModify ?? groups}
               handleClose={handleClose}
               handleModals={handleModals}
               handleModalJoin={handleModalJoin}

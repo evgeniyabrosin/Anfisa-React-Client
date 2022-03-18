@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
-import { selectOptions } from '@pages/filter/ui/query-builder/ui/modal-select-custom-inheritance-mode'
+import { selectOptions } from '@pages/filter/ui/modal-edit/modal-edit.store'
 import { getSelectedValue } from '@utils/function-panel/getSelectedValue'
 import { TRequestCondition } from '../../function-panel.interface'
 import functionPanelStore from '../../function-panel.store'
