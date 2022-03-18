@@ -3,6 +3,7 @@ import { withErrorBoundary } from 'react-error-boundary'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
+import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -16,7 +17,6 @@ import { ErrorPage } from '@pages/error/error'
 import { FilterControl } from '@pages/filter/ui/filter-control/filter-control'
 import { FilterRefiner } from '@pages/filter/ui/filter-refiner'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
-import { getNumberWithCommas } from '@pages/filter/ui/query-builder/ui/next-step-route'
 import { TableModal } from '@pages/filter/ui/TableModal'
 
 const RefinerPage = observer((): ReactElement => {
@@ -51,7 +51,7 @@ const RefinerPage = observer((): ReactElement => {
         <div className="text-white flex-grow flex justify-end pr-6">
           <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
             {t('filter.variants', {
-              all: getNumberWithCommas(
+              all: formatNumber(
                 isXL
                   ? (toJS(dirinfoStore.dsinfo).total as number)
                   : statAmount[0],
@@ -63,13 +63,13 @@ const RefinerPage = observer((): ReactElement => {
             <React.Fragment>
               <span className="header-variants-info">
                 {t('filter.transcribedVariants', {
-                  all: getNumberWithCommas(statAmount[1]),
+                  all: formatNumber(statAmount[1]),
                 })}
               </span>
 
               <span className="header-variants-info">
                 {t('filter.transcripts', {
-                  all: getNumberWithCommas(statAmount[2]),
+                  all: formatNumber(statAmount[2]),
                 })}
               </span>
             </React.Fragment>
