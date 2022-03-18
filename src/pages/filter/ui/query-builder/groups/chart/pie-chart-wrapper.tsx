@@ -2,10 +2,10 @@ import { FC, useState } from 'react'
 import styled from 'styled-components'
 
 import { StatList } from '@declarations'
+import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import { Icon } from '@ui/icon'
-import { getNumberWithCommas } from '../../ui/next-step-route'
 import chartStore from './chart.store'
 import { getShortNumber } from './utils/getShortNumber'
 
@@ -123,7 +123,7 @@ export const PieChartWrapper: FC<IPieChartProps> = ({
                 </LabelRowLeftName>
 
                 <LabelQuantity>
-                  {getNumberWithCommas(variantNumber) +
+                  {formatNumber(variantNumber) +
                     ' ' +
                     t('filter.chart.variants')}
                 </LabelQuantity>
