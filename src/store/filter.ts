@@ -1,5 +1,4 @@
 import cloneDeep from 'lodash/cloneDeep'
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 import { TVariant } from 'service-providers/common/common.interface'
@@ -9,6 +8,7 @@ import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
@@ -119,19 +119,13 @@ export class FilterStore {
   }
 
   async fetchDsInfoAsync() {
-    const response = await fetch(
-      getApiUrl(`dsinfo?ds=${datasetStore.datasetName}`),
-    )
-
-    const result = await response.json()
-
-    return result
+    return await datasetProvider.getDsInfo({ ds: datasetStore.datasetName })
   }
 
   async fetchProblemGroupsAsync() {
     const dsInfo = await this.fetchDsInfoAsync()
 
-    return Object.keys(get(dsInfo, 'meta.samples', {}))
+    return dsInfo.meta.samples
   }
 
   async fetchStatFuncAsync(unit: string, param?: any) {

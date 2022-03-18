@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import { formatNumber } from '@core/format-number'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -12,7 +13,6 @@ import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
 import { showToast } from '@utils/notifications/showToast'
-import { getNumberWithCommas } from './query-builder/ui/next-step-route'
 import { QueryResults } from './query-results'
 
 export const QuerySelected = observer((): ReactElement => {
@@ -58,21 +58,21 @@ export const QuerySelected = observer((): ReactElement => {
             {t('dtree.results')}
             <span className="font-normal text-grey-blue ml-2">
               {'('}
-              {variants}
+              {formatNumber(variants)}
               {')'}
             </span>
           </span>
 
           <span className="text-12 leading-14px text-white mt-2">
             {t('filter.variants', {
-              all: getNumberWithCommas(allVariants),
+              all: formatNumber(allVariants),
             })}
           </span>
 
           {transcribedVariants > 0 && (
             <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcribedVariants', {
-                all: getNumberWithCommas(transcribedVariants),
+                all: formatNumber(transcribedVariants),
               })}
             </span>
           )}
@@ -80,7 +80,7 @@ export const QuerySelected = observer((): ReactElement => {
           {allTranscripts > 0 && (
             <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcripts', {
-                all: getNumberWithCommas(allTranscripts),
+                all: formatNumber(allTranscripts),
               })}
             </span>
           )}
@@ -96,7 +96,7 @@ export const QuerySelected = observer((): ReactElement => {
           <Button
             className="ml-auto"
             text={t('general.apply', {
-              amount: getNumberWithCommas(selectedVariants),
+              amount: formatNumber(selectedVariants),
             })}
             onClick={handleClick}
           />

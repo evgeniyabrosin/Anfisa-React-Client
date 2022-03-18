@@ -1,4 +1,5 @@
 import { FC, memo, useEffect, useRef } from 'react'
+import { ChartData } from 'chart.js'
 import isEqual from 'lodash/isEqual'
 
 import { StatList } from '@declarations'
@@ -35,7 +36,7 @@ export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
           const chart = chartRef.current
 
           const currentChartConfig = isPieChart
-            ? getPieChartConfig(chartData)
+            ? getPieChartConfig(chartData as ChartData<'doughnut'>)
             : getBarChartConfig(chartData)
 
           if (!chart) {
