@@ -9,6 +9,7 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { TNumericCondition } from '@service-providers/common/common.interface'
 import { createNumericExpression } from '@utils/createNumericExpression'
 
 type TNumericExpression = [null | number, boolean, null | number, boolean]
@@ -48,18 +49,20 @@ export const RangePanel = observer((): ReactElement => {
   const handleAddConditionsAsync = async () => {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    await datasetStore.setConditionsAsync([
-      [
-        FilterKindEnum.Numeric,
-        selectedFilter.name,
-        createNumericExpression({
-          expType: NumericExpressionTypes.GreaterThan,
-          minValue: min,
-          maxValue: max,
-        }),
-      ],
-    ])
+    // REMOVE: type any => TNumericCondition
+    const condition: any[] = [
+      FilterKindEnum.Numeric,
+      selectedFilter.name,
+      createNumericExpression({
+        expType: NumericExpressionTypes.GreaterThan,
+        minValue: min,
+        maxValue: max,
+      }),
+    ]
 
+    await datasetStore.setConditionsAsync([condition as TNumericCondition])
+
+    // REMOVE: useless func
     filterStore.addSelectedFilterGroup(
       selectedFilter.vgroup,
       selectedFilter.name,
@@ -74,6 +77,8 @@ export const RangePanel = observer((): ReactElement => {
         ],
       ],
     )
+
+    filterStore.addFilterMap(condition as TNumericCondition)
 
     if (!datasetStore.isXL) {
       datasetStore.fetchWsListAsync()
@@ -94,11 +99,15 @@ export const RangePanel = observer((): ReactElement => {
       datasetStore.resetActivePreset()
     }
 
+    // REMOVE: useless func
     filterStore.removeSelectedFilters({
       group: selectedFilter.vgroup,
       groupItemName: selectedFilter.name,
       variant: [selectedFilter.name, 0],
     })
+
+    filterStore.removeFilterMap('add some id')
+
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
     setIsVisibleMixedError(false)

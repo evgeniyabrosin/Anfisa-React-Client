@@ -18,6 +18,7 @@ import {
   ICompoundRequestArgs,
   ICustomInheritanceModeArgs,
   IRecordDescriptor,
+  TFuncArgs,
   TFuncCondition,
 } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -25,7 +26,7 @@ import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { isConditionArgsTypeOf } from '@utils/function-panel/isConditionArgsTypeOf'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
-import { TFuncArgs } from './../service-providers/common/common.interface'
+import { TCondition } from './../service-providers/common/common.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -351,6 +352,7 @@ export class DatasetStore {
     return result
   }
 
+  // REMOVE: useless func
   getVariantValue(groupItemName: string, condition: TFuncCondition) {
     const conditionArgs = condition[4] as TFuncArgs
 
@@ -378,6 +380,7 @@ export class DatasetStore {
     return condition[condition.length - 2] as string
   }
 
+  // REMOVE: useless func
   getConditionValue(
     groupItemName: FuncStepTypesEnum,
     condition: TFuncCondition,
@@ -409,6 +412,10 @@ export class DatasetStore {
         (item: any) => item.name === groupItemName,
       )
 
+      // REMOVE: change condition type above
+      filterStore.addFilterMap(condition as TCondition)
+
+      // REMOVE: useless func
       if (condition[0] === FilterKindEnum.Enum) {
         condition[3]?.forEach((value: string) => {
           filterStore.addSelectedFilters({
@@ -419,6 +426,7 @@ export class DatasetStore {
         })
       }
 
+      // REMOVE: useless func
       if (condition[0] === FilterKindEnum.Func) {
         const variantValue = this.getVariantValue(
           groupItemName,
@@ -442,6 +450,7 @@ export class DatasetStore {
         })
       }
 
+      // REMOVE: useless func
       if (condition[0] === FilterKindEnum.Numeric) {
         filterStore.addSelectedFilters({
           group: filterItem.vgroup,

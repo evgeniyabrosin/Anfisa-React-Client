@@ -6,25 +6,30 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { SelectedFilterCard } from './selected-filter-card'
 
+export interface IHandleRemoveFilter {
+  filterId: string
+  filterName: string
+  subFilterName: string
+}
+
 export const QueryResults = observer((): ReactElement => {
   const keys = Object.keys(filterStore.selectedFilters)
 
-  const handleRemoveItem = (
-    itemName: string,
-    subGroupKey: string,
-    title: string,
-  ) => {
+  const selectedFilters = filterStore.selectedFiltersMapAsArray
+
+  // REMOVE: there should be only filterId, subFilterIndex
+  const handleRemoveFilter = ({
+    filterId,
+    filterName,
+    subFilterName,
+  }: IHandleRemoveFilter) => {
     datasetStore.resetActivePreset()
 
-    filterStore.removeSelectedFilters({
-      group: subGroupKey,
-      groupItemName: title,
-      variant: [itemName, 0],
-    })
+    filterStore.removeFilterMap(filterId)
 
     datasetStore.removeCondition({
-      subGroup: title,
-      itemName,
+      subGroup: filterName,
+      itemName: subFilterName,
     })
 
     if (!datasetStore.isXL) {
@@ -50,18 +55,12 @@ export const QueryResults = observer((): ReactElement => {
       className="overflow-y-scroll"
       style={{ height: 'calc(100vh - 280px)' }}
     >
-      {keys.map(subGroupKey => (
-        <div key={subGroupKey} className="flex flex-col">
-          {Object.keys(filterStore.selectedFilters[subGroupKey]).map(title => (
-            <SelectedFilterCard
-              key={title}
-              title={title}
-              filters={filterStore.selectedFilters[subGroupKey][title]}
-              onRemove={itemName =>
-                handleRemoveItem(itemName, subGroupKey, title)
-              }
-            />
-          ))}
+      {selectedFilters.map(([filterId, filter]) => (
+        <div key={filterId} className="flex flex-col">
+          <SelectedFilterCard
+            filter={filter}
+            handleRemoveFilter={handleRemoveFilter}
+          />
         </div>
       ))}
     </div>

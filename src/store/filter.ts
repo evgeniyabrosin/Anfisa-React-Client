@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { nanoid } from 'nanoid'
 import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
@@ -9,6 +10,7 @@ import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import { TCondition } from './../service-providers/common/common.interface'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
@@ -22,15 +24,23 @@ interface AddSelectedFiltersI {
   variant?: TVariant
 }
 
+export interface IFilter {
+  filterId: string
+  condition: TCondition
+}
+
 export class FilterStore {
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
+
+  private _selectedFiltersMap = new Map<string, IFilter>()
+
   actionName?: ActionFilterEnum
   statFuncData: any = []
   filterCondition: Record<string, any> = {}
-  memorizedSelectedFilters: SelectedFiltersType | undefined = undefined
+  memorizedSelectedFilters: SelectedFiltersType | undefined | any = undefined
 
   selectedFiltersHistory: SelectedFiltersType[] = []
 
@@ -54,6 +64,26 @@ export class FilterStore {
     this.selectedGroupItem = item
   }
 
+  public get selectedFiltersMap(): Map<string, IFilter> {
+    return this._selectedFiltersMap
+  }
+
+  // REMOVE: add type
+  public get selectedFiltersMapAsArray(): [string, IFilter][] {
+    return Array.from(this._selectedFiltersMap)
+
+    // return Array.from(this._filters.values()).map(filterItem => ({
+    //   ...filterItem,
+    //   filters: Array.from(filterItem.filters.values()),
+    // }))
+  }
+
+  // REMOVE: useless func
+  setSelectedFilters(filters: SelectedFiltersType) {
+    this.selectedFilters = JSON.parse(JSON.stringify(filters))
+  }
+
+  // REMOVE: useless func
   addSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
@@ -68,6 +98,25 @@ export class FilterStore {
     }
   }
 
+  addFilterMap(condition: TCondition): void {
+    const filterId: string = nanoid()
+
+    const newFilter = { filterId: filterId, condition: condition }
+
+    this._selectedFiltersMap.set(filterId, newFilter)
+  }
+
+  removeFilterMap(filterId: string): void {
+    this._selectedFiltersMap.delete(filterId)
+  }
+
+  changeFilterMap(filterId: string, condition: TCondition): void {
+    const currentFilter = this._selectedFiltersMap.get(filterId)
+
+    currentFilter!.condition = condition
+  }
+
+  // REMOVE: useless func
   removeSelectedFilters({
     group,
     groupItemName,
@@ -90,6 +139,7 @@ export class FilterStore {
     }
   }
 
+  // REMOVE: useless func
   addSelectedFilterGroup(
     group: string,
     groupItemName: string,
@@ -106,16 +156,6 @@ export class FilterStore {
     variants.forEach(variant => {
       this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
     })
-  }
-
-  removeSelectedFiltersGroup(group: string, groupItemName: string) {
-    if (this.selectedFilters[group][groupItemName]) {
-      delete this.selectedFilters[group][groupItemName]
-    }
-
-    if (isEmpty(this.selectedFilters[group])) {
-      delete this.selectedFilters[group]
-    }
   }
 
   async fetchDsInfoAsync() {
@@ -162,14 +202,11 @@ export class FilterStore {
     this.selectedGroupItem = {}
     this.dtreeSet = {}
     this.selectedFilters = {}
+    this._selectedFiltersMap = new Map()
   }
 
   resetStatFuncData() {
     this.statFuncData = []
-  }
-
-  setSelectedFilters(filters: SelectedFiltersType) {
-    this.selectedFilters = JSON.parse(JSON.stringify(filters))
   }
 
   setSelectedFiltersHistory(history: SelectedFiltersType[]) {
@@ -200,9 +237,19 @@ export class FilterStore {
     this.memorizedSelectedFilters = toJS(this.selectedFilters)
   }
 
+  memorizeSelectedFiltersMap() {
+    this.memorizedSelectedFilters = toJS(this._selectedFiltersMap)
+  }
+
   applyMemorizedFilters() {
     if (this.memorizedSelectedFilters) {
       this.selectedFilters = this.memorizedSelectedFilters
+    }
+  }
+
+  applyMemorizedFiltersMap() {
+    if (this.memorizedSelectedFilters) {
+      this._selectedFiltersMap = this.memorizedSelectedFilters
     }
   }
 }

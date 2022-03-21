@@ -4,6 +4,10 @@ import { makeAutoObservable, toJS } from 'mobx'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import datasetStore, { DatasetStore } from '@store/dataset'
 import filterStore, { FilterStore } from '@store/filter'
+import {
+  ConditionJoinMode,
+  TEnumCondition,
+} from '@service-providers/common/common.interface'
 
 type FilterAttributesStoreParams = {
   datasetStore: DatasetStore
@@ -76,13 +80,18 @@ export class FilterAttributesStore {
   updateEnumFilter(group: FilterGroup, values: string[]): void {
     const { vgroup, groupName } = group
 
+    const condition: TEnumCondition = [
+      FilterKindEnum.Enum,
+      groupName,
+      ConditionJoinMode.OR,
+      values,
+    ]
+
     if (this.datasetStore.activePreset) {
       this.datasetStore.resetActivePreset()
     }
 
-    this.datasetStore.setConditionsAsync([
-      [FilterKindEnum.Enum, groupName, 'OR', values],
-    ])
+    this.datasetStore.setConditionsAsync([condition])
 
     if (!this.datasetStore.isXL) {
       this.datasetStore.fetchWsListAsync()
@@ -107,6 +116,7 @@ export class FilterAttributesStore {
     updatedFilters[vgroup][groupName] = selectedSubAttributes
 
     this.filterStore.setSelectedFilters(updatedFilters)
+    this.filterStore.addFilterMap(condition)
   }
 
   updateCurrentGroupEnumFilter(values: string[]): void {

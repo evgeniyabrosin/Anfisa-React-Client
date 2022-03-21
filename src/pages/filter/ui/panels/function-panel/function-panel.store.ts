@@ -70,6 +70,7 @@ class FunctionPanelStore {
     await datasetStore.setConditionsAsync([conditions], 'func')
   }
 
+  // REMOVE: useless func
   public addSelectedFilters(variant: TVariant): void {
     filterStore.addSelectedFilters({
       group: this.filterGroup,
@@ -78,10 +79,13 @@ class FunctionPanelStore {
     })
   }
 
-  public sumbitConditions(conditions: TFuncCondition, variant: TVariant): void {
+  public sumbitConditions(condition: TFuncCondition, variant: TVariant): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    this.applyConditions(conditions)
+    // REMOVE: useless func
+    this.applyConditions(condition)
+
+    filterStore.addFilterMap(condition)
 
     this.addSelectedFilters(variant)
 
@@ -101,6 +105,7 @@ class FunctionPanelStore {
       delete localSelectedFilters[this.filterGroup][this.filterName]
     }
 
+    // probably excess func
     filterStore.setSelectedFilters(localSelectedFilters)
   }
 

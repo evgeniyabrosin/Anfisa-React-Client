@@ -3,7 +3,7 @@ import { ReactElement, useEffect } from 'react'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { QueryBuilderGroups } from './query-builder/groups/query-builder-groups'
-import { QuerySelected } from './query-selected'
+import { QuerySelected } from './query-builder/right-refiner-column/query-selected'
 import { SelectedGroup } from './selected-group'
 
 export const FilterRefiner = (): ReactElement => {
