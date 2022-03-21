@@ -19,15 +19,13 @@ export const Preset = observer((): ReactElement => {
   const onSelectAsync = async (arg: Option, reset?: string) => {
     datasetStore.setActivePreset(arg.value)
 
-    if (datasetStore.prevPreset !== datasetStore.activePreset) {
-      filterPresetStore.loadPresetAsync(arg.value, 'ws')
+    filterPresetStore.loadPresetAsync(arg.value, 'ws')
 
-      datasetStore.fetchWsListAsync(false, 'reset')
-      datasetStore.setIsLoadingTabReport(true)
+    datasetStore.fetchWsListAsync(false, 'reset')
+    datasetStore.setIsLoadingTabReport(true)
 
-      reset && datasetStore.resetActivePreset()
-      reset && datasetStore.resetPrevPreset()
-    }
+    reset && datasetStore.resetActivePreset()
+    reset && datasetStore.resetPrevPreset()
   }
 
   return (
