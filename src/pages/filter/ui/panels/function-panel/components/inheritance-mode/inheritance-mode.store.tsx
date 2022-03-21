@@ -131,9 +131,7 @@ class InheritanceModeStore {
       },
     ]
 
-    const variant: TVariant = [`${this.variantsValues}`, 0]
-
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions)
 
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.InheritanceMode,

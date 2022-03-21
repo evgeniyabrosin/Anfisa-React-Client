@@ -4,10 +4,7 @@ import { makeAutoObservable, toJS } from 'mobx'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import {
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
+import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 
 class FunctionPanelStore {
@@ -67,27 +64,16 @@ class FunctionPanelStore {
   }
 
   public async applyConditions(conditions: TFuncCondition): Promise<void> {
-    await datasetStore.setConditionsAsync([conditions], 'func')
+    await datasetStore.setConditionsAsync([conditions])
   }
 
-  // REMOVE: useless func
-  public addSelectedFilters(variant: TVariant): void {
-    filterStore.addSelectedFilters({
-      group: this.filterGroup,
-      groupItemName: this.filterName,
-      variant: variant,
-    })
-  }
-
-  public sumbitConditions(condition: TFuncCondition, variant: TVariant): void {
+  public sumbitConditions(condition: TFuncCondition): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
     // REMOVE: useless func
     this.applyConditions(condition)
 
     filterStore.addFilterMap(condition)
-
-    this.addSelectedFilters(variant)
 
     if (!datasetStore.isXL) {
       datasetStore.fetchWsListAsync()

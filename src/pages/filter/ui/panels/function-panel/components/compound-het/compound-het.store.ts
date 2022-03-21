@@ -7,7 +7,6 @@ import filterStore from '@store/filter'
 import {
   ConditionJoinMode,
   TFuncCondition,
-  TVariant,
 } from '@service-providers/common/common.interface'
 import functionPanelStore from '../../function-panel.store'
 import { ICompoundHetCachedValues } from './../../function-panel.interface'
@@ -84,9 +83,7 @@ class CompoundHetStore {
       { approx: this.cachedValues?.conditions.approx || null, state: null },
     ]
 
-    const variant: TVariant = ['Proband', 0]
-
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions)
   }
 
   public handleResetFields(): void {

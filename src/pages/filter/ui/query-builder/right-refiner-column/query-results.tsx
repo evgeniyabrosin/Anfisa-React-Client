@@ -10,11 +10,11 @@ export interface IHandleRemoveFilter {
   filterId: string
   filterName: string
   subFilterName: string
+  subFilterIdx: number
+  filterType: string
 }
 
 export const QueryResults = observer((): ReactElement => {
-  const keys = Object.keys(filterStore.selectedFilters)
-
   const selectedFilters = filterStore.selectedFiltersMapAsArray
 
   // REMOVE: there should be only filterId, subFilterIndex
@@ -22,10 +22,12 @@ export const QueryResults = observer((): ReactElement => {
     filterId,
     filterName,
     subFilterName,
+    subFilterIdx,
+    filterType,
   }: IHandleRemoveFilter) => {
     datasetStore.resetActivePreset()
 
-    filterStore.removeFilterMap(filterId)
+    filterStore.removeFilterMap({ filterId, subFilterIdx, filterType })
 
     datasetStore.removeCondition({
       subGroup: filterName,
@@ -37,7 +39,7 @@ export const QueryResults = observer((): ReactElement => {
     }
   }
 
-  if (keys.length === 0) {
+  if (selectedFilters.length === 0) {
     return (
       <div
         style={{ height: 'calc(100vh - 223px)' }}

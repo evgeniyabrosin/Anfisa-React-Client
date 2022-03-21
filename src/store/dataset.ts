@@ -14,18 +14,10 @@ import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
-import {
-  ICompoundRequestArgs,
-  ICustomInheritanceModeArgs,
-  IRecordDescriptor,
-  TFuncArgs,
-  TFuncCondition,
-} from '@service-providers/common/common.interface'
+import { IRecordDescriptor } from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { isConditionArgsTypeOf } from '@utils/function-panel/isConditionArgsTypeOf'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
-import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
 import { TCondition } from './../service-providers/common/common.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
@@ -352,117 +344,13 @@ export class DatasetStore {
     return result
   }
 
-  // REMOVE: useless func
-  getVariantValue(groupItemName: string, condition: TFuncCondition) {
-    const conditionArgs = condition[4] as TFuncArgs
-
-    if (groupItemName === FuncStepTypesEnum.GeneRegion) {
-      return JSON.stringify(conditionArgs)
-    }
-
-    if (groupItemName === FuncStepTypesEnum.CustomInheritanceMode) {
-      return JSON.stringify(conditionArgs).replace(/[{}]/g, '')
-    }
-
-    if (
-      isConditionArgsTypeOf<ICompoundRequestArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CompoundRequest,
-      )
-    ) {
-      return `"request:" ${JSON.stringify(conditionArgs.request).replace(
-        /[{}]/g,
-        '',
-      )}`
-    }
-
-    return condition[condition.length - 2] as string
-  }
-
-  // REMOVE: useless func
-  getConditionValue(
-    groupItemName: FuncStepTypesEnum,
-    condition: TFuncCondition,
-  ) {
-    const conditionArgs = condition[4]
-
-    if (
-      isConditionArgsTypeOf<ICustomInheritanceModeArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CustomInheritanceMode,
-      )
-    ) {
-      return { scenario: Object.entries(conditionArgs.scenario) }
-    }
-
-    return conditionArgs
-  }
-
   updatePresetLoad(dsStatData: any, source?: string) {
     this.conditions = dsStatData.conditions
     filterStore.selectedFilters = {}
     this.startPresetConditions = [...this.conditions]
 
-    dsStatData.conditions?.forEach((condition: any[]) => {
-      const groupItemName = condition[1]
-
-      const filterItem = this.startDsStat['stat-list']?.find(
-        (item: any) => item.name === groupItemName,
-      )
-
-      // REMOVE: change condition type above
+    dsStatData.conditions?.forEach((condition: TCondition) => {
       filterStore.addFilterMap(condition as TCondition)
-
-      // REMOVE: useless func
-      if (condition[0] === FilterKindEnum.Enum) {
-        condition[3]?.forEach((value: string) => {
-          filterStore.addSelectedFilters({
-            group: filterItem.vgroup,
-            groupItemName,
-            variant: [value, 0],
-          })
-        })
-      }
-
-      // REMOVE: useless func
-      if (condition[0] === FilterKindEnum.Func) {
-        const variantValue = this.getVariantValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [variantValue, 0],
-        })
-
-        const conditionValue = this.getConditionValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.setFilterCondition(groupItemName, {
-          conditions: conditionValue,
-          variants: condition[3],
-        })
-      }
-
-      // REMOVE: useless func
-      if (condition[0] === FilterKindEnum.Numeric) {
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [groupItemName, condition[condition.length - 1]],
-        })
-
-        filterStore.setFilterCondition(
-          groupItemName,
-          condition[condition.length - 1],
-        )
-      }
     })
 
     !source || (this.isXL && this.fetchDsStatAsync())

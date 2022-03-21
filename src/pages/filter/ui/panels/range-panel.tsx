@@ -106,8 +106,6 @@ export const RangePanel = observer((): ReactElement => {
       variant: [selectedFilter.name, 0],
     })
 
-    filterStore.removeFilterMap('add some id')
-
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
     setIsVisibleMixedError(false)

@@ -11,17 +11,21 @@ interface Props {
     filterId,
     filterName,
     subFilterName,
+    filterType,
+    subFilterIdx,
   }: IHandleRemoveFilter) => void
+  filterType: string
 }
 
 export const EnumFilter = ({
   filterId,
   filterName,
   filterContent,
+  filterType,
   handleRemoveFilter,
 }: Props): ReactElement => (
   <>
-    {filterContent.map(subFilterName => (
+    {filterContent.map((subFilterName, subFilterIdx) => (
       <div
         key={filterId + subFilterName}
         className="flex items-center pl-6 py-4"
@@ -33,6 +37,8 @@ export const EnumFilter = ({
               filterId,
               filterName,
               subFilterName,
+              subFilterIdx,
+              filterType,
             })
           }
         />

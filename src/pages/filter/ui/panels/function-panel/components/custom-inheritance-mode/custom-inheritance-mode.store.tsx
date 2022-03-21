@@ -5,7 +5,6 @@ import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import {
   ConditionJoinMode,
   TFuncCondition,
-  TVariant,
 } from '@service-providers/common/common.interface'
 import { getSelectValue } from '@utils/function-panel/getSelectValue'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
@@ -225,9 +224,7 @@ class CustomInheritanceModeStore {
       JSON.parse(`{"scenario":{${this.stringScenario}}}`),
     ]
 
-    const variant: TVariant = [`"scenario": ${this.stringScenario}`, 0]
-
-    functionPanelStore.sumbitConditions(custInhModeConditions, variant)
+    functionPanelStore.sumbitConditions(custInhModeConditions)
   }
 }
 

@@ -4,7 +4,6 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import {
   ConditionJoinMode,
   TFuncCondition,
-  TVariant,
 } from '@service-providers/common/common.interface'
 import functionPanelStore from '../../function-panel.store'
 import { IGeneRegionCachedValues } from './../../function-panel.interface'
@@ -43,9 +42,7 @@ class GeneRegionStore {
       { locus: this.locusValue },
     ]
 
-    const variant: TVariant = [`{"locus":"${this.locusValue}"}`, 0]
-
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions)
   }
 }
 

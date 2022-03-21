@@ -15,6 +15,7 @@ interface Props {
     filterName,
     subFilterName,
   }: IHandleRemoveFilter) => void
+  filterType: string
 }
 
 export const FuncFilter = ({
@@ -23,10 +24,11 @@ export const FuncFilter = ({
   filterContent,
   filterExpression,
   handleRemoveFilter,
+  filterType,
 }: Props): ReactElement => (
   <>
     {filterName === FuncStepTypesEnum.InheritanceMode ? (
-      filterContent.map(subFilterName => (
+      filterContent.map((subFilterName, subFilterIdx) => (
         <div
           className="flex items-center pl-6 py-4"
           key={filterId + subFilterName}
@@ -38,7 +40,9 @@ export const FuncFilter = ({
               handleRemoveFilter({
                 filterId,
                 filterName,
-                subFilterName: filterName,
+                subFilterName,
+                subFilterIdx,
+                filterType,
               })
             }
           />
@@ -57,6 +61,8 @@ export const FuncFilter = ({
               filterId,
               filterName,
               subFilterName: JSON.stringify(filterExpression),
+              subFilterIdx: 0,
+              filterType,
             })
           }
         />

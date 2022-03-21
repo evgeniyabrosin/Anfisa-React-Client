@@ -6,6 +6,7 @@ import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
@@ -27,6 +28,12 @@ interface AddSelectedFiltersI {
 export interface IFilter {
   filterId: string
   condition: TCondition
+}
+
+export interface IRemoveFilter {
+  filterId: string
+  subFilterIdx: number
+  filterType: string
 }
 
 export class FilterStore {
@@ -64,38 +71,13 @@ export class FilterStore {
     this.selectedGroupItem = item
   }
 
-  public get selectedFiltersMap(): Map<string, IFilter> {
-    return this._selectedFiltersMap
-  }
-
-  // REMOVE: add type
   public get selectedFiltersMapAsArray(): [string, IFilter][] {
     return Array.from(this._selectedFiltersMap)
-
-    // return Array.from(this._filters.values()).map(filterItem => ({
-    //   ...filterItem,
-    //   filters: Array.from(filterItem.filters.values()),
-    // }))
   }
 
   // REMOVE: useless func
   setSelectedFilters(filters: SelectedFiltersType) {
     this.selectedFilters = JSON.parse(JSON.stringify(filters))
-  }
-
-  // REMOVE: useless func
-  addSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
-    if (!this.selectedFilters[group]) {
-      this.selectedFilters[group] = {}
-    }
-
-    if (!this.selectedFilters[group][groupItemName]) {
-      this.selectedFilters[group][groupItemName] = {}
-    }
-
-    if (variant) {
-      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
-    }
   }
 
   addFilterMap(condition: TCondition): void {
@@ -106,8 +88,20 @@ export class FilterStore {
     this._selectedFiltersMap.set(filterId, newFilter)
   }
 
-  removeFilterMap(filterId: string): void {
-    this._selectedFiltersMap.delete(filterId)
+  removeFilterMap({ filterId, subFilterIdx, filterType }: IRemoveFilter): void {
+    const currentFilter = this._selectedFiltersMap.get(filterId)
+
+    if (
+      filterType === FilterKindEnum.Numeric ||
+      currentFilter?.condition[3]!.length === 1
+    ) {
+      this._selectedFiltersMap.delete(filterId)
+      return
+    }
+
+    currentFilter!.condition[3] = currentFilter?.condition[3]?.filter(
+      (_filter, idx) => idx !== subFilterIdx,
+    )
   }
 
   changeFilterMap(filterId: string, condition: TCondition): void {

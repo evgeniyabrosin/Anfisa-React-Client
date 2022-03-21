@@ -1,10 +1,11 @@
 import { ReactElement } from 'react'
 import cn from 'classnames'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useToggle } from '@core/hooks/use-toggle'
-import { IFilter } from '@store/filter'
+import filterStore, { IFilter } from '@store/filter'
 import { Icon } from '@ui/icon'
 import {
   TFuncArgs,
@@ -14,13 +15,14 @@ import { EnumFilter } from './enum-filter'
 import { FuncFilter } from './func-filter'
 import { NumericFilter } from './numeric-filter'
 import { IHandleRemoveFilter } from './query-results'
-
 interface SelectedFilterCardProps {
   filter: IFilter
   handleRemoveFilter: ({
     filterId,
     filterName,
     subFilterName,
+    subFilterIdx,
+    filterType,
   }: IHandleRemoveFilter) => void
 }
 
@@ -61,6 +63,8 @@ export const SelectedFilterCard = observer(
                 filterId,
                 filterName,
                 subFilterName: filterName,
+                subFilterIdx: 0,
+                filterType,
               })
             }
           />
@@ -72,6 +76,7 @@ export const SelectedFilterCard = observer(
             filterName={filterName}
             filterContent={filterContent}
             handleRemoveFilter={handleRemoveFilter}
+            filterType={filterType}
           />
         )}
 
@@ -82,6 +87,7 @@ export const SelectedFilterCard = observer(
             filterContent={filterContent}
             filterExpression={filterExpression}
             handleRemoveFilter={handleRemoveFilter}
+            filterType={filterType}
           />
         )}
       </div>

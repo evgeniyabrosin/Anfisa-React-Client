@@ -5,7 +5,6 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import {
   ConditionJoinMode,
   TFuncCondition,
-  TVariant,
 } from '@service-providers/common/common.interface'
 import { getFilteredRequestCondition } from '@utils/function-panel/getFilteredRequestCondition'
 import { getFuncParams } from '@utils/getFuncParams'
@@ -211,12 +210,7 @@ class CompoundRequestStore {
       },
     ]
 
-    const variant: TVariant = [
-      `"request":${getPureRequestString(requestString)}}`,
-      0,
-    ]
-
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions)
   }
 }
 
