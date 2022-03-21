@@ -5,7 +5,7 @@ import {
   IFuncPropertyStatus,
   ISolutionEntryDescription,
   TCondition,
-  TCount,
+  TItemsCount,
   TPropertyStatus,
 } from 'service-providers/common/common.interface'
 
@@ -31,8 +31,8 @@ export interface IDsStatCondSeq {
 
 export interface IDsStat {
   kind: DatasetKinds
-  'total-counts': TCount[]
-  'filtered-counts': TCount[]
+  'total-counts': TItemsCount[]
+  'filtered-counts': TItemsCount[]
   'stat-list': TPropertyStatus[]
   'cur-filter'?: null | string
   conditions: TCondition[]

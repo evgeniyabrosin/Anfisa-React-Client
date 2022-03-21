@@ -1,11 +1,16 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 
-import { StatList } from '@declarations'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
+import {
+  AttributeKinds,
+  IFuncPropertyStatus,
+  TPropertyStatus,
+} from '@service-providers/common'
 import dtreeModalStore from '../../modals.store'
 
 export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
+
 export interface IParams {
   approx: any
   state?: string[] | null
@@ -22,8 +27,7 @@ class ModalEditStore {
     const locationIndex = dtreeModalStore.groupIndexToChange
     const { stepIndexForApi } = activeStepStore
 
-    const location: [number, number] = [+stepIndexForApi, locationIndex]
-    return location
+    return [+stepIndexForApi, locationIndex]
   }
 
   public get variants(): string[] | [string, number] {
@@ -34,33 +38,48 @@ class ModalEditStore {
     return dtreeModalStore.groupNameToChange
   }
 
+  get currentGroupToChange() {
+    if (dtreeModalStore.groupIndexToChange < 0) {
+      return undefined
+    }
+
+    return toJS(
+      dtreeStore.stepData[activeStepStore.activeStepIndex].groups[
+        dtreeModalStore.groupIndexToChange
+      ],
+    )
+  }
+
   public get currentGroupLength(): number {
-    return dtreeStore.stepData[activeStepStore.activeStepIndex].groups[
-      dtreeModalStore.groupIndexToChange
-    ].length
+    return this.currentGroupToChange?.length ?? 0
   }
 
   public get currentStepGroups(): string[] {
-    return dtreeStore.currentStepGroups
+    return toJS(dtreeStore.stepData[activeStepStore.activeStepIndex].groups)
   }
 
-  public get statList(): StatList[] {
-    return dtreeStore.startDtreeStat['stat-list']
+  public get statList(): TPropertyStatus[] {
+    return dtreeStore.stat.list || []
+  }
+
+  get attributeStatusToChange(): TPropertyStatus | undefined {
+    return this.groupName
+      ? toJS(dtreeStore.stat.getAttributeStatusByName(this.groupName))
+      : undefined
+  }
+
+  get funcAttributeStatusToChange(): IFuncPropertyStatus | undefined {
+    const status = this.attributeStatusToChange
+
+    return status && status?.kind === AttributeKinds.FUNC ? status : undefined
   }
 
   public get problemGroups(): string[] {
-    return (
-      this.statList.find((item: any) => item.name === this.groupName)?.family ??
-      []
-    )
+    return this.funcAttributeStatusToChange?.family ?? []
   }
 
-  public get approxModes() {
-    return (
-      this.statList.find((item: any) => item.name === this.groupName)?.[
-        'approx-modes'
-      ] ?? []
-    )
+  public get approxModes(): string[][] {
+    return this.funcAttributeStatusToChange?.['approx-modes'] ?? []
   }
 
   public get approxOptions(): string[] {
