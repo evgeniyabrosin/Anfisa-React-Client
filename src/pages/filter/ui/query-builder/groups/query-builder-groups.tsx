@@ -5,8 +5,8 @@ import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { DeferRender } from '@components/defer-render'
 import { GlbPagesNames } from '@glb/glb-names'
-import { DeferRender } from '@utils/deferRender'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
@@ -18,20 +18,6 @@ export const QueryBuilderGroups = observer((): ReactElement => {
   const subGroupData = Object.values(filteredQueryBuilder)
 
   const chunkSize = 2
-  let groupsCount = Math.trunc(groupNames.length / 2)
-  let requestIdleCallbackIds: number[] = []
-
-  function decrement(id: number) {
-    requestIdleCallbackIds.push(id)
-    groupsCount--
-
-    if (groupsCount === 0) {
-      requestIdleCallbackIds.forEach(requestId => {
-        window.cancelAnimationFrame(requestId)
-      })
-      requestIdleCallbackIds = []
-    }
-  }
 
   const activeStepIndex = dtreeStore.stepData.findIndex(
     step => step.isActive || step.isReturnedVariantsActive,
@@ -78,7 +64,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
           className="overflow-y-auto"
           style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
         >
-          <DeferRender chunkSize={chunkSize} renderId={decrement}>
+          <DeferRender chunkSize={chunkSize}>
             {groupNames.map((groupName, index) => (
               <QueryBuilderSubgroup
                 groupName={groupName}
