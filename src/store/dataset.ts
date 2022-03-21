@@ -264,15 +264,16 @@ export class DatasetStore {
     this.startPresetConditions = []
   }
 
-  async initDatasetAsync(
-    datasetName: string = this.datasetName,
-    prevPage?: string,
-  ) {
+  async initDatasetAsync(datasetName: string = this.datasetName) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
 
-    if (!prevPage) {
+    const isTabReportEmpty = this.tabReport.length === 0
+    const isWsRecordsEmpty = this.wsRecords.length === 0
+    const shouldDataBeUpdated = isTabReportEmpty && isWsRecordsEmpty
+
+    if (shouldDataBeUpdated) {
       await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
 
       this.filteredNo.length === 0

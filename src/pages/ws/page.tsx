@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
-import { useHistory } from 'react-router-dom'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import {
@@ -10,7 +9,6 @@ import {
   withDefault,
 } from 'use-query-params'
 
-import { HistoryLocationState } from '@declarations'
 import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
@@ -34,11 +32,6 @@ const WSPage = observer((): ReactElement => {
   const params = useParams()
 
   useDatasetName()
-
-  const historyLocationState = useHistory().location
-    .state as HistoryLocationState
-
-  const prevPage = historyLocationState?.prevPage || ''
 
   const [query] = useQueryParams({
     variant: NumberParam,
@@ -71,7 +64,7 @@ const WSPage = observer((): ReactElement => {
         variantStore.setDsName(params.get('ds') ?? '')
       }
 
-      await datasetStore.initDatasetAsync(dsName, prevPage)
+      await datasetStore.initDatasetAsync(dsName)
     }
 
     initAsync()
