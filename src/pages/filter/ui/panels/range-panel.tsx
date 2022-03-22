@@ -49,8 +49,7 @@ export const RangePanel = observer((): ReactElement => {
   const handleAddConditionsAsync = async () => {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    // REMOVE: type any => TNumericCondition
-    const condition: any[] = [
+    const condition: TNumericCondition = [
       FilterKindEnum.Numeric,
       selectedFilter.name,
       createNumericExpression({
