@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep'
-import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { nanoid } from 'nanoid'
 
 import { IStatFuncData, StatListType } from '@declarations'
@@ -24,11 +24,10 @@ export interface IRemoveFilter {
 }
 
 export class FilterStore {
+  private _selectedFilters = new Map<string, TCondition>()
+
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
-  dtreeSet: any = {}
-
-  private _selectedFilters = new Map<string, TCondition>()
 
   actionName?: ActionFilterEnum
   statFuncData: any = []
@@ -62,7 +61,7 @@ export class FilterStore {
   }
 
   public get conditions() {
-    return toJS(Array.from(toJS(this._selectedFilters.values())))
+    return Array.from(this._selectedFilters.values())
   }
 
   public addFilterBlock(condition: TCondition): void {
@@ -71,6 +70,7 @@ export class FilterStore {
     this._selectedFilters.set(filterId, condition)
   }
 
+  // TODO: will be implemented after new UX/UI is ready
   // public removeFilterBlock(filterBlockName: string): void {
   //   // const id = this.selectedFiltersMapAsArray.reverse().map(filter => {
   //   //   if (filter[1][1] === filterBlockName) return filter[0]
@@ -145,7 +145,6 @@ export class FilterStore {
   resetData() {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
-    this.dtreeSet = {}
     this.resetSelectedFilters()
   }
 
