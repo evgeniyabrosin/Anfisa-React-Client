@@ -41,6 +41,8 @@ class FilterControlRefinerStore {
 
     if (filterStore.actionName === ActionFilterEnum.Delete) {
       presetStore.deletePreset()
+      filterStore.resetSelectedFilters()
+      datasetStore.fetchDsStatAsync()
     }
 
     if (filterStore.actionName === ActionFilterEnum.Join) {
