@@ -11,7 +11,7 @@ interface IProps {
   validateValue: (e: string) => void
   handleSetValue: (e: string) => void
   isErrorVisible: boolean
-  variants: [string, number]
+  variants: string[] | [string, number]
 }
 
 export const GeneRegionContent = observer(

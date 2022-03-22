@@ -5,10 +5,10 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
+import { selectOptions } from '../../modal-edit/modal-edit.store'
 import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
-import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
   problemGroups: string[]

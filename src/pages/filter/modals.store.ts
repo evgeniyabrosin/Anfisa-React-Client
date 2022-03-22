@@ -14,21 +14,17 @@ class DtreeModalStore {
 
   isModalAttributeVisible = false
   isModalJoinVisible = false
-  isModalNumbersVisible = false
 
-  isModalEditFiltersVisible = false
-  isModalEditInheritanceModeVisible = false
-  isModalEditCustomInheritanceModeVisible = false
-  isModalEditCompoundHetVisible = false
-  isModalEditCompoundRequestVisible = false
-  isModalEditGeneRegionVisible = false
+  isModalInheritanceModeVisible = false
+  isModalCustomInheritanceModeVisible = false
+  isModalCompoundHetVisible = false
+  isModalCompoundRequestVisible = false
+  isModalGeneRegionVisible = false
 
   isModalSelectFilterVisible = false
-  isModalSelectInheritanceModeVisible = false
-  isModalSelectCustomInheritanceModeVisible = false
-  isModalSelectCompoundHetVisible = false
-  isModalSelectCompoundRequestVisible = false
-  isModalSelectGeneRegionVisible = false
+  isModalEditFiltersVisible = false
+
+  isModalNumbersVisible = false
 
   isModalTextEditorVisible = false
   isModalConfirmationVisible = false
@@ -134,130 +130,90 @@ class DtreeModalStore {
 
   // 4. Modals for func attr
 
-  public openModalEditInheritanceMode(groupName: string, groupIndex: number) {
-    this.isModalEditInheritanceModeVisible = true
-
-    this.groupNameToChange = groupName
-
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditInheritanceMode() {
-    this.isModalEditInheritanceModeVisible = false
-  }
-
-  public openModalEditCustomInheritanceMode(
+  public openModalInheritanceMode(
     groupName: string,
-    groupIndex: number,
-  ) {
-    this.isModalEditCustomInheritanceModeVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditCustomInheritanceMode() {
-    this.isModalEditCustomInheritanceModeVisible = false
-  }
-
-  public openModalEditCompoundHet(groupName: string, groupIndex: number) {
-    this.isModalEditCompoundHetVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditCompoundHet() {
-    this.isModalEditCompoundHetVisible = false
-  }
-
-  public openModalEditCompoundRequest(groupName: string, groupIndex: number) {
-    this.isModalEditCompoundRequestVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public openModalEditCustomInheritanceModeFunc(
-    groupName: string,
-    groupIndex: number,
-  ) {
-    this.isModalEditCompoundRequestVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditCompoundRequest() {
-    this.isModalEditCompoundRequestVisible = false
-  }
-
-  public openModalEditGeneRegion(groupName: string, groupIndex: number) {
-    this.isModalEditGeneRegionVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditGeneRegion() {
-    this.isModalEditGeneRegionVisible = false
-  }
-
-  public openModalSelectInheritanceMode(groupName: string, source: string) {
-    this.modalSource = source
-
-    this.isModalSelectInheritanceModeVisible = true
-
-    this.groupNameToChange = groupName
-  }
-
-  public closeModalSelectInheritanceMode() {
-    this.isModalSelectInheritanceModeVisible = false
-  }
-
-  public openModalSelectCustomInheritanceMode(
-    groupName: string,
-    source: string,
+    groupIndex: number | undefined,
+    source: string = '',
   ) {
     this.modalSource = source
-
-    this.isModalSelectCustomInheritanceModeVisible = true
-
+    this.isModalInheritanceModeVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalSelectCustomInheritanceMode() {
-    this.isModalSelectCustomInheritanceModeVisible = false
+  public closeModalInheritanceMode() {
+    this.isModalInheritanceModeVisible = false
   }
 
-  public openModalSelectCompoundHet(groupName: string, source: string) {
+  public openModalCustomInheritanceMode(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
-
-    this.isModalSelectCompoundHetVisible = true
-
+    this.isModalCustomInheritanceModeVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalSelectCompoundHet() {
-    this.isModalSelectCompoundHetVisible = false
+  public closeModalCustomInheritanceMode() {
+    this.isModalCustomInheritanceModeVisible = false
   }
 
-  public openModalSelectCompoundRequest(groupName: string, source: string) {
+  public openModalCompoundHet(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
-
-    this.isModalSelectCompoundRequestVisible = true
-
+    this.isModalCompoundHetVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalSelectCompoundRequest() {
-    this.isModalSelectCompoundRequestVisible = false
+  public closeModalCompoundHet() {
+    this.isModalCompoundHetVisible = false
   }
 
-  public openModalSelectGeneRegion(groupName: string, source: string) {
+  public openModalCompoundRequest(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
-
-    this.isModalSelectGeneRegionVisible = true
+    this.isModalCompoundRequestVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalSelectGeneRegion() {
-    this.isModalSelectGeneRegionVisible = false
+  public openModalCustomInheritanceModeFunc(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
+    this.modalSource = source
+    this.isModalCustomInheritanceModeVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
+  }
+
+  public closeModalCompoundRequest() {
+    this.isModalCompoundRequestVisible = false
+  }
+
+  public openModalGeneRegion(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
+    this.modalSource = source
+    this.isModalGeneRegionVisible = true
+    this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
+  }
+
+  public closeModalGeneRegion() {
+    this.isModalGeneRegionVisible = false
   }
 
   // 5. Modal for editing dtree code (new / loaded)

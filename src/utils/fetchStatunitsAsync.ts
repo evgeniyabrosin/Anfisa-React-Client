@@ -9,6 +9,13 @@ export const fetchStatunitsAsync = async (
   statList: any[],
   stepIndex?: string,
 ) => {
+  const isRefiner = filterStore.method === GlbPagesNames.Refiner
+
+  if (!isRefiner) {
+    // Dtree has own fetch mechanism
+    return
+  }
+
   const incompletePropertyList: string[] = []
 
   statList.forEach(element => {
@@ -32,16 +39,9 @@ export const fetchStatunitsAsync = async (
     units: JSON.stringify(incompletePropertyList),
   })
 
-  const isRefiner = filterStore.method === GlbPagesNames.Refiner
+  const conditions = JSON.stringify(datasetStore.conditions)
 
-  if (isRefiner) {
-    const conditions = JSON.stringify(datasetStore.conditions)
-
-    body.append('conditions', conditions)
-  } else {
-    stepIndex && body.append('no', stepIndex)
-    dtreeStore.dtreeCode && body.append('code', dtreeStore.dtreeCode)
-  }
+  body.append('conditions', conditions)
 
   const response = await fetch(getApiUrl('statunits'), {
     method: 'POST',
@@ -68,9 +68,7 @@ export const fetchStatunitsAsync = async (
 
   const filteredStatList = getFilteredAttrsList(newStatList)
 
-  isRefiner
-    ? datasetStore.setStatList(filteredStatList)
-    : dtreeStore.setStatList(filteredStatList)
+  datasetStore.setStatList(filteredStatList)
 
   fetchStatunitsAsync(newStatList, stepIndex)
 }

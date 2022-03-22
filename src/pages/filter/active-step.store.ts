@@ -71,10 +71,7 @@ class ActiveStep {
 
   makeStepActive(index: number, option: ActiveStepOptions) {
     this.setActiveStep(index, option)
-    dtreeStore.changeStepDataAcitveStep(index, option)
-
-    const { dtreeCode } = dtreeStore
-    dtreeStore.fetchDtreeStatAsync(dtreeCode, this.stepIndexForApi)
+    dtreeStore.changeStepDataActiveStep(index, option, this.stepIndexForApi)
   }
 
   createEmptyStep(stepIndex: number, position: CreateEmptyStepPositions) {

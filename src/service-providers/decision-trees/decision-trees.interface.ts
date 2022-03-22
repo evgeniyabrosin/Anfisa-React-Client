@@ -2,24 +2,24 @@ import {
   DatasetKinds,
   ISolutionEntryDescription,
   TCondition,
-  TCount,
+  TItemsCount,
   TPropertyStatus,
 } from 'service-providers/common/common.interface'
 
 // dtree_set
 
-export enum DtreeModyfyingActions {
+export enum DtreeModifyingActions {
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
 }
 
-export type TDtreeModyfyingActions = [
+export type TDtreeModifyingActions = [
   actionType: 'DTREE',
-  actionName: DtreeModyfyingActions,
+  actionName: DtreeModifyingActions,
   decisionTreeName: string,
 ]
 
-export enum InstrModyfingActionNames {
+export enum InstrModifyingActionNames {
   DUPLICATE = 'DUPLICATE',
   DELETE = 'DELETE',
   NEGATE = 'NEGATE',
@@ -32,9 +32,9 @@ export enum InstrModyfingActionNames {
   COMMENTS = 'COMMENTS',
 }
 
-export type TInstrModyfingActions = [
+export type TInstrModifyingActions = [
   actionType: 'INSTR',
-  actionName: InstrModyfingActionNames,
+  actionName: InstrModifyingActionNames,
   pointNo: number,
   additionalOption: unknown,
 ]
@@ -46,37 +46,37 @@ export enum PointModyfingActionNames {
   JOIN_OR = 'JOIN-OR',
 }
 
-export type TPointModyfingActions = [
+export type TPointModifyingActions = [
   actionType: 'POINT',
   actionName: PointModyfingActionNames,
   pointNo: number,
   condition: TCondition,
 ]
 
-export enum AtomModyfingActionName {
+export enum AtomModifyingActionName {
   EDIT = 'EDIT',
   DELETE = 'DELETE',
 }
 
-export type TAtomModyfingActions = [
+export type TAtomModifyingActions = [
   actionType: 'ATOM',
-  actionName: AtomModyfingActionName,
+  actionName: AtomModifyingActionName,
   atomLocation: [pointNo: number, atomNoInPointAtomList: number],
   additionalArgument?: unknown,
 ]
 
-export type TModyfyingAction =
-  | TDtreeModyfyingActions
-  | TInstrModyfingActions
-  | TPointModyfingActions
-  | TAtomModyfingActions
+export type TModifyingAction =
+  | TDtreeModifyingActions
+  | TInstrModifyingActions
+  | TPointModifyingActions
+  | TAtomModifyingActions
 
 export interface IDtreeSetArguments {
   ds: string
   tm?: string
   dtree?: string
   code?: string
-  instr: TModyfyingAction
+  instr: TModifyingAction
 }
 
 export enum DtreeSetPointKinds {
@@ -95,11 +95,11 @@ export interface IDtreeSetPoint {
   actions: string[]
 }
 
-export type PointCount = TCount | null
+export type PointCount = TItemsCount | null
 
 export interface IDtreeSet {
   kind: DatasetKinds
-  'total-counts': TCount[]
+  'total-counts': TItemsCount[]
   'point-counts': PointCount[]
   code: string
   points: IDtreeSetPoint[]
@@ -143,11 +143,11 @@ export interface IDtreeStatArguments {
   no?: string
 }
 
-export interface IDtreeStat {
-  'total-counts': TCount[]
-  'filtered-counts': TCount[]
+export interface IDtreeStatResponse {
+  'total-counts': TItemsCount
+  'filtered-counts': TItemsCount
   'stat-list': TPropertyStatus[]
-  rq_id: string
+  'rq-id': string
 }
 
 // dtree_check
@@ -175,4 +175,21 @@ export interface IDtreeCmpArguments {
 
 export interface IDtreeCmp {
   cmp: string[][]
+}
+
+export type TDtreeStat = {
+  list: TPropertyStatus[]
+  filteredCounts: TItemsCount
+  totalCounts: TItemsCount
+}
+
+export type TGetFullDtreeStatParams = {
+  ds: string
+  no: string
+  code: string
+}
+
+export type TGetFullDtreeStatOptions = {
+  abortSignal?: AbortSignal
+  onPartialResponse?: (response: TDtreeStat) => void
 }

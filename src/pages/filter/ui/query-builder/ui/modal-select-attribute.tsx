@@ -52,7 +52,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
       </div>
 
       <div id="attributes-container" className="flex-1 overflow-y-scroll mt-4">
-        {dtreeStore.isFiltersLoading ? (
+        {dtreeStore.stat.isLoading ? (
           <div className="flex justify-center w-full my-4">
             {t('dtree.loading')}
           </div>
