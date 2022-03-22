@@ -23,7 +23,7 @@ export const addToActionHistory = (
   dtreeStore.setActionHistoryIndex(nextIndex)
 
   if (isFilterRefiner) {
-    //REMOVE: think about it
+    // TODO: implement this logic
     // const filters = filterStore.selectedFilters
     // filtersHistory.push(filters)
     // filterStore.setSelectedFiltersHistory(filtersHistory)

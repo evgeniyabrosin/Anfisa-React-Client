@@ -28,7 +28,7 @@ export class FilterStore {
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
 
-  private _selectedFiltersMap = new Map<string, TCondition>()
+  private _selectedFilters = new Map<string, TCondition>()
 
   actionName?: ActionFilterEnum
   statFuncData: any = []
@@ -58,17 +58,17 @@ export class FilterStore {
   }
 
   public get selectedFiltersArray(): [string, TCondition][] {
-    return Array.from(this._selectedFiltersMap)
+    return Array.from(this._selectedFilters)
   }
 
   public get conditions() {
-    return toJS(Array.from(toJS(this._selectedFiltersMap.values())))
+    return toJS(Array.from(toJS(this._selectedFilters.values())))
   }
 
   public addFilterBlock(condition: TCondition): void {
     const filterId: string = nanoid()
 
-    this._selectedFiltersMap.set(filterId, condition)
+    this._selectedFilters.set(filterId, condition)
   }
 
   // public removeFilterBlock(filterBlockName: string): void {
@@ -80,7 +80,7 @@ export class FilterStore {
   public addFilterToFilterBlock(condition: TCondition): void {
     const filterId: string = nanoid()
 
-    this._selectedFiltersMap.set(filterId, condition)
+    this._selectedFilters.set(filterId, condition)
   }
 
   public removeFilterFromFilterBlock({
@@ -88,13 +88,13 @@ export class FilterStore {
     subFilterIdx,
     filterType,
   }: IRemoveFilter): void {
-    const currentCondition = this._selectedFiltersMap.get(filterId)!
+    const currentCondition = this._selectedFilters.get(filterId)!
 
     if (
       filterType === FilterKindEnum.Numeric ||
       currentCondition[3]?.length === 1
     ) {
-      this._selectedFiltersMap.delete(filterId)
+      this._selectedFilters.delete(filterId)
       return
     }
 
@@ -146,7 +146,11 @@ export class FilterStore {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
     this.dtreeSet = {}
-    this._selectedFiltersMap = new Map()
+    this.resetSelectedFilters()
+  }
+
+  resetSelectedFilters() {
+    this._selectedFilters = new Map()
   }
 
   resetStatFuncData() {
@@ -178,12 +182,12 @@ export class FilterStore {
   }
 
   memorizeSelectedFilters() {
-    this.memorizedSelectedFilters = this._selectedFiltersMap
+    this.memorizedSelectedFilters = this._selectedFilters
   }
 
   applyMemorizedFilters() {
     if (this.memorizedSelectedFilters) {
-      this._selectedFiltersMap = this.memorizedSelectedFilters
+      this._selectedFilters = this.memorizedSelectedFilters
     }
   }
 }

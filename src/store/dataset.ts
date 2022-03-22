@@ -234,14 +234,6 @@ export class DatasetStore {
     dtreeStore.setStatRequestId(result['rq-id'])
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
-    // REMOVE: think about it
-    const conditionFromHistory = bodyFromHistory?.get('conditions')
-    console.log(conditionFromHistory)
-
-    // if (conditionFromHistory) {
-    //   this.conditions = JSON.parse(conditionFromHistory)
-    // }
-
     const statList = result['stat-list']
 
     fetchStatunitsAsync(statList)
@@ -265,6 +257,9 @@ export class DatasetStore {
   }
 
   updatePresetLoad(dsStatData: any, source?: string) {
+    filterStore.resetSelectedFilters()
+    this.startPresetConditions = dsStatData.conditions
+
     dsStatData.conditions?.forEach((condition: TCondition) => {
       filterStore.addFilterBlock(condition as TCondition)
     })

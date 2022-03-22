@@ -5,7 +5,6 @@ import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import {
   ConditionJoinMode,
   TFuncCondition,
-  TVariant,
 } from '@service-providers/common/common.interface'
 import { IInheritanceModeCachedValues } from '../../function-panel.interface'
 import functionPanelStore from '../../function-panel.store'

@@ -25,6 +25,7 @@ import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
+import { TCondition } from '@service-providers/common/common.interface'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
@@ -56,10 +57,11 @@ const WSPage = observer((): ReactElement => {
 
         return [name, group, symbol, [value]]
       })
-      console.log(conditions)
 
-      // REMOVE: think about ot
-      // datasetStore.setConditionsAsync(conditions)
+      // TODO: remove "as Type" afrer refactoring
+      conditions.forEach(condition =>
+        filterStore.addFilterBlock(condition as TCondition),
+      )
     }
 
     const initAsync = async () => {

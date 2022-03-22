@@ -70,7 +70,7 @@ export const RangePanel = observer((): ReactElement => {
   const handleClear = () => {
     const filterName = filterStore.selectedGroupItem.vgroup
 
-    // IMPLEMENT: this logic for deletion attr
+    // TODO: this logic for deletion attr
     // if (!datasetStore.isXL) {
     //   datasetStore.fetchWsListAsync()
     // }

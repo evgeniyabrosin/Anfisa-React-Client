@@ -58,7 +58,7 @@ export const EnumPanel = observer((): ReactElement => {
     filterAttributesStore.clearGroupFilter()
     setSelectedVariants([])
 
-    // IMPLEMENT: this logic for deletion attr
+    // TODO: this logic for deletion attr
     // if (!datasetStore.isXL) {
     //   datasetStore.fetchWsListAsync()
     // }

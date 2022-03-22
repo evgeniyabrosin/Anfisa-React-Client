@@ -53,7 +53,7 @@ export class FilterAttributesStore {
   }
 
   clearGroupFilter(): void {
-    // IMPLEMENT: this logic for deletion attr
+    // TODO: this logic for deletion attr
     // if (!datasetStore.isXL) {
     //   datasetStore.fetchWsListAsync()
     // }
