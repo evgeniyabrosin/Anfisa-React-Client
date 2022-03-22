@@ -72,19 +72,19 @@ export const NextStepContentItem = observer(
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeModalStore.openModalEditInheritanceMode(group[1], currNo)
+          dtreeModalStore.openModalInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeModalStore.openModalEditCustomInheritanceMode(group[1], currNo)
+          dtreeModalStore.openModalCustomInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundHet &&
-          dtreeModalStore.openModalEditCompoundHet(group[1], currNo)
+          dtreeModalStore.openModalCompoundHet(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundRequest &&
-          dtreeModalStore.openModalEditCompoundRequest(group[1], currNo)
+          dtreeModalStore.openModalCompoundRequest(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
-          dtreeModalStore.openModalEditGeneRegion(group[1], currNo)
+          dtreeModalStore.openModalGeneRegion(group[1], currNo)
       }
     }
 

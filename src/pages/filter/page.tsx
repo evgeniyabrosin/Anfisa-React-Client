@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
+import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
@@ -17,7 +18,6 @@ import { ErrorPage } from '../error/error'
 import { ModalsBlock } from './modals-block'
 import { FilterControl } from './ui/filter-control/filter-control'
 import { QueryBuilder } from './ui/query-builder/query-builder'
-import { getNumberWithCommas } from './ui/query-builder/ui/next-step-route'
 
 const FilterPage = observer((): ReactElement => {
   const isXL = datasetStore.isXL
@@ -58,31 +58,31 @@ const FilterPage = observer((): ReactElement => {
       if (isXL) return toJS(dirinfoStore.dsinfo.total)
 
       if (filterStore.method === GlbPagesNames.Filter) {
-        return getNumberWithCommas(toJS(dtreeStore.statAmount[0]))
+        return formatNumber(toJS(dtreeStore.statAmount[0]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return getNumberWithCommas(toJS(datasetStore.statAmount[0]))
+        return formatNumber(toJS(datasetStore.statAmount[0]))
       }
     }
 
     if (type === 'transcribedVariants') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return getNumberWithCommas(toJS(dtreeStore.statAmount[1]))
+        return formatNumber(toJS(dtreeStore.statAmount[1]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return getNumberWithCommas(toJS(datasetStore.statAmount[1]))
+        return formatNumber(toJS(datasetStore.statAmount[1]))
       }
     }
 
     if (type === 'transcripts') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return getNumberWithCommas(toJS(dtreeStore.statAmount[2]))
+        return formatNumber(toJS(dtreeStore.statAmount[2]))
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return getNumberWithCommas(toJS(datasetStore.statAmount[2]))
+        return formatNumber(toJS(datasetStore.statAmount[2]))
       }
     }
   }

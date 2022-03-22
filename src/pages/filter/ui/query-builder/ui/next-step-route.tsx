@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 import styled from 'styled-components'
 
-import { FilterCountsType } from '@declarations'
+import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
@@ -91,12 +91,6 @@ interface IProps {
   isIncluded: boolean
 }
 
-export function getNumberWithCommas(value: FilterCountsType) {
-  if (typeof value !== 'number') return '...'
-
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
 export const NextStepRoute = observer(
   ({ isExpanded, index, isIncluded }: IProps): ReactElement => {
     const [allVariants, transcribedVariants] = get(
@@ -109,11 +103,11 @@ export const NextStepRoute = observer(
     const currentStep = dtreeStore.getStepData[index]
 
     const changedStartCounts = startFilterCounts
-      ? getNumberWithCommas(startFilterCounts)
+      ? formatNumber(startFilterCounts)
       : startFilterCounts
 
     const changedAllVariants = allVariants
-      ? getNumberWithCommas(allVariants)
+      ? formatNumber(allVariants)
       : allVariants
 
     const alternativeCounts = changedStartCounts || changedAllVariants
@@ -130,15 +124,13 @@ export const NextStepRoute = observer(
       index: index + 1,
     })
 
-    const differenceWithCommas = getNumberWithCommas(currentStep.difference)
+    const differenceWithCommas = formatNumber(currentStep.difference)
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
           <div>
-            {index === 0
-              ? firstStepValue
-              : getNumberWithCommas(startFilterCounts)}
+            {index === 0 ? firstStepValue : formatNumber(startFilterCounts)}
           </div>
         </StartAmount>
 

@@ -1,6 +1,6 @@
-import { StatList } from '@declarations'
+import { TPropertyStatus } from '@service-providers/common/common.interface'
 
-export const getFilteredAttrsList = (data: StatList[]) => {
+export const getFilteredAttrsList = (data: TPropertyStatus[]) => {
   const filteredAttrsList = data.map((item: any) => {
     if (item.kind === 'enum' && item.variants) {
       const filteredVariants = item.variants.filter(

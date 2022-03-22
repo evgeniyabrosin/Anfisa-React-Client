@@ -6,10 +6,10 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
-import { resetOptions } from '../../panels/function-panel/components/compound-request'
+import { selectOptions } from '../../modal-edit/modal-edit.store'
+import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
 import { AllNotModalMods } from './all-not-modal-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
-import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
   problemGroups: string[]

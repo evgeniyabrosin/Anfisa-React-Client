@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { formatNumber } from '@core/format-number'
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
@@ -12,7 +13,6 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 import { changeStep } from '@utils/changeStep'
 import { ExpandContentButton } from './expand-content-button'
 import { ModalOperation } from './modal-operation'
-import { getNumberWithCommas } from './next-step-route'
 import { StepDivider } from './step-divider'
 
 export const Operation = styled.div`
@@ -84,7 +84,7 @@ export const NextStepHeader = observer(
 
             {!isExpanded && (difference || difference === 0) && (
               <div className="ml-2 text-14 text-grey-blue font-normal">
-                {`(${getNumberWithCommas(difference)} variants are ${
+                {`(${formatNumber(difference)} variants are ${
                   isExcluded ? 'excluded' : 'included'
                 })`}
               </div>

@@ -11,6 +11,7 @@ import { RadioButton } from '@ui/radio-button'
 import { ReturnedVariantsDataCy } from '@components/data-testid/returned-variants'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
+import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
 
@@ -57,7 +58,9 @@ export const TableModal = observer(() => {
 
       const requestValue = isRefiner ? conditions : stepIndex
 
-      const result = await fetchDsListAsync(requestValue)
+      const result = await fetchDsListAsync(
+        requestValue as number | TCondition[],
+      )
 
       fetchJobStatusAsync(result.task_id)
     }

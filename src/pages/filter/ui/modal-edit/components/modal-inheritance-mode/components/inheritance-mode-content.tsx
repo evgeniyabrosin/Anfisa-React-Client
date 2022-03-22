@@ -1,23 +1,27 @@
-import { Fragment } from 'react'
+import { ChangeEvent, Fragment } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
-import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
-import { DisabledVariantsAmount } from './disabled-variants-amount'
-import { ModsDivider } from './mods-divider'
+import { DisabledVariantsAmount } from '../../../../query-builder/ui/disabled-variants-amount'
+import { ModsDivider } from '../../../../query-builder/ui/mods-divider'
 
 interface IProps {
-  attrData: StatListType
-  handleProblemGroup: (e: boolean, group: string) => void
-  problemGroupData: string[]
+  problemGroups: string[]
+  setProblemGroups: (e: boolean, group: string) => void
+  selectedProblemGroups: string[]
   handleReset: () => void
 }
 
 export const InheritanceModeContent = observer(
-  ({ attrData, handleProblemGroup, problemGroupData, handleReset }: IProps) => {
+  ({
+    problemGroups,
+    setProblemGroups,
+    selectedProblemGroups,
+    handleReset,
+  }: IProps) => {
     const variants = dtreeStore.statFuncData.variants
 
     const handleCheckGroupItem = (checked: boolean, name: string) => {
@@ -33,17 +37,13 @@ export const InheritanceModeContent = observer(
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div>{t('dtree.problemGroup')}</div>
 
-          {attrData.family.map((group: string) => (
+          {problemGroups.map((group: string) => (
             <div key={group}>
               <Checkbox
-                onChange={(e: any) =>
-                  handleProblemGroup(e.target.checked, group)
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setProblemGroups(e.target.checked, group)
                 }
-                checked={
-                  problemGroupData
-                    ? problemGroupData.includes(group)
-                    : attrData.affected.includes(group)
-                }
+                checked={selectedProblemGroups.includes(group)}
                 className="mx-1 cursor-pointer"
               />
               <span>{group}</span>

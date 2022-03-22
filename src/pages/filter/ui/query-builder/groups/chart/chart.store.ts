@@ -4,44 +4,19 @@ import { makeAutoObservable } from 'mobx'
 import { StatList } from '@declarations'
 import { theme } from '@theme'
 import { ChartRenderModes } from './chart.interface'
+import { getVariantListForPieChart } from './utils/getVariantListForPieChart'
 
 class ChartStore {
   constructor() {
     makeAutoObservable(this)
   }
 
-  // temporary solution. I'll fix it in the next PR
   colorListForPieChart: string[] = [
     theme('colors.blue.bright'),
     theme('colors.purple.bright'),
     theme('colors.yellow.secondary'),
     theme('colors.orange.bright'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
-    theme('colors.grey.disabled'),
+    theme('colors.grey.blue'),
   ]
 
   getBarChartConfig = (data: ChartData): ChartConfiguration => ({
@@ -73,7 +48,9 @@ class ChartStore {
     },
   })
 
-  getPieChartConfig(data: ChartData): ChartConfiguration {
+  getPieChartConfig(
+    data: ChartData<'doughnut'>,
+  ): ChartConfiguration<'doughnut'> {
     return {
       type: 'doughnut',
       data,
@@ -83,6 +60,11 @@ class ChartStore {
           legend: { display: false },
         },
         borderColor: 'transparent',
+        cutout: '60%',
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
       },
     }
   }
@@ -117,9 +99,14 @@ class ChartStore {
       (firstVariant, secondVariant) => secondVariant[1] - firstVariant[1],
     )
 
-    const titleList = filteredVariants.map(varaint => varaint[0])
+    const currentVariants =
+      renderMode === ChartRenderModes.Pie
+        ? getVariantListForPieChart(filteredVariants)
+        : filteredVariants
 
-    const quantityList = filteredVariants.map(element => +element[1])
+    const titleList = currentVariants.map(varaint => varaint[0])
+
+    const quantityList = currentVariants.map(element => +element[1])
 
     const defaultColorList = [theme('colors.blue.bright')]
 
