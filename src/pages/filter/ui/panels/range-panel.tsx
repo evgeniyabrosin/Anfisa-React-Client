@@ -69,21 +69,12 @@ export const RangePanel = observer((): ReactElement => {
   }
 
   const handleClear = () => {
-    // REMOVE: will be changed
-
-    // datasetStore.removeFunctionConditionAsync(selectedFilter.name)
-
     const filterName = filterStore.selectedGroupItem.vgroup
-    // const localSelectedFilters = filterStore.selectedFilters
 
-    // if (
-    //   localSelectedFilters[group]?.[groupItemName] &&
-    //   datasetStore.activePreset
-    // ) {
-    //   datasetStore.resetActivePreset()
+    // IMPLEMENT: this logic for deletion attr
+    // if (!datasetStore.isXL) {
+    //   datasetStore.fetchWsListAsync()
     // }
-
-    // filterStore.removeFilterBlock(selectedFilter.name)
 
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
@@ -91,10 +82,6 @@ export const RangePanel = observer((): ReactElement => {
     setMin('')
     setMax('')
     filterStore.clearFilterCondition(filterName)
-
-    // if (!datasetStore.isXL) {
-    //   datasetStore.fetchWsListAsync()
-    // }
   }
 
   const validateMin = (value: string) => {

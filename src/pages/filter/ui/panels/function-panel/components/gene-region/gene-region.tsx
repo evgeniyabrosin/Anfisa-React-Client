@@ -70,7 +70,6 @@ export const GeneRegion = observer(() => {
           functionPanelStore.clearCachedValues(FuncStepTypesEnum.GeneRegion)
         }
         disabled={!simpleVariants || isErrorVisible}
-        selectedFilterValue={selectedFilterValue}
       />
     </React.Fragment>
   )

@@ -19,8 +19,6 @@ interface SelectedFilterCardProps {
   filterCondition: TCondition
   handleRemoveFilter: ({
     filterId,
-    filterName,
-    subFilterName,
     subFilterIdx,
     filterType,
   }: IHandleRemoveFilter) => void
@@ -64,8 +62,6 @@ export const SelectedFilterCard = observer(
             handleRemoveFilter={() =>
               handleRemoveFilter({
                 filterId,
-                filterName,
-                subFilterName: filterName,
                 subFilterIdx: 0,
                 filterType,
               })

@@ -9,8 +9,6 @@ interface Props {
   filterContent: string[]
   handleRemoveFilter: ({
     filterId,
-    filterName,
-    subFilterName,
     filterType,
     subFilterIdx,
   }: IHandleRemoveFilter) => void
@@ -19,7 +17,6 @@ interface Props {
 
 export const EnumFilter = ({
   filterId,
-  filterName,
   filterContent,
   filterType,
   handleRemoveFilter,
@@ -35,8 +32,6 @@ export const EnumFilter = ({
           onChange={() =>
             handleRemoveFilter({
               filterId,
-              filterName,
-              subFilterName,
               subFilterIdx,
               filterType,
             })

@@ -23,9 +23,9 @@ export const addToActionHistory = (
   dtreeStore.setActionHistoryIndex(nextIndex)
 
   if (isFilterRefiner) {
-    const filters = filterStore.selectedFilters
-
-    filtersHistory.push(filters)
-    filterStore.setSelectedFiltersHistory(filtersHistory)
+    //REMOVE: think about it
+    // const filters = filterStore.selectedFilters
+    // filtersHistory.push(filters)
+    // filterStore.setSelectedFiltersHistory(filtersHistory)
   }
 }

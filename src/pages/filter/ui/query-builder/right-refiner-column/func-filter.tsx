@@ -12,8 +12,8 @@ interface Props {
   filterExpression: TFuncArgs
   handleRemoveFilter: ({
     filterId,
-    filterName,
-    subFilterName,
+    subFilterIdx,
+    filterType,
   }: IHandleRemoveFilter) => void
   filterType: string
 }
@@ -36,11 +36,8 @@ export const FuncFilter = ({
           <Checkbox
             checked
             onChange={() =>
-              //REMOVE: this props to remove
               handleRemoveFilter({
                 filterId,
-                filterName,
-                subFilterName,
                 subFilterIdx,
                 filterType,
               })
@@ -59,8 +56,6 @@ export const FuncFilter = ({
           onChange={() =>
             handleRemoveFilter({
               filterId,
-              filterName,
-              subFilterName: JSON.stringify(filterExpression),
               subFilterIdx: 0,
               filterType,
             })

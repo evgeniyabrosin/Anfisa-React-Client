@@ -8,14 +8,12 @@ import { SelectedFilterCard } from './selected-filter-card'
 
 export interface IHandleRemoveFilter {
   filterId: string
-  filterName: string
-  subFilterName: string
   subFilterIdx: number
   filterType: string
 }
 
 export const QueryResults = observer((): ReactElement => {
-  const selectedFilters = filterStore.selectedFiltersMapAsArray
+  const selectedFilters = filterStore.selectedFiltersArray
 
   const handleRemoveFilter = ({
     filterId,

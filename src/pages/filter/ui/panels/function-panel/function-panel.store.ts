@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash'
 import { makeAutoObservable, toJS } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
@@ -77,32 +76,6 @@ class FunctionPanelStore {
 
   public fetchStatFunc(componentName: string, params: string) {
     return filterStore.fetchStatFuncAsync(componentName, params)
-  }
-
-  public clearGroupFilter(): void {
-    const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
-
-    if (localSelectedFilters[this.filterGroup]?.[this.filterName]) {
-      delete localSelectedFilters[this.filterGroup][this.filterName]
-    }
-  }
-
-  public get isFilterExistsInAppliedPreset(): boolean {
-    return (
-      datasetStore.activePreset !== '' &&
-      filterStore.selectedFilters[this.filterGroup]?.[this.filterName] !==
-        undefined
-    )
-  }
-
-  public isFilterInSelectedFilters(selectedFilterValue: string): boolean {
-    const selectedFilter =
-      filterStore.selectedFilters?.[this.filterGroup]?.[this.filterName]
-
-    return selectedFilter && selectedFilterValue
-      ? selectedFilterValue in
-          filterStore.selectedFilters[this.filterGroup][this.filterName]
-      : false
   }
 }
 

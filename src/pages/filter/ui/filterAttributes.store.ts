@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, toJS } from 'mobx'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
@@ -53,31 +52,18 @@ export class FilterAttributesStore {
     return toJS(this.getDatasetEnumValues(this.currentGroup))
   }
 
-  clearGroupFilter({ vgroup, groupName }: FilterGroup): void {
-    const localSelectedFilters = cloneDeep(this.filterStore.selectedFilters)
-
-    if (localSelectedFilters[vgroup]?.[groupName]) {
-      delete localSelectedFilters[vgroup][groupName]
-
-      // REMOVE: will be changed
-      // if (this.datasetStore.activePreset) {
-      //   this.datasetStore.resetActivePreset()
-      // }
-    }
-    // REMOVE: will be changed
-    // this.datasetStore.removeConditionGroup({ subGroup: groupName })
-
-    if (!this.datasetStore.isXL) {
-      this.datasetStore.fetchWsListAsync()
-    }
-  }
-
-  clearCurrentGroupFilter(): void {
-    this.clearGroupFilter(this.currentGroup)
+  clearGroupFilter(): void {
+    // IMPLEMENT: this logic for deletion attr
+    // if (!datasetStore.isXL) {
+    //   datasetStore.fetchWsListAsync()
+    // }
+    // if (!this.datasetStore.isXL) {
+    //   this.datasetStore.fetchWsListAsync()
+    // }
   }
 
   updateEnumFilter(group: FilterGroup, values: string[]): void {
-    const { vgroup, groupName } = group
+    const { groupName } = group
 
     const condition: TEnumCondition = [
       FilterKindEnum.Enum,
@@ -96,24 +82,6 @@ export class FilterAttributesStore {
     if (!this.datasetStore.isXL) {
       this.datasetStore.fetchWsListAsync()
     }
-
-    const updatedFilters = cloneDeep(this.filterStore.selectedFilters)
-
-    if (!updatedFilters[vgroup]) {
-      updatedFilters[vgroup] = {}
-    }
-
-    const selectedSubAttributes: Record<string, number> = {}
-    const variants = this.getAllEnumVariants(group)
-
-    values.forEach(variantName => {
-      const variant = variants.find(variant => variant[0] === variantName)
-
-      if (variant) {
-        selectedSubAttributes[variant[0]] = variant[1]
-      }
-    })
-    updatedFilters[vgroup][groupName] = selectedSubAttributes
   }
 
   updateCurrentGroupEnumFilter(values: string[]): void {

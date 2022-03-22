@@ -235,7 +235,8 @@ export class DatasetStore {
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
     // REMOVE: think about it
-    // const conditionFromHistory = bodyFromHistory?.get('conditions')
+    const conditionFromHistory = bodyFromHistory?.get('conditions')
+    console.log(conditionFromHistory)
 
     // if (conditionFromHistory) {
     //   this.conditions = JSON.parse(conditionFromHistory)

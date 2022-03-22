@@ -27,7 +27,6 @@ export class FilterStore {
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
   dtreeSet: any = {}
-  selectedFilters: SelectedFiltersType = {}
 
   private _selectedFiltersMap = new Map<string, TCondition>()
 
@@ -58,7 +57,7 @@ export class FilterStore {
     this.selectedGroupItem = item
   }
 
-  public get selectedFiltersMapAsArray(): [string, TCondition][] {
+  public get selectedFiltersArray(): [string, TCondition][] {
     return Array.from(this._selectedFiltersMap)
   }
 
@@ -147,7 +146,6 @@ export class FilterStore {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
     this.dtreeSet = {}
-    this.selectedFilters = {}
     this._selectedFiltersMap = new Map()
   }
 
@@ -180,20 +178,10 @@ export class FilterStore {
   }
 
   memorizeSelectedFilters() {
-    this.memorizedSelectedFilters = toJS(this.selectedFilters)
-  }
-
-  memorizeSelectedFiltersMap() {
-    this.memorizedSelectedFilters = toJS(this._selectedFiltersMap)
+    this.memorizedSelectedFilters = this._selectedFiltersMap
   }
 
   applyMemorizedFilters() {
-    if (this.memorizedSelectedFilters) {
-      this.selectedFilters = this.memorizedSelectedFilters
-    }
-  }
-
-  applyMemorizedFiltersMap() {
     if (this.memorizedSelectedFilters) {
       this._selectedFiltersMap = this.memorizedSelectedFilters
     }
