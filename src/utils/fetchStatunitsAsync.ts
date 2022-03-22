@@ -11,6 +11,8 @@ export const fetchStatunitsAsync = async (
 ) => {
   const incompletePropertyList: string[] = []
 
+  const { conditions } = filterStore
+
   statList.forEach(element => {
     if (element.incomplete) {
       incompletePropertyList.push(element.name)
@@ -35,9 +37,7 @@ export const fetchStatunitsAsync = async (
   const isRefiner = filterStore.method === GlbPagesNames.Refiner
 
   if (isRefiner) {
-    const conditions = JSON.stringify(datasetStore.conditions)
-
-    body.append('conditions', conditions)
+    body.append('conditions', JSON.stringify(conditions))
   } else {
     stepIndex && body.append('no', stepIndex)
     dtreeStore.dtreeCode && body.append('code', dtreeStore.dtreeCode)

@@ -1,24 +1,19 @@
 /* eslint-disable max-lines */
-import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import {
-  DsStatType,
-  IRemoveConditionItem,
-  StatListType,
-  TabReportType,
-} from '@declarations'
-import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { DsStatType, StatListType, TabReportType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
-import { IRecordDescriptor } from '@service-providers/common/common.interface'
+import {
+  IRecordDescriptor,
+  TCondition,
+} from '@service-providers/common/common.interface'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
-import { TCondition } from './../service-providers/common/common.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
@@ -44,7 +39,6 @@ export class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: Condition[] = []
   startPresetConditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
@@ -153,84 +147,8 @@ export class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: Condition[], conditionsType?: string) {
-    if (!conditions[0]) {
-      this.conditions = []
-      await this.fetchDsStatAsync()
-    } else {
-      const groupCondtionsIndex = this.conditions.findIndex(
-        (item: any) => item[1] === conditions[0][1],
-      )
-
-      if (groupCondtionsIndex !== -1 && conditionsType !== 'func') {
-        this.conditions.splice(groupCondtionsIndex, 1)
-      }
-
-      this.conditions = this.conditions.concat(conditions)
-
-      await this.fetchDsStatAsync()
-    }
-
-    return Array.from({ length: this.statAmount[0] })
-  }
-
-  async removeFunctionConditionAsync(functionName: string) {
-    this.conditions = this.conditions.filter(
-      ([, name]) => name !== functionName,
-    )
-
+  async setConditionsAsync() {
     await this.fetchDsStatAsync()
-  }
-
-  removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
-    let cloneConditions: Condition[] = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    const conditionKind = cloneConditions.find(
-      item => item![1] === subGroup,
-    )![0]
-
-    if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
-        (item: string) => item !== itemName,
-      )
-
-      if (filteredItems?.length === 0) {
-        cloneConditions.splice(subGroupIndex, 1)
-      } else {
-        cloneConditions[subGroupIndex][3] = filteredItems
-      }
-    } else if (conditionKind === FilterKindEnum.Func) {
-      cloneConditions = cloneConditions.filter(
-        (condition: any) =>
-          JSON.stringify(condition[condition.length - 1]) !== itemName,
-      )
-    } else {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
-  }
-
-  removeConditionGroup({ subGroup }: { subGroup: string }) {
-    const cloneConditions = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    if (subGroupIndex !== -1) {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
   }
 
   resetPrevPreset() {
@@ -253,7 +171,6 @@ export class DatasetStore {
   }
 
   resetConditions() {
-    this.conditions = []
     this.startPresetConditions = []
   }
 
@@ -287,14 +204,15 @@ export class DatasetStore {
       ds: this.datasetName,
       tm: '0',
     })
+    const { conditions } = filterStore
 
     if (!this.isFilterDisabled) {
-      this.conditions.length > 0 &&
-        localBody.append('conditions', JSON.stringify(this.conditions))
+      conditions.length > 0 &&
+        localBody.append('conditions', JSON.stringify(conditions))
     }
 
     this.activePreset &&
-      this.conditions.length === 0 &&
+      conditions.length === 0 &&
       localBody.append('filter', this.activePreset)
 
     if (shouldSaveInHistory) {
@@ -316,11 +234,12 @@ export class DatasetStore {
     dtreeStore.setStatRequestId(result['rq-id'])
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
-    const conditionFromHistory = bodyFromHistory?.get('conditions')
+    // REMOVE: think about it
+    // const conditionFromHistory = bodyFromHistory?.get('conditions')
 
-    if (conditionFromHistory) {
-      this.conditions = JSON.parse(conditionFromHistory)
-    }
+    // if (conditionFromHistory) {
+    //   this.conditions = JSON.parse(conditionFromHistory)
+    // }
 
     const statList = result['stat-list']
 
@@ -345,12 +264,8 @@ export class DatasetStore {
   }
 
   updatePresetLoad(dsStatData: any, source?: string) {
-    this.conditions = dsStatData.conditions
-    filterStore.selectedFilters = {}
-    this.startPresetConditions = [...this.conditions]
-
     dsStatData.conditions?.forEach((condition: TCondition) => {
-      filterStore.addFilterMap(condition as TCondition)
+      filterStore.addFilterBlock(condition as TCondition)
     })
 
     !source || (this.isXL && this.fetchDsStatAsync())
@@ -495,10 +410,12 @@ export class DatasetStore {
       ds: this.datasetName,
     })
 
+    const { conditions } = filterStore
+
     if (!this.isFilterDisabled) {
       body.append(
         'conditions',
-        kind === 'reset' ? '[]' : JSON.stringify(this.conditions),
+        kind === 'reset' ? '[]' : JSON.stringify(conditions),
       )
       body.append('zone', JSON.stringify(this.zone))
     }
@@ -590,7 +507,7 @@ export class DatasetStore {
 
   memorizeFilterConditions() {
     this.memorizedConditions = {
-      conditions: toJS(this.conditions),
+      conditions: toJS(filterStore.conditions),
       activePreset: this.activePreset,
       zone: toJS(this.zone),
     }

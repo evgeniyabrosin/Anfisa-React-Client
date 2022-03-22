@@ -15,6 +15,7 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore, { Condition } from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ExportPanel } from '@components/export-panel'
@@ -33,6 +34,8 @@ const WSPage = observer((): ReactElement => {
 
   useDatasetName()
 
+  const { conditions } = filterStore
+
   const [query] = useQueryParams({
     variant: NumberParam,
     refiner: withDefault(ArrayParam, []),
@@ -41,7 +44,7 @@ const WSPage = observer((): ReactElement => {
   const { variant, refiner } = query
 
   const hasConditionsInSearchParamsOnly =
-    refiner.length > 0 && datasetStore.conditions.length === 0
+    refiner.length > 0 && conditions.length === 0
 
   Number.isInteger(variant) && variantStore.setIndex(variant as number)
 
@@ -53,8 +56,10 @@ const WSPage = observer((): ReactElement => {
 
         return [name, group, symbol, [value]]
       })
+      console.log(conditions)
 
-      datasetStore.setConditionsAsync(conditions)
+      // REMOVE: think about ot
+      // datasetStore.setConditionsAsync(conditions)
     }
 
     const initAsync = async () => {

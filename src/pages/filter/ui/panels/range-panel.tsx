@@ -60,25 +60,8 @@ export const RangePanel = observer((): ReactElement => {
       }),
     ]
 
-    await datasetStore.setConditionsAsync([condition as TNumericCondition])
-
-    // REMOVE: useless func
-    filterStore.addSelectedFilterGroup(
-      selectedFilter.vgroup,
-      selectedFilter.name,
-      [
-        [
-          selectedFilter.name,
-          createNumericExpression({
-            expType: NumericExpressionTypes.GreaterThan,
-            minValue: min,
-            maxValue: max,
-          }),
-        ],
-      ],
-    )
-
-    filterStore.addFilterMap(condition as TNumericCondition)
+    filterStore.addFilterBlock(condition as TNumericCondition)
+    datasetStore.fetchDsStatAsync()
 
     if (!datasetStore.isXL) {
       datasetStore.fetchWsListAsync()
@@ -86,35 +69,32 @@ export const RangePanel = observer((): ReactElement => {
   }
 
   const handleClear = () => {
-    datasetStore.removeFunctionConditionAsync(selectedFilter.name)
+    // REMOVE: will be changed
 
-    const group = filterStore.selectedGroupItem.vgroup
-    const groupItemName = filterStore.selectedGroupItem.name
-    const localSelectedFilters = filterStore.selectedFilters
+    // datasetStore.removeFunctionConditionAsync(selectedFilter.name)
 
-    if (
-      localSelectedFilters[group]?.[groupItemName] &&
-      datasetStore.activePreset
-    ) {
-      datasetStore.resetActivePreset()
-    }
+    const filterName = filterStore.selectedGroupItem.vgroup
+    // const localSelectedFilters = filterStore.selectedFilters
 
-    // REMOVE: useless func
-    filterStore.removeSelectedFilters({
-      group: selectedFilter.vgroup,
-      groupItemName: selectedFilter.name,
-      variant: [selectedFilter.name, 0],
-    })
+    // if (
+    //   localSelectedFilters[group]?.[groupItemName] &&
+    //   datasetStore.activePreset
+    // ) {
+    //   datasetStore.resetActivePreset()
+    // }
+
+    // filterStore.removeFilterBlock(selectedFilter.name)
 
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
     setIsVisibleMixedError(false)
     setMin('')
     setMax('')
+    filterStore.clearFilterCondition(filterName)
 
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    // if (!datasetStore.isXL) {
+    //   datasetStore.fetchWsListAsync()
+    // }
   }
 
   const validateMin = (value: string) => {

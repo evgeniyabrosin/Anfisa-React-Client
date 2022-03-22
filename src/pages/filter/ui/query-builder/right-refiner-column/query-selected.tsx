@@ -9,6 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
@@ -20,6 +21,7 @@ export const QuerySelected = observer((): ReactElement => {
   const params = useParams()
 
   const variants: any = dirinfoStore.dsinfo.total || 0
+  const { conditions } = filterStore
 
   const [allVariants, transcribedVariants, allTranscripts] = get(
     datasetStore,
@@ -28,15 +30,13 @@ export const QuerySelected = observer((): ReactElement => {
   )
 
   const selectedVariants =
-    datasetStore.conditions.length === 0
-      ? allVariants
-      : datasetStore.filteredNo.length
+    conditions.length === 0 ? allVariants : datasetStore.filteredNo.length
 
   const handleClick = () => {
     let conditionsUrl = ''
 
-    if (datasetStore.conditions.length > 0) {
-      datasetStore.conditions.forEach(condition => {
+    if (conditions.length > 0) {
+      conditions.forEach(condition => {
         conditionsUrl += `&refiner=${condition[0]},${condition[1]},${
           condition[2]
         },${condition[3]?.[0] || ''}`

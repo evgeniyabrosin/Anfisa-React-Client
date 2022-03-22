@@ -37,6 +37,8 @@ class FilterControlRefinerStore {
     createPresetName: string,
     isSelectedFiltersEmpty: boolean,
   ): void => {
+    const { conditions } = filterStore
+
     if (filterStore.actionName === ActionFilterEnum.Delete) {
       presetStore.deletePreset()
     }
@@ -49,7 +51,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToJoin = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,
@@ -90,7 +92,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToModify = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,

@@ -63,17 +63,12 @@ class FunctionPanelStore {
     filterStore.clearFilterCondition(componentName, filterName)
   }
 
-  public async applyConditions(conditions: TFuncCondition): Promise<void> {
-    await datasetStore.setConditionsAsync([conditions])
-  }
-
   public sumbitConditions(condition: TFuncCondition): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    // REMOVE: useless func
-    this.applyConditions(condition)
+    filterStore.addFilterBlock(condition)
 
-    filterStore.addFilterMap(condition)
+    datasetStore.fetchDsStatAsync()
 
     if (!datasetStore.isXL) {
       datasetStore.fetchWsListAsync()
@@ -90,9 +85,6 @@ class FunctionPanelStore {
     if (localSelectedFilters[this.filterGroup]?.[this.filterName]) {
       delete localSelectedFilters[this.filterGroup][this.filterName]
     }
-
-    // probably excess func
-    filterStore.setSelectedFilters(localSelectedFilters)
   }
 
   public get isFilterExistsInAppliedPreset(): boolean {

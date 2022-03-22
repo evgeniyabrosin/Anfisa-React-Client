@@ -37,6 +37,8 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
+    const { conditions } = filterStore
+
     if (
       pathName === PatnNameEnum.Filter &&
       filterStore.method === GlbPagesNames.Filter &&
@@ -60,7 +62,7 @@ export const ModalSaveDataset = observer(() => {
     if (
       pathName === PatnNameEnum.Ws &&
       !datasetStore.activePreset &&
-      datasetStore.conditions.length === 0
+      conditions.length === 0
     ) {
       setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
     }

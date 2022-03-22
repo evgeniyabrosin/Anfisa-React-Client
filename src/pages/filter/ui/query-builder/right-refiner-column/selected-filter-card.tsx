@@ -1,13 +1,12 @@
 import { ReactElement } from 'react'
 import cn from 'classnames'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useToggle } from '@core/hooks/use-toggle'
-import filterStore, { IFilter } from '@store/filter'
 import { Icon } from '@ui/icon'
 import {
+  TCondition,
   TFuncArgs,
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
@@ -16,7 +15,8 @@ import { FuncFilter } from './func-filter'
 import { NumericFilter } from './numeric-filter'
 import { IHandleRemoveFilter } from './query-results'
 interface SelectedFilterCardProps {
-  filter: IFilter
+  filterId: string
+  filterCondition: TCondition
   handleRemoveFilter: ({
     filterId,
     filterName,
@@ -27,14 +27,17 @@ interface SelectedFilterCardProps {
 }
 
 export const SelectedFilterCard = observer(
-  ({ filter, handleRemoveFilter }: SelectedFilterCardProps): ReactElement => {
+  ({
+    filterId,
+    filterCondition,
+    handleRemoveFilter,
+  }: SelectedFilterCardProps): ReactElement => {
     const [isOpen, open, close] = useToggle(true)
 
-    const filterType: string = filter.condition[0]
-    const filterName: string = filter.condition[1]
-    const filterContent: string[] = filter.condition[3]!
-    const filterId: string = filter.filterId
-    const filterExpression: TFuncArgs = filter.condition[4]!
+    const filterType: string = filterCondition[0]
+    const filterName: string = filterCondition[1]
+    const filterContent: string[] = filterCondition[3]!
+    const filterExpression: TFuncArgs = filterCondition[4]!
 
     return (
       <div>
@@ -57,7 +60,7 @@ export const SelectedFilterCard = observer(
           <NumericFilter
             filterId={filterId}
             filterName={filterName}
-            numericExpression={filter.condition[2] as TNumericConditionBounds}
+            numericExpression={filterCondition[2] as TNumericConditionBounds}
             handleRemoveFilter={() =>
               handleRemoveFilter({
                 filterId,

@@ -1,8 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
-import isEmpty from 'lodash/isEmpty'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 import { nanoid } from 'nanoid'
-import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
@@ -19,17 +17,6 @@ export type SelectedFiltersType = Record<
   Record<string, Record<string, number>>
 >
 
-interface AddSelectedFiltersI {
-  group: string
-  groupItemName: string
-  variant?: TVariant
-}
-
-export interface IFilter {
-  filterId: string
-  condition: TCondition
-}
-
 export interface IRemoveFilter {
   filterId: string
   subFilterIdx: number
@@ -42,7 +29,7 @@ export class FilterStore {
   dtreeSet: any = {}
   selectedFilters: SelectedFiltersType = {}
 
-  private _selectedFiltersMap = new Map<string, IFilter>()
+  private _selectedFiltersMap = new Map<string, TCondition>()
 
   actionName?: ActionFilterEnum
   statFuncData: any = []
@@ -71,85 +58,50 @@ export class FilterStore {
     this.selectedGroupItem = item
   }
 
-  public get selectedFiltersMapAsArray(): [string, IFilter][] {
+  public get selectedFiltersMapAsArray(): [string, TCondition][] {
     return Array.from(this._selectedFiltersMap)
   }
 
-  // REMOVE: useless func
-  setSelectedFilters(filters: SelectedFiltersType) {
-    this.selectedFilters = JSON.parse(JSON.stringify(filters))
+  public get conditions() {
+    return toJS(Array.from(toJS(this._selectedFiltersMap.values())))
   }
 
-  addFilterMap(condition: TCondition): void {
+  public addFilterBlock(condition: TCondition): void {
     const filterId: string = nanoid()
 
-    const newFilter = { filterId: filterId, condition: condition }
-
-    this._selectedFiltersMap.set(filterId, newFilter)
+    this._selectedFiltersMap.set(filterId, condition)
   }
 
-  removeFilterMap({ filterId, subFilterIdx, filterType }: IRemoveFilter): void {
-    const currentFilter = this._selectedFiltersMap.get(filterId)
+  // public removeFilterBlock(filterBlockName: string): void {
+  //   // const id = this.selectedFiltersMapAsArray.reverse().map(filter => {
+  //   //   if (filter[1][1] === filterBlockName) return filter[0]
+  //   // })
+  // }
+
+  public addFilterToFilterBlock(condition: TCondition): void {
+    const filterId: string = nanoid()
+
+    this._selectedFiltersMap.set(filterId, condition)
+  }
+
+  public removeFilterFromFilterBlock({
+    filterId,
+    subFilterIdx,
+    filterType,
+  }: IRemoveFilter): void {
+    const currentCondition = this._selectedFiltersMap.get(filterId)!
 
     if (
       filterType === FilterKindEnum.Numeric ||
-      currentFilter?.condition[3]!.length === 1
+      currentCondition[3]?.length === 1
     ) {
       this._selectedFiltersMap.delete(filterId)
       return
     }
 
-    currentFilter!.condition[3] = currentFilter?.condition[3]?.filter(
+    currentCondition[3] = currentCondition[3]?.filter(
       (_filter, idx) => idx !== subFilterIdx,
     )
-  }
-
-  changeFilterMap(filterId: string, condition: TCondition): void {
-    const currentFilter = this._selectedFiltersMap.get(filterId)
-
-    currentFilter!.condition = condition
-  }
-
-  // REMOVE: useless func
-  removeSelectedFilters({
-    group,
-    groupItemName,
-    variant,
-  }: AddSelectedFiltersI) {
-    if (!this.selectedFilters[group]) {
-      return
-    }
-
-    if (this.selectedFilters[group][groupItemName] && variant) {
-      delete this.selectedFilters[group][groupItemName][variant[0]]
-    }
-
-    if (isEmpty(this.selectedFilters[group][groupItemName])) {
-      delete this.selectedFilters[group][groupItemName]
-    }
-
-    if (isEmpty(this.selectedFilters[group])) {
-      delete this.selectedFilters[group]
-    }
-  }
-
-  // REMOVE: useless func
-  addSelectedFilterGroup(
-    group: string,
-    groupItemName: string,
-    variants: any[],
-  ) {
-    if (!this.selectedFilters[group]) {
-      this.selectedFilters[group] = {}
-    }
-
-    if (!this.selectedFilters[group][groupItemName]) {
-      this.selectedFilters[group][groupItemName] = {}
-    }
-
-    variants.forEach(variant => {
-      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
-    })
   }
 
   async fetchDsInfoAsync() {
@@ -163,7 +115,7 @@ export class FilterStore {
   }
 
   async fetchStatFuncAsync(unit: string, param?: any) {
-    const conditions = JSON.stringify(datasetStore.conditions)
+    const conditions = JSON.stringify(this.conditions)
 
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,

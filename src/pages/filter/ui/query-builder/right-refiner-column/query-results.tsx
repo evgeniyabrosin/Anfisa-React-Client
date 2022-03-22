@@ -17,22 +17,20 @@ export interface IHandleRemoveFilter {
 export const QueryResults = observer((): ReactElement => {
   const selectedFilters = filterStore.selectedFiltersMapAsArray
 
-  // REMOVE: there should be only filterId, subFilterIndex
   const handleRemoveFilter = ({
     filterId,
-    filterName,
-    subFilterName,
     subFilterIdx,
     filterType,
   }: IHandleRemoveFilter) => {
     datasetStore.resetActivePreset()
 
-    filterStore.removeFilterMap({ filterId, subFilterIdx, filterType })
-
-    datasetStore.removeCondition({
-      subGroup: filterName,
-      itemName: subFilterName,
+    filterStore.removeFilterFromFilterBlock({
+      filterId,
+      subFilterIdx,
+      filterType,
     })
+
+    datasetStore.fetchDsStatAsync()
 
     if (!datasetStore.isXL) {
       datasetStore.fetchWsListAsync()
@@ -57,10 +55,11 @@ export const QueryResults = observer((): ReactElement => {
       className="overflow-y-scroll"
       style={{ height: 'calc(100vh - 280px)' }}
     >
-      {selectedFilters.map(([filterId, filter]) => (
+      {selectedFilters.map(([filterId, filterCondition]) => (
         <div key={filterId} className="flex flex-col">
           <SelectedFilterCard
-            filter={filter}
+            filterId={filterId}
+            filterCondition={filterCondition}
             handleRemoveFilter={handleRemoveFilter}
           />
         </div>

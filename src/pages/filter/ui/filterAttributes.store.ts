@@ -59,14 +59,13 @@ export class FilterAttributesStore {
     if (localSelectedFilters[vgroup]?.[groupName]) {
       delete localSelectedFilters[vgroup][groupName]
 
-      if (this.datasetStore.activePreset) {
-        this.datasetStore.resetActivePreset()
-      }
+      // REMOVE: will be changed
+      // if (this.datasetStore.activePreset) {
+      //   this.datasetStore.resetActivePreset()
+      // }
     }
-
-    this.filterStore.setSelectedFilters(localSelectedFilters)
-
-    this.datasetStore.removeConditionGroup({ subGroup: groupName })
+    // REMOVE: will be changed
+    // this.datasetStore.removeConditionGroup({ subGroup: groupName })
 
     if (!this.datasetStore.isXL) {
       this.datasetStore.fetchWsListAsync()
@@ -86,12 +85,13 @@ export class FilterAttributesStore {
       ConditionJoinMode.OR,
       values,
     ]
+    this.filterStore.addFilterBlock(condition)
 
     if (this.datasetStore.activePreset) {
       this.datasetStore.resetActivePreset()
     }
 
-    this.datasetStore.setConditionsAsync([condition])
+    datasetStore.fetchDsStatAsync()
 
     if (!this.datasetStore.isXL) {
       this.datasetStore.fetchWsListAsync()
@@ -114,9 +114,6 @@ export class FilterAttributesStore {
       }
     })
     updatedFilters[vgroup][groupName] = selectedSubAttributes
-
-    this.filterStore.setSelectedFilters(updatedFilters)
-    this.filterStore.addFilterMap(condition)
   }
 
   updateCurrentGroupEnumFilter(values: string[]): void {
@@ -145,11 +142,10 @@ export class FilterAttributesStore {
 
   private getDatasetEnumValues(group: FilterGroup): string[] {
     const { groupName } = group
+    const { conditions } = filterStore
 
     return (
-      this.datasetStore.conditions.find(
-        (element: any[]) => element[1] === groupName,
-      )?.[3] ?? []
+      conditions.find((element: any[]) => element[1] === groupName)?.[3] ?? []
     )
   }
 }

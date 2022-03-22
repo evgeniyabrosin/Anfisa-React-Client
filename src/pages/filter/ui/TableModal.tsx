@@ -51,9 +51,9 @@ export const TableModal = observer(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      const isRefiner = filterStore.method === GlbPagesNames.Refiner
+      const { conditions } = filterStore
 
-      const conditions = datasetStore.conditions
+      const isRefiner = filterStore.method === GlbPagesNames.Refiner
 
       const requestValue = isRefiner ? conditions : stepIndex
 

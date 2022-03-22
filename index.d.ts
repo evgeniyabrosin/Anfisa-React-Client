@@ -308,11 +308,6 @@ export interface IColumns {
   hidden: boolean
 }
 
-export interface IRemoveConditionItem {
-  subGroup: string
-  itemName: string
-}
-
 export interface IGridLayout {
   w: number
   h: number

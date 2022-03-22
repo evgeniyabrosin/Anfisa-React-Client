@@ -26,15 +26,16 @@ export const PanelButtons = observer(
         datasetStore.resetActivePreset()
       }
 
-      datasetStore.removeFunctionConditionAsync(functionPanelStore.filterName)
+      // REMOVE: will be changed
+      // datasetStore.removeFunctionConditionAsync(functionPanelStore.filterName)
 
-      functionPanelStore.clearGroupFilter()
+      // functionPanelStore.clearGroupFilter()
 
       filterStore.resetStatFuncData()
 
-      if (!datasetStore.isXL) {
-        datasetStore.fetchWsListAsync()
-      }
+      // if (!datasetStore.isXL) {
+      //   datasetStore.fetchWsListAsync()
+      // }
 
       resetFields()
     }
