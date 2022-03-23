@@ -2,6 +2,7 @@ import { Fragment, ReactElement } from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
+import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
@@ -59,7 +60,7 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
 
         <span className="text-12 leading-14px text-grey-blue mt-2">
           {t('ds.totalVariants')}
-          {variants}
+          {formatNumber(variants)}
         </span>
 
         {toJS(dtreeStore.stepData).length > 0 && (
@@ -67,13 +68,13 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
             <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
               <span>{t('dtree.acceptedVariants')}</span>
 
-              <span>{getDerivedVariants('included') || 0}</span>
+              <span>{formatNumber(getDerivedVariants('included') || 0)}</span>
             </div>
 
             <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
               <span>{t('dtree.rejectedVariants')}</span>
 
-              <span>{getDerivedVariants('excluded') || 0}</span>
+              <span>{formatNumber(getDerivedVariants('excluded') || 0)}</span>
             </div>
           </Fragment>
         )}
