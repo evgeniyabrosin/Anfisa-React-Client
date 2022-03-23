@@ -84,10 +84,7 @@ class InheritanceModeStore {
   public handleResetVariantsLocally(variantsValues: string[]): void {
     if (variantsValues.length === 0) return
 
-    functionPanelStore.clearCachedValues(
-      FuncStepTypesEnum.InheritanceMode,
-      'variants',
-    )
+    functionPanelStore.clearCachedValues(FuncStepTypesEnum.InheritanceMode)
   }
 
   public setConditions({

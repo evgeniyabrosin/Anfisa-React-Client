@@ -36,24 +36,11 @@ export class FilterStore {
 
   selectedFiltersHistory: SelectedFiltersType[] = []
 
+  activeFilterId: string = ''
+  isRedactorMode = false
+
   constructor() {
     makeAutoObservable(this)
-  }
-
-  setActionName(actionName?: ActionFilterEnum) {
-    this.actionName = actionName
-  }
-
-  resetActionName() {
-    this.actionName = undefined
-  }
-
-  setMethod(method: GlbPagesNames | FilterControlOptions) {
-    this.method = method
-  }
-
-  setSelectedGroupItem(item: StatListType) {
-    this.selectedGroupItem = item
   }
 
   public get selectedFiltersArray(): [string, TCondition][] {
@@ -64,23 +51,26 @@ export class FilterStore {
     return Array.from(this._selectedFilters.values())
   }
 
+  public get selectedFilter(): TCondition {
+    return this._selectedFilters.get(this.activeFilterId)!
+  }
+
   public addFilterBlock(condition: TCondition): void {
     const filterId: string = nanoid()
 
     this._selectedFilters.set(filterId, condition)
+
+    this.setActiveFilterId(filterId)
   }
 
-  // TODO: will be implemented after new UX/UI is ready
-  // public removeFilterBlock(filterBlockName: string): void {
-  //   // const id = this.selectedFiltersMapAsArray.reverse().map(filter => {
-  //   //   if (filter[1][1] === filterBlockName) return filter[0]
-  //   // })
-  // }
+  public removeFilterBlock(filterId: string): void {
+    this._selectedFilters.delete(filterId)
+
+    datasetStore.fetchDsStatAsync()
+  }
 
   public addFilterToFilterBlock(condition: TCondition): void {
-    const filterId: string = nanoid()
-
-    this._selectedFilters.set(filterId, condition)
+    this._selectedFilters.set(this.activeFilterId, condition)
   }
 
   public removeFilterFromFilterBlock({
@@ -103,17 +93,17 @@ export class FilterStore {
     )
   }
 
-  async fetchDsInfoAsync() {
+  public async fetchDsInfoAsync() {
     return await datasetProvider.getDsInfo({ ds: datasetStore.datasetName })
   }
 
-  async fetchProblemGroupsAsync() {
+  public async fetchProblemGroupsAsync() {
     const dsInfo = await this.fetchDsInfoAsync()
 
     return dsInfo.meta.samples
   }
 
-  async fetchStatFuncAsync(unit: string, param?: any) {
+  public async fetchStatFuncAsync(unit: string, param?: any) {
     const conditions = JSON.stringify(this.conditions)
 
     const body = new URLSearchParams({
@@ -142,49 +132,83 @@ export class FilterStore {
     return result
   }
 
-  resetData() {
+  public resetData() {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
     this.resetSelectedFilters()
   }
 
-  resetSelectedFilters() {
+  public resetSelectedFilters() {
     this._selectedFilters = new Map()
   }
 
-  resetStatFuncData() {
+  public resetStatFuncData() {
     this.statFuncData = []
   }
 
-  setSelectedFiltersHistory(history: SelectedFiltersType[]) {
+  public setSelectedFiltersHistory(history: SelectedFiltersType[]) {
     this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
   }
 
-  setFilterCondition<T = any>(filterName: string, values: T) {
+  public setFilterCondition<T = any>(filterName: string, values: T) {
     this.filterCondition[filterName] = cloneDeep(values)
   }
 
-  readFilterCondition<T = any>(filterName: string) {
+  public readFilterCondition<T = any>(filterName: string) {
     return this.filterCondition[filterName]
       ? (this.filterCondition[filterName] as T)
       : undefined
   }
 
-  resetFilterCondition() {
+  public resetFilterCondition() {
     this.filterCondition = {}
   }
 
-  clearFilterCondition(filterName: string, subFilterName?: string) {
-    subFilterName
-      ? delete this.filterCondition[filterName][subFilterName]
-      : delete this.filterCondition[filterName]
+  public clearFilterCondition(filterName: string) {
+    delete this.filterCondition[filterName]
   }
 
-  memorizeSelectedFilters() {
+  public setActiveFilterId(filterId: string) {
+    this.activeFilterId = filterId
+  }
+
+  public resetActiveFilterId() {
+    this.activeFilterId = ''
+  }
+
+  public setActionName(actionName?: ActionFilterEnum) {
+    this.actionName = actionName
+  }
+
+  public resetActionName() {
+    this.actionName = undefined
+  }
+
+  public setMethod(method: GlbPagesNames | FilterControlOptions) {
+    this.method = method
+  }
+
+  public setSelectedGroupItem(item: StatListType) {
+    this.selectedGroupItem = item
+  }
+
+  public resetSelectedGroupItem() {
+    this.selectedGroupItem = {}
+  }
+
+  public setIsRedacorMode() {
+    this.isRedactorMode = true
+  }
+
+  public resetIsRedacorMode() {
+    this.isRedactorMode = false
+  }
+
+  public memorizeSelectedFilters() {
     this.memorizedSelectedFilters = this._selectedFilters
   }
 
-  applyMemorizedFilters() {
+  public applyMemorizedFilters() {
     if (this.memorizedSelectedFilters) {
       this._selectedFilters = this.memorizedSelectedFilters
     }

@@ -12,24 +12,18 @@ import { InputNumber } from '@ui/input-number'
 import { TNumericCondition } from '@service-providers/common/common.interface'
 import { createNumericExpression } from '@utils/createNumericExpression'
 
-type TNumericExpression = [null | number, boolean, null | number, boolean]
-
-const getCachedValues = () => {
-  return filterStore.readFilterCondition<TNumericExpression>(
-    filterStore.selectedGroupItem.name,
-  )
-}
-
 const getFilterValue = (arg: string): string | number => {
-  const filterExpression = getCachedValues()
+  const { selectedFilter } = filterStore
 
-  if (filterExpression) {
-    if (arg === 'min' && typeof filterExpression[0] === 'number') {
-      return filterExpression[0]
+  if (selectedFilter) {
+    const selectedFilterExpression = selectedFilter[2]
+
+    if (arg === 'min' && typeof selectedFilterExpression[1] === 'number') {
+      return selectedFilterExpression[1]
     }
 
-    if (arg === 'max' && typeof filterExpression[2] === 'number') {
-      return filterExpression[2]
+    if (arg === 'max' && typeof selectedFilterExpression[2] === 'number') {
+      return selectedFilterExpression[2]
     }
   }
 
@@ -38,15 +32,30 @@ const getFilterValue = (arg: string): string | number => {
 
 export const RangePanel = observer((): ReactElement => {
   const selectedFilter = filterStore.selectedGroupItem
+  const isRedactorMode = filterStore.isRedactorMode
 
   const [min, setMin] = useState<string | number>(getFilterValue('min'))
   const [max, setMax] = useState<string | number>(getFilterValue('max'))
+
+  useEffect(() => {
+    const dispose = reaction(
+      () => filterStore.isRedactorMode,
+      () => {
+        if (!filterStore.isRedactorMode) {
+          setMin('')
+          setMax('')
+        }
+      },
+    )
+
+    return () => dispose()
+  })
 
   const [isVisibleMinError, setIsVisibleMinError] = useState(false)
   const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
   const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
 
-  const handleAddConditionsAsync = async () => {
+  const handleSetConditionsAsync = async () => {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
     const condition: TNumericCondition = [
@@ -59,7 +68,10 @@ export const RangePanel = observer((): ReactElement => {
       }),
     ]
 
-    filterStore.addFilterBlock(condition as TNumericCondition)
+    isRedactorMode
+      ? filterStore.addFilterToFilterBlock(condition as TNumericCondition)
+      : filterStore.addFilterBlock(condition as TNumericCondition)
+
     datasetStore.fetchDsStatAsync()
 
     if (!datasetStore.isXL) {
@@ -68,19 +80,11 @@ export const RangePanel = observer((): ReactElement => {
   }
 
   const handleClear = () => {
-    const filterName = filterStore.selectedGroupItem.vgroup
-
-    // TODO: this logic for deletion attr
-    // if (!datasetStore.isXL) {
-    //   datasetStore.fetchWsListAsync()
-    // }
-
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
     setIsVisibleMixedError(false)
     setMin('')
     setMax('')
-    filterStore.clearFilterCondition(filterName)
   }
 
   const validateMin = (value: string) => {
@@ -112,20 +116,13 @@ export const RangePanel = observer((): ReactElement => {
   }
 
   useEffect(() => {
+    if (!min && !max) return
+
     if (min && max && +min > +max) {
       setIsVisibleMixedError(true)
     } else {
       setIsVisibleMixedError(false)
     }
-
-    filterStore.setFilterCondition(
-      filterStore.selectedGroupItem.name,
-      createNumericExpression({
-        expType: NumericExpressionTypes.GreaterThan,
-        minValue: min,
-        maxValue: max,
-      }),
-    )
   }, [min, max])
 
   useEffect(() => {
@@ -154,7 +151,7 @@ export const RangePanel = observer((): ReactElement => {
       </div>
 
       <InputNumber
-        className="w-full"
+        className="w-full border border-grey-blue"
         value={min}
         onChange={e => {
           setMin(e.target.value)
@@ -174,7 +171,7 @@ export const RangePanel = observer((): ReactElement => {
 
       <div className="relative h-14">
         <InputNumber
-          className="w-full"
+          className="w-full border border-grey-blue"
           value={max}
           onChange={e => {
             setMax(e.target.value)
@@ -196,8 +193,8 @@ export const RangePanel = observer((): ReactElement => {
         />
 
         <Button
-          text={t('general.add')}
-          onClick={handleAddConditionsAsync}
+          text={isRedactorMode ? t('general.apply') : t('general.add')}
+          onClick={handleSetConditionsAsync}
           disabled={
             isVisibleMinError ||
             isVisibleMaxError ||

@@ -58,8 +58,8 @@ class FunctionPanelStore {
     filterStore.setFilterCondition<T>(componentName, cachedValues)
   }
 
-  public clearCachedValues(componentName: string, filterName?: string): void {
-    filterStore.clearFilterCondition(componentName, filterName)
+  public clearCachedValues(filterName: string): void {
+    filterStore.clearFilterCondition(filterName)
   }
 
   public sumbitConditions(condition: TFuncCondition): void {

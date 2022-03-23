@@ -1,22 +1,23 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import cn from 'classnames'
 
 import { IHandleRemoveFilter } from './query-results'
-
 interface Props {
   filterId: string
-  filterName: string
+  isFilterActive: boolean
   filterContent: string[]
+  filterType: string
   handleRemoveFilter: ({
     filterId,
     filterType,
     subFilterIdx,
   }: IHandleRemoveFilter) => void
-  filterType: string
 }
 
 export const EnumFilter = ({
   filterId,
+  isFilterActive,
   filterContent,
   filterType,
   handleRemoveFilter,
@@ -25,7 +26,10 @@ export const EnumFilter = ({
     {filterContent.map((subFilterName, subFilterIdx) => (
       <div
         key={filterId + subFilterName}
-        className="flex items-center pl-6 py-4"
+        className={cn(
+          'flex items-center pl-4 py-4',
+          isFilterActive && 'bg-blue-light',
+        )}
       >
         <Checkbox
           checked
