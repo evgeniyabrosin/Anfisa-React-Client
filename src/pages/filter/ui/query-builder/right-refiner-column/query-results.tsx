@@ -38,8 +38,8 @@ export const QueryResults = observer((): ReactElement => {
   if (selectedFilters.length === 0) {
     return (
       <div
-        style={{ height: 'calc(100vh - 223px)' }}
-        className="w-full flex justify-center items-center"
+        style={{ height: 'calc(100vh - 280px)' }}
+        className="flex items-center justify-center border-b border-grey-disabled"
       >
         <p className="leading-16px text-grey-blue">
           {t('general.noResultsFound')}

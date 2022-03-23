@@ -49,15 +49,7 @@ export const FilterRefinerGroupItem = observer(
     const status = incomplete ? '...' : ''
 
     return (
-      <div
-        className={cn(
-          'flex items-center py-1 pr-20',
-          {
-            'bg-blue-light': isIndeterminate,
-          },
-          className,
-        )}
-      >
+      <div className={cn('flex items-center py-1 pr-20', className)}>
         <Checkbox
           className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
           checked={checked}

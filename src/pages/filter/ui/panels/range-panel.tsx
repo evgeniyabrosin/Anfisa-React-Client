@@ -154,7 +154,7 @@ export const RangePanel = observer((): ReactElement => {
       </div>
 
       <InputNumber
-        className="w-full"
+        className="w-full border border-grey-blue"
         value={min}
         onChange={e => {
           setMin(e.target.value)
@@ -174,7 +174,7 @@ export const RangePanel = observer((): ReactElement => {
 
       <div className="relative h-14">
         <InputNumber
-          className="w-full"
+          className="w-full border border-grey-blue"
           value={max}
           onChange={e => {
             setMax(e.target.value)

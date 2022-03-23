@@ -94,6 +94,8 @@ export const QueryBuilderSubgroupItem = observer(
         openAttrListForDtree(group)
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setSelectedGroupItem(group)
+
+        filterStore.setActiveFilterId('')
       }
     }
 

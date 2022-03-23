@@ -7,7 +7,6 @@ import { formatNumber } from '@core/format-number'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
@@ -20,7 +19,6 @@ export const QuerySelected = observer((): ReactElement => {
   const history = useHistory()
   const params = useParams()
 
-  const variants: any = dirinfoStore.dsinfo.total || 0
   const { conditions } = filterStore
 
   const [allVariants, transcribedVariants, allTranscripts] = get(
@@ -51,26 +49,19 @@ export const QuerySelected = observer((): ReactElement => {
   }
 
   return (
-    <div className="w-1/3">
-      <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark">
+    <div className="w-1/3 ">
+      <div className="flex items-center px-4 py-3 border-b border-grey-disabled bg-grey-light">
         <div className="flex flex-wrap">
-          <span className="font-bold text-16 text-blue-bright w-full">
-            {t('dtree.results')}
-            <span className="font-normal text-grey-blue ml-2">
-              {'('}
-              {formatNumber(variants)}
-              {')'}
-            </span>
-          </span>
+          <span className="font-bold text-20 w-full">{t('dtree.results')}</span>
 
-          <span className="text-12 leading-14px text-white mt-2">
+          <span className="text-12 leading-14px mt-2">
             {t('filter.variants', {
               all: formatNumber(allVariants),
             })}
           </span>
 
           {transcribedVariants > 0 && (
-            <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
+            <span className="text-12 leading-14px border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcribedVariants', {
                 all: formatNumber(transcribedVariants),
               })}
@@ -78,7 +69,7 @@ export const QuerySelected = observer((): ReactElement => {
           )}
 
           {allTranscripts > 0 && (
-            <span className="text-12 leading-14px text-white border-l-2 border-grey-blue mt-2 ml-2 pl-2">
+            <span className="text-12 leading-14px border-l-2 border-grey-blue mt-2 ml-2 pl-2">
               {t('filter.transcripts', {
                 all: formatNumber(allTranscripts),
               })}

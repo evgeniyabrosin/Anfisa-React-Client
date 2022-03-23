@@ -1,13 +1,14 @@
 import { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import cn from 'classnames'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { TFuncArgs } from '@service-providers/common/common.interface'
 import { IHandleRemoveFilter } from './query-results'
-
 interface Props {
   filterId: string
   filterName: string
+  isFilterActive: boolean
   filterContent: string[]
   filterExpression: TFuncArgs
   handleRemoveFilter: ({
@@ -21,6 +22,7 @@ interface Props {
 export const FuncFilter = ({
   filterId,
   filterName,
+  isFilterActive,
   filterContent,
   filterExpression,
   handleRemoveFilter,
@@ -30,7 +32,10 @@ export const FuncFilter = ({
     {filterName === FuncStepTypesEnum.InheritanceMode ? (
       filterContent.map((subFilterName, subFilterIdx) => (
         <div
-          className="flex items-center pl-6 py-4"
+          className={cn(
+            'flex items-center pl-4 py-4',
+            isFilterActive && 'bg-blue-light',
+          )}
           key={filterId + subFilterName}
         >
           <Checkbox
@@ -50,7 +55,12 @@ export const FuncFilter = ({
         </div>
       ))
     ) : (
-      <div className="flex items-center pl-6 py-4">
+      <div
+        className={cn(
+          'flex items-center pl-4 py-4',
+          isFilterActive && 'bg-blue-light',
+        )}
+      >
         <Checkbox
           checked
           onChange={() =>
