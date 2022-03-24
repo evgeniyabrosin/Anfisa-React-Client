@@ -55,7 +55,7 @@ const FilterPage = observer((): ReactElement => {
 
   const getFiltersValue = (type: string) => {
     if (type === 'all') {
-      if (isXL) return toJS(dirinfoStore.dsinfo.total)
+      if (isXL) return formatNumber(toJS(dirinfoStore.dsinfo.total))
 
       if (filterStore.method === GlbPagesNames.Filter) {
         return formatNumber(toJS(dtreeStore.statAmount[0]))
@@ -96,7 +96,7 @@ const FilterPage = observer((): ReactElement => {
           <div className="text-white flex-grow flex justify-end pr-6">
             <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
               {t('filter.variants', {
-                all: formatNumber(getFiltersValue('all')),
+                all: getFiltersValue('all'),
               })}
             </span>
 
