@@ -102,7 +102,7 @@ export const TableModal = observer(() => {
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatusData])
+  }, [jobStatusData, samples])
 
   useEffect(() => {
     if (jobStatusData) {
