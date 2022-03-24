@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
@@ -34,6 +35,8 @@ export const ModalOptions = observer(
     const handleDeleteFilterBlock = (e: React.MouseEvent) => {
       e.stopPropagation()
       filterStore.removeFilterBlock(filterId)
+
+      if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
     }
 
     return (

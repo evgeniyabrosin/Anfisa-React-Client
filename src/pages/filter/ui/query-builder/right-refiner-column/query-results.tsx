@@ -30,15 +30,13 @@ export const QueryResults = observer((): ReactElement => {
 
     datasetStore.fetchDsStatAsync()
 
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
   }
 
   if (selectedFilters.length === 0) {
     return (
       <div
-        style={{ height: 'calc(100vh - 280px)' }}
+        style={{ height: 'calc(100vh - 276px)' }}
         className="flex items-center justify-center border-b border-grey-disabled"
       >
         <p className="leading-16px text-grey-blue">
@@ -51,7 +49,7 @@ export const QueryResults = observer((): ReactElement => {
   return (
     <div
       className="overflow-y-scroll"
-      style={{ height: 'calc(100vh - 280px)' }}
+      style={{ height: 'calc(100vh - 320px)' }}
     >
       {selectedFilters.map(([filterId, filterCondition]) => (
         <div key={filterId} className="flex flex-col">

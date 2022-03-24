@@ -21,6 +21,8 @@ export const QuerySelected = observer((): ReactElement => {
 
   const { conditions } = filterStore
 
+  const selectedFiltersAmount = filterStore.selectedFiltersArray.length
+
   const [allVariants, transcribedVariants, allTranscripts] = get(
     datasetStore,
     'statAmount',
@@ -48,20 +50,32 @@ export const QuerySelected = observer((): ReactElement => {
         })
   }
 
+  const clearAlSelectedFilters = () => {
+    if (selectedFiltersAmount === 0) return
+
+    if (datasetStore.activePreset) datasetStore.resetActivePreset()
+
+    filterStore.resetSelectedFilters()
+
+    datasetStore.fetchDsStatAsync()
+
+    if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
+  }
+
   return (
     <div className="w-1/3 ">
-      <div className="flex items-center px-4 py-3 border-b border-grey-disabled bg-grey-light">
+      <div className="flex items-center px-4 py-3 border-b border-grey-disabled bg-grey-tertiary">
         <div className="flex flex-wrap">
           <span className="font-bold text-20 w-full">{t('dtree.results')}</span>
 
-          <span className="text-12 leading-14px mt-2">
+          <span className="text-12 leading-14px mt-1 font-medium">
             {t('filter.variants', {
               all: formatNumber(allVariants),
             })}
           </span>
 
           {transcribedVariants > 0 && (
-            <span className="text-12 leading-14px border-l-2 border-grey-blue mt-2 ml-2 pl-2">
+            <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcribedVariants', {
                 all: formatNumber(transcribedVariants),
               })}
@@ -69,7 +83,7 @@ export const QuerySelected = observer((): ReactElement => {
           )}
 
           {allTranscripts > 0 && (
-            <span className="text-12 leading-14px border-l-2 border-grey-blue mt-2 ml-2 pl-2">
+            <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcripts', {
                 all: formatNumber(allTranscripts),
               })}
@@ -93,6 +107,21 @@ export const QuerySelected = observer((): ReactElement => {
           />
         )}
       </div>
+
+      {selectedFiltersAmount > 0 && (
+        <div className="flex items-center justify-between px-4 py-3 text-14">
+          <div className="text-grey-blue">
+            {filterStore.selectedFiltersArray.length} added
+          </div>
+
+          <div
+            className="text-blue-bright font-medium cursor-pointer"
+            onClick={clearAlSelectedFilters}
+          >
+            {t('general.clearAll')}
+          </div>
+        </div>
+      )}
 
       {datasetStore.isLoadingDsStat ? <Loader /> : <QueryResults />}
     </div>
