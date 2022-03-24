@@ -44,15 +44,15 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const getWords = (text: string | null) => {
     if (!text) return []
 
-    const splitByBraces = text.split('{').map((item, ind) => {
-      if (ind === 0) return [`${item}{`]
+    const splitByBraces = text.split('{').map((item, index) => {
+      if (index === 0) return [`${item}{`]
 
       const elements = item.split('}').map((x, i) => {
         if (i === 1) return `}${x}`
-        if (expanded[ind - 1]) return x
-        const rex = x.split(',')
-        if (rex.length <= 3) return rex.join(',')
-        return rex.slice(0, 3).join(',') + ', ...'
+        if (expanded[index - 1]) return x
+        const attachments = x.split(',')
+        if (attachments.length <= 3) return attachments.join(',')
+        return attachments.slice(0, 3).join(',') + ', ...'
       })
 
       return elements.join('')
@@ -69,7 +69,7 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
     const flatedTextList = changedTextList.flat()
 
     const words = flatedTextList
-      .filter(it => !!it)
+      .filter(Boolean)
       .map((word, wordIndex: number) => {
         const changedWord = word.trim()
 
