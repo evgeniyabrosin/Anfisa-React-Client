@@ -1,5 +1,6 @@
 import { ChangeEvent, Fragment } from 'react'
 import Checkbox from 'react-three-state-checkbox'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -27,10 +28,22 @@ export const InheritanceModeContent = observer(
     const handleCheckGroupItem = (checked: boolean, name: string) => {
       if (checked) {
         dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
+        return
       }
+
+      dtreeStore.removeSelectedFilter(name)
     }
+
+    const setAll = (checked: boolean) => () => {
+      const allVariants = toJS(variants)
+      allVariants &&
+        allVariants.forEach((variant: any[]) =>
+          handleCheckGroupItem(checked, variant[0]),
+        )
+    }
+
+    const clearAll = setAll(false)
+    const selectAll = setAll(true)
 
     return (
       <Fragment>
@@ -66,7 +79,7 @@ export const InheritanceModeContent = observer(
           <div className="flex">
             <div
               className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
+              onClick={selectAll}
             >
               {t('general.selectAll')}
             </div>
@@ -75,7 +88,7 @@ export const InheritanceModeContent = observer(
 
             <div
               className="text-14 text-blue-bright cursor-pointer"
-              onClick={() => alert('This function is not ready yet')}
+              onClick={clearAll}
             >
               {t('general.clearAll')}
             </div>
