@@ -43,17 +43,35 @@ interface IProps {
   group: any
   index: number
   currNo: number
+  expanded: boolean
+  setExpandOnClick: () => void
 }
 
 export const NextStepContentItem = observer(
-  ({ group, index, currNo }: IProps): ReactElement => {
+  ({
+    group,
+    index,
+    currNo,
+    expanded,
+    setExpandOnClick,
+  }: IProps): ReactElement => {
     // const [isChecked, setIsChecked] = useState(true)
 
     // const toggleChecked = () => {
     //   setIsChecked(prev => !prev)
     // }
-
     const [isVisible, setIsVisible] = useState(false)
+    const limitSize = 3
+
+    const array = group.find((elem: any) => Array.isArray(elem))
+
+    const getButtonMessage = () => {
+      if (group[0] === StepTypeEnum.Numeric) return ''
+
+      const size = array.length - limitSize
+
+      return expanded ? `Hide ${size} variants` : `Show ${size} variants`
+    }
 
     // const toggleVisible = () => {
     //   setIsVisible(prev => !prev)
@@ -182,15 +200,22 @@ export const NextStepContentItem = observer(
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
               {group[0] === StepTypeEnum.Numeric &&
-                getNumericExpression(
-                  group.find((elem: any) => Array.isArray(elem)),
-                  group[1],
-                )}
+                getNumericExpression(array, group[1])}
 
               {group[0] !== StepTypeEnum.Numeric &&
-                group
-                  .find((elem: any) => Array.isArray(elem))
+                array
+                  .slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
                   .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
+
+              {group[0] !== StepTypeEnum.Numeric && array.length > 3 && (
+                <div
+                  key={Math.random()}
+                  className="text-blue-bright cursor-pointer"
+                  onClick={setExpandOnClick}
+                >
+                  {getButtonMessage()}
+                </div>
+              )}
             </div>
           </div>
         </ContentControl>

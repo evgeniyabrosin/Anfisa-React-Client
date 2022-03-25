@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
@@ -30,6 +30,11 @@ const ContentEditor = styled.div`
 export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const groups = dtreeStore.getStepData[index].groups
 
+  const [expanded, setExpanded] = useState<Record<number, boolean>>({})
+  const expandGroup = (id: number) => () => {
+    setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
+  }
+
   const currentStepData = dtreeStore.getStepData[index]
   const isExcluded = currentStepData.excluded
   const result = String(!isExcluded)
@@ -39,8 +44,22 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const getWords = (text: string | null) => {
     if (!text) return []
 
-    const textList = text.split(/{|}/)
+    const splitByBraces = text.split('{').map((item, index) => {
+      if (index === 0) return [`${item}{`]
 
+      const elements = item.split('}').map((x, i) => {
+        if (i === 1) return `}${x}`
+        if (expanded[index - 1]) return x
+        const attachments = x.split(',')
+        if (attachments.length <= 3) return attachments.join(',')
+        return attachments.slice(0, 3).join(',') + ', ...'
+      })
+
+      return elements.join('')
+    })
+
+    const res = splitByBraces.join('')
+    const textList = res.split(/{|}/)
     const changedTextList = textList.map(element => {
       if (element.includes('"')) return `{${element}}`
 
@@ -49,22 +68,24 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
 
     const flatedTextList = changedTextList.flat()
 
-    const words = flatedTextList.map((word, wordIndex: number) => {
-      const changedWord = word.trim()
+    const words = flatedTextList
+      .filter(Boolean)
+      .map((word, wordIndex: number) => {
+        const changedWord = word.trim()
 
-      switch (changedWord) {
-        case 'if':
-        case 'and':
-        case 'or':
-        case 'not':
-          return (
-            <span key={wordIndex} className="text-white">{` ${word} `}</span>
-          )
+        switch (changedWord) {
+          case 'if':
+          case 'and':
+          case 'or':
+          case 'not':
+            return (
+              <span key={wordIndex} className="text-white">{` ${word} `}</span>
+            )
 
-        default:
-          return <span key={wordIndex}>{`${word} `}</span>
-      }
-    })
+          default:
+            return <span key={wordIndex}>{`${word} `}</span>
+        }
+      })
 
     return words
   }
@@ -89,6 +110,8 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
                 group={group}
                 index={index}
                 currNo={currNo}
+                setExpandOnClick={expandGroup(currNo)}
+                expanded={expanded[currNo] || false}
               />
             ))
           ) : (
@@ -111,9 +134,7 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
               )}
 
               <div className="flex">
-                <div className="text-orange-secondary mr-2">
-                  {wordList.map(element => element)}
-                </div>
+                <div className="text-orange-secondary mr-2">{wordList}</div>
               </div>
 
               <div className="text-grey-light pl-2">return {result}</div>
