@@ -33,21 +33,16 @@ export const QuerySelected = observer((): ReactElement => {
       : datasetStore.filteredNo.length
 
   const handleClick = () => {
-    let conditionsUrl = ''
-
-    if (datasetStore.conditions.length > 0) {
-      datasetStore.conditions.forEach(condition => {
-        conditionsUrl += `&refiner=${condition[0]},${condition[1]},${
-          condition[2]
-        },${condition[3]?.[0] || ''}`
-      })
-    }
+    const conditions = JSON.stringify(datasetStore.conditions)
 
     allVariants > 2600
       ? showToast(t('filter.tooMuchVariants'), 'error')
-      : history.push(`${Routes.WS}?ds=${params.get('ds')}${conditionsUrl}`, {
-          prevPage: 'refiner',
-        })
+      : history.push(
+          `${Routes.WS}?ds=${params.get('ds')}&conditions=${conditions}`,
+          {
+            prevPage: 'refiner',
+          },
+        )
   }
 
   return (

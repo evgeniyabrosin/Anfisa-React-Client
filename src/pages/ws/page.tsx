@@ -2,12 +2,7 @@ import { Fragment, ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import {
-  ArrayParam,
-  NumberParam,
-  useQueryParams,
-  withDefault,
-} from 'use-query-params'
+import { NumberParam, useQueryParams } from 'use-query-params'
 
 import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
@@ -30,30 +25,21 @@ import { TableVariants } from './ui/table-variants'
 
 const WSPage = observer((): ReactElement => {
   const params = useParams()
+  const stringifyedConditions = params.get('conditions') ?? ''
+  const conditions: Condition[] = JSON.parse(stringifyedConditions)
 
   useDatasetName()
 
   const [query] = useQueryParams({
     variant: NumberParam,
-    refiner: withDefault(ArrayParam, []),
   })
 
-  const { variant, refiner } = query
-
-  const hasConditionsInSearchParamsOnly =
-    refiner.length > 0 && datasetStore.conditions.length === 0
+  const { variant } = query
 
   Number.isInteger(variant) && variantStore.setIndex(variant as number)
 
   useEffect(() => {
-    if (hasConditionsInSearchParamsOnly) {
-      const conditions: Condition[] = (refiner as string[]).map((c: string) => {
-        const item: string[] = c!.split(',')
-        const [name, group, symbol, value] = item
-
-        return [name, group, symbol, [value]]
-      })
-
+    if (conditions.length > 0) {
       datasetStore.setConditionsAsync(conditions)
     }
 
