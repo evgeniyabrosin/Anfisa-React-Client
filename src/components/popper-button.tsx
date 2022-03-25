@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useState } from 'react'
+import { Fragment, MouseEvent, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
 import cn, { Argument } from 'classnames'
 
@@ -34,6 +34,9 @@ export const PopperButton = ({
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
+          onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
+            isOpen && event.stopPropagation()
+          }}
           onClick={isOpen ? close : open}
         />
       )}
@@ -42,6 +45,9 @@ export const PopperButton = ({
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
+          onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
+            isOpen && event.stopPropagation()
+          }}
           onClick={isOpen ? close : open}
         />
       )}
