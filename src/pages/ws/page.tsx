@@ -25,8 +25,7 @@ import { TableVariants } from './ui/table-variants'
 
 const WSPage = observer((): ReactElement => {
   const params = useParams()
-  const stringifyedConditions = params.get('conditions') ?? ''
-  const conditions: Condition[] = JSON.parse(stringifyedConditions)
+  const stringifyedConditions = params.get('conditions')
 
   useDatasetName()
 
@@ -39,7 +38,8 @@ const WSPage = observer((): ReactElement => {
   Number.isInteger(variant) && variantStore.setIndex(variant as number)
 
   useEffect(() => {
-    if (conditions.length > 0) {
+    if (stringifyedConditions) {
+      const conditions: Condition[] = JSON.parse(stringifyedConditions)
       datasetStore.setConditionsAsync(conditions)
     }
 
