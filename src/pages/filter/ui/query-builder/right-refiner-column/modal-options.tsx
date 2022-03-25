@@ -46,7 +46,7 @@ export const ModalOptions = observer(
       >
         <div className="top-8 flex flex-col justify-between px-0 py-0 bg-white rounded-md shadow-dark">
           <div
-            onClick={(e: React.MouseEvent) => handleDeleteFilterBlock(e)}
+            onClick={handleDeleteFilterBlock}
             className="flex items-center justify-between py-2 px-2 rounded-br-none rounded-bl-none rounded-l-md rounded-r-md cursor-pointer hover:bg-blue-bright hover:text-white"
             data-testId={DecisionTreeModalDataCy.joinByAnd}
           >
@@ -56,7 +56,7 @@ export const ModalOptions = observer(
           </div>
 
           <div
-            onClick={(e: React.MouseEvent) => handleCopyFilterName(e)}
+            onClick={handleCopyFilterName}
             className="flex items-center justify-between py-2 px-2 rounded-bl-md rounded-br-md cursor-pointer hover:bg-blue-bright hover:text-white"
             data-testId={DecisionTreeModalDataCy.joinByOr}
           >

@@ -67,12 +67,7 @@ export const SelectedFilterCard = observer(
           )}
           onClick={() => filterStore.setActiveFilterId(filterId)}
         >
-          <div
-            className="flex"
-            onClick={(event: React.MouseEvent) =>
-              toggleFilterContentVisibility(event)
-            }
-          >
+          <div className="flex" onClick={toggleFilterContentVisibility}>
             <Icon
               name="Arrow"
               className={cn(
@@ -88,9 +83,7 @@ export const SelectedFilterCard = observer(
             name="Options"
             className="cursor-pointer text-blue-bright flex justify-self-end"
             stroke={false}
-            onClick={(event: React.MouseEvent) =>
-              toggleModalOptionsVisibility(event)
-            }
+            onClick={toggleModalOptionsVisibility}
           />
 
           {isModalOptionsVisible && (

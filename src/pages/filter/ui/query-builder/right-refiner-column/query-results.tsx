@@ -30,7 +30,9 @@ export const QueryResults = observer((): ReactElement => {
 
     datasetStore.fetchDsStatAsync()
 
-    if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
   }
 
   if (selectedFilters.length === 0) {
