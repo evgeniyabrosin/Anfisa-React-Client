@@ -2,13 +2,14 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import {
-  ConditionJoinMode,
   TFuncCondition,
   TVariant,
 } from '@service-providers/common/common.interface'
 import { getFilteredRequestCondition } from '@utils/function-panel/getFilteredRequestCondition'
 import { getFuncParams } from '@utils/getFuncParams'
+import { getModeType } from '@utils/getModeType'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
@@ -21,8 +22,18 @@ import {
 } from './../../function-panel.interface'
 
 class CompoundRequestStore {
+  currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public setCurrentMode(modeType: ModeTypes): void {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this.currentMode = undefined
   }
 
   public get cachedValues(): ICompoundRequestCachedValues {
@@ -202,7 +213,7 @@ class CompoundRequestStore {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.CompoundRequest,
-      ConditionJoinMode.OR,
+      getModeType(this.currentMode),
       ['True'],
       {
         approx: this.cachedValues?.conditions.approx || null,
@@ -216,7 +227,7 @@ class CompoundRequestStore {
       0,
     ]
 
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant, this.currentMode)
   }
 }
 

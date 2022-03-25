@@ -210,7 +210,10 @@ export class DatasetStore {
       } else {
         cloneConditions[subGroupIndex][3] = filteredItems
       }
-    } else if (conditionKind === FilterKindEnum.Func) {
+    } else if (
+      conditionKind === FilterKindEnum.Func &&
+      itemName.includes('locus')
+    ) {
       cloneConditions = cloneConditions.filter(
         (condition: any) =>
           JSON.stringify(condition[condition.length - 1]) !== itemName,

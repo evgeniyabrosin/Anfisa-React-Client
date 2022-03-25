@@ -2,13 +2,14 @@ import { makeAutoObservable, toJS } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import {
-  ConditionJoinMode,
   TFuncCondition,
   TVariant,
 } from '@service-providers/common/common.interface'
 import { getSelectValue } from '@utils/function-panel/getSelectValue'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
+import { getModeType } from '@utils/getModeType'
 import { getSortedArray } from '@utils/getSortedArray'
 import {
   ICustomInheritanceModeCachedValues,
@@ -29,8 +30,18 @@ interface ISendRequest {
 }
 
 class CustomInheritanceModeStore {
+  currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public setCurrentMode(modeType: ModeTypes): void {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this.currentMode = undefined
   }
 
   public get cachedValues(): ICustomInheritanceModeCachedValues {
@@ -220,14 +231,18 @@ class CustomInheritanceModeStore {
     const custInhModeConditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.CustomInheritanceMode,
-      ConditionJoinMode.OR,
+      getModeType(this.currentMode),
       ['True'],
       JSON.parse(`{"scenario":{${this.stringScenario}}}`),
     ]
 
     const variant: TVariant = [`"scenario": ${this.stringScenario}`, 0]
 
-    functionPanelStore.sumbitConditions(custInhModeConditions, variant)
+    functionPanelStore.sumbitConditions(
+      custInhModeConditions,
+      variant,
+      this.currentMode,
+    )
   }
 }
 

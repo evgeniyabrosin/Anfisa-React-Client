@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
-import { AllNotModalMods } from '@pages/filter/ui/query-builder/ui/all-not-modal-mods'
+import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import { ApproxStateModalMods } from '@pages/filter/ui/query-builder/ui/approx-state-modal-mods'
 import { DisabledVariantsAmount } from '@pages/filter/ui/query-builder/ui/disabled-variants-amount'
 import { HeaderModal } from '@pages/filter/ui/query-builder/ui/header-modal'
@@ -77,7 +77,7 @@ export const ModalCompoundRequest = observer((): ReactElement => {
           handleSetCondition={handleSetCondition}
         />
 
-        <AllNotModalMods />
+        <AllNotMods />
       </div>
 
       <div className="flex flex-col w-full mt-4 text-14">

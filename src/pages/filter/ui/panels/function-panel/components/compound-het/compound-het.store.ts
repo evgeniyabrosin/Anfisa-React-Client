@@ -3,12 +3,13 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { IStatFuncData } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
 import {
-  ConditionJoinMode,
   TFuncCondition,
   TVariant,
 } from '@service-providers/common/common.interface'
+import { getModeType } from '@utils/getModeType'
 import functionPanelStore from '../../function-panel.store'
 import { ICompoundHetCachedValues } from './../../function-panel.interface'
 
@@ -21,8 +22,18 @@ export const CompoundHetSelectOptions = [
 class CompoundHetStore {
   statFuncStatus = ''
 
+  currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public setCurrentMode(modeType: ModeTypes): void {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this.currentMode = undefined
   }
 
   public get cachedValues(): ICompoundHetCachedValues {
@@ -79,14 +90,14 @@ class CompoundHetStore {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.CompoundHet,
-      ConditionJoinMode.OR,
+      getModeType(this.currentMode),
       ['Proband'],
       { approx: this.cachedValues?.conditions.approx || null, state: null },
     ]
 
     const variant: TVariant = ['Proband', 0]
 
-    functionPanelStore.sumbitConditions(conditions, variant)
+    functionPanelStore.sumbitConditions(conditions, variant, this.currentMode)
   }
 
   public handleResetFields(): void {

@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { Fragment, ReactElement, useMemo } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useToggle } from '@core/hooks/use-toggle'
 import { Icon } from '@ui/icon'
 import { getNumericExpression } from '@utils/getNumericExpression'
+import { AllNotModeView } from './all-not-mode-view'
 
 interface Props {
   title: string
@@ -16,9 +17,14 @@ interface Props {
 export const SelectedFilterCard = observer(
   ({ title, filters, onRemove }: Props): ReactElement => {
     const [isOpen, open, close] = useToggle(true)
-    const filtersEntries = Object.entries(filters)
 
-    if (filtersEntries.length === 0) {
+    const filterContentWithoutModes = useMemo(() => {
+      return Object.entries(filters).filter(
+        filter => filter[0] !== 'All' && filter[0] !== 'Not',
+      )
+    }, [filters])
+
+    if (filterContentWithoutModes.length === 0) {
       return <Fragment />
     }
 
@@ -31,6 +37,14 @@ export const SelectedFilterCard = observer(
         : getNumericExpression(filterExp, filterName)
     }
 
+    const isAllMode: boolean = useMemo(() => {
+      return Object.keys(filters).includes('All')
+    }, [filters])
+
+    const isNotMode: boolean = useMemo(() => {
+      return Object.keys(filters).includes('Not')
+    }, [filters])
+
     return (
       <div>
         <div
@@ -38,6 +52,7 @@ export const SelectedFilterCard = observer(
           onClick={isOpen ? close : open}
         >
           <span className="leading-16px">{title}</span>
+          <AllNotModeView isAllMode={isAllMode} isNotMode={isNotMode} />
 
           <Icon
             name="Arrow"
@@ -50,7 +65,7 @@ export const SelectedFilterCard = observer(
 
         {isOpen && (
           <div>
-            {filtersEntries.map(([filterName, filterExpression]) => (
+            {filterContentWithoutModes.map(([filterName, filterExpression]) => (
               <div
                 key={filterName + filterExpression}
                 className="flex items-center pl-6 py-4"

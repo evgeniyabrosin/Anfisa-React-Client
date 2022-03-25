@@ -1,8 +1,10 @@
 import { ReactElement } from 'react'
 
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Select } from '@ui/select'
-import { AllNotModalMods } from '@pages/filter/ui/query-builder/ui/all-not-modal-mods'
+import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
+import compoundRequestStore from './compound-request.store'
 
 const approxOptions = [
   'shared transcript',
@@ -16,7 +18,13 @@ export const resetOptions = [
   'Compensational',
 ]
 
-export const AprroxAndState = (): ReactElement => (
+interface IAprroxAndStateProps {
+  simpleVariants: string[]
+}
+
+export const AprroxAndState = ({
+  simpleVariants,
+}: IAprroxAndStateProps): ReactElement => (
   <div className="flex justify-between items-center w-full mt-4 text-14">
     <div className="flex">
       <div className="flex items-center">
@@ -41,6 +49,10 @@ export const AprroxAndState = (): ReactElement => (
       </div>
     </div>
 
-    <AllNotModalMods />
+    <AllNotMods
+      isNotModeChecked={compoundRequestStore.currentMode === ModeTypes.Not}
+      isNotModeDisabled={simpleVariants ? simpleVariants.length === 0 : true}
+      toggleNotMode={() => compoundRequestStore.setCurrentMode(ModeTypes.Not)}
+    />
   </div>
 )

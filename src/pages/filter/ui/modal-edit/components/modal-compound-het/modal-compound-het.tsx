@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
+import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import { SelectModalButtons } from '@pages/filter/ui/query-builder/ui/select-modal-buttons'
 import dtreeModalStore from '../../../../modals.store'
-import { AllNotModalMods } from '../../../query-builder/ui/all-not-modal-mods'
 import { ApproxStateModalMods } from '../../../query-builder/ui/approx-state-modal-mods'
 import { DisabledVariantsAmount } from '../../../query-builder/ui/disabled-variants-amount'
 import { HeaderModal } from '../../../query-builder/ui/header-modal'
@@ -66,7 +66,7 @@ export const ModalCompoundHet = observer((): ReactElement => {
           handleSetCondition={handleSetCondition}
         />
 
-        <AllNotModalMods />
+        <AllNotMods />
       </div>
 
       <DisabledVariantsAmount variants={variants} disabled={true} />

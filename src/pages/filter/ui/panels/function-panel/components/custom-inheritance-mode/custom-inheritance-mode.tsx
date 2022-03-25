@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
 import { CustomInheritanceModeContent } from '@pages/filter/ui/query-builder/ui/custom-inheritance-mode-content'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
@@ -47,6 +48,12 @@ export const CustomInheritanceMode = observer(() => {
         selectStates={selectStates}
         handleReset={setComplexScenario}
         resetValue={reset}
+        isNotModeChecked={
+          customInheritanceModeStore.currentMode === ModeTypes.Not
+        }
+        toggleNotMode={() =>
+          customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
+        }
       />
 
       <PanelButtons

@@ -5,6 +5,7 @@ import { TVariant } from 'service-providers/common/common.interface'
 
 import { IStatFuncData, StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
@@ -19,7 +20,8 @@ export type SelectedFiltersType = Record<
 interface AddSelectedFiltersI {
   group: string
   groupItemName: string
-  variant?: TVariant
+  variant: TVariant
+  modeType?: ModeTypes | string
 }
 
 export class FilterStore {
@@ -54,7 +56,12 @@ export class FilterStore {
     this.selectedGroupItem = item
   }
 
-  addSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
+  addSelectedFilters({
+    group,
+    groupItemName,
+    variant,
+    modeType,
+  }: AddSelectedFiltersI) {
     if (!this.selectedFilters[group]) {
       this.selectedFilters[group] = {}
     }
@@ -65,6 +72,10 @@ export class FilterStore {
 
     if (variant) {
       this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
+    }
+
+    if (modeType) {
+      this.selectedFilters[group][groupItemName][modeType] = 1
     }
   }
 
