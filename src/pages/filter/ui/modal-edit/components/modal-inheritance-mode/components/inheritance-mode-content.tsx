@@ -1,11 +1,11 @@
 import { ChangeEvent, Fragment } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import modalInheritanceModeStore from '@pages/filter/ui/modal-edit/components/modal-inheritance-mode/modal-inheritance-mode.store'
 import { DisabledVariantsAmount } from '../../../../query-builder/ui/disabled-variants-amount'
 import { ModsDivider } from '../../../../query-builder/ui/mods-divider'
 
@@ -24,26 +24,6 @@ export const InheritanceModeContent = observer(
     handleReset,
   }: IProps) => {
     const variants = dtreeStore.statFuncData.variants
-
-    const handleCheckGroupItem = (checked: boolean, name: string) => {
-      if (checked) {
-        dtreeStore.addSelectedFilter(name)
-        return
-      }
-
-      dtreeStore.removeSelectedFilter(name)
-    }
-
-    const setAll = (checked: boolean) => () => {
-      const allVariants = toJS(variants)
-      allVariants &&
-        allVariants.forEach((variant: any[]) =>
-          handleCheckGroupItem(checked, variant[0]),
-        )
-    }
-
-    const clearAll = setAll(false)
-    const selectAll = setAll(true)
 
     return (
       <Fragment>
@@ -79,7 +59,7 @@ export const InheritanceModeContent = observer(
           <div className="flex">
             <div
               className="text-14 text-blue-bright cursor-pointer"
-              onClick={selectAll}
+              onClick={modalInheritanceModeStore.setAllGroupVariants}
             >
               {t('general.selectAll')}
             </div>
@@ -88,7 +68,7 @@ export const InheritanceModeContent = observer(
 
             <div
               className="text-14 text-blue-bright cursor-pointer"
-              onClick={clearAll}
+              onClick={modalInheritanceModeStore.clearAllGroupVariants}
             >
               {t('general.clearAll')}
             </div>
@@ -98,7 +78,9 @@ export const InheritanceModeContent = observer(
         <DisabledVariantsAmount
           variants={variants}
           disabled={false}
-          handleCheckGroupItem={handleCheckGroupItem}
+          handleCheckGroupItem={
+            modalInheritanceModeStore.handleCheckGroupVariantItem
+          }
         />
       </Fragment>
     )
