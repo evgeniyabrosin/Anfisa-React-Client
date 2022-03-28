@@ -19,6 +19,10 @@ module.exports = {
         16: '16px',
         20: '20px',
       },
+      padding: {
+        10: '10px',
+        15: '15px',
+      },
       backgroundOpacity: {
         2: '0.02',
       },
