@@ -83,7 +83,7 @@ export const NextStepContentItem = observer(
       activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       group[0] === StepTypeEnum.Enum &&
-        dtreeModalStore.openModalEditFilters(group[1], currNo)
+        dtreeModalStore.openModalFilters(group[1], currNo)
 
       group[0] === StepTypeEnum.Numeric &&
         dtreeModalStore.openModalNumbers(group[1], currNo)

@@ -8,13 +8,12 @@ import { ModalConfiramtion } from './ui/modal-confirmation'
 import { ModalCompoundHet } from './ui/modal-edit/components/modal-compound-het/modal-compound-het'
 import { ModalCompoundRequest } from './ui/modal-edit/components/modal-compound-request/modal-compound-request'
 import { ModalCustomInheritanceMode } from './ui/modal-edit/components/modal-custom-inheritance-mode/modal-custom-inheritance-mode'
-import { ModalEditFilters } from './ui/modal-edit/components/modal-edit-filters'
+import { ModalFilters } from './ui/modal-edit/components/modal-filters/modal-filters'
 import { ModalGeneRegion } from './ui/modal-edit/components/modal-gene-region/modal-gene-region'
 import { ModalInheritanceMode } from './ui/modal-edit/components/modal-inheritance-mode/modal-inheritance-mode'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
 import { ModalSaveDataset } from './ui/query-builder/ui/modal-save-dataset'
 import { ModalSelectAttribute } from './ui/query-builder/ui/modal-select-attribute'
-import { ModalSelectFilters } from './ui/query-builder/ui/modal-select-filters'
 import { TableModal } from './ui/TableModal'
 
 export const ModalsBlock = observer(
@@ -22,8 +21,7 @@ export const ModalsBlock = observer(
     <Fragment>
       {dtreeModalStore.isModalAttributeVisible && <ModalSelectAttribute />}
 
-      {dtreeModalStore.isModalEditFiltersVisible && <ModalEditFilters />}
-      {dtreeModalStore.isModalSelectFilterVisible && <ModalSelectFilters />}
+      {dtreeModalStore.isModalFiltersVisible && <ModalFilters />}
 
       {dtreeModalStore.isModalNumbersVisible && <ModalNumbers />}
 

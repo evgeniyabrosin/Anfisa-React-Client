@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
-import uniq from 'lodash/uniq'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { FilterCountsType } from '@declarations'
@@ -377,9 +376,13 @@ class DtreeStore {
   }
 
   addSelectedFilter(filter: string) {
-    const localSelectedFilters = [...this.selectedFilters, filter]
+    this.selectedFilters = [...this.selectedFilters, filter]
 
-    this.selectedFilters = uniq(localSelectedFilters)
+    this.resetLocalDtreeCode()
+  }
+
+  addSelectedFilterList(filters: string[]) {
+    this.selectedFilters = [...this.selectedFilters, ...filters]
 
     this.resetLocalDtreeCode()
   }
