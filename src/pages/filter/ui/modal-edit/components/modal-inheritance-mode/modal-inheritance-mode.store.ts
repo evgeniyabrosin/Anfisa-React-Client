@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 
 import { ActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
@@ -67,6 +67,7 @@ class ModalInheritanceModeStore {
       .join('", "')}"]}`
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
+    this.clearAllGroupVariants()
   }
 
   public saveChanges = (selectedProblemGroups: string[]): void => {
@@ -75,6 +76,31 @@ class ModalInheritanceModeStore {
     changeFunctionalStep(params, true)
     dtreeModalStore.closeModalInheritanceMode()
     dtreeStore.resetSelectedFilters()
+  }
+
+  public handleCheckGroupVariantItem(checked: boolean, name: string): void {
+    if (checked) {
+      dtreeStore.addSelectedFilter(name)
+      return
+    }
+
+    dtreeStore.removeSelectedFilter(name)
+  }
+
+  public clearAllGroupVariants(): void {
+    const variants = toJS(dtreeStore.statFuncData.variants)
+    variants &&
+      variants.forEach((variant: any[]) =>
+        dtreeStore.removeSelectedFilter(variant[0]),
+      )
+  }
+
+  public setAllGroupVariants(): void {
+    const variants = toJS(dtreeStore.statFuncData.variants)
+    variants &&
+      variants.forEach((variant: any[]) =>
+        dtreeStore.addSelectedFilter(variant[0]),
+      )
   }
 
   public addAttribute = (
