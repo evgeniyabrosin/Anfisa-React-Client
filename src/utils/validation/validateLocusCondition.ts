@@ -15,6 +15,11 @@ export const validateLocusCondition = ({
   groupName,
   currentStepIndex,
 }: IValidateLocusConditionProps): void => {
+  if (value.length === 0) {
+    setIsErrorVisible(false)
+    return
+  }
+
   let numberValue = value[3]
   let lastIndexOfName = 3
 
