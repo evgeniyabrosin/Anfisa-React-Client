@@ -64,7 +64,7 @@ class CompoundHetStore {
 
   public setConditions(approx: string | null, variants?: string[]): void {
     functionPanelStore.setCachedValues<ICompoundHetCachedValues>(
-      FuncStepTypesEnum.GeneRegion,
+      FuncStepTypesEnum.CompoundHet,
       {
         conditions: { approx: approx, state: null },
         variants: variants || ['Proband'],
