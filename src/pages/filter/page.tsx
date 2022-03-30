@@ -46,6 +46,7 @@ const FilterPage = observer((): ReactElement => {
     return () => {
       dtreeStore.resetFilterValue()
       dtreeStore.resetAlgorithmFilterValue()
+      dtreeStore.resetCurrentDtreeName()
       dtreeStore.resetData()
       dirinfoStore.resetData()
       datasetStore.resetData()
