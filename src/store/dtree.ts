@@ -121,7 +121,7 @@ class DtreeStore {
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
-    const finalStep = {
+    const finalStep: IStepData = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
@@ -470,33 +470,20 @@ class DtreeStore {
   updatePointCounts(pointCounts: [number | null][]) {
     const localStepData = [...this.stepData]
 
+    const counts = toJS(pointCounts)
+
     localStepData.forEach((element, index) => {
-      const counts = toJS(pointCounts)
-
       const startCountsIndex = this.getStepIndexForApi(index)
-      const indexes = toJS(this.dtreeStepIndices)
-      const isFinalStepIndex = index === indexes.length
+      const differenceCountsIndex = startCountsIndex + 1
 
-      const currentCount = isFinalStepIndex
-        ? counts[counts.length - 1]?.[0]
-        : counts[startCountsIndex]?.[0]
+      const isFinalStep = index === localStepData.length - 1
 
-      const startCounts =
-        counts[startCountsIndex] === null ? '...' : currentCount
-
-      const diferenceCountsIndex = startCountsIndex + 1
-
-      const diferenceCounts =
-        counts[diferenceCountsIndex] === null
-          ? '...'
-          : counts[diferenceCountsIndex]?.[0]
-
-      const isEmptyTree = counts.length === 1
-      const isFinalStep = Boolean(localStepData[index].isFinalStep)
-      const shouldSetAllVariants = isEmptyTree && isFinalStep
-
-      element.startFilterCounts = startCounts
-      element.difference = shouldSetAllVariants ? counts[0][0] : diferenceCounts
+      if (isFinalStep) {
+        element.difference = counts[counts.length - 1]?.[0]
+      } else {
+        element.startFilterCounts = counts[startCountsIndex]?.[0]
+        element.difference = counts[differenceCountsIndex]?.[0]
+      }
     })
 
     runInAction(() => {
