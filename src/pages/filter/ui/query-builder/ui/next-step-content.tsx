@@ -10,7 +10,6 @@ import activeStepStore, {
 } from '@pages/filter/active-step.store'
 import dtreeModalStore from '../../../modals.store'
 import { NextStepContentItem } from './next-step-content-item'
-import { floor } from 'lodash'
 
 interface IProps {
   index: number
@@ -50,7 +49,7 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
       .map((item, index) => {
         if (index % 2 === 0) return item
 
-        if (expanded[floor(index / 2)]) return `{${item}}`
+        if (expanded[Math.floor(index / 2)]) return `{${item}}`
 
         const elements = item
           .split(/([^("|,)]*"[^"]+"[^("|,)]*)|([^,]+)/)
