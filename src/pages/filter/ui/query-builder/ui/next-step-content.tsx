@@ -10,6 +10,7 @@ import activeStepStore, {
 } from '@pages/filter/active-step.store'
 import dtreeModalStore from '../../../modals.store'
 import { NextStepContentItem } from './next-step-content-item'
+import { floor } from 'lodash'
 
 interface IProps {
   index: number
@@ -44,24 +45,32 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
   const getWords = (text: string | null) => {
     if (!text) return []
 
-    const splitByBraces = text.split('{').map((item, index) => {
-      if (index === 0) return [`${item}{`]
+    const removeNotExpandedAttributes = text
+      .split(/{|}/)
+      .map((item, index) => {
+        if (index % 2 === 0) return item
 
-      const elements = item.split('}').map((x, i) => {
-        if (i === 1) return `}${x}`
-        if (expanded[index - 1]) return x
-        const attachments = x.split(',')
-        if (attachments.length <= 3) return attachments.join(',')
-        return attachments.slice(0, 3).join(',') + ', ...'
+        if (expanded[floor(index / 2)]) return `{${item}}`
+
+        const elements = item
+          .split(/([^("|,)]*"[^"]+"[^("|,)]*)|([^,]+)/)
+          .filter(Boolean)
+          .filter(el => el !== ',')
+
+        if (elements.length <= 3) return `{${elements.join(',')}}`
+
+        return `{${elements.slice(0, 3).join(',')}, ...}`
       })
+      .join('')
 
-      return elements.join('')
-    })
-
-    const res = splitByBraces.join('')
-    const textList = res.split(/{|}/)
-    const changedTextList = textList.map(element => {
-      if (element.includes('"')) return `{${element}}`
+    const textList = removeNotExpandedAttributes.split(/{|}/)
+    const changedTextList = textList.map((element, index) => {
+      if (
+        element.includes('"') &&
+        !(index === 0 || textList.length === index + 1)
+      ) {
+        return `{${element}}`
+      }
 
       return element.split(' ')
     })
