@@ -17,13 +17,13 @@ interface IRequestBlockProps {
 export const RequestBlock = observer(
   ({ index, activeRequestIndex, item }: IRequestBlockProps): ReactElement => {
     const { problemGroups } = modalEditStore
-    const [hasErrors, setError] = useState(false)
+    const [hasErrors, setErrors] = useState(false)
 
     useEffect(() => {
       try {
-        setError(Number.parseInt(item[0]) <= 0)
+        setErrors(Number.parseInt(item[0]) <= 0)
       } catch (e) {
-        setError(true)
+        setErrors(true)
       }
     }, [item])
 
