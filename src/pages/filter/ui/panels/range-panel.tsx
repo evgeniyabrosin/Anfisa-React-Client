@@ -9,6 +9,7 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { TNumericCondition } from '@service-providers/common'
 import { createNumericExpression } from '@utils/createNumericExpression'
 
 type TNumericExpression = [null | number, boolean, null | number, boolean]
@@ -57,7 +58,7 @@ export const RangePanel = observer((): ReactElement => {
           minValue: min,
           maxValue: max,
         }),
-      ],
+      ] as TNumericCondition,
     ])
 
     filterStore.addSelectedFilterGroup(

@@ -8,7 +8,7 @@ import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import datasetStore, { Condition } from '@store/dataset'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
@@ -19,6 +19,7 @@ import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
+import { TCondition } from '@service-providers/common'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
@@ -39,7 +40,7 @@ const WSPage = observer((): ReactElement => {
 
   useEffect(() => {
     if (stringifyedConditions) {
-      const conditions: Condition[] = JSON.parse(stringifyedConditions)
+      const conditions: TCondition[] = JSON.parse(stringifyedConditions)
       datasetStore.setConditionsAsync(conditions)
     }
 

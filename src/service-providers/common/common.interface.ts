@@ -1,3 +1,5 @@
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+
 export enum DatasetKinds {
   WS = 'ws',
   XL = 'xl',
@@ -53,7 +55,7 @@ export interface IGeneRegionArgs {
 }
 
 export type TEnumCondition = [
-  conditionType: 'enum',
+  conditionType: FilterKindEnum.Enum,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],

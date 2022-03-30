@@ -2,12 +2,12 @@ import { get } from 'lodash'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { IGridLayout, ReccntDisplayItem } from '@declarations'
-import { getApiUrl } from '@core/get-api-url'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import {
   IReccntArguments,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
@@ -147,12 +147,12 @@ export class VariantStore {
 
     const [variantResponse, tagsResponse] = await Promise.all([
       datasetProvider.getRecCnt(reccntArguments),
-      fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
+      wsDatasetProvider.getWsTags({ ds: this.dsName, rec: this.index }),
     ])
 
     const [variant, tagsData] = await Promise.all([
       variantResponse,
-      tagsResponse.json(),
+      tagsResponse,
     ])
 
     const checkedTags = Object.keys(tagsData['rec-tags']).filter(
@@ -169,7 +169,7 @@ export class VariantStore {
       this.optionalTags = optionalTags
       this.checkedTags = checkedTags
       this.tagsWithNotes = get(tagsData, 'rec-tags')
-      this.noteText = tagsData['rec-tags']['_note']
+      this.noteText = tagsData['rec-tags']['_note'] as string
       this.initRecordsDisplayConfig()
 
       if (this.wsDrawerVariantsLayout.length === 0) {
@@ -181,23 +181,13 @@ export class VariantStore {
   async fetchSelectedTagsAsync(params: string) {
     if (datasetStore.isXL) return
 
-    const body = new URLSearchParams({
+    const wsTags = await wsDatasetProvider.getWsTags({
       ds: this.dsName,
-      rec: this.index.toString(),
-      tags: `{${params}}`,
+      rec: this.index,
+      tags: JSON.parse(params),
     })
 
-    const response = await fetch(getApiUrl('ws_tags'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const tagsData = await response.json()
-
-    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
+    const checkedTags = Object.keys(wsTags['rec-tags']).filter(
       tag => tag !== '_note',
     )
 

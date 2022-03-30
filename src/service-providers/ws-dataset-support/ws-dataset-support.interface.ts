@@ -39,7 +39,7 @@ export type TZoneList = IZoneDescriptor | IZoneDescriptor[]
 
 // ws_tags
 
-export type TTagsDescriptor = [tagName: string, value: string | true][]
+export type TTagsDescriptor = Record<string, string | true>
 
 export interface IWsTagsArguments {
   ds: string

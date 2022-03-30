@@ -7,8 +7,10 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { GlbPagesNames } from '@glb/glb-names'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
+
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true
@@ -19,27 +21,13 @@ class OperationsStore {
   }
 
   async macroTaggingAsync({ tag, off }: { tag: string; off?: boolean }) {
-    const body = new URLSearchParams({
+    await wsDatasetProvider.updateMicroTagging({
       ds: datasetStore.datasetName,
       tag,
-      conditions: JSON.stringify(datasetStore.conditions),
+      conditions: datasetStore.conditions,
       filter: datasetStore.activePreset,
+      off,
     })
-
-    off && body.append('off', String(off))
-
-    const response = await fetch(
-      getApiUrl(`macro_tagging?ds=${datasetStore.datasetName}&tag=${tag}`),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body,
-      },
-    )
-
-    await response.json()
 
     datasetStore.initDatasetAsync(datasetStore.datasetName)
     dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
