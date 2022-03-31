@@ -34,13 +34,13 @@ Feature: Main table, Presets
 	Scenario: No data
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When clicks "Select an option" under "Preset"
-		And user chooses the "⏚SEQaBOO_Hearing_Loss_v_4" preset
+		And user chooses the "⏚BGM_Compound_Het" preset
 		Then Empty variants list should be displayed
 		And the "There are no results. Try to reset filters And try again" message should be displayed
 		And the "Reset filters" button should be present
 ​
 	Scenario: Reset filters
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
-		And the "⏚SEQaBOO_Hearing_Loss_v_4" preset is applied
+		And the "⏚BGM_Compound_Het" preset is applied
 		When clicks "Reset filters" button
 		Then filters should be reset

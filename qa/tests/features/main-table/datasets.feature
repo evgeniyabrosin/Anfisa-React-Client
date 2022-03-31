@@ -101,7 +101,7 @@ Feature: Main table, Dataset Creation
         And clicks "Save dataset"
         And writes the name for a dataset with more than 250 characters.
         And clicks "Add dataset"
-        Then dataset should not be saved.
+        Then User should be unable to click "Add dataset" .
 
     Scenario: Try to create dataset with spaces in the name
         Given The main table of the dataset

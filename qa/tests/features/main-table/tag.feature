@@ -2,6 +2,7 @@ Feature: Main table, Filter by Tag
     As the Anfisa user I want to filter variants list by Tag
 
     Scenario: Open the Main Table page
+
         Given The Main page was open
         When User clicks a WS dataset
         And clicks the "Open in viewer" button
@@ -9,26 +10,30 @@ Feature: Main table, Filter by Tag
         Then The "Main Table" page should be opened
     ​
     Scenario: Tags are correspond to the dataset
+
         Given The "Main table" for WS dataset was open
         When user clicks the "Add" button under the "Tag" section
         Then List of Tags should be displayed
         And Tags should correspond to the dataset
 
     Scenario: Open Main Table page to another dataset
+
         Given The "Main table" for WS dataset was open
-        When user back to the Main page screen
+        When user goes back to the Main page screen
         And clicks another WS dataset
         And clicks the "Open in viewer" button
         And clicks the "Main Table" sub-menu
         Then The "Main Table" page should be opened
     ​
     Scenario: Tags are correspond to the dataset
+
         Given The "Main table" for WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         Then List of tags should be displayed
         And Tags should correspond to the dataset
     ​
     Scenario: Select a tag without applying
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button the "Tag" section
         And "Tag" dialog is opened
@@ -36,6 +41,7 @@ Feature: Main table, Filter by Tag
         Then Chosen Tags should be checked but should not be added to the panel
 
     Scenario: Add filter by one tag
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -44,6 +50,7 @@ Feature: Main table, Filter by Tag
         Then ariants list should be filtered by selected tag
     ​
     Scenario: Add filter by a few tags
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -52,6 +59,7 @@ Feature: Main table, Filter by Tag
         Then Variants list should be filtered by selected tags.
     ​
     Scenario: Edit filter
+
         Given Some Tags were added to the "Tag"
         When User clicks "Edit" button near "Tag"
         And adds/removes some tags from the "Tag"
@@ -59,6 +67,7 @@ Feature: Main table, Filter by Tag
         Then Variants list should be filtered by newly selected tags
 
     Scenario: NOT mode
+
         Given The "Main table" of the WS dataset was open
         When  User clicks the "Add" button under "Tag"
         And the "Tag" dialog is opened
@@ -68,6 +77,7 @@ Feature: Main table, Filter by Tag
         Then Variants without selected tag should be displayed
 
     Scenario: Variants with notes only
+
         Given The "Main table" of the WS dataset was open
         When  User clicks the "Add" button under "Tag"
         And the "Tag" dialog is opened
@@ -76,6 +86,7 @@ Feature: Main table, Filter by Tag
         Then Only variants with notes should be displayed
     ​
     Scenario: Variants with notes only + Not mode
+
         Given The "Main table" of the WS dataset was open
         When  User clicks the "Add" button under "Tag"
         And the "Tag" dialog is opened
@@ -87,6 +98,7 @@ Feature: Main table, Filter by Tag
         Then Only variants with notes and without checked variant should be displayed
     ​
     Scenario: Clear All
+
         Given Some tags were added to the "Tag"
         When User clicks "Edit" button near "Tag"
         And clicks the "Clear all" button
@@ -94,6 +106,7 @@ Feature: Main table, Filter by Tag
         Then All chosen tags should be cleared
 
     Scenario: Cancel
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -102,6 +115,7 @@ Feature: Main table, Filter by Tag
         Then variants should not be filtered by tags (no filter's changes)
 
     Scenario: Search by Tag
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -109,6 +123,7 @@ Feature: Main table, Filter by Tag
         Then The Tag should be found
     ​
     Scenario: Search by Tag (substring)
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -116,6 +131,7 @@ Feature: Main table, Filter by Tag
         Then The Tag should be found
 
     Scenario: Search by Tag (lower-case)
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -123,6 +139,7 @@ Feature: Main table, Filter by Tag
         Then  The Tag should be found
     ​
     Scenario: Search by Tag (upper-case)
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And the "Tag" dialog is opened
@@ -130,6 +147,7 @@ Feature: Main table, Filter by Tag
         Then  The Tag should be found
     ​
     Scenario: Search by random row
+
         Given The "Main table" of the WS dataset was open
         When User clicks the "Add" button under the "Tag" section
         And  Tag  dialog is opened
