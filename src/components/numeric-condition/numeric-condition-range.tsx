@@ -145,7 +145,9 @@ export const NumericConditionRange = ({
                 className="mr-1"
                 onChange={handleZeroIncludedChange}
               />
-              {t('numericCondition.includeZero', { count: histogram?.[3][0] })}
+              {t('numericCondition.includeZero', {
+                count: Math.round(histogram?.[3][0] ?? 0),
+              })}
             </label>
           </div>
         )}

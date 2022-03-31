@@ -13,5 +13,5 @@ export const RangeSliderHistogramAxisLabel = styled.span`
   margin-top: -5px;
   font-size: 10px;
   line-height: 10px;
-  color: ${theme('color.grey.blue')};
+  color: ${theme('colors.grey.blue')};
 `

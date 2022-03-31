@@ -103,12 +103,31 @@ export enum AttributeKinds {
   FUNC = 'func',
 }
 
+export enum AttributeChartRenderModes {
+  Pie = 'pie',
+  Bar = 'bar',
+  Linear = 'linear',
+  Log = 'log',
+  Neighborhood = 'neighborhood',
+}
+
+export enum AttributeNumericRenderModes {
+  Less = '<',
+  Greater = '>',
+  Equal = '=',
+}
+
+export type TAttributeRenderMode =
+  | AttributeChartRenderModes
+  | `${AttributeChartRenderModes.Linear},${AttributeNumericRenderModes}`
+  | `${AttributeChartRenderModes.Log},${AttributeNumericRenderModes}`
+
 export interface IBasePropertyStatus<Kind extends AttributeKinds> {
   name: string
   kind: Kind
   vgroup: string
   title?: string
-  'render-mode'?: string
+  'render-mode'?: AttributeChartRenderModes
   tooltip?: string
   incomplete?: true
   detailed?: true
