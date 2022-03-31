@@ -22,6 +22,6 @@ export const compareConditions = ({
   if (prevPreset && currentPreset !== prevPreset) return true
 
   return currentConditions.some((condition: any[], index) => {
-    return difference(condition, startConditions[index]).length !== 0
+    return difference(condition, startConditions[index]).length === 0
   })
 }

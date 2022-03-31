@@ -3,10 +3,7 @@ import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
-import {
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
+import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getModeType } from '@utils/getModeType'
 import { IInheritanceModeCachedValues } from '../../function-panel.interface'
 import functionPanelStore from '../../function-panel.store'
@@ -143,9 +140,7 @@ class InheritanceModeStore {
       },
     ]
 
-    const variant: TVariant = [`${this.variantsValues}`, 0]
-
-    functionPanelStore.sumbitConditions(conditions, variant, this.currentMode)
+    functionPanelStore.sumbitConditions(conditions)
 
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.InheritanceMode,

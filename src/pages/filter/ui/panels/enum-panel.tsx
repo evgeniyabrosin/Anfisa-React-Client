@@ -1,13 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
 import filterAttributesStore from '../filterAttributes.store'
 import { QueryBuilderSearch } from '../query-builder/query-builder-search'
-import { AllNotMods } from '../query-builder/ui/all-not-mods'
 import { SelectedGroupItem } from '../selected-group-item'
 
 const variantsPerPage = 12
@@ -17,7 +15,6 @@ export const EnumPanel = observer((): ReactElement => {
     currentGroup: { groupName },
     allEnumVariants: variants,
     datasetEnumValues: datasetVariants,
-    groupSubKind,
   } = filterAttributesStore
 
   const [selectedVariants, setSelectedVariants] = useState<string[]>([])
@@ -28,7 +25,6 @@ export const EnumPanel = observer((): ReactElement => {
   useEffect(() => {
     setSearchValue('')
     setCurrentPage(0)
-    filterAttributesStore.resetCurrentMode()
   }, [groupName])
 
   const preparedSearchValue = searchValue.toLocaleLowerCase()
@@ -59,9 +55,7 @@ export const EnumPanel = observer((): ReactElement => {
   }
 
   const handleClear = () => {
-    filterAttributesStore.clearCurrentGroupFilter()
     setSelectedVariants([])
-    filterAttributesStore.resetCurrentMode()
 
     setCurrentPage(0)
   }
@@ -89,22 +83,6 @@ export const EnumPanel = observer((): ReactElement => {
           value={searchValue}
           onChange={handleChange}
           isSubgroupItemSearch
-        />
-      </div>
-
-      <div className="flex justify-end mt-2 -mb-4">
-        <AllNotMods
-          groupSubKind={groupSubKind}
-          isAllModeChecked={filterAttributesStore.currentMode === ModeTypes.All}
-          isNotModeChecked={filterAttributesStore.currentMode === ModeTypes.Not}
-          isAllModeDisabled={selectedVariants.length < 2}
-          isNotModeDisabled={selectedVariants.length === 0}
-          toggleAllMode={() =>
-            filterAttributesStore.setCurrentMode(ModeTypes.All)
-          }
-          toggleNotMode={() =>
-            filterAttributesStore.setCurrentMode(ModeTypes.Not)
-          }
         />
       </div>
 

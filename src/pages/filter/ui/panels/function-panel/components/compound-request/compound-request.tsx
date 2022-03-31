@@ -65,7 +65,6 @@ export const CompoundRequest = observer((): ReactElement => {
         onSubmit={() => compoundRequestStore.handleSumbitCondtions()}
         resetFields={handleResetFields}
         disabled={!simpleVariants}
-        selectedFilterValue={selectedFilterValue}
       />
     </React.Fragment>
   )

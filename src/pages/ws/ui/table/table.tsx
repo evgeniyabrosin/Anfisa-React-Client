@@ -54,7 +54,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   const history = useHistory()
   const alreadyOpened = !!params.get('variant')
 
-  const { selectedFilters } = filterStore
+  const { selectedFiltersArray } = filterStore
 
   const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } =
     zoneStore
@@ -170,7 +170,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
 
   const renderNoResults = useCallback(() => {
     const isFiltersSelected =
-      Object.keys(selectedFilters).length > 0 ||
+      selectedFiltersArray.length > 0 ||
       selectedGenes.length > 0 ||
       selectedGenesList.length > 0 ||
       selectedSamples.length > 0 ||
@@ -193,7 +193,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
       return null
     }
   }, [
-    selectedFilters,
+    selectedFiltersArray,
     selectedGenes,
     selectedGenesList,
     selectedSamples,

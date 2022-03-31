@@ -83,7 +83,6 @@ export const GeneRegion = observer(() => {
           geneRegionStore.resetCurrentMode()
         }}
         disabled={!simpleVariants || isErrorVisible}
-        selectedFilterValue={selectedFilterValue}
       />
     </React.Fragment>
   )

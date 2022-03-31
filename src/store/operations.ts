@@ -24,7 +24,7 @@ class OperationsStore {
     await wsDatasetProvider.updateMicroTagging({
       ds: datasetStore.datasetName,
       tag,
-      conditions: datasetStore.conditions,
+      conditions: filterStore.conditions,
       filter: datasetStore.activePreset,
       off,
     })
@@ -34,12 +34,14 @@ class OperationsStore {
   }
 
   async exportReportAsync(exportType?: ExportTypeEnum) {
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
     })
 
-    if (datasetStore.conditions) {
-      const condtitions = JSON.stringify(datasetStore.conditions)
+    if (conditions) {
+      const condtitions = JSON.stringify(conditions)
 
       body.append('conditions', condtitions)
     }
@@ -117,6 +119,8 @@ class OperationsStore {
   ): Promise<{ ok: boolean; message?: string }> {
     this.resetIsCreationOver()
 
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       ws: wsName,
@@ -133,9 +137,7 @@ class OperationsStore {
         : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {
-      const conditions = JSON.stringify(datasetStore.conditions)
-
-      conditions && body.append('conditions', conditions)
+      conditions && body.append('conditions', JSON.stringify(conditions))
     } else {
       body.append('code', dtreeStore.dtreeCode)
     }

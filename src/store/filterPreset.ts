@@ -38,9 +38,11 @@ class PresetStore {
   }
 
   async deletePresetAsync(presetName: string) {
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      conditions: JSON.stringify(datasetStore.conditions),
+      conditions: JSON.stringify(conditions),
       instr: JSON.stringify(['DELETE', presetName]),
     })
 
@@ -58,6 +60,8 @@ class PresetStore {
   }
 
   async joinPresetAsync(presetName: string) {
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       instr: JSON.stringify(['JOIN', presetName]),
@@ -65,7 +69,7 @@ class PresetStore {
 
     datasetStore.prevPreset
       ? body.append('filter', datasetStore.prevPreset)
-      : body.append('conditions', JSON.stringify(datasetStore.conditions))
+      : body.append('conditions', JSON.stringify(conditions))
 
     const result = await datasetStore.fetchDsStatAsync(false, body)
 
@@ -73,9 +77,11 @@ class PresetStore {
   }
 
   async updatePresetAsync(presetName: string) {
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      conditions: JSON.stringify(datasetStore.conditions),
+      conditions: JSON.stringify(conditions),
       instr: JSON.stringify(['UPDATE', presetName]),
     })
 

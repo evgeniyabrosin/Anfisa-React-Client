@@ -22,7 +22,9 @@ export const FilterControlRefiner = observer((): ReactElement => {
 
   const [createPresetName, setCreatePresetName] = useState<string>('')
 
-  const isSelectedFiltersEmpty: boolean = isEmpty(filterStore.selectedFilters)
+  const isSelectedFiltersEmpty: boolean = isEmpty(
+    filterStore.selectedFiltersArray,
+  )
 
   const isApplyDisabled =
     activePreset.startsWith(DEFAULT_PRESET_LABEL) &&

@@ -37,8 +37,12 @@ class FilterControlRefinerStore {
     createPresetName: string,
     isSelectedFiltersEmpty: boolean,
   ): void => {
+    const { conditions } = filterStore
+
     if (filterStore.actionName === ActionFilterEnum.Delete) {
       presetStore.deletePreset()
+      filterStore.resetSelectedFilters()
+      datasetStore.fetchDsStatAsync()
     }
 
     if (filterStore.actionName === ActionFilterEnum.Join) {
@@ -49,7 +53,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToJoin = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,
@@ -90,7 +94,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToModify = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,

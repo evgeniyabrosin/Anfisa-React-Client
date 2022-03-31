@@ -1,11 +1,14 @@
-import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, toJS } from 'mobx'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore, { DatasetStore } from '@store/dataset'
 import filterStore, { FilterStore } from '@store/filter'
-import { getModeType } from '@utils/getModeType'
+import {
+  ConditionJoinMode,
+  TCondition,
+  TEnumCondition,
+} from '@service-providers/common/common.interface'
 
 type FilterAttributesStoreParams = {
   datasetStore: DatasetStore
@@ -57,77 +60,26 @@ export class FilterAttributesStore {
     return toJS(this.getDatasetEnumValues(this.currentGroup))
   }
 
-  public setCurrentMode(modeType: ModeTypes): void {
-    this.currentMode = modeType
-  }
+  updateEnumFilter(group: FilterGroup, values: string[]): void {
+    const { groupName } = group
 
-  public resetCurrentMode(): void {
-    this.currentMode = undefined
-  }
-
-  public clearGroupFilter({ vgroup, groupName }: FilterGroup): void {
-    const localSelectedFilters = cloneDeep(this.filterStore.selectedFilters)
-
-    if (localSelectedFilters[vgroup]?.[groupName]) {
-      delete localSelectedFilters[vgroup][groupName]
-
-      if (this.datasetStore.activePreset) {
-        this.datasetStore.resetActivePreset()
-      }
-    }
-
-    this.filterStore.setSelectedFilters(localSelectedFilters)
-
-    this.datasetStore.removeConditionGroup({ subGroup: groupName })
-
-    if (!this.datasetStore.isXL) {
-      this.datasetStore.fetchWsListAsync()
-    }
-  }
-
-  public clearCurrentGroupFilter(): void {
-    this.clearGroupFilter(this.currentGroup)
-  }
-
-  public updateEnumFilter(group: FilterGroup, values: string[]): void {
-    const { vgroup, groupName } = group
+    const condition: TEnumCondition = [
+      FilterKindEnum.Enum,
+      groupName,
+      ConditionJoinMode.OR,
+      values,
+    ]
+    this.filterStore.addFilterBlock(condition)
 
     if (this.datasetStore.activePreset) {
       this.datasetStore.resetActivePreset()
     }
 
-    this.datasetStore.setConditionsAsync([
-      [FilterKindEnum.Enum, groupName, getModeType(this.currentMode), values],
-    ])
+    datasetStore.fetchDsStatAsync()
 
     if (!this.datasetStore.isXL) {
       this.datasetStore.fetchWsListAsync()
     }
-
-    const updatedFilters = cloneDeep(this.filterStore.selectedFilters)
-
-    if (!updatedFilters[vgroup]) {
-      updatedFilters[vgroup] = {}
-    }
-
-    const selectedSubAttributes: Record<string, number> = {}
-    const variants = this.getAllEnumVariants(group)
-
-    values.forEach(variantName => {
-      const variant = variants.find(variant => variant[0] === variantName)
-
-      if (variant) {
-        selectedSubAttributes[variant[0]] = variant[1]
-      }
-    })
-
-    if (this.currentMode) {
-      selectedSubAttributes[this.currentMode] = 1
-    }
-
-    updatedFilters[vgroup][groupName] = selectedSubAttributes
-
-    this.filterStore.setSelectedFilters(updatedFilters)
   }
 
   public updateCurrentGroupEnumFilter(values: string[]): void {
@@ -156,11 +108,11 @@ export class FilterAttributesStore {
 
   private getDatasetEnumValues(group: FilterGroup): string[] {
     const { groupName } = group
+    const { conditions } = filterStore
 
     return (
-      this.datasetStore.conditions.find(
-        (element: any[]) => element[1] === groupName,
-      )?.[3] ?? []
+      conditions.find((element: TCondition) => element[1] === groupName)?.[3] ??
+      []
     )
   }
 }

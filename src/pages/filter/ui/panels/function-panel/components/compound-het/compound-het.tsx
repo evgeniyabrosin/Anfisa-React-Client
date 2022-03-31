@@ -61,7 +61,6 @@ export const CompundHet = observer((): ReactElement => {
         onSubmit={() => compoundHetStore.handleSumbitCondtions()}
         resetFields={() => compoundHetStore.handleResetFields()}
         disabled={!simpleVariants}
-        selectedFilterValue={'Proband'}
       />
     </React.Fragment>
   )

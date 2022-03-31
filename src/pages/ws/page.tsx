@@ -10,6 +10,7 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ExportPanel } from '@components/export-panel'
@@ -19,7 +20,7 @@ import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
-import { TCondition } from '@service-providers/common'
+import { TCondition } from '@service-providers/common/common.interface'
 import { ControlPanel } from './ui/control-panel'
 import { ModalNotes } from './ui/modal-notes'
 import { TableVariants } from './ui/table-variants'
@@ -27,6 +28,7 @@ import { TableVariants } from './ui/table-variants'
 const WSPage = observer((): ReactElement => {
   const params = useParams()
   const stringifyedConditions = params.get('conditions')
+  const { conditions } = filterStore
 
   useDatasetName()
 
@@ -39,9 +41,10 @@ const WSPage = observer((): ReactElement => {
   Number.isInteger(variant) && variantStore.setIndex(variant as number)
 
   useEffect(() => {
-    if (stringifyedConditions) {
+    if (stringifyedConditions && !conditions.length) {
       const conditions: TCondition[] = JSON.parse(stringifyedConditions)
-      datasetStore.setConditionsAsync(conditions)
+
+      conditions.forEach(condtion => filterStore.addFilterBlock(condtion))
     }
 
     const initAsync = async () => {

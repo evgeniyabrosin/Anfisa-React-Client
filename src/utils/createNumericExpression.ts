@@ -1,5 +1,6 @@
 import { NumericExpressionType } from '@core/enum/numeric-expression-types'
 import { InnerValues } from '@glb/glb-types'
+import { TNumericConditionBounds } from '@service-providers/common/common.interface'
 import { NumericExpressionTypes } from './../core/enum/numeric-expression-types'
 
 interface ICreateExpression {
@@ -14,7 +15,7 @@ export const createNumericExpression = ({
   extraExpType,
   minValue,
   maxValue,
-}: ICreateExpression) => {
+}: ICreateExpression): TNumericConditionBounds => {
   const isExtraGreaterThan = (): boolean => {
     return extraExpType === NumericExpressionTypes.GreaterThan
   }
@@ -69,5 +70,5 @@ export const createNumericExpression = ({
     return value
   }
 
-  return getValue(expType)
+  return getValue(expType) as TNumericConditionBounds
 }

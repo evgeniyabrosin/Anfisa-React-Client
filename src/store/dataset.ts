@@ -1,30 +1,22 @@
 /* eslint-disable max-lines */
-import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { DsStatType, IRemoveConditionItem, StatListType } from '@declarations'
-import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { DsStatType, StatListType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import {
-  ICompoundRequestArgs,
-  ICustomInheritanceModeArgs,
   IRecordDescriptor,
   TCondition,
-  TFuncCondition,
 } from '@service-providers/common/common.interface'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { isConditionArgsTypeOf } from '@utils/function-panel/isConditionArgsTypeOf'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
-import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
-import { TFuncArgs } from './../service-providers/common/common.interface'
 import {
   IDsListArguments,
   ITabReport,
@@ -55,7 +47,6 @@ export class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: TCondition[] = []
   startPresetConditions: Condition[] = []
   zone: any[] = []
   statAmount: number[] = []
@@ -164,87 +155,8 @@ export class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: TCondition[], conditionsType?: string) {
-    if (!conditions[0]) {
-      this.conditions = []
-      await this.fetchDsStatAsync()
-    } else {
-      const groupCondtionsIndex = this.conditions.findIndex(
-        (item: any) => item[1] === conditions[0][1],
-      )
-
-      if (groupCondtionsIndex !== -1 && conditionsType !== 'func') {
-        this.conditions.splice(groupCondtionsIndex, 1)
-      }
-
-      this.conditions = this.conditions.concat(conditions)
-
-      await this.fetchDsStatAsync()
-    }
-
-    return Array.from({ length: this.statAmount[0] })
-  }
-
-  async removeFunctionConditionAsync(functionName: string) {
-    this.conditions = this.conditions.filter(
-      ([, name]) => name !== functionName,
-    )
-
+  async setConditionsAsync() {
     await this.fetchDsStatAsync()
-  }
-
-  removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
-    let cloneConditions: TCondition[] = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    const conditionKind = cloneConditions.find(
-      item => item![1] === subGroup,
-    )![0]
-
-    if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
-        (item: string) => item !== itemName,
-      )
-
-      if (filteredItems?.length === 0) {
-        cloneConditions.splice(subGroupIndex, 1)
-      } else {
-        cloneConditions[subGroupIndex][3] = filteredItems
-      }
-    } else if (
-      conditionKind === FilterKindEnum.Func &&
-      itemName.includes('locus')
-    ) {
-      cloneConditions = cloneConditions.filter(
-        (condition: any) =>
-          JSON.stringify(condition[condition.length - 1]) !== itemName,
-      )
-    } else {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
-  }
-
-  removeConditionGroup({ subGroup }: { subGroup: string }) {
-    const cloneConditions = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    if (subGroupIndex !== -1) {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
   }
 
   resetPrevPreset() {
@@ -267,7 +179,6 @@ export class DatasetStore {
   }
 
   resetConditions() {
-    this.conditions = []
     this.startPresetConditions = []
   }
 
@@ -301,14 +212,15 @@ export class DatasetStore {
       ds: this.datasetName,
       tm: '0',
     })
+    const { conditions } = filterStore
 
     if (!this.isFilterDisabled) {
-      this.conditions.length > 0 &&
-        localBody.append('conditions', JSON.stringify(this.conditions))
+      conditions.length > 0 &&
+        localBody.append('conditions', JSON.stringify(conditions))
     }
 
     this.activePreset &&
-      this.conditions.length === 0 &&
+      conditions.length === 0 &&
       localBody.append('filter', this.activePreset)
 
     if (shouldSaveInHistory) {
@@ -329,12 +241,6 @@ export class DatasetStore {
 
     dtreeStore.setStatRequestId(result['rq-id'])
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
-
-    const conditionFromHistory = bodyFromHistory?.get('conditions')
-
-    if (conditionFromHistory) {
-      this.conditions = JSON.parse(conditionFromHistory)
-    }
 
     const statList = result['stat-list']
 
@@ -358,109 +264,12 @@ export class DatasetStore {
     return result
   }
 
-  getVariantValue(groupItemName: string, condition: TFuncCondition) {
-    const conditionArgs = condition[4] as TFuncArgs
-
-    if (groupItemName === FuncStepTypesEnum.GeneRegion) {
-      return JSON.stringify(conditionArgs)
-    }
-
-    if (groupItemName === FuncStepTypesEnum.CustomInheritanceMode) {
-      return JSON.stringify(conditionArgs).replace(/[{}]/g, '')
-    }
-
-    if (
-      isConditionArgsTypeOf<ICompoundRequestArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CompoundRequest,
-      )
-    ) {
-      return `"request:" ${JSON.stringify(conditionArgs.request).replace(
-        /[{}]/g,
-        '',
-      )}`
-    }
-
-    return condition[condition.length - 2] as string
-  }
-
-  getConditionValue(
-    groupItemName: FuncStepTypesEnum,
-    condition: TFuncCondition,
-  ) {
-    const conditionArgs = condition[4]
-
-    if (
-      isConditionArgsTypeOf<ICustomInheritanceModeArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CustomInheritanceMode,
-      )
-    ) {
-      return { scenario: Object.entries(conditionArgs.scenario) }
-    }
-
-    return conditionArgs
-  }
-
   updatePresetLoad(dsStatData: any, source?: string) {
-    this.conditions = dsStatData.conditions
-    filterStore.selectedFilters = {}
-    this.startPresetConditions = [...this.conditions]
+    filterStore.resetSelectedFilters()
+    this.startPresetConditions = dsStatData.conditions
 
-    dsStatData.conditions?.forEach((condition: any[]) => {
-      const groupItemName = condition[1]
-
-      const filterItem = this.startDsStat['stat-list']?.find(
-        (item: any) => item.name === groupItemName,
-      )
-
-      if (condition[0] === FilterKindEnum.Enum) {
-        condition[3]?.forEach((value: string) => {
-          filterStore.addSelectedFilters({
-            group: filterItem.vgroup,
-            groupItemName,
-            variant: [value, 0],
-          })
-        })
-      }
-
-      if (condition[0] === FilterKindEnum.Func) {
-        const variantValue = this.getVariantValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [variantValue, 0],
-        })
-
-        const conditionValue = this.getConditionValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.setFilterCondition(groupItemName, {
-          conditions: conditionValue,
-          variants: condition[3],
-        })
-      }
-
-      if (condition[0] === FilterKindEnum.Numeric) {
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [groupItemName, condition[condition.length - 1]],
-        })
-
-        filterStore.setFilterCondition(
-          groupItemName,
-          condition[condition.length - 1],
-        )
-      }
+    dsStatData.conditions?.forEach((condition: TCondition) => {
+      filterStore.addFilterBlock(condition as TCondition)
     })
 
     !source || (this.isXL && this.fetchDsStatAsync())
@@ -589,8 +398,10 @@ export class DatasetStore {
       filter: this.activePreset,
     }
 
+    const { conditions } = filterStore
+
     if (!this.isFilterDisabled) {
-      params.conditions = kind === 'reset' ? [] : this.conditions
+      params.conditions = kind === 'reset' ? [] : conditions
       if (!isXL) {
         ;(params as IWsListArguments).zone = this.zone
       }
@@ -656,7 +467,7 @@ export class DatasetStore {
 
   memorizeFilterConditions() {
     this.memorizedConditions = {
-      conditions: toJS(this.conditions),
+      conditions: toJS(filterStore.conditions),
       activePreset: this.activePreset,
       zone: toJS(this.zone),
     }

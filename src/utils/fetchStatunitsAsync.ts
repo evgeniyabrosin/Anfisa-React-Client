@@ -18,6 +18,8 @@ export const fetchStatunitsAsync = async (
 
   const incompletePropertyList: string[] = []
 
+  const { conditions } = filterStore
+
   statList.forEach(element => {
     if (element.incomplete) {
       incompletePropertyList.push(element.name)
@@ -39,9 +41,7 @@ export const fetchStatunitsAsync = async (
     units: JSON.stringify(incompletePropertyList),
   })
 
-  const conditions = JSON.stringify(datasetStore.conditions)
-
-  body.append('conditions', conditions)
+  body.append('conditions', JSON.stringify(conditions))
 
   const response = await fetch(getApiUrl('statunits'), {
     method: 'POST',
