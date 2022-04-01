@@ -34,7 +34,6 @@ Feature: Main table, variants list
 		And list of secondary datasets of the "xl_PGP3140_wgs_NIST-4_2" dataset is displayed
 		And user clicks another secondary dataset
 		Then the Main Table page should be updated for the selected dataset
-		And number of variants, transcribed variants, And transcripts should be updated And correspond to the selected dataset
 		And URL should be updated.
 ​
 	Scenario: Back to the first dataset via datasets list
@@ -43,7 +42,6 @@ Feature: Main table, variants list
 		And list of secondary datasets of the "xl_PGP3140_wgs_NIST-4_2" dataset is displayed
 		And user clicks the first one secondary dataset (same as in step 3)
 		Then the Main Table page should be updated for the selected dataset
-		And number of variants, transcribed variants, And transcripts should be updated And correspond to the selected dataset
 		And URL should be updated.
 ​
 	Scenario: Copy URL
