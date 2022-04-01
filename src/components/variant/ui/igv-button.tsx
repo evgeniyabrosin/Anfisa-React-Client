@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
@@ -31,10 +32,14 @@ export const IgvButton = observer((): ReactElement => {
 
   const fixedLocus = locus.split(' ')[0]
 
+  const igvUrls = dirinfoStore.dsinfo['igv-urls'] as string[] | undefined
+  const checkedIgvUrls = igvUrls ?? []
+  const stringifiedIgvUrls = JSON.stringify(checkedIgvUrls)
+
   return (
     <Link
       target="_blank"
-      to={`${Routes.IGV}?locus=${fixedLocus}&names=${fixedSampleList}`}
+      to={`${Routes.IGV}?locus=${fixedLocus}&names=${fixedSampleList}&igvUrls=${stringifiedIgvUrls}`}
     >
       <Button
         className="mx-2 whitespace-nowrap"

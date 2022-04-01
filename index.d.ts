@@ -106,6 +106,7 @@ export interface DsinfoI {
   meta: Meta
   cohorts: any[]
   'unit-groups': any[][]
+  'igv-urls'?: string[]
 }
 
 export type StatHistogram = [
