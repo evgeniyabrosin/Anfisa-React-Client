@@ -64,10 +64,7 @@ export const NextStepContent = observer(({ index }: IProps): ReactElement => {
 
     const textList = removeNotExpandedAttributes.split(/{|}/)
     const changedTextList = textList.map((element, index) => {
-      if (
-        element.includes('"') &&
-        !(index === 0 || textList.length === index + 1)
-      ) {
+      if (element.includes('"') && index % 2 === 1) {
         return `{${element}}`
       }
 
