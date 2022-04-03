@@ -1,11 +1,11 @@
 import * as d3 from 'd3'
 
+import { getBounds, getYScaleAndAxis } from '@core/charts'
 import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { SvgChartRenderParams } from '@components/svg-chart/svg-chart'
 import { TVariant } from '@service-providers/common'
 import { TBarChartData } from '../chart.interface'
-import { getBounds, getYScaleAndAxis } from '../utils'
 import { barColor, tickColor } from './bar-chart.styles'
 
 const margin = {
@@ -46,7 +46,7 @@ export const drawBarChart = ({
     .padding(0.1)
     .align(0)
 
-  const [yScale, yAxis] = getYScaleAndAxis(min, max, chartHeight)
+  const [yScale, yAxis] = getYScaleAndAxis({ min, max, height: chartHeight })
 
   chart
     .append('g')

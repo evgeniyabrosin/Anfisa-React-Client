@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useMemo, useRef } from 'react'
 
+import { formatNumber } from '@core/format-number'
 import { RangeSliderColor } from '../types'
 import {
   RangeSliderHistogramAxisLabel,
@@ -27,10 +28,7 @@ export const RangeSliderHistogram = ({
 }: IRangeSliderHistogramProps): ReactElement | null => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const yAxis = useMemo(
-    () => getYAxis(Math.max(...data), height),
-    [data, height],
-  )
+  const yAxis = useMemo(() => getYAxis(data, height), [data, height])
 
   const barPositions = useMemo(
     () =>
@@ -80,14 +78,14 @@ export const RangeSliderHistogram = ({
           height: `${height}px`,
         }}
       />
-      {yAxis.map(([value, offset]) => (
+      {yAxis.ticks.map(value => (
         <RangeSliderHistogramAxisLabel
           key={value}
           style={{
-            top: offset,
+            top: `${yAxis.scale(value)}px`,
           }}
         >
-          {value}
+          {formatNumber(value)}
         </RangeSliderHistogramAxisLabel>
       ))}
     </RangeSliderHistogramRoot>

@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
 
+import { getBounds, getYScaleAndAxis } from '@core/charts'
 import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { SvgChartRenderParams } from '@components/svg-chart'
@@ -9,7 +10,6 @@ import {
   THistogramChartData,
   THistogramChartDataItem,
 } from '../chart.interface'
-import { getBounds, getYScaleAndAxis } from '../utils'
 import { barColor, logBarColor } from './histogram-chart.styles'
 
 const margin = {
@@ -86,7 +86,7 @@ export const drawHistogram = ({
 
   const noZeroData = data.filter(({ value }) => value > 0)
   const [min, max] = getBounds(noZeroData, item => item.value)
-  const [yScale, yAxis] = getYScaleAndAxis(min, max, chartHeight)
+  const [yScale, yAxis] = getYScaleAndAxis({ min, max, height: chartHeight })
 
   const isLogMode = mode === HistogramTypes.LOG
   const xScale = isLogMode ? d3.scaleLog() : d3.scaleLinear()

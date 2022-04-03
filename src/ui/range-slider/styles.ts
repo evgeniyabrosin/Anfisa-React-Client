@@ -20,7 +20,7 @@ interface IRangeSliderRootProps {
 
 export const RangeSliderRoot = styled.div<IRangeSliderRootProps>`
   ${props => props.isVertical && 'height: 100%;'}
-  margin-left: ${props => (props.hasHistogram ? '40px' : '0')};
+  margin-left: ${props => (props.hasHistogram ? '48px' : '0')};
   cursor: ${props =>
     props.isDisabled ? 'default' : props.isActive ? 'grabbing' : 'pointer'};
 `

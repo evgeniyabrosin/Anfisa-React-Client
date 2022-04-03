@@ -1,3 +1,6 @@
+import { ScaleContinuousNumeric } from 'd3'
+
+import { getBounds, getYScaleAndAxis } from '@core/charts'
 import { Color, color2str, interpolateColor, parseColor } from '@core/colors'
 import { theme } from '@theme'
 import { RangeSliderColor } from '../types'
@@ -23,18 +26,19 @@ export const prepareCanvas = (
   canvas.height = height * pixelRatio
 }
 
-type HistogramAxis = [number, number][]
+type HistogramAxis = {
+  scale: ScaleContinuousNumeric<number, number>
+  ticks: number[]
+}
 
-export const getYAxis = (max: number, height: number): HistogramAxis => {
-  const k = Math.pow(10, Math.floor(Math.log10(max)))
-  const step = Math.ceil(max / 4 / k) * k
+export const getYAxis = (data: number[], height: number): HistogramAxis => {
+  const [min, max] = getBounds(
+    data.filter(value => value > 0),
+    item => item,
+  )
+  const [scale, axis] = getYScaleAndAxis({ min, max, height })
 
-  const ret: [number, number][] = []
-  for (let y = step; y <= max; y += step) {
-    ret.push([y, (1 - y / max) * height])
-  }
-
-  return ret
+  return { scale, ticks: scale.ticks(...axis.tickArguments()) }
 }
 
 const getBarColor = (color: RangeSliderColor): Color =>
@@ -119,7 +123,7 @@ type DrawHistogramParams = {
   height: number
   data: number[]
   selectedArea?: [number, number] | null
-  yAxis?: HistogramAxis
+  yAxis: HistogramAxis
   barPositions: number[]
   barSpacing?: number
   partialFill?: HistogramPartialFill
@@ -141,17 +145,14 @@ export const drawHistogram = ({
   const drawWidth = width * pixelRatio
   const drawHeight = height * pixelRatio
 
-  const max = Math.max(...data)
-  const yScale = drawHeight / max
-
   ctx.clearRect(0, 0, drawWidth, drawHeight)
 
   if (yAxis) {
     ctx.beginPath()
     ctx.strokeStyle = axisCssColor
 
-    for (const point of yAxis) {
-      const y = point[1] * pixelRatio
+    for (const value of yAxis.ticks) {
+      const y = yAxis.scale(value) * pixelRatio
 
       ctx.moveTo(0, y)
       ctx.lineTo(drawWidth, y)
@@ -185,6 +186,8 @@ export const drawHistogram = ({
     const x0 = Math.max(barPositions[i], 0) * pixelRatio
     const x1 = Math.min(barPositions[i + 1] ?? width, width) * pixelRatio
     const barWidth = x1 - x0
+    const y0 = yAxis.scale(data[i]) * pixelRatio
+    const y1 = drawHeight
 
     if (!selectedArea || x0 >= selectedRight || x1 <= selectedLeft) {
       ctx.fillStyle = inactiveBarCssColor
@@ -201,8 +204,8 @@ export const drawHistogram = ({
           right,
           x0,
           x1,
-          y0: drawHeight - data[i] * yScale,
-          y1: drawHeight,
+          y0,
+          y1,
           color,
         }
 
@@ -224,9 +227,9 @@ export const drawHistogram = ({
 
     ctx.fillRect(
       x0 + (i > 0 ? halfBarDrawSpacing : 0),
-      drawHeight - value * yScale,
+      y0,
       barWidth - (i < barCount - 1 ? halfBarDrawSpacing : 0),
-      value * yScale,
+      y1 - y0,
     )
   }
 }

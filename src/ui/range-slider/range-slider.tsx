@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import cn, { Argument } from 'classnames'
 
+import { formatNumber } from '@core/format-number'
 import { RangeSliderHistogram } from './range-slider-histogram'
 import {
   RangeSliderHandle,
@@ -308,11 +309,13 @@ export const RangeSlider = ({
             />
           ))}
           {leftValue !== null && (
-            <RangeSliderLabel ref={leftLabelRef}>{leftValue}</RangeSliderLabel>
+            <RangeSliderLabel ref={leftLabelRef}>
+              {formatNumber(leftValue)}
+            </RangeSliderLabel>
           )}
           {isRangeMode && rightValue !== null && (
             <RangeSliderLabel ref={rightLabelRef}>
-              {rightValue}
+              {formatNumber(rightValue)}
             </RangeSliderLabel>
           )}
           {isRangeMode && (
