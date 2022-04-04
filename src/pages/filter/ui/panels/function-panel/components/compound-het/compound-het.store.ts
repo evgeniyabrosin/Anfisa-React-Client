@@ -1,7 +1,6 @@
 import { Option } from 'react-dropdown'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { IStatFuncData } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
@@ -46,7 +45,7 @@ class CompoundHetStore {
   }
 
   public async getStatFuncStatusAsync(): Promise<void> {
-    const statFuncData: IStatFuncData = await filterStore.fetchStatFuncAsync(
+    const statFuncData = await filterStore.fetchStatFuncAsync(
       FuncStepTypesEnum.CompoundHet,
       JSON.stringify({
         approx: this.cachedValues?.conditions.approx || null,

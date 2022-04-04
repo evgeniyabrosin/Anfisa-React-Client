@@ -1,9 +1,9 @@
 import difference from 'lodash/difference'
 
-import { Condition } from '@store/dataset'
+import { TCondition } from '@service-providers/common'
 
 interface ICompareConditionsProps {
-  currentConditions: Condition[]
+  currentConditions: TCondition[]
   startConditions: any[]
   currentPreset?: string
   prevPreset?: string

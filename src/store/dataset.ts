@@ -1,17 +1,18 @@
 /* eslint-disable max-lines */
-import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { DsStatType, StatListType } from '@declarations'
-import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import {
   IRecordDescriptor,
   TCondition,
+  TItemsCount,
 } from '@service-providers/common/common.interface'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import { IDsStatArguments } from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -26,8 +27,6 @@ import dirinfoStore from './dirinfo'
 import operations from './operations'
 
 const INCREASE_INDEX = 50
-
-export type Condition = [string, string, unknown, string[]?, unknown?]
 
 export class DatasetStore {
   dsStat: DsStatType = {}
@@ -47,11 +46,12 @@ export class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  startPresetConditions: Condition[] = []
+  conditions: TCondition[] = []
+  startPresetConditions: TCondition[] = []
   zone: any[] = []
-  statAmount: number[] = []
+  statAmount: TItemsCount | null = null
   memorizedConditions:
-    | { conditions: Condition[]; activePreset: string; zone: any[] }
+    | { conditions: TCondition[]; activePreset: string; zone: any[] }
     | undefined = undefined
 
   indexTabReport = 0
@@ -172,7 +172,7 @@ export class DatasetStore {
     this.dsStat = {}
     this.startDsStat = {}
     this.variantsAmount = 0
-    this.statAmount = []
+    this.statAmount = null
     this.prevPreset = ''
     this.wsRecords = []
     this.tabReport = []
@@ -204,43 +204,43 @@ export class DatasetStore {
 
   async fetchDsStatAsync(
     shouldSaveInHistory = true,
-    bodyFromHistory?: URLSearchParams,
+    bodyFromHistory?: IDsStatArguments,
   ): Promise<DsStatType> {
     this.isLoadingDsStat = true
 
-    const localBody = new URLSearchParams({
+    const localBody: IDsStatArguments = {
       ds: this.datasetName,
-      tm: '0',
-    })
-    const { conditions } = filterStore
-
-    if (!this.isFilterDisabled) {
-      conditions.length > 0 &&
-        localBody.append('conditions', JSON.stringify(conditions))
+      tm: 0,
     }
 
-    this.activePreset &&
-      conditions.length === 0 &&
-      localBody.append('filter', this.activePreset)
+    const { conditions } = filterStore
+
+    if (!this.isFilterDisabled && conditions.length > 0) {
+      localBody.conditions = conditions
+    }
+
+    if (this.activePreset && this.conditions.length === 0) {
+      localBody.filter = this.activePreset
+    }
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
     }
 
-    const body = shouldSaveInHistory ? localBody : bodyFromHistory
+    const checkedBodyFromHistory = bodyFromHistory ?? localBody
+    const body = shouldSaveInHistory ? localBody : checkedBodyFromHistory
 
-    const response = await fetch(getApiUrl('ds_stat'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const result = await filteringRegimeProvider.getDsStat(body)
 
     dtreeStore.setStatRequestId(result['rq-id'])
+
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
+
+    const conditionFromHistory = checkedBodyFromHistory.conditions
+
+    if (conditionFromHistory) {
+      this.conditions = conditionFromHistory
+    }
 
     const statList = result['stat-list']
 
@@ -254,7 +254,7 @@ export class DatasetStore {
       }
 
       if (this.isXL) {
-        this.statAmount = get(result, 'filtered-counts', [])
+        this.statAmount = result['filtered-counts']
       }
 
       this.variantsAmount = result['total-counts']['0']
@@ -427,7 +427,7 @@ export class DatasetStore {
           ? wsList.records.map((variant: { no: number }) => variant.no)
           : []
 
-        this.statAmount = get(wsList, 'filtered-counts', []) as number[]
+        this.statAmount = wsList['filtered-counts']
         this.wsRecords = wsList.records
       })
     }
@@ -481,6 +481,14 @@ export class DatasetStore {
         ;(this as any)[key] = (memorizedConditions as any)[key]
       })
     }
+  }
+
+  get fixedStatAmount() {
+    const variantCounts = this.statAmount?.[0] ?? null
+    const dnaVariantsCounts = this.statAmount?.[1] ?? null
+    const transcriptsCounts = this.statAmount?.[2] ?? null
+
+    return { variantCounts, dnaVariantsCounts, transcriptsCounts }
   }
 }
 

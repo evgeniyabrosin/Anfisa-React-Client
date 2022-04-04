@@ -2,14 +2,15 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { nanoid } from 'nanoid'
 
-import { IStatFuncData, StatListType } from '@declarations'
+import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
-import { getApiUrl } from '@core/get-api-url'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
+import { TCondition } from '@service-providers/common'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
-import { TCondition } from './../service-providers/common/common.interface'
+import { IStatfuncArguments } from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import datasetStore from './dataset'
 
 export type SelectedFiltersType = Record<
@@ -126,27 +127,16 @@ export class FilterStore {
     return dsInfo.meta.samples
   }
 
-  public async fetchStatFuncAsync(unit: string, param?: any) {
-    const conditions = JSON.stringify(this.conditions)
-
-    const body = new URLSearchParams({
+  async fetchStatFuncAsync(unit: string, param: any) {
+    const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
-      conditions,
+      conditions: datasetStore.conditions,
       rq_id: String(Date.now()),
       unit,
-    })
+      param,
+    }
 
-    param && body.append('param', param)
-
-    const response = await fetch(getApiUrl('statfunc'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result: IStatFuncData = await response.json()
+    const result = await filteringRegimeProvider.getStatFunc(body)
 
     runInAction(() => {
       this.statFuncData = result

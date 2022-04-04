@@ -18,8 +18,8 @@ interface Props {
 
 export const ExportReportButton = observer(
   ({ isOpen, refEl, ...rest }: Props): ReactElement => {
-    const [allVariants] = datasetStore.statAmount
-    const areVariantsZero = allVariants === 0
+    const { variantCounts } = datasetStore.fixedStatAmount
+    const areVariantsZero = variantCounts === 0
 
     return (
       <Button

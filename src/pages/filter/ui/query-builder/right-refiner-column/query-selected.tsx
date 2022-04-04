@@ -1,6 +1,5 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { formatNumber } from '@core/format-number'
@@ -23,19 +22,16 @@ export const QuerySelected = observer((): ReactElement => {
 
   const selectedFiltersAmount = filterStore.selectedFiltersArray.length
 
-  const [allVariants, transcribedVariants, allTranscripts] = get(
-    datasetStore,
-    'statAmount',
-    [],
-  )
+  const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
+    datasetStore.fixedStatAmount
 
   const selectedVariants =
-    conditions.length === 0 ? allVariants : datasetStore.filteredNo.length
+    conditions.length === 0 ? variantCounts : datasetStore.filteredNo.length
 
   const handleClick = () => {
     const conditions = JSON.stringify(filterStore.conditions)
 
-    allVariants > 2600
+    variantCounts && variantCounts > 2600
       ? showToast(t('filter.tooMuchVariants'), 'error')
       : history.push(
           `${Routes.WS}?ds=${params.get('ds')}&conditions=${conditions}`,
@@ -65,22 +61,22 @@ export const QuerySelected = observer((): ReactElement => {
 
           <span className="text-12 leading-14px mt-1 font-medium">
             {t('filter.variants', {
-              all: formatNumber(allVariants),
+              all: formatNumber(variantCounts),
             })}
           </span>
 
-          {transcribedVariants > 0 && (
+          {dnaVariantsCounts && dnaVariantsCounts > 0 && (
             <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcribedVariants', {
-                all: formatNumber(transcribedVariants),
+                all: formatNumber(dnaVariantsCounts),
               })}
             </span>
           )}
 
-          {allTranscripts > 0 && (
+          {transcriptsCounts && transcriptsCounts > 0 && (
             <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcripts', {
-                all: formatNumber(allTranscripts),
+                all: formatNumber(transcriptsCounts),
               })}
             </span>
           )}

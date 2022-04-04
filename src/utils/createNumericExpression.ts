@@ -1,6 +1,5 @@
 import { NumericExpressionType } from '@core/enum/numeric-expression-types'
-import { InnerValues } from '@glb/glb-types'
-import { TNumericConditionBounds } from '@service-providers/common/common.interface'
+import { TNumericConditionBounds } from '@service-providers/common'
 import { NumericExpressionTypes } from './../core/enum/numeric-expression-types'
 
 interface ICreateExpression {
@@ -8,6 +7,13 @@ interface ICreateExpression {
   extraExpType?: NumericExpressionType
   minValue?: string | number
   maxValue?: string | number
+}
+
+interface INumericExpressionTypes {
+  withMaxValue: TNumericConditionBounds
+  withMinValue: TNumericConditionBounds
+  withExtraGreaterThan: TNumericConditionBounds
+  withExtraGreatOrEqualThan: TNumericConditionBounds
 }
 
 export const createNumericExpression = ({
@@ -24,7 +30,10 @@ export const createNumericExpression = ({
     return extraExpType === NumericExpressionTypes.GreaterOrEqualThan
   }
 
-  const numericExperssionValues = {
+  const numericExperssionValues: {
+    [NumericExpressionTypes.GreaterThan]: INumericExpressionTypes
+    [NumericExpressionTypes.GreaterOrEqualThan]: INumericExpressionTypes
+  } = {
     [NumericExpressionTypes.GreaterThan]: {
       withMaxValue: [null, true, +maxValue!, false],
       withMinValue: [+minValue!, false, null, true],
@@ -40,34 +49,25 @@ export const createNumericExpression = ({
     },
   }
 
-  type NumericExperssionValue = InnerValues<
-    typeof numericExperssionValues,
-    keyof typeof numericExperssionValues
-  >
-
-  const getValue = (type: NumericExpressionType): NumericExperssionValue => {
-    let value: NumericExperssionValue = []
-
+  const getValue = (type: NumericExpressionType): TNumericConditionBounds => {
     const numericValue = numericExperssionValues[type]
 
+    // TODO: need to refactor expression
     switch (true) {
       case minValue === maxValue:
-        value = numericValue.withExtraGreatOrEqualThan
-        break
+        return numericValue.withExtraGreatOrEqualThan
       case !!maxValue:
-        value = numericValue.withMaxValue
-        break
+        return numericValue.withMaxValue
       case !!minValue:
-        value = numericValue.withMinValue
-        break
+        return numericValue.withMinValue
       case isExtraGreaterThan():
-        value = numericValue.withExtraGreaterThan
-        break
+        return numericValue.withExtraGreaterThan
       case isExtraGreatOrEqualThan():
-        value = numericValue.withExtraGreatOrEqualThan
-    }
+        return numericValue.withExtraGreatOrEqualThan
 
-    return value
+      default:
+        return numericValue.withExtraGreatOrEqualThan
+    }
   }
 
   return getValue(expType) as TNumericConditionBounds

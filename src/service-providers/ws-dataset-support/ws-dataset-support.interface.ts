@@ -16,8 +16,8 @@ export interface IWsListArguments {
 
 export interface IWsList {
   ds: string
-  'total-counts': TItemsCount[]
-  'filtered-counts': TItemsCount[]
+  'total-counts': TItemsCount
+  'filtered-counts': TItemsCount
   records: IRecordDescriptor[]
   'active-samples?': string
 }

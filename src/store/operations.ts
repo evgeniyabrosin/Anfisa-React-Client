@@ -129,11 +129,11 @@ class OperationsStore {
     const isRefiner = filterStore.method === GlbPagesNames.Refiner
     const isMainTable = pathName === Routes.WS
 
-    let compareValue = 0
+    const { variantCounts } = datasetStore.fixedStatAmount
 
-    compareValue =
-      isRefiner || isMainTable
-        ? datasetStore.statAmount[0]
+    const compareValue =
+      variantCounts && (isRefiner || isMainTable)
+        ? variantCounts
         : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {

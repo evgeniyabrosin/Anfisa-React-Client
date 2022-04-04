@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { NumberParam, useQueryParams } from 'use-query-params'
 
@@ -62,11 +61,8 @@ const WSPage = observer((): ReactElement => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const [allVariants, transcribedVariants, allTranscripts] = get(
-    datasetStore,
-    'statAmount',
-    [],
-  )
+  const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
+    datasetStore.fixedStatAmount
 
   return (
     <Fragment>
@@ -82,19 +78,19 @@ const WSPage = observer((): ReactElement => {
               data-testid={MainTableDataCy.numVariants}
             >
               {t('filter.variants', {
-                all: formatNumber(allVariants),
+                all: formatNumber(variantCounts),
               })}
             </span>
 
             <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 font-bold">
               {t('filter.transcribedVariants', {
-                all: formatNumber(transcribedVariants),
+                all: formatNumber(dnaVariantsCounts),
               })}
             </span>
 
             <span className="text-12 leading-14px text-white border-l-2 border-blue-lighter mt-2 ml-2 pl-2 mr-6 font-bold">
               {t('filter.transcripts', {
-                all: formatNumber(allTranscripts),
+                all: formatNumber(transcriptsCounts),
               })}
             </span>
 
