@@ -4,10 +4,8 @@ import styled from 'styled-components'
 
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
-import variantStore from '@store/variant'
 import columnsStore from '@store/wsColumns'
 import { Loader } from '@components/loader'
-import { variantColumnTable } from '../columns'
 import { Table } from './table/table'
 
 const Styles = styled.div`
@@ -44,21 +42,13 @@ const Styles = styled.div`
 `
 
 export const TableVariants = observer((): ReactElement => {
-  const defaultColumns = columnsStore.selectedColumns.map(column =>
-    variantColumnTable.find(item => item.Header === column),
-  )
-
-  const collapsedColumns = defaultColumns.slice(0, 2)
-
-  const { drawerVisible } = variantStore
-
-  const columns = drawerVisible ? collapsedColumns : defaultColumns
-
   if (datasetStore.isLoadingTabReport) return <Loader />
+
+  const { columnDataListForRender } = columnsStore
 
   return (
     <Styles className="flex-1 overflow-auto">
-      <Table columns={columns} data={datasetStore.tabReport} />
+      <Table columns={columnDataListForRender} data={datasetStore.tabReport} />
     </Styles>
   )
 })
