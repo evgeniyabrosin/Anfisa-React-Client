@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import { theme } from '@theme'
-import { Icon } from '@ui/icon'
 
 export const MainWrapper = styled.div`
   display: flex;
@@ -9,13 +8,17 @@ export const MainWrapper = styled.div`
   align-items: start;
 `
 
-export const LabelsWrapper = styled.div`
+export const ListWrapper = styled.div`
+  width: 67%;
+`
+
+export const LabelsWrapper = styled.div<{ isListCollapsed: boolean }>`
   color: ${theme('colors.white')};
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
-  width: 67%;
-  margin-left: 16px;
+  max-height: ${({ isListCollapsed }) => (isListCollapsed ? '120px' : 'none')};
+  overflow: hidden;
 `
 
 export const LabelRow = styled.div`
@@ -26,26 +29,34 @@ export const LabelRow = styled.div`
 
 export const LabelRowLeft = styled.div`
   display: flex;
-  flex-direction: column;
-`
-
-export const LabelRowLeftName = styled.div`
-  display: flex;
   align-items: center;
 `
 
-export const StyledIcon = styled(Icon)<{ color: string | undefined }>`
+export const StyledIcon = styled.div<{ color: string | undefined }>`
   margin-right: 8px;
-  color: ${({ color }) => color};
+  background-color: ${({ color }) => color};
+  border-radius: 5px;
+  width: 5px;
+  height: 5px;
+`
+
+export const LavelInfo = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 165px;
+  margin-right: 16px;
 `
 
 export const LabelQuantity = styled.span`
   color: ${theme('colors.grey.blue')};
+  flex-wrap: nowrap;
 `
 
 export const LabelRowRight = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 export const CollapseBtn = styled.span`

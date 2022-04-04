@@ -43,5 +43,5 @@ export const QueryBuilderSubgroupChart = ({
     return null
   }
 
-  return <div className="rounded-md bg-blue-secondary p-2 mr-5">{chart}</div>
+  return <div className="rounded-md bg-blue-secondary p-4 mr-5">{chart}</div>
 }
