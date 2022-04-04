@@ -17,7 +17,6 @@ import {
   IAttributeDescriptors,
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { findElementInRow } from '@utils/mian-table/find-element-in-row'
-import { closeHandler } from '../drawer'
 import { DrawerNote } from './drawer-note'
 import { DrawerTags } from './drawer-tags'
 
@@ -72,7 +71,7 @@ export const VariantHeader = observer(({ setLayout }: Props): ReactElement => {
     datasetStore.fetchWsListAsync()
     datasetStore.fetchWsTagsAsync()
 
-    closeHandler()
+    variantStore.setDrawerVisible(false)
 
     // if url has 'variant' should be navigated to prev route
     const previousLocation = location.search.split('&variant')[0]

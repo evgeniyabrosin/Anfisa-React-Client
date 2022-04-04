@@ -55,15 +55,6 @@ class ColumnsStore {
     this.columns = columns
   }
 
-  resetColumnsToDefault() {
-    const defaultColumns = Object.values(tableColumnMap).map(column => ({
-      title: column,
-      hidden: false,
-    }))
-
-    this.setColumns(defaultColumns)
-  }
-
   showColumns() {
     this.selectedColumns = this.columns
       .filter(column => !column.hidden)
