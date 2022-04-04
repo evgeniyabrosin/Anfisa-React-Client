@@ -12,9 +12,6 @@
 	    Given Filter Refiner of "PGP3140_wgs_panel_hl" dataset was opened
 	    When User clicks "Preset" drop down menu
 	    And chooses "⏚Mendelian_Compound_Het" Preset
-	    And user clicks "Actions"
-	    And user clicks "Load"
-	    And User clicks "Apply" button near the drop down menu
 	    Then Preset should be loaded
 	    And 7 variants should be shown
 
@@ -29,13 +26,14 @@
 	    And 2 Variants should be shown
 
     Scenario: uncheck filter for preset
-	    Given Chosen Preset and Tag were applied
-	    When User clicks "Edit Filters"
-	    And Filtered Variant amount (2)  is written on the top of page
-	    And User unchecks "Transcript_consequence" Filter
-	    And Variants are filtered (7)
-	    And User checks the same Filter one more time
-	    Then Variant number should be the same as before uncheck (2)
+	    Given Filter Refiner of "PGP3140_wgs_panel_hl" dataset is opened
+	    When User clicks "Preset" dropdown menu
+		And chooses  "⏚SEQaBOO_Hearing_Loss_v_5"  Preset
+	    And Filtered Variant amount (22)  is written on the top of page
+	    And User unchecks "Rules" Filter "⏚Hearing Loss, v.5" subfilter
+	    And Variants are filtered (2592)
+	    And User checks the same Filter one more time (Rules, ⏚Hearing Loss, v.5)
+	    Then Variant number should be the same as before uncheck (22)
 
 	Scenario: Open Filter Refiner 
 	    Given Dataset list was opened
@@ -73,9 +71,6 @@
 	    Given Filter Refiner of "PGP3140_wgs_panel_hl" dataset was opened
 	    When User clicks "Preset" drop down menu
 	    And chooses  "⏚SEQaBOO_Hearing_Loss_v_5"  Preset
-	    And user clicks "Actions"
-	    And user clicks "Load"
-	    And User clicks "Apply" button near the drop down menu
 	    Then chosen preset should be loaded
 	    And 22 Variants should be shown
 
@@ -92,6 +87,6 @@
 	    Given Main table was opened
 	    And 9 Variants are shown
 	    When User clicks "Edit Filters"
-	    And unchecks all the filters
+	    And unchecks all the filters with "Clear all" button
 	    Then 2592 Variants should be shown
 		

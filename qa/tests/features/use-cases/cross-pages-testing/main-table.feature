@@ -37,16 +37,19 @@
         And User chooses  "⏚BGM_Homozygous_Rec"
         And There are 2 Variants shown in the top of the screen of Main table
         And User clicks "Edit Filters"
-        And User unchecks all the chosen Filters (Callers; Transcript_consequence; Transcript_biotype; Transcript_source)
+        And User clicks "Clear all" at the right column of Filter refiner
         Then In "Filter Refiner" Variants should be filtered in the right side of the page
+        And 2592 variants should be shown
 
     Scenario: Apply filters and click "X" button without applying
         Given  Main table of "PGP3140_wgs_panel_hl" dataset was opened
         And 2592 Variants were shown
         When User clicks "Edit Filters"
-        And User checks  "Rules"
+        And User clicks  "Callers" Filter
+        And User chooses "BGM_AUTO_DOM" subfilter
+        And clicks "Add" button
         And Variants are filtered
-        And 602 Variants are shown
+        And 9 Variants are shown
         And User clicks close button (X)  without applying Filter
         Then Main page should be opened
         And There should be 2592 Variants shown again in the top of the screen
@@ -57,12 +60,12 @@
         And User chooses  "⏚Mendelian_Compound_Het " Preset
         And There are 7 Variants shown
         And User clicks "Edit Filters"
-        And User unchecks Filter "Transcript_consequence"
+        And User unchecks Filter "benign" from the right column
         Then Variants should be filtered
-        And Variants should be shown on the right side near the "Result" button in Filter Refiner (120)
+        And Variants should be shown on the right side near the "Result" button in Filter Refiner (48)
 
     Scenario: Choose Decision tree from Filter refiner
-        Given Chosen Preset (⏚Mendelian_Compound_Het)  and Filter (Rules)  were added
+        Given Chosen Preset (⏚Mendelian_Compound_Het)  and Filter (Callers)  were added
         When User clicks "Filtering Method" drop down menu
         And User clicks "Decision Tree" on drop down menu
         And Decision tree page is opened

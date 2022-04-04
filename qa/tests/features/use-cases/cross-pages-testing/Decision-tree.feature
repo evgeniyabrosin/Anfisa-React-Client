@@ -60,6 +60,6 @@
 	    And user chooses "⏚SEQaBOO_Hearing_Quick" preset
 	    And  4 variants are shown
 	    And user clicks "Edit Filters"
-	    And Unchecks all chosen Filters
+	    And Unchecks all chosen Filters with clicking "Clear all" button
 	    Then Variant numbers should be recalculated
 	    And 186 Variants should be shown again
