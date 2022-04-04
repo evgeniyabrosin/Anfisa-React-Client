@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import { Select } from '@ui/select'
 
 interface IProps {
@@ -31,6 +32,7 @@ export const ApproxStateModalMods = ({
         onChange={(e: any) => handleSetCondition(e.target.value, 'approx')}
         className="w-full ml-2"
         approx
+        disabled={datasetStore.isXL}
       />
     </div>
 

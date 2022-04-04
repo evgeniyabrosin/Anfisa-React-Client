@@ -33,21 +33,25 @@ const JoinType = styled.div`
   height: 28px;
 `
 
-const NotModeWrapper = styled(JoinType)`
-  padding: 2px 6px;
-  margin: 2px 4px;
+const NotModeWrapper = styled.div`
+  margin: 8px 4px;
+  width: 25px;
+  height: 20px;
   color: ${theme('colors.red.light')};
   background-color: ${theme('colors.red.lighter')};
+  font-size: 12px;
 `
 
-const AllModeWrapper = styled(JoinType)`
-  padding: 2px 6px;
-  margin: 2px 4px;
+const AllModeWrapper = styled.div`
+  margin: 8px 4px;
+  width: 25px;
+  height: 20px;
   color: ${theme('colors.green.secondary')};
   background-color: ${theme('colors.green.medium')};
+  font-size: 12px;
 `
 
-interface IProps {
+interface INextStepContentItemProps {
   group: any
   index: number
   currNo: number
@@ -62,7 +66,7 @@ export const NextStepContentItem = observer(
     currNo,
     expanded,
     setExpandOnClick,
-  }: IProps): ReactElement => {
+  }: INextStepContentItemProps): ReactElement => {
     // const [isChecked, setIsChecked] = useState(true)
 
     // const toggleChecked = () => {
@@ -128,7 +132,7 @@ export const NextStepContentItem = observer(
           <div
             className={cn(
               'flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area',
-              currentStep.isActive ? 'bg-green-light' : 'bg-blue-light',
+              currentStep.isActive && 'bg-blue-tertiary',
             )}
             data-testId={DecisionTreeModalDataCy.joinByLabel}
           >
@@ -155,12 +159,7 @@ export const NextStepContentItem = observer(
           </div>
         )}
 
-        <ContentControl
-          className={cn(
-            'w-full h-auto flex rounded-md mr-2 pl-2 py-3 step-content-area',
-            currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
-          )}
-        >
+        <ContentControl className="w-full h-auto flex rounded-md mr-2 pl-2 py-3 border border-grey-light step-content-area">
           <div className="flex items-center h-auto w-full pr-2 ">
             <Icon
               name="SettingsFat"
@@ -188,7 +187,7 @@ export const NextStepContentItem = observer(
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div> */}
             {!isNumeric && (
-              <label className="pl-4">
+              <label className="flex items-center pl-4 text-14">
                 <Checkbox
                   checked={isNotMode}
                   className="mr-1"
@@ -207,7 +206,7 @@ export const NextStepContentItem = observer(
             )}
 
             {isAllMode && (
-              <AllModeWrapper className="flex items-center justify-center">
+              <AllModeWrapper className="flex items-center justify-center rounded-sm">
                 {'all'}
               </AllModeWrapper>
             )}
