@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { TFuncCondition } from '@service-providers/common/common.interface'
-import { getModeType } from '@utils/getModeType'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { IInheritanceModeCachedValues } from '../../function-panel.interface'
 import functionPanelStore from '../../function-panel.store'
 
@@ -132,7 +132,7 @@ class InheritanceModeStore {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.InheritanceMode,
-      getModeType(this.currentMode),
+      getConditionJoinMode(this.currentMode),
       this.variantsValues,
       {
         problem_group:

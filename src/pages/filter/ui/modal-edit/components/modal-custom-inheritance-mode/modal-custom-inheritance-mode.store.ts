@@ -2,10 +2,12 @@ import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
@@ -32,8 +34,18 @@ class ModalCustomInheritanceModeStore {
 
   resetValue = ''
 
+  currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public setCurrentMode(modeType: ModeTypes) {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode() {
+    this.currentMode = undefined
   }
 
   public setSingleSelectValue(type: keyof ISelectValues, value: string): void {
@@ -157,7 +169,7 @@ class ModalCustomInheritanceModeStore {
     dtreeStore.addSelectedFilter(modalEditStore.variants[0][0])
     const params = { scenario: dtreeStore.scenario }
 
-    addAttributeToStep(action, 'func', [null], params)
+    addAttributeToStep(action, 'func', [null], params, this.currentMode)
     dtreeStore.resetSelectedFilters()
     dtreeModalStore.closeModalCustomInheritanceMode()
     this.resetData()
@@ -166,7 +178,7 @@ class ModalCustomInheritanceModeStore {
   public saveChanges(): void {
     const params = { scenario: dtreeStore.scenario }
 
-    changeFunctionalStep(params)
+    changeFunctionalStep(params, this.currentMode)
     dtreeModalStore.closeModalCustomInheritanceMode()
     this.resetData()
   }
@@ -179,6 +191,7 @@ class ModalCustomInheritanceModeStore {
     }
 
     this.resetValue = ''
+    this.resetCurrentMode()
   }
 
   public getSelectedValue(currentGroup: any[], group: string): any {
@@ -218,6 +231,10 @@ class ModalCustomInheritanceModeStore {
     })
 
     const params = `{"scenario":${scenarioString}}`
+
+    const conditionJoinType = currentGroup[2]
+
+    this.currentMode = getCurrentModeType(conditionJoinType)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }

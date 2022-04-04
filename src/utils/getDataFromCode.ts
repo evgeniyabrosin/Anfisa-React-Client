@@ -26,11 +26,14 @@ export const getDataFromCode = (code: string) => {
 
     const isNegate = changedElement.includes('if not ')
 
+    const isAll = changedElement.includes('if all ')
+
     return {
       comment,
       types,
       result: false,
       isNegate,
+      isAll,
       condition,
     }
   })

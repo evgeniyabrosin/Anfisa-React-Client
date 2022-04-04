@@ -43,6 +43,7 @@ export const getStepDataAsync = async (
       difference: '...',
       comment: stepCodes[index].comment,
       negate: stepCodes[index].isNegate,
+      all: stepCodes[index].isAll,
       condition: stepCodes[index].condition,
     })
   })

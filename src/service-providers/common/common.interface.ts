@@ -1,4 +1,5 @@
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
 
 export enum DatasetKinds {
   WS = 'ws',
@@ -160,7 +161,7 @@ export enum EnumPropertyStatusSubKinds {
 export interface IEnumPropertyStatus
   extends IBasePropertyStatus<AttributeKinds.ENUM> {
   variants?: TVariant[]
-  'sub-kind': EnumPropertyStatusSubKinds
+  'sub-kind': SubKinds
 }
 
 export interface IFuncPropertyStatus

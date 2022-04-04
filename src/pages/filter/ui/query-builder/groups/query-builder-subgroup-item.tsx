@@ -7,6 +7,7 @@ import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -16,7 +17,8 @@ import { FnLabel } from '@components/fn-label'
 import { GlbPagesNames } from '@glb/glb-names'
 import { TPropertyStatus } from '@service-providers/common'
 import dtreeModalStore from '../../../modals.store'
-import { QueryBuilderSubgroupChart } from './chart'
+import modalFiltersStore from '../../modal-edit/components/modal-enum/modal-enum.store'
+import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {
   subGroupItem: StatList
@@ -51,7 +53,8 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeModalStore.closeModalAttribute()
 
       if (group.kind === FilterKindEnum.Enum) {
-        dtreeModalStore.openModalFilters(group.name, undefined, source)
+        dtreeModalStore.openModalEnum(group.name, undefined, source)
+        modalFiltersStore.setCurrentGroupSubKind(group['sub-kind'] as SubKinds)
       }
 
       if (group.kind === FilterKindEnum.Numeric) {
