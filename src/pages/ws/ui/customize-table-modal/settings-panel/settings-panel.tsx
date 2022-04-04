@@ -27,7 +27,7 @@ export const SettingsPanel = observer(({ close }: Props): ReactElement => {
       onSelectAll={() => columnsStore.selectAllColumns()}
       onClearAll={() => columnsStore.clearAllColumns()}
       onApply={() => {
-        columnsStore.showColumns()
+        columnsStore.filterColumns()
         columnsStore.setViewType(viewType)
         close()
       }}

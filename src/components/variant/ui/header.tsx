@@ -9,6 +9,7 @@ import { useVariantIndex } from '@core/hooks/use-variant-index'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
+import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -68,10 +69,11 @@ export const VariantHeader = observer(({ setLayout }: Props): ReactElement => {
   ])
 
   const handleCloseDrawer = () => {
+    // TODO: add this requests to "Apply" btn in modals for change tags and notes in another task
     datasetStore.fetchWsListAsync()
     datasetStore.fetchWsTagsAsync()
 
-    variantStore.setDrawerVisible(false)
+    columnsStore.closeDrawer()
 
     // if url has 'variant' should be navigated to prev route
     const previousLocation = location.search.split('&variant')[0]

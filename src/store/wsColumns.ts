@@ -75,7 +75,18 @@ class ColumnsStore {
     this.columns = columns
   }
 
-  showColumns() {
+  closeDrawer() {
+    const columns = this.selectedColumns.map(column => ({
+      title: column,
+      hidden: false,
+    }))
+
+    this.setColumns(columns)
+
+    variantStore.setDrawerVisible(false)
+  }
+
+  filterColumns() {
     this.selectedColumns = this.columns
       .filter(column => !column.hidden)
       .map(column => column.title ?? column)

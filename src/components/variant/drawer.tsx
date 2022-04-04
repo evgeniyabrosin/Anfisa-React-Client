@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
 import variantStore from '@store/variant'
+import columnsStore from '@store/wsColumns'
 import { VariantBody } from './ui/body'
 import { VariantHeader } from './ui/header'
 
@@ -19,7 +20,7 @@ export const VariantDrawer = observer((): ReactElement => {
 
   useEffect(() => {
     return () => {
-      variantStore.setDrawerVisible(false)
+      columnsStore.closeDrawer()
     }
   }, [])
 
