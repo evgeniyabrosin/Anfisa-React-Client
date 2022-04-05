@@ -1,8 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Checkbox from 'react-three-state-checkbox'
-import { toast } from 'react-toastify'
-import get from 'lodash/get'
-import isBoolean from 'lodash/isBoolean'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
@@ -12,16 +10,16 @@ import { Button } from '@ui/button'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import { noFirstSymbolsPattern } from '@utils/validateNotes'
+import drawerTagsStore from '../drawer-tags.store'
 import { TagsContainer } from './tags-container'
 
 const DrawerTagButton = observer(({ refEl, onClick }: any) => {
   return (
     <Button
       refEl={refEl}
-      text={'+ Add'}
+      text="+ Add"
       size="xs"
-      variant={'secondary-dark'}
+      variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addTag}
     />
@@ -35,85 +33,22 @@ const DrawerTagModal = observer(({ close }: any) => {
     !variantStore.isModalNotesVisible && close()
   })
 
-  const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')
-  const hg19 = get(variantStore, 'variant[0].rows[1].cells[0][0]', '')
+  const { genes, hg19locus, tags, localCheckedTags, customTag, errorMessage } =
+    drawerTagsStore
 
-  const [checkedTags, setCheckedTags] = useState<string[]>(
-    variantStore.checkedTags,
-  )
+  useEffect(() => {
+    drawerTagsStore.setLocalCheckedTagList(toJS(variantStore.checkedTags))
+  }, [])
 
-  const [error, setError] = useState<string>('')
+  // TODO: The need of this feature is in doubt
+  // const handleClick = (tag: string) => {
+  //   variantStore.showModalNotes()
+  //   // variantStore.setCurrentTag(tag)
+  // }
 
-  const [customTag, setCustomTag] = useState<string>('')
-
-  const tags = [...variantStore.generalTags, ...variantStore.optionalTags]
-
-  const handleChange = (value: string) => {
-    if (
-      tags
-        .map(tag => tag.toLocaleLowerCase())
-        .includes(value.toLocaleLowerCase())
-    ) {
-      setError(t('variant.tagExists'))
-    } else {
-      setError('')
-    }
-
-    if (value.length > 30) setError(t('error.tagNameIsTooLong'))
-
-    if (noFirstSymbolsPattern.test(value)) setError(t('error.noFirstSymbols'))
-
-    setCustomTag(value)
-  }
-
-  const handleCheck = (checked: boolean, item: string) => {
-    if (checked) {
-      setCheckedTags(prev => [...prev, item])
-      variantStore.updateTagsWithNotes([item, true])
-    } else {
-      setCheckedTags(prev => prev.filter(tag => tag !== item))
-      variantStore.updateTagsWithNotes([item, true], 'remove')
-    }
-  }
-
-  const handleSetCustomTag = () => {
-    if (variantStore.generalTags.includes(customTag)) {
-      toast.error(t('variant.tagExists'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
-    } else {
-      variantStore.updateGeneralTags(customTag)
-      variantStore.updateTagsWithNotes([customTag, true])
-      setCustomTag('')
-    }
-  }
-
-  const handleSaveTagsAsync = async () => {
-    let params = ''
-
-    Object.entries(variantStore.tagsWithNotes).map((tagData, index) => {
-      params += `"${tagData[0]}":${
-        isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`
-      }`
-
-      if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += `,`
-      }
-    })
-
-    variantStore.fetchSelectedTagsAsync(params)
+  const handleSaveTags = () => {
+    drawerTagsStore.handleSaveTagsAsync()
     close()
-  }
-
-  const handleClick = (tag: string) => {
-    variantStore.showModalNotes()
-    variantStore.setCurrentTag(tag)
   }
 
   return (
@@ -125,55 +60,62 @@ const DrawerTagModal = observer(({ close }: any) => {
         <span>{t('variant.tagsFor')} </span>
 
         <span className="text-blue-bright">
-          {`[${genInfo}] `}
+          {`[${genes}] `}
 
-          <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+          <span dangerouslySetInnerHTML={{ __html: hg19locus }} />
         </span>
       </span>
 
       <div className="mt-4 h-auto overflow-auto" style={{ maxHeight: 300 }}>
-        {tags.map(tag => (
-          <div key={tag} className="flex items-center mb-4">
-            <Checkbox
-              checked={
-                checkedTags.includes(tag) ||
-                Object.keys(variantStore.tagsWithNotes).includes(tag)
-              }
-              className="w-4 h-4"
-              onChange={e => handleCheck(e.target.checked, tag)}
-            />
+        {tags.map(tagName => {
+          const checked = localCheckedTags.includes(tagName)
 
-            <span className="text-12 ml-1">{tag}</span>
+          return (
+            <div key={tagName} className="flex items-center mb-4">
+              <Checkbox
+                checked={checked}
+                className="w-4 h-4"
+                onChange={e =>
+                  drawerTagsStore.handleCheckTag(e.target.checked, tagName)
+                }
+              />
 
-            <span
+              <span className="text-12 ml-1">{tagName}</span>
+
+              {/* TODO: The need of this feature is in doubt  */}
+
+              {/* <span
               className="ml-2 cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick(tag)}
+              onClick={() => handleClick(tagName)}
             >
-              {Object.keys(variantStore.tagsWithNotes).includes(tag) && `(#)`}
-            </span>
-          </div>
-        ))}
+              {Object.keys(variantStore.tagsWithNotes).includes(tagName) && '(#)'}
+            </span> */}
+            </div>
+          )
+        })}
       </div>
 
       <div className="mt-2 h-auto">
         <Input
           value={customTag}
-          onChange={(e: any) => handleChange(e.target.value)}
+          onChange={(e: any) =>
+            drawerTagsStore.handleChangeCustomTag(e.target.value)
+          }
         />
 
         <div className="flex justify-between">
-          {error && (
+          {errorMessage && (
             <div className="mt-px text-12 text-red-secondary whitespace-nowrap">
-              {error}
+              {errorMessage}
             </div>
           )}
 
           <div className="flex justify-end w-full">
             <Button
               text="Add custom tag"
-              disabled={!customTag.trim() || !!error}
+              disabled={!customTag.trim() || !!errorMessage}
               className="mt-2"
-              onClick={handleSetCustomTag}
+              onClick={() => drawerTagsStore.handleSetCustomTag()}
               dataTestId={VariantDrawerDataCy.addCustomTag}
             />
           </div>
@@ -184,13 +126,13 @@ const DrawerTagModal = observer(({ close }: any) => {
         <Button
           text={t('general.cancel')}
           onClick={close}
-          variant={'secondary'}
+          variant="secondary"
           className="mr-2 ml-auto"
         />
 
         <Button
           text="Save tags"
-          onClick={handleSaveTagsAsync}
+          onClick={handleSaveTags}
           dataTestId={VariantDrawerDataCy.saveTags}
         />
       </div>

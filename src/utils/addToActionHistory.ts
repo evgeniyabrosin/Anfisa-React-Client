@@ -1,8 +1,9 @@
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import { IDsStatArguments } from '@service-providers/filtering-regime'
 
 export const addToActionHistory = (
-  body: URLSearchParams,
+  body: IDsStatArguments,
   isFilterRefiner = false,
 ) => {
   const actionHistory = [...dtreeStore.actionHistory]
@@ -23,9 +24,9 @@ export const addToActionHistory = (
   dtreeStore.setActionHistoryIndex(nextIndex)
 
   if (isFilterRefiner) {
-    const filters = filterStore.selectedFilters
-
-    filtersHistory.push(filters)
-    filterStore.setSelectedFiltersHistory(filtersHistory)
+    // TODO: implement this logic
+    // const filters = filterStore.selectedFilters
+    // filtersHistory.push(filters)
+    // filterStore.setSelectedFiltersHistory(filtersHistory)
   }
 }

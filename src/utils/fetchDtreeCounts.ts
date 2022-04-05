@@ -20,7 +20,7 @@ export const fetchDtreeCountsAsync = async (
     tm: '1',
   })
 
-  const response = await fetch(getApiUrl(`dtree_counts`), {
+  const response = await fetch(getApiUrl('dtree_counts'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

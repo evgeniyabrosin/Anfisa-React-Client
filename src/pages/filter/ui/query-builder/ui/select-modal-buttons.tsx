@@ -5,17 +5,20 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { ModalSources } from '@core/enum/modal-sources'
 import { t } from '@i18n'
-import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
+import dtreeModalStore from '../../../modals.store'
 import { ModalJoin } from './modal-join'
 
+// TODO: `currentGroup` prop is used only for empty group test
+//       may be we can use `isEmptyGroup` boolean prop or
+//       isEmptyCurrentGroup getter from dtreeStore
 interface IProps {
   handleModals: () => void
   handleClose: () => void
   handleModalJoin: () => void
-  currentGroup: any[]
+  currentGroup: any
   disabled: any
   handleAddAttribute: (action: ActionType) => void
 }
@@ -32,11 +35,12 @@ export const SelectModalButtons = observer(
     return (
       <div
         className={cn('flex mt-1 items-center', {
-          'justify-end': dtreeStore.modalSource === ModalSources.TreeStat,
-          'justify-between': dtreeStore.modalSource === ModalSources.TreeStep,
+          'justify-end': dtreeModalStore.modalSource === ModalSources.TreeStat,
+          'justify-between':
+            dtreeModalStore.modalSource === ModalSources.TreeStep,
         })}
       >
-        {dtreeStore.modalSource === ModalSources.TreeStep && (
+        {dtreeModalStore.modalSource === ModalSources.TreeStep && (
           <div
             className="text-14 text-blue-bright font-medium cursor-pointer"
             onClick={handleModals}
@@ -48,8 +52,8 @@ export const SelectModalButtons = observer(
         <div className="flex">
           <Button
             text={t('general.cancel')}
-            variant={'secondary'}
-            className={'mr-2'}
+            variant="secondary"
+            className="mr-2"
             onClick={() => handleClose()}
             dataTestId={DecisionTreeModalDataCy.cancelButton}
           />
@@ -58,7 +62,7 @@ export const SelectModalButtons = observer(
               <Button
                 disabled={disabled}
                 text={t('dtree.replace')}
-                className={'mr-2'}
+                className="mr-2"
                 onClick={() => handleAddAttribute('REPLACE')}
                 dataTestId={DecisionTreeModalDataCy.replaceButton}
               />
@@ -72,7 +76,7 @@ export const SelectModalButtons = observer(
                   dataTestId={DecisionTreeModalDataCy.addByJoin}
                 />
 
-                {dtreeStore.isModalJoinVisible && (
+                {dtreeModalStore.isModalJoinVisible && (
                   <ModalJoin handleAddAttribute={handleAddAttribute} />
                 )}
               </div>

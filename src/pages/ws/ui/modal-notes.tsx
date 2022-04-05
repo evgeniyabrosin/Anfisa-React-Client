@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
-import { validateNotes } from '@utils/validateNotes'
+import { validateNotes } from '@utils/validation/validateNotes'
 import { HeaderModal } from '../../filter/ui/query-builder/ui/header-modal'
 import { ModalBase } from '../../filter/ui/query-builder/ui/modal-base'
 
@@ -73,7 +73,7 @@ export const ModalNotes = observer(() => {
           <div className="flex items-center">
             <Button
               text={t('general.cancel')}
-              variant={'secondary'}
+              variant="secondary"
               onClick={handleClose}
             />
 

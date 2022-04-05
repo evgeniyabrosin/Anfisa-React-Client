@@ -108,35 +108,33 @@ describe('Filter refiner regression test', () => {
     filterRefinerPage.total.resultsListElement.countElements(0)
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should add new row | step 9', () => {
-    filterRefinerPage.visit(link)
-    selectElementInLeftPanel('Compound_Request')
-    cy.waitUntil(() =>
-      filterRefinerPage.filter.selectReset.element.should('be.visible'),
-    )
-    filterRefinerPage.filter.selectReset.select('Homozygous Recessive/X-linked')
-    filterRefinerPage.filter.addButton.first().click()
-    filterRefinerPage.filter.selectReset.select('Autosomal Dominant')
-    filterRefinerPage.filter.addButton.first().click()
-    //TODO count the number of smth
-  })
+  // it.skip('should add new row | step 9', () => {
+  //   filterRefinerPage.visit(link)
+  //   selectElementInLeftPanel('Compound_Request')
+  //   cy.waitUntil(() =>
+  //     filterRefinerPage.filter.selectReset.element.should('be.visible'),
+  //   )
+  //   filterRefinerPage.filter.selectReset.select('Homozygous Recessive/X-linked')
+  //   filterRefinerPage.filter.addButton.first().click()
+  //   filterRefinerPage.filter.selectReset.select('Autosomal Dominant')
+  //   filterRefinerPage.filter.addButton.first().click()
+  //   TODO count the number of smth
+  // })
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should delete first row | step 10', () => {
-    filterRefinerPage.visit(link)
-    selectElementInLeftPanel('Compound_Request')
-    cy.waitUntil(() =>
-      filterRefinerPage.filter.selectReset.element.should('be.visible'),
-    )
-    filterRefinerPage.filter.selectReset.select('Homozygous Recessive/X-linked')
-    filterRefinerPage.filter.addButton.first().click()
-    filterRefinerPage.filter.selectReset.select('Autosomal Dominant')
-    filterRefinerPage.filter.addButton.first().click()
-    //count the number of lines
-    filterRefinerPage.filter.removeButton.click()
-    //count the number of lines
-  })
+  // it.skip('should delete first row | step 10', () => {
+  //   filterRefinerPage.visit(link)
+  //   selectElementInLeftPanel('Compound_Request')
+  //   cy.waitUntil(() =>
+  //     filterRefinerPage.filter.selectReset.element.should('be.visible'),
+  //   )
+  //   filterRefinerPage.filter.selectReset.select('Homozygous Recessive/X-linked')
+  //   filterRefinerPage.filter.addButton.first().click()
+  //   filterRefinerPage.filter.selectReset.select('Autosomal Dominant')
+  //   filterRefinerPage.filter.addButton.first().click()
+  //   //count the number of lines
+  //   filterRefinerPage.filter.removeButton.click()
+  //   //count the number of lines
+  // })
 
   it('should add filter | step 11', () => {
     filterRefinerPage.visit(link)
@@ -149,15 +147,14 @@ describe('Filter refiner regression test', () => {
     countAddedElements(1, 'Num_Samples')
   })
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should add filter | step 12', () => {
-    filterRefinerPage.visit(link)
-    selectElementInLeftPanel('GeneRegion')
-    filterRefinerPage.filter.inputText
-      .eq(1)
-      .type('I dont know what to type in here')
-    countAddedElements(1, 'Num_Samples')
-  })
+  // it.skip('should add filter | step 12', () => {
+  //   filterRefinerPage.visit(link)
+  //   selectElementInLeftPanel('GeneRegion')
+  //   filterRefinerPage.filter.inputText
+  //     .eq(1)
+  //     .type('I dont know what to type in here')
+  //   countAddedElements(1, 'Num_Samples')
+  // })
 
   it('should undone all actions | step 13', () => {
     filterRefinerPage.visit(link)
@@ -174,29 +171,28 @@ describe('Filter refiner regression test', () => {
   })
 
   //skip until redo button is fixed
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should redo undone steps| step 14', () => {
-    filterRefinerPage.visit(link)
-    selectElementInLeftPanel('Callers')
-    cy.intercept('POST', addFilters).as('addFilters')
-    selectFilterElements(0)
-    selectFilterElements(2)
-    filterRefinerPage.filter.addButton.click()
-    cy.wait('@addFilters')
-    filterRefinerPage.total.resultsListElement.countElements(2)
-    filterRefinerPage.menu.undoButton.click()
-    filterRefinerPage.total.resultsListElement.countElements(0)
-    filterRefinerPage.menu.redoButton.click()
-    cy.waitUntil(() =>
-      filterRefinerPage.total.resultsListElement.element.should('be.visible'),
-    )
-  })
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should apply every filter | step 15', () => {
-    filterRefinerPage.visit(link)
-    //there is no apply button
-  })
+  // it.skip('should redo undone steps| step 14', () => {
+  //   filterRefinerPage.visit(link)
+  //   selectElementInLeftPanel('Callers')
+  //   cy.intercept('POST', addFilters).as('addFilters')
+  //   selectFilterElements(0)
+  //   selectFilterElements(2)
+  //   filterRefinerPage.filter.addButton.click()
+  //   cy.wait('@addFilters')
+  //   filterRefinerPage.total.resultsListElement.countElements(2)
+  //   filterRefinerPage.menu.undoButton.click()
+  //   filterRefinerPage.total.resultsListElement.countElements(0)
+  //   filterRefinerPage.menu.redoButton.click()
+  //   cy.waitUntil(() =>
+  //     filterRefinerPage.total.resultsListElement.element.should('be.visible'),
+  //   )
+  // })
+
+  // it.skip('should apply every filter | step 15', () => {
+  //   filterRefinerPage.visit(link)
+  //   //there is no apply button
+  // })
 
   function selectFilterElements(index: number) {
     filterRefinerPage.filter.filterElements

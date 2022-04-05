@@ -1,9 +1,11 @@
 import { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Input } from '@ui/input'
-import { AllNotModalMods } from './all-not-modal-mods'
+import modalGeneRegionStore from '../../modal-edit/components/modal-gene-region/modal-gene-region.store'
+import { AllNotMods } from './all-not-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
 
 interface IProps {
@@ -11,7 +13,7 @@ interface IProps {
   validateValue: (e: string) => void
   handleSetValue: (e: string) => void
   isErrorVisible: boolean
-  variants: [string, number]
+  variants: string[] | [string, number]
 }
 
 export const GeneRegionContent = observer(
@@ -46,7 +48,15 @@ export const GeneRegionContent = observer(
             </div>
           </div>
 
-          <AllNotModalMods />
+          <AllNotMods
+            isNotModeChecked={
+              modalGeneRegionStore.currentMode === ModeTypes.Not
+            }
+            isNotModeDisabled={variants ? variants.length === 0 : true}
+            toggleNotMode={() =>
+              modalGeneRegionStore.setCurrentMode(ModeTypes.Not)
+            }
+          />
         </div>
 
         <DisabledVariantsAmount

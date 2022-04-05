@@ -1,25 +1,30 @@
+const prettierConfig = require('./.prettierrc.js')
+
 module.exports = {
-  extends: 'eslint-config-react-config-r13v',
+  extends: [
+    'eslint:recommended',
+    'ts-react-important-stuff',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+  ],
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    'simple-import-sort',
+    '@typescript-eslint',
+    'unicorn',
+    'formatjs',
+    'promise',
+  ],
   rules: {
-    //general
-    quotes: [
-      'error',
-      'single',
-      {
-        avoidEscape: true,
-        allowTemplateLiterals: true,
-      },
-    ],
+    quotes: ['error', 'single', 'avoid-escape'],
     curly: ['error', 'multi-line'],
     'simple-import-sort/imports': [
       'warn',
       {
         groups: [
-          // Style imports
           ['^.+\\.s?css$'],
-          // react related packages, other packages
           ['^react', '(\\w-/)*'],
-          // Side effect imports, Alias, Relative
           [
             '^\\u0000',
             '^@declarations',
@@ -37,22 +42,22 @@ module.exports = {
       },
     ],
     'unicorn/filename-case': 'off',
-    // typescript
+    'unicorn/prefer-module': 'off',
+    'unicorn/prefer-ternary': 'off',
+    'unicorn/prefer-object-from-entries': 'off',
+    'unicorn/no-static-only-class': 'off',
+    'unicorn/no-useless-undefined': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    //react
+    '@typescript-eslint/no-unused-vars': 'warn',
     'react/jsx-no-literals': 'off',
     'react/react-in-jsx-scope': 'off',
     'jest/expect-expect': 'off',
-    //prettier
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'all',
-        singleQuote: true,
-        semi: false,
-        arrowParens: 'avoid',
-        bracketSpacing: true,
-      },
-    ],
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'jsx-a11y/alt-text': 'off',
+    'react/prop-types': 'off',
+    'jsx-a11y/iframe-has-title': 'off',
+    'no-console': ['warn', { allow: ['error'] }],
+    'prettier/prettier': ['error', prettierConfig],
   },
 }

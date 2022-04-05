@@ -1,32 +1,34 @@
 import { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StatListType } from '@declarations'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
-import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
-import { resetOptions } from '../../compound-request'
-import { AllNotModalMods } from './all-not-modal-mods'
+import { selectOptions } from '../../modal-edit/modal-edit.store'
+import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
+import { AllNotMods } from './all-not-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
-import { selectOptions } from './modal-select-custom-inheritance-mode'
 
 interface IProps {
-  attrData: StatListType
+  problemGroups: string[]
   handleSetScenario: (group: string, e: string) => void
   selectStates: string[]
   handleReset: (e: string) => void
   resetValue?: string
+  isNotModeChecked?: boolean
+  toggleNotMode?: () => void
 }
 
 export const CustomInheritanceModeContent = observer(
   ({
-    attrData,
+    problemGroups,
     handleSetScenario,
     selectStates,
     handleReset,
     resetValue,
+    isNotModeChecked,
+    toggleNotMode,
   }: IProps) => {
     const variants =
       dtreeStore.statFuncData.variants ?? filterStore.statFuncData?.variants
@@ -36,7 +38,7 @@ export const CustomInheritanceModeContent = observer(
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div>{t('dtree.scenario')}</div>
 
-          {attrData.family.map((group: string, index: number) => (
+          {problemGroups.map((group: string, index: number) => (
             <div key={group}>
               <span>{group}</span>
 
@@ -60,11 +62,14 @@ export const CustomInheritanceModeContent = observer(
               options={resetOptions}
               value={resetValue}
               reset
-              data-testid={FilterRefinerDataCy.selectReset}
             />
           </div>
 
-          <AllNotModalMods />
+          <AllNotMods
+            isNotModeChecked={isNotModeChecked}
+            isNotModeDisabled={variants ? variants.length === 0 : true}
+            toggleNotMode={toggleNotMode}
+          />
         </div>
 
         <DisabledVariantsAmount variants={variants} disabled={true} />

@@ -3,9 +3,12 @@ import cn, { Argument } from 'classnames'
 
 interface Props {
   placeholder?: string
+  disabled?: boolean
   value: string | number
   className?: Argument
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  min?: number
+  max?: number
 }
 
 export const InputNumber = ({ ...rest }: Props): ReactElement => {

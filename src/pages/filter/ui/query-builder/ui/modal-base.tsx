@@ -1,3 +1,4 @@
+import { Ref } from 'react'
 import cn from 'classnames'
 import styled from 'styled-components'
 
@@ -26,7 +27,7 @@ const ModalContent = styled.div<{
 interface IProps {
   minHeight: number | string
   maxHeight?: number | string
-  refer: any
+  refer?: Ref<HTMLDivElement>
   width?: number | string
   children: any
   theme?: string

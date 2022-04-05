@@ -11,6 +11,7 @@ import { RadioButton } from '@ui/radio-button'
 import { ReturnedVariantsDataCy } from '@components/data-testid/returned-variants'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
+import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
 
@@ -51,13 +52,15 @@ export const TableModal = observer(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      const isRefiner = filterStore.method === GlbPagesNames.Refiner
+      const { conditions } = filterStore
 
-      const conditions = datasetStore.conditions
+      const isRefiner = filterStore.method === GlbPagesNames.Refiner
 
       const requestValue = isRefiner ? conditions : stepIndex
 
-      const result = await fetchDsListAsync(requestValue)
+      const result = await fetchDsListAsync(
+        requestValue as number | TCondition[],
+      )
 
       fetchJobStatusAsync(result.task_id)
     }
@@ -95,12 +98,12 @@ export const TableModal = observer(() => {
 
       setVariantList(samples || records)
 
-      const orderNumber = isSample ? samples[0]?.no ?? 0 : records[0]?.no ?? 0
+      const orderNumber = isSample ? samples[0]?.no ?? 0 : 0
 
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatusData])
+  }, [jobStatusData, samples])
 
   useEffect(() => {
     if (jobStatusData) {
@@ -154,7 +157,10 @@ export const TableModal = observer(() => {
             <div className="flex">
               <div className="p-5">
                 <div className="flex flex-col">
-                  <div>In scope: {allVaraints}</div>
+                  <div>
+                    {'In scope: '}
+                    {allVaraints}
+                  </div>
                   <div className="flex items-center mr-3">
                     <RadioButton
                       isDisabled={variantSize === 'LARGE'}
@@ -183,7 +189,8 @@ export const TableModal = observer(() => {
                     data-testid={ReturnedVariantsDataCy.sampleButton}
                   >
                     <p onClick={() => setVariantIndex(index)}>
-                      N - {index + 1}
+                      {'N - '}
+                      {index + 1}
                     </p>
                   </div>
                 ))}

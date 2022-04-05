@@ -50,16 +50,7 @@ export const FilterRefinerGroupItem = observer(
     const status = incomplete ? '...' : ''
 
     return (
-      <div
-        data-testid={FilterRefinerDataCy.listElements}
-        className={cn(
-          'flex items-center py-1 pr-20',
-          {
-            'bg-blue-light': isIndeterminate,
-          },
-          className,
-        )}
-      >
+      <div className={cn('flex items-center py-1 pr-20', className)}>
         <Checkbox
           className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
           checked={checked}
@@ -70,7 +61,7 @@ export const FilterRefinerGroupItem = observer(
 
         {isFunc && (
           <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-            fn
+            {'fn'}
           </p>
         )}
 

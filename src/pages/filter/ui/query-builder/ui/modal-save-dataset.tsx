@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -19,11 +18,13 @@ import { Attention } from '@ui/icons/attention'
 import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
+import { showToast } from '@utils/notifications/showToast'
+import {
+  noFirstNumberPattern,
+  noSymbolPattern,
+} from '@utils/validation/validationPatterns'
 import { HeaderModal } from './header-modal'
 import { ModalBase } from './modal-base'
-
-export const noSymbolPattern = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~§±№-]/
-export const noFirstNumberPattern = /^[\d_]/
 
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)
@@ -36,6 +37,9 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
+    const { variantCounts } = datasetStore.fixedStatAmount
+    const { conditions } = filterStore
+
     if (
       pathName === PatnNameEnum.Filter &&
       filterStore.method === GlbPagesNames.Filter &&
@@ -47,19 +51,19 @@ export const ModalSaveDataset = observer(() => {
     if (
       pathName === PatnNameEnum.Filter &&
       filterStore.method === GlbPagesNames.Refiner &&
-      datasetStore.statAmount[0] === 0
+      variantCounts === 0
     ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
-    if (pathName === PatnNameEnum.Ws && datasetStore.statAmount[0] === 0) {
+    if (pathName === PatnNameEnum.Ws && variantCounts === 0) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
     if (
       pathName === PatnNameEnum.Ws &&
       !datasetStore.activePreset &&
-      datasetStore.conditions.length === 0
+      conditions.length === 0
     ) {
       setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
     }
@@ -102,15 +106,7 @@ export const ModalSaveDataset = observer(() => {
 
       operations.resetSavingStatus()
     } else {
-      toast.warning(t('general.creaitionIsInProcess'), {
-        position: 'bottom-right',
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-      })
+      showToast(t('general.creaitionIsInProcess'), 'warning')
     }
   }
 
@@ -190,7 +186,7 @@ export const ModalSaveDataset = observer(() => {
               className="ml-2 mt-1 text-14 text-blue-bright cursor-pointer"
               onClick={handleOpenDataset}
             >
-              Open It
+              {'Open It'}
             </span>
           )}
         </span>
@@ -198,7 +194,7 @@ export const ModalSaveDataset = observer(() => {
         <div className="flex ml-auto mt-6">
           <Button
             text={t('general.cancel')}
-            variant={'secondary'}
+            variant="secondary"
             className="border-grey-light hover:bg-grey-light"
             onClick={handleClose}
             dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
@@ -208,7 +204,7 @@ export const ModalSaveDataset = observer(() => {
             text={t('dsCreation.addDataset')}
             className="ml-4"
             disabled={!value.trim() || error.length > 0}
-            variant={'secondary'}
+            variant="secondary"
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}
           />

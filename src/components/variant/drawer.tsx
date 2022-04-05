@@ -18,38 +18,36 @@ export const closeHandler = () => {
   }, 200)
 }
 
-export const VariantDrawer = observer(
-  (): ReactElement => {
-    const drawerWidth = window.innerWidth - 380
+export const VariantDrawer = observer((): ReactElement => {
+  const drawerWidth = window.innerWidth - 380
 
-    const gridLayout = SessionStoreManager.read<IGridLayout[]>('gridLayout')
+  const gridLayout = SessionStoreManager.read<IGridLayout[]>('gridLayout')
 
-    const [layout, setLayout] = useState<IGridLayout[]>(
-      gridLayout || variantStore.wsDrawerVariantsLayout,
-    )
+  const [layout, setLayout] = useState<IGridLayout[]>(
+    gridLayout || variantStore.wsDrawerVariantsLayout,
+  )
 
-    useEffect(() => {
-      return () => {
-        closeHandler()
-      }
-    }, [])
+  useEffect(() => {
+    return () => {
+      closeHandler()
+    }
+  }, [])
 
-    return (
-      <div
-        style={{
-          transitionProperty: 'width',
-          width: variantStore.drawerVisible ? drawerWidth : 0,
-        }}
-        className={cn(`bg-blue-lighter duration-200 ease-linear flex flex-col`)}
-      >
-        <VariantHeader setLayout={setLayout} />
+  return (
+    <div
+      style={{
+        transitionProperty: 'width',
+        width: variantStore.drawerVisible ? drawerWidth : 0,
+      }}
+      className={cn('bg-blue-lighter duration-200 ease-linear flex flex-col')}
+    >
+      <VariantHeader setLayout={setLayout} />
 
-        <VariantBody
-          drawerWidth={drawerWidth}
-          setLayout={setLayout}
-          layout={layout}
-        />
-      </div>
-    )
-  },
-)
+      <VariantBody
+        drawerWidth={drawerWidth}
+        setLayout={setLayout}
+        layout={layout}
+      />
+    </div>
+  )
+})

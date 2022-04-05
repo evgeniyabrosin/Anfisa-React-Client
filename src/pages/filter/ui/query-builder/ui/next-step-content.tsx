@@ -1,14 +1,17 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { makeStepActive } from '@utils/makeStepActive'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
+import dtreeModalStore from '../../../modals.store'
 import { NextStepContentItem } from './next-step-content-item'
 
-interface IProps {
+interface INextStepContentProps {
   index: number
 }
 
@@ -25,8 +28,13 @@ const ContentEditor = styled.div`
 `
 
 export const NextStepContent = observer(
-  ({ index }: IProps): ReactElement => {
+  ({ index }: INextStepContentProps): ReactElement => {
     const groups = dtreeStore.getStepData[index].groups
+
+    const [expanded, setExpanded] = useState<Record<number, boolean>>({})
+    const expandGroup = (id: number) => () => {
+      setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
+    }
 
     const currentStepData = dtreeStore.getStepData[index]
     const isExcluded = currentStepData.excluded
@@ -37,32 +45,56 @@ export const NextStepContent = observer(
     const getWords = (text: string | null) => {
       if (!text) return []
 
-      const textList = text.split(/{|}/)
+      const removeNotExpandedAttributes = text
+        .split(/{|}/)
+        .map((item, index) => {
+          if (index % 2 === 0) return item
 
-      const changedTextList = textList.map(element => {
-        if (element.includes(`"`)) return `{${element}}`
+          if (expanded[Math.floor(index / 2)]) return `{${item}}`
+
+          const elements = item
+            .split(/([^("|,)]*"[^"]+"[^("|,)]*)|([^,]+)/)
+            .filter(Boolean)
+            .filter(el => el !== ',')
+
+          if (elements.length <= 3) return `{${elements.join(',')}}`
+
+          return `{${elements.slice(0, 3).join(',')}, ...}`
+        })
+        .join('')
+
+      const textList = removeNotExpandedAttributes.split(/{|}/)
+      const changedTextList = textList.map((element, index) => {
+        if (element.includes('"') && index % 2 === 1) {
+          return `{${element}}`
+        }
 
         return element.split(' ')
       })
 
       const flatedTextList = changedTextList.flat()
 
-      const words = flatedTextList.map((word, wordIndex: number) => {
-        const changedWord = word.trim()
+      const words = flatedTextList
+        .filter(Boolean)
+        .map((word, wordIndex: number) => {
+          const changedWord = word.trim()
 
-        switch (changedWord) {
-          case 'if':
-          case 'and':
-          case 'or':
-          case 'not':
-            return (
-              <span key={wordIndex} className="text-white">{` ${word} `}</span>
-            )
+          switch (changedWord) {
+            case 'if':
+            case 'and':
+            case 'or':
+            case 'not':
+              return (
+                <span
+                  key={wordIndex}
+                  className="text-white"
+                >{` ${word} `}</span>
+              )
 
-          default:
-            return <span key={wordIndex}>{`${word} `}</span>
-        }
-      })
+            default:
+              return <span key={wordIndex}>{`${word} `}</span>
+          }
+        })
 
       return words
     }
@@ -70,14 +102,16 @@ export const NextStepContent = observer(
     const wordList = getWords(condition)
 
     const openModal = () => {
-      makeStepActive(index)
-      dtreeStore.openModalAttribute(index)
+      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+
+      dtreeModalStore.openModalAttribute()
     }
 
     return (
       <div className="flex flex-col items-start py-2 h-auto w-full">
         <Content>
           <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
+            {/* TODO: add variable "isEmptyStep" instead of "groups && groups.length > 0" */}
             {groups && groups.length > 0 ? (
               groups.map((group: any, currNo: number) => (
                 <NextStepContentItem
@@ -85,6 +119,8 @@ export const NextStepContent = observer(
                   group={group}
                   index={index}
                   currNo={currNo}
+                  setExpandOnClick={expandGroup(currNo)}
+                  expanded={expanded[currNo] || false}
                 />
               ))
             ) : (
@@ -95,7 +131,7 @@ export const NextStepContent = observer(
           </div>
 
           {groups && groups.length > 0 && (
-            <ContentEditor className="w-1/3 h-full">
+            <ContentEditor className="w-1/3 h-full ml-2">
               <div
                 className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono"
                 data-testid={DecisionTreesResultsDataCy.contentEditor}
@@ -107,9 +143,7 @@ export const NextStepContent = observer(
                 )}
 
                 <div className="flex">
-                  <div className="text-orange-secondary mr-2">
-                    {wordList.map(element => element)}
-                  </div>
+                  <div className="text-orange-secondary mr-2">{wordList}</div>
                 </div>
 
                 <div className="text-grey-light pl-2">return {result}</div>

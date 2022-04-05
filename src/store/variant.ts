@@ -1,8 +1,13 @@
 import { get } from 'lodash'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { IGridLayout, ReccntCommon, ReccntDisplayItem } from '@declarations'
-import { getApiUrl } from '@core/get-api-url'
+import { IGridLayout, ReccntDisplayItem } from '@declarations'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import {
+  IReccntArguments,
+  TRecCntResponse,
+} from '@service-providers/dataset-level/dataset-level.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
@@ -11,7 +16,7 @@ const DRAWER_DEFAULT_X = 0
 
 export class VariantStore {
   drawerVisible = false
-  variant: ReccntCommon[] = []
+  variant: TRecCntResponse[] = []
   recordsDisplayConfig: any = {}
   wsDrawerVariantsLayout: IGridLayout[] = []
   modalDrawerVariantsLayout: IGridLayout[] = []
@@ -109,14 +114,8 @@ export class VariantStore {
     })
   }
 
-  setDsName(dsName: string) {
-    const oldDsName = this.dsName
-
-    this.dsName = dsName
-
-    if (oldDsName !== dsName) {
-      this.fetchVarinatInfoAsync()
-    }
+  setDsName(settedDsName: string) {
+    this.dsName = settedDsName
   }
 
   updateGeneralTags(tagName: string) {
@@ -126,27 +125,34 @@ export class VariantStore {
   async fetchVarinatInfoAsync() {
     if (datasetStore.isXL) return
 
-    const details = datasetStore.wsRecords.find(
-      record => record.no === this.index,
+    const details = toJS(
+      datasetStore.wsRecords.find(record => record.no === this.index),
     )
 
+    const label = details?.lb
+    const geneNameInBrackets = label?.split(' ')[0] ?? ''
+    const geneName = geneNameInBrackets.slice(1, geneNameInBrackets.length - 1)
+
+    const isVariantWithoutGene = geneName === 'None'
+
+    // create reccntBody with URLSearchParams
+    const reccntArguments: IReccntArguments = {
+      ds: this.dsName,
+      rec: String(this.index),
+    }
+
+    if (!isVariantWithoutGene) {
+      reccntArguments.details = details?.dt
+    }
+
     const [variantResponse, tagsResponse] = await Promise.all([
-      fetch(
-        getApiUrl(
-          `reccnt?ds=${this.dsName}&rec=${this.index}&details=${
-            details ? details.dt : ''
-          }`,
-        ),
-        {
-          method: 'POST',
-        },
-      ),
-      fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
+      datasetProvider.getRecCnt(reccntArguments),
+      wsDatasetProvider.getWsTags({ ds: this.dsName, rec: this.index }),
     ])
 
     const [variant, tagsData] = await Promise.all([
-      variantResponse.json(),
-      tagsResponse.json(),
+      variantResponse,
+      tagsResponse,
     ])
 
     const checkedTags = Object.keys(tagsData['rec-tags']).filter(
@@ -163,7 +169,7 @@ export class VariantStore {
       this.optionalTags = optionalTags
       this.checkedTags = checkedTags
       this.tagsWithNotes = get(tagsData, 'rec-tags')
-      this.noteText = tagsData['rec-tags']['_note']
+      this.noteText = tagsData['rec-tags']['_note'] as string
       this.initRecordsDisplayConfig()
 
       if (this.wsDrawerVariantsLayout.length === 0) {
@@ -175,23 +181,13 @@ export class VariantStore {
   async fetchSelectedTagsAsync(params: string) {
     if (datasetStore.isXL) return
 
-    const body = new URLSearchParams({
+    const wsTags = await wsDatasetProvider.getWsTags({
       ds: this.dsName,
-      rec: this.index.toString(),
-      tags: `{${params}}`,
+      rec: this.index,
+      tags: JSON.parse(params),
     })
 
-    const response = await fetch(getApiUrl(`ws_tags`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const tagsData = await response.json()
-
-    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
+    const checkedTags = Object.keys(wsTags['rec-tags']).filter(
       tag => tag !== '_note',
     )
 
@@ -206,14 +202,10 @@ export class VariantStore {
     datasetName: string,
     orderNumber: number,
   ) {
-    const variantResponse = await fetch(
-      getApiUrl(`reccnt?ds=${datasetName}&rec=${orderNumber}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const variant = await variantResponse.json()
+    const variant = await datasetProvider.getRecCnt({
+      ds: datasetName,
+      rec: String(orderNumber),
+    })
 
     runInAction(() => {
       this.variant = variant

@@ -6,22 +6,23 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { RadioButton } from '@ui/radio-button'
+import activeStepStore, {
+  ActiveStepOptions,
+  CreateEmptyStepPositions,
+} from '@pages/filter/active-step.store'
 import { changeStep } from '@utils/changeStep'
-import { createEmptyStep } from '@utils/createEmptyStep'
-import { makeStepActive } from '@utils/makeStepActive'
 import { ResultsView, TreeView } from './next-step'
 import { Operation, Step } from './next-step-header'
 import { NextStepRoute } from './next-step-route'
 import { StepDivider } from './step-divider'
 
-interface IProps {
+interface IFinalStepProps {
   index: number
 }
 
 export const FinalStep = observer(
-  ({ index }: IProps): ReactElement => {
+  ({ index }: IFinalStepProps): ReactElement => {
     const currentStep = dtreeStore.getStepData[index]
-    const prevStepIndex = index - 1
 
     const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -29,7 +30,10 @@ export const FinalStep = observer(
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        makeStepActive(stepIndex)
+        activeStepStore.makeStepActive(
+          stepIndex,
+          ActiveStepOptions.StartedVariants,
+        )
       }
     }
 
@@ -47,7 +51,7 @@ export const FinalStep = observer(
           <TreeView
             className={cn(
               'pr-3',
-              currentStep.isReturnedVariantsActive ? 'bg-green-light' : '',
+              currentStep.isReturnedVariantsActive ? 'bg-blue-tertiary' : '',
             )}
           >
             <NextStepRoute
@@ -60,11 +64,11 @@ export const FinalStep = observer(
           <ResultsView
             className={cn(
               'border-l border-grey-light font-medium px-5 relative',
-              currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
+              currentStep.isActive && 'bg-blue-tertiary',
             )}
             onClick={event => setStepActive(index, event)}
           >
-            <div className="flex w-full  items-center  step-content-area">
+            <div className="flex w-full items-center  step-content-area">
               <Step className="mb-2 mt-2">{t('dtree.finalStep')}</Step>
 
               <div className="flex ml-4">
@@ -94,7 +98,12 @@ export const FinalStep = observer(
             <Button
               text={t('dtree.addStep')}
               className="absolute -bottom-9 z-1000 left-0"
-              onClick={() => createEmptyStep(prevStepIndex, 'AFTER')}
+              onClick={() =>
+                activeStepStore.createEmptyStep(
+                  index,
+                  CreateEmptyStepPositions.FINAL,
+                )
+              }
             />
           </ResultsView>
         </div>

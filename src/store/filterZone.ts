@@ -1,7 +1,7 @@
 import { difference } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
-import { getApiUrl } from '@core/get-api-url'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
 class ZoneStore {
@@ -20,7 +20,9 @@ class ZoneStore {
   isProband: boolean | undefined = false
 
   isModeNOT = false
+  modeNotSubmitted = false
   isModeWithNotes = false
+  modeWithNotesSubmitted = false
 
   constructor() {
     makeAutoObservable(this)
@@ -123,7 +125,7 @@ class ZoneStore {
   removeLocalTag(tagName: string, type: string) {
     this.localTags = this.localTags.filter(tag => tag !== tagName)
 
-    tagName === '_note' && this.resetModeWithNotes()
+    tagName === '_note' && this.setModeWithNotes(false)
 
     if (type === 'fast') {
       this.createSelectedZoneFilter('isTags')
@@ -191,12 +193,12 @@ class ZoneStore {
         ? difference(datasetStore.tags, this.selectedTags)
         : this.selectedTags
       ).map(async tag => {
-        const response = await fetch(
-          getApiUrl(`tag_select?ds=${datasetStore.datasetName}&tag=${tag}`),
-        )
+        const tagSelect = await wsDatasetProvider.getTagSelect({
+          ds: datasetStore.datasetName,
+          tag,
+        })
 
-        const result = await response.json()
-        const currentNo = result['tag-rec-list']
+        const currentNo = tagSelect['tag-rec-list']
 
         return currentNo
       }),
@@ -205,25 +207,30 @@ class ZoneStore {
     const uniqueNo = Array.from(new Set(filteredData.flat()))
 
     datasetStore.indexFilteredNo = 0
-    datasetStore.filteredNo = uniqueNo
+    datasetStore.filteredNo = uniqueNo as number[]
 
     await datasetStore.fetchFilteredTabReportAsync()
   }
 
-  setModeNOT() {
-    this.isModeNOT = true
+  setModeNOT(value: boolean) {
+    this.isModeNOT = value
   }
 
   resetModeNOT() {
-    this.isModeNOT = false
+    this.isModeNOT = this.modeNotSubmitted
   }
 
-  setModeWithNotes() {
-    this.isModeWithNotes = true
+  setModeWithNotes(value: boolean) {
+    this.isModeWithNotes = value
   }
 
   resetModeWithNotes() {
-    this.isModeWithNotes = false
+    this.isModeWithNotes = this.modeWithNotesSubmitted
+  }
+
+  submitTagsMode() {
+    this.modeNotSubmitted = this.isModeNOT
+    this.modeWithNotesSubmitted = this.isModeWithNotes
   }
 }
 

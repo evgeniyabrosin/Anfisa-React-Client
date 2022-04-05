@@ -12,22 +12,34 @@ import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
-import { IGridLayout, ReccntCommon } from '@declarations'
+import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
+import {
+  ICommonAspectDescriptor,
+  IPreAspectDescriptor,
+  ITableAspectDescriptor,
+  TRecCntResponse,
+} from '@service-providers/dataset-level/dataset-level.interface'
 import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
 const normHitClass = 'norm hit'
 const noTrHitClass = 'no-tr-hit'
 
-const PreView = ({ content }: ReccntCommon): ReactElement => {
+const PreView = ({
+  content,
+}: ICommonAspectDescriptor & IPreAspectDescriptor): ReactElement => {
   return <pre className="overflow-y-hidden">{content}</pre>
 }
 
-const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
+const TableView = ({
+  colhead,
+  rows,
+  name,
+}: ICommonAspectDescriptor & ITableAspectDescriptor): ReactElement => {
   let colheadData: string[] = []
 
   if (colhead) {
@@ -54,7 +66,7 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
     <div>
       {rows?.length === 0 ? (
         <div className="flex justify-center text-center w-full">
-          No data to show
+          {'No data to show'}
         </div>
       ) : (
         <table className="min-w-full">
@@ -103,8 +115,11 @@ const TableView = ({ colhead, rows, name }: ReccntCommon): ReactElement => {
                       <td
                         key={cIndex}
                         className={cn(
-                          'py-3 pr-3 font-medium',
-                          !cell[1]?.includes(noTrHitClass) && 'text-white',
+                          'py-3 pr-3 font-normal',
+                          cell[0].includes('</a>')
+                            ? 'text-blue-bright'
+                            : !cell[1]?.includes(noTrHitClass) &&
+                                'text-grey-blue',
                         )}
                         dangerouslySetInnerHTML={{ __html: cell[0] }}
                       />
@@ -179,7 +194,7 @@ export const VariantBody = observer(
           }
         }}
       >
-        {filtered.map((aspect: ReccntCommon, index: number) => {
+        {filtered.map((aspect: TRecCntResponse, index: number) => {
           return (
             <div
               data-grid={layout[index]}
@@ -273,9 +288,16 @@ export const VariantBody = observer(
                 }}
               >
                 {aspect.type === 'pre' ? (
-                  <PreView {...aspect} />
+                  <PreView
+                    {...(aspect as ICommonAspectDescriptor &
+                      IPreAspectDescriptor)}
+                  />
                 ) : (
-                  <TableView {...aspect} name={aspect.name} />
+                  <TableView
+                    {...(aspect as ICommonAspectDescriptor &
+                      ITableAspectDescriptor)}
+                    name={aspect.name}
+                  />
                 )}
               </div>
             </div>

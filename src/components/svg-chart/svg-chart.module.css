@@ -1,0 +1,27 @@
+@tailwind base;
+
+.tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -999;
+  padding: 4px 8px;
+  border-radius: 2px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+
+  &_shown {
+    visibility: visible;
+    opacity: 1;
+    z-index: 999;
+  }
+
+  &_hidding {
+    opacity: 0;
+  }
+
+  @apply text-xs;
+  @apply text-white;
+  @apply bg-blue-dark;
+}

@@ -1,15 +1,27 @@
-import { getApiUrl } from '@core/get-api-url'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
+import {
+  filteringProvider,
+  IStatunitsArguments,
+} from '@service-providers/filtering-regime'
 import { getFilteredAttrsList } from './getFilteredAttrsList'
 
 export const fetchStatunitsAsync = async (
   statList: any[],
   stepIndex?: string,
 ) => {
+  const isRefiner = filterStore.method === GlbPagesNames.Refiner
+
+  if (!isRefiner) {
+    // Dtree has own fetch mechanism
+    return
+  }
+
   const incompletePropertyList: string[] = []
+
+  const { conditions } = filterStore
 
   statList.forEach(element => {
     if (element.incomplete) {
@@ -25,33 +37,16 @@ export const fetchStatunitsAsync = async (
 
   const requestId = dtreeStore.statRequestId
 
-  const body = new URLSearchParams({
+  const body: IStatunitsArguments = {
     ds: datasetStore.datasetName,
     rq_id: requestId,
     tm: '1',
-    units: JSON.stringify(incompletePropertyList),
-  })
-
-  const isRefiner = filterStore.method === GlbPagesNames.Refiner
-
-  if (isRefiner) {
-    const conditions = JSON.stringify(datasetStore.conditions)
-
-    body.append('conditions', conditions)
-  } else {
-    stepIndex && body.append('no', stepIndex)
-    dtreeStore.dtreeCode && body.append('code', dtreeStore.dtreeCode)
+    units: incompletePropertyList,
+    conditions: datasetStore.conditions,
   }
 
-  const response = await fetch(getApiUrl(`statunits`), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body,
-  })
+  const result = await filteringProvider.getStatUnits(body)
 
-  const result = await response.json()
   const calculatedUnits = result.units
 
   const newStatList = statList.map(element => {
@@ -68,9 +63,7 @@ export const fetchStatunitsAsync = async (
 
   const filteredStatList = getFilteredAttrsList(newStatList)
 
-  isRefiner
-    ? datasetStore.setStatList(filteredStatList)
-    : dtreeStore.setStatList(filteredStatList)
+  datasetStore.setStatList(filteredStatList)
 
   fetchStatunitsAsync(newStatList, stepIndex)
 }

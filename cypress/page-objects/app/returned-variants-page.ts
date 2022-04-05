@@ -9,7 +9,7 @@ class ReturnedVariantsPage extends BasePage {
     this.returnedVariantsTable = new ReturnedVariantWidget({
       selectors: {
         sampleButton: `[data-testid = "${ReturnedVariantsDataCy.sampleButton}"]`,
-        tableSection: `[data-grid="[object Object]"]`,
+        tableSection: '[data-grid="[object Object]"]',
         returnedVariantsHeader: `[data-testid = "${ReturnedVariantsDataCy.returnedVariantsHeader}"]`,
       },
       labels: {

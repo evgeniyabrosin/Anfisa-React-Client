@@ -1,8 +1,9 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
+import { CSSProperties } from 'styled-components'
 
 export interface ButtonProps {
-  text?: string
+  text?: string | JSX.Element
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   variant?:
@@ -12,12 +13,15 @@ export interface ButtonProps {
     | 'primary-dark'
     | 'diestruction'
   className?: Argument
-  onClick?: () => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseDown?: (event: MouseEvent<HTMLButtonElement>) => void
   append?: ReactElement
   prepend?: ReactElement
   icon?: ReactElement
   refEl?: any
   dataTestId?: string
+  style?: CSSProperties
 }
 
 export const Button = ({
@@ -26,12 +30,15 @@ export const Button = ({
   disabled = false,
   variant = 'primary',
   onClick,
+  onMouseUp,
+  onMouseDown,
   className,
   append,
   prepend,
   icon,
   refEl,
   dataTestId,
+  style = {},
 }: ButtonProps): ReactElement => {
   let padding = ''
   const classNameString: string = cn(className)
@@ -57,7 +64,7 @@ export const Button = ({
   }
 
   const cnButton = cn(
-    'flex items-center justify-center rounded-full',
+    'flex items-center justify-between rounded-full',
     padding,
     {
       //default primary
@@ -101,8 +108,16 @@ export const Button = ({
     className,
   )
 
-  const clickHandler = () => {
-    !disabled && onClick && onClick()
+  const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onClick && onClick(event)
+  }
+
+  const onMouseUpHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onMouseUp && onMouseUp(event)
+  }
+
+  const onMouseDownHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    !disabled && onMouseDown && onMouseDown(event)
   }
 
   return (
@@ -112,6 +127,9 @@ export const Button = ({
       className={cnButton}
       ref={refEl}
       onClick={clickHandler}
+      onMouseUp={onMouseUpHandler}
+      onMouseDown={onMouseDownHandler}
+      style={style}
     >
       {prepend}
       {text && <span className="mx-2 text-xs leading-14px">{text}</span>}

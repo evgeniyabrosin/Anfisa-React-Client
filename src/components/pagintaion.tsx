@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -15,7 +14,7 @@ enum Actions {
 interface IProps {
   pagesNumbers: number
   currentPage: number
-  setPageNumber: Dispatch<SetStateAction<number>>
+  setPageNumber: (value: number) => void
 }
 
 const Panel = styled.div`

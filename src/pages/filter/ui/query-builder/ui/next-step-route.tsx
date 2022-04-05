@@ -1,18 +1,19 @@
 import { Fragment, ReactElement } from 'react'
 import cn from 'classnames'
-import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 import styled from 'styled-components'
 
-import { FilterCountsType } from '@declarations'
+import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { makeStepActive } from '@utils/makeStepActive'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 
 const StartAmount = styled.div`
   font-size: 13px;
@@ -46,6 +47,7 @@ const ExcludeTurn = styled.div<{ isIncluded: boolean }>`
   position: absolute;
   top: 29px;
   margin-right: 14px;
+  margin-top: 4px;
   display: flex;
   width: 20px;
   height: 60px;
@@ -83,40 +85,30 @@ const DifferenceCounts = styled.span<{
         : theme('colors.purple.bright')};
 `
 
-interface IProps {
+interface INextStepRouteProps {
   isExpanded: boolean
   index: number
   isIncluded: boolean
 }
 
-export function getNumberWithCommas(value: FilterCountsType) {
-  if (typeof value !== 'number') return '...'
-
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
 export const NextStepRoute = observer(
-  ({ isExpanded, index, isIncluded }: IProps): ReactElement => {
-    const [allVariants, transcribedVariants] = get(
-      datasetStore,
-      'statAmount',
-      [],
-    )
+  ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
+    const { variantCounts, dnaVariantsCounts } = datasetStore.fixedStatAmount
 
-    const startFilterCounts = dtreeStore.getStepData[index].startFilterCounts
     const currentStep = dtreeStore.getStepData[index]
+    const startFilterCounts = currentStep.startFilterCounts
 
     const changedStartCounts = startFilterCounts
-      ? getNumberWithCommas(startFilterCounts)
+      ? formatNumber(startFilterCounts)
       : startFilterCounts
 
-    const changedAllVariants = allVariants
-      ? getNumberWithCommas(allVariants)
-      : allVariants
+    const changedAllVariants = variantCounts
+      ? formatNumber(variantCounts)
+      : variantCounts
 
     const alternativeCounts = changedStartCounts || changedAllVariants
 
-    const firstStepValue = transcribedVariants
+    const firstStepValue = dnaVariantsCounts
       ? changedStartCounts
       : alternativeCounts
 
@@ -128,25 +120,34 @@ export const NextStepRoute = observer(
       index: index + 1,
     })
 
-    const differenceWithCommas = getNumberWithCommas(currentStep.difference)
+    const differenceWithCommas = formatNumber(currentStep.difference)
+
+    const defaultStartCounts =
+      index === 0 ? firstStepValue : formatNumber(startFilterCounts)
+
+    const isFinalStep = index === dtreeStore.stepData.length - 1
+
+    const currentStartCounts = isFinalStep
+      ? differenceWithCommas
+      : defaultStartCounts
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
         <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
-          <div>
-            {index === 0
-              ? firstStepValue
-              : getNumberWithCommas(startFilterCounts)}
-          </div>
+          <div>{currentStartCounts}</div>
         </StartAmount>
 
         <div className="flex flex-col items-center w-1/6">
-          <CircleStartThread className="bg-blue-bright">
+          <CircleStartThread
+            className={cn('bg-blue-bright mt-1', { '-mt-px': isFinalStep })}
+          >
             <SubCircleThread />
           </CircleStartThread>
 
           <LineThread
-            className={cn('bg-blue-bright', { 'mt-4': index === 0 })}
+            className={cn('bg-blue-bright', {
+              'mt-5': index === 0,
+            })}
           />
 
           {isExpanded && currentStep.groups && currentStep.groups.length > 0 && (
@@ -163,12 +164,15 @@ export const NextStepRoute = observer(
                     <ExcludeAmount
                       isIncluded={isIncluded}
                       onClick={() =>
-                        makeStepActive(index, 'isReturnedVariantsActive')
+                        activeStepStore.makeStepActive(
+                          index,
+                          ActiveStepOptions.ReturnedVariants,
+                        )
                       }
                       data-testid={DecisionTreesResultsDataCy.excludeInfo}
                     >
                       <span>
-                        {isIncluded ? `+` : `-`}
+                        {isIncluded ? '+' : '-'}
                         {isDifferenceActive ? (
                           <DifferenceCounts isIncluded={isIncluded}>
                             {differenceWithCommas}

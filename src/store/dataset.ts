@@ -1,49 +1,58 @@
 /* eslint-disable max-lines */
-import cloneDeep from 'lodash/cloneDeep'
-import get from 'lodash/get'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import {
-  DsStatType,
-  IRemoveConditionItem,
-  StatListType,
-  TabReportType,
-} from '@declarations'
-import { FilterKindEnum } from '@core/enum/filter-kind.enum'
-import { getApiUrl } from '@core/get-api-url'
+import { DsStatType, StatListType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import {
+  IRecordDescriptor,
+  TCondition,
+  TItemsCount,
+} from '@service-providers/common/common.interface'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import { IDsStatArguments } from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
+import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
+import {
+  IDsListArguments,
+  ITabReport,
+} from './../service-providers/dataset-level/dataset-level.interface'
+import { IZoneDescriptor } from './../service-providers/ws-dataset-support/ws-dataset-support.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
 const INCREASE_INDEX = 50
 
-export type Condition = [string, string, unknown, string[]?, unknown?]
-
-class DatasetStore {
+export class DatasetStore {
   dsStat: DsStatType = {}
+  startDsStat: DsStatType = {}
   variantsAmount = 0
-  tabReport: TabReportType[] = []
+  tabReport: ITabReport[] = []
   genes: string[] = []
   genesList: string[] = []
   tags: string[] = []
   samples: string[] = []
   selectedVariantNumber?: number
 
-  wsRecords: { no: number; cl: string; dt: string; lb: string }[] = []
+  wsRecords: IRecordDescriptor[] = []
   offset = 0
   filteredNo: number[] = []
 
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: Condition[] = []
+  conditions: TCondition[] = []
+  startPresetConditions: TCondition[] = []
   zone: any[] = []
-  statAmount: number[] = []
+  statAmount: TItemsCount | null = null
+  memorizedConditions:
+    | { conditions: TCondition[]; activePreset: string; zone: any[] }
+    | undefined = undefined
 
   indexTabReport = 0
   indexFilteredNo = 0
@@ -86,6 +95,10 @@ class DatasetStore {
 
   setActivePreset(value: string) {
     this.activePreset = value
+  }
+
+  setPrevPreset(value: string) {
+    this.prevPreset = value
   }
 
   setSelectedVariantNumber(index: number | undefined) {
@@ -142,82 +155,11 @@ class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: Condition[]) {
-    if (!conditions[0]) {
-      this.conditions = []
-      await this.fetchDsStatAsync()
-    }
-
-    const groupCondtionsIndex = this.conditions.findIndex(
-      (item: any) => item[1] === conditions[0][1],
-    )
-
-    if (groupCondtionsIndex !== -1) {
-      this.conditions.splice(groupCondtionsIndex, 1)
-    }
-
-    this.conditions = this.conditions.concat(conditions)
-
-    await this.fetchDsStatAsync()
-
-    return Array.from({ length: this.statAmount[0] })
-  }
-
-  async removeFunctionConditionAsync(functionName: string) {
-    this.conditions = this.conditions.filter(
-      ([_, name]) => name !== functionName,
-    )
-
+  async setConditionsAsync() {
     await this.fetchDsStatAsync()
   }
 
-  removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
-    const cloneConditions = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    const conditionKind = cloneConditions.find(
-      item => item![1] === subGroup,
-    )![0]
-
-    if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
-        (item: string) => item !== itemName,
-      )
-
-      if (filteredItems?.length === 0) {
-        cloneConditions.splice(subGroupIndex, 1)
-      } else {
-        cloneConditions[subGroupIndex][3] = filteredItems
-      }
-    } else {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
-  }
-
-  removeConditionGroup({ subGroup }: { subGroup: string }) {
-    const cloneConditions = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    if (subGroupIndex !== -1) {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
-  }
-
-  resetHasPreset() {
+  resetPrevPreset() {
     this.prevPreset = ''
   }
 
@@ -228,26 +170,28 @@ class DatasetStore {
     this.samples = []
     this.tags = []
     this.dsStat = {}
+    this.startDsStat = {}
     this.variantsAmount = 0
-    this.statAmount = []
+    this.statAmount = null
     this.prevPreset = ''
     this.wsRecords = []
     this.tabReport = []
   }
 
   resetConditions() {
-    this.conditions = []
+    this.startPresetConditions = []
   }
 
-  async initDatasetAsync(
-    datasetName: string = this.datasetName,
-    prevPage?: string,
-  ) {
+  async initDatasetAsync(datasetName: string = this.datasetName) {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
 
-    if (!prevPage) {
+    const isTabReportEmpty = this.tabReport.length === 0
+    const isWsRecordsEmpty = this.wsRecords.length === 0
+    const shouldDataBeUpdated = isTabReportEmpty && isWsRecordsEmpty
+
+    if (shouldDataBeUpdated) {
       await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
 
       this.filteredNo.length === 0
@@ -260,47 +204,42 @@ class DatasetStore {
 
   async fetchDsStatAsync(
     shouldSaveInHistory = true,
-    bodyFromHistory?: URLSearchParams,
-  ) {
+    bodyFromHistory?: IDsStatArguments,
+  ): Promise<DsStatType> {
     this.isLoadingDsStat = true
 
-    const localBody = new URLSearchParams({
+    const localBody: IDsStatArguments = {
       ds: this.datasetName,
-      tm: '0',
-    })
-
-    if (!this.isFilterDisabled) {
-      this.conditions.length > 0 &&
-        localBody.append('conditions', JSON.stringify(this.conditions))
+      tm: 0,
     }
 
-    this.activePreset &&
-      this.conditions.length === 0 &&
-      localBody.append('filter', this.activePreset)
+    const { conditions } = filterStore
+
+    if (!this.isFilterDisabled && conditions.length > 0) {
+      localBody.conditions = conditions
+    }
+
+    if (this.activePreset && this.conditions.length === 0) {
+      localBody.filter = this.activePreset
+    }
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
     }
 
-    const body = shouldSaveInHistory ? localBody : bodyFromHistory
+    const checkedBodyFromHistory = bodyFromHistory ?? localBody
+    const body = shouldSaveInHistory ? localBody : checkedBodyFromHistory
 
-    const response = await fetch(getApiUrl(`ds_stat`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const result = await filteringRegimeProvider.getDsStat(body)
 
     dtreeStore.setStatRequestId(result['rq-id'])
+
     result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
-    const conditionFromHistory = bodyFromHistory?.get('conditions')
+    const conditionFromHistory = checkedBodyFromHistory.conditions
 
     if (conditionFromHistory) {
-      this.conditions = JSON.parse(conditionFromHistory)
+      this.conditions = conditionFromHistory
     }
 
     const statList = result['stat-list']
@@ -310,36 +249,29 @@ class DatasetStore {
     runInAction(() => {
       this.dsStat = result
 
+      if (Object.keys(this.startDsStat).length === 0) {
+        this.startDsStat = this.dsStat
+      }
+
       if (this.isXL) {
-        this.statAmount = get(result, 'filtered-counts', [])
+        this.statAmount = result['filtered-counts']
       }
 
       this.variantsAmount = result['total-counts']['0']
       this.isLoadingDsStat = false
     })
+
+    return result
   }
 
   updatePresetLoad(dsStatData: any, source?: string) {
-    this.conditions = dsStatData.conditions
-    filterStore.selectedFilters = {}
+    filterStore.resetSelectedFilters()
+    this.startPresetConditions = dsStatData.conditions
 
-    dsStatData.conditions?.forEach((condition: any[]) => {
-      const name = condition[1]
-
-      const filterItem = dsStatData['stat-list']?.find(
-        (item: any) => item.name === name,
-      )
-
-      if (condition[0] === FilterKindEnum.Enum) {
-        condition[3]?.forEach((value: string) => {
-          filterStore.addSelectedFilters({
-            group: filterItem.vgroup,
-            groupItemName: name,
-            variant: [value, 0],
-          })
-        })
-      }
+    dsStatData.conditions?.forEach((condition: TCondition) => {
+      filterStore.addFilterBlock(condition as TCondition)
     })
+
     !source || (this.isXL && this.fetchDsStatAsync())
   }
 
@@ -378,28 +310,21 @@ class DatasetStore {
       return
     }
 
-    const response = await fetch(getApiUrl(`tab_report`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        ds: String(dsName),
-        schema: 'xbr',
-        seq: JSON.stringify(seq),
-      }),
+    const tabReport = await datasetProvider.getTabReport({
+      ds: dsName,
+      schema: 'xbr',
+      seq,
     })
 
-    const result = await response.json()
-
     runInAction(() => {
-      this.tabReport = [...this.tabReport, ...result]
-      this.reportsLoaded = this.tabReport.length === this.variantsAmount
+      this.tabReport = [...this.tabReport, ...tabReport]
+      this.reportsLoaded = this.tabReport.length === this.filteredNo.length
       this.isFetchingMore = false
     })
 
     this.setIsLoadingTabReport(false)
   }
+
   async fetchFilteredTabReportAsync() {
     let seq: number[] = []
 
@@ -441,34 +366,25 @@ class DatasetStore {
   async fetchTagSelectAsync() {
     if (this.isXL) return
 
-    const response = await fetch(
-      getApiUrl(`tag_select?ds=${this.datasetName}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const result = await response.json()
+    const tagSelect = await wsDatasetProvider.getTagSelect({
+      ds: this.datasetName,
+    })
 
     runInAction(() => {
-      this.tags = [...result['tag-list']].filter(item => item !== '_note')
+      this.tags = [...tagSelect['tag-list']].filter(item => item !== '_note')
     })
   }
 
   async fetchWsTagsAsync() {
     if (this.isXL) return
 
-    const response = await fetch(
-      getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${variantStore.index}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const result = await response.json()
+    const wsTags = await wsDatasetProvider.getWsTags({
+      ds: this.datasetName,
+      rec: variantStore.index,
+    })
 
     runInAction(() => {
-      this.tags = [...result['op-tags'], ...result['check-tags']].filter(
+      this.tags = [...wsTags['op-tags'], ...wsTags['check-tags']].filter(
         item => item !== '_note',
       )
     })
@@ -477,35 +393,25 @@ class DatasetStore {
   async fetchWsListAsync(isXL?: boolean, kind?: string) {
     this.setIsLoadingTabReport(true)
 
-    const body = new URLSearchParams({
+    const params: IWsListArguments | IDsListArguments = {
       ds: this.datasetName,
-    })
-
-    if (!this.isFilterDisabled) {
-      body.append(
-        'conditions',
-        kind === 'reset' ? '[]' : JSON.stringify(this.conditions),
-      )
-      body.append('zone', JSON.stringify(this.zone))
+      filter: this.activePreset,
     }
 
-    this.prevPreset = this.activePreset
-    body.append('filter', this.activePreset)
+    const { conditions } = filterStore
 
-    const response = await fetch(getApiUrl(isXL ? `ds_list` : `ws_list`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    if (!this.isFilterDisabled) {
+      params.conditions = kind === 'reset' ? [] : conditions
+      if (!isXL) {
+        ;(params as IWsListArguments).zone = this.zone
+      }
+    }
 
     this.indexFilteredNo = 0
 
     if (isXL) {
-      const taskResult = await operations.getJobStatusAsync(result.task_id)
+      const dsList = await datasetProvider.getDsList(params)
+      const taskResult = await operations.getJobStatusAsync(dsList.task_id)
 
       runInAction(() => {
         this.filteredNo = taskResult?.data?.[0].samples
@@ -515,13 +421,14 @@ class DatasetStore {
           : []
       })
     } else {
+      const wsList = await wsDatasetProvider.getWsList(params)
       runInAction(() => {
-        this.filteredNo = result.records
-          ? result.records.map((variant: { no: number }) => variant.no)
+        this.filteredNo = wsList.records
+          ? wsList.records.map((variant: { no: number }) => variant.no)
           : []
 
-        this.statAmount = get(result, 'filtered-counts', [])
-        this.wsRecords = result.records
+        this.statAmount = wsList['filtered-counts']
+        this.wsRecords = wsList.records
       })
     }
 
@@ -531,48 +438,57 @@ class DatasetStore {
   }
 
   async fetchZoneListAsync(zone: string) {
-    const body = new URLSearchParams({ ds: this.datasetName, zone })
-
-    const response = await fetch(getApiUrl(`zone_list`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const zoneList = (await wsDatasetProvider.getZoneList({
+      ds: this.datasetName,
+      zone,
+    })) as IZoneDescriptor
 
     runInAction(() => {
       zone === 'Symbol'
-        ? (this.genes = result.variants)
-        : (this.genesList = result.variants)
+        ? (this.genes = zoneList.variants)
+        : (this.genesList = zoneList.variants)
     })
   }
 
   async fetchSamplesZoneAsync() {
-    const body = new URLSearchParams({
+    const zoneList = (await wsDatasetProvider.getZoneList({
       ds: this.datasetName,
       zone: 'Has_Variant',
-    })
-
-    const response = await fetch(getApiUrl(`zone_list`), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    })) as IZoneDescriptor
 
     runInAction(() => {
-      this.samples = result.variants
+      this.samples = zoneList.variants
     })
   }
 
   setStatList(statList: StatListType) {
     this.dsStat['stat-list'] = statList
+  }
+
+  memorizeFilterConditions() {
+    this.memorizedConditions = {
+      conditions: toJS(filterStore.conditions),
+      activePreset: this.activePreset,
+      zone: toJS(this.zone),
+    }
+  }
+
+  applyMemorizedConditions() {
+    const { memorizedConditions } = this
+
+    if (memorizedConditions) {
+      Object.keys(memorizedConditions).forEach((key: string) => {
+        ;(this as any)[key] = (memorizedConditions as any)[key]
+      })
+    }
+  }
+
+  get fixedStatAmount() {
+    const variantCounts = this.statAmount?.[0] ?? null
+    const dnaVariantsCounts = this.statAmount?.[1] ?? null
+    const transcriptsCounts = this.statAmount?.[2] ?? null
+
+    return { variantCounts, dnaVariantsCounts, transcriptsCounts }
   }
 }
 

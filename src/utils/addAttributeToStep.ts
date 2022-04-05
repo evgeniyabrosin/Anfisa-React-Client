@@ -1,13 +1,16 @@
 import { ActionType, AttributeType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
+import activeStepStore from '@pages/filter/active-step.store'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import datasetStore from '../store/dataset'
-import { getCurrentStepIndexForApi } from './getCurrentStepIndexForApi'
 
 export const addAttributeToStep = (
   action: ActionType,
   attributeType: AttributeType,
   filters: any = null,
   params: any = null,
+  currentMode?: ModeTypes,
   // eslint-disable-next-line max-params
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -27,13 +30,16 @@ export const addAttributeToStep = (
   const attribute = [attributeType, subGroupName, currentFilters]
 
   if (shouldTakeAttributeFromStore) {
-    attribute.splice(2, 0, '')
+    const conditionsJoinMode = getConditionJoinMode(currentMode)
+
+    attribute.splice(2, 0, conditionsJoinMode)
   }
 
   if (params) attribute.push(params)
 
-  const stepIndexForApi = getCurrentStepIndexForApi()
-  const instruction = ['POINT', action, stepIndexForApi, attribute]
+  const { stepIndexForApi } = activeStepStore
+
+  const instruction = ['POINT', action, +stepIndexForApi, attribute]
 
   body.append('instr', JSON.stringify(instruction))
 
