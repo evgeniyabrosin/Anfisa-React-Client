@@ -4,6 +4,8 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { FilterCountsType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
 import {
   IDsStatArguments,
@@ -163,7 +165,11 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    const statList = this.stat.list ?? toJS(datasetStore.dsStat['stat-list'])
+    const isRefiner = filterStore.method === GlbPagesNames.Refiner
+
+    const statList = isRefiner
+      ? toJS(datasetStore.dsStat['stat-list'])
+      : this.stat.list
 
     return getQueryBuilder(statList)
   }
