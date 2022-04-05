@@ -36,3 +36,11 @@ export const RangeSliderOrientation = Glb.makeEnum({
 })
 
 export type RangeSliderOrientation = EnumValue<typeof RangeSliderOrientation>
+
+export interface IRangeSliderAxis {
+  readonly ticks: number[]
+
+  getOffset(value: number): number
+
+  getValue(offset: number): number
+}

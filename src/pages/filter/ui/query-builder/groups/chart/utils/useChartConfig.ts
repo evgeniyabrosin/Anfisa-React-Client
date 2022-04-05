@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import isEqual from 'lodash/isEqual'
 
+import { adjustHistogramData } from '@core/histograms'
 import {
   AttributeChartRenderModes,
   AttributeKinds,
@@ -147,7 +148,8 @@ export const useChartConfig = (
   ) {
     if (isNumeric) {
       configRef.current = getHistogramChartConfig(
-        status.histogram,
+        // TODO: in the next step we can move `adjustHistogramData` call to service providers adapters
+        adjustHistogramData(status.histogram, status.max),
         status['sub-kind'],
       )
     } else {
