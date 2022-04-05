@@ -46,19 +46,6 @@ Feature: Main Table
         And Clicks apply
         Then Main table should be filtered by custom tag
 
-    Scenario: Gene column should be turned off
-        Given Main Table was opened
-        When User clicks on "Customize Table" dropdown
-        And toggles off "Gene" column
-        And Clicks apply button
-        Then Gene column should be turned off
-
-    Scenario: Gene column should be turned on
-        Given Main Table was opened
-        When User clicks on "Customize Table" dropdown
-        And toggles on "Gene" column
-        And Clicks apply button
-        Then Gene column should be turned on and displayed in the first place
 
     Scenario Outline: <Middle> column should be turned off
         Given Main Table was opened
