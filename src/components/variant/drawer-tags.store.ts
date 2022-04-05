@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { ITableAspectDescriptor } from '@service-providers/dataset-level/dataset-level.interface'
+import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import { findElementInRow } from '@utils/mian-table/find-element-in-row'
 import { showToast } from '@utils/notifications/showToast'
 import { noFirstSymbolsPattern } from '@utils/validation/validationPatterns'
@@ -102,14 +103,13 @@ class DrawerTagsStore {
   }
 
   async handleSaveTagsAsync(): Promise<void> {
-    let params = ''
+    const tagList: TTagsDescriptor = {}
 
-    this.localCheckedTags.forEach((tagName, index) => {
-      const isLastIndex = index === this.localCheckedTags.length - 1
-      params += `"${tagName}":true${isLastIndex ? '' : ','}`
+    this.localCheckedTags.forEach(tagName => {
+      tagList[tagName] = true
     })
 
-    variantStore.fetchSelectedTagsAsync(params)
+    variantStore.fetchSelectedTagsAsync(tagList)
   }
 }
 

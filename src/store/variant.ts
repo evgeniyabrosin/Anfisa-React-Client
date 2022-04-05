@@ -7,6 +7,7 @@ import {
   IReccntArguments,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
+import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
@@ -178,13 +179,13 @@ export class VariantStore {
     })
   }
 
-  async fetchSelectedTagsAsync(params: string) {
+  async fetchSelectedTagsAsync(tagList: TTagsDescriptor) {
     if (datasetStore.isXL) return
 
     const wsTags = await wsDatasetProvider.getWsTags({
       ds: this.dsName,
       rec: this.index,
-      tags: JSON.parse(params),
+      tags: tagList,
     })
 
     const checkedTags = Object.keys(wsTags['rec-tags']).filter(
@@ -193,7 +194,7 @@ export class VariantStore {
 
     runInAction(() => {
       this.checkedTags = checkedTags
-
+      this.tagsWithNotes = wsTags['rec-tags']
       this.initRecordsDisplayConfig()
     })
   }
