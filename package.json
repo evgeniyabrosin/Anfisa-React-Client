@@ -1,6 +1,6 @@
 {
   "name": "anfisa-react-client",
-  "version": "0.2.72",
+  "version": "0.2.73",
   "private": true,
   "dependencies": {
     "@monaco-editor/react": "4.3.1",
