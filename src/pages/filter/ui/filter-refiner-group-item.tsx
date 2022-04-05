@@ -8,7 +8,6 @@ import Tooltip from 'rc-tooltip'
 import { StatListType } from '@declarations'
 import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
-import { FilterRefinerDataCy } from '@components/data-testid/filter-refiner.cy'
 
 type Props = StatListType & {
   onChange?: (checked: boolean) => void

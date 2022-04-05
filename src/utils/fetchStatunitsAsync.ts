@@ -21,8 +21,6 @@ export const fetchStatunitsAsync = async (
 
   const incompletePropertyList: string[] = []
 
-  const { conditions } = filterStore
-
   statList.forEach(element => {
     if (element.incomplete) {
       incompletePropertyList.push(element.name)
