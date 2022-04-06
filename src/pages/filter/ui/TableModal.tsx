@@ -1,6 +1,7 @@
-import React, { Key, useEffect, useRef, useState } from 'react'
+import React, { Key, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import cn from 'classnames'
 import { get } from 'lodash'
+import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -34,9 +35,6 @@ const ModalContent = styled.div`
   width: 90%;
   min-height: 700px;
   max-height: 500px;
-  .react-grid-item {
-    width: calc(100% - 30px) !important;
-  }
 `
 
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
@@ -47,11 +45,29 @@ export const TableModal = observer(() => {
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
+  const [tableWidth, setTableWidth] = useState(window.innerWidth - 420)
   const ref = useRef(null)
+  const variantContainerRef = useRef<HTMLDivElement>(null)
+
+  const resizeHandler = debounce(() => {
+    const width = variantContainerRef.current?.getBoundingClientRect().width
+    if (width) {
+      setTableWidth(width)
+    }
+  }, 50)
 
   useEffect(() => {
     variantStore.fetchVarinatInfoForModalAsync(datasetStore.datasetName, 0)
+
+    addEventListener('resize', resizeHandler)
+
+    return () => window.removeEventListener('resize', resizeHandler)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useLayoutEffect(() => {
+    resizeHandler()
+  }, [resizeHandler])
 
   const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
 
@@ -278,9 +294,12 @@ export const TableModal = observer(() => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col bg-blue-lighter w-full h-full overflow-auto">
+                <div
+                  ref={variantContainerRef}
+                  className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
+                >
                   <VariantBody
-                    drawerWidth={window.innerWidth}
+                    drawerWidth={tableWidth}
                     setLayout={setLayout}
                     layout={layout}
                   />
