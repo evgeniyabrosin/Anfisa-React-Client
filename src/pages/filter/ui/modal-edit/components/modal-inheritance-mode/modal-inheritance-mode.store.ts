@@ -4,6 +4,8 @@ import { makeAutoObservable } from 'mobx'
 import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
+import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import { TCondition } from '@service-providers/common'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import dtreeModalStore from '../../../../modals.store'
@@ -158,6 +160,18 @@ class ModalInheritanceModeStore {
     const conditionJoinType = currentGroup[2]
 
     this.currentMode = getCurrentModeType(conditionJoinType)
+  }
+
+  public getSelectedProblemGroups = (currentGroup: TCondition): string[] => {
+    const { problemGroups } = modalEditStore
+
+    if (currentGroup) {
+      return Object.values(currentGroup[currentGroup.length - 1]).length > 0
+        ? (Object.values(currentGroup[currentGroup.length - 1])[0] as string[])
+        : [problemGroups[0]]
+    } else {
+      return []
+    }
   }
 }
 

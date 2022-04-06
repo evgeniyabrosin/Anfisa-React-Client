@@ -105,6 +105,8 @@ export const QueryBuilderSubgroupItem = observer(
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setSelectedGroupItem(group)
 
+        filterStore.resetIsRedacorMode()
+
         filterStore.setActiveFilterId('')
       }
     }

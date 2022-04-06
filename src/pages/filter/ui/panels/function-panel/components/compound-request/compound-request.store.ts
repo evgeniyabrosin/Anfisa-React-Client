@@ -3,6 +3,8 @@ import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import filterStore from '@store/filter'
+import { TRequestCondition } from '@service-providers/common'
 import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getFilteredRequestCondition } from '@utils/function-panel/getFilteredRequestCondition'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
@@ -13,45 +15,80 @@ import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
 import functionPanelStore from '../../function-panel.store'
 import { getPureRequestString } from './../../../../../../../utils/function-panel/getPureRequestString'
-import {
-  ICompoundRequestCachedValues,
-  TRequestCondition,
-} from './../../function-panel.interface'
 
 class CompoundRequestStore {
-  currentMode?: ModeTypes
+  private _requestCondition: TRequestCondition[] = [
+    [1, {}] as TRequestCondition,
+  ]
+  private _resetValue: string = ''
+  private _activeRequestIndex = this.requestCondition.length - 1
+  private _currentMode?: ModeTypes
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  public setCurrentMode(modeType: ModeTypes): void {
-    this.currentMode = modeType
-  }
-
-  public resetCurrentMode(): void {
-    this.currentMode = undefined
-  }
-
-  public get cachedValues(): ICompoundRequestCachedValues {
-    return functionPanelStore.getCachedValues<ICompoundRequestCachedValues>(
-      FuncStepTypesEnum.CompoundRequest,
-    )
-  }
-
   public get requestCondition(): TRequestCondition[] {
-    return (
-      this.cachedValues?.conditions.request || [[1, {}] as TRequestCondition]
-    )
+    return this._requestCondition
   }
 
   public get resetValue(): string {
-    return this.cachedValues?.reset || ''
+    return this._resetValue
+  }
+
+  public get activeRequestIndex(): number {
+    return this._activeRequestIndex
+  }
+
+  public get currentMode(): ModeTypes | undefined {
+    return this._currentMode
+  }
+
+  public setActiveRequestIndex(idx: number) {
+    this._activeRequestIndex = idx
+  }
+
+  public resetActiveRequestIndex() {
+    this._activeRequestIndex = this.requestCondition.length - 1
+  }
+
+  public setCurrentMode(modeType?: ModeTypes): void {
+    if (!modeType) {
+      this._currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
+
+      return
+    }
+
+    this._currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this._currentMode = undefined
+  }
+
+  public setRequestCondition(requestCondition: TRequestCondition[]) {
+    this._requestCondition = requestCondition
+  }
+
+  public setResetValue(resetValue: string) {
+    this._resetValue = resetValue
+  }
+
+  public clearRequestCondition() {
+    this._requestCondition = [[1, {}] as TRequestCondition]
+  }
+
+  public clearResetValue() {
+    this._resetValue = ''
   }
 
   public get selectedFilterValue(): string {
     const filteredRequestCondition = getFilteredRequestCondition(
-      this.cachedValues?.conditions.request || this.requestCondition,
+      this.requestCondition,
     )
 
     const requestString = getFuncParams(FuncStepTypesEnum.CompoundRequest, {
@@ -83,16 +120,11 @@ class CompoundRequestStore {
       }
     })
 
-    this.setConditions({
-      newRequestCondition,
-    })
+    this.setRequestCondition(newRequestCondition)
   }
 
   // prepared request creation
-  public handleSetComplexRequest(
-    resetName: string,
-    activeRequestIndex: number,
-  ): void {
+  public handleSetComplexRequest(resetName: string): void {
     const resetRequestData = getResetRequestData(
       resetName,
       functionPanelStore.problemGroups,
@@ -103,21 +135,18 @@ class CompoundRequestStore {
     const newRequestCondition = cloneDeep(this.requestCondition)
 
     newRequestCondition.forEach((requestCondition, index) => {
-      if (index === activeRequestIndex) {
+      if (index === this.activeRequestIndex) {
         requestCondition[1] = newRequest
       }
     })
 
-    this.setConditions({
-      newRequestCondition,
-      resetName,
-    })
+    this.setRequestCondition(newRequestCondition)
+    this.setResetValue(resetName)
   }
 
   // add new request block
   public handleRequestBlocksAmount(
     type: string,
-    setActiveRequestIndex: (length: number) => void,
     activeRequestIndex: number,
   ): void {
     if (type === 'ADD') {
@@ -127,12 +156,10 @@ class CompoundRequestStore {
         emptyBlock,
       ]
 
-      setActiveRequestIndex(newRequestCondition.length - 1)
+      this.setActiveRequestIndex(newRequestCondition.length - 1)
 
-      this.setConditions({
-        newRequestCondition,
-        resetName: 'empty',
-      })
+      this.setRequestCondition(newRequestCondition)
+      this.setResetValue('empty')
     } else {
       const newRequestCondition = cloneDeep(
         this.requestCondition.filter(
@@ -140,14 +167,12 @@ class CompoundRequestStore {
         ),
       )
 
-      setActiveRequestIndex(newRequestCondition.length - 1)
+      this.setActiveRequestIndex(newRequestCondition.length - 1)
 
-      this.setConditions({
-        newRequestCondition,
-        resetName: getResetType(
-          newRequestCondition[newRequestCondition.length - 1][1],
-        ),
-      })
+      this.setRequestCondition(newRequestCondition)
+      this.setResetValue(
+        getResetType(newRequestCondition[newRequestCondition.length - 1][1]),
+      )
     }
   }
 
@@ -166,36 +191,16 @@ class CompoundRequestStore {
       }
     })
 
-    this.setConditions({ newRequestCondition })
+    this.setRequestCondition(newRequestCondition)
   }
 
   // choose an active request block
-  public handleActiveRequest(
-    requestBlockIndex: number,
-    setActiveRequestIndex: (index: number) => void,
-  ): void {
-    setActiveRequestIndex(requestBlockIndex)
+  public handleActiveRequest(requestBlockIndex: number): void {
+    this.setActiveRequestIndex(requestBlockIndex)
 
     const currentRequest = this.requestCondition[requestBlockIndex]
 
-    this.setConditions({
-      resetName: getResetType(currentRequest[1]) || 'empty',
-    })
-  }
-
-  // cach values in every change
-  public setConditions({ newRequestCondition, resetName }: any): void {
-    functionPanelStore.setCachedValues<ICompoundRequestCachedValues>(
-      FuncStepTypesEnum.CompoundRequest,
-      {
-        conditions: {
-          approx: null,
-          state: null,
-          request: newRequestCondition || this.requestCondition,
-        },
-        reset: resetName || this.resetValue,
-      },
-    )
+    this.setResetValue(getResetType(currentRequest[1]) || 'empty')
   }
 
   public handleSumbitCondtions(): void {
@@ -213,13 +218,23 @@ class CompoundRequestStore {
       getConditionJoinMode(this.currentMode),
       ['True'],
       {
-        approx: this.cachedValues?.conditions.approx || null,
-        state: this.cachedValues?.conditions.state || null,
+        approx: null,
+        state: null,
         request: JSON.parse(`${getPureRequestString(requestString)}`),
       },
     ]
 
     functionPanelStore.sumbitConditions(conditions)
+
+    this.clearData()
+    filterStore.resetStatFuncData()
+  }
+
+  public clearData(): void {
+    this.setActiveRequestIndex(0)
+    this.resetCurrentMode()
+    this.clearResetValue()
+    this.clearRequestCondition()
   }
 }
 
