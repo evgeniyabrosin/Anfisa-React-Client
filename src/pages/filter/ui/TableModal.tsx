@@ -288,7 +288,7 @@ export const TableModal = observer(() => {
                     <div className="bg-blue-lighter mx-3 rounded-sm w-0.5 h-[20px]" />
                     <Icon
                       name="Close"
-                      onClick={() => dtreeStore.closeTableModal()}
+                      onClick={dtreeStore.closeTableModal}
                       size={16}
                       className="cursor-pointer text-white"
                     />
