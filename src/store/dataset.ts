@@ -4,6 +4,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 import { DsStatType, StatListType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import presetStore from '@store/filterPreset'
 import variantStore from '@store/variant'
 import {
   IRecordDescriptor,
@@ -17,7 +18,6 @@ import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-datas
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
 import {
   IDsListArguments,
   ITabReport,
@@ -107,6 +107,7 @@ export class DatasetStore {
 
   resetActivePreset() {
     this.activePreset = ''
+    presetStore.setIsPresetDataModified()
   }
 
   setIsLoadingTabReport(value: boolean) {
@@ -234,8 +235,6 @@ export class DatasetStore {
 
     dtreeStore.setStatRequestId(result['rq-id'])
 
-    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
-
     const conditionFromHistory = checkedBodyFromHistory.conditions
 
     if (conditionFromHistory) {
@@ -264,15 +263,13 @@ export class DatasetStore {
     return result
   }
 
-  updatePresetLoad(dsStatData: any, source?: string) {
+  updatePresetLoad(dsStatData: DsStatType) {
     filterStore.resetSelectedFilters()
     this.startPresetConditions = dsStatData.conditions
 
-    dsStatData.conditions?.forEach((condition: TCondition) => {
-      filterStore.addFilterBlock(condition as TCondition)
-    })
+    filterStore.setConditionsFromPreset(dsStatData.conditions)
 
-    !source || (this.isXL && this.fetchDsStatAsync())
+    if (!this.isXL) this.fetchWsListAsync()
   }
 
   async fetchTabReportAsync() {

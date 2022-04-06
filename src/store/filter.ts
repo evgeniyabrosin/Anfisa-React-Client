@@ -1,17 +1,16 @@
-import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { nanoid } from 'nanoid'
 
 import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import datasetStore from '@store/dataset'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
-import { TCondition } from '@service-providers/common'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
-import datasetStore from './dataset'
+import { TCondition } from './../service-providers/common/common.interface'
 
 export type SelectedFiltersType = Record<
   string,
@@ -32,40 +31,23 @@ export class FilterStore {
 
   actionName?: ActionFilterEnum
   statFuncData: any = []
-  filterCondition: Record<string, any> = {}
-
   memorizedSelectedFilters: Map<string, TCondition> | undefined = undefined
 
   selectedFiltersHistory: SelectedFiltersType[] = []
 
   activeFilterId: string = ''
+  isRedactorMode = false
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  public setActiveFilterId(filterId: string) {
-    this.activeFilterId = filterId
-  }
+  public fetchConditions() {
+    datasetStore.fetchDsStatAsync()
 
-  public resetActiveFilterId() {
-    this.activeFilterId = ''
-  }
-
-  public setActionName(actionName?: ActionFilterEnum) {
-    this.actionName = actionName
-  }
-
-  public resetActionName() {
-    this.actionName = undefined
-  }
-
-  public setMethod(method: GlbPagesNames | FilterControlOptions) {
-    this.method = method
-  }
-
-  setSelectedGroupItem(item: StatListType) {
-    this.selectedGroupItem = item
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
+    }
   }
 
   public get selectedFiltersArray(): [string, TCondition][] {
@@ -76,24 +58,34 @@ export class FilterStore {
     return Array.from(this._selectedFilters.values())
   }
 
+  public get selectedFilter(): TCondition {
+    return this._selectedFilters.get(this.activeFilterId)!
+  }
+
+  public setConditionsFromPreset(conditions: TCondition[]): void {
+    conditions.forEach(condition =>
+      this._selectedFilters.set(nanoid(), condition),
+    )
+  }
+
   public addFilterBlock(condition: TCondition): void {
     const filterId: string = nanoid()
 
     this._selectedFilters.set(filterId, condition)
 
-    this.setActiveFilterId(filterId)
+    this.fetchConditions()
   }
 
   public removeFilterBlock(filterId: string): void {
     this._selectedFilters.delete(filterId)
-
-    datasetStore.fetchDsStatAsync()
+    this.resetIsRedacorMode()
+    datasetStore.resetActivePreset()
+    this.fetchConditions()
   }
 
   public addFilterToFilterBlock(condition: TCondition): void {
-    const filterId: string = nanoid()
-
-    this._selectedFilters.set(filterId, condition)
+    this._selectedFilters.set(this.activeFilterId, condition)
+    this.fetchConditions()
   }
 
   public removeFilterFromFilterBlock({
@@ -103,18 +95,17 @@ export class FilterStore {
   }: IRemoveFilter): void {
     const currentCondition = this._selectedFilters.get(filterId)!
 
-    const isFilterReadyToBeDeleted =
-      filterType === FilterKindEnum.Numeric || currentCondition[3]?.length === 1
-
-    if (isFilterReadyToBeDeleted) {
+    if (
+      filterType === FilterKindEnum.Numeric ||
+      currentCondition[3]?.length === 1
+    ) {
       this._selectedFilters.delete(filterId)
-
       return
     }
 
-    currentCondition[3] = currentCondition[3]?.filter(
-      (_filter, idx) => idx !== subFilterIdx,
-    )
+    currentCondition[3]?.splice(subFilterIdx, 1)
+    datasetStore.resetActivePreset()
+    this.fetchConditions()
   }
 
   public async fetchDsInfoAsync() {
@@ -153,6 +144,8 @@ export class FilterStore {
 
   public resetSelectedFilters() {
     this._selectedFilters = new Map()
+    this.resetIsRedacorMode()
+    this.resetActiveFilterId()
   }
 
   public resetStatFuncData() {
@@ -163,24 +156,40 @@ export class FilterStore {
     this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
   }
 
-  public setFilterCondition<T = any>(filterName: string, values: T) {
-    this.filterCondition[filterName] = cloneDeep(values)
+  public setActiveFilterId(filterId: string) {
+    this.activeFilterId = filterId
   }
 
-  public readFilterCondition<T = any>(filterName: string) {
-    return this.filterCondition[filterName]
-      ? (this.filterCondition[filterName] as T)
-      : undefined
+  public resetActiveFilterId() {
+    this.activeFilterId = ''
   }
 
-  public resetFilterCondition() {
-    this.filterCondition = {}
+  public setActionName(actionName?: ActionFilterEnum) {
+    this.actionName = actionName
   }
 
-  public clearFilterCondition(filterName: string, subFilterName?: string) {
-    subFilterName
-      ? delete this.filterCondition[filterName][subFilterName]
-      : delete this.filterCondition[filterName]
+  public resetActionName() {
+    this.actionName = undefined
+  }
+
+  public setMethod(method: GlbPagesNames | FilterControlOptions) {
+    this.method = method
+  }
+
+  public setSelectedGroupItem(item: StatListType) {
+    this.selectedGroupItem = item
+  }
+
+  public resetSelectedGroupItem() {
+    this.selectedGroupItem = {}
+  }
+
+  public setIsRedacorMode() {
+    this.isRedactorMode = true
+  }
+
+  public resetIsRedacorMode() {
+    this.isRedactorMode = false
   }
 
   public memorizeSelectedFilters() {

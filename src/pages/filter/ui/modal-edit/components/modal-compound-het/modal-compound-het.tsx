@@ -2,6 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
@@ -16,13 +17,8 @@ import { EditModalButtons } from '../edit-modal-buttons'
 import modalCompoundHetStore from './modal-compound-het.store'
 
 export const ModalCompoundHet = observer((): ReactElement => {
-  const {
-    variants,
-
-    approxValues,
-    approxOptions,
-    currentStepGroups,
-  } = modalEditStore
+  const { variants, approxValues, approxOptions, currentStepGroups } =
+    modalEditStore
 
   const { stateOptions, stateCondition, approxCondition } =
     modalCompoundHetStore
@@ -36,10 +32,10 @@ export const ModalCompoundHet = observer((): ReactElement => {
   const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
 
   useEffect(() => {
-    modalCompoundHetStore.fetchStatFunc()
+    modalCompoundHetStore.fetchStatFunc(currentGroup)
 
     return () => dtreeStore.resetStatFuncData()
-  }, [])
+  }, [currentGroup])
 
   const handleSetCondition = (value: string, type: string) => {
     modalCompoundHetStore.setCondition(value, type)
@@ -66,7 +62,13 @@ export const ModalCompoundHet = observer((): ReactElement => {
           handleSetCondition={handleSetCondition}
         />
 
-        <AllNotMods />
+        <AllNotMods
+          isNotModeChecked={modalCompoundHetStore.currentMode === ModeTypes.Not}
+          isNotModeDisabled={variants ? variants.length === 0 : true}
+          toggleNotMode={() =>
+            modalCompoundHetStore.setCurrentMode(ModeTypes.Not)
+          }
+        />
       </div>
 
       <DisabledVariantsAmount variants={variants} disabled={true} />

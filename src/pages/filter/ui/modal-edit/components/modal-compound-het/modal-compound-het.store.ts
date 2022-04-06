@@ -1,9 +1,12 @@
 import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
+import { TFuncCondition } from '@service-providers/common/common.interface'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import dtreeModalStore from '../../../../modals.store'
 import modalEditStore, { IParams } from '../../modal-edit.store'
 
@@ -12,8 +15,18 @@ class ModalCompoundHetStore {
   approxCondition = 'transcript'
   stateOptions: string[] = [this.stateCondition]
 
+  currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public setCurrentMode(modeType: ModeTypes) {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode() {
+    this.currentMode = undefined
   }
 
   public setStateCondition(condtition: string): void {
@@ -50,14 +63,16 @@ class ModalCompoundHetStore {
           : this.stateOptions
     }
 
-    addAttributeToStep(action, 'func', null, params)
+    addAttributeToStep(action, 'func', null, params, this.currentMode)
 
     dtreeStore.resetSelectedFilters()
     dtreeModalStore.closeModalCompoundHet()
+    this.resetCurrentMode()
   }
 
   public closeModal(): void {
     dtreeModalStore.closeModalCompoundHet()
+    this.resetCurrentMode()
   }
 
   public getApprox(approxValue: string): null | string {
@@ -96,16 +111,23 @@ class ModalCompoundHetStore {
           : this.stateOptions
     }
 
-    changeFunctionalStep(params)
+    changeFunctionalStep(params, this.currentMode)
     dtreeModalStore.closeModalCompoundHet()
+    this.resetCurrentMode()
   }
 
-  public fetchStatFunc(): void {
+  public fetchStatFunc(currentGroup: TFuncCondition): void {
     const params = `{"approx":${this.getApprox(this.approxCondition)},"state":${
       this.stateCondition === '-current-' || !this.stateCondition
         ? null
         : `"${this.stateCondition}"`
     }}`
+
+    if (currentGroup) {
+      const conditionJoinType = currentGroup[2]
+
+      this.currentMode = getCurrentModeType(conditionJoinType)
+    }
 
     dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
   }

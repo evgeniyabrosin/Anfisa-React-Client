@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import modalFiltersStore from '../modal-filters.store'
+import modalFiltersStore from '../modal-enum.store'
 
-export const FiltersList = observer((): ReactElement => {
+export const EnumList = observer((): ReactElement => {
   const { groupsPage } = modalFiltersStore
 
   return (

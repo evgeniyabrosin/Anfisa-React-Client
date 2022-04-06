@@ -1,5 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import { ConditionJoinMode } from '@service-providers/common/common.interface'
 
 export const editStepAttribute = (
   stepIndex: number,
@@ -19,9 +20,9 @@ export const editStepAttribute = (
 
   const filteredAttribute = attribute.filter(
     (element: any) =>
-      element !== 'OR' &&
-      element !== 'and' &&
-      element !== 'NOT' &&
+      element !== ConditionJoinMode.OR &&
+      element !== ConditionJoinMode.AND &&
+      element !== ConditionJoinMode.NOT &&
       element !== 'or',
   )
 

@@ -9,7 +9,14 @@ import React, {
 import cn, { Argument } from 'classnames'
 
 import { formatNumber } from '@core/format-number'
-import { RangeSliderHistogram } from './range-slider-histogram'
+import {
+  RangeSliderColor,
+  RangeSliderMode,
+  RangeSliderOrientation,
+  RangeSliderScale,
+  RangeSliderSide,
+  RangeSliderValue,
+} from './range-slider.interface'
 import {
   RangeSliderHandle,
   RangeSliderLabel,
@@ -18,21 +25,14 @@ import {
   RangeSliderRuler,
   RangeSliderTick,
   RangeSliderVerticalRuler,
-} from './styles'
-import {
-  RangeSliderColor,
-  RangeSliderMode,
-  RangeSliderOrientation,
-  RangeSliderScale,
-  RangeSliderSide,
-  RangeSliderValue,
-} from './types'
+} from './range-slider.styles'
 import {
   adjustLabels,
-  getScaleTransform,
-  getSliderTicks,
   normalizeValue,
-} from './utils'
+  RangeSliderLinearAxis,
+  RangeSliderLogAxis,
+} from './range-slider.utils'
+import { RangeSliderHistogram } from './range-slider-histogram'
 
 export interface IRangeSliderProps {
   className?: Argument
@@ -84,50 +84,43 @@ export const RangeSlider = ({
   const [size, setSize] = useState(0)
   const [dragState, setDragState] = useState<DragState | null>(null)
 
+  const isLogarithmic = scale === RangeSliderScale.Logarithmic
   const isRangeMode = mode === RangeSliderMode.Range
   const hasHistogram = !!histogram
+  const isLogarithmicHistogram = hasHistogram && isLogarithmic
+  const fakeZero = isLogarithmic && min === 0 ? 0.1 : undefined
 
-  const { getOffset, getValue, alignValue } = useMemo(
-    () =>
-      getScaleTransform({
-        min,
-        max,
-        size,
-        scale,
-        step,
-      }),
-    [min, max, size, step, scale],
-  )
-
-  const ticks = useMemo(
-    () =>
-      getSliderTicks({
-        min,
-        max,
-        size,
-        scale,
-        step,
-      }),
-    [min, max, size, step, scale],
-  )
-
+  const isHistogramPoints = hasHistogram
+    ? scale === RangeSliderScale.Linear && max - min + 1 === histogram.length
+    : false
   const isVertical = orientation === RangeSliderOrientation.Vertical
 
-  const isLogarithmicHistogram =
-    hasHistogram && scale === RangeSliderScale.Logarithmic
+  const axis = useMemo(
+    () =>
+      isLogarithmic
+        ? new RangeSliderLogAxis({ min, max, size, fakeZero })
+        : new RangeSliderLinearAxis({
+            min,
+            max,
+            size,
+            step,
+            isHistogramPoints,
+          }),
+    [min, max, size, step, isLogarithmic, isHistogramPoints, fakeZero],
+  )
 
   const histogramBarPositions = useMemo(
     // in logarithmic scale we have first fake interval from 0 (-∞),
     // so take it and every 9th tick
     () =>
       isLogarithmicHistogram
-        ? ticks
-            .map(tick => tick.offset)
+        ? axis.ticks
+            .map(tick => axis.getOffset(tick))
             .filter((_, i) =>
               min > 0 ? i % 9 === 0 : i === 0 || (i - 1) % 9 === 0,
             )
         : undefined,
-    [isLogarithmicHistogram, ticks, min],
+    [isLogarithmicHistogram, axis, min],
   )
 
   let leftValue = normalizeValue(value?.[0], min, max)
@@ -150,12 +143,15 @@ export const RangeSlider = ({
     if (isRangeMode) {
       histogramSelectedArea =
         leftValue !== null || rightValue !== null
-          ? [getOffset(leftValue ?? min), getOffset(rightValue ?? max)]
+          ? [
+              leftValue !== null ? axis.getOffset(leftValue) : 0,
+              rightValue !== null ? axis.getOffset(rightValue) : size,
+            ]
           : null
     } else if (leftValue !== null && rightValue !== null) {
       histogramSelectedArea = [
-        getOffset(leftValue - rightValue),
-        getOffset(leftValue + rightValue),
+        axis.getOffset(leftValue - rightValue),
+        axis.getOffset(leftValue + rightValue),
       ]
     }
   }
@@ -200,11 +196,11 @@ export const RangeSlider = ({
         document.removeEventListener('mouseleave', stopDrag)
       }
     }
-  }, [dragState, getValue, alignValue])
+  }, [dragState])
 
-  const leftOffset = leftValue !== null ? getOffset(leftValue) : null
+  const leftOffset = leftValue !== null ? axis.getOffset(leftValue) : null
   const rightOffset =
-    isRangeMode && rightValue !== null ? getOffset(rightValue) : null
+    isRangeMode && rightValue !== null ? axis.getOffset(rightValue) : null
 
   useLayoutEffect(
     () =>
@@ -232,7 +228,7 @@ export const RangeSlider = ({
       const getValueFromEvent = (
         event: MouseEvent | React.MouseEvent,
       ): number => {
-        return getValue(
+        return axis.getValue(
           isVertical ? origin - event.clientY : event.clientX - origin,
         )
       }
@@ -251,7 +247,7 @@ export const RangeSlider = ({
             Math.abs(rightValue - newValue) < Math.abs(leftValue - newValue)))
 
       const onMouseMove = (moveEvent: MouseEvent) => {
-        const handleValue = alignValue(getValueFromEvent(moveEvent))
+        const handleValue = getValueFromEvent(moveEvent)
 
         if (isRightHandle) {
           if (leftValue == null || handleValue > leftValue) {
@@ -295,19 +291,26 @@ export const RangeSlider = ({
             height={histogramHeight}
             data={histogram}
             selectedArea={histogramSelectedArea}
+            selectedStrict={isHistogramPoints ? strict : null}
             color={color}
             barPositions={histogramBarPositions}
           />
         )}
         <Ruler>
-          {ticks.map(({ value, offset }) => (
-            <RangeSliderTick
-              key={value}
-              style={
-                isVertical ? { bottom: `${offset}px` } : { left: `${offset}px` }
-              }
-            />
-          ))}
+          {axis.ticks.map(value => {
+            const offset = axis.getOffset(value)
+
+            return (
+              <RangeSliderTick
+                key={value}
+                style={
+                  isVertical
+                    ? { bottom: `${offset}px` }
+                    : { left: `${offset}px` }
+                }
+              />
+            )
+          })}
           {leftValue !== null && (
             <RangeSliderLabel ref={leftLabelRef}>
               {formatNumber(leftValue)}

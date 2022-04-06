@@ -3,7 +3,7 @@ import { ScaleContinuousNumeric } from 'd3'
 import { getBounds, getYScaleAndAxis } from '@core/charts'
 import { Color, color2str, interpolateColor, parseColor } from '@core/colors'
 import { theme } from '@theme'
-import { RangeSliderColor } from '../types'
+import { RangeSliderColor, RangeSliderSide } from '../range-slider.interface'
 
 export const pixelRatio = window.devicePixelRatio || 1
 
@@ -123,6 +123,7 @@ type DrawHistogramParams = {
   height: number
   data: number[]
   selectedArea?: [number, number] | null
+  selectedStrict?: RangeSliderSide | null
   yAxis: HistogramAxis
   barPositions: number[]
   barSpacing?: number
@@ -136,6 +137,7 @@ export const drawHistogram = ({
   height,
   data,
   selectedArea,
+  selectedStrict,
   yAxis,
   barPositions,
   barSpacing = 2,
@@ -176,6 +178,13 @@ export const drawHistogram = ({
   const halfBarDrawSpacing = (barSpacing / 2) * pixelRatio
   const barColor = color2str(getBarColor(color))
 
+  const isLeftStrict =
+    selectedStrict === RangeSliderSide.Left ||
+    selectedStrict === RangeSliderSide.Both
+  const isRightStrict =
+    selectedStrict === RangeSliderSide.Right ||
+    selectedStrict === RangeSliderSide.Both
+
   for (let i = 0; i < barCount; ++i) {
     const value = data[i]
 
@@ -191,6 +200,12 @@ export const drawHistogram = ({
 
     if (!selectedArea || x0 >= selectedRight || x1 <= selectedLeft) {
       ctx.fillStyle = inactiveBarCssColor
+    } else if (selectedStrict) {
+      ctx.fillStyle =
+        (x0 < selectedLeft && selectedStrict < x1 && isLeftStrict) ||
+        (x0 < selectedRight && selectedRight < x1 && isRightStrict)
+          ? inactiveBarCssColor
+          : barColor
     } else {
       const left = Math.max(selectedLeft - x0, 0) / barWidth
       const right = Math.min(selectedRight - x0, barWidth) / barWidth
