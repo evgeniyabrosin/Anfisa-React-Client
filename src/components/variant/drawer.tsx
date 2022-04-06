@@ -9,15 +9,6 @@ import columnsStore from '@store/wsColumns'
 import { VariantBody } from './ui/body'
 import { VariantHeader } from './ui/header'
 
-export const closeHandler = () => {
-  variantStore.setDrawerVisible(false)
-
-  setTimeout(() => {
-    columnsStore.resetColumnsToDefault()
-    columnsStore.showColumns()
-  }, 200)
-}
-
 export const VariantDrawer = observer((): ReactElement => {
   const drawerWidth = window.innerWidth - 380
 
@@ -29,7 +20,7 @@ export const VariantDrawer = observer((): ReactElement => {
 
   useEffect(() => {
     return () => {
-      closeHandler()
+      columnsStore.closeDrawer()
     }
   }, [])
 

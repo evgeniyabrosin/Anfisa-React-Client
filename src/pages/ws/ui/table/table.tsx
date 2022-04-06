@@ -105,7 +105,6 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
 
       if (!variantStore.drawerVisible) {
         columnsStore.setColumns(columnsStore.getColumnsForOpenDrawer())
-        columnsStore.showColumns()
         variantStore.setDsName(params.get('ds') ?? '')
         variantStore.setDrawerVisible(true)
       }
