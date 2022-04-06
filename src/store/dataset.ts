@@ -195,9 +195,7 @@ export class DatasetStore {
     if (shouldDataBeUpdated) {
       await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
 
-      this.filteredNo.length === 0
-        ? await this.fetchTabReportAsync()
-        : await this.fetchFilteredTabReportAsync()
+      await this.fetchFilteredTabReportAsync()
 
       this.fetchDsStatAsync()
     }
