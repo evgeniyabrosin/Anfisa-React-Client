@@ -430,7 +430,7 @@ class DtreeStore {
     if (index) this.tableModalIndexNumber = index
   }
 
-  closeTableModal() {
+  closeTableModal = () => {
     this.isTableModalVisible = false
     this.tableModalIndexNumber = null
   }

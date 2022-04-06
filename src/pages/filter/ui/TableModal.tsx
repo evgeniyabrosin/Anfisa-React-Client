@@ -250,9 +250,12 @@ export const TableModal = observer(() => {
                         return (
                           <tr
                             key={variant.no}
-                            className={cn('border-y-[0.5px] border-grey-blue', {
-                              'bg-blue-bright': active,
-                            })}
+                            className={cn(
+                              'border-y-[0.5px] border-grey-blue cursor-pointer',
+                              {
+                                'bg-blue-bright': active,
+                              },
+                            )}
                             onClick={() => setVariantIndex(index)}
                           >
                             <th
