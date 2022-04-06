@@ -2,8 +2,8 @@ const themeColors = require('./src/theme/colors.js')
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  // darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       lineHeight: {
@@ -18,6 +18,10 @@ module.exports = {
         14: '14px',
         16: '16px',
         20: '20px',
+      },
+      padding: {
+        10: '10px',
+        15: '15px',
       },
       backgroundOpacity: {
         2: '0.02',

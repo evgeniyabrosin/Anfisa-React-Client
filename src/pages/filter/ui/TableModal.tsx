@@ -51,9 +51,9 @@ export const TableModal = observer(() => {
     dtreeStore.setShouldLoadTableModal(true)
 
     const initAsync = async () => {
-      const isRefiner = filterStore.method === GlbPagesNames.Refiner
+      const { conditions } = filterStore
 
-      const conditions = datasetStore.conditions
+      const isRefiner = filterStore.method === GlbPagesNames.Refiner
 
       const requestValue = isRefiner ? conditions : stepIndex
 
@@ -97,12 +97,12 @@ export const TableModal = observer(() => {
 
       setVariantList(samples || records)
 
-      const orderNumber = isSample ? samples[0]?.no ?? 0 : records[0]?.no ?? 0
+      const orderNumber = isSample ? samples[0]?.no ?? 0 : 0
 
       variantStore.fetchVarinatInfoForModalAsync(datasetName, orderNumber)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobStatusData])
+  }, [jobStatusData, samples])
 
   useEffect(() => {
     if (jobStatusData) {

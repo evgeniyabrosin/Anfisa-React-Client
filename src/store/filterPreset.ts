@@ -1,99 +1,92 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
-import { getApiUrl } from '@core/get-api-url'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
+import {
+  DsStatArgumentsOptions,
+  IDsStatArguments,
+} from '@service-providers/filtering-regime'
 import { showToast } from '@utils/notifications/showToast'
 import datasetStore from './dataset'
 
 export const DEFAULT_PRESET_LABEL = '⏚'
 
 class PresetStore {
+  private _isPresetDataModified = false
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  async loadPresetAsync(filter: string, source?: string) {
-    const body = new URLSearchParams({
+  public get isPresetDataModified() {
+    return this._isPresetDataModified
+  }
+
+  public setIsPresetDataModified() {
+    this._isPresetDataModified = true
+  }
+
+  public resetIsPresetDataModified() {
+    this._isPresetDataModified = false
+  }
+
+  async loadPresetAsync(filter: string) {
+    this.resetIsPresetDataModified()
+
+    const body: IDsStatArguments = {
       ds: datasetStore.datasetName,
       filter,
-    })
-
-    const response = await fetch(getApiUrl('ds_stat'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    filterStore.resetFilterCondition()
-
-    runInAction(() => {
-      datasetStore.updatePresetLoad(result, source)
-      datasetStore.dsStat = result
-    })
-  }
-
-  async deletePresetAsync(presetName: string) {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      conditions: JSON.stringify(datasetStore.conditions),
-      instr: JSON.stringify(['DELETE', presetName]),
-    })
-
-    const response = await fetch(getApiUrl('ds_stat'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
-
-    datasetStore.dsStat = result
-  }
-
-  async joinPresetAsync(presetName: string) {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      instr: JSON.stringify(['JOIN', presetName]),
-    })
-
-    datasetStore.prevPreset
-      ? body.append('filter', datasetStore.prevPreset)
-      : body.append('conditions', JSON.stringify(datasetStore.conditions))
+    }
 
     const result = await datasetStore.fetchDsStatAsync(false, body)
 
-    await datasetStore.updatePresetLoad(result)
+    datasetStore.updatePresetLoad(result)
+  }
+
+  async deletePresetAsync(presetName: string) {
+    this.resetIsPresetDataModified()
+
+    const { conditions } = filterStore
+
+    const body: IDsStatArguments = {
+      ds: datasetStore.datasetName,
+      conditions: conditions,
+      instr: [DsStatArgumentsOptions.DELETE, presetName],
+    }
+
+    const result = await datasetStore.fetchDsStatAsync(false, body)
+
+    datasetStore.updatePresetLoad(result)
+  }
+
+  async joinPresetAsync(presetName: string) {
+    this.resetIsPresetDataModified()
+
+    const { conditions } = filterStore
+
+    const body: IDsStatArguments = {
+      ds: datasetStore.datasetName,
+      instr: [DsStatArgumentsOptions.JOIN, presetName],
+      conditions: conditions,
+    }
+
+    const result = await datasetStore.fetchDsStatAsync(false, body)
+
+    datasetStore.updatePresetLoad(result)
   }
 
   async updatePresetAsync(presetName: string) {
-    const body = new URLSearchParams({
+    const { conditions } = filterStore
+
+    const body: IDsStatArguments = {
       ds: datasetStore.datasetName,
-      conditions: JSON.stringify(datasetStore.conditions),
-      instr: JSON.stringify(['UPDATE', presetName]),
-    })
+      conditions: conditions,
+      instr: [DsStatArgumentsOptions.UPDATE, presetName],
+    }
 
-    const response = await fetch(getApiUrl('ds_stat'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
+    const result = await datasetStore.fetchDsStatAsync(false, body)
 
-    const result = await response.json()
-
-    runInAction(() => {
-      datasetStore.dsStat = result
-    })
-
-    await datasetStore.updatePresetLoad(result)
+    datasetStore.updatePresetLoad(result)
   }
 
   deletePreset(): void {
@@ -131,6 +124,8 @@ class PresetStore {
   }
 
   modifyPreset(preset: string): void {
+    this.resetIsPresetDataModified()
+
     this.updatePresetAsync(preset)
 
     filterStore.resetActionName()
@@ -151,7 +146,7 @@ class PresetStore {
     if (filterStore.actionName) return
 
     if (datasetStore.prevPreset !== datasetStore.activePreset) {
-      this.loadPresetAsync(preset, 'refiner')
+      this.loadPresetAsync(preset)
 
       if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
     }

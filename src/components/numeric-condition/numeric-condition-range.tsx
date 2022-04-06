@@ -1,5 +1,6 @@
 import React, { Fragment, ReactElement, useCallback, useMemo } from 'react'
 
+import { adjustHistogramData } from '@core/histograms'
 import { t } from '@i18n'
 import { InputNumber } from '@ui/input-number'
 import { RangeSliderSide } from '@ui/range-slider'
@@ -31,9 +32,14 @@ export const NumericConditionRange = ({
   const [value, setValue] = useConditionBoundsValue(initialValue, isZeroSkipped)
 
   const [scale] = (attrData['render-mode'] || '').split(',')
-  const { min, max, histogram } = attrData
+  const { min, max, histogram, 'sub-kind': subKind } = attrData
+  const histogramData = useMemo(
+    () => adjustHistogramData(histogram, max)?.[3],
+    [histogram, max],
+  )
+
   const isLogarithmic = scale === 'log'
-  const isFloat = attrData['sub-kind'] === NumericPropertyStatusSubKinds.FLOAT
+  const isFloat = subKind === NumericPropertyStatusSubKinds.FLOAT
 
   const [minValue, minStrictness, maxValue, maxStrictness, isZeroIncluded] =
     value
@@ -145,7 +151,9 @@ export const NumericConditionRange = ({
                 className="mr-1"
                 onChange={handleZeroIncludedChange}
               />
-              {t('numericCondition.includeZero', { count: histogram?.[3][0] })}
+              {t('numericCondition.includeZero', {
+                count: Math.round(histogram?.[3][0] ?? 0),
+              })}
             </label>
           </div>
         )}
@@ -157,7 +165,7 @@ export const NumericConditionRange = ({
             isLogarithmic={isLogarithmic}
             isFloat={isFloat}
             isZeroSkipped={isZeroSkipped}
-            histogramData={histogram?.[3]}
+            histogramData={histogramData}
             value={value}
             disabled={
               isZeroIncluded ? RangeSliderSide.Left : RangeSliderSide.None

@@ -23,7 +23,7 @@ export const StrictnessSelect = ({
     <div className={cn('relative', className)}>
       <div
         className={cn(
-          'flex items-center w-12 p-1 shadow-dark rounded',
+          'flex items-center w-12 p-1 shadow-dark rounded bg-white',
           isDisabled
             ? 'text-grey-blue'
             : 'cursor-pointer text-black  hover:text-blue-bright',

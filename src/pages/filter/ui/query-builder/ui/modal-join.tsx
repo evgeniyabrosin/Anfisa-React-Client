@@ -21,7 +21,7 @@ export const ModalJoin = observer(
       handleAddAttribute(typeOfJoin)
 
       dtreeModalStore.closeModalJoin()
-      dtreeModalStore.closeModalSelectFilter()
+      dtreeModalStore.closeModalEnum()
       dtreeModalStore.closeModalNumbers()
       dtreeModalStore.closeModalInheritanceMode()
       dtreeModalStore.closeModalCustomInheritanceMode()

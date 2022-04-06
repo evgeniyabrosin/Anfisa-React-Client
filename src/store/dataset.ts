@@ -1,43 +1,38 @@
 /* eslint-disable max-lines */
-import cloneDeep from 'lodash/cloneDeep'
-import get from 'lodash/get'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import {
-  DsStatType,
-  IRemoveConditionItem,
-  StatListType,
-  TabReportType,
-} from '@declarations'
-import { FilterKindEnum } from '@core/enum/filter-kind.enum'
-import { getApiUrl } from '@core/get-api-url'
+import { DsStatType, StatListType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import presetStore from '@store/filterPreset'
 import variantStore from '@store/variant'
 import {
-  ICompoundRequestArgs,
-  ICustomInheritanceModeArgs,
   IRecordDescriptor,
-  TFuncCondition,
+  TCondition,
+  TItemsCount,
 } from '@service-providers/common/common.interface'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import { IDsStatArguments } from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
+import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
-import { isConditionArgsTypeOf } from '@utils/function-panel/isConditionArgsTypeOf'
-import { getFilteredAttrsList } from '@utils/getFilteredAttrsList'
-import { FuncStepTypesEnum } from './../core/enum/func-step-types-enum'
-import { TFuncArgs } from './../service-providers/common/common.interface'
+import {
+  IDsListArguments,
+  ITabReport,
+} from './../service-providers/dataset-level/dataset-level.interface'
+import { IZoneDescriptor } from './../service-providers/ws-dataset-support/ws-dataset-support.interface'
 import dirinfoStore from './dirinfo'
 import operations from './operations'
 
 const INCREASE_INDEX = 50
 
-export type Condition = [string, string, unknown, string[]?, unknown?]
-
 export class DatasetStore {
   dsStat: DsStatType = {}
   startDsStat: DsStatType = {}
   variantsAmount = 0
-  tabReport: TabReportType[] = []
+  tabReport: ITabReport[] = []
   genes: string[] = []
   genesList: string[] = []
   tags: string[] = []
@@ -51,12 +46,12 @@ export class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: Condition[] = []
-  startPresetConditions: Condition[] = []
+  conditions: TCondition[] = []
+  startPresetConditions: TCondition[] = []
   zone: any[] = []
-  statAmount: number[] = []
+  statAmount: TItemsCount | null = null
   memorizedConditions:
-    | { conditions: Condition[]; activePreset: string; zone: any[] }
+    | { conditions: TCondition[]; activePreset: string; zone: any[] }
     | undefined = undefined
 
   indexTabReport = 0
@@ -112,6 +107,7 @@ export class DatasetStore {
 
   resetActivePreset() {
     this.activePreset = ''
+    presetStore.setIsPresetDataModified()
   }
 
   setIsLoadingTabReport(value: boolean) {
@@ -160,87 +156,8 @@ export class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync(conditions: Condition[], conditionsType?: string) {
-    if (!conditions[0]) {
-      this.conditions = []
-      await this.fetchDsStatAsync()
-    } else {
-      const groupCondtionsIndex = this.conditions.findIndex(
-        (item: any) => item[1] === conditions[0][1],
-      )
-
-      if (groupCondtionsIndex !== -1 && conditionsType !== 'func') {
-        this.conditions.splice(groupCondtionsIndex, 1)
-      }
-
-      this.conditions = this.conditions.concat(conditions)
-
-      await this.fetchDsStatAsync()
-    }
-
-    return Array.from({ length: this.statAmount[0] })
-  }
-
-  async removeFunctionConditionAsync(functionName: string) {
-    this.conditions = this.conditions.filter(
-      ([, name]) => name !== functionName,
-    )
-
+  async setConditionsAsync() {
     await this.fetchDsStatAsync()
-  }
-
-  removeCondition({ subGroup, itemName }: IRemoveConditionItem) {
-    let cloneConditions: Condition[] = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    const conditionKind = cloneConditions.find(
-      item => item![1] === subGroup,
-    )![0]
-
-    if (conditionKind === FilterKindEnum.Enum) {
-      const filteredItems = cloneConditions[subGroupIndex][3]?.filter(
-        (item: string) => item !== itemName,
-      )
-
-      if (filteredItems?.length === 0) {
-        cloneConditions.splice(subGroupIndex, 1)
-      } else {
-        cloneConditions[subGroupIndex][3] = filteredItems
-      }
-    } else if (
-      conditionKind === FilterKindEnum.Func &&
-      itemName.includes('locus')
-    ) {
-      cloneConditions = cloneConditions.filter(
-        (condition: any) =>
-          JSON.stringify(condition[condition.length - 1]) !== itemName,
-      )
-    } else {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
-  }
-
-  removeConditionGroup({ subGroup }: { subGroup: string }) {
-    const cloneConditions = cloneDeep(this.conditions)
-
-    const subGroupIndex = cloneConditions.findIndex(
-      item => item[1] === subGroup,
-    )
-
-    if (subGroupIndex !== -1) {
-      cloneConditions.splice(subGroupIndex, 1)
-    }
-
-    this.conditions = cloneConditions
-
-    this.fetchDsStatAsync()
   }
 
   resetPrevPreset() {
@@ -256,14 +173,13 @@ export class DatasetStore {
     this.dsStat = {}
     this.startDsStat = {}
     this.variantsAmount = 0
-    this.statAmount = []
+    this.statAmount = null
     this.prevPreset = ''
     this.wsRecords = []
     this.tabReport = []
   }
 
   resetConditions() {
-    this.conditions = []
     this.startPresetConditions = []
   }
 
@@ -289,47 +205,40 @@ export class DatasetStore {
 
   async fetchDsStatAsync(
     shouldSaveInHistory = true,
-    bodyFromHistory?: URLSearchParams,
+    bodyFromHistory?: IDsStatArguments,
   ): Promise<DsStatType> {
     this.isLoadingDsStat = true
 
-    const localBody = new URLSearchParams({
+    const localBody: IDsStatArguments = {
       ds: this.datasetName,
-      tm: '0',
-    })
-
-    if (!this.isFilterDisabled) {
-      this.conditions.length > 0 &&
-        localBody.append('conditions', JSON.stringify(this.conditions))
+      tm: 0,
     }
 
-    this.activePreset &&
-      this.conditions.length === 0 &&
-      localBody.append('filter', this.activePreset)
+    const { conditions } = filterStore
+
+    if (!this.isFilterDisabled && conditions.length > 0) {
+      localBody.conditions = conditions
+    }
+
+    if (this.activePreset && this.conditions.length === 0) {
+      localBody.filter = this.activePreset
+    }
 
     if (shouldSaveInHistory) {
       addToActionHistory(localBody, true)
     }
 
-    const body = shouldSaveInHistory ? localBody : bodyFromHistory
+    const checkedBodyFromHistory = bodyFromHistory ?? localBody
+    const body = shouldSaveInHistory ? localBody : checkedBodyFromHistory
 
-    const response = await fetch(getApiUrl('ds_stat'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const result = await filteringRegimeProvider.getDsStat(body)
 
     dtreeStore.setStatRequestId(result['rq-id'])
-    result['stat-list'] = getFilteredAttrsList(result['stat-list'])
 
-    const conditionFromHistory = bodyFromHistory?.get('conditions')
+    const conditionFromHistory = checkedBodyFromHistory.conditions
 
     if (conditionFromHistory) {
-      this.conditions = JSON.parse(conditionFromHistory)
+      this.conditions = conditionFromHistory
     }
 
     const statList = result['stat-list']
@@ -344,7 +253,7 @@ export class DatasetStore {
       }
 
       if (this.isXL) {
-        this.statAmount = get(result, 'filtered-counts', [])
+        this.statAmount = result['filtered-counts']
       }
 
       this.variantsAmount = result['total-counts']['0']
@@ -354,112 +263,13 @@ export class DatasetStore {
     return result
   }
 
-  getVariantValue(groupItemName: string, condition: TFuncCondition) {
-    const conditionArgs = condition[4] as TFuncArgs
+  updatePresetLoad(dsStatData: DsStatType) {
+    filterStore.resetSelectedFilters()
+    this.startPresetConditions = dsStatData.conditions
 
-    if (groupItemName === FuncStepTypesEnum.GeneRegion) {
-      return JSON.stringify(conditionArgs)
-    }
+    filterStore.setConditionsFromPreset(dsStatData.conditions)
 
-    if (groupItemName === FuncStepTypesEnum.CustomInheritanceMode) {
-      return JSON.stringify(conditionArgs).replace(/[{}]/g, '')
-    }
-
-    if (
-      isConditionArgsTypeOf<ICompoundRequestArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CompoundRequest,
-      )
-    ) {
-      return `"request:" ${JSON.stringify(conditionArgs.request).replace(
-        /[{}]/g,
-        '',
-      )}`
-    }
-
-    return condition[condition.length - 2] as string
-  }
-
-  getConditionValue(
-    groupItemName: FuncStepTypesEnum,
-    condition: TFuncCondition,
-  ) {
-    const conditionArgs = condition[4]
-
-    if (
-      isConditionArgsTypeOf<ICustomInheritanceModeArgs>(
-        groupItemName,
-        conditionArgs,
-        FuncStepTypesEnum.CustomInheritanceMode,
-      )
-    ) {
-      return { scenario: Object.entries(conditionArgs.scenario) }
-    }
-
-    return conditionArgs
-  }
-
-  updatePresetLoad(dsStatData: any, source?: string) {
-    this.conditions = dsStatData.conditions
-    filterStore.selectedFilters = {}
-    this.startPresetConditions = [...this.conditions]
-
-    dsStatData.conditions?.forEach((condition: any[]) => {
-      const groupItemName = condition[1]
-
-      const filterItem = this.startDsStat['stat-list']?.find(
-        (item: any) => item.name === groupItemName,
-      )
-
-      if (condition[0] === FilterKindEnum.Enum) {
-        condition[3]?.forEach((value: string) => {
-          filterStore.addSelectedFilters({
-            group: filterItem.vgroup,
-            groupItemName,
-            variant: [value, 0],
-          })
-        })
-      }
-
-      if (condition[0] === FilterKindEnum.Func) {
-        const variantValue = this.getVariantValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [variantValue, 0],
-        })
-
-        const conditionValue = this.getConditionValue(
-          groupItemName,
-          condition as TFuncCondition,
-        )
-
-        filterStore.setFilterCondition(groupItemName, {
-          conditions: conditionValue,
-          variants: condition[3],
-        })
-      }
-
-      if (condition[0] === FilterKindEnum.Numeric) {
-        filterStore.addSelectedFilters({
-          group: filterItem.vgroup,
-          groupItemName,
-          variant: [groupItemName, condition[condition.length - 1]],
-        })
-
-        filterStore.setFilterCondition(
-          groupItemName,
-          condition[condition.length - 1],
-        )
-      }
-    })
-
-    !source || (this.isXL && this.fetchDsStatAsync())
+    if (!this.isXL) this.fetchWsListAsync()
   }
 
   async fetchTabReportAsync() {
@@ -497,22 +307,14 @@ export class DatasetStore {
       return
     }
 
-    const response = await fetch(getApiUrl('tab_report'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        ds: String(dsName),
-        schema: 'xbr',
-        seq: JSON.stringify(seq),
-      }),
+    const tabReport = await datasetProvider.getTabReport({
+      ds: dsName,
+      schema: 'xbr',
+      seq,
     })
 
-    const result = await response.json()
-
     runInAction(() => {
-      this.tabReport = [...this.tabReport, ...result]
+      this.tabReport = [...this.tabReport, ...tabReport]
       this.reportsLoaded = this.tabReport.length === this.filteredNo.length
       this.isFetchingMore = false
     })
@@ -561,34 +363,25 @@ export class DatasetStore {
   async fetchTagSelectAsync() {
     if (this.isXL) return
 
-    const response = await fetch(
-      getApiUrl(`tag_select?ds=${this.datasetName}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const result = await response.json()
+    const tagSelect = await wsDatasetProvider.getTagSelect({
+      ds: this.datasetName,
+    })
 
     runInAction(() => {
-      this.tags = [...result['tag-list']].filter(item => item !== '_note')
+      this.tags = [...tagSelect['tag-list']].filter(item => item !== '_note')
     })
   }
 
   async fetchWsTagsAsync() {
     if (this.isXL) return
 
-    const response = await fetch(
-      getApiUrl(`ws_tags?ds=${this.datasetName}&rec=${variantStore.index}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const result = await response.json()
+    const wsTags = await wsDatasetProvider.getWsTags({
+      ds: this.datasetName,
+      rec: variantStore.index,
+    })
 
     runInAction(() => {
-      this.tags = [...result['op-tags'], ...result['check-tags']].filter(
+      this.tags = [...wsTags['op-tags'], ...wsTags['check-tags']].filter(
         item => item !== '_note',
       )
     })
@@ -597,34 +390,25 @@ export class DatasetStore {
   async fetchWsListAsync(isXL?: boolean, kind?: string) {
     this.setIsLoadingTabReport(true)
 
-    const body = new URLSearchParams({
+    const params: IWsListArguments | IDsListArguments = {
       ds: this.datasetName,
-    })
-
-    if (!this.isFilterDisabled) {
-      body.append(
-        'conditions',
-        kind === 'reset' ? '[]' : JSON.stringify(this.conditions),
-      )
-      body.append('zone', JSON.stringify(this.zone))
+      filter: this.activePreset,
     }
 
-    body.append('filter', this.activePreset)
+    const { conditions } = filterStore
 
-    const response = await fetch(getApiUrl(isXL ? 'ds_list' : 'ws_list'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    if (!this.isFilterDisabled) {
+      params.conditions = kind === 'reset' ? [] : conditions
+      if (!isXL) {
+        ;(params as IWsListArguments).zone = this.zone
+      }
+    }
 
     this.indexFilteredNo = 0
 
     if (isXL) {
-      const taskResult = await operations.getJobStatusAsync(result.task_id)
+      const dsList = await datasetProvider.getDsList(params)
+      const taskResult = await operations.getJobStatusAsync(dsList.task_id)
 
       runInAction(() => {
         this.filteredNo = taskResult?.data?.[0].samples
@@ -634,13 +418,14 @@ export class DatasetStore {
           : []
       })
     } else {
+      const wsList = await wsDatasetProvider.getWsList(params)
       runInAction(() => {
-        this.filteredNo = result.records
-          ? result.records.map((variant: { no: number }) => variant.no)
+        this.filteredNo = wsList.records
+          ? wsList.records.map((variant: { no: number }) => variant.no)
           : []
 
-        this.statAmount = get(result, 'filtered-counts', [])
-        this.wsRecords = result.records
+        this.statAmount = wsList['filtered-counts']
+        this.wsRecords = wsList.records
       })
     }
 
@@ -650,43 +435,26 @@ export class DatasetStore {
   }
 
   async fetchZoneListAsync(zone: string) {
-    const body = new URLSearchParams({ ds: this.datasetName, zone })
-
-    const response = await fetch(getApiUrl('zone_list'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const zoneList = (await wsDatasetProvider.getZoneList({
+      ds: this.datasetName,
+      zone,
+    })) as IZoneDescriptor
 
     runInAction(() => {
       zone === 'Symbol'
-        ? (this.genes = result.variants)
-        : (this.genesList = result.variants)
+        ? (this.genes = zoneList.variants)
+        : (this.genesList = zoneList.variants)
     })
   }
 
   async fetchSamplesZoneAsync() {
-    const body = new URLSearchParams({
+    const zoneList = (await wsDatasetProvider.getZoneList({
       ds: this.datasetName,
       zone: 'Has_Variant',
-    })
-
-    const response = await fetch(getApiUrl('zone_list'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    })) as IZoneDescriptor
 
     runInAction(() => {
-      this.samples = result.variants
+      this.samples = zoneList.variants
     })
   }
 
@@ -696,7 +464,7 @@ export class DatasetStore {
 
   memorizeFilterConditions() {
     this.memorizedConditions = {
-      conditions: toJS(this.conditions),
+      conditions: toJS(filterStore.conditions),
       activePreset: this.activePreset,
       zone: toJS(this.zone),
     }
@@ -710,6 +478,14 @@ export class DatasetStore {
         ;(this as any)[key] = (memorizedConditions as any)[key]
       })
     }
+  }
+
+  get fixedStatAmount() {
+    const variantCounts = this.statAmount?.[0] ?? null
+    const dnaVariantsCounts = this.statAmount?.[1] ?? null
+    const transcriptsCounts = this.statAmount?.[2] ?? null
+
+    return { variantCounts, dnaVariantsCounts, transcriptsCounts }
   }
 }
 

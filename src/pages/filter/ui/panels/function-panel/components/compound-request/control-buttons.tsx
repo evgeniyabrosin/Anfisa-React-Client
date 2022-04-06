@@ -8,20 +8,15 @@ import compoundRequestStore from './compound-request.store'
 
 interface IControlButtonsProps {
   activeRequestIndex: number
-  setActiveRequestIndex: (item: number) => void
 }
 
 export const ControlButtons = observer(
-  ({
-    activeRequestIndex,
-    setActiveRequestIndex,
-  }: IControlButtonsProps): ReactElement => (
+  ({ activeRequestIndex }: IControlButtonsProps): ReactElement => (
     <div className="flex">
       <Button
         onClick={() =>
           compoundRequestStore.handleRequestBlocksAmount(
             RequestBlockOperations.Add,
-            setActiveRequestIndex,
             activeRequestIndex,
           )
         }
@@ -35,7 +30,6 @@ export const ControlButtons = observer(
         onClick={() =>
           compoundRequestStore.handleRequestBlocksAmount(
             RequestBlockOperations.Remove,
-            setActiveRequestIndex,
             activeRequestIndex,
           )
         }

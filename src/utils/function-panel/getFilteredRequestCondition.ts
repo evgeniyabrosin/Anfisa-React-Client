@@ -1,4 +1,4 @@
-import { TRequestCondition } from '@pages/filter/ui/panels/function-panel/function-panel.interface'
+import { TRequestCondition } from '@service-providers/common'
 
 export const getFilteredRequestCondition = (
   fullRequestCondition: TRequestCondition[],

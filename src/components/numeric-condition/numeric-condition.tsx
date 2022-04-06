@@ -1,10 +1,9 @@
 import React, { ReactElement } from 'react'
 
+import { AttributeChartRenderModes } from '@service-providers/common'
 import { NumericConditionNeighborhood } from './numeric-condition-neighborhood'
 import { NumericConditionRange } from './numeric-condition-range'
 import { INumericConditionProps } from './types'
-
-const RENDER_MODE_NEIGHBORHOOD = 'neighborhood'
 
 export const NumericCondition = (
   props: INumericConditionProps,
@@ -14,7 +13,9 @@ export const NumericCondition = (
   } = props
 
   return React.createElement(
-    renderMode === RENDER_MODE_NEIGHBORHOOD && min != null && max != null
+    renderMode === AttributeChartRenderModes.Neighborhood &&
+      min != null &&
+      max != null
       ? NumericConditionNeighborhood
       : NumericConditionRange,
     props,

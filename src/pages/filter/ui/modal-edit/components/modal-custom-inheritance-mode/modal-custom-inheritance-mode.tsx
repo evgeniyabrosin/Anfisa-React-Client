@@ -2,6 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import { SelectModalButtons } from '@pages/filter/ui/query-builder/ui/select-modal-buttons'
@@ -66,6 +67,12 @@ export const ModalCustomInheritanceMode = observer((): ReactElement => {
         selectStates={selectStates}
         handleReset={handleSetComplexScenario}
         resetValue={modalCustomInheritanceModeStore.resetValue}
+        isNotModeChecked={
+          modalCustomInheritanceModeStore.currentMode === ModeTypes.Not
+        }
+        toggleNotMode={() =>
+          modalCustomInheritanceModeStore.setCurrentMode(ModeTypes.Not)
+        }
       />
 
       {currentGroup ? (

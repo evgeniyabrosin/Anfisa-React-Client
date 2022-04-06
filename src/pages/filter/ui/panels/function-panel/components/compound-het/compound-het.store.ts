@@ -1,17 +1,12 @@
 import { Option } from 'react-dropdown'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { IStatFuncData } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
-import {
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
-import { getModeType } from '@utils/getModeType'
-import functionPanelStore from '../../function-panel.store'
-import { ICompoundHetCachedValues } from './../../function-panel.interface'
+import { TFuncCondition } from '@service-providers/common/common.interface'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
+import functionPanelStore, { approxOptions } from '../../function-panel.store'
 
 export const CompoundHetSelectOptions = [
   { label: 'shared transcript', value: '' },
@@ -20,62 +15,68 @@ export const CompoundHetSelectOptions = [
 ]
 
 class CompoundHetStore {
-  statFuncStatus = ''
-
-  currentMode?: ModeTypes
+  private _statFuncStatus = ''
+  private _initialApprox: string | null = ''
+  private _currentMode?: ModeTypes
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  public setCurrentMode(modeType: ModeTypes): void {
-    this.currentMode = modeType
+  public get statFuncStatus(): string {
+    return this._statFuncStatus
+  }
+  public get initialApprox(): string | null {
+    return this._initialApprox
+  }
+  public get currentMode(): ModeTypes | undefined {
+    return this._currentMode
+  }
+
+  public setInitialApprox(initialApprox: string | null) {
+    this._initialApprox = initialApprox
+  }
+
+  public resetInitialApprox() {
+    this._initialApprox = ''
+  }
+
+  public setCurrentMode(modeType?: ModeTypes): void {
+    if (!modeType) {
+      this._currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
+
+      return
+    }
+
+    this._currentMode = modeType
   }
 
   public resetCurrentMode(): void {
-    this.currentMode = undefined
-  }
-
-  public get cachedValues(): ICompoundHetCachedValues {
-    return functionPanelStore.getCachedValues<ICompoundHetCachedValues>(
-      FuncStepTypesEnum.CompoundHet,
-    )
-  }
-
-  public get initialApprox(): string {
-    return (
-      this.cachedValues?.conditions.approx || CompoundHetSelectOptions[0].value
-    )
+    this._currentMode = undefined
   }
 
   public async getStatFuncStatusAsync(): Promise<void> {
-    const statFuncData: IStatFuncData = await filterStore.fetchStatFuncAsync(
+    const statFuncData = await filterStore.fetchStatFuncAsync(
       FuncStepTypesEnum.CompoundHet,
       JSON.stringify({
-        approx: this.cachedValues?.conditions.approx || null,
+        approx: this.initialApprox ?? null,
         state: null,
       }),
     )
 
     runInAction(() => {
-      this.statFuncStatus = statFuncData.err || ''
+      this._statFuncStatus = statFuncData.err || ''
     })
-  }
-
-  public setConditions(approx: string | null, variants?: string[]): void {
-    functionPanelStore.setCachedValues<ICompoundHetCachedValues>(
-      FuncStepTypesEnum.GeneRegion,
-      {
-        conditions: { approx: approx, state: null },
-        variants: variants || ['Proband'],
-      },
-    )
   }
 
   public handleChangeApprox(arg: Option): void {
     const approx = !arg.value ? null : arg.value
 
-    this.setConditions(approx)
+    this.setInitialApprox(approx)
 
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.CompoundHet,
@@ -90,20 +91,19 @@ class CompoundHetStore {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.CompoundHet,
-      getModeType(this.currentMode),
+      getConditionJoinMode(this.currentMode),
       ['Proband'],
-      { approx: this.cachedValues?.conditions.approx || null, state: null },
+      { approx: this.initialApprox ?? null, state: null },
     ]
 
-    const variant: TVariant = ['Proband', 0]
+    functionPanelStore.sumbitConditions(conditions)
 
-    functionPanelStore.sumbitConditions(conditions, variant, this.currentMode)
+    filterStore.resetStatFuncData()
+    this.resetInitialApprox()
   }
 
   public handleResetFields(): void {
-    this.setConditions('shared transcript')
-
-    functionPanelStore.clearCachedValues(FuncStepTypesEnum.CompoundHet)
+    this.setInitialApprox(approxOptions[0])
   }
 }
 

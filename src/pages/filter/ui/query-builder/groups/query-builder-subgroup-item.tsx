@@ -7,6 +7,7 @@ import { StatList } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModalSources } from '@core/enum/modal-sources'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -14,7 +15,9 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
 import { GlbPagesNames } from '@glb/glb-names'
+import { TPropertyStatus } from '@service-providers/common'
 import dtreeModalStore from '../../../modals.store'
+import modalFiltersStore from '../../modal-edit/components/modal-enum/modal-enum.store'
 import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {
@@ -50,7 +53,8 @@ export const QueryBuilderSubgroupItem = observer(
       dtreeModalStore.closeModalAttribute()
 
       if (group.kind === FilterKindEnum.Enum) {
-        dtreeModalStore.openModalSelectFilter(group.name, source)
+        dtreeModalStore.openModalEnum(group.name, undefined, source)
+        modalFiltersStore.setCurrentGroupSubKind(group['sub-kind'] as SubKinds)
       }
 
       if (group.kind === FilterKindEnum.Numeric) {
@@ -100,8 +104,21 @@ export const QueryBuilderSubgroupItem = observer(
         openAttrListForDtree(group)
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setSelectedGroupItem(group)
+
+        filterStore.resetIsRedacorMode()
+
+        filterStore.setActiveFilterId('')
       }
     }
+
+    /* TODO: if variants length > 100  add another visualisation */
+    const isChartVisible =
+      isVisibleSubGroupItem &&
+      !isModal &&
+      ((subGroupItem.variants &&
+        subGroupItem.variants.length > 0 &&
+        subGroupItem.variants.length < 100) ||
+        (subGroupItem.histogram && subGroupItem.histogram.length > 0))
 
     return (
       <div className="pl-2 mb-2">
@@ -136,17 +153,11 @@ export const QueryBuilderSubgroupItem = observer(
             </span>
           </div>
         </div>
-
-        {/* TODO: if varaintas length > 100  add antoher visualisation*/}
-        {isVisibleSubGroupItem &&
-          !isModal &&
-          subGroupItem.variants &&
-          subGroupItem.variants.length > 0 &&
-          subGroupItem.variants.length < 100 && (
-            <QueryBuilderSubgroupChart subGroupItem={toJS(subGroupItem)} />
-          )}
-        {isVisibleSubGroupItem && !isModal && subGroupItem.max > 0 && (
-          <QueryBuilderSubgroupChart subGroupItem={toJS(subGroupItem)} />
+        {isChartVisible && (
+          <QueryBuilderSubgroupChart
+            // TODO: StatList -> TPropertyStatus refactoring
+            subGroupItem={toJS(subGroupItem) as TPropertyStatus}
+          />
         )}
       </div>
     )

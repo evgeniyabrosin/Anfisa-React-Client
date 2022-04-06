@@ -21,9 +21,7 @@ class DtreeModalStore {
   isModalCompoundRequestVisible = false
   isModalGeneRegionVisible = false
 
-  isModalSelectFilterVisible = false
-  isModalEditFiltersVisible = false
-
+  isModalEnumVisible = false
   isModalNumbersVisible = false
 
   isModalTextEditorVisible = false
@@ -106,25 +104,20 @@ class DtreeModalStore {
 
   // 3. Modal for enum attr
 
-  public openModalSelectFilter(groupName: string, source: string) {
+  public openModalEnum(
+    groupName: string,
+    groupIndex: number | undefined,
+    source: string = '',
+  ) {
     this.modalSource = source
 
-    this.isModalSelectFilterVisible = true
+    this.isModalEnumVisible = true
     this.groupNameToChange = groupName
+    this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalSelectFilter() {
-    this.isModalSelectFilterVisible = false
-  }
-
-  public openModalEditFilters(groupName: string, groupIndex: number) {
-    this.isModalEditFiltersVisible = true
-    this.groupNameToChange = groupName
-    this.groupIndexToChange = groupIndex
-  }
-
-  public closeModalEditFilters() {
-    this.isModalEditFiltersVisible = false
+  public closeModalEnum() {
+    this.isModalEnumVisible = false
     dtreeStore.resetSelectedFilters()
   }
 

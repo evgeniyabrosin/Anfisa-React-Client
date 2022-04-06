@@ -11,22 +11,15 @@ export const resetOptions = [
   'Compensational',
 ]
 
-interface IResetSelectProps {
-  activeRequestIndex: number
-}
-
 export const ResetSelect = observer(
-  ({ activeRequestIndex }: IResetSelectProps): ReactElement => (
+  (): ReactElement => (
     <div className="flex w-1/2">
       <span>{t('dtree.reset')}</span>
 
       <Select
         options={resetOptions}
         onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-          compoundRequestStore.handleSetComplexRequest(
-            e.target.value,
-            activeRequestIndex,
-          )
+          compoundRequestStore.handleSetComplexRequest(e.target.value)
         }
         className="w-full ml-2"
         value={compoundRequestStore.resetValue}

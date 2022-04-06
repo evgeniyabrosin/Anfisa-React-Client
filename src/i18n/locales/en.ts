@@ -34,6 +34,7 @@ export const en = {
       join: 'Preset has been joined',
       delete: 'Preset has been deleted',
     },
+    selectSecondaryPlaceholder: 'Select secondary...',
   },
   home: {
     title: 'Home',
@@ -143,8 +144,10 @@ export const en = {
       seeAll: 'See all',
       hide: 'Hide',
       total: 'Total',
-      variants: 'variants',
+      variants: '{value} variants',
     },
+    delete: 'Delete',
+    copy: 'Copy',
   },
   dtree: {
     variants: 'variants',

@@ -37,6 +37,9 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
+    const { variantCounts } = datasetStore.fixedStatAmount
+    const { conditions } = filterStore
+
     if (
       pathName === PatnNameEnum.Filter &&
       filterStore.method === GlbPagesNames.Filter &&
@@ -48,19 +51,19 @@ export const ModalSaveDataset = observer(() => {
     if (
       pathName === PatnNameEnum.Filter &&
       filterStore.method === GlbPagesNames.Refiner &&
-      datasetStore.statAmount[0] === 0
+      variantCounts === 0
     ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
-    if (pathName === PatnNameEnum.Ws && datasetStore.statAmount[0] === 0) {
+    if (pathName === PatnNameEnum.Ws && variantCounts === 0) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)
     }
 
     if (
       pathName === PatnNameEnum.Ws &&
       !datasetStore.activePreset &&
-      datasetStore.conditions.length === 0
+      conditions.length === 0
     ) {
       setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
     }

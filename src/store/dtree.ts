@@ -1,11 +1,17 @@
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
-import uniq from 'lodash/uniq'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { FilterCountsType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
+import filterStore from '@store/filter'
+import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import {
+  IDsStatArguments,
+  IStatfuncArguments,
+} from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getDataFromCode } from '@utils/getDataFromCode'
@@ -21,6 +27,7 @@ export type IStepData = {
   step: number
   groups: any[]
   negate?: boolean
+  all?: boolean
   excluded: boolean
   isActive: boolean
   isReturnedVariantsActive: boolean
@@ -93,7 +100,7 @@ class DtreeStore {
 
   requestData: IRequestData[] = []
 
-  actionHistory: URLSearchParams[] = []
+  actionHistory: IDsStatArguments[] = []
   actionHistoryIndex = -1
 
   constructor() {
@@ -122,7 +129,7 @@ class DtreeStore {
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
-    const finalStep = {
+    const finalStep: IStepData = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
@@ -158,9 +165,13 @@ class DtreeStore {
   }
 
   get getQueryBuilder() {
-    const statList = this.stat.list ?? datasetStore.dsStat['stat-list']
+    const isRefiner = filterStore.method === GlbPagesNames.Refiner
 
-    return getQueryBuilder(toJS(statList))
+    const statList = isRefiner
+      ? toJS(datasetStore.dsStat['stat-list'])
+      : this.stat.list
+
+    return getQueryBuilder(statList)
   }
 
   getStepIndexForApi = (index: number) => {
@@ -181,7 +192,8 @@ class DtreeStore {
     return stepIndexForApi
   }
 
-  async fetchDtreeSetAsync(body: URLSearchParams, shouldSaveInHistory = true) {
+  // TODO: change body type
+  async fetchDtreeSetAsync(body: any, shouldSaveInHistory = true) {
     if (shouldSaveInHistory) addToActionHistory(body)
 
     this.setIsCountsReceived(false)
@@ -217,24 +229,16 @@ class DtreeStore {
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
-    const body = new URLSearchParams({
+    const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
       no: activeStepStore.stepIndexForApi,
       code: this.dtreeCode,
       rq_id: Math.random().toString(),
       unit: subGroupName,
       param,
-    })
+    }
 
-    const response = await fetch(getApiUrl('statfunc'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result = await response.json()
+    const result = await filteringRegimeProvider.getStatFunc(body)
 
     runInAction(() => {
       this.statFuncData = result
@@ -245,7 +249,7 @@ class DtreeStore {
     })
   }
 
-  setActionHistory(updatedActionHistory: URLSearchParams[]) {
+  setActionHistory(updatedActionHistory: IDsStatArguments[]) {
     runInAction(() => {
       this.actionHistory = [...updatedActionHistory]
     })
@@ -360,16 +364,6 @@ class DtreeStore {
     this.resetLocalDtreeCode()
   }
 
-  negateStep(index: number) {
-    if (!this.stepData[index].negate) {
-      this.stepData[index].negate = true
-    } else {
-      this.stepData[index].negate = !this.stepData[index].negate
-    }
-
-    this.resetLocalDtreeCode()
-  }
-
   addSelectedGroup(group: any) {
     this.selectedGroups = []
     this.selectedGroups = group
@@ -377,9 +371,13 @@ class DtreeStore {
   }
 
   addSelectedFilter(filter: string) {
-    const localSelectedFilters = [...this.selectedFilters, filter]
+    this.selectedFilters = [...this.selectedFilters, filter]
 
-    this.selectedFilters = uniq(localSelectedFilters)
+    this.resetLocalDtreeCode()
+  }
+
+  addSelectedFilterList(filters: string[]) {
+    this.selectedFilters = [...this.selectedFilters, ...filters]
 
     this.resetLocalDtreeCode()
   }
@@ -467,33 +465,20 @@ class DtreeStore {
   updatePointCounts(pointCounts: [number | null][]) {
     const localStepData = [...this.stepData]
 
+    const counts = toJS(pointCounts)
+
     localStepData.forEach((element, index) => {
-      const counts = toJS(pointCounts)
-
       const startCountsIndex = this.getStepIndexForApi(index)
-      const indexes = toJS(this.dtreeStepIndices)
-      const isFinalStepIndex = index === indexes.length
+      const differenceCountsIndex = startCountsIndex + 1
 
-      const currentCount = isFinalStepIndex
-        ? counts[counts.length - 1]?.[0]
-        : counts[startCountsIndex]?.[0]
+      const isFinalStep = index === localStepData.length - 1
 
-      const startCounts =
-        counts[startCountsIndex] === null ? '...' : currentCount
-
-      const diferenceCountsIndex = startCountsIndex + 1
-
-      const diferenceCounts =
-        counts[diferenceCountsIndex] === null
-          ? '...'
-          : counts[diferenceCountsIndex]?.[0]
-
-      const isEmptyTree = counts.length === 1
-      const isFinalStep = Boolean(localStepData[index].isFinalStep)
-      const shouldSetAllVariants = isEmptyTree && isFinalStep
-
-      element.startFilterCounts = startCounts
-      element.difference = shouldSetAllVariants ? counts[0][0] : diferenceCounts
+      if (isFinalStep) {
+        element.difference = counts[counts.length - 1]?.[0]
+      } else {
+        element.startFilterCounts = counts[startCountsIndex]?.[0]
+        element.difference = counts[differenceCountsIndex]?.[0]
+      }
     })
 
     runInAction(() => {

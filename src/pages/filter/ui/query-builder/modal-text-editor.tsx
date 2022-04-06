@@ -183,6 +183,9 @@ export const ModalTextEditor = observer((): ReactElement => {
           value={code}
           options={{
             cursorSmoothCaretAnimation: true,
+            minimap: {
+              showSlider: 'always',
+            },
           }}
           theme={theme === 'light' ? 'vs-white' : 'vs-dark'}
           onChange={(e: any) => {

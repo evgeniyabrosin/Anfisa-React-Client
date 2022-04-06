@@ -67,8 +67,7 @@ class DecisionTreesProvider extends ServiceProviderBase {
 
       const { units } = await filteringProvider.getStatUnits(
         {
-          ds: params.ds,
-          no: params.no,
+          ...params,
           rq_id: requestId,
           tm: '1',
           units: incompleteProps,

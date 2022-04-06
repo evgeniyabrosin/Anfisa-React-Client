@@ -2,6 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
@@ -77,7 +78,15 @@ export const ModalCompoundRequest = observer((): ReactElement => {
           handleSetCondition={handleSetCondition}
         />
 
-        <AllNotMods />
+        <AllNotMods
+          isNotModeChecked={
+            modalCompoundRequestStore.currentMode === ModeTypes.Not
+          }
+          isNotModeDisabled={variants ? variants.length === 0 : true}
+          toggleNotMode={() =>
+            modalCompoundRequestStore.setCurrentMode(ModeTypes.Not)
+          }
+        />
       </div>
 
       <div className="flex flex-col w-full mt-4 text-14">
