@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
-import { EMPTY_VALUE } from '@pages/ws/columns'
+import { EMPTY_VALUE } from '@pages/ws/constants'
 import { CellI, PredicationI } from './cell-interfaces'
 import { GnomadItem } from './gnomad-item'
 

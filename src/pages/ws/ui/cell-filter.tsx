@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import get from 'lodash/get'
 
-import { EMPTY_VALUE } from '@pages/ws/columns'
+import { EMPTY_VALUE } from '@pages/ws/constants'
 import { CellI } from './cell-interfaces'
 
 export const CellFilter = (cell: CellI): ReactElement => {

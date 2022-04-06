@@ -62,5 +62,3 @@ export const variantColumnTable = [
     Cell: CellFilter,
   },
 ]
-
-export const EMPTY_VALUE = '-'
