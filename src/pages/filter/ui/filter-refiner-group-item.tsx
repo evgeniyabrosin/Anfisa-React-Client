@@ -1,78 +1,48 @@
 import { ReactElement } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import cn, { Argument } from 'classnames'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
 import { StatListType } from '@declarations'
 import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
+import { FnLabel } from '@components/fn-label'
 
 type Props = StatListType & {
-  onChange?: (checked: boolean) => void
   className?: Argument
   group?: string
   isFunc?: boolean
-  isNumeric?: boolean
   incomplete?: boolean
 }
 
 export const FilterRefinerGroupItem = observer(
   ({
     name,
-    onChange,
     className,
     group,
     isFunc,
-    isNumeric,
     title,
     tooltip,
     incomplete = false,
     ...rest
   }: Props): ReactElement => {
-    const checked = get(
-      filterStore,
-      `selectedFilters[${group}][${name}]`,
-      false,
-    )
-
-    const isIndeterminate = filterStore.selectedGroupItem.name === name
-
     const handleSelect = () => {
       filterStore.setSelectedGroupItem({ name, ...rest })
     }
 
-    const isNotEnum = isFunc || isNumeric
-    const disabled = (isNotEnum && !checked) || incomplete
-
     const status = incomplete ? '...' : ''
 
     return (
-      <div className={cn('flex items-center py-1 pr-20', className)}>
-        <Checkbox
-          className="cursor-pointer bg-white w-4 h-4 rounded-sm border-2 border-grey-blue"
-          checked={checked}
-          indeterminate={isIndeterminate}
-          disabled={disabled}
-          onChange={event => onChange && onChange(event.target.checked)}
-        />
+      <div className={cn('flex items-center pt-1 pr-20', className)}>
+        {isFunc && <FnLabel subGroup={true} className="-mr-1" />}
 
-        {isFunc && (
-          <p className="text-10 leading-10px text-green-secondary bg-green-light p-1 w-4 h-4 flex items-center ml-2 rounded-sm">
-            {'fn'}
-          </p>
-        )}
-
-        <p
+        <span
           key={name}
           onClick={handleSelect}
-          className={cn('text-14 ml-2 cursor-pointer', {
-            'font-bold': checked,
-          })}
+          className={cn('text-16 ml-2 font-bold cursor-pointer')}
         >
           {name || title}
-        </p>
+        </span>
 
         <span className="text-14 text-blue-bright">{`${status}`}</span>
 

@@ -18,8 +18,8 @@ export const getHistogram = ({
   isZeroSkipped,
   histogramData,
 }: TGetHistogramParams): [
-  IRangeSliderProps['histogram'],
-  number | undefined,
+  data: IRangeSliderProps['histogram'],
+  step: number | undefined,
 ] => {
   if (!histogramData) {
     return [undefined, undefined]

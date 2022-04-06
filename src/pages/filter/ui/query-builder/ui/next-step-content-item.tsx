@@ -178,7 +178,7 @@ export const NextStepContentItem = observer(
 
             <div className="flex items-center text-14 font-medium mr-2">
               {group.includes(StepTypeEnum.Func) && (
-                <FnLabel currentStep={currentStep} />
+                <FnLabel currentStep={currentStep} className="shadow-dark" />
               )}
               {`${group[1]}`}
             </div>

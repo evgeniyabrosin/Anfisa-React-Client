@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { t } from '@i18n'
 import filterStore from '@store/filter'
@@ -6,76 +6,87 @@ import {
   DsStatArgumentsOptions,
   IDsStatArguments,
 } from '@service-providers/filtering-regime'
-import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { showToast } from '@utils/notifications/showToast'
 import datasetStore from './dataset'
 
 export const DEFAULT_PRESET_LABEL = '⏚'
 
 class PresetStore {
+  private _isPresetDataModified = false
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  async loadPresetAsync(filter: string, source?: string) {
+  public get isPresetDataModified() {
+    return this._isPresetDataModified
+  }
+
+  public setIsPresetDataModified() {
+    this._isPresetDataModified = true
+  }
+
+  public resetIsPresetDataModified() {
+    this._isPresetDataModified = false
+  }
+
+  async loadPresetAsync(filter: string) {
+    this.resetIsPresetDataModified()
+
     const body: IDsStatArguments = {
       ds: datasetStore.datasetName,
       filter,
     }
 
-    const result = await filteringRegimeProvider.getDsStat(body)
+    const result = await datasetStore.fetchDsStatAsync(false, body)
 
-    filterStore.resetFilterCondition()
-
-    runInAction(() => {
-      datasetStore.updatePresetLoad(result, source)
-      datasetStore.dsStat = result
-    })
+    datasetStore.updatePresetLoad(result)
   }
 
   async deletePresetAsync(presetName: string) {
+    this.resetIsPresetDataModified()
+
+    const { conditions } = filterStore
+
     const body: IDsStatArguments = {
       ds: datasetStore.datasetName,
-      conditions: datasetStore.conditions,
+      conditions: conditions,
       instr: [DsStatArgumentsOptions.DELETE, presetName],
-    }
-
-    const result = await filteringRegimeProvider.getDsStat(body)
-
-    datasetStore.dsStat = result
-  }
-
-  async joinPresetAsync(presetName: string) {
-    const body: IDsStatArguments = {
-      ds: datasetStore.datasetName,
-      instr: [DsStatArgumentsOptions.JOIN, presetName],
-    }
-
-    if (datasetStore.prevPreset) {
-      body.filter = datasetStore.prevPreset
-    } else {
-      body.conditions = datasetStore.conditions
     }
 
     const result = await datasetStore.fetchDsStatAsync(false, body)
 
-    await datasetStore.updatePresetLoad(result)
+    datasetStore.updatePresetLoad(result)
+  }
+
+  async joinPresetAsync(presetName: string) {
+    this.resetIsPresetDataModified()
+
+    const { conditions } = filterStore
+
+    const body: IDsStatArguments = {
+      ds: datasetStore.datasetName,
+      instr: [DsStatArgumentsOptions.JOIN, presetName],
+      conditions: conditions,
+    }
+
+    const result = await datasetStore.fetchDsStatAsync(false, body)
+
+    datasetStore.updatePresetLoad(result)
   }
 
   async updatePresetAsync(presetName: string) {
+    const { conditions } = filterStore
+
     const body: IDsStatArguments = {
       ds: datasetStore.datasetName,
-      conditions: datasetStore.conditions,
+      conditions: conditions,
       instr: [DsStatArgumentsOptions.UPDATE, presetName],
     }
 
-    const result = await filteringRegimeProvider.getDsStat(body)
+    const result = await datasetStore.fetchDsStatAsync(false, body)
 
-    runInAction(() => {
-      datasetStore.dsStat = result
-    })
-
-    await datasetStore.updatePresetLoad(result)
+    datasetStore.updatePresetLoad(result)
   }
 
   deletePreset(): void {
@@ -113,6 +124,8 @@ class PresetStore {
   }
 
   modifyPreset(preset: string): void {
+    this.resetIsPresetDataModified()
+
     this.updatePresetAsync(preset)
 
     filterStore.resetActionName()
@@ -133,7 +146,7 @@ class PresetStore {
     if (filterStore.actionName) return
 
     if (datasetStore.prevPreset !== datasetStore.activePreset) {
-      this.loadPresetAsync(preset, 'refiner')
+      this.loadPresetAsync(preset)
 
       if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
     }
