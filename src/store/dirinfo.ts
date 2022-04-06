@@ -1,14 +1,13 @@
 import cloneDeep from 'lodash/cloneDeep'
 import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
-import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 import { DirInfoType, DsDistItem, DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
 import { HgModes } from '@service-providers/dataset-level/dataset-level.interface'
-import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import datasetStore from './dataset'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
@@ -183,28 +182,6 @@ class DirInfoStore {
     const meta: any = this.dsinfo.meta
     const hgModeValue: HgModes = meta?.modes?.[0]
     return hgModeValue
-  }
-
-  getAncestorDataset(
-    datasetName: string,
-  ): IDirInfoDatasetDescriptor | undefined {
-    if (!datasetName || !this.dirinfo['ds-dict']) {
-      return undefined
-    }
-
-    const dataset: IDirInfoDatasetDescriptor | undefined =
-      this.dirinfo['ds-dict'][datasetName]
-
-    if (!dataset) {
-      return undefined
-    }
-
-    const ancestorName = dataset.ancestors[0]?.[0]
-    if (ancestorName) {
-      return toJS(this.dirinfo['ds-dict'][ancestorName])
-    }
-
-    return toJS(dataset)
   }
 }
 

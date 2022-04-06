@@ -34,6 +34,7 @@ export const en = {
       join: 'Preset has been joined',
       delete: 'Preset has been deleted',
     },
+    selectSecondaryPlaceholder: 'Select secondary...',
   },
   home: {
     title: 'Home',
