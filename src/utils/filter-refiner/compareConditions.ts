@@ -1,5 +1,4 @@
-import difference from 'lodash/difference'
-
+import presetStore from '@store/filterPreset'
 import { TCondition } from '@service-providers/common'
 
 interface ICompareConditionsProps {
@@ -21,7 +20,5 @@ export const compareConditions = ({
 
   if (prevPreset && currentPreset !== prevPreset) return true
 
-  return currentConditions.some((condition: any[], index) => {
-    return difference(condition, startConditions[index]).length === 0
-  })
+  return presetStore.isPresetDataModified
 }

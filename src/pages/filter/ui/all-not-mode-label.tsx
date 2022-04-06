@@ -1,14 +1,14 @@
 import { ReactElement } from 'react'
 
-interface AllNotModeViewProps {
+interface IAllNotModeLabelProps {
   isAllMode: boolean
   isNotMode: boolean
 }
 
-export const AllNotModeView = ({
+export const AllNotModeLabel = ({
   isAllMode,
   isNotMode,
-}: AllNotModeViewProps): ReactElement => (
+}: IAllNotModeLabelProps): ReactElement => (
   <>
     {isAllMode && (
       <span className="ml-1 px-1 text-10 bg-green-medium  text-green-secondary rounded-sm">

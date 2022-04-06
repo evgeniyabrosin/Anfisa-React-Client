@@ -28,11 +28,7 @@ export const ProblemGroups = observer(
 
           <span
             className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={() =>
-              inheritanceModeStore.handleResetAllFieldsLocally(
-                problemGroupValues,
-              )
-            }
+            onClick={inheritanceModeStore.resetAllFields}
           >
             Reset
           </span>

@@ -2,39 +2,37 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { StatListType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useToggle } from '@core/hooks/use-toggle'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
+import { ConditionJoinMode } from '@service-providers/common'
 import {
   TCondition,
   TFuncArgs,
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
+import { AllNotModeLabel } from '../../all-not-mode-label'
 import { EnumFilter } from './enum-filter'
 import { FuncFilter } from './func-filter'
 import { ModalOptions } from './modal-options'
 import { NumericFilter } from './numeric-filter'
-import { IHandleRemoveFilterProps } from './query-results'
 
 interface ISelectedFilterCardProps {
   filterId: string
   filterCondition: TCondition
-  handleRemoveFilter: ({
-    filterId,
-    subFilterIdx,
-    filterType,
-  }: IHandleRemoveFilterProps) => void
 }
 
 export const SelectedFilterCard = observer(
-  ({
-    filterId,
-    filterCondition,
-    handleRemoveFilter,
-  }: ISelectedFilterCardProps): ReactElement => {
+  ({ filterId, filterCondition }: ISelectedFilterCardProps): ReactElement => {
     const filterType: string = filterCondition[0]
     const filterName: string = filterCondition[1]
+    const filterMode: ConditionJoinMode | undefined =
+      filterType !== FilterKindEnum.Numeric
+        ? (filterCondition[2] as ConditionJoinMode)
+        : undefined
     const filterContent: string[] = filterCondition[3] || []
     const filterExpression: TFuncArgs = filterCondition[4]!
 
@@ -58,25 +56,42 @@ export const SelectedFilterCard = observer(
       isModalOptionsVisible ? hideModalOptions() : showModalOptions()
     }
 
+    const handleOpenFilter = () => {
+      filterStore.setActiveFilterId(filterId)
+      filterStore.setIsRedacorMode()
+      filterStore.resetSelectedGroupItem()
+
+      const selectedGroupItem = datasetStore.startDsStat['stat-list'].find(
+        (filter: StatListType) => filter.name === filterName,
+      )
+
+      filterStore.setSelectedGroupItem(selectedGroupItem)
+    }
+
     return (
       <>
         <div
           className={cn(
-            'relative flex justify-between items-center border-b border-grey-light py-4 pl-3 pr-0.5 cursor-pointer',
-            isFilterActive && 'bg-blue-light',
+            'relative flex justify-between items-center border-b border-grey-light py-4 px-3 cursor-pointer',
+            { 'bg-blue-tertiary': isFilterActive },
           )}
-          onClick={() => filterStore.setActiveFilterId(filterId)}
+          onClick={handleOpenFilter}
         >
           <div className="flex" onClick={toggleFilterContentVisibility}>
             <Icon
               name="Arrow"
               className={cn(
-                'text-grey-blue transform transition-transform mr-1',
+                'text-grey-blue transform transition-transform mr-2',
                 isFilterContentVisible ? 'rotate-90' : '-rotate-90',
               )}
             />
 
-            <div className="leading-16px">{filterName}</div>
+            <div className="leading-16px font-bold">{filterName}</div>
+
+            <AllNotModeLabel
+              isAllMode={filterMode === ConditionJoinMode.AND}
+              isNotMode={filterMode === ConditionJoinMode.NOT}
+            />
           </div>
 
           <Icon
@@ -97,17 +112,9 @@ export const SelectedFilterCard = observer(
 
         {isFilterContentVisible && filterType === FilterKindEnum.Numeric && (
           <NumericFilter
-            filterId={filterId}
             filterName={filterName}
             isFilterActive={isFilterActive}
             numericExpression={filterCondition[2] as TNumericConditionBounds}
-            handleRemoveFilter={() =>
-              handleRemoveFilter({
-                filterId,
-                subFilterIdx: 0,
-                filterType,
-              })
-            }
           />
         )}
 
@@ -116,8 +123,6 @@ export const SelectedFilterCard = observer(
             filterId={filterId}
             isFilterActive={isFilterActive}
             filterContent={filterContent}
-            handleRemoveFilter={handleRemoveFilter}
-            filterType={filterType}
           />
         )}
 
@@ -128,8 +133,6 @@ export const SelectedFilterCard = observer(
             isFilterActive={isFilterActive}
             filterContent={filterContent}
             filterExpression={filterExpression}
-            handleRemoveFilter={handleRemoveFilter}
-            filterType={filterType}
           />
         )}
       </>

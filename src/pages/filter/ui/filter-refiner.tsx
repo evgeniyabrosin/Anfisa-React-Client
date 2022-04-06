@@ -10,10 +10,6 @@ export const FilterRefiner = (): ReactElement => {
   useEffect(() => {
     datasetStore.memorizeFilterConditions()
     filterStore.memorizeSelectedFilters()
-
-    return () => {
-      filterStore.filterCondition = {}
-    }
   }, [])
 
   return (

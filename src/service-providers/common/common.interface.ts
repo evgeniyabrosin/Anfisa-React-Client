@@ -33,12 +33,18 @@ export enum ConditionJoinMode {
   NOT = 'NOT',
 }
 
+export type TRequestCondition = [number, TSelectValues]
+
+export type TSelectValues = {
+  [key: string]: string[]
+}
+
 export interface IInheritanceModeArgs {
   problem_group: string[] | null
 }
 
 export interface ICustomInheritanceModeArgs {
-  scenario: [string, string[]]
+  scenario: [string, string[] | string]
 }
 
 export interface ICompoundHetArgs {
@@ -47,7 +53,7 @@ export interface ICompoundHetArgs {
 
 export interface ICompoundRequestArgs {
   approx: string | null
-  request: [number, { [key: string]: string[] }]
+  request: TRequestCondition[]
   state?: string | null
 }
 

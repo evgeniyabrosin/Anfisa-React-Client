@@ -17,6 +17,7 @@ import { ModalBase } from '../../../query-builder/ui/modal-base'
 import modalEditStore from '../../modal-edit.store'
 import { EditModalButtons } from '../edit-modal-buttons'
 import { EnumList } from './components/enum-list'
+import { EnumMods } from './components/enum-mods'
 import modalFiltersStore from './modal-enum.store'
 
 export const ModalEnum = observer((): ReactElement => {
@@ -106,15 +107,25 @@ export const ModalEnum = observer((): ReactElement => {
           {dtreeStore.selectedFilters.length || 0} {t('dtree.selected')}
         </div>
 
-        <AllNotMods
-          isAllModeChecked={modalFiltersStore.currentMode === ModeTypes.All}
-          isNotModeChecked={modalFiltersStore.currentMode === ModeTypes.Not}
-          isAllModeDisabled={dtreeStore.selectedFilters.length < 2}
-          isNotModeDisabled={!dtreeStore.selectedFilters.length}
-          toggleAllMode={() => modalFiltersStore.setCurrentMode(ModeTypes.All)}
-          toggleNotMode={() => modalFiltersStore.setCurrentMode(ModeTypes.Not)}
-          groupSubKind={modalFiltersStore.currentGroupSubKind}
-        />
+        <div className="flex flex-col">
+          <EnumMods />
+
+          <div className="flex justify-end mt-1">
+            <AllNotMods
+              isAllModeChecked={modalFiltersStore.currentMode === ModeTypes.All}
+              isNotModeChecked={modalFiltersStore.currentMode === ModeTypes.Not}
+              isAllModeDisabled={dtreeStore.selectedFilters.length < 2}
+              isNotModeDisabled={!dtreeStore.selectedFilters.length}
+              toggleAllMode={() =>
+                modalFiltersStore.setCurrentMode(ModeTypes.All)
+              }
+              toggleNotMode={() =>
+                modalFiltersStore.setCurrentMode(ModeTypes.Not)
+              }
+              groupSubKind={modalFiltersStore.currentGroupSubKind}
+            />
+          </div>
+        </div>
       </div>
 
       <EnumList />

@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 import { theme } from '@theme'
-import { RangeSliderHistogramRoot } from './range-slider-histogram/styles'
-import { RangeSliderColor } from './types'
+import { RangeSliderColor } from './range-slider.interface'
+import { RangeSliderHistogramRoot } from './range-slider-histogram/range-slider-histogram.styles'
 
 const disabledColor = theme('colors.grey.disabled')
 const controlDisabledColor = theme('colors.grey.blue')

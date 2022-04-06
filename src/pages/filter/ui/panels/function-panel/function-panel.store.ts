@@ -6,6 +6,12 @@ import filterStore from '@store/filter'
 import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
 
+export const approxOptions = [
+  'shared transcript',
+  'shared gene',
+  'non-intersecting transcripts',
+]
+
 class FunctionPanelStore {
   constructor() {
     makeAutoObservable(this)
@@ -50,28 +56,12 @@ class FunctionPanelStore {
     return attrData.family
   }
 
-  public getCachedValues<T>(componentName: string): T {
-    return filterStore.readFilterCondition(componentName) as T
-  }
-
-  public setCachedValues<T>(componentName: string, cachedValues: T): void {
-    filterStore.setFilterCondition<T>(componentName, cachedValues)
-  }
-
-  public clearCachedValues(componentName: string, filterName?: string): void {
-    filterStore.clearFilterCondition(componentName, filterName)
-  }
-
   public sumbitConditions(condition: TFuncCondition): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    filterStore.addFilterBlock(condition)
-
-    datasetStore.fetchDsStatAsync()
-
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    filterStore.isRedactorMode
+      ? filterStore.addFilterToFilterBlock(condition)
+      : filterStore.addFilterBlock(condition)
   }
 
   public fetchStatFunc(componentName: string, params: string) {
