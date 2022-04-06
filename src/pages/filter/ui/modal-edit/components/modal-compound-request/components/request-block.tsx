@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useEffect, useState } from 'react'
+import React, { ChangeEvent, ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -17,15 +17,8 @@ interface IRequestBlockProps {
 export const RequestBlock = observer(
   ({ index, activeRequestIndex, item }: IRequestBlockProps): ReactElement => {
     const { problemGroups } = modalEditStore
-    const [hasErrors, setErrors] = useState(false)
 
-    useEffect(() => {
-      try {
-        setErrors(Number.parseInt(item[0]) <= 0)
-      } catch (e) {
-        setErrors(true)
-      }
-    }, [item])
+    const hasErrors = Number.parseInt(item[0]) <= 0
 
     return (
       <div className={cn('flex flex-col w-full')}>
