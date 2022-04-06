@@ -470,16 +470,6 @@ export class DatasetStore {
     }
   }
 
-  applyMemorizedConditions() {
-    const { memorizedConditions } = this
-
-    if (memorizedConditions) {
-      Object.keys(memorizedConditions).forEach((key: string) => {
-        ;(this as any)[key] = (memorizedConditions as any)[key]
-      })
-    }
-  }
-
   get fixedStatAmount() {
     const variantCounts = this.statAmount?.[0] ?? null
     const dnaVariantsCounts = this.statAmount?.[1] ?? null
