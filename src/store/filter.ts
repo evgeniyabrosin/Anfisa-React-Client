@@ -195,12 +195,6 @@ export class FilterStore {
   public memorizeSelectedFilters() {
     this.memorizedSelectedFilters = this._selectedFilters
   }
-
-  public applyMemorizedFilters() {
-    if (this.memorizedSelectedFilters) {
-      this._selectedFilters = this.memorizedSelectedFilters
-    }
-  }
 }
 
 export default new FilterStore()

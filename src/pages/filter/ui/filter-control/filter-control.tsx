@@ -1,14 +1,15 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
+import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
@@ -32,12 +33,7 @@ export const FilterControl = observer((): ReactElement => {
   const isUndoLocked = isFirstActionHistoryIndex
   const isRedoLocked = isLastActionHistoryIndex
   const history = useHistory()
-  const handleClose = () => {
-    datasetStore.applyMemorizedConditions()
-    filterStore.applyMemorizedFilters()
-    datasetStore.fetchWsListAsync()
-    history.goBack()
-  }
+
   const params = useParams()
   const dsName = params.get('ds') || ''
   const page: FilterControlOptions = filterStore.method as FilterControlOptions
@@ -52,68 +48,62 @@ export const FilterControl = observer((): ReactElement => {
   }
 
   return (
-    <Fragment>
-      <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
-        <div className="flex items-center w-full mt-5">
-          {page === GlbPagesNames.Refiner ? (
-            <FilterControlRefiner />
-          ) : (
-            <FilterControlQueryBuilder />
-          )}
-        </div>
+    <div className="flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6">
+      <div className="flex items-center w-full mt-5">
+        {page === GlbPagesNames.Refiner ? (
+          <FilterControlRefiner />
+        ) : (
+          <FilterControlQueryBuilder />
+        )}
+      </div>
 
-        <div className="flex justify-between w-full mt-3">
-          <div className="flex items-center">
-            <span className="text-grey-blue text-14 font-bold mr-2">
-              {t('filter.method')}
-            </span>
+      <div className="flex justify-between w-full mt-3">
+        <div className="flex items-center">
+          <span className="text-grey-blue text-14 font-bold mr-2">
+            {t('filter.method')}
+          </span>
 
-            <DropDown
-              options={FilterControlOptions}
-              value={pageName}
-              onSelect={args => {
-                goToPage(args.value as FilterControlOptions)
-              }}
+          <DropDown
+            options={FilterControlOptions}
+            value={pageName}
+            onSelect={args => {
+              goToPage(args.value as FilterControlOptions)
+            }}
+          />
+
+          {page === GlbPagesNames.Filter && (
+            <Button
+              text="Text editor"
+              className="ml-2"
+              variant={'secondary-dark'}
+              onClick={() => dtreeModalStore.openModalTextEditor()}
+              dataTestId={DecisionTreesMenuDataCy.textEditor}
             />
-
-            {page === GlbPagesNames.Filter && (
+          )}
+          {/* Temporarily removed in Refiner page */}
+          {page === GlbPagesNames.Filter && (
+            <>
               <Button
-                text="Text editor"
+                text="Undo"
                 className="ml-2"
                 variant={'secondary-dark'}
-                onClick={() => dtreeModalStore.openModalTextEditor()}
-                dataTestId={DecisionTreesMenuDataCy.textEditor}
+                disabled={isUndoLocked}
+                onClick={() => moveActionHistory(-1)}
               />
-            )}
-            {/* Temporarily removed in Refiner page */}
-            {page === GlbPagesNames.Filter && (
-              <>
-                <Button
-                  text="Undo"
-                  className="ml-2"
-                  variant={'secondary-dark'}
-                  disabled={isUndoLocked}
-                  onClick={() => moveActionHistory(-1)}
-                />
-                <Button
-                  text="Redo"
-                  className="ml-2"
-                  variant={'secondary-dark'}
-                  disabled={isRedoLocked}
-                  onClick={() => moveActionHistory(1)}
-                />
-              </>
-            )}
-          </div>
-          <div className="flex flex-wrap">
-            <Icon
-              name="Close"
-              className="text-white cursor-pointer"
-              onClick={handleClose}
-            />
-          </div>
+              <Button
+                text="Redo"
+                className="ml-2"
+                variant={'secondary-dark'}
+                disabled={isRedoLocked}
+                onClick={() => moveActionHistory(1)}
+              />
+            </>
+          )}
         </div>
+        <Link className="flex flex-wrap" to={Routes.Root}>
+          <Icon name="Close" className="text-white cursor-pointer" />
+        </Link>
       </div>
-    </Fragment>
+    </div>
   )
 })
