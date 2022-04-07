@@ -12,9 +12,9 @@ import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { DatasetType } from './dataset-type'
+
 interface Props {
   item: DsDistItem
-  isSubItems?: boolean
 }
 
 interface DsNameProps {
@@ -65,89 +65,82 @@ const DatasetName = ({
   )
 }
 
-export const DatasetsListItem = observer(
-  ({ item, isSubItems }: Props): ReactElement => {
-    const history = useHistory()
-    const params = useParams()
-    const isActive = item.name === dirinfoStore.selectedDirinfoName
-    const [isOpenFolder, setIsOpenFolder] = useState(isActive)
-    const isNullKind = item.kind === null
-    const secondaryKeys: string[] = get(item, 'secondary', [])
-    const hasChildren = secondaryKeys.length > 0
+export const DatasetsListItem = observer(({ item }: Props): ReactElement => {
+  const history = useHistory()
+  const params = useParams()
+  const isActive = item.name === dirinfoStore.selectedDirinfoName
+  const [isOpenFolder, setIsOpenFolder] = useState(isActive)
+  const isNullKind = item.kind === null
+  const secondaryKeys: string[] = get(item, 'secondary', [])
+  const hasChildren = secondaryKeys.length > 0
 
-    const isActiveParent =
-      hasChildren && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
+  const isActiveParent =
+    hasChildren && secondaryKeys.includes(dirinfoStore.selectedDirinfoName)
 
-    useEffect(() => {
-      setIsOpenFolder(secondaryKeys.includes(params.get('ds') || ''))
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  useEffect(() => {
+    setIsOpenFolder(secondaryKeys.includes(params.get('ds') || ''))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    const handleClick = () => {
-      if (isNullKind && !hasChildren) return
+  const handleClick = () => {
+    if (isNullKind && !hasChildren) return
 
-      if (hasChildren) {
-        setIsOpenFolder(prev => !prev)
-        dirinfoStore.setDsInfo(item as DsDistItem)
-      }
-
-      dirinfoStore.setInfoFrameLink('')
-      dirinfoStore.setActiveInfoName('')
-
-      history.replace(`${Routes.Root}?ds=${isNullKind ? '' : item.name}`)
+    if (hasChildren) {
+      setIsOpenFolder(prev => !prev)
+      dirinfoStore.setDsInfo(item as DsDistItem)
     }
 
-    return (
-      <Fragment>
-        <div
-          key={item.name}
-          onClick={handleClick}
-          className={cn('flex items-center relative w-full', {
-            'cursor-pointer': hasChildren || !isNullKind,
-            'pl-5': isSubItems,
-            'bg-blue-bright bg-opacity-10': isActive,
-          })}
-        >
-          <DatasetType
-            hasChildren={hasChildren}
-            isActive={isActive || isActiveParent}
-          />
+    dirinfoStore.setInfoFrameLink('')
+    dirinfoStore.setActiveInfoName('')
 
-          <DatasetName
-            dsName={item.name}
-            kind={item.kind}
-            isActive={isActive}
-            isActiveParent={isActiveParent}
-          />
+    history.replace(`${Routes.Root}?ds=${isNullKind ? '' : item.name}`)
+  }
 
-          <div className="ml-auto text-10 leading-18px text-grey-blue whitespace-nowrap bg-blue-lighter">
-            <div
-              className={cn('py-2 pr-4', {
-                'bg-blue-bright bg-opacity-10': isActive,
-              })}
-            >
-              {formatDate(item['create-time'])}
-            </div>
+  return (
+    <Fragment>
+      <div
+        key={item.name}
+        onClick={handleClick}
+        className={cn('flex items-center relative w-full', {
+          'cursor-pointer': hasChildren || !isNullKind,
+          'bg-blue-bright bg-opacity-10': isActive,
+        })}
+      >
+        <DatasetType
+          hasChildren={hasChildren}
+          isActive={isActive || isActiveParent}
+        />
+
+        <DatasetName
+          dsName={item.name}
+          kind={item.kind}
+          isActive={isActive}
+          isActiveParent={isActiveParent}
+        />
+
+        <div className="ml-auto text-10 leading-18px text-grey-blue whitespace-nowrap bg-blue-lighter">
+          <div
+            className={cn('py-2 pr-4', {
+              'bg-blue-bright bg-opacity-10': isActive,
+            })}
+          >
+            {formatDate(item['create-time'])}
           </div>
         </div>
+      </div>
 
-        {isOpenFolder && hasChildren && (
-          <div>
-            {secondaryKeys.map((secondaryKey: string) => {
-              const secondaryItem: DsDistItem =
-                dirinfoStore.dirinfo['ds-dict'][secondaryKey]
+      {isOpenFolder && hasChildren && (
+        <div className={cn('pl-15')}>
+          {secondaryKeys.map((secondaryKey: string) => {
+            const secondaryItem: DsDistItem =
+              dirinfoStore.dirinfo['ds-dict'][secondaryKey]
 
-              return (
-                <DatasetsListItem
-                  item={secondaryItem}
-                  key={secondaryItem.name}
-                  isSubItems
-                />
-              )
-            })}
-          </div>
-        )}
-      </Fragment>
-    )
-  },
-)
+            return (
+              <DatasetsListItem item={secondaryItem} key={secondaryItem.name} />
+            )
+          })}
+        </div>
+      )}
+    </Fragment>
+  )
+})

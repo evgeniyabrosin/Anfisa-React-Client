@@ -1,2 +1,2 @@
 export * from './numeric-condition'
-export * from './types'
+export * from './numeric-condition.interface'

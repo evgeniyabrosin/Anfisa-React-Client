@@ -7,6 +7,9 @@ import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Input } from '@ui//input'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
+import { ConditionJoinMode } from '@service-providers/common'
+import { IGeneRegionArgs } from '@service-providers/common/common.interface'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { DisabledVariantsAmount } from '../../../../query-builder/ui/disabled-variants-amount'
 import functionPanelStore from '../../function-panel.store'
@@ -14,9 +17,11 @@ import { PanelButtons } from '../panelButtons'
 import geneRegionStore from './gene-region.store'
 
 export const GeneRegion = observer(() => {
-  const { locusValue, selectedFilterValue } = geneRegionStore
+  const { selectedFilter, isRedactorMode } = filterStore
 
   const { simpleVariants } = functionPanelStore
+
+  const { locusValue, selectedFilterValue } = geneRegionStore
 
   const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false)
 
@@ -24,6 +29,30 @@ export const GeneRegion = observer(() => {
     validateLocusCondition({ value, setIsErrorVisible })
   }
 
+  const handleResetFields = () => {
+    geneRegionStore.resetLocusValue()
+    setIsErrorVisible(false)
+    geneRegionStore.resetCurrentMode()
+  }
+
+  // set/reset data
+  useEffect(() => {
+    if (selectedFilter && isRedactorMode) {
+      const selectedFilterConditions = selectedFilter[4] as IGeneRegionArgs
+      const selectedFilterLocusValue = selectedFilterConditions['locus']
+      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+
+      geneRegionStore.setCurrentMode(getCurrentModeType(conditionJoinType))
+      geneRegionStore.setLocusValue(selectedFilterLocusValue)
+    }
+
+    if (!isRedactorMode) {
+      geneRegionStore.resetLocusValue()
+      geneRegionStore.resetCurrentMode()
+    }
+  }, [isRedactorMode, selectedFilter])
+
+  // update data
   useEffect(() => {
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.GeneRegion,
@@ -57,7 +86,7 @@ export const GeneRegion = observer(() => {
           <Input
             value={locusValue}
             onChange={e => {
-              geneRegionStore.setConditions(e.target.value)
+              geneRegionStore.setLocusValue(e.target.value)
               validateValue(e.target.value)
             }}
           />
@@ -78,12 +107,8 @@ export const GeneRegion = observer(() => {
 
       <PanelButtons
         onSubmit={() => geneRegionStore.handleSumbitCondtions()}
-        resetFields={() => {
-          functionPanelStore.clearCachedValues(FuncStepTypesEnum.GeneRegion)
-          geneRegionStore.resetCurrentMode()
-        }}
+        resetFields={handleResetFields}
         disabled={!simpleVariants || isErrorVisible}
-        selectedFilterValue={selectedFilterValue}
       />
     </React.Fragment>
   )

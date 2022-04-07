@@ -1,9 +1,8 @@
 import Checkbox from 'react-three-state-checkbox'
 
-import { SubKindsEnum } from '@core/enum/sub-kinds-enum'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
 import { ModsDivider } from './mods-divider'
-
 interface IAllNotModsProps {
   isNotModeDisabled?: boolean
   isNotModeChecked?: boolean
@@ -24,8 +23,8 @@ export const AllNotMods = ({
   groupSubKind,
 }: IAllNotModsProps) => {
   const isAllModeAvailable =
-    groupSubKind === SubKindsEnum.Multi ||
-    groupSubKind === SubKindsEnum.InheritanceZ
+    groupSubKind === SubKinds.Multi || groupSubKind === SubKinds.InheritanceZ
+
   return (
     <div className="flex text-14 text-blue-bright">
       {isAllModeAvailable && (

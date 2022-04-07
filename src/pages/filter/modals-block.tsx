@@ -8,7 +8,7 @@ import { ModalConfiramtion } from './ui/modal-confirmation'
 import { ModalCompoundHet } from './ui/modal-edit/components/modal-compound-het/modal-compound-het'
 import { ModalCompoundRequest } from './ui/modal-edit/components/modal-compound-request/modal-compound-request'
 import { ModalCustomInheritanceMode } from './ui/modal-edit/components/modal-custom-inheritance-mode/modal-custom-inheritance-mode'
-import { ModalFilters } from './ui/modal-edit/components/modal-filters/modal-filters'
+import { ModalEnum } from './ui/modal-edit/components/modal-enum/modal-enum'
 import { ModalGeneRegion } from './ui/modal-edit/components/modal-gene-region/modal-gene-region'
 import { ModalInheritanceMode } from './ui/modal-edit/components/modal-inheritance-mode/modal-inheritance-mode'
 import { ModalTextEditor } from './ui/query-builder/modal-text-editor'
@@ -21,7 +21,7 @@ export const ModalsBlock = observer(
     <Fragment>
       {dtreeModalStore.isModalAttributeVisible && <ModalSelectAttribute />}
 
-      {dtreeModalStore.isModalFiltersVisible && <ModalFilters />}
+      {dtreeModalStore.isModalEnumVisible && <ModalEnum />}
 
       {dtreeModalStore.isModalNumbersVisible && <ModalNumbers />}
 

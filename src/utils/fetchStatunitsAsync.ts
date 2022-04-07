@@ -1,8 +1,11 @@
-import { getApiUrl } from '@core/get-api-url'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
+import {
+  filteringProvider,
+  IStatunitsArguments,
+} from '@service-providers/filtering-regime'
 import { getFilteredAttrsList } from './getFilteredAttrsList'
 
 export const fetchStatunitsAsync = async (
@@ -32,26 +35,16 @@ export const fetchStatunitsAsync = async (
 
   const requestId = dtreeStore.statRequestId
 
-  const body = new URLSearchParams({
+  const body: IStatunitsArguments = {
     ds: datasetStore.datasetName,
     rq_id: requestId,
     tm: '1',
-    units: JSON.stringify(incompletePropertyList),
-  })
+    units: incompletePropertyList,
+    conditions: datasetStore.conditions,
+  }
 
-  const conditions = JSON.stringify(datasetStore.conditions)
+  const result = await filteringProvider.getStatUnits(body)
 
-  body.append('conditions', conditions)
-
-  const response = await fetch(getApiUrl('statunits'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body,
-  })
-
-  const result = await response.json()
   const calculatedUnits = result.units
 
   const newStatList = statList.map(element => {

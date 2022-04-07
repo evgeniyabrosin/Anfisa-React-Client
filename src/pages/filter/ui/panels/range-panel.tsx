@@ -9,26 +9,21 @@ import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { InputNumber } from '@ui/input-number'
+import { TNumericCondition } from '@service-providers/common/common.interface'
 import { createNumericExpression } from '@utils/createNumericExpression'
 
-type TNumericExpression = [null | number, boolean, null | number, boolean]
-
-const getCachedValues = () => {
-  return filterStore.readFilterCondition<TNumericExpression>(
-    filterStore.selectedGroupItem.name,
-  )
-}
-
 const getFilterValue = (arg: string): string | number => {
-  const filterExpression = getCachedValues()
+  const { selectedFilter } = filterStore
 
-  if (filterExpression) {
-    if (arg === 'min' && typeof filterExpression[0] === 'number') {
-      return filterExpression[0]
+  if (selectedFilter) {
+    const selectedFilterExpression = selectedFilter[2]
+
+    if (arg === 'min' && typeof selectedFilterExpression[0] === 'number') {
+      return selectedFilterExpression[0]
     }
 
-    if (arg === 'max' && typeof filterExpression[2] === 'number') {
-      return filterExpression[2]
+    if (arg === 'max' && typeof selectedFilterExpression[2] === 'number') {
+      return selectedFilterExpression[2]
     }
   }
 
@@ -37,77 +32,59 @@ const getFilterValue = (arg: string): string | number => {
 
 export const RangePanel = observer((): ReactElement => {
   const selectedFilter = filterStore.selectedGroupItem
+  const { isRedactorMode } = filterStore
 
   const [min, setMin] = useState<string | number>(getFilterValue('min'))
   const [max, setMax] = useState<string | number>(getFilterValue('max'))
+
+  useEffect(() => {
+    const dispose = reaction(
+      () => filterStore.isRedactorMode,
+      () => {
+        if (!filterStore.isRedactorMode) {
+          setMin('')
+          setMax('')
+        }
+      },
+    )
+
+    return () => dispose()
+  }, [])
 
   const [isVisibleMinError, setIsVisibleMinError] = useState(false)
   const [isVisibleMaxError, setIsVisibleMaxError] = useState(false)
   const [isVisibleMixedError, setIsVisibleMixedError] = useState(false)
 
-  const handleAddConditionsAsync = async () => {
+  const handleSetConditionsAsync = async () => {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    await datasetStore.setConditionsAsync([
-      [
-        FilterKindEnum.Numeric,
-        selectedFilter.name,
-        createNumericExpression({
-          expType: NumericExpressionTypes.GreaterThan,
-          minValue: min,
-          maxValue: max,
-        }),
-      ],
-    ])
-
-    filterStore.addSelectedFilterGroup(
-      selectedFilter.vgroup,
+    const condition: TNumericCondition = [
+      FilterKindEnum.Numeric,
       selectedFilter.name,
-      [
-        [
-          selectedFilter.name,
-          createNumericExpression({
-            expType: NumericExpressionTypes.GreaterThan,
-            minValue: min,
-            maxValue: max,
-          }),
-        ],
-      ],
-    )
+      createNumericExpression({
+        expType: NumericExpressionTypes.GreaterThan,
+        minValue: min,
+        maxValue: max,
+      }),
+    ]
 
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    isRedactorMode
+      ? filterStore.addFilterToFilterBlock(condition as TNumericCondition)
+      : filterStore.addFilterBlock(condition as TNumericCondition)
+
+    setMin('')
+    setMax('')
+    filterStore.resetIsRedacorMode()
+    filterStore.resetActiveFilterId()
+    filterStore.resetSelectedGroupItem()
   }
 
   const handleClear = () => {
-    datasetStore.removeFunctionConditionAsync(selectedFilter.name)
-
-    const group = filterStore.selectedGroupItem.vgroup
-    const groupItemName = filterStore.selectedGroupItem.name
-    const localSelectedFilters = filterStore.selectedFilters
-
-    if (
-      localSelectedFilters[group]?.[groupItemName] &&
-      datasetStore.activePreset
-    ) {
-      datasetStore.resetActivePreset()
-    }
-
-    filterStore.removeSelectedFilters({
-      group: selectedFilter.vgroup,
-      groupItemName: selectedFilter.name,
-      variant: [selectedFilter.name, 0],
-    })
     setIsVisibleMinError(false)
     setIsVisibleMaxError(false)
     setIsVisibleMixedError(false)
     setMin('')
     setMax('')
-
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
   }
 
   const validateMin = (value: string) => {
@@ -139,20 +116,13 @@ export const RangePanel = observer((): ReactElement => {
   }
 
   useEffect(() => {
+    if (!min && !max) return
+
     if (min && max && +min > +max) {
       setIsVisibleMixedError(true)
     } else {
       setIsVisibleMixedError(false)
     }
-
-    filterStore.setFilterCondition(
-      filterStore.selectedGroupItem.name,
-      createNumericExpression({
-        expType: NumericExpressionTypes.GreaterThan,
-        minValue: min,
-        maxValue: max,
-      }),
-    )
   }, [min, max])
 
   useEffect(() => {
@@ -165,7 +135,6 @@ export const RangePanel = observer((): ReactElement => {
     )
 
     return () => dispose()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -181,7 +150,7 @@ export const RangePanel = observer((): ReactElement => {
       </div>
 
       <InputNumber
-        className="w-full"
+        className="w-full border border-grey-blue"
         value={min}
         onChange={e => {
           setMin(e.target.value)
@@ -201,7 +170,7 @@ export const RangePanel = observer((): ReactElement => {
 
       <div className="relative h-14">
         <InputNumber
-          className="w-full"
+          className="w-full border border-grey-blue"
           value={max}
           onChange={e => {
             setMax(e.target.value)
@@ -215,16 +184,19 @@ export const RangePanel = observer((): ReactElement => {
         )}
       </div>
 
-      <div className="flex items-center justify-between mt-1">
+      <div className="flex items-center justify-end mt-1">
         <Button
           variant={'secondary'}
           text={t('general.clear')}
           onClick={handleClear}
+          className="px-5 mr-2"
         />
 
         <Button
-          text={t('general.add')}
-          onClick={handleAddConditionsAsync}
+          text={
+            isRedactorMode ? t('dtree.saveChanges') : t('dtree.addAttribute')
+          }
+          onClick={handleSetConditionsAsync}
           disabled={
             isVisibleMinError ||
             isVisibleMaxError ||

@@ -34,6 +34,7 @@ export const en = {
       join: 'Preset has been joined',
       delete: 'Preset has been deleted',
     },
+    selectSecondaryPlaceholder: 'Select secondary...',
   },
   home: {
     title: 'Home',
@@ -114,6 +115,7 @@ export const en = {
     saveNote: 'Save note',
   },
   numericCondition: {
+    limitedRange: 'Limited range',
     upperBoundError: 'Upper bound is incorrect',
     lowerBoundError: 'Lower bound is incorrect',
     conditionError: 'Condition is incorrect',
@@ -143,8 +145,10 @@ export const en = {
       seeAll: 'See all',
       hide: 'Hide',
       total: 'Total',
-      variants: 'variants',
+      variants: '{value} variants',
     },
+    delete: 'Delete',
+    copy: 'Copy',
   },
   dtree: {
     variants: 'variants',
@@ -196,6 +200,8 @@ export const en = {
     state: 'State',
     locus: 'Locus',
     chromosomeNameIsNotCorrect: 'Chromosome name is incorrect',
+    minimalCountsOfEventsOnCompoundRequest:
+      'Minimal count of events should be more than 0',
     fullList: 'Full list',
     samples25: 'Samples-25',
     editCurrentDecisionTreeCode: 'Edit current Decision Tree code',

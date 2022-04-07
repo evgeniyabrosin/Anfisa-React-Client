@@ -10,11 +10,13 @@ module.exports = {
     medium: '#d9ecff',
     hover: '#0089e5',
     active: '#0068ae',
+    tertiary: '#f5faff',
   },
   green: {
     light: '#ddf3d9',
     medium: '#caf3c7',
     secondary: '#19af00',
+    tertiary: '#f5f7f9',
   },
   grey: {
     blue: '#9fb1c0',

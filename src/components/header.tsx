@@ -1,10 +1,8 @@
 import { Fragment, ReactElement, ReactNode, useEffect } from 'react'
-import { Option } from 'react-dropdown'
 import { Link, useHistory } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -12,12 +10,11 @@ import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { PageRoute, RouteNames, Routes } from '@router/routes.enum'
-import { DropDown } from '@ui/dropdown'
-import { Icon } from '@ui/icon'
+import { Divider } from '@ui/divider'
+import { Breadcrumbs } from '@components/breadcrumbs'
 import { Logo } from '@components/logo'
 import { GlbPagesNames } from '@glb/glb-names'
 import userIcon from '@images/thomas-hunt.jpg'
-import { showToast } from '@utils/notifications/showToast'
 
 interface Props {
   children?: ReactElement | ReactNode
@@ -43,102 +40,52 @@ export const Header = observer(({ children }: Props): ReactElement => {
     dirinfoStore.fetchDirInfoAsync()
   }, [ds])
 
-  const ancestorDataset = dirinfoStore.getAncestorDataset(ds)
-  const secondaryDatasets: (Option | string)[] | undefined =
-    ancestorDataset?.secondary ?? []
+  const handleChangeDataset = (datasetName: string) => {
+    if (datasetName === ds) {
+      return
+    }
 
-  if (
-    ancestorDataset &&
-    (ancestorDataset.kind !== 'xl' || isXlDatasetAllowed)
-  ) {
-    secondaryDatasets.unshift({
-      label: '\u00a0',
-      value: ancestorDataset.name,
-    })
-  }
-
-  const handleChangeDataset = (arg: Option) => {
-    if (arg.value === ds) return
-
-    ds !== arg.value &&
-      history.push(`${history.location.pathname}?ds=${arg.value}`)
+    history.push(`${history.location.pathname}?ds=${datasetName}`)
     datasetStore.setDatasetName(history.location.pathname)
 
-    const dsName = arg.value
-
-    if (dsName && !variantStore.dsName) {
-      variantStore.setDsName(arg.value)
+    if (datasetName && !variantStore.dsName) {
+      variantStore.setDsName(datasetName)
     }
 
     datasetStore.resetConditions()
     datasetStore.resetActivePreset()
-    datasetStore.initDatasetAsync(dsName)
-  }
-
-  const copyLink = () => {
-    copyToClipboard(
-      `${window.origin}${history.location.pathname}?ds=${ds}${
-        variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''
-      }`,
-    )
-
-    showToast(t('ds.copied'), 'info')
+    datasetStore.initDatasetAsync(datasetName)
   }
 
   return (
     <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center grow-0 shrink-1 min-w-0 mr-4">
         <Link to={Routes.Root}>
-          <div className="flex items-center text-white">
-            <Logo mode="white" className="mr-4" />
-
-            <span className="text-grey-blue whitespace-pre-line text-xs flex flex-col">
-              <span>
-                {t('header.version.frontend', {
-                  version: process.env.REACT_APP_VERSION,
-                })}
-              </span>
-              <span>
-                {t('header.version.backend', {
-                  version: toJS(dirinfoStore.dirinfo).version,
-                })}
-              </span>
-            </span>
-          </div>
+          <Logo mode="white" className="mr-4" />
         </Link>
-
-        <div className="text-grey-blue flex items-center mr-2">
-          {!isHomepage && ancestorDataset && (
-            <Fragment>
-              <div className="mx-4 bg-blue-lighter w-0.5 h-4" />
-
-              <span className="font-bold uppercase text-xs text-blue-bright">
-                {t('home.title')}
-              </span>
-
-              <span className="mx-2">/</span>
-
-              <span>{ancestorDataset.name}</span>
-
-              {secondaryDatasets && secondaryDatasets.length > 0 && (
-                <Fragment>
-                  <span className="mx-2">/</span>
-
-                  <DropDown
-                    options={secondaryDatasets}
-                    value={ds}
-                    onSelect={handleChangeDataset}
-                  />
-                </Fragment>
-              )}
-              <Icon
-                name="CopyLink"
-                className="cursor-pointer ml-2"
-                onClick={copyLink}
-              />
-            </Fragment>
-          )}
-        </div>
+        <span className="text-grey-blue whitespace-pre-line text-xs flex flex-col">
+          <span>
+            {t('header.version.frontend', {
+              version: process.env.REACT_APP_VERSION,
+            })}
+          </span>
+          <span>
+            {t('header.version.backend', {
+              version: toJS(dirinfoStore.dirinfo).version,
+            })}
+          </span>
+        </span>
+        {!isHomepage && (
+          <Fragment>
+            <Divider orientation="vertical" />
+            <Breadcrumbs
+              datasetName={ds}
+              onChangeDataset={handleChangeDataset}
+              className="grow-0 shrink-1 min-w-0"
+              isXlDatasetAllowed={isXlDatasetAllowed}
+            />
+          </Fragment>
+        )}
       </div>
 
       {children}

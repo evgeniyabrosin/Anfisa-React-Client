@@ -1,4 +1,3 @@
-import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -13,10 +12,10 @@ export const moveActionHistory = (value: 1 | -1) => {
   const isFilterRefiner = filterStore.method === GlbPagesNames.Refiner
 
   if (isFilterRefiner) {
-    const filters = filterStore.selectedFiltersHistory[updatedIndex]
-
-    datasetStore.fetchDsStatAsync(false, body)
-    filterStore.setSelectedFilters(filters)
+    // temporarilly disabled
+    // const filters = filterStore.selectedFiltersHistory[updatedIndex]
+    // datasetStore.fetchDsStatAsync(false, body)
+    // filterStore.setSelectedFilters(filters)
   } else {
     dtreeStore.fetchDtreeSetAsync(body, false)
   }

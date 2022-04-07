@@ -2,12 +2,14 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import modalEditStore, {
   IParams,
 } from '@pages/filter/ui/modal-edit/modal-edit.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
 import { getResetRequestData } from '@utils/getResetRequestData'
@@ -22,12 +24,21 @@ class ModalCompoundRequestStore {
   resetValue = ''
   stateOptions: string[] = [this.stateCondition]
   activeRequestIndex: number = this.requestCondition.length - 1
+  currentMode?: ModeTypes
 
   constructor() {
     makeAutoObservable(this)
   }
 
   // root functions
+
+  public setCurrentMode(modeType: ModeTypes) {
+    this.currentMode = modeType
+  }
+
+  public resetCurrentMode() {
+    this.currentMode = undefined
+  }
 
   public setRequestCondition(requestCondition: ({}[] | [number, any])[]): void {
     this.requestCondition = requestCondition
@@ -256,7 +267,7 @@ class ModalCompoundRequestStore {
 
     params.request = this.requestCondition
 
-    addAttributeToStep(action, 'func', null, params)
+    addAttributeToStep(action, 'func', null, params, this.currentMode)
 
     dtreeStore.resetSelectedFilters()
 
@@ -282,7 +293,7 @@ class ModalCompoundRequestStore {
 
     params.request = this.requestCondition
 
-    changeFunctionalStep(params)
+    changeFunctionalStep(params, this.currentMode)
 
     dtreeModalStore.closeModalCompoundRequest()
 
@@ -296,6 +307,7 @@ class ModalCompoundRequestStore {
     this.approxCondition = 'transcript'
     this.resetValue = ''
     this.requestCondition = [[1, {}]]
+    this.resetCurrentMode()
   }
 
   public closeModal(): void {
@@ -338,6 +350,10 @@ class ModalCompoundRequestStore {
         ? null
         : `"${this.stateCondition}"`
     },"request":${requestString}}`
+
+    const conditionJoinType = currentGroup[2]
+
+    this.currentMode = getCurrentModeType(conditionJoinType)
 
     dtreeStore.fetchStatFuncAsync(groupName, params)
   }

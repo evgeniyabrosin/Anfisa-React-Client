@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import filterStore from '@store/filter'
 import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
@@ -12,6 +13,8 @@ export const SelectedGroupHeader = observer((): ReactElement => {
       )
     : 0
 
+  const isFunc = filterStore.selectedGroupItem.kind === FilterKindEnum.Func
+
   return (
     <div className="flex justify-between flex-wrap">
       <FilterRefinerGroupItem
@@ -19,6 +22,7 @@ export const SelectedGroupHeader = observer((): ReactElement => {
         {...filterStore.selectedGroupItem}
         amount={groupVariantSum}
         onChange={() => filterStore.setSelectedGroupItem({})}
+        isFunc={isFunc}
       />
     </div>
   )

@@ -1,2 +1,2 @@
 export * from './range-slider'
-export * from './types'
+export * from './range-slider.interface'

@@ -120,7 +120,36 @@ export interface ITabReportArguments {
   seq: number[]
   schema: string
 }
-export type TTabReport = any[]
+export interface ITabReport {
+  _no: number
+  ClinVar: string[]
+  HGMD: string[]
+  Gene: string[]
+  Coordinate: string
+  Change: string
+  MSQ: string[]
+  'Protein Change': string[]
+  Polyphen: string[]
+  SIFT: string[]
+  'MUT TASTER': string[]
+  FATHMM: string[]
+  gnomAD_Overall_AF: number
+  gnomAD_Overall_AF_Popmax: number
+  gnomAD_Genomes_AF: number
+  gnomAD_Exomes_AF: number
+  gnomAD_Overall_Hom: number
+  gnomAD_Overall_Hem?: any
+  QD: number
+  FT: string[]
+  GTEx: string[][]
+  IGV?: any
+  gnomAD: string[]
+  Samples: ISample[]
+}
+export interface ISample {
+  genotype: string
+  g_quality: number
+}
 
 // vsetup
 

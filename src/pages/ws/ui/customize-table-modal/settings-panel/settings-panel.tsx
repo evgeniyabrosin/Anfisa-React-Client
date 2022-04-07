@@ -1,8 +1,6 @@
 import { ReactElement, useState } from 'react'
-import { cloneDeep } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
-import { IColumns } from '@declarations'
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
 import columnsStore from '@store/wsColumns'
@@ -17,10 +15,6 @@ interface Props {
 export const SettingsPanel = observer(({ close }: Props): ReactElement => {
   const [viewType, setViewType] = useState<ViewTypeEnum>(columnsStore.viewType)
 
-  const [defaultColumns, setDefaultColumns] = useState<IColumns[]>(
-    cloneDeep(columnsStore.getExtendedColumns),
-  )
-
   const columnListStore = new ColumnListStore()
 
   return (
@@ -33,13 +27,11 @@ export const SettingsPanel = observer(({ close }: Props): ReactElement => {
       onSelectAll={() => columnsStore.selectAllColumns()}
       onClearAll={() => columnsStore.clearAllColumns()}
       onApply={() => {
-        columnsStore.showColumns()
+        columnsStore.filterColumns()
         columnsStore.setViewType(viewType)
-        setDefaultColumns(columnsStore.getExtendedColumns)
         close()
       }}
       onClose={() => {
-        columnsStore.setColumns(defaultColumns)
         columnsStore.resetSearchColumnValue()
         close()
       }}

@@ -1,79 +1,47 @@
-import { FC, memo, useEffect, useRef } from 'react'
-import { ChartData } from 'chart.js'
-import isEqual from 'lodash/isEqual'
+import { ReactElement, ReactNode } from 'react'
 
-import { StatList } from '@declarations'
-import { ChartRenderModes } from './chart.interface'
-import chartStore from './chart.store'
-import Chart from './chart-register'
-import { PieChartWrapper } from './pie-chart-wrapper'
+import { TPropertyStatus } from '@service-providers/common'
+import { BarChart } from './bar-chart'
+import { ChartType } from './chart.interface'
+import { HistogramChart } from './histogram-chart'
+import { PieChart } from './pie-chart'
+import { useChartConfig } from './utils'
 
 interface IQueryBuilderSubgroupChartProps {
-  // TODO: change types when refactoring
-  // subGroupItem: TPropertyStatus
-  subGroupItem: StatList
+  subGroupItem: TPropertyStatus
 }
 
-export const QueryBuilderSubgroupChart: FC<IQueryBuilderSubgroupChartProps> =
-  memo(
-    ({ subGroupItem }) => {
-      const { getBarChartConfig, getPieChartConfig, getChartData } = chartStore
+export const QueryBuilderSubgroupChart = ({
+  subGroupItem,
+}: IQueryBuilderSubgroupChartProps): ReactElement | null => {
+  const chartConfig = useChartConfig(subGroupItem)
 
-      const chartData = getChartData(subGroupItem)
+  if (!chartConfig) {
+    return null
+  }
 
-      const { 'render-mode': renderMode } = subGroupItem
-      const isPieChart = renderMode === ChartRenderModes.Pie
-
-      const canvasRef = useRef<HTMLCanvasElement>(null)
-      const chartRef = useRef<Chart>()
-
-      useEffect(() => {
-        if (!canvasRef.current) {
-          return
-        }
-
-        if (chartData) {
-          const chart = chartRef.current
-
-          const currentChartConfig = isPieChart
-            ? getPieChartConfig(chartData as ChartData<'doughnut'>)
-            : getBarChartConfig(chartData)
-
-          if (!chart) {
-            chartRef.current = new Chart(canvasRef.current, currentChartConfig)
-          } else {
-            chart.data = chartData
-            chart.update()
-          }
-        } else {
-          if (chartRef.current) {
-            chartRef.current.destroy()
-            chartRef.current = undefined
-          }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [subGroupItem])
-
-      useEffect(() => {
-        return () => {
-          chartRef.current?.destroy()
-        }
-      }, [])
-
-      return (
-        <div className="rounded-md bg-blue-secondary p-2 mr-5">
-          {isPieChart ? (
-            <PieChartWrapper subGroupItem={subGroupItem}>
-              <canvas ref={canvasRef} />
-            </PieChartWrapper>
-          ) : (
-            <canvas ref={canvasRef} />
-          )}
-        </div>
+  let chart: ReactNode = null
+  switch (chartConfig.type) {
+    case ChartType.Bar:
+      chart = <BarChart data={chartConfig.data} height={150} />
+      break
+    case ChartType.Pie:
+      chart = <PieChart data={chartConfig.data} />
+      break
+    case ChartType.Histogram:
+      chart = (
+        <HistogramChart
+          data={chartConfig.data}
+          mode={chartConfig.mode}
+          height={150}
+        />
       )
-    },
-    (prevProps, nextProps) =>
-      isEqual(prevProps.subGroupItem, nextProps.subGroupItem),
-  )
+      break
+  }
 
-QueryBuilderSubgroupChart.displayName = 'QueryBuilderSubgroupChart'
+  if (!chart) {
+    return null
+  }
+
+  return <div className="rounded-md bg-blue-secondary p-4 mr-5">{chart}</div>
+}

@@ -1,12 +1,15 @@
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import dtreeModalStore from '../../pages/filter/modals.store'
 
 export const changeFunctionalStep = (
   params: any,
-  isInheritanceMode = false,
+  currentMode?: ModeTypes,
+  isInheritanceMode?: boolean,
 ) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
@@ -30,10 +33,9 @@ export const changeFunctionalStep = (
     if (index <= 1 || index === filtersIndex) {
       filteredAttribute.push(element)
     } else if (index === 2) {
-      const isNotNegate = element === 'and' || element === 'OR'
-      const negateValue = isNotNegate ? '' : 'NOT'
+      const conditionsJoinMode = getConditionJoinMode(currentMode)
 
-      filteredAttribute.push(negateValue)
+      filteredAttribute.push(conditionsJoinMode)
     }
   })
 

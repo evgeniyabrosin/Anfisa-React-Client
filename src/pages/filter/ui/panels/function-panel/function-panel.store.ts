@@ -1,15 +1,16 @@
-import { cloneDeep } from 'lodash'
 import { makeAutoObservable, toJS } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import {
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
+import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getQueryBuilder } from '@utils/getQueryBuilder'
+
+export const approxOptions = [
+  'shared transcript',
+  'shared gene',
+  'non-intersecting transcripts',
+]
 
 class FunctionPanelStore {
   constructor() {
@@ -55,77 +56,16 @@ class FunctionPanelStore {
     return attrData.family
   }
 
-  public getCachedValues<T>(componentName: string): T {
-    return filterStore.readFilterCondition(componentName) as T
-  }
-
-  public setCachedValues<T>(componentName: string, cachedValues: T): void {
-    filterStore.setFilterCondition<T>(componentName, cachedValues)
-  }
-
-  public clearCachedValues(componentName: string, filterName?: string): void {
-    filterStore.clearFilterCondition(componentName, filterName)
-  }
-
-  public async applyConditions(conditions: TFuncCondition): Promise<void> {
-    await datasetStore.setConditionsAsync([conditions], 'func')
-  }
-
-  public addSelectedFilters(variant: TVariant, modeType?: ModeTypes): void {
-    filterStore.addSelectedFilters({
-      group: this.filterGroup,
-      groupItemName: this.filterName,
-      variant,
-      modeType,
-    })
-  }
-
-  public sumbitConditions(
-    conditions: TFuncCondition,
-    variant: TVariant,
-    modeType?: ModeTypes,
-  ): void {
+  public sumbitConditions(condition: TFuncCondition): void {
     if (datasetStore.activePreset) datasetStore.resetActivePreset()
 
-    this.applyConditions(conditions)
-
-    this.addSelectedFilters(variant, modeType)
-
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    filterStore.isRedactorMode
+      ? filterStore.addFilterToFilterBlock(condition)
+      : filterStore.addFilterBlock(condition)
   }
 
   public fetchStatFunc(componentName: string, params: string) {
     return filterStore.fetchStatFuncAsync(componentName, params)
-  }
-
-  public clearGroupFilter(): void {
-    const localSelectedFilters = cloneDeep(filterStore.selectedFilters)
-
-    if (localSelectedFilters[this.filterGroup]?.[this.filterName]) {
-      delete localSelectedFilters[this.filterGroup][this.filterName]
-    }
-
-    filterStore.setSelectedFilters(localSelectedFilters)
-  }
-
-  public get isFilterExistsInAppliedPreset(): boolean {
-    return (
-      datasetStore.activePreset !== '' &&
-      filterStore.selectedFilters[this.filterGroup]?.[this.filterName] !==
-        undefined
-    )
-  }
-
-  public isFilterInSelectedFilters(selectedFilterValue: string): boolean {
-    const selectedFilter =
-      filterStore.selectedFilters?.[this.filterGroup]?.[this.filterName]
-
-    return selectedFilter && selectedFilterValue
-      ? selectedFilterValue in
-          filterStore.selectedFilters[this.filterGroup][this.filterName]
-      : false
   }
 }
 

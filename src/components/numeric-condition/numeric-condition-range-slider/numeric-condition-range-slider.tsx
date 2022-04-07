@@ -7,7 +7,7 @@ import {
   RangeSliderScale,
   RangeSliderSide,
 } from '@ui/range-slider'
-import { TExtendedNumericConditionValue } from '../utils'
+import { TExtendedNumericConditionValue } from '../numeric-condition.utils'
 import { getHistogram } from './utils'
 
 export interface INumericConditionRangeSliderProps {

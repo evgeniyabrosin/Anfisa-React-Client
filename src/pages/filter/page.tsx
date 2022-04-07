@@ -46,12 +46,16 @@ const FilterPage = observer((): ReactElement => {
     return () => {
       dtreeStore.resetFilterValue()
       dtreeStore.resetAlgorithmFilterValue()
+      dtreeStore.resetCurrentDtreeName()
       dtreeStore.resetData()
       dirinfoStore.resetData()
       datasetStore.resetData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dsName, history])
+
+  const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
+    datasetStore.fixedStatAmount
 
   const getFiltersValue = (type: string) => {
     if (type === 'all') {
@@ -62,7 +66,7 @@ const FilterPage = observer((): ReactElement => {
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(toJS(datasetStore.statAmount[0]))
+        return formatNumber(toJS(variantCounts))
       }
     }
 
@@ -72,7 +76,7 @@ const FilterPage = observer((): ReactElement => {
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(toJS(datasetStore.statAmount[1]))
+        return formatNumber(toJS(dnaVariantsCounts))
       }
     }
 
@@ -82,7 +86,7 @@ const FilterPage = observer((): ReactElement => {
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(toJS(datasetStore.statAmount[2]))
+        return formatNumber(transcriptsCounts)
       }
     }
   }

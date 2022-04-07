@@ -3,15 +3,14 @@ import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
-import { SubKindsEnum } from '@core/enum/sub-kinds-enum'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import inheritanceModeStore from './inheritance-mode.store'
 
 interface IComplexVariantsProps {
-  variantsValues: string[]
-  problemGroupValues: string[]
-  filteredComplexVariants: [string, number][]
+  variantValues: string[]
+  variants: [string, number][]
   handleChangeVariants: (
     e: ChangeEvent<HTMLInputElement>,
     variantName: string,
@@ -20,32 +19,27 @@ interface IComplexVariantsProps {
 
 export const ComplexVariants = observer(
   ({
-    variantsValues,
-    problemGroupValues,
-    filteredComplexVariants,
+    variantValues,
+    variants,
     handleChangeVariants,
   }: IComplexVariantsProps) => {
     return (
       <React.Fragment>
         <div className="flex items-center justify-between">
           <p className="text-14 leading-14px text-grey-blue">
-            {variantsValues.length} Selected
+            {variantValues.length} Selected
           </p>
 
           <span
             className="text-12 leading-14px text-blue-bright cursor-pointer ml-auto mr-2"
-            onClick={() =>
-              inheritanceModeStore.handleSelectAllVariants(problemGroupValues)
-            }
+            onClick={inheritanceModeStore.selectAllVariants}
           >
             {t('general.selectAll')}
           </span>
 
           <span
             className="text-12 leading-14px text-blue-bright cursor-pointer"
-            onClick={() =>
-              inheritanceModeStore.handleResetVariantsLocally(variantsValues)
-            }
+            onClick={() => inheritanceModeStore.clearAllVariants(variantValues)}
           >
             {t('general.clearAll')}
           </span>
@@ -53,11 +47,11 @@ export const ComplexVariants = observer(
 
         <div className="flex justify-between">
           <div>
-            {filteredComplexVariants.map(([variantName, variantValue]) => {
+            {variants.map(([variantName, variantValue]) => {
               return (
                 <div key={variantName} className="flex items-center mt-4">
                   <Checkbox
-                    checked={variantsValues.includes(variantName)}
+                    checked={variantValues.includes(variantName)}
                     onChange={e => {
                       handleChangeVariants(e, variantName)
                     }}
@@ -71,10 +65,10 @@ export const ComplexVariants = observer(
             })}
           </div>
 
-          <div className="mt-1">
+          <div className="mt-2">
             <AllNotMods
-              isAllModeDisabled={variantsValues.length < 2}
-              isNotModeDisabled={variantsValues.length === 0}
+              isAllModeDisabled={variantValues.length < 2}
+              isNotModeDisabled={variantValues.length === 0}
               isAllModeChecked={
                 inheritanceModeStore.currentMode === ModeTypes.All
               }
@@ -87,14 +81,14 @@ export const ComplexVariants = observer(
               toggleNotMode={() =>
                 inheritanceModeStore.setCurrentMode(ModeTypes.Not)
               }
-              groupSubKind={SubKindsEnum.InheritanceZ}
+              groupSubKind={SubKinds.InheritanceZ}
             />
           </div>
         </div>
 
-        {filteredComplexVariants.length === 0 && (
+        {variants.length === 0 && (
           <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
-            Out of choice. Select problem group.
+            {t('dtree.noFilters')}
           </div>
         )}
       </React.Fragment>

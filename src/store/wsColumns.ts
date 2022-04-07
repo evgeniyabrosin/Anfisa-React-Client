@@ -3,6 +3,8 @@ import { makeAutoObservable } from 'mobx'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
+import variantStore from '@store/variant'
+import { variantColumnTable } from '@pages/ws/columns'
 
 export const columnsToIgnore: string[] = ['Gene', 'Variant']
 class ColumnsStore {
@@ -10,6 +12,24 @@ class ColumnsStore {
   viewType: ViewTypeEnum = ViewTypeEnum.Cozy
   selectedColumns: string[] = Object.values(tableColumnMap)
   searchColumnValue = ''
+
+  get selectedDataColumns() {
+    return this.selectedColumns.map(column =>
+      variantColumnTable.find(item => item.Header === column),
+    )
+  }
+
+  get collapsedSelectedDataColumns() {
+    return this.selectedDataColumns.slice(0, 2)
+  }
+
+  get columnDataListForRender() {
+    const { drawerVisible } = variantStore
+
+    return drawerVisible
+      ? this.collapsedSelectedDataColumns
+      : this.selectedDataColumns
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -55,16 +75,18 @@ class ColumnsStore {
     this.columns = columns
   }
 
-  resetColumnsToDefault() {
-    const defaultColumns = Object.values(tableColumnMap).map(column => ({
+  closeDrawer() {
+    const columns = this.selectedColumns.map(column => ({
       title: column,
       hidden: false,
     }))
 
-    this.setColumns(defaultColumns)
+    this.setColumns(columns)
+
+    variantStore.setDrawerVisible(false)
   }
 
-  showColumns() {
+  filterColumns() {
     this.selectedColumns = this.columns
       .filter(column => !column.hidden)
       .map(column => column.title ?? column)

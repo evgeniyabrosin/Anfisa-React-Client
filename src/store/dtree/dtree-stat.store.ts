@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import {
   TItemsCount,
@@ -59,7 +59,7 @@ export class DtreeStatStore {
   }
 
   get list(): TPropertyStatus[] | undefined {
-    return this.data?.list && getFilteredAttrsList(this.data.list)
+    return this.data?.list && getFilteredAttrsList(toJS(this.data.list))
   }
 
   get totalCounts(): TItemsCount | undefined {

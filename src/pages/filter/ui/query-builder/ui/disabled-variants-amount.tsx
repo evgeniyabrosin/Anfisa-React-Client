@@ -18,7 +18,7 @@ export const DisabledVariantsAmount = observer(
     <div className="my-5 text-14">
       {variants?.length > 0 && !isErrorVisible ? (
         variants.map((variant: any) => (
-          <div key={variant} className="flex items-center">
+          <div key={variant} className="flex items-center py-1">
             {disabled ? (
               <Checkbox
                 checked={true}
