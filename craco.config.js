@@ -31,8 +31,23 @@ module.exports = {
     },
   ],
   style: {
-    postcssOptions: {
-      plugins: [require('tailwindcss'), require('autoprefixer')],
+    postcss: {
+      // craco v6 doesn't support react-scripts@5.x.x
+      // therefore we need to update loader options manually
+      loaderOptions: postcssLoaderOptions => {
+        const {
+          postcssOptions,
+          postcssOptions: { plugins },
+        } = postcssLoaderOptions
+
+        return {
+          ...postcssLoaderOptions,
+          postcssOptions: {
+            ...postcssOptions,
+            plugins: ['tailwindcss/nesting', ...plugins],
+          },
+        }
+      },
     },
   },
   webpack: {

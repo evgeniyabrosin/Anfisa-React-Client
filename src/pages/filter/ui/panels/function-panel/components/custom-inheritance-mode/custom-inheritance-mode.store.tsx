@@ -1,25 +1,16 @@
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
-import {
-  ConditionJoinMode,
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
+import { ModeTypes } from '@core/enum/mode-types-enum'
+import filterStore from '@store/filter'
+import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getSelectValue } from '@utils/function-panel/getSelectValue'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { getSortedArray } from '@utils/getSortedArray'
-import {
-  ICustomInheritanceModeCachedValues,
-  TScenario,
-} from '../../function-panel.interface'
+import { TScenario } from '../../function-panel.interface'
 import functionPanelStore from '../../function-panel.store'
-
-interface IConditions {
-  arrayScenario: TScenario[]
-  resetName?: string
-}
 
 interface ISendRequest {
   complexScenario?: [string, string][]
@@ -29,44 +20,78 @@ interface ISendRequest {
 }
 
 class CustomInheritanceModeStore {
+  private _scenario: TScenario[] = []
+  private _resetValue: string = ''
+  private _currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  public get cachedValues(): ICustomInheritanceModeCachedValues {
-    return toJS(
-      functionPanelStore.getCachedValues<ICustomInheritanceModeCachedValues>(
-        FuncStepTypesEnum.CustomInheritanceMode,
-      ),
-    )
-  }
-
   public get scenario() {
-    return this.cachedValues?.conditions.scenario || {}
+    return this._scenario
   }
 
-  public get reset() {
-    return this.cachedValues?.reset || ''
+  public get resetValue(): string {
+    return this._resetValue
+  }
+
+  public get currentMode(): ModeTypes | undefined {
+    return this._currentMode
+  }
+
+  public setScenario(scenario: TScenario[]) {
+    this._scenario = scenario
+  }
+
+  public setResetValue(resetValue: string) {
+    this._resetValue = resetValue
+  }
+
+  public setCurrentMode(modeType?: ModeTypes): void {
+    if (!modeType) {
+      this._currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
+
+      return
+    }
+
+    this._currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this._currentMode = undefined
+  }
+
+  public clearScenario() {
+    this._scenario = []
+  }
+
+  public clearResetValue() {
+    this._resetValue = ''
   }
 
   public get stringScenario() {
-    return this.cachedValues ? getStringScenario(this.scenario) : ''
+    return this.scenario.length > 0 ? getStringScenario(this.scenario) : ''
   }
 
   public get firstSelectValue() {
-    return this.cachedValues
+    return this.scenario.length > 0
       ? getSelectValue(this.scenario, functionPanelStore.problemGroups[0])
       : ''
   }
 
   public get secondSelectValue() {
-    return this.cachedValues
+    return this.scenario.length > 0
       ? getSelectValue(this.scenario, functionPanelStore.problemGroups[1])
       : ''
   }
 
   public get thirdSelectValue() {
-    return this.cachedValues
+    return this.scenario.length > 0
       ? getSelectValue(this.scenario, functionPanelStore.problemGroups[2])
       : ''
   }
@@ -81,7 +106,7 @@ class CustomInheritanceModeStore {
 
   public get selectedFilterValue(): string {
     return `"scenario": ${
-      this.cachedValues ? `${getStringScenario(this.scenario)}` : '{}'
+      this.scenario.length > 0 ? `${getStringScenario(this.scenario)}` : '{}'
     }`
   }
 
@@ -112,6 +137,7 @@ class CustomInheritanceModeStore {
   // complex scenario creation
   public setComplexScenario(resetName: string): void {
     const problemGroups = functionPanelStore.problemGroups
+    this.setResetValue(resetName)
 
     if (resetName === InheritanceModeEnum.HomozygousRecessive_XLinked) {
       const complexScenario: any[] = [
@@ -166,23 +192,11 @@ class CustomInheritanceModeStore {
     }
   }
 
-  // cach values
-  public setConditions({ arrayScenario, resetName }: IConditions): void {
-    functionPanelStore.setCachedValues<ICustomInheritanceModeCachedValues>(
-      FuncStepTypesEnum.CustomInheritanceMode,
-      {
-        conditions: { scenario: arrayScenario },
-        reset: resetName || this.reset,
-      },
-    )
-  }
-
   // root function to update data
   public sendRequestAsync = async ({
     selectType,
     selectValue,
     complexScenario,
-    resetName,
   }: ISendRequest) => {
     let selectiveData: any[] = []
 
@@ -211,7 +225,7 @@ class CustomInheritanceModeStore {
 
     const params = `{"scenario":{${stringScenario}}}`
 
-    this.setConditions({ arrayScenario, resetName })
+    this.setScenario(arrayScenario)
 
     functionPanelStore.fetchStatFunc('Custom_Inheritance_Mode', params)
   }
@@ -220,14 +234,21 @@ class CustomInheritanceModeStore {
     const custInhModeConditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.CustomInheritanceMode,
-      ConditionJoinMode.OR,
+      getConditionJoinMode(this.currentMode),
       ['True'],
       JSON.parse(`{"scenario":{${this.stringScenario}}}`),
     ]
 
-    const variant: TVariant = [`"scenario": ${this.stringScenario}`, 0]
+    functionPanelStore.sumbitConditions(custInhModeConditions)
 
-    functionPanelStore.sumbitConditions(custInhModeConditions, variant)
+    filterStore.resetStatFuncData()
+    this.clearData()
+  }
+
+  public clearData(): void {
+    this.clearResetValue()
+    this.clearScenario()
+    this.resetCurrentMode()
   }
 }
 

@@ -5,11 +5,11 @@ import {
   IFuncPropertyStatus,
   ISolutionEntryDescription,
   TCondition,
-  TCount,
+  TItemsCount,
   TPropertyStatus,
 } from 'service-providers/common/common.interface'
 
-enum DsStatArgumentsOptions {
+export enum DsStatArgumentsOptions {
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
   JOIN = 'JOIN',
@@ -19,7 +19,7 @@ export interface IDsStatArguments {
   ds: string
   tm?: number
   filter?: string
-  conditions: TCondition[]
+  conditions?: TCondition[]
   instr?: [option: DsStatArgumentsOptions, filterName: string]
 }
 
@@ -31,8 +31,8 @@ export interface IDsStatCondSeq {
 
 export interface IDsStat {
   kind: DatasetKinds
-  'total-counts': TCount[]
-  'filtered-counts': TCount[]
+  'total-counts': TItemsCount
+  'filtered-counts': TItemsCount
   'stat-list': TPropertyStatus[]
   'cur-filter'?: null | string
   conditions: TCondition[]

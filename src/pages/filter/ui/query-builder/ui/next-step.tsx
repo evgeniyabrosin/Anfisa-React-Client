@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
-} from '@store/dtree/active-step.store'
-import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+} from '@pages/filter/active-step.store'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'
@@ -25,14 +25,18 @@ export const ResultsView = styled.div`
   align-items: center;
 `
 
-interface IProps {
+interface INextStepProps {
   index: number
   isContentExpanded: boolean
   changeIndicator: number
 }
 
 export const NextStep = observer(
-  ({ index, isContentExpanded, changeIndicator }: IProps): ReactElement => {
+  ({
+    index,
+    isContentExpanded,
+    changeIndicator,
+  }: INextStepProps): ReactElement => {
     const [isExpanded, setIsExpanded] = useState(true)
 
     useEffect(() => {
@@ -61,14 +65,14 @@ export const NextStep = observer(
 
     return (
       <div
-        className="flex flex-col mb-2"
+        className="flex flex-col"
         data-testid={DecisionTreesResultsDataCy.stepCard}
       >
-        <div className="flex">
+        <div className="flex overflow-hidden">
           <TreeView
             className={cn(
               'pr-3',
-              currentStep.isReturnedVariantsActive ? 'bg-green-light' : '',
+              currentStep.isReturnedVariantsActive ? ' bg-blue-tertiary' : '',
             )}
           >
             <NextStepRoute
@@ -80,8 +84,8 @@ export const NextStep = observer(
 
           <ResultsView
             className={cn(
-              'border-l border-grey-light font-medium px-5 relative',
-              currentStep.isActive ? ' bg-green-light' : 'bg-blue-light',
+              'border-b border-l border-grey-light font-medium px-5 relative',
+              currentStep.isActive && ' bg-blue-tertiary',
             )}
             onClick={event => setStepActive(index, event)}
           >

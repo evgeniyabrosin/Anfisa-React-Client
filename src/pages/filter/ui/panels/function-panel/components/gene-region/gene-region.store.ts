@@ -1,51 +1,71 @@
 import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import {
-  ConditionJoinMode,
-  TFuncCondition,
-  TVariant,
-} from '@service-providers/common/common.interface'
+import { ModeTypes } from '@core/enum/mode-types-enum'
+import filterStore from '@store/filter'
+import { TFuncCondition } from '@service-providers/common/common.interface'
+import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import functionPanelStore from '../../function-panel.store'
-import { IGeneRegionCachedValues } from './../../function-panel.interface'
 
 class GeneRegionStore {
+  private _locusValue: string = ''
+  private _currentMode?: ModeTypes
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  public get cachedValues(): IGeneRegionCachedValues {
-    return functionPanelStore.getCachedValues<IGeneRegionCachedValues>(
-      FuncStepTypesEnum.GeneRegion,
-    )
+  public get locusValue(): string {
+    return this._locusValue
   }
 
-  public get locusValue(): string {
-    return this.cachedValues?.conditions.locus || ''
+  public get currentMode(): ModeTypes | undefined {
+    return this._currentMode
+  }
+
+  public setLocusValue(locusValue: string) {
+    this._locusValue = locusValue
+  }
+
+  public resetLocusValue() {
+    this._locusValue = ''
+  }
+
+  public setCurrentMode(modeType?: ModeTypes): void {
+    if (!modeType) {
+      this._currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
+
+      return
+    }
+
+    this._currentMode = modeType
+  }
+
+  public resetCurrentMode(): void {
+    this._currentMode = undefined
   }
 
   public get selectedFilterValue(): string {
     return `{"locus":"${this.locusValue}"}`
   }
 
-  public setConditions = (value: string): void => {
-    functionPanelStore.setCachedValues(FuncStepTypesEnum.GeneRegion, {
-      conditions: { locus: value },
-    })
-  }
-
   public handleSumbitCondtions(): void {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.GeneRegion,
-      ConditionJoinMode.OR,
+      getConditionJoinMode(this.currentMode),
       ['True'],
       { locus: this.locusValue },
     ]
 
-    const variant: TVariant = [`{"locus":"${this.locusValue}"}`, 0]
+    functionPanelStore.sumbitConditions(conditions)
 
-    functionPanelStore.sumbitConditions(conditions, variant)
+    this.resetLocusValue()
+    filterStore.resetStatFuncData()
   }
 }
 

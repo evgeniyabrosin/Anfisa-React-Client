@@ -10,6 +10,7 @@ import ClosePadded from '@icons/close-padded'
 import Collapse from '@icons/collapse'
 import Copy from '@icons/copy'
 import CopyLink from '@icons/copy-link'
+import Delete from '@icons/delete'
 import Dnd from '@icons/dnd'
 import Expand from '@icons/expand'
 import Export from '@icons/export'
@@ -27,7 +28,6 @@ import SettingsFat from '@icons/settings-fat'
 import Sort from '@icons/sort'
 import ThreadAdd from '@icons/thread-add'
 import ThreadClose from '@icons/thread-close'
-
 interface IconItem {
   size: number
   viewBox: { w: number; h: number }
@@ -46,8 +46,9 @@ const iconItems: { [key: string]: IconItem } = {
   ClosePadded,
   CopyLink,
   Copy,
-  Export,
+  Delete,
   Dnd,
+  Export,
   Expand,
   File,
   Filter,

@@ -9,15 +9,17 @@ import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/active-step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '@pages/filter/active-step.store'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getNumericExpression } from '@utils/getNumericExpression'
+import dtreeModalStore from '../../../modals.store'
+import modalFiltersStore from '../../modal-edit/components/modal-enum/modal-enum.store'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`
@@ -31,28 +33,57 @@ const JoinType = styled.div`
   height: 28px;
 `
 
-const NegateWrapper = styled(JoinType)`
-  padding: 2px 6px;
-  margin: 2px 4px;
+const NotModeWrapper = styled.div`
+  margin: 8px 4px;
+  width: 25px;
+  height: 20px;
   color: ${theme('colors.red.light')};
   background-color: ${theme('colors.red.lighter')};
+  font-size: 12px;
 `
 
-interface IProps {
+const AllModeWrapper = styled.div`
+  margin: 8px 4px;
+  width: 25px;
+  height: 20px;
+  color: ${theme('colors.green.secondary')};
+  background-color: ${theme('colors.green.medium')};
+  font-size: 12px;
+`
+
+interface INextStepContentItemProps {
   group: any
   index: number
   currNo: number
+  expanded: boolean
+  setExpandOnClick: () => void
 }
 
 export const NextStepContentItem = observer(
-  ({ group, index, currNo }: IProps): ReactElement => {
+  ({
+    group,
+    index,
+    currNo,
+    expanded,
+    setExpandOnClick,
+  }: INextStepContentItemProps): ReactElement => {
     // const [isChecked, setIsChecked] = useState(true)
 
     // const toggleChecked = () => {
     //   setIsChecked(prev => !prev)
     // }
-
     const [isVisible, setIsVisible] = useState(false)
+    const limitSize = 3
+
+    const array = group.find((elem: any) => Array.isArray(elem))
+
+    const getButtonMessage = () => {
+      if (group[0] === StepTypeEnum.Numeric) return ''
+
+      const size = array.length - limitSize
+
+      return expanded ? `Hide ${size} variants` : `Show ${size} variants`
+    }
 
     // const toggleVisible = () => {
     //   setIsVisible(prev => !prev)
@@ -64,33 +95,35 @@ export const NextStepContentItem = observer(
       activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       group[0] === StepTypeEnum.Enum &&
-        dtreeStore.openModalEditFilters(group[1], index, currNo)
+        dtreeModalStore.openModalEnum(group[1], currNo) &&
+        modalFiltersStore.setCurrentGroupSubKind(group['sub-kind'])
 
       group[0] === StepTypeEnum.Numeric &&
-        dtreeStore.openModalNumbers(group[1], currNo)
+        dtreeModalStore.openModalNumbers(group[1], currNo)
 
       if (group[0] === StepTypeEnum.Func) {
         group[1] === FuncStepTypesEnum.InheritanceMode &&
-          dtreeStore.openModalEditInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CustomInheritanceMode &&
-          dtreeStore.openModalEditCustomInheritanceMode(group[1], index, currNo)
+          dtreeModalStore.openModalCustomInheritanceMode(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundHet &&
-          dtreeStore.openModalEditCompoundHet(group[1], index, currNo)
+          dtreeModalStore.openModalCompoundHet(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.CompoundRequest &&
-          dtreeStore.openModalEditCompoundRequest(group[1], index, currNo)
+          dtreeModalStore.openModalCompoundRequest(group[1], currNo)
 
         group[1] === FuncStepTypesEnum.GeneRegion &&
-          dtreeStore.openModalEditGeneRegion(group[1], index, currNo)
+          dtreeModalStore.openModalGeneRegion(group[1], currNo)
       }
     }
 
     const currentGroup = currentStep.groups[currNo]
     const isNumeric = currentGroup[0] === 'numeric'
 
-    const isNegateAttribute = currentGroup[2] === 'NOT'
+    const isNotMode = currentGroup[2] === 'NOT'
+    const isAllMode = currentGroup[2] === 'AND'
     const isNegateStep = currentStep.negate
 
     return (
@@ -99,7 +132,7 @@ export const NextStepContentItem = observer(
           <div
             className={cn(
               'flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area',
-              currentStep.isActive ? 'bg-green-light' : 'bg-blue-light',
+              currentStep.isActive && 'bg-blue-tertiary',
             )}
             data-testId={DecisionTreeModalDataCy.joinByLabel}
           >
@@ -126,12 +159,7 @@ export const NextStepContentItem = observer(
           </div>
         )}
 
-        <ContentControl
-          className={cn(
-            'w-full h-auto flex rounded-md mr-2 pl-2 py-3 step-content-area',
-            currentStep.isActive ? ' bg-green-medium' : 'bg-blue-medium',
-          )}
-        >
+        <ContentControl className="w-full h-auto flex rounded-md mr-2 pl-2 py-3 border border-grey-light step-content-area">
           <div className="flex items-center h-auto w-full pr-2 ">
             <Icon
               name="SettingsFat"
@@ -143,14 +171,14 @@ export const NextStepContentItem = observer(
             />
 
             {isNegateStep && (
-              <NegateWrapper className="flex items-center justify-center">
+              <NotModeWrapper className="flex items-center justify-center">
                 {'NOT'}
-              </NegateWrapper>
+              </NotModeWrapper>
             )}
 
             <div className="flex items-center text-14 font-medium mr-2">
               {group.includes(StepTypeEnum.Func) && (
-                <FnLabel currentStep={currentStep} />
+                <FnLabel currentStep={currentStep} className="shadow-dark" />
               )}
               {`${group[1]}`}
             </div>
@@ -159,13 +187,11 @@ export const NextStepContentItem = observer(
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div> */}
             {!isNumeric && (
-              <label className="pl-4">
+              <label className="flex items-center pl-4 text-14">
                 <Checkbox
-                  checked={isNegateAttribute}
+                  checked={isNotMode}
                   className="mr-1"
-                  onChange={() =>
-                    editStepAttribute(index, currNo, isNegateAttribute)
-                  }
+                  onChange={() => editStepAttribute(index, currNo, isNotMode)}
                 />
                 {t('dtree.negate')}
               </label>
@@ -173,23 +199,36 @@ export const NextStepContentItem = observer(
           </div>
 
           <div className="flex flex-row step-content-area">
-            {isNegateAttribute && (
-              <NegateWrapper className="flex items-center justify-center">
-                {'NOT'}
-              </NegateWrapper>
+            {isNotMode && (
+              <NotModeWrapper className="flex items-center justify-center">
+                {'not'}
+              </NotModeWrapper>
+            )}
+
+            {isAllMode && (
+              <AllModeWrapper className="flex items-center justify-center rounded-sm">
+                {'all'}
+              </AllModeWrapper>
             )}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
               {group[0] === StepTypeEnum.Numeric &&
-                getNumericExpression(
-                  group.find((elem: any) => Array.isArray(elem)),
-                  group[1],
-                )}
+                getNumericExpression(array, group[1])}
 
               {group[0] !== StepTypeEnum.Numeric &&
-                group
-                  .find((elem: any) => Array.isArray(elem))
+                array
+                  .slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
                   .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
+
+              {group[0] !== StepTypeEnum.Numeric && array.length > 3 && (
+                <div
+                  key={Math.random()}
+                  className="text-blue-bright cursor-pointer"
+                  onClick={setExpandOnClick}
+                >
+                  {getButtonMessage()}
+                </div>
+              )}
             </div>
           </div>
         </ContentControl>

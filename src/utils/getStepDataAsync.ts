@@ -1,5 +1,5 @@
 import dtreeStore, { IStepData } from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
 import { getDataFromCode } from './getDataFromCode'
 
@@ -40,10 +40,10 @@ export const getStepDataAsync = async (
       isActive: isLoadingNewTree ? false : index === activeStepIndex,
       isReturnedVariantsActive: false,
       startFilterCounts: '...',
-      finishFilterCounts: '...',
       difference: '...',
       comment: stepCodes[index].comment,
       negate: stepCodes[index].isNegate,
+      all: stepCodes[index].isAll,
       condition: stepCodes[index].condition,
     })
   })

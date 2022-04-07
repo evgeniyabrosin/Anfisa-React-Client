@@ -2,7 +2,11 @@ import React, { ChangeEvent, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
+import { ConditionJoinMode } from '@service-providers/common'
+import { IInheritanceModeArgs } from '@service-providers/common/common.interface'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import functionPanelStore from '../../function-panel.store'
 import { PanelButtons } from '../panelButtons'
 import { ComplexVariants } from './complex-variants'
@@ -10,30 +14,28 @@ import inheritanceModeStore from './inheritance-mode.store'
 import { ProblemGroups } from './problem-groups'
 
 export const InheritanceMode = observer(() => {
-  const { problemGroups, filteredComplexVariants } = functionPanelStore
+  const { selectedFilter, isRedactorMode } = filterStore
 
-  const {
-    cachedValues,
-    problemGroupValues,
-    variantsValues,
-    selectedFilterValue,
-  } = inheritanceModeStore
+  const { problemGroups, filteredComplexVariants, complexVariants } =
+    functionPanelStore
+
+  const { problemGroupValues, variantValues } = inheritanceModeStore
 
   const handleChangeProblemGroups = (
     e: ChangeEvent<HTMLInputElement>,
     problemGroup: string,
   ) => {
-    inheritanceModeStore.handleChangeProblemGroups(e, problemGroup)
+    inheritanceModeStore.updateProblemGroupValues(e, problemGroup)
   }
 
   const handleChangeVariants = (
     e: ChangeEvent<HTMLInputElement>,
     variantName: string,
   ) => {
-    inheritanceModeStore.handleChangeVariants(e, variantName)
+    inheritanceModeStore.updateVariantValues(e, variantName)
   }
 
-  // check if there is some data in cachedValues from preset
+  // update data
   useEffect(() => {
     functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.InheritanceMode,
@@ -41,8 +43,43 @@ export const InheritanceMode = observer(() => {
         problem_group: problemGroupValues || [],
       }),
     )
+  }, [problemGroupValues])
+
+  // listener for curr mode reseting
+  useEffect(() => {
+    if (variantValues.length < 2) {
+      inheritanceModeStore.currentMode === ModeTypes.All &&
+        inheritanceModeStore.resetCurrentMode()
+    }
+
+    if (variantValues.length < 1) {
+      inheritanceModeStore.resetCurrentMode()
+    }
+  }, [variantValues])
+
+  // set/reset data
+  useEffect(() => {
+    if (selectedFilter && isRedactorMode) {
+      const selectedFilterProblemGroups =
+        selectedFilter[4] as IInheritanceModeArgs
+
+      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+
+      inheritanceModeStore.setCurrentMode(getCurrentModeType(conditionJoinType))
+      inheritanceModeStore.setProblemGroupValues(
+        selectedFilterProblemGroups['problem_group'] || [problemGroups[0]],
+      )
+      inheritanceModeStore.setVariantValues(selectedFilter[3] as string[])
+    }
+
+    if (!isRedactorMode) {
+      inheritanceModeStore.setProblemGroupValues([])
+      inheritanceModeStore.setVariantValues([])
+      inheritanceModeStore.resetCurrentMode()
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cachedValues])
+  }, [isRedactorMode, selectedFilter])
 
   // to avoid displaying this data on the another func attr
   useEffect(() => {
@@ -57,22 +94,18 @@ export const InheritanceMode = observer(() => {
         handleChangeProblemGroups={handleChangeProblemGroups}
       />
 
-      <div className="h-px w-full bg-white my-4" />
+      <div className="h-px w-full bg-white my-3" />
 
       <ComplexVariants
-        variantsValues={variantsValues}
-        problemGroupValues={problemGroupValues}
-        filteredComplexVariants={filteredComplexVariants}
+        variantValues={variantValues}
+        variants={selectedFilter ? complexVariants : filteredComplexVariants}
         handleChangeVariants={handleChangeVariants}
       />
 
       <PanelButtons
         onSubmit={inheritanceModeStore.handleSumbitCondtions}
-        resetFields={() =>
-          inheritanceModeStore.handleResetAllFieldsLocally(problemGroupValues)
-        }
-        disabled={variantsValues.length === 0}
-        selectedFilterValue={selectedFilterValue}
+        resetFields={inheritanceModeStore.resetAllFields}
+        disabled={variantValues.length === 0}
       />
     </React.Fragment>
   )

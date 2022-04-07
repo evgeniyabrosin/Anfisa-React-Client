@@ -1,40 +1,41 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import dtreeStore from '@store/dtree'
 import { NumericCondition } from '@components/numeric-condition'
 import { EditModalButtons } from '@pages/filter/ui/modal-edit/components/edit-modal-buttons'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
+import dtreeModalStore from '../../../../modals.store'
 import { HeaderModal } from '../../../query-builder/ui/header-modal'
 import { ModalBase } from '../../../query-builder/ui/modal-base'
 import { SelectModalButtons } from '../../../query-builder/ui/select-modal-buttons'
+import modalEditStore from '../../modal-edit.store'
 
 export const ModalNumbers = observer((): ReactElement | null => {
-  const groups = dtreeStore.currentStepGroups
-  const currentGroup = dtreeStore.currentStepGroupToChange
+  const groups = modalEditStore.currentStepGroups
+  const currentGroup = modalEditStore.currentGroupToChange
 
   const initialValue = currentGroup
     ? currentGroup[currentGroup.length - 1]
     : undefined
 
-  const attr = dtreeStore.attributeStatusToChange
+  const attr = modalEditStore.attributeStatusToChange
 
   if (!attr || attr.kind !== 'numeric') {
     return null
   }
 
   const handleClose = () => {
-    dtreeStore.closeModalNumbers()
+    dtreeModalStore.closeModalNumbers()
   }
 
   const handleModals = () => {
     handleClose()
-    dtreeStore.openModalAttribute()
+    dtreeModalStore.openModalAttribute()
   }
 
   const handleModalJoin = () => {
-    dtreeStore.openModalJoin()
+    dtreeModalStore.openModalJoin()
   }
 
   return (

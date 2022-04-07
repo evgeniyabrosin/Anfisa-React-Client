@@ -1,11 +1,8 @@
-import { Fragment, ReactElement, ReactNode, useEffect, useState } from 'react'
-import { Option } from 'react-dropdown'
+import { Fragment, ReactElement, ReactNode, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import get from 'lodash/get'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { copyToClipboard } from '@core/copy-to-clipboard'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
@@ -13,25 +10,25 @@ import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { PageRoute, RouteNames, Routes } from '@router/routes.enum'
-import { DropDown } from '@ui/dropdown'
-import { Icon } from '@ui/icon'
+import { Divider } from '@ui/divider'
+import { Breadcrumbs } from '@components/breadcrumbs'
 import { Logo } from '@components/logo'
 import { GlbPagesNames } from '@glb/glb-names'
 import userIcon from '@images/thomas-hunt.jpg'
-import { showToast } from '@utils/notifications/showToast'
 
 interface Props {
   children?: ReactElement | ReactNode
 }
 
+const allowedXlDatasetRotes: PageRoute[] = [Routes.Refiner, Routes.Filter]
+
 export const Header = observer(({ children }: Props): ReactElement => {
-  const [datasets, setDatasets] = useState([])
-  const [xlDatasetName, setXlDatasetName] = useState('')
   const params = useParams()
   const ds = params.get('ds') || ''
   const history = useHistory()
   const isHomepage = window.location.pathname === Routes.Root
   const path: PageRoute = window.location.pathname as PageRoute
+  const isXlDatasetAllowed = allowedXlDatasetRotes.includes(path)
 
   useEffect(() => {
     const page: GlbPagesNames = RouteNames[path]
@@ -40,104 +37,55 @@ export const Header = observer(({ children }: Props): ReactElement => {
   }, [path])
 
   useEffect(() => {
-    const initAsync = async () => {
-      await dirinfoStore.fetchDirInfoAsync()
-
-      const xlName = get(
-        toJS(dirinfoStore.dirinfo),
-        `['ds-dict'][${ds}].ancestors[0][0]`,
-        '',
-      )
-
-      setXlDatasetName(xlName)
-
-      setDatasets(
-        get(toJS(dirinfoStore.dirinfo), `ds-dict.${xlName}.secondary`, []),
-      )
-    }
-
-    initAsync()
+    dirinfoStore.fetchDirInfoAsync()
   }, [ds])
 
-  const handleChangeDataset = (arg: Option) => {
-    if (arg.value === ds) return
+  const handleChangeDataset = (datasetName: string) => {
+    if (datasetName === ds) {
+      return
+    }
 
-    ds !== arg.value &&
-      history.push(`${history.location.pathname}?ds=${arg.value}`)
+    history.push(`${history.location.pathname}?ds=${datasetName}`)
     datasetStore.setDatasetName(history.location.pathname)
 
-    const dsName = arg.value
-
-    if (dsName && !variantStore.dsName) {
-      variantStore.setDsName(arg.value)
+    if (datasetName && !variantStore.dsName) {
+      variantStore.setDsName(datasetName)
     }
 
     datasetStore.resetConditions()
     datasetStore.resetActivePreset()
-    datasetStore.initDatasetAsync(dsName)
-  }
-
-  const copyLink = () => {
-    copyToClipboard(
-      `${window.origin}${history.location.pathname}?ds=${ds}${
-        variantStore.drawerVisible ? `&variant=${variantStore.index}` : ''
-      }`,
-    )
-
-    showToast(t('ds.copied'), 'info')
+    datasetStore.initDatasetAsync(datasetName)
   }
 
   return (
     <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center grow-0 shrink-1 min-w-0 mr-4">
         <Link to={Routes.Root}>
-          <div className="flex items-center text-white">
-            <Logo mode="white" className="mr-4" />
-
-            <span className="text-grey-blue whitespace-pre-line text-xs flex flex-col">
-              <span>
-                {t('header.version.frontend', {
-                  version: process.env.REACT_APP_VERSION,
-                })}
-              </span>
-              <span>
-                {t('header.version.backend', {
-                  version: toJS(dirinfoStore.dirinfo).version,
-                })}
-              </span>
-            </span>
-          </div>
+          <Logo mode="white" className="mr-4" />
         </Link>
-
-        <div className="text-grey-blue flex items-center mr-2">
-          {!isHomepage && xlDatasetName && datasets && (
-            <Fragment>
-              <div className="mx-4 bg-blue-lighter w-0.5 h-4" />
-
-              <span className="font-bold uppercase text-xs text-blue-bright">
-                {t('home.title')}
-              </span>
-
-              <span className="mx-2">/</span>
-
-              <span>{xlDatasetName}</span>
-
-              <span className="mx-2">/</span>
-
-              <DropDown
-                options={datasets}
-                value={ds}
-                onSelect={handleChangeDataset}
-              />
-
-              <Icon
-                name="CopyLink"
-                className="cursor-pointer ml-2"
-                onClick={copyLink}
-              />
-            </Fragment>
-          )}
-        </div>
+        <span className="text-grey-blue whitespace-pre-line text-xs flex flex-col">
+          <span>
+            {t('header.version.frontend', {
+              version: process.env.REACT_APP_VERSION,
+            })}
+          </span>
+          <span>
+            {t('header.version.backend', {
+              version: toJS(dirinfoStore.dirinfo).version,
+            })}
+          </span>
+        </span>
+        {!isHomepage && (
+          <Fragment>
+            <Divider orientation="vertical" />
+            <Breadcrumbs
+              datasetName={ds}
+              onChangeDataset={handleChangeDataset}
+              className="grow-0 shrink-1 min-w-0"
+              isXlDatasetAllowed={isXlDatasetAllowed}
+            />
+          </Fragment>
+        )}
       </div>
 
       {children}

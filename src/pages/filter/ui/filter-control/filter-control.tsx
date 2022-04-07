@@ -15,6 +15,7 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
+import dtreeModalStore from '../../modals.store'
 import {
   FilterControlOptions,
   FilterControlOptionsNames,
@@ -80,7 +81,7 @@ export const FilterControl = observer((): ReactElement => {
                 text="Text editor"
                 className="ml-2"
                 variant={'secondary-dark'}
-                onClick={() => dtreeStore.openModalTextEditor()}
+                onClick={() => dtreeModalStore.openModalTextEditor()}
                 dataTestId={DecisionTreesMenuDataCy.textEditor}
               />
             )}

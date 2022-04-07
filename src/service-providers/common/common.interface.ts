@@ -1,12 +1,15 @@
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { SubKinds } from '@core/enum/sub-kinds-enum'
+
 export enum DatasetKinds {
   WS = 'ws',
   XL = 'xl',
 }
 
-export type TCount = [
-  variantCounts: [number],
-  dnaVariantsCounts?: [number],
-  transcriptsCounts?: [number],
+export type TItemsCount = [
+  variantCounts: number,
+  dnaVariantsCounts: number,
+  transcriptsCounts: number,
 ]
 
 export type TDateISOString = string
@@ -30,12 +33,18 @@ export enum ConditionJoinMode {
   NOT = 'NOT',
 }
 
+export type TRequestCondition = [number, TSelectValues]
+
+export type TSelectValues = {
+  [key: string]: string[]
+}
+
 export interface IInheritanceModeArgs {
   problem_group: string[] | null
 }
 
 export interface ICustomInheritanceModeArgs {
-  scenario: [string, string[]]
+  scenario: [string, string[] | string]
 }
 
 export interface ICompoundHetArgs {
@@ -44,7 +53,7 @@ export interface ICompoundHetArgs {
 
 export interface ICompoundRequestArgs {
   approx: string | null
-  request: [number, { [key: string]: string[] }]
+  request: TRequestCondition[]
   state?: string | null
 }
 
@@ -53,7 +62,7 @@ export interface IGeneRegionArgs {
 }
 
 export type TEnumCondition = [
-  conditionType: 'enum',
+  conditionType: FilterKindEnum.Enum,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
@@ -101,12 +110,31 @@ export enum AttributeKinds {
   FUNC = 'func',
 }
 
+export enum AttributeChartRenderModes {
+  Pie = 'pie',
+  Bar = 'bar',
+  Linear = 'linear',
+  Log = 'log',
+  Neighborhood = 'neighborhood',
+}
+
+export enum AttributeNumericRenderModes {
+  Less = '<',
+  Greater = '>',
+  Equal = '=',
+}
+
+export type TAttributeRenderMode =
+  | AttributeChartRenderModes
+  | `${AttributeChartRenderModes.Linear},${AttributeNumericRenderModes}`
+  | `${AttributeChartRenderModes.Log},${AttributeNumericRenderModes}`
+
 export interface IBasePropertyStatus<Kind extends AttributeKinds> {
   name: string
   kind: Kind
   vgroup: string
   title?: string
-  'render-mode'?: string
+  'render-mode'?: AttributeChartRenderModes
   tooltip?: string
   incomplete?: true
   detailed?: true
@@ -124,7 +152,7 @@ export interface INumericPropertyStatus
   extends IBasePropertyStatus<AttributeKinds.NUMERIC> {
   min?: number
   max?: number
-  counts?: TCount[]
+  counts?: TItemsCount[]
   histogram?: TNumericPropertyHistogram
   'sub-kind': NumericPropertyStatusSubKinds
 }
@@ -139,7 +167,7 @@ export enum EnumPropertyStatusSubKinds {
 export interface IEnumPropertyStatus
   extends IBasePropertyStatus<AttributeKinds.ENUM> {
   variants?: TVariant[]
-  'sub-kind': EnumPropertyStatusSubKinds
+  'sub-kind': SubKinds
 }
 
 export interface IFuncPropertyStatus
@@ -148,6 +176,10 @@ export interface IFuncPropertyStatus
   err?: string
   'rq-id': string
   no?: string
+  scenario?: [string, string[]]
+  request?: [string, string[]][]
+  family?: string[]
+  'approx-modes'?: string[][]
 }
 
 export type TPropertyStatus =

@@ -1,11 +1,16 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
+import { ConditionJoinMode } from '@service-providers/common'
+import { getCurrentModeType } from '@utils/getCurrentModeType'
 import filterAttributesStore from '../filterAttributes.store'
 import { QueryBuilderSearch } from '../query-builder/query-builder-search'
+import { AllNotMods } from '../query-builder/ui/all-not-mods'
 import { SelectedGroupItem } from '../selected-group-item'
 
 const variantsPerPage = 12
@@ -13,14 +18,40 @@ const variantsPerPage = 12
 export const EnumPanel = observer((): ReactElement => {
   const {
     currentGroup: { groupName },
-    allEnumVariants: variants,
-    datasetEnumValues: datasetVariants,
+    filteredEnumVariants,
+    allEnumVariants,
+    groupSubKind,
   } = filterAttributesStore
+
+  const { selectedFilter, isRedactorMode } = filterStore
 
   const [selectedVariants, setSelectedVariants] = useState<string[]>([])
 
   const [searchValue, setSearchValue] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
+
+  // set/reset data
+  useEffect(() => {
+    if (selectedFilter && isRedactorMode) {
+      const selectedFilters = selectedFilter[3] || []
+
+      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+
+      filterAttributesStore.setCurrentMode(
+        getCurrentModeType(conditionJoinType),
+      )
+
+      setSelectedVariants(selectedFilters)
+    }
+
+    if (!isRedactorMode) {
+      setSelectedVariants([])
+      setCurrentPage(0)
+      setSearchValue('')
+    }
+
+    return () => filterAttributesStore.resetCurrentMode()
+  }, [isRedactorMode, selectedFilter])
 
   useEffect(() => {
     setSearchValue('')
@@ -28,7 +59,12 @@ export const EnumPanel = observer((): ReactElement => {
   }, [groupName])
 
   const preparedSearchValue = searchValue.toLocaleLowerCase()
-  const filteredVariants = variants.filter(variant =>
+
+  const filteredVariants = (
+    selectedVariants.length > filteredEnumVariants.length
+      ? allEnumVariants
+      : filteredEnumVariants
+  ).filter(variant =>
     variant[0].toLocaleLowerCase().includes(preparedSearchValue),
   )
 
@@ -55,15 +91,19 @@ export const EnumPanel = observer((): ReactElement => {
   }
 
   const handleClear = () => {
-    filterAttributesStore.clearCurrentGroupFilter()
+    setSelectedVariants([])
 
     setCurrentPage(0)
+
+    filterAttributesStore.resetCurrentMode()
   }
 
   const handleAddConditions = () => {
     filterAttributesStore.addValuesToCurrentGroupEnumFilter(selectedVariants)
     setCurrentPage(0)
     setSelectedVariants([])
+    filterStore.resetSelectedGroupItem()
+    filterStore.resetActiveFilterId()
   }
 
   const handleChange = (value: string) => {
@@ -86,21 +126,33 @@ export const EnumPanel = observer((): ReactElement => {
         />
       </div>
 
+      <div className="flex justify-end mt-2 -mb-4">
+        <AllNotMods
+          groupSubKind={groupSubKind}
+          isAllModeChecked={filterAttributesStore.currentMode === ModeTypes.All}
+          isNotModeChecked={filterAttributesStore.currentMode === ModeTypes.Not}
+          isAllModeDisabled={selectedVariants.length < 2}
+          isNotModeDisabled={selectedVariants.length === 0}
+          toggleAllMode={() =>
+            filterAttributesStore.setCurrentMode(ModeTypes.All)
+          }
+          toggleNotMode={() =>
+            filterAttributesStore.setCurrentMode(ModeTypes.Not)
+          }
+        />
+      </div>
+
       <div className="mt-4">
         <div className="flex-1 mt-4 overflow-y-auto">
           {variantsPage.length > 0 ? (
-            variantsPage.map(
-              variant =>
-                variant[1] !== 0 && (
-                  <SelectedGroupItem
-                    key={variant[0]}
-                    isSelected={selectedVariants.includes(variant[0])}
-                    isInDataset={datasetVariants.includes(variant[0])}
-                    variant={variant}
-                    handleCheckGroupItem={handleCheckGroupItem}
-                  />
-                ),
-            )
+            variantsPage.map(variant => (
+              <SelectedGroupItem
+                key={variant[0]}
+                isSelected={selectedVariants.includes(variant[0])}
+                variant={variant}
+                handleCheckGroupItem={handleCheckGroupItem}
+              />
+            ))
           ) : (
             <div className="flex justify-center items-center text-14 text-grey-blue">
               {t('dtree.noFilters')}
@@ -116,15 +168,18 @@ export const EnumPanel = observer((): ReactElement => {
           setPageNumber={setCurrentPage}
         />
       )}
-      <div className="flex items-center justify-between mt-1 pb-2">
+      <div className="flex items-center justify-end mt-2">
         <Button
           variant="secondary"
           text={t('general.clear')}
           onClick={handleClear}
+          className="px-5 mr-2"
         />
 
         <Button
-          text={t('general.add')}
+          text={
+            isRedactorMode ? t('dtree.saveChanges') : t('dtree.addAttribute')
+          }
           onClick={handleAddConditions}
           disabled={isBlockAddBtn}
         />

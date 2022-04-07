@@ -1,17 +1,16 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import get from 'lodash/get'
-import isBoolean from 'lodash/isBoolean'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { getParsedValue } from '@utils/drawer/getParsedValue'
 import { validateNotes } from '@utils/validation/validateNotes'
 
 const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
@@ -45,29 +44,16 @@ const DrawerNoteModal = observer(({ close }: any) => {
     setValue(variantStore.noteText)
   }, [])
 
-  const sendTagsWithNotesRequest = () => {
-    let params = ''
-
-    Object.entries(variantStore.tagsWithNotes).map((tagData, index) => {
-      params += `"${tagData[0]}":${
-        isBoolean(tagData[1]) ? tagData[1] : `"${tagData[1]}"`
-      }`
-
-      if (Object.entries(variantStore.tagsWithNotes)[index + 1]) {
-        params += ','
-      }
-    })
-
-    variantStore.fetchSelectedTagsAsync(params)
-    datasetStore.fetchWsTagsAsync()
-  }
-
   const handleSaveNoteAsync = async () => {
-    variantStore.updateTagsWithNotes(['_note', value])
+    const noteValue: string = value.includes('"')
+      ? getParsedValue(value)
+      : value
+
+    variantStore.updateTagsWithNotes(['_note', noteValue])
 
     variantStore.setNoteText(value)
 
-    sendTagsWithNotesRequest()
+    variantStore.fetchSelectedTagsAsync(variantStore.tagsWithNotes)
     close()
   }
 
@@ -75,7 +61,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
     variantStore.updateTagsWithNotes(['_note', true], 'remove')
     variantStore.setNoteText('')
     setValue('')
-    sendTagsWithNotesRequest()
+    variantStore.fetchSelectedTagsAsync(variantStore.tagsWithNotes)
     close()
   }
 

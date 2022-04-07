@@ -1,4 +1,4 @@
-import React, { Ref } from 'react'
+import { Ref } from 'react'
 import cn from 'classnames'
 import styled from 'styled-components'
 

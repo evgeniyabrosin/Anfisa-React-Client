@@ -1,160 +1,133 @@
-import cloneDeep from 'lodash/cloneDeep'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
-import { makeAutoObservable, runInAction, toJS } from 'mobx'
-import { TVariant } from 'service-providers/common/common.interface'
+import { makeAutoObservable, runInAction } from 'mobx'
+import { nanoid } from 'nanoid'
 
-import { IStatFuncData, StatListType } from '@declarations'
+import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { getApiUrl } from '@core/get-api-url'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import datasetStore from '@store/dataset'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
-import datasetStore from './dataset'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import { IStatfuncArguments } from '@service-providers/filtering-regime'
+import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
+import { TCondition } from './../service-providers/common/common.interface'
 
 export type SelectedFiltersType = Record<
   string,
   Record<string, Record<string, number>>
 >
 
-interface AddSelectedFiltersI {
-  group: string
-  groupItemName: string
-  variant?: TVariant
+export interface IRemoveFilter {
+  filterId: string
+  subFilterIdx: number
+  filterType: string
 }
 
 export class FilterStore {
+  private _selectedFilters = new Map<string, TCondition>()
+
   method!: GlbPagesNames | FilterControlOptions
   selectedGroupItem: StatListType = {}
-  dtreeSet: any = {}
-  selectedFilters: SelectedFiltersType = {}
+
   actionName?: ActionFilterEnum
   statFuncData: any = []
-  filterCondition: Record<string, any> = {}
-  memorizedSelectedFilters: SelectedFiltersType | undefined = undefined
+  memorizedSelectedFilters: Map<string, TCondition> | undefined = undefined
 
   selectedFiltersHistory: SelectedFiltersType[] = []
+
+  activeFilterId: string = ''
+  isRedactorMode = false
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  setActionName(actionName?: ActionFilterEnum) {
-    this.actionName = actionName
-  }
+  public fetchConditions() {
+    datasetStore.fetchDsStatAsync()
 
-  resetActionName() {
-    this.actionName = undefined
-  }
-
-  setMethod(method: GlbPagesNames | FilterControlOptions) {
-    this.method = method
-  }
-
-  setSelectedGroupItem(item: StatListType) {
-    this.selectedGroupItem = item
-  }
-
-  addSelectedFilters({ group, groupItemName, variant }: AddSelectedFiltersI) {
-    if (!this.selectedFilters[group]) {
-      this.selectedFilters[group] = {}
-    }
-
-    if (!this.selectedFilters[group][groupItemName]) {
-      this.selectedFilters[group][groupItemName] = {}
-    }
-
-    if (variant) {
-      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
+    if (!datasetStore.isXL) {
+      datasetStore.fetchWsListAsync()
     }
   }
 
-  removeSelectedFilters({
-    group,
-    groupItemName,
-    variant,
-  }: AddSelectedFiltersI) {
-    if (!this.selectedFilters[group]) {
+  public get selectedFiltersArray(): [string, TCondition][] {
+    return Array.from(this._selectedFilters)
+  }
+
+  public get conditions() {
+    return Array.from(this._selectedFilters.values())
+  }
+
+  public get selectedFilter(): TCondition {
+    return this._selectedFilters.get(this.activeFilterId)!
+  }
+
+  public setConditionsFromPreset(conditions: TCondition[]): void {
+    conditions.forEach(condition =>
+      this._selectedFilters.set(nanoid(), condition),
+    )
+  }
+
+  public addFilterBlock(condition: TCondition): void {
+    const filterId: string = nanoid()
+
+    this._selectedFilters.set(filterId, condition)
+
+    this.fetchConditions()
+  }
+
+  public removeFilterBlock(filterId: string): void {
+    this._selectedFilters.delete(filterId)
+    this.resetIsRedacorMode()
+    datasetStore.resetActivePreset()
+    this.fetchConditions()
+  }
+
+  public addFilterToFilterBlock(condition: TCondition): void {
+    this._selectedFilters.set(this.activeFilterId, condition)
+    this.fetchConditions()
+  }
+
+  public removeFilterFromFilterBlock({
+    filterId,
+    subFilterIdx,
+    filterType,
+  }: IRemoveFilter): void {
+    const currentCondition = this._selectedFilters.get(filterId)!
+
+    if (
+      filterType === FilterKindEnum.Numeric ||
+      currentCondition[3]?.length === 1
+    ) {
+      this._selectedFilters.delete(filterId)
       return
     }
 
-    if (this.selectedFilters[group][groupItemName] && variant) {
-      delete this.selectedFilters[group][groupItemName][variant[0]]
-    }
-
-    if (isEmpty(this.selectedFilters[group][groupItemName])) {
-      delete this.selectedFilters[group][groupItemName]
-    }
-
-    if (isEmpty(this.selectedFilters[group])) {
-      delete this.selectedFilters[group]
-    }
+    currentCondition[3]?.splice(subFilterIdx, 1)
+    datasetStore.resetActivePreset()
+    this.fetchConditions()
   }
 
-  addSelectedFilterGroup(
-    group: string,
-    groupItemName: string,
-    variants: any[],
-  ) {
-    if (!this.selectedFilters[group]) {
-      this.selectedFilters[group] = {}
-    }
-
-    if (!this.selectedFilters[group][groupItemName]) {
-      this.selectedFilters[group][groupItemName] = {}
-    }
-
-    variants.forEach(variant => {
-      this.selectedFilters[group][groupItemName][variant[0]] = variant[1]
-    })
+  public async fetchDsInfoAsync() {
+    return await datasetProvider.getDsInfo({ ds: datasetStore.datasetName })
   }
 
-  removeSelectedFiltersGroup(group: string, groupItemName: string) {
-    if (this.selectedFilters[group][groupItemName]) {
-      delete this.selectedFilters[group][groupItemName]
-    }
-
-    if (isEmpty(this.selectedFilters[group])) {
-      delete this.selectedFilters[group]
-    }
-  }
-
-  async fetchDsInfoAsync() {
-    const response = await fetch(
-      getApiUrl(`dsinfo?ds=${datasetStore.datasetName}`),
-    )
-
-    const result = await response.json()
-
-    return result
-  }
-
-  async fetchProblemGroupsAsync() {
+  public async fetchProblemGroupsAsync() {
     const dsInfo = await this.fetchDsInfoAsync()
 
-    return Object.keys(get(dsInfo, 'meta.samples', {}))
+    return dsInfo.meta.samples
   }
 
-  async fetchStatFuncAsync(unit: string, param?: any) {
-    const conditions = JSON.stringify(datasetStore.conditions)
-
-    const body = new URLSearchParams({
+  async fetchStatFuncAsync(unit: string, param: any) {
+    const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
-      conditions,
+      conditions: datasetStore.conditions,
       rq_id: String(Date.now()),
       unit,
-    })
+      param,
+    }
 
-    param && body.append('param', param)
-
-    const response = await fetch(getApiUrl('statfunc'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const result: IStatFuncData = await response.json()
+    const result = await filteringRegimeProvider.getStatFunc(body)
 
     runInAction(() => {
       this.statFuncData = result
@@ -163,52 +136,69 @@ export class FilterStore {
     return result
   }
 
-  resetData() {
+  public resetData() {
     this.method = GlbPagesNames.Filter
     this.selectedGroupItem = {}
-    this.dtreeSet = {}
-    this.selectedFilters = {}
+    this.resetSelectedFilters()
   }
 
-  resetStatFuncData() {
+  public resetSelectedFilters() {
+    this._selectedFilters = new Map()
+    this.resetIsRedacorMode()
+    this.resetActiveFilterId()
+  }
+
+  public resetStatFuncData() {
     this.statFuncData = []
   }
 
-  setSelectedFilters(filters: SelectedFiltersType) {
-    this.selectedFilters = JSON.parse(JSON.stringify(filters))
-  }
-
-  setSelectedFiltersHistory(history: SelectedFiltersType[]) {
+  public setSelectedFiltersHistory(history: SelectedFiltersType[]) {
     this.selectedFiltersHistory = JSON.parse(JSON.stringify(history))
   }
 
-  setFilterCondition<T = any>(filterName: string, values: T) {
-    this.filterCondition[filterName] = cloneDeep(values)
+  public setActiveFilterId(filterId: string) {
+    this.activeFilterId = filterId
   }
 
-  readFilterCondition<T = any>(filterName: string) {
-    return this.filterCondition[filterName]
-      ? (this.filterCondition[filterName] as T)
-      : undefined
+  public resetActiveFilterId() {
+    this.activeFilterId = ''
   }
 
-  resetFilterCondition() {
-    this.filterCondition = {}
+  public setActionName(actionName?: ActionFilterEnum) {
+    this.actionName = actionName
   }
 
-  clearFilterCondition(filterName: string, subFilterName?: string) {
-    subFilterName
-      ? delete this.filterCondition[filterName][subFilterName]
-      : delete this.filterCondition[filterName]
+  public resetActionName() {
+    this.actionName = undefined
   }
 
-  memorizeSelectedFilters() {
-    this.memorizedSelectedFilters = toJS(this.selectedFilters)
+  public setMethod(method: GlbPagesNames | FilterControlOptions) {
+    this.method = method
   }
 
-  applyMemorizedFilters() {
+  public setSelectedGroupItem(item: StatListType) {
+    this.selectedGroupItem = item
+  }
+
+  public resetSelectedGroupItem() {
+    this.selectedGroupItem = {}
+  }
+
+  public setIsRedacorMode() {
+    this.isRedactorMode = true
+  }
+
+  public resetIsRedacorMode() {
+    this.isRedactorMode = false
+  }
+
+  public memorizeSelectedFilters() {
+    this.memorizedSelectedFilters = this._selectedFilters
+  }
+
+  public applyMemorizedFilters() {
     if (this.memorizedSelectedFilters) {
-      this.selectedFilters = this.memorizedSelectedFilters
+      this._selectedFilters = this.memorizedSelectedFilters
     }
   }
 }

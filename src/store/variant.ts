@@ -1,9 +1,14 @@
 import { get } from 'lodash'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { IGridLayout, ReccntCommon, ReccntDisplayItem } from '@declarations'
-import { getApiUrl } from '@core/get-api-url'
-import { IReccntArguments } from '@service-providers/dataset-level/dataset-level.interface'
+import { IGridLayout, ReccntDisplayItem } from '@declarations'
+import datasetProvider from '@service-providers/dataset-level/dataset.provider'
+import {
+  IReccntArguments,
+  TRecCntResponse,
+} from '@service-providers/dataset-level/dataset-level.interface'
+import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
@@ -12,7 +17,7 @@ const DRAWER_DEFAULT_X = 0
 
 export class VariantStore {
   drawerVisible = false
-  variant: ReccntCommon[] = []
+  variant: TRecCntResponse[] = []
   recordsDisplayConfig: any = {}
   wsDrawerVariantsLayout: IGridLayout[] = []
   modalDrawerVariantsLayout: IGridLayout[] = []
@@ -141,24 +146,14 @@ export class VariantStore {
       reccntArguments.details = details?.dt
     }
 
-    const reccntArgumentsList = Object.entries(reccntArguments)
-    const reccntBody = new URLSearchParams()
-
-    reccntArgumentsList.forEach(element => {
-      reccntBody.append(element[0], element[1])
-    })
-
     const [variantResponse, tagsResponse] = await Promise.all([
-      fetch(getApiUrl('reccnt'), {
-        method: 'POST',
-        body: reccntBody,
-      }),
-      fetch(getApiUrl(`ws_tags?ds=${this.dsName}&rec=${this.index}`)),
+      datasetProvider.getRecCnt(reccntArguments),
+      wsDatasetProvider.getWsTags({ ds: this.dsName, rec: this.index }),
     ])
 
     const [variant, tagsData] = await Promise.all([
-      variantResponse.json(),
-      tagsResponse.json(),
+      variantResponse,
+      tagsResponse,
     ])
 
     const checkedTags = Object.keys(tagsData['rec-tags']).filter(
@@ -175,7 +170,7 @@ export class VariantStore {
       this.optionalTags = optionalTags
       this.checkedTags = checkedTags
       this.tagsWithNotes = get(tagsData, 'rec-tags')
-      this.noteText = tagsData['rec-tags']['_note']
+      this.noteText = tagsData['rec-tags']['_note'] as string
       this.initRecordsDisplayConfig()
 
       if (this.wsDrawerVariantsLayout.length === 0) {
@@ -184,32 +179,22 @@ export class VariantStore {
     })
   }
 
-  async fetchSelectedTagsAsync(params: string) {
+  async fetchSelectedTagsAsync(tagList: TTagsDescriptor) {
     if (datasetStore.isXL) return
 
-    const body = new URLSearchParams({
+    const wsTags = await wsDatasetProvider.getWsTags({
       ds: this.dsName,
-      rec: this.index.toString(),
-      tags: `{${params}}`,
+      rec: this.index,
+      tags: tagList,
     })
 
-    const response = await fetch(getApiUrl('ws_tags'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
-
-    const tagsData = await response.json()
-
-    const checkedTags = Object.keys(tagsData['rec-tags']).filter(
+    const checkedTags = Object.keys(wsTags['rec-tags']).filter(
       tag => tag !== '_note',
     )
 
     runInAction(() => {
       this.checkedTags = checkedTags
-
+      this.tagsWithNotes = wsTags['rec-tags']
       this.initRecordsDisplayConfig()
     })
   }
@@ -218,14 +203,10 @@ export class VariantStore {
     datasetName: string,
     orderNumber: number,
   ) {
-    const variantResponse = await fetch(
-      getApiUrl(`reccnt?ds=${datasetName}&rec=${orderNumber}`),
-      {
-        method: 'POST',
-      },
-    )
-
-    const variant = await variantResponse.json()
+    const variant = await datasetProvider.getRecCnt({
+      ds: datasetName,
+      rec: String(orderNumber),
+    })
 
     runInAction(() => {
       this.variant = variant

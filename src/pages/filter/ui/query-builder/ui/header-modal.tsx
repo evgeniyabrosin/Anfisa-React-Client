@@ -5,7 +5,7 @@ import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-m
 import { SwitchTheme } from './switch-theme'
 
 interface IProps {
-  groupName: string
+  groupName?: string
   handleClose: () => void
   theme?: string
   isTextEditor?: boolean

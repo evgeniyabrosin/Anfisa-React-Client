@@ -12,15 +12,25 @@ import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 
 class FilterControlRefinerStore {
+  private _createPresetName = ''
+
   constructor() {
     makeAutoObservable(this)
   }
 
-  get activePreset(): string {
+  public get createPresetName(): string {
+    return this._createPresetName
+  }
+
+  public setCreatePresetName(presetName: string) {
+    this._createPresetName = presetName
+  }
+
+  public get activePreset(): string {
     return datasetStore.activePreset
   }
 
-  get presets(): string[] {
+  public get presets(): string[] {
     return get(datasetStore, 'dsStat.filter-list', [])
       .filter(this.isPresetAbleToBeModified)
       .map((preset: FilterList) => preset.name)
@@ -37,8 +47,18 @@ class FilterControlRefinerStore {
     createPresetName: string,
     isSelectedFiltersEmpty: boolean,
   ): void => {
+    const { conditions } = filterStore
+
     if (filterStore.actionName === ActionFilterEnum.Delete) {
+      if (!datasetStore.activePreset) {
+        showToast(t('error.choosePresetFirst'), 'error')
+
+        return
+      }
+
       presetStore.deletePreset()
+      filterStore.resetSelectedFilters()
+      datasetStore.fetchDsStatAsync()
     }
 
     if (filterStore.actionName === ActionFilterEnum.Join) {
@@ -49,7 +69,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToJoin = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,
@@ -80,6 +100,7 @@ class FilterControlRefinerStore {
       }
 
       presetStore.createPreset(createPresetName)
+      this.setCreatePresetName('')
     }
 
     if (filterStore.actionName === ActionFilterEnum.Modify) {
@@ -90,7 +111,7 @@ class FilterControlRefinerStore {
       }
 
       const isConditionsAbleToModify = compareConditions({
-        currentConditions: datasetStore.conditions,
+        currentConditions: conditions,
         startConditions: datasetStore.startPresetConditions,
         currentPreset: datasetStore.activePreset,
         prevPreset: datasetStore.prevPreset,

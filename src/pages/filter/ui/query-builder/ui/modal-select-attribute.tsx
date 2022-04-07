@@ -5,6 +5,7 @@ import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import dtreeModalStore from '../../../modals.store'
 import { QueryBuilderSubgroup } from '../groups/query-builder-subgroup'
 import { QueryBuilderSearch } from '../query-builder-search'
 import { HeaderModal } from './header-modal'
@@ -26,7 +27,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
   const modalBaseRef = useRef(null)
 
   const handleClose = () => {
-    dtreeStore.closeModalAttribute()
+    dtreeModalStore.closeModalAttribute()
     dtreeStore.resetFilterModalValue()
   }
 
@@ -51,7 +52,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
       </div>
 
       <div id="attributes-container" className="flex-1 overflow-y-scroll mt-4">
-        {dtreeStore.isFiltersLoading ? (
+        {dtreeStore.stat.isLoading ? (
           <div className="flex justify-center w-full my-4">
             {t('dtree.loading')}
           </div>

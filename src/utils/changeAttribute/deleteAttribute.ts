@@ -1,6 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/active-step.store'
+import activeStepStore from '@pages/filter/active-step.store'
 import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
 
 export const deleteAttribute = (): void => {

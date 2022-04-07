@@ -5,12 +5,10 @@ interface IProps {
   handleCheckGroupItem: (checked: boolean, variant: [string, number]) => void
   variant: [string, number]
   isSelected: boolean
-  isInDataset: boolean
 }
 
 export const SelectedGroupItem = ({
   isSelected,
-  isInDataset,
   variant,
   handleCheckGroupItem,
 }: IProps): ReactElement => {
@@ -21,8 +19,7 @@ export const SelectedGroupItem = ({
   return (
     <div className="flex items-center mb-2 text-14">
       <Checkbox
-        checked={isSelected || isInDataset}
-        disabled={isInDataset}
+        checked={isSelected}
         className="-mt-0.5 mr-1 cursor-pointer"
         onChange={handleCheck}
       />

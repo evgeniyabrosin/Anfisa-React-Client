@@ -5,10 +5,10 @@ import { ChangeStepActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   CreateEmptyStepPositions,
-} from '@store/dtree/active-step.store'
-import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+} from '@pages/filter/active-step.store'
 import { changeStep } from '@utils/changeStep'
 
 interface IProps {

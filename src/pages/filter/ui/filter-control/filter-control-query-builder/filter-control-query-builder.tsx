@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useState } from 'react'
+import { Fragment, ReactElement } from 'react'
 import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -21,20 +21,16 @@ import { DtreeModal } from '../../dtree-modal'
 import { FilterButton } from '../../filter-button'
 
 export const FilterControlQueryBuilder = observer((): ReactElement => {
-  const [activeTree, setActiveTree] = useState('')
-  const [createTreeName, setCreateTreeName] = useState('')
-
   const trees: string[] = get(dtreeStore, 'dtreeList', []).map(
     (preset: FilterList) => preset.name,
   )
 
+  const currentTreeName = dtreeStore.currentDtreeName
+  const prevTreeName = dtreeStore.previousDtreeName
+  const createNewDtreeName = dtreeStore.createNewDtreeName
+
   const handleSelect = (value: string) => {
-    setActiveTree(value)
-
-    dtreeStore.setDtreeName(value)
-
-    const currentTreeName = dtreeStore.currentDtreeName
-    const prevTreeName = dtreeStore.previousDtreeName
+    dtreeStore.setCurrentDtreeName(value)
 
     if (
       dtreeStore.dtreeCode.length > 13 &&
@@ -69,16 +65,8 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
 
     let instruction, notification
 
-    if (filterStore.actionName === ActionFilterEnum.Delete) {
-      instruction = ['DTREE', 'DELETE', dtreeStore.currentDtreeName]
-      notification = `${t('dtree.dtree')} "${dtreeStore.currentDtreeName}" ${t(
-        'dtree.hasBeenDeleted',
-      )}`
-      setActiveTree('')
-    }
-
     if (filterStore.actionName === ActionFilterEnum.Create) {
-      const isDtreeNameValid = validatePresetName(createTreeName)
+      const isDtreeNameValid = validatePresetName(createNewDtreeName)
 
       if (!isDtreeNameValid) {
         showToast(t('error.dtreeNameIsNotValid'), 'error')
@@ -86,14 +74,13 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
         return
       }
 
-      instruction = ['DTREE', 'UPDATE', createTreeName]
-      notification = `${t('dtree.dtree')} "${createTreeName}" ${t(
+      instruction = ['DTREE', 'UPDATE', createNewDtreeName]
+      notification = `${t('dtree.dtree')} "${createNewDtreeName}" ${t(
         'dtree.hasBeenCreated',
       )}`
-      setActiveTree(createTreeName)
-      dtreeStore.setDtreeName(createTreeName)
+      dtreeStore.setCurrentDtreeName(createNewDtreeName)
 
-      setCreateTreeName('')
+      dtreeStore.resetCreateNewDtreeName()
     }
 
     if (filterStore.actionName === ActionFilterEnum.Modify) {
@@ -141,16 +128,16 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
 
           {filterStore.actionName === ActionFilterEnum.Create ? (
             <Input
-              value={createTreeName}
+              value={createNewDtreeName}
               placeholder={t('dtree.decisionTreeName')}
               className="bg-blue-lighter text-white border-2 border-blue-bright"
               style={{ width: 209 }}
-              onChange={e => setCreateTreeName(e.target.value)}
+              onChange={e => dtreeStore.setCreateNewDtreeName(e.target.value)}
             />
           ) : (
             <DropDown
               options={trees}
-              value={activeTree}
+              value={currentTreeName}
               onSelect={args => handleSelect(args.value)}
             />
           )}
@@ -163,8 +150,19 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
           />
         )}
 
-        {(createTreeName ||
-          filterStore.actionName === ActionFilterEnum.Delete ||
+        {(createNewDtreeName ||
+          filterStore.actionName === ActionFilterEnum.Modify) && (
+          <Button
+            text={t('general.apply')}
+            disabled={isApplyDisabled}
+            size="md"
+            onClick={handleClick}
+            className="text-white mt-auto ml-2"
+            dataTestId={DecisionTreesMenuDataCy.applyNewTree}
+          />
+        )}
+
+        {(createNewDtreeName ||
           filterStore.actionName === ActionFilterEnum.Modify ||
           filterStore.actionName === ActionFilterEnum.Create) && (
           <Button
@@ -174,21 +172,8 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
             className={cn('mt-auto ml-2')}
             onClick={() => {
               filterStore.setActionName()
-              setCreateTreeName('')
+              dtreeStore.resetCreateNewDtreeName()
             }}
-          />
-        )}
-
-        {(createTreeName ||
-          filterStore.actionName === ActionFilterEnum.Delete ||
-          filterStore.actionName === ActionFilterEnum.Modify) && (
-          <Button
-            text={t('general.apply')}
-            disabled={isApplyDisabled}
-            size="md"
-            onClick={handleClick}
-            className="text-white mt-auto ml-2"
-            dataTestId={DecisionTreesMenuDataCy.applyNewTree}
           />
         )}
       </div>

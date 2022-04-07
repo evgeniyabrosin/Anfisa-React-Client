@@ -7,8 +7,10 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { GlbPagesNames } from '@glb/glb-names'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
+
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true
@@ -19,39 +21,27 @@ class OperationsStore {
   }
 
   async macroTaggingAsync({ tag, off }: { tag: string; off?: boolean }) {
-    const body = new URLSearchParams({
+    await wsDatasetProvider.updateMicroTagging({
       ds: datasetStore.datasetName,
       tag,
-      conditions: JSON.stringify(datasetStore.conditions),
+      conditions: filterStore.conditions,
       filter: datasetStore.activePreset,
+      off,
     })
-
-    off && body.append('off', String(off))
-
-    const response = await fetch(
-      getApiUrl(`macro_tagging?ds=${datasetStore.datasetName}&tag=${tag}`),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body,
-      },
-    )
-
-    await response.json()
 
     datasetStore.initDatasetAsync(datasetStore.datasetName)
     dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
   }
 
   async exportReportAsync(exportType?: ExportTypeEnum) {
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
     })
 
-    if (datasetStore.conditions) {
-      const condtitions = JSON.stringify(datasetStore.conditions)
+    if (conditions) {
+      const condtitions = JSON.stringify(conditions)
 
       body.append('conditions', condtitions)
     }
@@ -129,6 +119,8 @@ class OperationsStore {
   ): Promise<{ ok: boolean; message?: string }> {
     this.resetIsCreationOver()
 
+    const { conditions } = filterStore
+
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
       ws: wsName,
@@ -137,17 +129,15 @@ class OperationsStore {
     const isRefiner = filterStore.method === GlbPagesNames.Refiner
     const isMainTable = pathName === Routes.WS
 
-    let compareValue = 0
+    const { variantCounts } = datasetStore.fixedStatAmount
 
-    compareValue =
-      isRefiner || isMainTable
-        ? datasetStore.statAmount[0]
+    const compareValue =
+      variantCounts && (isRefiner || isMainTable)
+        ? variantCounts
         : dtreeStore.acceptedVariants
 
     if (isRefiner || isMainTable) {
-      const conditions = JSON.stringify(datasetStore.conditions)
-
-      conditions && body.append('conditions', conditions)
+      conditions && body.append('conditions', JSON.stringify(conditions))
     } else {
       body.append('code', dtreeStore.dtreeCode)
     }

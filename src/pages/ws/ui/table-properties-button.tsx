@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 import cn from 'classnames'
 
 import { t } from '@i18n'
@@ -9,7 +9,8 @@ import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 interface Props {
   refEl: any
   isOpen?: boolean
-  onClick?: () => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void
   dataTestId?: string
 }
 
@@ -17,11 +18,13 @@ export const TableProperiesButton = ({
   refEl,
   isOpen,
   onClick,
+  onMouseUp,
 }: Props): ReactElement => (
   <Button
     dataTestId={MainTableDataCy.customizeTable}
     refEl={refEl}
     onClick={onClick}
+    onMouseUp={onMouseUp}
     text={t('ds.customizeTable')}
     variant="secondary-dark"
     prepend={<Icon name="Settings" />}

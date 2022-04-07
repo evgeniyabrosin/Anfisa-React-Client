@@ -2,11 +2,9 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 
-import { getIgvUrl } from '@core/get-api-url'
 import { useParams } from '@core/hooks/use-params'
 import { ErrorPage } from '@pages/error/error'
-import { convertToListObject } from './adapters/convert-to-list-object'
-import igvServiceProvider from './serviceProvider/igv-service-provider'
+import NotFoundPage from '@pages/not-found/not-found.page'
 import { FileMissing } from './ui/file-missing'
 
 export const hg38Folder = 'GRCh38'
@@ -14,63 +12,60 @@ export const hg38Folder = 'GRCh38'
 const igv = require('igv')
 
 const IgvPage = observer((): ReactElement => {
-  const [isEachFilesMissing, setIsEachFilesMissing] = useState<boolean>(false)
-  const [listObject, setListObject] = useState<string[]>([])
+  const [isEachFilesMissing, setIsEachFilesMissing] = useState(false)
+
   const ref = useRef<HTMLDivElement>(null)
 
   const params = useParams()
+
+  const stringifiedIgvUrls = params.get('igvUrls')
 
   const locus = params.get('locus')
   const names = params.get('names')
   const nameList = names?.split(',') ?? []
 
-  const isCorrectParams = locus && names
+  const isCorrectParams = locus && names && stringifiedIgvUrls
+
+  if (!isCorrectParams) {
+    return <NotFoundPage />
+  }
 
   useEffect(() => {
-    // eslint-disable-next-line promise/catch-or-return
-    igvServiceProvider
-      .getListBucketAsync()
-      .then(listBucket => convertToListObject(listBucket, hg38Folder))
-      .then(list => setListObject(list))
-  }, [])
+    const igvUrls: string[] = JSON.parse(stringifiedIgvUrls)
 
-  useEffect(() => {
     const tracks = nameList
       .map(name => {
-        const path = `${hg38Folder}/${name}.sorted.bam`
-        const indexPath = `${hg38Folder}/${name}.sorted.bam.bai`
+        const path = igvUrls.find(url => url.includes(name))
 
-        const isFileDownloaded = listObject.includes(path)
-        const isIndexFileDownloaded = listObject.includes(indexPath)
+        if (!path) return null
 
-        const isDownloaded = isFileDownloaded && isIndexFileDownloaded
+        const indexPath = `${path}.bai`
 
-        return isDownloaded
-          ? {
-              name,
-              url: getIgvUrl(path),
-              indexURL: getIgvUrl(indexPath),
-              format: 'bam',
-            }
-          : null
+        return {
+          name,
+          url: path,
+          indexURL: indexPath,
+          format: 'bam',
+        }
       })
       .filter(element => element)
 
     const isTracksEmpty = tracks.length === 0
 
-    if (listObject.length > 0) setIsEachFilesMissing(isTracksEmpty)
+    if (isTracksEmpty) {
+      setIsEachFilesMissing(true)
+    } else {
+      const options = {
+        genome: 'hg38',
+        locus,
+        tracks,
+      }
 
-    const options = {
-      genome: 'hg38',
-      locus,
-      tracks,
+      igv.createBrowser(ref.current, options)
     }
 
-    const shouldRenderIgv = isCorrectParams && !isTracksEmpty
-
-    if (shouldRenderIgv) igv.createBrowser(ref.current, options)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listObject])
+  }, [])
 
   return isEachFilesMissing ? <FileMissing /> : <div ref={ref} />
 })
