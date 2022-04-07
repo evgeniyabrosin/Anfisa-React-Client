@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 
 import { Tag } from '@ui/tag'
+import { EMPTY_VALUE } from '@pages/ws/constants'
 import { CellI } from './cell-interfaces'
 
 export const CellTags = ({ cell }: CellI): ReactElement => {
@@ -10,7 +11,7 @@ export const CellTags = ({ cell }: CellI): ReactElement => {
     []
 
   if (tags.length === 0) {
-    return <div>{'-'}</div>
+    return <div>{EMPTY_VALUE}</div>
   }
 
   return (
