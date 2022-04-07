@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import {
   DragDropContext,
   Draggable,
@@ -30,10 +30,6 @@ export const ColumnsList = observer((): ReactElement => {
   }
 
   const { filteredColumns, toggleColumnHidden } = columnListStore
-
-  useEffect(() => {
-    return () => columnsStore.setColumns([...columnsStore.selectedColumns])
-  }, [])
 
   return (
     <div className="mt-3 w-64 pr-4">
