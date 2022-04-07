@@ -8,6 +8,7 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
+import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
@@ -56,6 +57,9 @@ export const PopperTableModal = observer(
     className,
   }: Props) => {
     const ref = useRef(null)
+
+    const isSettingTable = viewType && setViewType
+    const isShortSettingTable = isSettingTable && variantStore.drawerVisible
 
     const onOutsideClick = () => {
       isTags && zoneStore.unselectAllTags()
@@ -107,39 +111,49 @@ export const PopperTableModal = observer(
             />
           </div>
 
-          <InputSearch
-            value={searchValue}
-            placeholder={searchInputPlaceholder}
-            onChange={e => onChange && onChange(e.target.value)}
-          />
-          {viewType && setViewType && (
-            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
+          {!isSettingTable && (
+            <InputSearch
+              value={searchValue}
+              placeholder={searchInputPlaceholder}
+              onChange={e => onChange && onChange(e.target.value)}
+            />
           )}
-          <div className="flex justify-between mt-5">
-            {viewType ? (
-              <span className="text-14 text-grey-blue">
-                {selectedAmount} {'Selected'}
-              </span>
-            ) : (
-              <span className="text-14 text-grey-blue">
-                {defintSelectedAmount() || 0} {'Selected'}
-              </span>
-            )}
-
-            <span className="text-12 text-blue-bright leading-14">
-              {onSelectAll && (
-                <span className="cursor-pointer mr-3" onClick={onSelectAll}>
-                  {t('general.selectAll')}
+          {!isShortSettingTable && (
+            <div className="flex justify-between mt-5">
+              {viewType ? (
+                <span className="text-14 text-grey-blue">
+                  {selectedAmount} {'Selected'}
+                </span>
+              ) : (
+                <span className="text-14 text-grey-blue">
+                  {defintSelectedAmount() || 0} {'Selected'}
                 </span>
               )}
-              <span className="cursor-pointer" onClick={onClearAll}>
-                {t('general.clearAll')}
+
+              <span className="text-12 text-blue-bright leading-14">
+                {onSelectAll && (
+                  <span className="cursor-pointer mr-3" onClick={onSelectAll}>
+                    {t('general.selectAll')}
+                  </span>
+                )}
+                <span className="cursor-pointer" onClick={onClearAll}>
+                  {t('general.clearAll')}
+                </span>
               </span>
-            </span>
-          </div>
+            </div>
+          )}
           {isTags && <FilterMods />}
         </div>
-        <div className="w-full pl-4">{children}</div>
+        {!isShortSettingTable && <div className="w-full pl-4">{children}</div>}
+        {isSettingTable && (
+          <div
+            className={cn('mx-4 mt-4 mb-7', {
+              'border-t-[1px] border-t-blue-light': !variantStore.drawerVisible,
+            })}
+          >
+            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
+          </div>
+        )}
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
