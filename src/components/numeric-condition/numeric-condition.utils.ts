@@ -108,9 +108,7 @@ export const parseNumeric = (
   }
 
   if (isFloat) {
-    console.log('Raw', value)
-    console.log('Parsed', Number.parseFloat(value))
-    return Number.parseFloat(value) //parseFloat(value)
+    return Number.parseFloat(value)
   }
 
   return parseInt(value, 10)
