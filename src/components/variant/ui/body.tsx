@@ -164,7 +164,7 @@ export const VariantBody = observer(
         containerPadding={[16, 16]}
         width={drawerWidth}
         margin={[8, 8]}
-        className="flex-grow overflow-y-scroll overflow-x-hidden"
+        className="flex-grow overflow-y-auto overflow-x-hidden"
         draggableHandle=".dragHandleSelector"
         onResizeStop={layoutData => {
           layoutData.forEach(layoutItem => {

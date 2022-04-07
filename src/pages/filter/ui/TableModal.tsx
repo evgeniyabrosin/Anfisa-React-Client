@@ -1,12 +1,18 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Key, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import cn from 'classnames'
+import { get } from 'lodash'
+import debounce from 'lodash/debounce'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
+import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -39,11 +45,29 @@ export const TableModal = observer(() => {
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
+  const [tableWidth, setTableWidth] = useState(window.innerWidth - 420)
   const ref = useRef(null)
+  const variantContainerRef = useRef<HTMLDivElement>(null)
+
+  const resizeHandler = debounce(() => {
+    const width = variantContainerRef.current?.getBoundingClientRect().width
+    if (width) {
+      setTableWidth(width)
+    }
+  }, 50)
 
   useEffect(() => {
     variantStore.fetchVarinatInfoForModalAsync(datasetStore.datasetName, 0)
+
+    addEventListener('resize', resizeHandler)
+
+    return () => window.removeEventListener('resize', resizeHandler)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useLayoutEffect(() => {
+    resizeHandler()
+  }, [resizeHandler])
 
   const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
 
@@ -116,8 +140,6 @@ export const TableModal = observer(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobStatusData, variantIndex])
 
-  const drawerWidth = window.innerWidth - 380
-
   const closeModal = (event: any) => {
     if (event.currentTarget === event.target) {
       dtreeStore.closeTableModal()
@@ -133,41 +155,66 @@ export const TableModal = observer(() => {
     setVariantList(newVariantList)
   }
 
-  const allVaraints = stepIndex ? dtreeStore.pointCounts[stepIndex] : ''
+  const onCollapse = () => {
+    if (isCollapsed) {
+      const parents = document.querySelectorAll('#parent')
+
+      setLayout((prev: any[]) => {
+        const newLayout = prev.map((item: any, index: number) => ({
+          ...item,
+          h:
+            get(parents[index].children[1].firstChild, 'clientHeight', 0) *
+              0.0208 +
+            1.3,
+          y: index,
+        }))
+
+        window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
+
+        return newLayout
+      })
+      return
+    }
+
+    setLayout((prev: any[]) => {
+      const newLayout = prev.map((item: any) => ({
+        ...item,
+        h: 1,
+      }))
+
+      window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
+
+      return newLayout
+    })
+  }
+
+  const isCollapsed = JSON.parse(
+    window.sessionStorage.getItem('gridLayout') || '[]',
+  ).every((el: IGridLayout) => el.h === 1)
 
   return (
-    <ModalView className="bg-grey-blue" onClick={closeModal}>
+    <ModalView className="bg-grey-blue rounded-lg" onClick={closeModal}>
       <ModalContent
-        className="flex flex-col py-4 px-4 bg-white rounded-lg overflow-y-auto"
+        className="flex flex-col bg-white rounded-lg overflow-y-auto h-full"
         ref={ref}
       >
         {isLoading ? (
-          jobStatus[1]
+          <div className="flex w-full h-full rounded-lg items-center justify-around">
+            {jobStatus[1]}
+          </div>
         ) : (
-          <Fragment>
-            <div
-              className="flex w-full justify-center text-16 font-semibold"
-              // data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
-              dangerouslySetInnerHTML={{
-                __html: variantList[variantIndex]?.lb ?? '',
-              }}
-            />
-
-            <div className="flex">
-              <div className="p-5">
-                <div className="flex flex-col">
-                  <div>
-                    {'In scope: '}
-                    {allVaraints}
-                  </div>
-                  <div className="flex items-center mr-3">
+          <>
+            <div className="flex w-full overflow-hidden rounded-lg">
+              <div className="flex flex-col rounded-l-lg overflow-auto">
+                <div className="flex px-[14px] py-4">
+                  <div className="flex items-center mr-[14px]">
                     <RadioButton
                       isDisabled={variantSize === 'LARGE'}
                       isChecked={!isSampleMode}
                       onChange={toggleMode}
                     />
 
-                    <div className="ml-1">{t('dtree.fullList')}</div>
+                    <div className="ml-[6px]">{t('dtree.fullList')}</div>
                   </div>
 
                   <div className="flex items-center">
@@ -177,30 +224,92 @@ export const TableModal = observer(() => {
                       onChange={toggleMode}
                     />
 
-                    <p className="ml-1 ">{t('dtree.samples25')}</p>
+                    <p className="ml-[6px]">{t('dtree.samples25')}</p>
                   </div>
                 </div>
-
-                {variantList.map((_element: any, index: number) => (
-                  <div
-                    key={index}
-                    className="shadow-dark p-1 mb-5 cursor-pointer"
-                    // data-testid={ReturnedVariantsDataCy.sampleButton}
-                  >
-                    <p onClick={() => setVariantIndex(index)}>
-                      {'N - '}
-                      {index + 1}
-                    </p>
-                  </div>
-                ))}
+                <table className="min-w-full table-auto">
+                  <thead>
+                    <tr className="border-y-[0.5px] border-grey-blue">
+                      <th className="px-4 py-3">Gene</th>
+                      <th className="px-4 py-3">Variant</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {toJS(variantList).map(
+                      (
+                        variant: { lb: string; no: Key | null | undefined },
+                        index: number,
+                      ) => {
+                        const parts = variant.lb
+                          .split(/[[\]]/)
+                          .filter(Boolean)
+                          .map(el => el.trim())
+                        const gene = parts[0]
+                        const variantB = parts[1]
+                        const active = index === variantIndex
+                        return (
+                          <tr
+                            key={variant.no}
+                            className={cn(
+                              'border-y-[0.5px] border-grey-blue cursor-pointer',
+                              {
+                                'bg-blue-bright': active,
+                              },
+                            )}
+                            onClick={() => setVariantIndex(index)}
+                          >
+                            <th
+                              className="text-sm font-normal py-[30px] px-[16px]"
+                              dangerouslySetInnerHTML={{ __html: gene }}
+                            />
+                            <th
+                              className="text-xs font-normal py-[30px] px-[16px]"
+                              dangerouslySetInnerHTML={{ __html: variantB }}
+                            />
+                          </tr>
+                        )
+                      },
+                    )}
+                  </tbody>
+                </table>
               </div>
-              <VariantBody
-                drawerWidth={drawerWidth}
-                setLayout={setLayout}
-                layout={layout}
-              />
+              <div className="flex flex-col rounded-r-lg w-full">
+                <div className="flex px-4 py-2 justify-between w-full bg-blue-dark">
+                  <div
+                    className="flex justify-center text-16 font-semi-bold text-blue-bright"
+                    dangerouslySetInnerHTML={{
+                      __html: variantList[variantIndex]?.lb ?? '',
+                    }}
+                  />
+                  <div className="flex justify-center items-center">
+                    <Icon
+                      name={isCollapsed ? 'Expand' : 'Collapse'}
+                      onClick={onCollapse}
+                      size={16}
+                      className="cursor-pointer text-white"
+                    />
+                    <div className="bg-blue-lighter mx-3 rounded-sm w-0.5 h-[20px]" />
+                    <Icon
+                      name="Close"
+                      onClick={dtreeStore.closeTableModal}
+                      size={16}
+                      className="cursor-pointer text-white"
+                    />
+                  </div>
+                </div>
+                <div
+                  ref={variantContainerRef}
+                  className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
+                >
+                  <VariantBody
+                    drawerWidth={tableWidth}
+                    setLayout={setLayout}
+                    layout={layout}
+                  />
+                </div>
+              </div>
             </div>
-          </Fragment>
+          </>
         )}
       </ModalContent>
     </ModalView>
