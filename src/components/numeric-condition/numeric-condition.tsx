@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react'
 
 import { AttributeChartRenderModes } from '@service-providers/common'
+import { INumericConditionProps } from './numeric-condition.interface'
 import { NumericConditionNeighborhood } from './numeric-condition-neighborhood'
 import { NumericConditionRange } from './numeric-condition-range'
-import { INumericConditionProps } from './types'
 
 export const NumericCondition = (
   props: INumericConditionProps,

@@ -115,6 +115,7 @@ export const en = {
     saveNote: 'Save note',
   },
   numericCondition: {
+    limitedRange: 'Limited range',
     upperBoundError: 'Upper bound is incorrect',
     lowerBoundError: 'Lower bound is incorrect',
     conditionError: 'Condition is incorrect',

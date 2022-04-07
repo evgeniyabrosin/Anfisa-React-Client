@@ -130,11 +130,17 @@ export const validateNumericValue = (
   const errors: NumericValueValidationErrors = [false, false, false]
   const [minValue, minStrictness, maxValue, maxStrictness] = value
 
-  if (minValue !== null && min != null && minValue < min) {
+  if (
+    minValue !== null &&
+    ((min != null && minValue < min) || (max != null && minValue > max))
+  ) {
     errors[NumericValueErrorType.MinValue] = true
   }
 
-  if (maxValue !== null && max != null && maxValue > max) {
+  if (
+    maxValue !== null &&
+    ((min != null && maxValue < min) || (max != null && maxValue > max))
+  ) {
     errors[NumericValueErrorType.MaxValue] = true
   }
 
@@ -281,4 +287,20 @@ export const useCenterDistanceValue = (
   )
 
   return [value, setters[0], setters[1]]
+}
+
+export const getLimitedRangeInitialState = (
+  value: TNumericConditionBounds | undefined,
+  attrData: INumericPropertyStatus,
+): boolean => {
+  const left = value?.[0]
+  const right = value?.[2]
+  const { min, max } = attrData
+
+  return !(
+    (min != null &&
+      ((left != null && left < min) || (right != null && right < min))) ||
+    (max != null &&
+      ((left != null && left > max) || (right != null && right > max)))
+  )
 }
