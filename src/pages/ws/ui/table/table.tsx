@@ -144,7 +144,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   useEffect(() => {
     alreadyOpened &&
       handleOpenVariant({
-        index: isFiltered() ? 0 : Number(params.get('variant')),
+        index: !isFiltered() ? 0 : Number(params.get('variant')),
       })
 
     const handleResize = debounce(() => {
