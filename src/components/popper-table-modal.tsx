@@ -33,6 +33,8 @@ interface Props {
   isGenesList?: boolean
   isSamples?: boolean
   isTags?: boolean
+  isNotSearchable?: boolean
+  notShowSelectedPanel?: boolean
   className?: Argument
 }
 
@@ -44,7 +46,6 @@ export const PopperTableModal = observer(
     searchInputPlaceholder,
     viewType,
     children,
-    setViewType,
     onSelectAll,
     onClearAll,
     onClose,
@@ -54,12 +55,11 @@ export const PopperTableModal = observer(
     isGenesList,
     isSamples,
     isTags,
+    isNotSearchable,
+    notShowSelectedPanel,
     className,
   }: Props) => {
     const ref = useRef(null)
-
-    const isSettingTable = viewType && setViewType
-    const isShortSettingTable = isSettingTable && variantStore.drawerVisible
 
     const onOutsideClick = () => {
       isTags && zoneStore.unselectAllTags()
@@ -111,14 +111,14 @@ export const PopperTableModal = observer(
             />
           </div>
 
-          {!isSettingTable && (
+          {!isNotSearchable && (
             <InputSearch
               value={searchValue}
               placeholder={searchInputPlaceholder}
               onChange={e => onChange && onChange(e.target.value)}
             />
           )}
-          {!isShortSettingTable && (
+          {!notShowSelectedPanel && (
             <div className="flex justify-between mt-5">
               {viewType ? (
                 <span className="text-14 text-grey-blue">
@@ -144,16 +144,7 @@ export const PopperTableModal = observer(
           )}
           {isTags && <FilterMods />}
         </div>
-        {!isShortSettingTable && <div className="w-full pl-4">{children}</div>}
-        {isSettingTable && (
-          <div
-            className={cn('mx-4 mt-4 mb-7', {
-              'border-t-[1px] border-t-blue-light': !variantStore.drawerVisible,
-            })}
-          >
-            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
-          </div>
-        )}
+        <div className="w-full pl-4">{children}</div>
         <div className="flex justify-end pb-4 px-4 mt-4">
           <Button
             text={t('general.cancel')}
