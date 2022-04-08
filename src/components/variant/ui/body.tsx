@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react'
 import GridLayout from 'react-grid-layout'
+import ScrollContainer from 'react-indiana-drag-scroll'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { clone, get } from 'lodash'
@@ -90,21 +91,25 @@ const TableView = ({
               </tr>
             </thead>
           )}
-          <tbody>
-            {rows?.map((row, i) => {
-              if (!row) return <tr key={i} />
 
+          <tbody>
+            {rows?.map((row, index) => {
+              if (!row) return <tr key={index} />
+              const isTest = true
+              const test = ' left-0 p-3 bg-blue-darkHover'
               return (
-                <tr
-                  key={row.name}
-                  className="border-b last:border-0 border-blue-lighter"
-                >
+                <tr key={row.name}>
                   <Tooltip
                     overlay={row.tooltip}
                     placement="bottomLeft"
                     trigger={row.tooltip ? ['hover'] : []}
                   >
-                    <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
+                    <td
+                      className={cn(
+                        'p-3 text-blue-bright whitespace-nowrap sticky',
+                        `${isTest ? test : ''}`,
+                      )}
+                    >
                       {row.title}
                     </td>
                   </Tooltip>
@@ -278,28 +283,29 @@ export const VariantBody = observer(
                   />
                 </div>
               </div>
-              <div
-                className={cn(
-                  'px-3 overflow-x-auto overflow-y-scroll content-child',
-                )}
-                id={`drawer-${aspect.name}`}
-                style={{
-                  height: get(layout, aspect.name, 0).h,
-                }}
-              >
-                {aspect.type === 'pre' ? (
-                  <PreView
-                    {...(aspect as ICommonAspectDescriptor &
-                      IPreAspectDescriptor)}
-                  />
-                ) : (
-                  <TableView
-                    {...(aspect as ICommonAspectDescriptor &
-                      ITableAspectDescriptor)}
-                    name={aspect.name}
-                  />
-                )}
-              </div>
+
+              <ScrollContainer hideScrollbars={false}>
+                <div
+                  className={cn('py-3 pr-3   content-child')}
+                  id={`drawer-${aspect.name}`}
+                  style={{
+                    height: get(layout, aspect.name, 0).h,
+                  }}
+                >
+                  {aspect.type === 'pre' ? (
+                    <PreView
+                      {...(aspect as ICommonAspectDescriptor &
+                        IPreAspectDescriptor)}
+                    />
+                  ) : (
+                    <TableView
+                      {...(aspect as ICommonAspectDescriptor &
+                        ITableAspectDescriptor)}
+                      name={aspect.name}
+                    />
+                  )}
+                </div>
+              </ScrollContainer>
             </div>
           )
         })}
