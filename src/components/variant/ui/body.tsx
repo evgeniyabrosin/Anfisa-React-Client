@@ -10,6 +10,7 @@ import ScrollContainer from 'react-indiana-drag-scroll'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { clone, get } from 'lodash'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
@@ -95,8 +96,9 @@ const TableView = ({
           <tbody>
             {rows?.map((row, index) => {
               if (!row) return <tr key={index} />
-              const isTest = true
-              const test = ' left-0 p-3 bg-blue-darkHover'
+
+              const isScrolledHorizontally = false
+              const blueBg = ' p-3 bg-blue-darkHover'
               return (
                 <tr key={row.name}>
                   <Tooltip
@@ -106,8 +108,8 @@ const TableView = ({
                   >
                     <td
                       className={cn(
-                        'p-3 text-blue-bright whitespace-nowrap sticky',
-                        `${isTest ? test : ''}`,
+                        'p-3 text-blue-bright whitespace-nowrap sticky left-0',
+                        `${isScrolledHorizontally ? blueBg : ''}`,
                       )}
                     >
                       {row.title}
@@ -200,6 +202,11 @@ export const VariantBody = observer(
         }}
       >
         {filtered.map((aspect: TRecCntResponse, index: number) => {
+          // const test = {
+          //   ...(aspect as ICommonAspectDescriptor & ITableAspectDescriptor),
+          // }
+
+          // console.log('test', toJS(test.rows))
           return (
             <div
               data-grid={layout[index]}
@@ -298,6 +305,7 @@ export const VariantBody = observer(
                         IPreAspectDescriptor)}
                     />
                   ) : (
+                    // rows here?
                     <TableView
                       {...(aspect as ICommonAspectDescriptor &
                         ITableAspectDescriptor)}
