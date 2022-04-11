@@ -26,7 +26,6 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
   )
 
   const currentTreeName = dtreeStore.currentDtreeName
-  const prevTreeName = dtreeStore.previousDtreeName
   const createNewDtreeName = dtreeStore.createNewDtreeName
 
   const handleSelect = (value: string) => {
