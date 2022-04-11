@@ -11,7 +11,6 @@ import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
-import { ViewTypeTable } from '@components/view-type-table'
 import { FilterMods } from '@pages/ws/ui/filter-mods'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 
@@ -32,6 +31,8 @@ interface Props {
   isGenesList?: boolean
   isSamples?: boolean
   isTags?: boolean
+  isNotSearchable?: boolean
+  notShowSelectedPanel?: boolean
   className?: Argument
 }
 
@@ -43,7 +44,6 @@ export const PopperTableModal = observer(
     searchInputPlaceholder,
     viewType,
     children,
-    setViewType,
     onSelectAll,
     onClearAll,
     onClose,
@@ -53,6 +53,8 @@ export const PopperTableModal = observer(
     isGenesList,
     isSamples,
     isTags,
+    isNotSearchable,
+    notShowSelectedPanel,
     className,
   }: Props) => {
     const ref = useRef(null)
@@ -107,36 +109,37 @@ export const PopperTableModal = observer(
             />
           </div>
 
-          <InputSearch
-            value={searchValue}
-            placeholder={searchInputPlaceholder}
-            onChange={e => onChange && onChange(e.target.value)}
-          />
-          {viewType && setViewType && (
-            <ViewTypeTable setViewType={setViewType} viewType={viewType} />
+          {!isNotSearchable && (
+            <InputSearch
+              value={searchValue}
+              placeholder={searchInputPlaceholder}
+              onChange={e => onChange && onChange(e.target.value)}
+            />
           )}
-          <div className="flex justify-between mt-5">
-            {viewType ? (
-              <span className="text-14 text-grey-blue">
-                {selectedAmount} {'Selected'}
-              </span>
-            ) : (
-              <span className="text-14 text-grey-blue">
-                {defintSelectedAmount() || 0} {'Selected'}
-              </span>
-            )}
-
-            <span className="text-12 text-blue-bright leading-14">
-              {onSelectAll && (
-                <span className="cursor-pointer mr-3" onClick={onSelectAll}>
-                  {t('general.selectAll')}
+          {!notShowSelectedPanel && (
+            <div className="flex justify-between mt-5">
+              {viewType ? (
+                <span className="text-14 text-grey-blue">
+                  {selectedAmount} {'Selected'}
+                </span>
+              ) : (
+                <span className="text-14 text-grey-blue">
+                  {defintSelectedAmount() || 0} {'Selected'}
                 </span>
               )}
-              <span className="cursor-pointer" onClick={onClearAll}>
-                {t('general.clearAll')}
+
+              <span className="text-12 text-blue-bright leading-14">
+                {onSelectAll && (
+                  <span className="cursor-pointer mr-3" onClick={onSelectAll}>
+                    {t('general.selectAll')}
+                  </span>
+                )}
+                <span className="cursor-pointer" onClick={onClearAll}>
+                  {t('general.clearAll')}
+                </span>
               </span>
-            </span>
-          </div>
+            </div>
+          )}
           {isTags && <FilterMods />}
         </div>
         <div className="w-full pl-4">{children}</div>
