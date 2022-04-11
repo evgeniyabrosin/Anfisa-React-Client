@@ -7,7 +7,7 @@ import filterStore from '@store/filter'
 import { EmptySelectedGroup } from './empty-selected-group'
 import { EnumPanel } from './panels/enum-panel'
 import { FunctionPanel } from './panels/function-panel/function-panel'
-import { RangePanel } from './panels/range-panel'
+import { NumericPanel } from './panels/numeric-panel'
 import { SelectedGroupHeader } from './selected-group-header'
 
 export const SelectedGroup = observer((): ReactElement => {
@@ -36,7 +36,7 @@ export const SelectedGroup = observer((): ReactElement => {
         <FunctionPanel />
       )}
       {filterStore.selectedGroupItem.kind === FilterKindEnum.Numeric && (
-        <RangePanel />
+        <NumericPanel />
       )}
     </div>
   )

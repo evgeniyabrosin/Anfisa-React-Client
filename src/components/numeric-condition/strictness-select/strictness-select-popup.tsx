@@ -25,21 +25,25 @@ export const StrictnessSelectPopup = ({
   }
 
   return (
-    <div ref={ref} className={cn('absolute z-50 w-full', className)}>
-      <div className="rounded-md shadow-dark overflow-hidden text-center text-blue-bright">
-        <div
-          onClick={() => onSelect(false)}
-          className="bg-blue-medium cursor-pointer hover:bg-blue-bright hover:text-white"
-        >
-          {'<'}
-        </div>
+    <div
+      ref={ref}
+      className={cn(
+        'absolute z-50 w-full bg-white border border-grey-disabled shadow-input rounded-md overflow-hidden text-center text-blue-bright',
+        className,
+      )}
+    >
+      <div
+        onClick={() => onSelect(false)}
+        className="cursor-pointer hover:bg-blue-tertiary"
+      >
+        {'<'}
+      </div>
 
-        <div
-          onClick={() => onSelect(true)}
-          className="bg-blue-medium cursor-pointer hover:bg-blue-bright hover:text-white"
-        >
-          {'≤'}
-        </div>
+      <div
+        onClick={() => onSelect(true)}
+        className="cursor-pointer hover:bg-blue-tertiary"
+      >
+        {'≤'}
       </div>
     </div>
   )

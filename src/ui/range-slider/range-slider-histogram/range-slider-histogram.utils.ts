@@ -8,7 +8,7 @@ import { RangeSliderColor, RangeSliderSide } from '../range-slider.interface'
 export const pixelRatio = window.devicePixelRatio || 1
 
 const inactiveBarCssColor: string = theme('colors.grey.disabled')
-const activeBarPrimaryCssColor: string = theme('colors.blue.hover')
+const activeBarPrimaryCssColor: string = theme('colors.blue.bright')
 const activeBarSecondaryCssColor: string = theme('colors.purple.bright')
 const axisCssColor: string = theme('colors.grey.tertiary')
 
@@ -200,7 +200,7 @@ export const drawHistogram = ({
 
     if (!selectedArea || x0 >= selectedRight || x1 <= selectedLeft) {
       ctx.fillStyle = inactiveBarCssColor
-    } else if (selectedStrict) {
+    } else if (selectedStrict != null) {
       ctx.fillStyle =
         (x0 < selectedLeft && selectedStrict < x1 && isLeftStrict) ||
         (x0 < selectedRight && selectedRight < x1 && isRightStrict)

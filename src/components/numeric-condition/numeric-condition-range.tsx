@@ -37,7 +37,10 @@ export const NumericConditionRange = ({
   controls,
 }: INumericConditionProps): ReactElement => {
   const isZeroSkipped = useMemo(() => getIsZeroSkipped(attrData), [attrData])
-  const [value, setValue] = useConditionBoundsValue(initialValue, isZeroSkipped)
+  const [value, { updateValue, clearValue }] = useConditionBoundsValue(
+    initialValue,
+    isZeroSkipped,
+  )
   const [isLimitedRange, setLimitedRange] = useState(() =>
     getLimitedRangeInitialState(initialValue, attrData),
   )
@@ -72,18 +75,18 @@ export const NumericConditionRange = ({
     INumericConditionRangeSliderProps['onChange']
   >(
     value => {
-      setValue(NumericValueIndex.MinValue, value[0])
-      setValue(NumericValueIndex.MaxValue, value[1])
+      updateValue(NumericValueIndex.MinValue, value[0])
+      updateValue(NumericValueIndex.MaxValue, value[1])
     },
-    [setValue],
+    [updateValue],
   )
 
   const handleZeroIncludedChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
-    setValue(NumericValueIndex.IsZeroIncluded, event.target.checked)
-    setValue(NumericValueIndex.MinValue, null)
-    setValue(NumericValueIndex.MinStrictness, false)
+    updateValue(NumericValueIndex.IsZeroIncluded, event.target.checked)
+    updateValue(NumericValueIndex.MinValue, null)
+    updateValue(NumericValueIndex.MinStrictness, false)
   }
 
   return (
@@ -104,12 +107,12 @@ export const NumericConditionRange = ({
               <InputNumber
                 data-test-id={DecisionTreeModalDataCy.leftInput}
                 disabled={isZeroIncluded}
-                className="h-8 w-full shadow-dark"
+                className="h-8 w-full border border-grey-disabled shadow-input"
                 min={min}
                 max={max}
                 value={minValue ?? ''}
                 onChange={event =>
-                  setValue(
+                  updateValue(
                     NumericValueIndex.MinValue,
                     parseNumeric(event.target.value, isFloat),
                   )
@@ -125,7 +128,7 @@ export const NumericConditionRange = ({
               <StrictnessSelect
                 isDisabled={isZeroIncluded}
                 value={minStrictness}
-                onChange={v => setValue(NumericValueIndex.MinStrictness, v)}
+                onChange={v => updateValue(NumericValueIndex.MinStrictness, v)}
               />
             </div>
           </div>
@@ -137,18 +140,18 @@ export const NumericConditionRange = ({
             <div className="grow-0 mx-2">
               <StrictnessSelect
                 value={maxStrictness}
-                onChange={v => setValue(NumericValueIndex.MaxStrictness, v)}
+                onChange={v => updateValue(NumericValueIndex.MaxStrictness, v)}
               />
             </div>
             <div className="grow">
               <InputNumber
                 data-test-id={DecisionTreeModalDataCy.rightInput}
-                className="h-8 w-full shadow-dark"
+                className="h-8 w-full border border-grey-disabled shadow-input"
                 min={min}
                 max={max}
                 value={maxValue ?? ''}
                 onChange={event =>
-                  setValue(
+                  updateValue(
                     NumericValueIndex.MaxValue,
                     parseNumeric(event.target.value, isFloat),
                   )
@@ -203,6 +206,7 @@ export const NumericConditionRange = ({
         controls({
           value: prepareValue(value, isZeroSkipped),
           hasErrors: errors.includes(true),
+          clearValue,
         })}
     </Fragment>
   )

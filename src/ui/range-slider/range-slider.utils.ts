@@ -71,9 +71,12 @@ export class RangeSliderLinearAxis implements IRangeSliderAxis {
      *     and in first approach we have ticks: 10, 20, 30, 40, 50
      * 2) `min=10`, `max=500` => `tickStep=100`, ticks: 10, 100, 200, 300, 400, 500
      */
-    let tickStep = Math.pow(10, Math.ceil(Math.log10(this.max - this.min)) - 1)
+    let tickStep = Math.max(
+      Math.pow(10, Math.ceil(Math.log10(this.max - this.min)) - 1),
+      this.step,
+    )
     let divider = 2
-    let candidateStep = tickStep / divider
+    let candidateStep = Math.max(tickStep / divider, this.step)
 
     /**
      * but in the next step we try to reduce out tick step
