@@ -199,7 +199,7 @@ export const TableModal = observer(() => {
         ref={ref}
       >
         {isLoading ? (
-          <div className="flex w-full h-full rounded-lg items-center justify-around">
+          <div className="flex w-full bg-white h-full rounded-lg items-center justify-around">
             {jobStatus[1]}
           </div>
         ) : (
