@@ -68,7 +68,7 @@ export const NextStep = observer(
         className="flex flex-col"
         data-testid={DecisionTreesResultsDataCy.stepCard}
       >
-        <div className="flex overflow-hidden">
+        <div className="flex">
           <TreeView
             className={cn(
               'pr-3',

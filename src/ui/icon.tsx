@@ -73,6 +73,8 @@ interface IconProps {
   fill?: boolean
   className?: Argument
   onClick?: (event: any) => void
+  onMouseUp?: (event: any) => void
+  onMouseDown?: (event: any) => void
   dataTestId?: string
 }
 
@@ -83,6 +85,8 @@ export const Icon = ({
   fill,
   className,
   onClick,
+  onMouseDown,
+  onMouseUp,
   dataTestId,
 }: IconProps): ReactElement => {
   const icon: IconItem = iconItems[name]
@@ -124,6 +128,8 @@ export const Icon = ({
         },
         className,
       )}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       onClick={onClick}
     >
       {icon.content}
