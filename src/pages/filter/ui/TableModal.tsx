@@ -195,7 +195,7 @@ export const TableModal = observer(() => {
   return (
     <ModalView className="bg-grey-blue rounded-lg" onClick={closeModal}>
       <ModalContent
-        className="flex flex-col bg-white rounded-lg overflow-y-auto h-full"
+        className="flex flex-col rounded-lg overflow-y-auto h-full"
         ref={ref}
       >
         {isLoading ? (
@@ -205,7 +205,7 @@ export const TableModal = observer(() => {
         ) : (
           <>
             <div className="flex w-full overflow-hidden rounded-lg">
-              <div className="flex flex-col rounded-l-lg overflow-auto">
+              <div className="flex flex-col bg-white rounded-l-lg overflow-auto">
                 <div className="flex px-[14px] py-4">
                   <div className="flex items-center mr-[14px]">
                     <RadioButton
