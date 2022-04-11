@@ -99,15 +99,21 @@ const TableView = ({
                   key={row.name}
                   className="border-b last:border-0 border-blue-lighter"
                 >
-                  <Tooltip
-                    overlay={row.tooltip}
-                    placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
-                  >
-                    <td className="py-3 pr-3 text-blue-bright whitespace-nowrap">
-                      {row.title}
-                    </td>
-                  </Tooltip>
+                  <td className="py-3 pr-3 flex text-blue-bright whitespace-nowrap">
+                    {row.title}
+                    {row.tooltip && (
+                      <Tooltip
+                        overlay={row.tooltip}
+                        placement="bottom"
+                        trigger={['click']}
+                      >
+                        <Icon
+                          name="Info"
+                          className="ml-2 text-white cursor-pointer"
+                        />
+                      </Tooltip>
+                    )}
+                  </td>
 
                   {row.cells
                     .filter(cell => cell[1]?.includes(filterSelection))
