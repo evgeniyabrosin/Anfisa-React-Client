@@ -228,7 +228,7 @@ export const en = {
     initialStep: 'Initial Step',
     viewVariants: 'View variants',
     viewReturnedVariants: 'View returned variants',
-    showReturnedVariantsForStep: 'Show {returnValue} varants for step {index}',
+    showReturnedVariantsForStep: 'Show {returnValue} variants for step {index}',
     dtreeDeleteConfirmation: 'Do you really want to delete this tree?',
   },
   error: {
