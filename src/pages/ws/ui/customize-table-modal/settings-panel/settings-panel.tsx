@@ -33,6 +33,7 @@ export const SettingsPanel = observer(({ close }: Props): ReactElement => {
       }}
       onClose={() => {
         columnsStore.resetSearchColumnValue()
+        columnsStore.resetColumns()
         close()
       }}
       setViewType={setViewType}

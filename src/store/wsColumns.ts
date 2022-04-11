@@ -43,6 +43,10 @@ class ColumnsStore {
     this.searchColumnValue = ''
   }
 
+  resetColumns() {
+    this.columns = this.selectedColumns
+  }
+
   setViewType(viewType: ViewTypeEnum) {
     this.viewType = viewType
   }
