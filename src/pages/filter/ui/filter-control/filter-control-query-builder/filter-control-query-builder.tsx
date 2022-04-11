@@ -35,7 +35,7 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
     if (
       dtreeStore.dtreeCode.length > 13 &&
       dtreeStore.startDtreeCode === dtreeStore.dtreeCode &&
-      currentTreeName === prevTreeName
+      dtreeStore.currentDtreeName === dtreeStore.previousDtreeName
     ) {
       return
     }
