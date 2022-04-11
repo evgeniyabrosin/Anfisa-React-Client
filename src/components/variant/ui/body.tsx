@@ -107,7 +107,10 @@ const TableView = ({
                         placement="bottom"
                         trigger={['click']}
                       >
-                        <Icon name="Info" className="ml-2 text-white" />
+                        <Icon
+                          name="Info"
+                          className="ml-2 text-white cursor-pointer"
+                        />
                       </Tooltip>
                     )}
                   </td>
