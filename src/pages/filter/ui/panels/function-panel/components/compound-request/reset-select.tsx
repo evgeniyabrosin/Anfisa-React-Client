@@ -1,15 +1,10 @@
 import { ChangeEvent, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
 import { Select } from '@ui/select'
 import compoundRequestStore from './compound-request.store'
-
-export const resetOptions = [
-  'Homozygous Recessive/X-linked',
-  'Autosomal Dominant',
-  'Compensational',
-]
 
 export const ResetSelect = observer(
   (): ReactElement => (

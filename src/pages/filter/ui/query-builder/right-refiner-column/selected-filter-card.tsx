@@ -16,7 +16,7 @@ import {
 } from '@service-providers/common/common.interface'
 import { AllNotModeLabel } from '../../all-not-mode-label'
 import { EnumFilter } from './enum-filter'
-import { FuncFilter } from './func-filter'
+import { FuncFilter } from './func-filter/func-filter'
 import { ModalOptions } from './modal-options'
 import { NumericFilter } from './numeric-filter'
 
@@ -71,43 +71,46 @@ export const SelectedFilterCard = observer(
     return (
       <>
         <div
-          className={cn(
-            'relative flex justify-between items-center border-b border-grey-light py-4 px-3 cursor-pointer',
-            { 'bg-blue-tertiary': isFilterActive },
-          )}
+          className={cn('relative flex flex-col px-3 cursor-pointer', {
+            'bg-blue-tertiary': isFilterActive,
+          })}
           onClick={handleOpenFilter}
         >
-          <div className="flex" onClick={toggleFilterContentVisibility}>
+          <div className="flex py-4 justify-between">
+            <div className="flex" onClick={toggleFilterContentVisibility}>
+              <Icon
+                name="Arrow"
+                className={cn(
+                  'text-grey-blue transform transition-transform mr-2',
+                  isFilterContentVisible ? 'rotate-90' : '-rotate-90',
+                )}
+              />
+
+              <div className="leading-16px font-bold">{filterName}</div>
+
+              <AllNotModeLabel
+                isAllMode={filterMode === ConditionJoinMode.AND}
+                isNotMode={filterMode === ConditionJoinMode.NOT}
+              />
+            </div>
+
             <Icon
-              name="Arrow"
-              className={cn(
-                'text-grey-blue transform transition-transform mr-2',
-                isFilterContentVisible ? 'rotate-90' : '-rotate-90',
-              )}
+              name="Options"
+              className="cursor-pointer text-blue-bright"
+              stroke={false}
+              onClick={toggleModalOptionsVisibility}
             />
 
-            <div className="leading-16px font-bold">{filterName}</div>
-
-            <AllNotModeLabel
-              isAllMode={filterMode === ConditionJoinMode.AND}
-              isNotMode={filterMode === ConditionJoinMode.NOT}
-            />
+            {isModalOptionsVisible && (
+              <ModalOptions
+                closeModal={hideModalOptions}
+                filterId={filterId}
+                filterName={filterName}
+              />
+            )}
           </div>
 
-          <Icon
-            name="Options"
-            className="cursor-pointer text-blue-bright flex justify-self-end"
-            stroke={false}
-            onClick={toggleModalOptionsVisibility}
-          />
-
-          {isModalOptionsVisible && (
-            <ModalOptions
-              closeModal={hideModalOptions}
-              filterId={filterId}
-              filterName={filterName}
-            />
-          )}
+          <div className="bg-grey-light h-px w-full" />
         </div>
 
         {isFilterContentVisible && filterType === FilterKindEnum.Numeric && (

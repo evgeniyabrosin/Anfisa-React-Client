@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect } from 'react'
 import { Option } from 'react-dropdown'
 import { observer } from 'mobx-react-lite'
 
+import { approxOptions } from '@core/approxOptions'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
 import { DropDown } from '@ui/dropdown'
@@ -10,7 +11,7 @@ import { DisabledVariantsAmount } from '@pages/filter/ui/query-builder/ui/disabl
 import { ConditionJoinMode } from '@service-providers/common'
 import { ICompoundHetArgs } from '@service-providers/common/common.interface'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
-import functionPanelStore, { approxOptions } from '../../function-panel.store'
+import functionPanelStore from '../../function-panel.store'
 import { PanelButtons } from '../panelButtons'
 import compoundHetStore, {
   CompoundHetSelectOptions,

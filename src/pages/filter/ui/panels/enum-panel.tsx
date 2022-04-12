@@ -18,7 +18,6 @@ const variantsPerPage = 12
 export const EnumPanel = observer((): ReactElement => {
   const {
     currentGroup: { groupName },
-    filteredEnumVariants,
     allEnumVariants,
     groupSubKind,
   } = filterAttributesStore
@@ -60,11 +59,7 @@ export const EnumPanel = observer((): ReactElement => {
 
   const preparedSearchValue = searchValue.toLocaleLowerCase()
 
-  const filteredVariants = (
-    selectedVariants.length > filteredEnumVariants.length
-      ? allEnumVariants
-      : filteredEnumVariants
-  ).filter(variant =>
+  const filteredVariants = allEnumVariants.filter(variant =>
     variant[0].toLocaleLowerCase().includes(preparedSearchValue),
   )
 

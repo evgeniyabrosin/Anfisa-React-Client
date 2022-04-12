@@ -40,7 +40,7 @@ export type TSelectValues = {
 }
 
 export interface IInheritanceModeArgs {
-  problem_group: string[] | null
+  problem_group: string[]
 }
 
 export interface ICustomInheritanceModeArgs {
@@ -49,6 +49,7 @@ export interface ICustomInheritanceModeArgs {
 
 export interface ICompoundHetArgs {
   approx: string | null
+  state: string | null
 }
 
 export interface ICompoundRequestArgs {

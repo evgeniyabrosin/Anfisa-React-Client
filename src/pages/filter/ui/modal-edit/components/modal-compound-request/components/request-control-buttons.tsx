@@ -2,11 +2,11 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Select } from '@ui/select'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import { resetOptions } from '@pages/filter/ui/panels/function-panel/components/compound-request/approx-state'
 import modalCompoundRequestStore from '../modal-compound-request.store'
 
 export const RequestControlButtons = observer((): ReactElement => {

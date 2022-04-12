@@ -51,17 +51,8 @@ export class FilterAttributesStore {
     }
   }
 
-  get filteredEnumVariants(): [string, number][] {
+  get allEnumVariants(): [string, number][] {
     return toJS(this.getAllEnumVariants(this.currentGroup))
-  }
-
-  public get allEnumVariants(): [string, number][] {
-    const allEnumVariants: [string, number][] =
-      datasetStore.dsStat['stat-list']?.find(
-        (item: any) => item.name === this.currentGroup.groupName,
-      )?.variants ?? []
-
-    return toJS(allEnumVariants)
   }
 
   public get groupSubKind(): string {
@@ -121,10 +112,10 @@ export class FilterAttributesStore {
       )
 
       thirdPartyFilters.forEach(filterName =>
-        filteredSelectedFilters.push([filterName, 0]),
+        allSelectedFilters.push([filterName, 0]),
       )
 
-      return filteredSelectedFilters
+      return allSelectedFilters
     }
 
     return filteredSelectedFilters
