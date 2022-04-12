@@ -1,145 +1,14 @@
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
+import { Dispatch, ReactElement, SetStateAction, useEffect } from 'react'
 import GridLayout from 'react-grid-layout'
-import ScrollContainer from 'react-indiana-drag-scroll'
-import Checkbox from 'react-three-state-checkbox'
-import cn from 'classnames'
 import { clone, get } from 'lodash'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
-import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
-import {
-  ICommonAspectDescriptor,
-  IPreAspectDescriptor,
-  ITableAspectDescriptor,
-  TRecCntResponse,
-} from '@service-providers/dataset-level/dataset-level.interface'
+import { DrawerWindow } from './drawer-window'
 import { IgvButton } from './igv-button'
-
-const normClass = 'norm'
-const normHitClass = 'norm hit'
-const noTrHitClass = 'no-tr-hit'
-
-const PreView = ({
-  content,
-}: ICommonAspectDescriptor & IPreAspectDescriptor): ReactElement => {
-  return <pre className="overflow-y-hidden">{content}</pre>
-}
-
-const TableView = ({
-  colhead,
-  rows,
-  name,
-}: ICommonAspectDescriptor & ITableAspectDescriptor): ReactElement => {
-  let colheadData: string[] = []
-
-  if (colhead) {
-    colheadData = [colhead?.[0]?.[0]]
-
-    if (colheadData[0]) {
-      const endOfString = colheadData[0].indexOf(']')
-
-      colheadData[0] = colheadData[0].slice(0, endOfString + 1)
-
-      if (name === 'view_transcripts') {
-        colheadData.push(t('variant.showSelectionOnly'))
-      }
-    }
-  }
-
-  const [filterSelection, setFilterSelection] = useState(normClass)
-
-  const handleSelection = (checked: boolean) => {
-    checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
-  }
-
-  return (
-    <div>
-      {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full">
-          {'No data to show'}
-        </div>
-      ) : (
-        <table className="min-w-full">
-          {colhead && colhead.length > 0 && (
-            <thead>
-              <tr className="text-blue-bright border-b border-blue-lighter">
-                <td />
-                {colheadData.map((th, i) => (
-                  <td key={i} className="py-3 pr-4">
-                    {th}
-
-                    {th === t('variant.showSelectionOnly') && (
-                      <Checkbox
-                        checked={filterSelection !== normClass}
-                        className="ml-1"
-                        onChange={(e: any) => handleSelection(e.target.checked)}
-                      />
-                    )}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-          )}
-
-          <tbody>
-            {rows?.map((row, index) => {
-              if (!row) return <tr key={index} />
-
-              const isScrolledHorizontally = false
-              const blueBg = ' p-3 bg-blue-darkHover'
-              return (
-                <tr key={row.name}>
-                  <Tooltip
-                    overlay={row.tooltip}
-                    placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
-                  >
-                    <td
-                      className={cn(
-                        'p-3 text-blue-bright whitespace-nowrap sticky left-0',
-                        `${isScrolledHorizontally ? blueBg : ''}`,
-                      )}
-                    >
-                      {row.title}
-                    </td>
-                  </Tooltip>
-
-                  {row.cells
-                    .filter(cell => cell[1]?.includes(filterSelection))
-                    .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-normal',
-                          cell[0].includes('</a>')
-                            ? 'text-blue-bright'
-                            : !cell[1]?.includes(noTrHitClass) &&
-                                'text-grey-blue',
-                        )}
-                        dangerouslySetInnerHTML={{ __html: cell[0] }}
-                      />
-                    ))}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      )}
-    </div>
-  )
-}
 
 interface Props {
   drawerWidth: number
@@ -201,12 +70,7 @@ export const VariantBody = observer(
           }
         }}
       >
-        {filtered.map((aspect: TRecCntResponse, index: number) => {
-          // const test = {
-          //   ...(aspect as ICommonAspectDescriptor & ITableAspectDescriptor),
-          // }
-
-          // console.log('test', toJS(test.rows))
+        {filtered.map((aspect, index: number) => {
           return (
             <div
               data-grid={layout[index]}
@@ -291,29 +155,7 @@ export const VariantBody = observer(
                 </div>
               </div>
 
-              <ScrollContainer hideScrollbars={false}>
-                <div
-                  className={cn('py-3 pr-3   content-child')}
-                  id={`drawer-${aspect.name}`}
-                  style={{
-                    height: get(layout, aspect.name, 0).h,
-                  }}
-                >
-                  {aspect.type === 'pre' ? (
-                    <PreView
-                      {...(aspect as ICommonAspectDescriptor &
-                        IPreAspectDescriptor)}
-                    />
-                  ) : (
-                    // rows here?
-                    <TableView
-                      {...(aspect as ICommonAspectDescriptor &
-                        ITableAspectDescriptor)}
-                      name={aspect.name}
-                    />
-                  )}
-                </div>
-              </ScrollContainer>
+              <DrawerWindow aspect={aspect} layout={layout} />
             </div>
           )
         })}
