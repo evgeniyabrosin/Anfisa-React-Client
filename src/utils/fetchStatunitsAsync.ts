@@ -40,7 +40,7 @@ export const fetchStatunitsAsync = async (
     rq_id: requestId,
     tm: '1',
     units: incompletePropertyList,
-    conditions: datasetStore.conditions,
+    conditions: filterStore.conditions,
   }
 
   const result = await filteringProvider.getStatUnits(body)

@@ -5,12 +5,13 @@ import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
+import { TCondition, TNumericConditionBounds } from '@service-providers/common'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
-import { TCondition } from './../service-providers/common/common.interface'
 
 export type SelectedFiltersType = Record<
   string,
@@ -62,6 +63,14 @@ export class FilterStore {
     return this._selectedFilters.get(this.activeFilterId)!
   }
 
+  public get selectedNumericFilterValue(): TNumericConditionBounds | undefined {
+    if (this.selectedFilter?.[0] === FilterKindEnum.Numeric) {
+      return this.selectedFilter?.[2]
+    }
+
+    return undefined
+  }
+
   public setConditionsFromPreset(conditions: TCondition[]): void {
     conditions.forEach(condition =>
       this._selectedFilters.set(nanoid(), condition),
@@ -108,6 +117,16 @@ export class FilterStore {
     this.fetchConditions()
   }
 
+  public saveFilter(condition: TCondition): void {
+    this.isRedactorMode
+      ? this.addFilterToFilterBlock(condition)
+      : this.addFilterBlock(condition)
+
+    this.resetIsRedacorMode()
+    this.resetActiveFilterId()
+    this.resetSelectedGroupItem()
+  }
+
   public async fetchDsInfoAsync() {
     return await datasetProvider.getDsInfo({ ds: datasetStore.datasetName })
   }
@@ -121,7 +140,7 @@ export class FilterStore {
   async fetchStatFuncAsync(unit: string, param: any) {
     const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
-      conditions: datasetStore.conditions,
+      conditions: filterStore.conditions,
       rq_id: String(Date.now()),
       unit,
       param,

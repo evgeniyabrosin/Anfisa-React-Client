@@ -5,6 +5,7 @@ import { RangeSliderColor } from './range-slider.interface'
 import { RangeSliderHistogramRoot } from './range-slider-histogram/range-slider-histogram.styles'
 
 const disabledColor = theme('colors.grey.disabled')
+const axisColor = theme('colors.grey.blue')
 const controlDisabledColor = theme('colors.grey.blue')
 const controlPrimaryActiveColor = theme('colors.blue.active')
 const controlPrimaryColor = theme('colors.blue.hover')
@@ -36,7 +37,7 @@ export const RangeSliderRuler = styled.div`
     right: -2px;
     top: 6px;
     height: 4px;
-    background: ${disabledColor};
+    background: ${axisColor};
     border-radius: 2px;
   }
 
@@ -143,14 +144,14 @@ export const RangeSliderTick = styled.div`
     top: 8px;
     width: 0;
     height: 6px;
-    border-left: 1px solid ${disabledColor};
+    border-left: 1px solid ${axisColor};
   }
 
   ${RangeSliderVerticalRuler} > & {
     left: 8px;
     width: 6px;
     height: 0;
-    border-top: 1px solid ${disabledColor};
+    border-top: 1px solid ${axisColor};
   }
 `
 

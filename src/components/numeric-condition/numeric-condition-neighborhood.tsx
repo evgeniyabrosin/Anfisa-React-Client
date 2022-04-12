@@ -25,10 +25,8 @@ export const NumericConditionNeighborhood = ({
   attrData,
   controls,
 }: INumericConditionProps): ReactElement | null => {
-  const [value, setCenter, setDistance] = useCenterDistanceValue(
-    initialValue,
-    attrData,
-  )
+  const [value, { setCenter, setDistance, clearValue }] =
+    useCenterDistanceValue(initialValue, attrData)
 
   const { min, max, histogram } = attrData
 
@@ -57,7 +55,7 @@ export const NumericConditionNeighborhood = ({
             </div>
             <div className="grow">
               <InputNumber
-                className="h-8 w-full shadow-dark"
+                className="h-8 w-full border border-grey-disabled shadow-input"
                 value={center ?? ''}
                 placeholder={t('numericCondition.center')}
                 onChange={event =>
@@ -73,7 +71,7 @@ export const NumericConditionNeighborhood = ({
             <div className="grow">
               <InputNumber
                 data-test-id={DecisionTreeModalDataCy.rightInput}
-                className="h-8 w-full shadow-dark"
+                className="h-8 w-full border border-grey-disabled shadow-input"
                 placeholder={t('numericCondition.distance')}
                 min={0}
                 max={maxDistance}
@@ -132,7 +130,8 @@ export const NumericConditionNeighborhood = ({
           </div>
         </div>
       </div>
-      {controls && controls({ value: conditionValue, hasErrors: false })}
+      {controls &&
+        controls({ value: conditionValue, hasErrors: false, clearValue })}
     </Fragment>
   )
 }

@@ -8,6 +8,7 @@ import {
 export interface INumericConditionControlsProps {
   value: TNumericConditionBounds
   hasErrors: boolean
+  clearValue: () => void
 }
 
 export interface INumericConditionProps {

@@ -13,7 +13,7 @@ export interface INumericConditionDistanceChart {
 const pixelRatio = window.devicePixelRatio || 1
 
 const inactiveCssColor: string = theme('colors.grey.disabled')
-const activeCssColor: string = theme('colors.blue.hover')
+const activeCssColor: string = theme('colors.blue.bright')
 
 const inactiveColor = parseColor(inactiveCssColor)
 const activeColor = parseColor(activeCssColor)

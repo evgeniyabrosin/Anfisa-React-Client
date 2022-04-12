@@ -76,27 +76,38 @@ const getInitialValue = (
   return [...initialValue, false]
 }
 
+type TUseConditionBoundsValueResult = [
+  value: TExtendedNumericConditionValue,
+  setters: {
+    updateValue: TNumericValueUpdater
+    clearValue: () => void
+  },
+]
+
 export const useConditionBoundsValue = (
   initialValue: TNumericConditionBounds | null | undefined,
   isZeroSkipped: boolean,
-): [TExtendedNumericConditionValue, TNumericValueUpdater] => {
+): TUseConditionBoundsValueResult => {
   const [value, setValue] = useState(() =>
     getInitialValue(initialValue, isZeroSkipped),
   )
 
-  const updaterRef = useRef<TNumericValueUpdater>()
+  const settersRef = useRef<TUseConditionBoundsValueResult[1]>()
 
-  if (!updaterRef.current) {
-    updaterRef.current = (index, elementValue) => {
-      if (!Number.isNaN(value) && elementValue !== undefined) {
-        setValue(prevValue =>
-          updateNumericValue(prevValue, index, elementValue),
-        )
-      }
+  if (!settersRef.current) {
+    settersRef.current = {
+      updateValue: (index, elementValue) => {
+        if (!Number.isNaN(value) && elementValue !== undefined) {
+          setValue(prevValue =>
+            updateNumericValue(prevValue, index, elementValue),
+          )
+        }
+      },
+      clearValue: () => setValue(defaultValue),
     }
   }
 
-  return [value, updaterRef.current]
+  return [value, settersRef.current]
 }
 
 export const parseNumeric = (
@@ -256,37 +267,43 @@ const coerceCenter = (
   return Math.min(Math.max(currentCenter, min + newDistance), max - newDistance)
 }
 
+type UseCenterDistanceValueResult = [
+  value: [number | null, number | null],
+  setter: {
+    setCenter: (newCenter: number | null) => void
+    setDistance: (newDistance: number | null) => void
+    clearValue: () => void
+  },
+]
+
 export const useCenterDistanceValue = (
   initialValue: TNumericConditionBounds | null | undefined,
   attrData: INumericPropertyStatus,
-): [
-  [number | null, number | null],
-  (newCenter: number | null) => void,
-  (newDistance: number | null) => void,
-] => {
+): UseCenterDistanceValueResult => {
   const [value, setValue] = useState(() =>
     getCenterDistanceInitialValue(initialValue, attrData),
   )
 
   const setters = useMemo(
-    () => [
-      (newCenter: number | null) => {
+    () => ({
+      setCenter: (newCenter: number | null) => {
         setValue(currentValue => [
           newCenter,
           coerceDistance(currentValue[1], newCenter, attrData),
         ])
       },
-      (newDistance: number | null) => {
+      setDistance: (newDistance: number | null) => {
         setValue(currentValue => [
           coerceCenter(currentValue[0], newDistance, attrData),
           newDistance,
         ])
       },
-    ],
+      clearValue: () => setValue([null, null]),
+    }),
     [attrData],
   )
 
-  return [value, setters[0], setters[1]]
+  return [value, setters]
 }
 
 export const getLimitedRangeInitialState = (

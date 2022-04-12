@@ -5,16 +5,16 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
-import { DsDistItem } from '@declarations'
 import { formatDate } from '@core/format-date'
 import { useParams } from '@core/hooks/use-params'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
+import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import { DatasetType } from './dataset-type'
 
 interface Props {
-  item: DsDistItem
+  item: IDirInfoDatasetDescriptor
 }
 
 interface DsNameProps {
@@ -87,7 +87,7 @@ export const DatasetsListItem = observer(({ item }: Props): ReactElement => {
 
     if (hasChildren) {
       setIsOpenFolder(prev => !prev)
-      dirinfoStore.setDsInfo(item as DsDistItem)
+      dirinfoStore.setDsInfo(item as IDirInfoDatasetDescriptor)
     }
 
     dirinfoStore.setInfoFrameLink('')
@@ -132,12 +132,19 @@ export const DatasetsListItem = observer(({ item }: Props): ReactElement => {
       {isOpenFolder && hasChildren && (
         <div className={cn('pl-15')}>
           {secondaryKeys.map((secondaryKey: string) => {
-            const secondaryItem: DsDistItem =
-              dirinfoStore.dirinfo['ds-dict'][secondaryKey]
+            const { dirinfo } = dirinfoStore
+            if (dirinfo) {
+              const secondaryItem: IDirInfoDatasetDescriptor =
+                dirinfo['ds-dict'][secondaryKey]
 
-            return (
-              <DatasetsListItem item={secondaryItem} key={secondaryItem.name} />
-            )
+              return (
+                <DatasetsListItem
+                  item={secondaryItem}
+                  key={secondaryItem.name}
+                />
+              )
+            }
+            return null
           })}
         </div>
       )}

@@ -51,7 +51,7 @@ export const FilterRefinerGroupItem = observer(
             key={group}
             overlay={tooltip}
             placement="left"
-            trigger={tooltip ? ['click'] : []}
+            trigger={['click']}
           >
             <Icon name="Info" className="ml-1 text-grey-blue cursor-pointer" />
           </Tooltip>

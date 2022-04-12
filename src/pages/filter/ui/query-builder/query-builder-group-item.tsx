@@ -53,7 +53,7 @@ export const QueryBuilderGroupItem = observer(
         key={group}
         overlay={tooltip}
         placement="bottomLeft"
-        trigger={tooltip ? ['hover'] : []}
+        trigger={tooltip ? ['click'] : []}
       >
         <div
           className={cn(

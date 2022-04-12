@@ -18,14 +18,14 @@ export interface IDocumentation {
 export interface IDirInfo {
   version: string
   'ds-list': string[]
-  'ds-dict': IDirInfoDatasetDescriptor
+  'ds-dict': Record<string, IDirInfoDatasetDescriptor>
   documentation: IDocumentation[]
 }
 
 // single_cnt
 
 export interface ISingleCntArgument {
-  record: Record<string, unknown>
+  record: string
 }
 
 // job_status
@@ -57,4 +57,3 @@ export type TAdmUpdateResponse = 'Updated'
 export interface IAdmReloadDsArguments {
   ds: string
 }
-export type TAdmReloadDsResponse = 'Reloaded <dataset name>'

@@ -8,7 +8,9 @@ import { GnomadItem } from './gnomad-item'
 export const CellPopulation = ({ cell }: CellI): ReactElement => {
   const gnomads = get(cell, 'value', []) as PredicationI[]
 
-  if (!gnomads.length) return <div>{EMPTY_VALUE}</div>
+  if (!gnomads.length || gnomads.every(item => !item.value)) {
+    return <div>{EMPTY_VALUE}</div>
+  }
 
   return (
     <div>
