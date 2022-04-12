@@ -25,7 +25,9 @@ const PreView = ({
   return <pre className="overflow-y-hidden">{content}</pre>
 }
 
-interface ITableView extends ICommonAspectDescriptor, ITableAspectDescriptor {
+interface ITableViewProps
+  extends ICommonAspectDescriptor,
+    ITableAspectDescriptor {
   shouldAddShadow: boolean
 }
 
@@ -34,7 +36,7 @@ const TableView = ({
   rows,
   name,
   shouldAddShadow,
-}: ITableView): ReactElement => {
+}: ITableViewProps): ReactElement => {
   let colheadData: string[] = []
 
   if (colhead) {
