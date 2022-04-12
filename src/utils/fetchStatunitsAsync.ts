@@ -1,5 +1,6 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import {
   filteringProvider,
   IStatunitsArguments,
