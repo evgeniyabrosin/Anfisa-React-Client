@@ -75,7 +75,12 @@ const TableView = ({
                 <td />
                 {colheadData.map((th, i) => (
                   <td key={i} className="py-3 pr-4">
-                    <span onMouseDownCapture={onMouseDownHandler}>{th}</span>
+                    <span
+                      className="cursor-auto"
+                      onMouseDownCapture={onMouseDownHandler}
+                    >
+                      {th}
+                    </span>
 
                     {th === t('variant.showSelectionOnly') && (
                       <Checkbox
@@ -108,7 +113,10 @@ const TableView = ({
                         `${shouldAddShadow ? blueBg : ''}`,
                       )}
                     >
-                      <span onMouseDownCapture={onMouseDownHandler}>
+                      <span
+                        className="cursor-auto"
+                        onMouseDownCapture={onMouseDownHandler}
+                      >
                         {row.title}
                       </span>
                     </td>
@@ -127,7 +135,10 @@ const TableView = ({
                                 'text-grey-blue',
                         )}
                       >
-                        <span onMouseDownCapture={onMouseDownHandler}>
+                        <span
+                          className="cursor-auto"
+                          onMouseDownCapture={onMouseDownHandler}
+                        >
                           {cell[0]}
                         </span>
                       </td>
@@ -195,6 +206,7 @@ export const DrawerWindow = observer(
         hideScrollbars={false}
         onScroll={handleScroll}
         onStartScroll={handleStartScroll}
+        className="cursor-grab"
       >
         <div
           className={cn('py-3 pr-3   content-child')}
