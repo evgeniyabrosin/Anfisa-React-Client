@@ -71,7 +71,9 @@ export const Header = observer(({ children }: Props): ReactElement => {
           </span>
           <span>
             {t('header.version.backend', {
-              version: toJS(dirinfoStore.dirinfo).version,
+              version: dirinfoStore.dirinfo
+                ? toJS(dirinfoStore.dirinfo).version
+                : '',
             })}
           </span>
         </span>

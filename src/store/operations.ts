@@ -7,6 +7,11 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { GlbPagesNames } from '@glb/glb-names'
+import {
+  ICsvExportArguments,
+  IDs2WsArguments,
+} from '@service-providers/operations/operations.interface'
+import operationsProvider from '@service-providers/operations/operations.provider'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 import dirinfoStore from './dirinfo'
@@ -36,41 +41,24 @@ class OperationsStore {
   async exportReportAsync(exportType?: ExportTypeEnum) {
     const { conditions } = filterStore
 
-    const body = new URLSearchParams({
+    const params: ICsvExportArguments = {
       ds: datasetStore.datasetName,
-    })
+    }
 
     if (conditions) {
-      const condtitions = JSON.stringify(conditions)
-
-      body.append('conditions', condtitions)
+      params.conditions = conditions
     }
 
     if (datasetStore.zone.length > 0) {
-      const zoneParams = datasetStore.zone.map(
-        item =>
-          `["${item[0]}",["${item[1].toString().split(',').join('","')}"]]`,
-      )
-
-      const zone = `[${zoneParams}]`
-
-      body.append('zone', zone)
+      params.zone = datasetStore.zone
     }
 
     try {
       this.isExportingReport = true
 
       if (exportType === ExportTypeEnum.Excel) {
-        const response = await fetch(getApiUrl('export'), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body,
-        })
-
-        const result = await response.json()
-        const responseFile = await fetch(getApiUrl(result.fname))
+        const response = await operationsProvider.export(params)
+        const responseFile = await fetch(getApiUrl(response.fname))
 
         await responseFile.blob().then(blob => {
           const url = window.URL.createObjectURL(blob)
@@ -85,26 +73,18 @@ class OperationsStore {
       }
 
       if (exportType === ExportTypeEnum.CSV) {
-        body.append('schema', 'xbr')
+        params.schema = 'xbr'
 
-        const response = await fetch(getApiUrl('csv_export'), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body,
-        })
+        const response = await operationsProvider.exportCsv(params)
 
-        await response.blob().then(blob => {
-          const url = window.URL.createObjectURL(blob)
-          const a = document.createElement('a')
+        const url = window.URL.createObjectURL(response)
+        const a = document.createElement('a')
 
-          a.href = url
-          a.download = `${datasetStore.datasetName}.csv`
-          a.click()
+        a.href = url
+        a.download = `${datasetStore.datasetName}.csv`
+        a.click()
 
-          return
-        })
+        return
       }
     } catch (error) {
       toast.error(String(error))
@@ -121,10 +101,10 @@ class OperationsStore {
 
     const { conditions } = filterStore
 
-    const body = new URLSearchParams({
+    const params: IDs2WsArguments = {
       ds: datasetStore.datasetName,
       ws: wsName,
-    })
+    }
 
     const isRefiner = filterStore.method === GlbPagesNames.Refiner
     const isMainTable = pathName === Routes.WS
@@ -136,10 +116,10 @@ class OperationsStore {
         ? variantCounts
         : dtreeStore.acceptedVariants
 
-    if (isRefiner || isMainTable) {
-      conditions && body.append('conditions', JSON.stringify(conditions))
+    if ((isRefiner || isMainTable) && conditions) {
+      params.conditions = conditions
     } else {
-      body.append('code', dtreeStore.dtreeCode)
+      params.code = dtreeStore.dtreeCode
     }
 
     if (!(compareValue > 0 && compareValue < 9000)) {
@@ -153,17 +133,9 @@ class OperationsStore {
 
     datasetStore.setIsLoadingTabReport(true)
 
-    const response = await fetch(getApiUrl('ds2ws'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
+    const response = await operationsProvider.createWorkspace(params)
 
-    const result = await response.json()
-
-    const jobStatusResponse = await this.getJobStatusAsync(result.task_id)
+    const jobStatusResponse = await this.getJobStatusAsync(response.task_id)
 
     if (!jobStatusResponse.ok) {
       return { ok: false, message: jobStatusResponse?.message }

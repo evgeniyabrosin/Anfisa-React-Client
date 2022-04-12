@@ -1,9 +1,9 @@
 import { ReactElement, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { DsDistItem } from '@declarations'
 import useWindowDimensions from '@core/hooks/use-window-dimensions'
 import dirinfoStore from '@store/dirinfo'
+import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import { DatasetsListItem } from './datasets-list-item'
 
 export const DatasetsList = observer((): ReactElement => {
@@ -20,13 +20,17 @@ export const DatasetsList = observer((): ReactElement => {
       className="overflow-y-auto overflow-x-hidden"
     >
       {dirinfoStore.dsDistKeys.map(key => {
-        const item: DsDistItem = dirinfoStore.dirinfo['ds-dict'][key]
+        const { dirinfo } = dirinfoStore
+        if (dirinfo) {
+          const item: IDirInfoDatasetDescriptor = dirinfo['ds-dict'][key]
 
-        if (!item || item.ancestors.length > 0) {
-          return
+          if (!item || item.ancestors.length > 0) {
+            return
+          }
+
+          return <DatasetsListItem item={item} key={item.name} />
         }
-
-        return <DatasetsListItem item={item} key={item.name} />
+        return null
       })}
     </div>
   )
