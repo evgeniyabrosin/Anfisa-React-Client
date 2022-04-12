@@ -64,8 +64,8 @@ const TableView = ({
   return (
     <div>
       {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full">
-          {'No data to show'}
+        <div className="flex justify-center text-center w-full relative bottom-3">
+          {t('variant.noDataToShow')}
         </div>
       ) : (
         <table className="min-w-full">
