@@ -1,4 +1,4 @@
-import { ReactElement, useRef, useState } from 'react'
+import { MouseEvent, ReactElement, useRef, useState } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
@@ -57,6 +57,10 @@ const TableView = ({
     checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
   }
 
+  const onMouseDownHandler = (event: MouseEvent) => {
+    event.stopPropagation()
+  }
+
   return (
     <div>
       {rows?.length === 0 ? (
@@ -71,7 +75,7 @@ const TableView = ({
                 <td />
                 {colheadData.map((th, i) => (
                   <td key={i} className="py-3 pr-4">
-                    {th}
+                    <span onMouseDownCapture={onMouseDownHandler}>{th}</span>
 
                     {th === t('variant.showSelectionOnly') && (
                       <Checkbox
@@ -104,7 +108,9 @@ const TableView = ({
                         `${shouldAddShadow ? blueBg : ''}`,
                       )}
                     >
-                      {row.title}
+                      <span onMouseDownCapture={onMouseDownHandler}>
+                        {row.title}
+                      </span>
                     </td>
                   </Tooltip>
 
@@ -120,8 +126,11 @@ const TableView = ({
                             : !cell[1]?.includes(noTrHitClass) &&
                                 'text-grey-blue',
                         )}
-                        dangerouslySetInnerHTML={{ __html: cell[0] }}
-                      />
+                      >
+                        <span onMouseDownCapture={onMouseDownHandler}>
+                          {cell[0]}
+                        </span>
+                      </td>
                     ))}
                 </tr>
               )
