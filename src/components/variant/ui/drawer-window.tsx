@@ -155,7 +155,15 @@ const TableView = ({
 
 export const DrawerWindow = observer(
   ({ aspect, layout }: { aspect: TRecCntResponse; layout: IGridLayout[] }) => {
-    const getLeftDistance = (element: HTMLDivElement): number | null => {
+    const ref = useRef<HTMLDivElement>(null)
+
+    const [startedLeftDistance, setStartedLeftDistance] = useState<
+      number | null
+    >(null)
+
+    const [shouldAddShadow, setShouldAddShadow] = useState(false)
+
+    const getLeftDistance = (element: HTMLDivElement | null): number | null => {
       const tableNode = element?.children?.[0]?.children?.[0]
       const tbodyNode = tableNode?.children[1]
       const trackedTdNode = tbodyNode?.children?.[0]?.children?.[1]
@@ -165,18 +173,10 @@ export const DrawerWindow = observer(
       return trackedTdNode.getBoundingClientRect().left
     }
 
-    const ref = useRef<HTMLDivElement>(null)
-    const [startedLeftDistance, setStartedLeftDistance] = useState<
-      number | null
-    >(null)
-    const [shouldAddShadow, setShouldAddShadow] = useState(false)
-
     const handleStartScroll = () => {
-      if (startedLeftDistance || !ref.current) return
-
       const currentLeftDistance = getLeftDistance(ref.current)
 
-      if (!currentLeftDistance) return
+      if (!currentLeftDistance || startedLeftDistance) return
 
       const fixedLeftDistance = Math.round(currentLeftDistance)
 
@@ -184,8 +184,6 @@ export const DrawerWindow = observer(
     }
 
     const handleScroll = () => {
-      if (!ref.current) return
-
       const currentLeftDistance = getLeftDistance(ref.current)
 
       if (!currentLeftDistance) return
