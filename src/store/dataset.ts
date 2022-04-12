@@ -46,7 +46,6 @@ export class DatasetStore {
   datasetName = ''
   activePreset = ''
   prevPreset = ''
-  conditions: TCondition[] = []
   startPresetConditions: TCondition[] = []
   zone: any[] = []
   statAmount: TItemsCount | null = null
@@ -212,13 +211,13 @@ export class DatasetStore {
       tm: 0,
     }
 
-    const { conditions } = filterStore
+    let { conditions } = filterStore
 
     if (!this.isFilterDisabled && conditions.length > 0) {
       localBody.conditions = conditions
     }
 
-    if (this.activePreset && this.conditions.length === 0) {
+    if (this.activePreset && conditions.length === 0) {
       localBody.filter = this.activePreset
     }
 
@@ -236,7 +235,7 @@ export class DatasetStore {
     const conditionFromHistory = checkedBodyFromHistory.conditions
 
     if (conditionFromHistory) {
-      this.conditions = conditionFromHistory
+      conditions = conditionFromHistory
     }
 
     const statList = result['stat-list']

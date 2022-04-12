@@ -5,6 +5,7 @@ import { StatListType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import datasetStore from '@store/dataset'
+import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
 import { TCondition, TNumericConditionBounds } from '@service-providers/common'
@@ -139,7 +140,7 @@ export class FilterStore {
   async fetchStatFuncAsync(unit: string, param: any) {
     const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
-      conditions: datasetStore.conditions,
+      conditions: filterStore.conditions,
       rq_id: String(Date.now()),
       unit,
       param,
