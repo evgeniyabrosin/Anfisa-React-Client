@@ -165,7 +165,7 @@ export const DrawerWindow = observer(
 
     const getLeftDistance = (element: HTMLDivElement | null): number | null => {
       const tableNode = element?.children?.[0]?.children?.[0]
-      const tbodyNode = tableNode?.children[1]
+      const tbodyNode = tableNode?.children[tableNode?.children.length - 1]
       const trackedTdNode = tbodyNode?.children?.[0]?.children?.[1]
 
       if (!trackedTdNode) return null
