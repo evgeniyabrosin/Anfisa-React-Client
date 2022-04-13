@@ -1,18 +1,30 @@
-import { MouseEvent, ReactElement, useRef, useState } from 'react'
+import {
+  Dispatch,
+  MouseEvent,
+  ReactElement,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
+import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
-import { get } from 'lodash'
+import clone from 'lodash/clone'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import variantStore from '@store/variant'
+import { Icon } from '@ui/icon'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
+import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -148,7 +160,15 @@ const TableView = ({
 }
 
 export const DrawerWindow = observer(
-  ({ aspect, layout }: { aspect: TRecCntResponse; layout: IGridLayout[] }) => {
+  ({
+    aspect,
+    layout,
+    setLayout,
+  }: {
+    aspect: TRecCntResponse
+    layout: IGridLayout[]
+    setLayout: Dispatch<SetStateAction<IGridLayout[]>>
+  }) => {
     const ref = useRef<HTMLDivElement>(null)
 
     const [startedLeftDistance, setStartedLeftDistance] = useState<
@@ -190,33 +210,114 @@ export const DrawerWindow = observer(
     }
 
     return (
-      <ScrollContainer
-        hideScrollbars={false}
-        onScroll={handleScroll}
-        onStartScroll={handleStartScroll}
-        className="cursor-grab"
-      >
+      <>
         <div
-          className={cn('py-3 pr-3   content-child')}
-          id={`drawer-${aspect.name}`}
-          style={{
-            height: get(layout, aspect.name, 0).h,
+          className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
+          onClick={e => {
+            const target = e.target as HTMLButtonElement
+
+            if (target && target.classList.contains('dragHandleSelector')) {
+              return
+            }
+
+            const cloneRecords: any = variantStore.recordsDisplayConfig
+
+            const drawerElement = document.querySelector(
+              `#drawer-${aspect.name}`,
+            )
+
+            const clientHeight = get(
+              drawerElement?.firstChild,
+              'clientHeight',
+              0,
+            )
+
+            const openedH = clientHeight * 0.0208 + 1.3
+
+            setLayout((prev: IGridLayout[]) => {
+              const clonedLayout: any[] = clone(prev)
+
+              const layoutItemIndex = clonedLayout.findIndex(
+                (aspectItem: any) => aspectItem.i === aspect.name,
+              )
+
+              clonedLayout[layoutItemIndex].h = cloneRecords[aspect.name].isOpen
+                ? 1
+                : openedH
+
+              variantStore.updateRecordsDisplayConfig(
+                clonedLayout[layoutItemIndex].i,
+                clonedLayout[layoutItemIndex].h,
+              )
+
+              const reflowLayout = clonedLayout.map(
+                (layoutItem, layoutIndex: number) => {
+                  if (layoutIndex < layoutItemIndex) {
+                    return layoutItem
+                  }
+
+                  return {
+                    ...layoutItem,
+                    y: layoutItem.y + openedH,
+                  }
+                },
+              )
+
+              window.sessionStorage.setItem(
+                'gridLayout',
+                JSON.stringify(reflowLayout),
+              )
+
+              return reflowLayout
+            })
+            variantStore.checkRecodsDisplaying()
           }}
-          ref={ref}
         >
-          {aspect.type === 'pre' ? (
-            <PreView
-              {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+          {aspect.title}
+          <div className="flex">
+            {aspect.name === 'view_gen' && <IgvButton />}
+            {aspect.name === 'view_transcripts' && (
+              <div>
+                <span>{t('variant.showSelectionOnly')}</span>
+                <Checkbox checked={false} />
+              </div>
+            )}
+
+            <Icon
+              name="ArrowsOut"
+              className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
             />
-          ) : (
-            <TableView
-              {...(aspect as ICommonAspectDescriptor & ITableAspectDescriptor)}
-              name={aspect.name}
-              shouldAddShadow={shouldAddShadow}
-            />
-          )}
+          </div>
         </div>
-      </ScrollContainer>
+        <ScrollContainer
+          hideScrollbars={false}
+          onScroll={handleScroll}
+          onStartScroll={handleStartScroll}
+          className="cursor-grab"
+        >
+          <div
+            className={cn('py-3 pr-3   content-child')}
+            id={`drawer-${aspect.name}`}
+            style={{
+              height: get(layout, aspect.name, 0).h,
+            }}
+            ref={ref}
+          >
+            {aspect.type === 'pre' ? (
+              <PreView
+                {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+              />
+            ) : (
+              <TableView
+                {...(aspect as ICommonAspectDescriptor &
+                  ITableAspectDescriptor)}
+                name={aspect.name}
+                shouldAddShadow={shouldAddShadow}
+              />
+            )}
+          </div>
+        </ScrollContainer>
+      </>
     )
   },
 )
