@@ -1,4 +1,5 @@
 import React, { Key, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import ScrollContainer from 'react-indiana-drag-scroll'
 import cn from 'classnames'
 import { get } from 'lodash'
 import debounce from 'lodash/debounce'
@@ -13,6 +14,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
+import { OverflowContainer } from '@ui/overflow-container'
 import { RadioButton } from '@ui/radio-button'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -204,7 +206,7 @@ export const TableModal = observer(() => {
           </div>
         ) : (
           <>
-            <div className="flex w-full overflow-hidden rounded-lg">
+            <div className="flex w-full overflow-hidden h-full rounded-lg">
               <div className="flex flex-col rounded-l-lg overflow-auto">
                 <div className="flex px-[14px] py-4">
                   <div className="flex items-center mr-[14px]">
@@ -299,13 +301,15 @@ export const TableModal = observer(() => {
                 </div>
                 <div
                   ref={variantContainerRef}
-                  className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
+                  className="flex flex-col bg-blue-lighter w-full h-full pb-2 overflow-auto scrollGradient"
                 >
-                  <VariantBody
-                    drawerWidth={tableWidth}
-                    setLayout={setLayout}
-                    layout={layout}
-                  />
+                  <OverflowContainer width="100%" height="100%" color="#091b34">
+                    <VariantBody
+                      drawerWidth={tableWidth}
+                      setLayout={setLayout}
+                      layout={layout}
+                    />
+                  </OverflowContainer>
                 </div>
               </div>
             </div>

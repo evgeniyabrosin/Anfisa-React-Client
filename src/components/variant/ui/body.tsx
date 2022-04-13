@@ -286,7 +286,7 @@ export const VariantBody = observer(
               </div>
               <div
                 className={cn(
-                  'px-3 overflow-x-auto overflow-y-scroll content-child',
+                  'px-3 overflow-x-auto overflow-y-hidden content-child scrollGradient',
                 )}
                 id={`drawer-${aspect.name}`}
                 style={{
