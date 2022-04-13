@@ -192,13 +192,9 @@ export const DrawerWindow = observer(
 
       const fixedCurrentLeftDistance = Math.round(currentLeftDistance)
 
-      if (fixedCurrentLeftDistance !== startedLeftDistance) {
-        setShouldAddShadow(true)
-      }
+      const isStartPosition = fixedCurrentLeftDistance === startedLeftDistance
 
-      if (fixedCurrentLeftDistance === startedLeftDistance) {
-        setShouldAddShadow(false)
-      }
+      setShouldAddShadow(!isStartPosition)
     }
 
     return (
