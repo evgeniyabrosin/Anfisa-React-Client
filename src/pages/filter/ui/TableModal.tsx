@@ -1,5 +1,4 @@
 import React, { Key, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import ScrollContainer from 'react-indiana-drag-scroll'
 import cn from 'classnames'
 import { get } from 'lodash'
 import debounce from 'lodash/debounce'
