@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   Dispatch,
   MouseEvent,
   ReactElement,
@@ -27,7 +28,6 @@ import {
 import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const normHitClass = 'norm hit'
 const noTrHitClass = 'no-tr-hit'
 
@@ -41,20 +41,15 @@ interface ITableViewProps
   extends ICommonAspectDescriptor,
     ITableAspectDescriptor {
   shouldAddShadow: boolean
+  filterSelection: string
 }
 
 const TableView = ({
   colhead,
   rows,
   shouldAddShadow,
+  filterSelection,
 }: ITableViewProps): ReactElement => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [filterSelection, setFilterSelection] = useState(normClass)
-
-  // const handleSelection = (checked: boolean) => {
-  //   checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
-  // }
-
   const onMouseDownHandler = (event: MouseEvent) => {
     event.stopPropagation()
   }
@@ -69,32 +64,6 @@ const TableView = ({
         </div>
       ) : (
         <table className="min-w-full">
-          {/* {colhead && colhead.length > 0 && (
-            <thead>
-              <tr className="text-blue-bright border-b border-blue-lighter">
-                <td />
-                {colheadData.map((th, i) => (
-                  <td key={i} className="py-3 pr-4">
-                    <span
-                      className="cursor-auto"
-                      onMouseDownCapture={onMouseDownHandler}
-                    >
-                      {th}
-                    </span>
-
-                    {th === t('variant.showSelectionOnly') && (
-                      <Checkbox
-                        checked={filterSelection !== normClass}
-                        className="ml-1"
-                        onChange={(e: any) => handleSelection(e.target.checked)}
-                      />
-                    )}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-          )} */}
-
           <tbody>
             {rows?.map((row, index) => {
               if (!row) return <tr key={index} />
@@ -171,6 +140,8 @@ export const DrawerWindow = observer(
   }) => {
     const ref = useRef<HTMLDivElement>(null)
 
+    const [filterSelection, setFilterSelection] = useState(normClass)
+
     const [startedLeftDistance, setStartedLeftDistance] = useState<
       number | null
     >(null)
@@ -209,10 +180,14 @@ export const DrawerWindow = observer(
       setShouldAddShadow(!isStartPosition)
     }
 
+    const handleSelection = (checked: boolean) => {
+      checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
+    }
+
     return (
       <>
         <div
-          className="flex justify-between p-3 rounded-t font-bold text-white uppercase cursor-pointer hover:bg-blue-bright"
+          className="flex justify-between p-3 rounded-t font-bold text-white cursor-pointer hover:bg-blue-bright"
           onClick={e => {
             const target = e.target as HTMLButtonElement
 
@@ -273,14 +248,23 @@ export const DrawerWindow = observer(
             variantStore.checkRecodsDisplaying()
           }}
         >
-          {aspect.title}
+          <span className="uppercase">{aspect.title}</span>
           <div className="flex">
             {aspect.name === 'view_gen' && <IgvButton />}
             {aspect.name === 'view_transcripts' && (
-              <div>
-                <span>{t('variant.showSelectionOnly')}</span>
-                <Checkbox checked={false} />
-              </div>
+              <label
+                className="mx-2 whitespace-nowrap flex items-center"
+                onClick={(event: MouseEvent) => event.stopPropagation()}
+              >
+                <span className="pr-2">{t('variant.showSelectionOnly')}</span>
+                <Checkbox
+                  className="h-4 w-4"
+                  checked={filterSelection !== normClass}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    handleSelection(event.target.checked)
+                  }}
+                />
+              </label>
             )}
 
             <Icon
@@ -313,6 +297,7 @@ export const DrawerWindow = observer(
                   ITableAspectDescriptor)}
                 name={aspect.name}
                 shouldAddShadow={shouldAddShadow}
+                filterSelection={filterSelection}
               />
             )}
           </div>
