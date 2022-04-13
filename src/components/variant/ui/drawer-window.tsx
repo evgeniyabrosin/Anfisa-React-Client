@@ -1,6 +1,5 @@
 import { MouseEvent, ReactElement, useRef, useState } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
-import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
@@ -16,6 +15,7 @@ import {
 } from '@service-providers/dataset-level/dataset-level.interface'
 
 const normClass = 'norm'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const normHitClass = 'norm hit'
 const noTrHitClass = 'no-tr-hit'
 
@@ -34,34 +34,20 @@ interface ITableViewProps
 const TableView = ({
   colhead,
   rows,
-  name,
   shouldAddShadow,
 }: ITableViewProps): ReactElement => {
-  let colheadData: string[] = []
-
-  if (colhead) {
-    colheadData = [colhead?.[0]?.[0]]
-
-    if (colheadData[0]) {
-      const endOfString = colheadData[0].indexOf(']')
-
-      colheadData[0] = colheadData[0].slice(0, endOfString + 1)
-
-      if (name === 'view_transcripts') {
-        colheadData.push(t('variant.showSelectionOnly'))
-      }
-    }
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filterSelection, setFilterSelection] = useState(normClass)
 
-  const handleSelection = (checked: boolean) => {
-    checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
-  }
+  // const handleSelection = (checked: boolean) => {
+  //   checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
+  // }
 
   const onMouseDownHandler = (event: MouseEvent) => {
     event.stopPropagation()
   }
+
+  const count = colhead?.[0][1]
 
   return (
     <div>
@@ -71,7 +57,7 @@ const TableView = ({
         </div>
       ) : (
         <table className="min-w-full">
-          {colhead && colhead.length > 0 && (
+          {/* {colhead && colhead.length > 0 && (
             <thead>
               <tr className="text-blue-bright border-b border-blue-lighter">
                 <td />
@@ -95,13 +81,17 @@ const TableView = ({
                 ))}
               </tr>
             </thead>
-          )}
+          )} */}
 
           <tbody>
             {rows?.map((row, index) => {
               if (!row) return <tr key={index} />
 
               const blueBg = ' p-3 bg-blue-darkHover'
+
+              const shouldShowCount =
+                colhead && colhead.length > 0 && index === 0
+
               return (
                 <tr key={row.name}>
                   <Tooltip
@@ -119,7 +109,9 @@ const TableView = ({
                         className="cursor-auto"
                         onMouseDownCapture={onMouseDownHandler}
                       >
-                        {row.title}
+                        {shouldShowCount
+                          ? `${row.title} [${count}]`
+                          : row.title}
                       </span>
                     </td>
                   </Tooltip>

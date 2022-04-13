@@ -1,10 +1,12 @@
 import { Dispatch, ReactElement, SetStateAction, useEffect } from 'react'
 import GridLayout from 'react-grid-layout'
+import Checkbox from 'react-three-state-checkbox'
 import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
+import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
 import { DrawerWindow } from './drawer-window'
@@ -147,6 +149,12 @@ export const VariantBody = observer(
                 {aspect.title}
                 <div className="flex">
                   {aspect.name === 'view_gen' && <IgvButton />}
+                  {aspect.name === 'view_transcripts' && (
+                    <div>
+                      <span>{t('variant.showSelectionOnly')}</span>
+                      <Checkbox checked={false} />
+                    </div>
+                  )}
 
                   <Icon
                     name="ArrowsOut"
