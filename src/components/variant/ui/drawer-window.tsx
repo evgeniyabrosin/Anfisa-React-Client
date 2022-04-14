@@ -54,7 +54,7 @@ const TableView = ({
     event.stopPropagation()
   }
 
-  const count = colhead?.[0][1]
+  const count = colhead?.[0]?.[1]
 
   return (
     <div>
@@ -70,8 +70,7 @@ const TableView = ({
 
               const blueBg = ' p-3 bg-blue-darkHover'
 
-              const shouldShowCount =
-                colhead && colhead.length > 0 && index === 0
+              const shouldShowCount = count && index === 0
 
               return (
                 <tr key={row.name}>
