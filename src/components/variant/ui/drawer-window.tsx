@@ -2,7 +2,6 @@ import {
   ChangeEvent,
   Dispatch,
   MouseEvent,
-  ReactElement,
   SetStateAction,
   useRef,
   useState,
@@ -24,13 +23,10 @@ import {
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
+import { DrawerClass } from '../drawer.utils'
 import { DrawerPreView } from './drawer-pre-view'
 import { DrawerTable } from './drawer-table'
 import { IgvButton } from './igv-button'
-
-const normClass = 'norm'
-const normHitClass = 'norm hit'
-const noTrHitClass = 'no-tr-hit'
 
 export const DrawerWindow = observer(
   ({
@@ -44,7 +40,9 @@ export const DrawerWindow = observer(
   }) => {
     const ref = useRef<HTMLDivElement>(null)
 
-    const [filterSelection, setFilterSelection] = useState(normClass)
+    const [filterSelection, setFilterSelection] = useState(
+      DrawerClass.normClass,
+    )
 
     const [startedLeftDistance, setStartedLeftDistance] = useState<
       number | null
@@ -85,7 +83,9 @@ export const DrawerWindow = observer(
     }
 
     const handleSelection = (checked: boolean) => {
-      checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
+      checked
+        ? setFilterSelection(DrawerClass.normHitClass)
+        : setFilterSelection(DrawerClass.normClass)
     }
 
     const currentLayout = layout.find(element => element.i === aspect.name)
@@ -172,7 +172,7 @@ export const DrawerWindow = observer(
                 </span>
                 <Checkbox
                   className="h-4 w-4"
-                  checked={filterSelection !== normClass}
+                  checked={filterSelection !== DrawerClass.normClass}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     handleSelection(event.target.checked)
                   }}

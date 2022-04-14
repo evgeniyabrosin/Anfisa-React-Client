@@ -7,10 +7,7 @@ import {
   ICommonAspectDescriptor,
   ITableAspectDescriptor,
 } from '@service-providers/dataset-level/dataset-level.interface'
-
-const normClass = 'norm'
-const normHitClass = 'norm hit'
-const noTrHitClass = 'no-tr-hit'
+import { DrawerClass } from '../drawer.utils'
 
 interface IDrawerTableProps
   extends ICommonAspectDescriptor,
@@ -80,7 +77,7 @@ export const DrawerTable = ({
                           'py-3 pr-3 font-normal',
                           cell[0].includes('</a>')
                             ? 'text-blue-bright'
-                            : !cell[1]?.includes(noTrHitClass) &&
+                            : !cell[1]?.includes(DrawerClass.noTrHitClass) &&
                                 'text-grey-blue',
                         )}
                       >
