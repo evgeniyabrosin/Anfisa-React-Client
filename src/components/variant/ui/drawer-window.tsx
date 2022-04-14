@@ -23,7 +23,7 @@ import {
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
-import { DrawerClass, getLeftDistance } from '../drawer.utils'
+import { DrawerClass, useScrollShadow } from '../drawer.utils'
 import { DrawerPreView } from './drawer-pre-view'
 import { DrawerTable } from './drawer-table'
 import { IgvButton } from './igv-button'
@@ -44,33 +44,8 @@ export const DrawerWindow = observer(
       DrawerClass.normClass,
     )
 
-    const [startedLeftDistance, setStartedLeftDistance] = useState<
-      number | null
-    >(null)
-
-    const [shouldAddShadow, setShouldAddShadow] = useState(false)
-
-    const handleStartScroll = () => {
-      const currentLeftDistance = getLeftDistance(ref.current)
-
-      if (!currentLeftDistance || startedLeftDistance) return
-
-      const fixedLeftDistance = Math.round(currentLeftDistance)
-
-      setStartedLeftDistance(fixedLeftDistance)
-    }
-
-    const handleScroll = () => {
-      const currentLeftDistance = getLeftDistance(ref.current)
-
-      if (!currentLeftDistance) return
-
-      const fixedCurrentLeftDistance = Math.round(currentLeftDistance)
-
-      const isStartPosition = fixedCurrentLeftDistance === startedLeftDistance
-
-      setShouldAddShadow(!isStartPosition)
-    }
+    const { shouldAddShadow, handleScroll, handleStartScroll } =
+      useScrollShadow(ref.current)
 
     const handleSelection = (checked: boolean) => {
       checked
