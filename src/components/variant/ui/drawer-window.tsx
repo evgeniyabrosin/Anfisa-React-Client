@@ -129,14 +129,14 @@ export const DrawerWindow = observer(
             {aspect.name === 'view_gen' && <IgvButton />}
             {shouldShowCheckbox && (
               <label
-                className="mx-2 whitespace-nowrap flex items-center"
+                className="mx-8 whitespace-nowrap flex items-center cursor-pointer"
                 onClick={(event: MouseEvent) => event.stopPropagation()}
               >
                 <span className="pr-2 font-normal text-xs">
                   {t('variant.showSelectionOnly')}
                 </span>
                 <Checkbox
-                  className="h-4 w-4"
+                  className="h-4 w-4 cursor-pointer"
                   checked={filterSelection !== DrawerClass.normClass}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     handleSelection(event.target.checked)
