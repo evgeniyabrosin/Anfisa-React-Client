@@ -13,7 +13,6 @@ import cn from 'classnames'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
@@ -25,107 +24,13 @@ import {
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
+import { DrawerPreView } from './drawer-pre-view'
+import { DrawerTable } from './drawer-table'
 import { IgvButton } from './igv-button'
 
 const normClass = 'norm'
 const normHitClass = 'norm hit'
 const noTrHitClass = 'no-tr-hit'
-
-const PreView = ({
-  content,
-}: ICommonAspectDescriptor & IPreAspectDescriptor): ReactElement => {
-  return <pre className="overflow-y-hidden">{content}</pre>
-}
-
-interface ITableViewProps
-  extends ICommonAspectDescriptor,
-    ITableAspectDescriptor {
-  shouldAddShadow: boolean
-  filterSelection: string
-}
-
-const TableView = ({
-  colhead,
-  rows,
-  shouldAddShadow,
-  filterSelection,
-}: ITableViewProps): ReactElement => {
-  const onMouseDownHandler = (event: MouseEvent) => {
-    event.stopPropagation()
-  }
-
-  const count = colhead?.[0]?.[1]
-
-  return (
-    <div>
-      {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full relative bottom-3">
-          {t('variant.noDataToShow')}
-        </div>
-      ) : (
-        <table className="min-w-full">
-          <tbody>
-            {rows?.map((row, index) => {
-              if (!row) return <tr key={index} />
-
-              const blueBg = ' p-3 bg-blue-darkHover'
-
-              const shouldShowCount = count && index === 0
-
-              return (
-                <tr key={row.name}>
-                  <Tooltip
-                    overlay={row.tooltip}
-                    placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
-                  >
-                    <td
-                      className={cn(
-                        'p-3 text-blue-bright whitespace-nowrap sticky left-0',
-                        `${shouldAddShadow ? blueBg : ''}`,
-                      )}
-                    >
-                      <span
-                        className="cursor-auto"
-                        onMouseDownCapture={onMouseDownHandler}
-                      >
-                        {shouldShowCount
-                          ? `${row.title} [${count}]`
-                          : row.title}
-                      </span>
-                    </td>
-                  </Tooltip>
-
-                  {row.cells
-                    .filter(cell => cell[1]?.includes(filterSelection))
-                    .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-normal',
-                          cell[0].includes('</a>')
-                            ? 'text-blue-bright'
-                            : !cell[1]?.includes(noTrHitClass) &&
-                                'text-grey-blue',
-                        )}
-                      >
-                        <span
-                          className="cursor-auto"
-                          onMouseDownCapture={onMouseDownHandler}
-                        >
-                          {cell[0]}
-                        </span>
-                      </td>
-                    ))}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      )}
-    </div>
-  )
-}
 
 export const DrawerWindow = observer(
   ({
@@ -296,11 +201,11 @@ export const DrawerWindow = observer(
             ref={ref}
           >
             {aspect.type === 'pre' ? (
-              <PreView
+              <DrawerPreView
                 {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
               />
             ) : (
-              <TableView
+              <DrawerTable
                 {...(aspect as ICommonAspectDescriptor &
                   ITableAspectDescriptor)}
                 name={aspect.name}
