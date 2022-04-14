@@ -184,6 +184,13 @@ export const DrawerWindow = observer(
       checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
     }
 
+    const currentLayout = layout.find(element => element.i === aspect.name)
+
+    const isWindowOpen = currentLayout?.h !== 1
+
+    const shouldShowCheckbox =
+      isWindowOpen && aspect.name === 'view_transcripts'
+
     return (
       <>
         <div
@@ -251,7 +258,7 @@ export const DrawerWindow = observer(
           <span className="uppercase">{aspect.title}</span>
           <div className="flex">
             {aspect.name === 'view_gen' && <IgvButton />}
-            {aspect.name === 'view_transcripts' && (
+            {shouldShowCheckbox && (
               <label
                 className="mx-2 whitespace-nowrap flex items-center"
                 onClick={(event: MouseEvent) => event.stopPropagation()}
