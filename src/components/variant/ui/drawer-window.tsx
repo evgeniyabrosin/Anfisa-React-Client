@@ -23,7 +23,7 @@ import {
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
-import { DrawerClass } from '../drawer.utils'
+import { DrawerClass, getLeftDistance } from '../drawer.utils'
 import { DrawerPreView } from './drawer-pre-view'
 import { DrawerTable } from './drawer-table'
 import { IgvButton } from './igv-button'
@@ -49,16 +49,6 @@ export const DrawerWindow = observer(
     >(null)
 
     const [shouldAddShadow, setShouldAddShadow] = useState(false)
-
-    const getLeftDistance = (element: HTMLDivElement | null): number | null => {
-      const tableNode = element?.children?.[0]?.children?.[0]
-      const tbodyNode = tableNode?.children[tableNode?.children.length - 1]
-      const trackedTdNode = tbodyNode?.children?.[0]?.children?.[1]
-
-      if (!trackedTdNode) return null
-
-      return trackedTdNode.getBoundingClientRect().left
-    }
 
     const handleStartScroll = () => {
       const currentLeftDistance = getLeftDistance(ref.current)
