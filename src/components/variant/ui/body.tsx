@@ -17,11 +17,7 @@ import { SessionStoreManager } from '@core/storage-management/session-store-mana
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
-import {
-  HorizontalScrollShadow,
-  ScrollShadower,
-  VerticalScrollShadow,
-} from '@ui/scroll-shadower'
+import { ScrollShadower } from '@ui/scroll-shadower'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
@@ -289,7 +285,7 @@ export const VariantBody = observer(
                   />
                 </div>
               </div>
-              <ScrollShadower height={'300px'} width={'100%'} color={''}>
+              <ScrollShadower height="100%" width="100%">
                 <div
                   className={cn('px-3 w-full content-child scrollGradient')}
                   id={`drawer-${aspect.name}`}

@@ -4,32 +4,31 @@ import styled, { css } from 'styled-components'
 interface Props {
   height: string
   width: string
-  color: string
 }
 
 interface HorizontalShadowProps {
   showOnLeft: boolean
   showOnRight: boolean
-  offsetRight?: number
+  rightOffset?: number
 }
 
 interface VerticalShadowProps {
   showOnTop: boolean
   showOnBottom: boolean
-  offsetDown?: number
+  bottomOffset?: number
 }
 
 const ShadowHorizontal = styled.div<HorizontalShadowProps>`
   position: relative;
-  ${props =>
-    props.showOnRight
+  ${({ showOnRight, rightOffset = 0 }) =>
+    showOnRight
       ? css`
           ::after {
             content: '';
             position: absolute;
             top: 0;
             bottom: 0;
-            right: ${props.offsetRight || 0}px;
+            right: ${rightOffset}px;
             width: 30px;
             background: linear-gradient(
               to right,
@@ -39,8 +38,8 @@ const ShadowHorizontal = styled.div<HorizontalShadowProps>`
           }
         `
       : ''}
-  ${props =>
-    props.showOnLeft
+  ${({ showOnLeft }) =>
+    showOnLeft
       ? css`
           ::before {
             content: '';
@@ -61,8 +60,8 @@ const ShadowHorizontal = styled.div<HorizontalShadowProps>`
 
 const ShadowVertical = styled.div<VerticalShadowProps>`
   position: relative;
-  ${props =>
-    props.showOnTop
+  ${({ showOnTop }) =>
+    showOnTop
       ? css`
           ::before {
             content: '';
@@ -79,13 +78,13 @@ const ShadowVertical = styled.div<VerticalShadowProps>`
           }
         `
       : ''}
-  ${props =>
-    props.showOnBottom
+  ${({ showOnBottom, bottomOffset = 0 }) =>
+    showOnBottom
       ? css`
           ::after {
             content: '';
             position: absolute;
-            bottom: ${props.offsetDown || 0}px;
+            bottom: ${bottomOffset}px;
             left: 0;
             right: 0;
             height: 30px;
@@ -106,73 +105,6 @@ const Container = styled.div<Props>`
   display: flex;
 `
 
-export const VerticalScrollShadow: FC<Props> = ({ children, ...props }) => {
-  const ref = useRef<HTMLDivElement>(null)
-
-  const [showOnBottom, setShowOnBottom] = useState<boolean>(true)
-  const [showOnTop, setShowOnTop] = useState<boolean>(false)
-
-  useEffect(() => {
-    const onScroll = () => {
-      const {
-        scrollHeight = 0,
-        scrollTop = 0,
-        offsetHeight = 0,
-      } = ref.current || {}
-      setShowOnTop(scrollTop > 0)
-      setShowOnBottom(scrollTop + offsetHeight < scrollHeight)
-    }
-    onScroll()
-    console.log(ref)
-    const node = ref.current
-    node?.addEventListener('scroll', onScroll)
-    return () => {
-      node?.removeEventListener('scroll', onScroll)
-    }
-  }, [])
-
-  return (
-    <ShadowVertical showOnTop={showOnTop} showOnBottom={showOnBottom}>
-      <Container ref={ref} {...props}>
-        {children}
-      </Container>
-    </ShadowVertical>
-  )
-}
-
-export const HorizontalScrollShadow: FC<Props> = ({ children, ...props }) => {
-  const ref = useRef<HTMLDivElement>(null)
-
-  const [showOnLeft, setShowOnLeft] = useState<boolean>(false)
-  const [showOnRight, setShowOnRight] = useState<boolean>(true)
-
-  useEffect(() => {
-    const onScroll = () => {
-      const {
-        scrollWidth = 0,
-        scrollLeft = 0,
-        offsetWidth = 0,
-      } = ref.current || {}
-      setShowOnLeft(scrollLeft != 0)
-      setShowOnRight(scrollLeft + offsetWidth != scrollWidth)
-    }
-    onScroll()
-    const node = ref.current
-    node?.addEventListener('scroll', onScroll)
-    return () => {
-      node?.removeEventListener('scroll', onScroll)
-    }
-  }, [])
-
-  return (
-    <ShadowHorizontal showOnLeft={showOnLeft} showOnRight={showOnRight}>
-      <Container ref={ref} {...props}>
-        {children}
-      </Container>
-    </ShadowHorizontal>
-  )
-}
-
 export const ScrollShadower: FC<Props> = ({ children, ...props }) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -185,6 +117,18 @@ export const ScrollShadower: FC<Props> = ({ children, ...props }) => {
   const [downOffset, setDownOffset] = useState<number>(0)
 
   useEffect(() => {
+    const onResize = () => {
+      const {
+        offsetWidth = 0,
+        offsetHeight = 0,
+        clientHeight = 0,
+        clientWidth = 0,
+      } = ref.current || {}
+
+      setRightOffset(offsetWidth - clientWidth)
+      setDownOffset(offsetHeight - clientHeight)
+    }
+
     const onScroll = () => {
       const {
         scrollWidth = 0,
@@ -193,11 +137,7 @@ export const ScrollShadower: FC<Props> = ({ children, ...props }) => {
         scrollHeight = 0,
         scrollTop = 0,
         offsetHeight = 0,
-        clientHeight = 0,
-        clientWidth = 0,
       } = ref.current || {}
-      setRightOffset(offsetWidth - clientWidth)
-      setDownOffset(offsetHeight - clientHeight)
 
       setShowOnLeft(scrollLeft != 0)
       setShowOnRight(scrollLeft + offsetWidth + rightOffset < scrollWidth)
@@ -205,23 +145,29 @@ export const ScrollShadower: FC<Props> = ({ children, ...props }) => {
       setShowOnBottom(scrollTop + offsetHeight + downOffset < scrollHeight)
     }
     onScroll()
+    onResize()
+
     const node = ref.current
+
     node?.addEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize)
     return () => {
       node?.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <ShadowVertical
       showOnTop={showOnTop}
       showOnBottom={showOnBottom}
-      offsetDown={downOffset}
+      bottomOffset={downOffset}
     >
       <ShadowHorizontal
         showOnLeft={showOnLeft}
         showOnRight={showOnRight}
-        offsetRight={rightOffset}
+        rightOffset={rightOffset}
       >
         <Container ref={ref} {...props}>
           {children}
