@@ -1,12 +1,12 @@
 import { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { selectOptions } from '../../modal-edit/modal-edit.store'
-import { resetOptions } from '../../panels/function-panel/components/compound-request/compound-request'
 import { AllNotMods } from './all-not-mods'
 import { DisabledVariantsAmount } from './disabled-variants-amount'
 

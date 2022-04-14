@@ -10,12 +10,6 @@ import { getSelectedValue } from '@utils/function-panel/getSelectedValue'
 import functionPanelStore from '../../function-panel.store'
 import compoundRequestStore from './compound-request.store'
 
-export const resetOptions = [
-  'Homozygous Recessive/X-linked',
-  'Autosomal Dominant',
-  'Compensational',
-]
-
 interface IRequestConditionsProps {
   activeRequestIndex: number
 }

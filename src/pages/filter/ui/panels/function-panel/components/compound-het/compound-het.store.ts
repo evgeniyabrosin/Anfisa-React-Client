@@ -1,12 +1,13 @@
 import { Option } from 'react-dropdown'
 import { makeAutoObservable, runInAction } from 'mobx'
 
+import { approxOptions } from '@core/approxOptions'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
 import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
-import functionPanelStore, { approxOptions } from '../../function-panel.store'
+import functionPanelStore from '../../function-panel.store'
 
 export const CompoundHetSelectOptions = [
   { label: 'shared transcript', value: '' },

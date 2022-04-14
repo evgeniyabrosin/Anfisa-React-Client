@@ -1,17 +1,11 @@
 import { ReactElement } from 'react'
 
+import { approxOptions } from '@core/approxOptions'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Select } from '@ui/select'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
-import { approxOptions } from '../../function-panel.store'
 import compoundRequestStore from './compound-request.store'
-
-export const resetOptions = [
-  'Homozygous Recessive/X-linked',
-  'Autosomal Dominant',
-  'Compensational',
-]
 
 interface IAprroxAndStateProps {
   simpleVariants: string[]

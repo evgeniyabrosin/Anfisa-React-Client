@@ -126,7 +126,7 @@ class InheritanceModeStore {
       this.variantValues,
       {
         problem_group:
-          this.problemGroupValues.length > 0 ? this.problemGroupValues : null,
+          this.problemGroupValues.length > 0 ? this.problemGroupValues : [],
       },
     ]
 

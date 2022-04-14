@@ -15,12 +15,6 @@ import { ControlButtons } from './control-buttons'
 import { RequestConditions } from './request-conditions'
 import { ResetSelect } from './reset-select'
 
-export const resetOptions = [
-  'Homozygous Recessive/X-linked',
-  'Autosomal Dominant',
-  'Compensational',
-]
-
 export const CompoundRequest = observer((): ReactElement => {
   const { selectedFilter, isRedactorMode } = filterStore
 
