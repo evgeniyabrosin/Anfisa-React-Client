@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import { theme } from '@theme'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
 import {
@@ -59,6 +60,8 @@ export const DrawerWindow = observer(
 
     const shouldShowCheckbox =
       isWindowOpen && aspect.name === 'view_transcripts'
+
+    const isChecked = filterSelection !== DrawerClass.normClass
 
     return (
       <>
@@ -136,8 +139,15 @@ export const DrawerWindow = observer(
                   {t('variant.showSelectionOnly')}
                 </span>
                 <Checkbox
-                  className="h-4 w-4 cursor-pointer"
-                  checked={filterSelection !== DrawerClass.normClass}
+                  className={cn(
+                    'h-4 w-4 cursor-pointer',
+                    isChecked
+                      ? ''
+                      : `appearance-none border-solid border border-${theme(
+                          'colors.grey.blue',
+                        )} rounded-sm`,
+                  )}
+                  checked={isChecked}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     handleSelection(event.target.checked)
                   }}
