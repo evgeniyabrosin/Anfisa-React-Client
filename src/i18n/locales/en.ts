@@ -113,6 +113,7 @@ export const en = {
     tagExists: 'That tag already exists',
     showSelectionOnly: 'Show selection only',
     saveNote: 'Save note',
+    noDataToShow: 'No data to show',
   },
   numericCondition: {
     limitedRange: 'Limited range',

@@ -1,144 +1,14 @@
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
+import { Dispatch, ReactElement, SetStateAction, useEffect } from 'react'
 import GridLayout from 'react-grid-layout'
-import Checkbox from 'react-three-state-checkbox'
-import cn from 'classnames'
 import { clone, get } from 'lodash'
 import { observer } from 'mobx-react-lite'
-import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
-import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
-import {
-  ICommonAspectDescriptor,
-  IPreAspectDescriptor,
-  ITableAspectDescriptor,
-  TRecCntResponse,
-} from '@service-providers/dataset-level/dataset-level.interface'
+import { DrawerWindow } from './drawer-window'
 import { IgvButton } from './igv-button'
-
-const normClass = 'norm'
-const normHitClass = 'norm hit'
-const noTrHitClass = 'no-tr-hit'
-
-const PreView = ({
-  content,
-}: ICommonAspectDescriptor & IPreAspectDescriptor): ReactElement => {
-  return <pre className="overflow-y-hidden">{content}</pre>
-}
-
-const TableView = ({
-  colhead,
-  rows,
-  name,
-}: ICommonAspectDescriptor & ITableAspectDescriptor): ReactElement => {
-  let colheadData: string[] = []
-
-  if (colhead) {
-    colheadData = [colhead?.[0]?.[0]]
-
-    if (colheadData[0]) {
-      const endOfString = colheadData[0].indexOf(']')
-
-      colheadData[0] = colheadData[0].slice(0, endOfString + 1)
-
-      if (name === 'view_transcripts') {
-        colheadData.push(t('variant.showSelectionOnly'))
-      }
-    }
-  }
-
-  const [filterSelection, setFilterSelection] = useState(normClass)
-
-  const handleSelection = (checked: boolean) => {
-    checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
-  }
-
-  return (
-    <div>
-      {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full">
-          {'No data to show'}
-        </div>
-      ) : (
-        <table className="min-w-full">
-          {colhead && colhead.length > 0 && (
-            <thead>
-              <tr className="text-blue-bright border-b border-blue-lighter">
-                <td />
-                {colheadData.map((th, i) => (
-                  <td key={i} className="py-3 pr-4">
-                    {th}
-
-                    {th === t('variant.showSelectionOnly') && (
-                      <Checkbox
-                        checked={filterSelection !== normClass}
-                        className="ml-1"
-                        onChange={(e: any) => handleSelection(e.target.checked)}
-                      />
-                    )}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-          )}
-          <tbody>
-            {rows?.map((row, i) => {
-              if (!row) return <tr key={i} />
-
-              return (
-                <tr
-                  key={row.name}
-                  className="border-b last:border-0 border-blue-lighter"
-                >
-                  <td className="py-3 pr-3 flex text-blue-bright whitespace-nowrap">
-                    {row.title}
-                    {row.tooltip && (
-                      <Tooltip
-                        overlay={row.tooltip}
-                        placement="bottom"
-                        trigger={['click']}
-                      >
-                        <Icon
-                          name="Info"
-                          className="ml-2 text-white cursor-pointer"
-                        />
-                      </Tooltip>
-                    )}
-                  </td>
-
-                  {row.cells
-                    .filter(cell => cell[1]?.includes(filterSelection))
-                    .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-normal',
-                          cell[0].includes('</a>')
-                            ? 'text-blue-bright'
-                            : !cell[1]?.includes(noTrHitClass) &&
-                                'text-grey-blue',
-                        )}
-                        dangerouslySetInnerHTML={{ __html: cell[0] }}
-                      />
-                    ))}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      )}
-    </div>
-  )
-}
 
 interface Props {
   drawerWidth: number
@@ -200,7 +70,7 @@ export const VariantBody = observer(
           }
         }}
       >
-        {filtered.map((aspect: TRecCntResponse, index: number) => {
+        {filtered.map((aspect, index: number) => {
           return (
             <div
               data-grid={layout[index]}
@@ -284,28 +154,8 @@ export const VariantBody = observer(
                   />
                 </div>
               </div>
-              <div
-                className={cn(
-                  'px-3 overflow-x-auto overflow-y-scroll content-child',
-                )}
-                id={`drawer-${aspect.name}`}
-                style={{
-                  height: get(layout, aspect.name, 0).h,
-                }}
-              >
-                {aspect.type === 'pre' ? (
-                  <PreView
-                    {...(aspect as ICommonAspectDescriptor &
-                      IPreAspectDescriptor)}
-                  />
-                ) : (
-                  <TableView
-                    {...(aspect as ICommonAspectDescriptor &
-                      ITableAspectDescriptor)}
-                    name={aspect.name}
-                  />
-                )}
-              </div>
+
+              <DrawerWindow aspect={aspect} layout={layout} />
             </div>
           )
         })}
