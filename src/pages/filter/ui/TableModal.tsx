@@ -13,7 +13,6 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
-import { OverflowContainer } from '@ui/overflow-container'
 import { RadioButton } from '@ui/radio-button'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -302,13 +301,11 @@ export const TableModal = observer(() => {
                   ref={variantContainerRef}
                   className="flex flex-col bg-blue-lighter w-full h-full pb-2 overflow-auto scrollGradient"
                 >
-                  <OverflowContainer width="100%" height="100%" color="#091b34">
-                    <VariantBody
-                      drawerWidth={tableWidth}
-                      setLayout={setLayout}
-                      layout={layout}
-                    />
-                  </OverflowContainer>
+                  <VariantBody
+                    drawerWidth={tableWidth}
+                    setLayout={setLayout}
+                    layout={layout}
+                  />
                 </div>
               </div>
             </div>

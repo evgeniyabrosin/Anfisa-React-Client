@@ -18,6 +18,11 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
 import {
+  HorizontalScrollShadow,
+  ScrollShadower,
+  VerticalScrollShadow,
+} from '@ui/scroll-shadower'
+import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
   ITableAspectDescriptor,
@@ -284,28 +289,28 @@ export const VariantBody = observer(
                   />
                 </div>
               </div>
-              <div
-                className={cn(
-                  'px-3 overflow-x-auto overflow-y-hidden content-child scrollGradient',
-                )}
-                id={`drawer-${aspect.name}`}
-                style={{
-                  height: get(layout, aspect.name, 0).h,
-                }}
-              >
-                {aspect.type === 'pre' ? (
-                  <PreView
-                    {...(aspect as ICommonAspectDescriptor &
-                      IPreAspectDescriptor)}
-                  />
-                ) : (
-                  <TableView
-                    {...(aspect as ICommonAspectDescriptor &
-                      ITableAspectDescriptor)}
-                    name={aspect.name}
-                  />
-                )}
-              </div>
+              <ScrollShadower height={'300px'} width={'100%'} color={''}>
+                <div
+                  className={cn('px-3 w-full content-child scrollGradient')}
+                  id={`drawer-${aspect.name}`}
+                  style={{
+                    height: get(layout, aspect.name, 0).h,
+                  }}
+                >
+                  {aspect.type === 'pre' ? (
+                    <PreView
+                      {...(aspect as ICommonAspectDescriptor &
+                        IPreAspectDescriptor)}
+                    />
+                  ) : (
+                    <TableView
+                      {...(aspect as ICommonAspectDescriptor &
+                        ITableAspectDescriptor)}
+                      name={aspect.name}
+                    />
+                  )}
+                </div>
+              </ScrollShadower>
             </div>
           )
         })}
