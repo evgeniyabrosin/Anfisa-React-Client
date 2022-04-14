@@ -256,7 +256,9 @@ export const DrawerWindow = observer(
                 className="mx-2 whitespace-nowrap flex items-center"
                 onClick={(event: MouseEvent) => event.stopPropagation()}
               >
-                <span className="pr-2">{t('variant.showSelectionOnly')}</span>
+                <span className="pr-2 font-normal text-xs">
+                  {t('variant.showSelectionOnly')}
+                </span>
                 <Checkbox
                   className="h-4 w-4"
                   checked={filterSelection !== normClass}
