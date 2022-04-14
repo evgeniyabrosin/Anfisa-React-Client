@@ -8,6 +8,7 @@ import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import { ScrollShadower } from '@ui/scroll-shadower'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
@@ -204,26 +205,29 @@ export const DrawerWindow = observer(
         onStartScroll={handleStartScroll}
         className="cursor-grab"
       >
-        <div
-          className={cn('py-3 pr-3   content-child')}
-          id={`drawer-${aspect.name}`}
-          style={{
-            height: get(layout, aspect.name, 0).h,
-          }}
-          ref={ref}
-        >
-          {aspect.type === 'pre' ? (
-            <PreView
-              {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
-            />
-          ) : (
-            <TableView
-              {...(aspect as ICommonAspectDescriptor & ITableAspectDescriptor)}
-              name={aspect.name}
-              shouldAddShadow={shouldAddShadow}
-            />
-          )}
-        </div>
+        <ScrollShadower height="100%" width="100%">
+          <div
+            className={cn('py-3 pr-3   content-child')}
+            id={`drawer-${aspect.name}`}
+            style={{
+              height: get(layout, aspect.name, 0).h,
+            }}
+            ref={ref}
+          >
+            {aspect.type === 'pre' ? (
+              <PreView
+                {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+              />
+            ) : (
+              <TableView
+                {...(aspect as ICommonAspectDescriptor &
+                  ITableAspectDescriptor)}
+                name={aspect.name}
+                shouldAddShadow={shouldAddShadow}
+              />
+            )}
+          </div>
+        </ScrollShadower>
       </ScrollContainer>
     )
   },
