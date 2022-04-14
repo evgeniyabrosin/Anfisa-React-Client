@@ -86,7 +86,7 @@ class DecisionTreesPage extends BasePage {
         graphHeaders: '',
         groupGraphHeaders: 'Variant',
         stepCard: 'header3',
-        treeTooltip: 'Show excluded varants for step 5',
+        treeTooltip: 'Show excluded variants for step 5',
         joinByLabel: 'Join by AND',
         contentEditor: '',
         modalHeader: 'Edit current Decision Tree code',
