@@ -26,7 +26,6 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
   )
 
   const currentTreeName = dtreeStore.currentDtreeName
-  const prevTreeName = dtreeStore.previousDtreeName
   const createNewDtreeName = dtreeStore.createNewDtreeName
 
   const handleSelect = (value: string) => {
@@ -35,7 +34,7 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
     if (
       dtreeStore.dtreeCode.length > 13 &&
       dtreeStore.startDtreeCode === dtreeStore.dtreeCode &&
-      currentTreeName === prevTreeName
+      dtreeStore.currentDtreeName === dtreeStore.previousDtreeName
     ) {
       return
     }

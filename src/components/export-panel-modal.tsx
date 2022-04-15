@@ -1,20 +1,15 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement } from 'react'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import operationsStore from '@store/operations'
 import { showToast } from '@utils/notifications/showToast'
 import { MainTableDataCy } from './data-testid/main-table.cy'
+import { IPopperMenuProps, PopperMenu } from './popper-menu/popper-menu'
+import { PopperMenuItem } from './popper-menu/popper-menu-item'
 
-interface Props {
-  close: () => void
-}
-
-export const ExportPanel = ({ close }: Props): ReactElement => {
-  const ref = useRef<any>(null)
-
+export const ExportPanelModal = ({ close }: IPopperMenuProps): ReactElement => {
   const { variantCounts } = datasetStore.fixedStatAmount
 
   const handleDownload = (type: ExportTypeEnum) => {
@@ -30,28 +25,21 @@ export const ExportPanel = ({ close }: Props): ReactElement => {
     close()
   }
 
-  useOutsideClick(ref, close)
-
   return (
-    <div
-      className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col w-32"
-      ref={ref}
-    >
-      <span
-        className="py-1 px-2 rounded hover:bg-blue-light"
+    <PopperMenu close={close} className="w-32">
+      <PopperMenuItem
         onClick={() => handleDownload(ExportTypeEnum.Excel)}
         data-testid={MainTableDataCy.exportExcel}
       >
         {t('general.excel')}
-      </span>
+      </PopperMenuItem>
 
-      <span
-        className="py-1 px-2 rounded hover:bg-blue-light"
+      <PopperMenuItem
         onClick={() => handleDownload(ExportTypeEnum.CSV)}
         data-testid={MainTableDataCy.exportCsv}
       >
         {t('general.csv')}
-      </span>
-    </div>
+      </PopperMenuItem>
+    </PopperMenu>
   )
 }

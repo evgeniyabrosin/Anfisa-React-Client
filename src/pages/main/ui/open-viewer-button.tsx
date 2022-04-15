@@ -1,9 +1,8 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement } from 'react'
 import { useHistory } from 'react-router-dom'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
@@ -13,16 +12,17 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
 import { PopperButton } from '@components/popper-button'
+import {
+  IPopperMenuProps,
+  PopperMenu,
+} from '@components/popper-menu/popper-menu'
+import { PopperMenuItem } from '@components/popper-menu/popper-menu-item'
 import { GlbPagesNames } from '@glb/glb-names'
 
 interface PropsButton {
   isOpen?: boolean
   refEl: any
   onClick?: () => void
-}
-
-interface PropsPanel {
-  close: () => void
 }
 
 const ButtonBase = ({ isOpen, refEl, ...rest }: PropsButton): ReactElement => (
@@ -44,8 +44,7 @@ const ButtonBase = ({ isOpen, refEl, ...rest }: PropsButton): ReactElement => (
   />
 )
 
-const Panel = ({ close }: PropsPanel): ReactElement => {
-  const ref = useRef<any>(null)
+const Panel = ({ close }: IPopperMenuProps): ReactElement => {
   const history = useHistory()
 
   let pages = Object.values(GlbPagesNames).filter(
@@ -63,21 +62,15 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
     filterStore.setMethod(name)
   }
 
-  useOutsideClick(ref, close)
-
   return (
-    <div
-      className="bg-white text-black rounded shadow-card text-12 cursor-pointer flex flex-col"
-      ref={ref}
-    >
+    <PopperMenu close={close}>
       {pages.map((pageName, index) => {
         const shouldRenderOption = pageName !== GlbPagesNames.IGV
 
         if (!shouldRenderOption) return
 
         return (
-          <span
-            className="py-1 px-3 rounded hover:bg-blue-light"
+          <PopperMenuItem
             key={index}
             data-testid={DatasetInfoDataCy.viewerOption}
             onClick={() => {
@@ -86,10 +79,10 @@ const Panel = ({ close }: PropsPanel): ReactElement => {
             }}
           >
             {t(`home.${pageName}`)}
-          </span>
+          </PopperMenuItem>
         )
       })}
-    </div>
+    </PopperMenu>
   )
 }
 

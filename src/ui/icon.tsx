@@ -7,17 +7,20 @@ import ArrowsOut from '@icons/arrows-out'
 import Circle from '@icons/circle'
 import Close from '@icons/close'
 import ClosePadded from '@icons/close-padded'
+import Cloud from '@icons/cloud'
 import Collapse from '@icons/collapse'
 import Copy from '@icons/copy'
 import CopyLink from '@icons/copy-link'
 import Delete from '@icons/delete'
 import Dnd from '@icons/dnd'
+import Ellipsis from '@icons/ellipsis'
 import Expand from '@icons/expand'
 import Export from '@icons/export'
 import File from '@icons/file'
 import Filter from '@icons/filter'
 import Folder from '@icons/folder'
 import FullScreen from '@icons/full-screen'
+import Import from '@icons/import'
 import Info from '@icons/info'
 import Lines from '@icons/lines'
 import Loupe from '@icons/loupe'
@@ -36,7 +39,39 @@ interface IconItem {
   content: ReactElement | ReactNode
 }
 
-const iconItems: { [key: string]: IconItem } = {
+export type TIcons =
+  | 'Add'
+  | 'Arrow'
+  | 'ArrowsOut'
+  | 'Circle'
+  | 'Close'
+  | 'Collapse'
+  | 'ClosePadded'
+  | 'CopyLink'
+  | 'Copy'
+  | 'Delete'
+  | 'Dnd'
+  | 'Export'
+  | 'Expand'
+  | 'File'
+  | 'Filter'
+  | 'Folder'
+  | 'FullScreen'
+  | 'Info'
+  | 'Lines'
+  | 'Loupe'
+  | 'Options'
+  | 'Rect'
+  | 'Settings'
+  | 'SettingsFat'
+  | 'Sort'
+  | 'ThreadAdd'
+  | 'ThreadClose'
+  | 'Ellipsis'
+  | 'Import'
+  | 'Cloud'
+
+const iconItems: Record<TIcons, IconItem> = {
   Add,
   Arrow,
   ArrowsOut,
@@ -64,10 +99,13 @@ const iconItems: { [key: string]: IconItem } = {
   Sort,
   ThreadAdd,
   ThreadClose,
+  Ellipsis,
+  Import,
+  Cloud,
 }
 
 interface IconProps {
-  name: string
+  name: TIcons
   size?: number
   stroke?: boolean
   fill?: boolean
