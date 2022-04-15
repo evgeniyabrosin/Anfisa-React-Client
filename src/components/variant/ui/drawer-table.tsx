@@ -84,9 +84,8 @@ export const DrawerTable = ({
                         <span
                           className="cursor-auto"
                           onMouseDownCapture={onMouseDownHandler}
-                        >
-                          {cell[0]}
-                        </span>
+                          dangerouslySetInnerHTML={{ __html: cell[0] }}
+                        />
                       </td>
                     ))}
                 </tr>
