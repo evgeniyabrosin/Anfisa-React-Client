@@ -3,6 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { ModalNumbers } from '@pages/filter/ui/modal-edit/components/modal-numbers'
+import { ExportModal } from '@pages/main/components/modals/export-modal'
+import { ImportModal } from '@pages/main/components/modals/import-modal'
+import handleDatasetStore from '../main/components/handle-dataset.store'
 import dtreeModalStore from './modals.store'
 import { ModalConfiramtion } from './ui/modal-confirmation'
 import { ModalCompoundHet } from './ui/modal-edit/components/modal-compound-het/modal-compound-het'
@@ -45,6 +48,9 @@ export const ModalsBlock = observer(
       {dtreeModalStore.isModalTextEditorVisible && <ModalTextEditor />}
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
       {dtreeModalStore.isModalConfirmationVisible && <ModalConfiramtion />}
+      {handleDatasetStore.isExportModalShown}
+      {handleDatasetStore.isExportModalShown && <ExportModal />}
+      {handleDatasetStore.isImportModalShown && <ImportModal />}
     </Fragment>
   ),
 )

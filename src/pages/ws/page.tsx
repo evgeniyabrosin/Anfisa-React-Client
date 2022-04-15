@@ -12,7 +12,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
-import { ExportPanel } from '@components/export-panel'
+import { ExportPanelModal } from '@components/export-panel-modal'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
@@ -96,7 +96,7 @@ const WSPage = observer((): ReactElement => {
 
             <PopperButton
               ButtonElement={ExportReportButton}
-              ModalElement={ExportPanel}
+              ModalElement={ExportPanelModal}
             />
           </div>
         </Header>

@@ -9,7 +9,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
-import { ExportPanel } from '@components/export-panel'
+import { ExportPanelModal } from '@components/export-panel-modal'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
@@ -79,7 +79,7 @@ const RefinerPage = observer((): ReactElement => {
           <div className="ml-2">
             <PopperButton
               ButtonElement={ExportReportButton}
-              ModalElement={ExportPanel}
+              ModalElement={ExportPanelModal}
             />
           </div>
         </div>

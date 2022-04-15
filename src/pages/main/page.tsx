@@ -43,7 +43,7 @@ const MainPage = (): ReactElement => {
   }, [])
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div className="min-h-full h-full flex flex-col">
       <Header />
       <div className="flex flex-row flex-grow">
         <Datasets />

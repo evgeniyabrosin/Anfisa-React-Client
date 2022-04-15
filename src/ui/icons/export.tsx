@@ -6,26 +6,17 @@ export default {
   size,
   viewBox: { w: size, h: size },
   stroke: true,
+  strokeColor: 'white',
   content: (
     <Fragment>
       <path
-        d="M5.375 7.37573L8 10L10.625 7.37573"
-        stroke="white"
-        strokeWidth="1.5"
+        d="M5.375 3.625L8 1L10.625 3.625"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      <path d="M8 8V1" strokeLinecap="round" strokeLinejoin="round" />
       <path
-        d="M8 3V9.99816"
-        stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M13.5 10V13.5C13.5 13.6326 13.4473 13.7598 13.3536 13.8536C13.2598 13.9473 13.1326 14 13 14H3C2.86739 14 2.74021 13.9473 2.64645 13.8536C2.55268 13.7598 2.5 13.6326 2.5 13.5V10"
-        stroke="white"
-        strokeWidth="1.5"
+        d="M11 6H12.5C12.6326 6 12.7598 6.05268 12.8536 6.14645C12.9473 6.24021 13 6.36739 13 6.5V13C13 13.1326 12.9473 13.2598 12.8536 13.3536C12.7598 13.4473 12.6326 13.5 12.5 13.5H3.5C3.36739 13.5 3.24021 13.4473 3.14645 13.3536C3.05268 13.2598 3 13.1326 3 13V6.5C3 6.36739 3.05268 6.24021 3.14645 6.14645C3.24021 6.05268 3.36739 6 3.5 6H5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

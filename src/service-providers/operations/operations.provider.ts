@@ -1,3 +1,6 @@
+import axios from 'axios'
+
+import { getApiUrl } from '@core/get-api-url'
 import { ServiceProviderBase } from '@service-providers/common'
 import {
   ICsvExportArguments,
@@ -34,8 +37,19 @@ class OperationsProvider extends ServiceProviderBase {
     return this.post<IExportWs>('export_ws', params).then(res => res.data)
   }
 
-  importDataset(params: IImportWsArguments) {
-    return this.post<IImportWs>('import_ws', params).then(res => res.data)
+  importDataset({ file, name }: IImportWsArguments) {
+    const bodyFormData = new FormData()
+    bodyFormData.append('name', name)
+    bodyFormData.append('file', file)
+
+    return axios
+      .post<IImportWs>(getApiUrl('import_ws'), bodyFormData, {
+        headers: {
+          Accept: 'multipart/form-data',
+          'Content-type': 'multipart/form-data',
+        },
+      })
+      .then(res => res.data)
   }
 }
 

@@ -51,6 +51,8 @@ export const Button = ({
   const isDefaultBackground: boolean =
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
 
+  const isSetRounded = /rounded/.test(classNameString)
+
   switch (size) {
     case 'xs':
       padding = 'py-0.5 ' + (text ? 'px-1' : 'px-0.5')
@@ -64,7 +66,7 @@ export const Button = ({
   }
 
   const cnButton = cn(
-    'flex items-center justify-between rounded-full',
+    `flex items-center justify-between ${isSetRounded ? '' : 'rounded-full'}`,
     padding,
     {
       //default primary
