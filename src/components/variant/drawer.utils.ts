@@ -46,7 +46,9 @@ export const useScrollShadow = (
     const fixedCurrentLeftDistance = Math.round(currentLeftDistance)
     const isStartPosition = fixedCurrentLeftDistance === startedLeftDistance
 
-    setShouldAddShadow(!isStartPosition)
+    if (shouldAddShadow === isStartPosition) {
+      setShouldAddShadow(!isStartPosition)
+    }
   }
 
   return { shouldAddShadow, handleScroll, handleStartScroll }
