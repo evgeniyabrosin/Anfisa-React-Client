@@ -18,12 +18,18 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
     element => element.isActive || element.isReturnedVariantsActive,
   )
 
-  const returnedVariants = stepData[stepIndex]?.difference
-  const startVariants = stepData[stepIndex]?.startFilterCounts
-  const hasReturnedVariants = Boolean(returnedVariants)
-  const hasStartVariants = Boolean(startVariants)
+  const currentStep = stepData[stepIndex]
+  const difference = currentStep?.difference
+  const startFilterCounts = currentStep?.startFilterCounts
+  const hasReturnedVariants = Boolean(difference)
+  const hasStartVariants = Boolean(startFilterCounts)
+
+  const isFirstStepEmpty = stepData[0]?.groups.length === 0
+  const isTreeEmpty = stepData.length === 2 && isFirstStepEmpty
+  const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
   const openTableModal = (isReturnedVariants = true) => {
+    //TODO: add check for having empty steps
     const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
     const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
 
@@ -80,7 +86,7 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
         )}
       </div>
       <div className="flex">
-        {hasReturnedVariants && (
+        {shouldShowReturnedVariants && (
           <Button
             dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
             onClick={() => openTableModal(true)}
