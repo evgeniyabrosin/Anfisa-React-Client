@@ -8,7 +8,7 @@ import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
-import { ScrollShadower } from '@ui/scroll-shadower'
+import { ScrollShadower } from '@ui/scroll-shadower/scroll-shadower'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
