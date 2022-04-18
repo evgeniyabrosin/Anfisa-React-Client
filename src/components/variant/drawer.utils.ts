@@ -6,6 +6,15 @@ export enum DrawerClass {
   noTrHitClass = 'no-tr-hit',
 }
 
+export const compareTwoNumbersWithRounding = (
+  firstNumber: number,
+  secondNumber: number,
+  accuracy: number,
+): boolean => {
+  const difference = Math.abs(secondNumber - firstNumber)
+  return difference <= accuracy
+}
+
 export const getLeftDistance = (
   element: HTMLDivElement | null,
 ): number | undefined => {
@@ -31,7 +40,6 @@ export const useScrollShadow = (
 
   const handleStartScroll = () => {
     const currentLeftDistance = getLeftDistance(element)
-
     if (!currentLeftDistance || startedLeftDistance) return
 
     const fixedLeftDistance = Math.round(currentLeftDistance)
@@ -40,11 +48,15 @@ export const useScrollShadow = (
 
   const handleScroll = () => {
     const currentLeftDistance = getLeftDistance(element)
-
-    if (!currentLeftDistance) return
+    if (!currentLeftDistance || !startedLeftDistance) return
 
     const fixedCurrentLeftDistance = Math.round(currentLeftDistance)
-    const isStartPosition = fixedCurrentLeftDistance === startedLeftDistance
+    const comparisonAccuracy = 5
+    const isStartPosition = compareTwoNumbersWithRounding(
+      startedLeftDistance,
+      fixedCurrentLeftDistance,
+      comparisonAccuracy,
+    )
 
     if (shouldAddShadow === isStartPosition) {
       setShouldAddShadow(!isStartPosition)
