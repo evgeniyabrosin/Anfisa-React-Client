@@ -1,230 +1,196 @@
-import { MouseEvent, ReactElement, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
-import { get } from 'lodash'
+import clone from 'lodash/clone'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import { theme } from '@theme'
+import variantStore from '@store/variant'
+import { Icon } from '@ui/icon'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
   ITableAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
-
-const normClass = 'norm'
-const normHitClass = 'norm hit'
-const noTrHitClass = 'no-tr-hit'
-
-const PreView = ({
-  content,
-}: ICommonAspectDescriptor & IPreAspectDescriptor): ReactElement => {
-  return <pre className="overflow-y-hidden">{content}</pre>
-}
-
-interface ITableViewProps
-  extends ICommonAspectDescriptor,
-    ITableAspectDescriptor {
-  shouldAddShadow: boolean
-}
-
-const TableView = ({
-  colhead,
-  rows,
-  name,
-  shouldAddShadow,
-}: ITableViewProps): ReactElement => {
-  let colheadData: string[] = []
-
-  if (colhead) {
-    colheadData = [colhead?.[0]?.[0]]
-
-    if (colheadData[0]) {
-      const endOfString = colheadData[0].indexOf(']')
-
-      colheadData[0] = colheadData[0].slice(0, endOfString + 1)
-
-      if (name === 'view_transcripts') {
-        colheadData.push(t('variant.showSelectionOnly'))
-      }
-    }
-  }
-
-  const [filterSelection, setFilterSelection] = useState(normClass)
-
-  const handleSelection = (checked: boolean) => {
-    checked ? setFilterSelection(normHitClass) : setFilterSelection(normClass)
-  }
-
-  const onMouseDownHandler = (event: MouseEvent) => {
-    event.stopPropagation()
-  }
-
-  return (
-    <div>
-      {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full relative bottom-3">
-          {t('variant.noDataToShow')}
-        </div>
-      ) : (
-        <table className="min-w-full">
-          {colhead && colhead.length > 0 && (
-            <thead>
-              <tr className="text-blue-bright border-b border-blue-lighter">
-                <td />
-                {colheadData.map((th, i) => (
-                  <td key={i} className="py-3 pr-4">
-                    <span
-                      className="cursor-auto"
-                      onMouseDownCapture={onMouseDownHandler}
-                    >
-                      {th}
-                    </span>
-
-                    {th === t('variant.showSelectionOnly') && (
-                      <Checkbox
-                        checked={filterSelection !== normClass}
-                        className="ml-1"
-                        onChange={(e: any) => handleSelection(e.target.checked)}
-                      />
-                    )}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-          )}
-
-          <tbody>
-            {rows?.map((row, index) => {
-              if (!row) return <tr key={index} />
-
-              const blueBg = ' p-3 bg-blue-darkHover'
-              return (
-                <tr key={row.name}>
-                  <Tooltip
-                    overlay={row.tooltip}
-                    placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
-                  >
-                    <td
-                      className={cn(
-                        'p-3 text-blue-bright whitespace-nowrap sticky left-0',
-                        `${shouldAddShadow ? blueBg : ''}`,
-                      )}
-                    >
-                      <span
-                        className="cursor-auto"
-                        onMouseDownCapture={onMouseDownHandler}
-                      >
-                        {row.title}
-                      </span>
-                    </td>
-                  </Tooltip>
-
-                  {row.cells
-                    .filter(cell => cell[1]?.includes(filterSelection))
-                    .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-normal',
-                          cell[0].includes('</a>')
-                            ? 'text-blue-bright'
-                            : !cell[1]?.includes(noTrHitClass) &&
-                                'text-grey-blue',
-                        )}
-                      >
-                        <span
-                          className="cursor-auto"
-                          onMouseDownCapture={onMouseDownHandler}
-                        >
-                          {cell[0]}
-                        </span>
-                      </td>
-                    ))}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      )}
-    </div>
-  )
-}
+import { DrawerClass, useScrollShadow } from '../drawer.utils'
+import { DrawerPreView } from './drawer-pre-view'
+import { DrawerTable } from './drawer-table'
+import { IgvButton } from './igv-button'
 
 export const DrawerWindow = observer(
-  ({ aspect, layout }: { aspect: TRecCntResponse; layout: IGridLayout[] }) => {
+  ({
+    aspect,
+    layout,
+    setLayout,
+  }: {
+    aspect: TRecCntResponse
+    layout: IGridLayout[]
+    setLayout: Dispatch<SetStateAction<IGridLayout[]>>
+  }) => {
     const ref = useRef<HTMLDivElement>(null)
 
-    const [startedLeftDistance, setStartedLeftDistance] = useState<
-      number | null
-    >(null)
+    const [filterSelection, setFilterSelection] = useState(
+      DrawerClass.normClass,
+    )
 
-    const [shouldAddShadow, setShouldAddShadow] = useState(false)
+    const { shouldAddShadow, handleScroll, handleStartScroll } =
+      useScrollShadow(ref.current)
 
-    const getLeftDistance = (element: HTMLDivElement | null): number | null => {
-      const tableNode = element?.children?.[0]?.children?.[0]
-      const tbodyNode = tableNode?.children[tableNode?.children.length - 1]
-      const trackedTdNode = tbodyNode?.children?.[0]?.children?.[1]
-
-      if (!trackedTdNode) return null
-
-      return trackedTdNode.getBoundingClientRect().left
+    const handleSelection = (checked: boolean) => {
+      checked
+        ? setFilterSelection(DrawerClass.normHitClass)
+        : setFilterSelection(DrawerClass.normClass)
     }
 
-    const handleStartScroll = () => {
-      const currentLeftDistance = getLeftDistance(ref.current)
+    const currentLayout = layout.find(element => element.i === aspect.name)
 
-      if (!currentLeftDistance || startedLeftDistance) return
+    const isWindowOpen = currentLayout?.h !== 1
 
-      const fixedLeftDistance = Math.round(currentLeftDistance)
+    const shouldShowCheckbox =
+      isWindowOpen && aspect.name === 'view_transcripts'
 
-      setStartedLeftDistance(fixedLeftDistance)
-    }
-
-    const handleScroll = () => {
-      const currentLeftDistance = getLeftDistance(ref.current)
-
-      if (!currentLeftDistance) return
-
-      const fixedCurrentLeftDistance = Math.round(currentLeftDistance)
-
-      const isStartPosition = fixedCurrentLeftDistance === startedLeftDistance
-
-      setShouldAddShadow(!isStartPosition)
-    }
+    const isChecked = filterSelection !== DrawerClass.normClass
 
     return (
-      <ScrollContainer
-        hideScrollbars={false}
-        onScroll={handleScroll}
-        onStartScroll={handleStartScroll}
-        className="cursor-grab"
-      >
+      <>
         <div
-          className={cn('py-3 pr-3   content-child')}
-          id={`drawer-${aspect.name}`}
-          style={{
-            height: get(layout, aspect.name, 0).h,
+          className="flex justify-between p-3 rounded-t font-bold text-white cursor-pointer hover:bg-blue-bright"
+          onClick={e => {
+            const target = e.target as HTMLButtonElement
+
+            if (target && target.classList.contains('dragHandleSelector')) {
+              return
+            }
+
+            const cloneRecords: any = variantStore.recordsDisplayConfig
+
+            const drawerElement = document.querySelector(
+              `#drawer-${aspect.name}`,
+            )
+
+            const clientHeight = get(
+              drawerElement?.firstChild,
+              'clientHeight',
+              0,
+            )
+
+            const openedH = clientHeight * 0.0208 + 1.3
+
+            setLayout((prev: IGridLayout[]) => {
+              const clonedLayout: any[] = clone(prev)
+
+              const layoutItemIndex = clonedLayout.findIndex(
+                (aspectItem: any) => aspectItem.i === aspect.name,
+              )
+
+              clonedLayout[layoutItemIndex].h = cloneRecords[aspect.name].isOpen
+                ? 1
+                : openedH
+
+              variantStore.updateRecordsDisplayConfig(
+                clonedLayout[layoutItemIndex].i,
+                clonedLayout[layoutItemIndex].h,
+              )
+
+              const reflowLayout = clonedLayout.map(
+                (layoutItem, layoutIndex: number) => {
+                  if (layoutIndex < layoutItemIndex) {
+                    return layoutItem
+                  }
+
+                  return {
+                    ...layoutItem,
+                    y: layoutItem.y + openedH,
+                  }
+                },
+              )
+
+              window.sessionStorage.setItem(
+                'gridLayout',
+                JSON.stringify(reflowLayout),
+              )
+
+              return reflowLayout
+            })
+            variantStore.checkRecodsDisplaying()
           }}
-          ref={ref}
         >
-          {aspect.type === 'pre' ? (
-            <PreView
-              {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+          <span className="uppercase">{aspect.title}</span>
+          <div className="flex">
+            {aspect.name === 'view_gen' && <IgvButton />}
+            {shouldShowCheckbox && (
+              <label
+                className="mx-8 whitespace-nowrap flex items-center cursor-pointer"
+                onClick={(event: MouseEvent) => event.stopPropagation()}
+              >
+                <span className="pr-2 font-normal text-xs">
+                  {t('variant.showSelectionOnly')}
+                </span>
+                <Checkbox
+                  className={cn(
+                    'h-4 w-4 cursor-pointer',
+                    isChecked
+                      ? ''
+                      : `appearance-none border-solid border border-${theme(
+                          'colors.grey.blue',
+                        )} rounded-sm`,
+                  )}
+                  checked={isChecked}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    handleSelection(event.target.checked)
+                  }}
+                />
+              </label>
+            )}
+
+            <Icon
+              name="ArrowsOut"
+              className="dragHandleSelector mr-1 cursor-move hover:text-blue-bright"
             />
-          ) : (
-            <TableView
-              {...(aspect as ICommonAspectDescriptor & ITableAspectDescriptor)}
-              name={aspect.name}
-              shouldAddShadow={shouldAddShadow}
-            />
-          )}
+          </div>
         </div>
-      </ScrollContainer>
+        <ScrollContainer
+          hideScrollbars={false}
+          onScroll={handleScroll}
+          onStartScroll={handleStartScroll}
+          className="cursor-grab"
+        >
+          <div
+            className={cn('py-3 pr-3   content-child')}
+            id={`drawer-${aspect.name}`}
+            style={{
+              height: get(layout, aspect.name, 0).h,
+            }}
+            ref={ref}
+          >
+            {aspect.type === 'pre' ? (
+              <DrawerPreView
+                {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+              />
+            ) : (
+              <DrawerTable
+                {...(aspect as ICommonAspectDescriptor &
+                  ITableAspectDescriptor)}
+                name={aspect.name}
+                shouldAddShadow={shouldAddShadow}
+                filterSelection={filterSelection}
+              />
+            )}
+          </div>
+        </ScrollContainer>
+      </>
     )
   },
 )
