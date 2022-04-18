@@ -7,6 +7,7 @@ import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { TCondition } from '@service-providers/common'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -263,6 +264,32 @@ class DtreeStore {
 
   // 2. UI functions to display adding / deleting / editing steps
 
+  get filteredStepData(): IStepData[] {
+    const searchValue = this.algorithmFilterValue.toLowerCase()
+
+    if (!searchValue) return this.stepData
+
+    const filteredStepData = this.stepData.filter(({ groups }) => {
+      return groups.some(condition => {
+        const name = condition[1].toLowerCase()
+        if (name.includes(searchValue)) return true
+
+        const valueVariants = condition[3]
+        if (!valueVariants) return false
+
+        const valueVariantList = Object.values(valueVariants)
+
+        return valueVariantList.some(varaintName => {
+          if (typeof varaintName !== 'string') return false
+
+          return varaintName?.toLowerCase().includes(searchValue)
+        })
+      })
+    })
+    return filteredStepData
+  }
+
+  // TOOD: think about it
   get getStepData() {
     let stepData = cloneDeep(this.stepData)
     let data: IStepData[] = []

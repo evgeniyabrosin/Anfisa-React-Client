@@ -1,4 +1,5 @@
 import { ReactElement, useEffect } from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
@@ -8,7 +9,11 @@ import { NextStep } from './ui/next-step'
 export const QueryBuilderTreeView = observer((): ReactElement => {
   const poitnCounts = dtreeStore.pointCounts
 
-  const stepData = dtreeStore.getStepData
+  const { stepData, filteredStepData, getStepData } = dtreeStore
+  // TODO: add filtering here
+
+  // console.log('filteredStepData', toJS(filteredStepData))
+  // // console.log('getStepData', toJS(getStepData))
 
   useEffect(() => {
     dtreeStore.updatePointCounts(poitnCounts)
@@ -17,7 +22,7 @@ export const QueryBuilderTreeView = observer((): ReactElement => {
 
   return (
     <div id="parent" className="flex flex-col overflow-auto h-full">
-      {stepData.map((element, index: number) => {
+      {getStepData.map((element, index: number) => {
         const key = element.groups
           ? JSON.stringify(element.groups) + element.startFilterCounts + index
           : index
