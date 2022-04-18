@@ -29,14 +29,14 @@ const ContentEditor = styled.div`
 
 export const NextStepContent = observer(
   ({ index }: INextStepContentProps): ReactElement => {
-    const groups = dtreeStore.getStepData[index].groups
+    const groups = dtreeStore.stepData[index].groups
 
     const [expanded, setExpanded] = useState<Record<number, boolean>>({})
     const expandGroup = (id: number) => () => {
       setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
     }
 
-    const currentStepData = dtreeStore.getStepData[index]
+    const currentStepData = dtreeStore.stepData[index]
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 

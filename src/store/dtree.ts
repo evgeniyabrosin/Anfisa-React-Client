@@ -286,29 +286,8 @@ class DtreeStore {
         })
       })
     })
+    console.log('filteredStepData', toJS(filteredStepData))
     return filteredStepData
-  }
-
-  // TOOD: think about it
-  get getStepData() {
-    let stepData = cloneDeep(this.stepData)
-    let data: IStepData[] = []
-
-    if (stepData[0] && stepData[0].groups && this.algorithmFilterValue) {
-      stepData = stepData.filter((item, currNo: number) =>
-        item.groups.find((subItem: any[]) => {
-          if (
-            subItem[1]
-              .toLocaleLowerCase()
-              .includes(this.algorithmFilterValue.toLocaleLowerCase())
-          ) {
-            return (data = [...data, stepData[currNo]])
-          }
-        }),
-      )
-    }
-
-    return this.algorithmFilterValue ? data : stepData
   }
 
   insertStep(position: CreateEmptyStepPositions, index: number) {
