@@ -42,7 +42,7 @@ export const IgvButton = observer((): ReactElement => {
       to={`${Routes.IGV}?locus=${fixedLocus}&names=${fixedSampleList}&igvUrls=${stringifiedIgvUrls}`}
     >
       <Button
-        className="mx-2 whitespace-nowrap"
+        className="mx-8 whitespace-nowrap"
         text={t('igv.openIgv')}
         size="sm"
       />

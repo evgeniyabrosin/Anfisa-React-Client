@@ -72,6 +72,7 @@ class DtreeStore {
   pointCounts: [number | null][] = []
   acceptedVariants = 0
 
+  evalStatus = undefined
   savingStatus: any = []
   shouldLoadTableModal = false
 
@@ -221,6 +222,7 @@ class DtreeStore {
       this.dtree = result
       this.dtreeCode = newCode
       this.dtreeList = result['dtree-list']
+      this.evalStatus = result['eval-status']
     })
 
     const isLoadingNewTree = !body.has('code')
