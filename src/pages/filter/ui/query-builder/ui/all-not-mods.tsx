@@ -67,7 +67,7 @@ export const AllNotMods = ({
         className="flex items-center"
         checked={isNotModeChecked ?? false}
         disabled={isNotModeDisabled}
-        onChange={toggleAllMode}
+        onChange={toggleNotMode}
       >
         {t('dtree.not')}
       </Checkbox>
