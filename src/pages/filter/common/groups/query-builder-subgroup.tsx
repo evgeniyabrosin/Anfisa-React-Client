@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { StatList } from '@declarations'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { ExpandContentButton } from '../../dtree/ui/query-builder/ui/expand-content-button'
+import { ExpandContentButton } from '../../dtree/components/ui/query-builder/ui/expand-content-button'
 import { QueryBuilderSubgroupItem } from './query-builder-subgroup-item'
 
 interface IProps {

@@ -1,4 +1,4 @@
-import { TScenario } from '@pages/filter/refiner/panels/function-panel/function-panel.interface'
+import { TScenario } from '@pages/filter/refiner/components/panels/function-panel/function-panel.interface'
 
 export const getStringScenario = (arrayScenario: TScenario[]): string => {
   let scenarioToString = ''

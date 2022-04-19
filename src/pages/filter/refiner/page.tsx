@@ -15,9 +15,9 @@ import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { ErrorPage } from '@pages/error/error'
 import { FilterControl } from '@pages/filter/common/filter-control/filter-control'
-import { ModalSaveDataset } from '@pages/filter/dtree/ui/query-builder/ui/modal-save-dataset'
-import { TableModal } from '@pages/filter/dtree/ui/TableModal'
-import { FilterRefiner } from '@pages/filter/refiner/filter-refiner'
+import { TableModal } from '@pages/filter/dtree/components/modals/components/TableModal'
+import { FilterRefiner } from '@pages/filter/refiner/components/filter-refiner'
+import { ModalSaveDataset } from '../dtree/components/modals/components/modal-save-dataset'
 
 const RefinerPage = observer((): ReactElement => {
   const isXL = datasetStore.isXL

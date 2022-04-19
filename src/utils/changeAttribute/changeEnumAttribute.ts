@@ -3,9 +3,9 @@ import uniq from 'lodash/uniq'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/dtree/active-step.store'
-import modalEditStore from '@pages/filter/dtree/modals/modals-control.strore'
-import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import modalEditStore from '@pages/filter/dtree/components/modals/modals-control.strore'
+import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 
 export const changeEnumAttribute = (currentMode?: ModeTypes) => {
