@@ -1,15 +1,17 @@
 import React, { Fragment, ReactElement } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 
 import { FilterModsEnum } from '@core/enum/filter-mods-enum'
 import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
+import { Checkbox } from '@ui/checkbox/checkbox'
 
 export const FilterMods = (): ReactElement => {
   const handleCheck = (
     target: EventTarget & HTMLInputElement,
     name: string,
   ) => {
+    console.log(target.checked)
+    console.log('name', name)
     if (target.checked && name) {
       name === FilterModsEnum.NOTMode && zoneStore.setModeNOT(true)
       name === FilterModsEnum.VariantsWithNotesOnly &&
@@ -24,7 +26,7 @@ export const FilterMods = (): ReactElement => {
   return (
     <Fragment>
       <div className="flex my-2">
-        <div className="mr-6 flex items-center">
+        {/*<div className="mr-6 flex items-center">
           <Checkbox
             onChange={e =>
               handleCheck(e.target, (e.target.name = FilterModsEnum.NOTMode))
@@ -33,9 +35,19 @@ export const FilterMods = (): ReactElement => {
             className="mb-0.5"
           />
           <span className="ml-1 text-12">{t('ds.notMode')}</span>
-        </div>
+        </div>*/}
+        <Checkbox
+          id="notMode"
+          className="mr-6 flex items-center text-12"
+          checked={zoneStore.isModeNOT}
+          onChange={e =>
+            handleCheck(e.target, (e.target.name = FilterModsEnum.NOTMode))
+          }
+        >
+          {t('ds.notMode')}
+        </Checkbox>
 
-        <div className="mr-6 flex items-center">
+        {/*<div className="mr-6 flex items-center">
           <Checkbox
             onChange={e =>
               handleCheck(
@@ -47,7 +59,20 @@ export const FilterMods = (): ReactElement => {
             className="mb-0.5"
           />
           <span className="ml-1 text-12">{t('ds.variantsWithNotesOnly')}</span>
-        </div>
+        </div>*/}
+        <Checkbox
+          id="variantsWithNotesOnly"
+          className="mr-6 flex items-center text-12"
+          checked={zoneStore.isModeWithNotes}
+          onChange={e =>
+            handleCheck(
+              e.target,
+              (e.target.name = FilterModsEnum.VariantsWithNotesOnly),
+            )
+          }
+        >
+          {t('ds.variantsWithNotesOnly')}
+        </Checkbox>
       </div>
 
       <div className="border border-blue-light -mb-1.5" />

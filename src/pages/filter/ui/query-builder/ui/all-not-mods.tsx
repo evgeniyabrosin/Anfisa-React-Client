@@ -1,7 +1,6 @@
-import Checkbox from 'react-three-state-checkbox'
-
 import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { ModsDivider } from './mods-divider'
 interface IAllNotModsProps {
   isNotModeDisabled?: boolean
@@ -29,7 +28,7 @@ export const AllNotMods = ({
     <div className="flex text-14 text-blue-bright">
       {isAllModeAvailable && (
         <>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <Checkbox
               checked={isAllModeChecked ?? false}
               className="mr-1 cursor-pointer"
@@ -38,13 +37,22 @@ export const AllNotMods = ({
             />
 
             <span>{t('dtree.all')}</span>
-          </div>
+          </div>*/}
+          <Checkbox
+            id="allModeCheckbox"
+            className="flex items-center"
+            checked={isAllModeChecked ?? false}
+            disabled={isAllModeDisabled}
+            onChange={toggleAllMode}
+          >
+            {t('dtree.all')}
+          </Checkbox>
 
           <ModsDivider />
         </>
       )}
 
-      <div className="flex items-center">
+      {/*<div className="flex items-center">
         <Checkbox
           checked={isNotModeChecked ?? false}
           className="mr-1 cursor-pointer"
@@ -53,7 +61,16 @@ export const AllNotMods = ({
         />
 
         <span>{t('dtree.not')}</span>
-      </div>
+      </div>*/}
+      <Checkbox
+        id="allNotModeCheckbox"
+        className="flex items-center"
+        checked={isNotModeChecked ?? false}
+        disabled={isNotModeDisabled}
+        onChange={toggleAllMode}
+      >
+        {t('dtree.not')}
+      </Checkbox>
     </div>
   )
 }

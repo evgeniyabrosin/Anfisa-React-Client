@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import React, { ChangeEvent, FC } from 'react'
 import cn, { Argument } from 'classnames'
 
 export interface ICheckInputProps {
   checked?: boolean
-  onChange?: () => void
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   className?: Argument
   disabled?: boolean
   type?: 'checkbox' | 'radio'
@@ -28,7 +28,7 @@ export const CheckInput: FC<ICheckInputProps> = ({
         id={id}
         checked={checked}
         disabled={disabled}
-        onClick={onChange}
+        onChange={onChange}
       />
       <label htmlFor={id} className={cn(lcn)}>
         {children}
