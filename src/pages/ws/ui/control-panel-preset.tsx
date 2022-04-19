@@ -21,7 +21,7 @@ export const Preset = observer((): ReactElement => {
 
     filterPresetStore.loadPresetAsync(arg.value)
 
-    datasetStore.fetchWsListAsync(false, 'reset')
+    datasetStore.fetchWsListAsync('reset')
     datasetStore.setIsLoadingTabReport(true)
 
     reset && datasetStore.resetActivePreset()
