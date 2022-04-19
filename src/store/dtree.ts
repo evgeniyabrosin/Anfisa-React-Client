@@ -7,7 +7,6 @@ import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
-import { TCondition } from '@service-providers/common'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -286,7 +285,7 @@ class DtreeStore {
         })
       })
     })
-    console.log('filteredStepData', toJS(filteredStepData))
+
     return filteredStepData
   }
 

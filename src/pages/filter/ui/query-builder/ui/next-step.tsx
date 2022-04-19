@@ -48,7 +48,7 @@ export const NextStep = observer(
       setIsExpanded(prev => !prev)
     }
 
-    const currentStep = dtreeStore.stepData[index]
+    const currentStep = dtreeStore.filteredStepData[index]
 
     const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -78,7 +78,7 @@ export const NextStep = observer(
             <NextStepRoute
               isExpanded={isExpanded}
               index={index}
-              isIncluded={!dtreeStore.stepData[index].excluded}
+              isIncluded={!dtreeStore.filteredStepData[index].excluded}
             />
           </TreeView>
 
@@ -93,7 +93,7 @@ export const NextStep = observer(
               isExpanded={isExpanded}
               expandContent={expandContent}
               index={index}
-              isExcluded={dtreeStore.stepData[index].excluded}
+              isExcluded={dtreeStore.filteredStepData[index].excluded}
             />
 
             {isExpanded && <NextStepContent index={index} />}
