@@ -29,8 +29,9 @@ export const CheckInput: FC<ICheckInputProps> = ({
         disabled={disabled}
         onChange={onChange}
         className={cn({
-          'mr-2 w-4 h-4': isCheckbox,
-          'mr-1': !isCheckbox,
+          'w-4 h-4': isCheckbox,
+          'mr-2': isCheckbox && children,
+          'mr-1': !isCheckbox && children,
         })}
       />
       {children}
