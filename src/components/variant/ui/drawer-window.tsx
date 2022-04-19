@@ -14,9 +14,9 @@ import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
-import { Checkbox } from '@ui/checkbox/checkbox'
 import { theme } from '@theme'
 import variantStore from '@store/variant'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
 import {
   ICommonAspectDescriptor,
