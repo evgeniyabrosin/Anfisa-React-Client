@@ -17,8 +17,8 @@ import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
-import { DtreeModal } from '../modals/components/dtree-modal'
-import { FilterButton } from '../ui/filter-button'
+import { DtreeModal } from './modals/components/dtree-modal'
+import { FilterButton } from './ui/filter-button'
 
 export const FilterControlDtree = observer((): ReactElement => {
   const trees: string[] = get(dtreeStore, 'dtreeList', []).map(

@@ -14,8 +14,8 @@ import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from '../../../dtree/components/ui/filter-button'
-import { FilterModal } from '../../../dtree/components/ui/filter-modal'
 import filterControlRefinerStore from './filter-control-refiner.store'
+import { FilterModal } from './filter-modal'
 
 export const FilterControlRefiner = observer((): ReactElement => {
   const { activePreset, presets, createPresetName } = filterControlRefinerStore

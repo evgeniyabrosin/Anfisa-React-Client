@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
-import { CustomInheritanceModeContent } from '@pages/filter/common/custom-inheritance-mode-content'
+import { CustomInheritanceModeContent } from '@pages/filter/refiner/components/panels/function-panel/components/custom-inheritance-mode/custom-inheritance-mode-content'
 import { ConditionJoinMode } from '@service-providers/common'
 import { ICustomInheritanceModeArgs } from '@service-providers/common/common.interface'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
