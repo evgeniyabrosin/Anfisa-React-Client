@@ -133,7 +133,12 @@ export const NextStepRoute = observer(
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
-        <StartAmount className="w-5/6 flex flex-col justify-between items-end mt-2 text-blue-bright mr-1 pt-1">
+        <StartAmount
+          className={cn(
+            'w-5/6 flex flex-col justify-between items-end text-blue-bright mr-1 pt-1',
+            isFinalStep ? 'mt-1.5' : 'mt-2.5',
+          )}
+        >
           <div>{currentStartCounts}</div>
         </StartAmount>
 

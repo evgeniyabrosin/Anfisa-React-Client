@@ -243,6 +243,7 @@ export const en = {
     choosePresetFirst: 'Choose preset first',
     chooseFiltersFirst: 'Choose filters first',
     cantJoinTheSamePreset: 'Cant join the same preset',
+    runtimeProblem: 'Runtime problem',
   },
   igv: {
     openIgv: 'Open igv',
