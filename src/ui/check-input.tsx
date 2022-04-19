@@ -7,8 +7,7 @@ export interface ICheckInputProps {
   className?: Argument
   disabled?: boolean
   type?: 'checkbox' | 'radio'
-  lcn?: Argument
-  id: string
+  id?: string
 }
 
 export const CheckInput: FC<ICheckInputProps> = ({
@@ -17,22 +16,23 @@ export const CheckInput: FC<ICheckInputProps> = ({
   onChange,
   id,
   className,
-  lcn,
   type = 'radio',
   children,
 }) => {
   return (
-    <div className={cn(className)}>
+    <label htmlFor={id} className={cn(className)}>
       <input
         type={type}
         id={id}
         checked={checked}
         disabled={disabled}
         onChange={onChange}
+        className={cn({
+          'mr-2': type === 'checkbox',
+          'mr-1': type !== 'checkbox',
+        })}
       />
-      <label htmlFor={id} className={cn(lcn)}>
-        {children}
-      </label>
-    </div>
+      {children}
+    </label>
   )
 }

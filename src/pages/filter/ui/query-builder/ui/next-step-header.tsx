@@ -96,16 +96,14 @@ export const NextStepHeader = observer(
               })}
             >
               <Radio
-                id={`include-${index}`}
                 checked={!currentStep.excluded}
                 onChange={() => toggleExclude(index, 'BOOL-TRUE')}
                 className="flex items-center mr-3"
               >
-                <Operation className="ml-1">{t('dtree.include')}</Operation>
+                <Operation>{t('dtree.include')}</Operation>
               </Radio>
 
               <Radio
-                id={`exclude-${index}`}
                 checked={currentStep.excluded}
                 onChange={() => toggleExclude(index, 'BOOL-FALSE')}
                 className="flex items-center mr-3"

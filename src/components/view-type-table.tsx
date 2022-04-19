@@ -21,7 +21,7 @@ export const ViewTypeTable = observer(
           className="mr-4 flex items-center"
           onChange={() => setViewType(viewTypeItem)}
         >
-          <span>{t(`ds.${viewTypeItem}`)}</span>
+          {t(`ds.${viewTypeItem}`)}
         </Radio>
       ))}
     </div>
