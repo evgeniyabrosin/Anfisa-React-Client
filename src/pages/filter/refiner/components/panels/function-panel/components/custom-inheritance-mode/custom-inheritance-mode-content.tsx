@@ -7,8 +7,8 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { selectOptions } from '../../../../../../dtree/components/modals/modals-control.strore'
-import { AllNotMods } from '../../../../../../dtree/components/ui/query-builder/ui/all-not-mods'
-import { DisabledVariantsAmount } from '../../../../../../dtree/components/ui/query-builder/ui/disabled-variants-amount'
+import { AllNotMods } from '../../../../../../dtree/components/query-builder/ui/all-not-mods'
+import { DisabledVariantsAmount } from '../../../../../../dtree/components/query-builder/ui/disabled-variants-amount'
 
 interface IProps {
   problemGroups: string[]

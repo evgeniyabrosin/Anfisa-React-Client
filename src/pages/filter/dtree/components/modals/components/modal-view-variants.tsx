@@ -39,7 +39,7 @@ const ModalContent = styled.div`
 
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
-export const TableModal = observer(() => {
+export const ModalViewVariants = observer(() => {
   const [layout, setLayout] = useState(variantStore.modalDrawerVariantsLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
@@ -69,7 +69,7 @@ export const TableModal = observer(() => {
     resizeHandler()
   }, [resizeHandler])
 
-  const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
+  const stepIndex = dtreeStore.modalViewVariantsIndexNumber ?? 0
 
   useEffect(() => {
     dtreeStore.setShouldLoadTableModal(true)
@@ -142,7 +142,7 @@ export const TableModal = observer(() => {
 
   const closeModal = (event: any) => {
     if (event.currentTarget === event.target) {
-      dtreeStore.closeTableModal()
+      dtreeStore.closeModalViewVariants()
     }
   }
 
@@ -291,7 +291,7 @@ export const TableModal = observer(() => {
                     <div className="bg-blue-lighter mx-3 rounded-sm w-0.5 h-[20px]" />
                     <Icon
                       name="Close"
-                      onClick={dtreeStore.closeTableModal}
+                      onClick={dtreeStore.closeModalViewVariants}
                       size={16}
                       className="cursor-pointer text-white"
                     />

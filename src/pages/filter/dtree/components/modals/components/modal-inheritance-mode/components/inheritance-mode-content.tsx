@@ -7,9 +7,9 @@ import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
-import { AllNotMods } from '@pages/filter/dtree/components/ui/query-builder/ui/all-not-mods'
-import { DisabledVariantsAmount } from '../../../../ui/query-builder/ui/disabled-variants-amount'
-import { ModsDivider } from '../../../../ui/query-builder/ui/mods-divider'
+import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
+import { DisabledVariantsAmount } from '../../../../query-builder/ui/disabled-variants-amount'
+import { ModsDivider } from '../../../../query-builder/ui/mods-divider'
 import modalInheritanceModeStore from '../modal-inheritance-mode.store'
 
 interface IProps {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import filterStore from '@store/filter'
-import { DisabledVariantsAmount } from '@pages/filter/dtree/components/ui/query-builder/ui/disabled-variants-amount'
+import { DisabledVariantsAmount } from '@pages/filter/dtree/components/query-builder/ui/disabled-variants-amount'
 import { ConditionJoinMode } from '@service-providers/common'
 import { ICompoundRequestArgs } from '@service-providers/common/common.interface'
 import { getCurrentModeType } from '@utils/getCurrentModeType'

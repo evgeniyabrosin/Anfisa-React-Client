@@ -15,8 +15,8 @@ import Editor from '@monaco-editor/react'
 import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
 import { IDtreeCheck } from '@service-providers/decision-trees/decision-trees.interface'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
-import { HeaderModal } from '../../ui/query-builder/ui/header-modal'
-import { ModalBase } from './modal-base'
+import { HeaderModal } from './ui/header-modal'
+import { ModalBase } from './ui/modal-base'
 
 const TEXT_EDITOR_THEME = 'textEditorTheme'
 

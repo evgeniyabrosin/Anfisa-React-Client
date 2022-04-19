@@ -16,7 +16,7 @@ import { ModalNumbers } from './components/modal-numbers'
 import { ModalSaveDataset } from './components/modal-save-dataset'
 import { ModalSelectAttribute } from './components/modal-select-attribute'
 import { ModalTextEditor } from './components/modal-text-editor'
-import { TableModal } from './components/TableModal'
+import { ModalViewVariants } from './components/modal-view-variants'
 import dtreeModalStore from './modals-visibility.store'
 
 export const ModalsContainer = observer(
@@ -44,7 +44,7 @@ export const ModalsContainer = observer(
 
       {dtreeModalStore.isModalGeneRegionVisible && <ModalGeneRegion />}
 
-      {dtreeStore.isTableModalVisible && <TableModal />}
+      {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
       {dtreeModalStore.isModalTextEditorVisible && <ModalTextEditor />}
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
       {dtreeModalStore.isModalConfirmationVisible && <ModalConfiramtion />}

@@ -11,7 +11,7 @@ import { Icon } from '@ui/icon'
 import { RadioButton } from '@ui/radio-button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { changeStep } from '@utils/changeStep'
-import { ModalOperation } from '../../../modals/components/modal-operation'
+import { ModalOperation } from '../../modals/components/modal-operation'
 import { ExpandContentButton } from './expand-content-button'
 import { StepDivider } from './step-divider'
 

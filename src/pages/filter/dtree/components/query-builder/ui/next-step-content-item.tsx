@@ -19,7 +19,7 @@ import activeStepStore, {
 import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getNumericExpression } from '@utils/getNumericExpression'
-import modalFiltersStore from '../../../modals/components/modal-enum/modal-enum.store'
+import modalFiltersStore from '../../modals/components/modal-enum/modal-enum.store'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`

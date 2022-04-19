@@ -4,7 +4,7 @@ import { approxOptions } from '@core/approxOptions'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Select } from '@ui/select'
-import { AllNotMods } from '@pages/filter/dtree/components/ui/query-builder/ui/all-not-mods'
+import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import compoundRequestStore from './compound-request.store'
 
 interface IAprroxAndStateProps {

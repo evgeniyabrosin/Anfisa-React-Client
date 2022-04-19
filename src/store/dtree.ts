@@ -95,8 +95,8 @@ class DtreeStore {
   stepAmout = 0
 
   isModalSaveDatasetVisible = false
-  isTableModalVisible = false
-  tableModalIndexNumber: null | number = null
+  isModalViewVariantsVisible = false
+  modalViewVariantsIndexNumber: null | number = null
 
   requestData: IRequestData[] = []
 
@@ -419,15 +419,15 @@ class DtreeStore {
     this.isModalSaveDatasetVisible = false
   }
 
-  openTableModal(index?: number) {
-    this.isTableModalVisible = true
+  openModalViewVariants(index?: number) {
+    this.isModalViewVariantsVisible = true
 
-    if (index) this.tableModalIndexNumber = index
+    if (index) this.modalViewVariantsIndexNumber = index
   }
 
-  closeTableModal = () => {
-    this.isTableModalVisible = false
-    this.tableModalIndexNumber = null
+  closeModalViewVariants = () => {
+    this.isModalViewVariantsVisible = false
+    this.modalViewVariantsIndexNumber = null
   }
 
   // 4. Other UI control functions

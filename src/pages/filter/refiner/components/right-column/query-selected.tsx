@@ -88,7 +88,7 @@ export const QuerySelected = observer((): ReactElement => {
         {datasetStore.isXL ? (
           <Button
             className="ml-auto"
-            onClick={() => dtreeStore.openTableModal()}
+            onClick={() => dtreeStore.openModalViewVariants()}
             text={t('dtree.viewVariants')}
           />
         ) : (

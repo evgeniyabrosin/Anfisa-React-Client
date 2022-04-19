@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
-import { AllNotMods } from '@pages/filter/dtree/components/ui/query-builder/ui/all-not-mods'
+import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import inheritanceModeStore from './inheritance-mode.store'
 
 interface IComplexVariantsProps {

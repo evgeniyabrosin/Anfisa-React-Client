@@ -5,7 +5,7 @@ import { DtreeOperations } from '@core/enum/dtree-operations'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
-import { ModalBase } from './modal-base'
+import { ModalBase } from './ui/modal-base'
 
 const confirmationText = {
   dtreeDelete: t('dtree.dtreeDeleteConfirmation'),

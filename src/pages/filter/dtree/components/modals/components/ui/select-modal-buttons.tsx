@@ -9,7 +9,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
-import { ModalJoin } from '../../../modals/components/modal-join'
+import { ModalJoin } from '../modal-join'
 
 // TODO: `currentGroup` prop is used only for empty group test
 //       may be we can use `isEmptyGroup` boolean prop or

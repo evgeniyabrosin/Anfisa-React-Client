@@ -2,7 +2,7 @@ import cn from 'classnames'
 
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import { SwitchTheme } from './switch-theme'
+import { SwitchTheme } from '../../../query-builder/ui/switch-theme'
 
 interface IProps {
   groupName?: string

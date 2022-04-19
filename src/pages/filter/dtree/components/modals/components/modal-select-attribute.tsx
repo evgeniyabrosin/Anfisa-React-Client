@@ -7,9 +7,9 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { QueryBuilderSubgroup } from '@pages/filter/common/groups/query-builder-subgroup'
 import dtreeModalStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
-import { QueryBuilderSearch } from '../../ui/query-builder/query-builder-search'
-import { HeaderModal } from '../../ui/query-builder/ui/header-modal'
-import { ModalBase } from './modal-base'
+import { QueryBuilderSearch } from '../../query-builder/query-builder-search'
+import { HeaderModal } from './ui/header-modal'
+import { ModalBase } from './ui/modal-base'
 
 export const ModalSelectAttribute = observer((): ReactElement => {
   const { filterValue, setFilterValue, filteredQueryBuilder } =

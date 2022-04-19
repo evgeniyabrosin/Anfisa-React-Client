@@ -15,7 +15,7 @@ import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { ErrorPage } from '@pages/error/error'
 import { FilterControl } from '@pages/filter/common/filter-control/filter-control'
-import { TableModal } from '@pages/filter/dtree/components/modals/components/TableModal'
+import { ModalViewVariants } from '@pages/filter/dtree/components/modals/components/modal-view-variants'
 import { FilterRefiner } from '@pages/filter/refiner/components/filter-refiner'
 import { ModalSaveDataset } from '../dtree/components/modals/components/modal-save-dataset'
 
@@ -46,7 +46,7 @@ const RefinerPage = observer((): ReactElement => {
 
   return (
     <Fragment>
-      {dtreeStore.isTableModalVisible && <TableModal />}
+      {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
       <Header>
         <div className="text-white flex-grow flex justify-end pr-6">

@@ -23,8 +23,8 @@ import {
   noFirstNumberPattern,
   noSymbolPattern,
 } from '@utils/validation/validationPatterns'
-import { HeaderModal } from '../../ui/query-builder/ui/header-modal'
-import { ModalBase } from './modal-base'
+import { HeaderModal } from './ui/header-modal'
+import { ModalBase } from './ui/modal-base'
 
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)

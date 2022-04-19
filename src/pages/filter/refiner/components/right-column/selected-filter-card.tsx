@@ -14,7 +14,7 @@ import {
   TFuncArgs,
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
-import { AllNotModeLabel } from '../../../dtree/components/ui/all-not-mode-label'
+import { AllNotModeLabel } from './all-not-mode-label'
 import { EnumFilter } from './enum-filter'
 import { FuncFilter } from './func-filter/func-filter'
 import { ModalOptions } from './modal-options'

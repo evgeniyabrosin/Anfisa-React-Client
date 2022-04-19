@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 
-import { QueryBuilderGroups } from '../../../../common/groups/query-builder-groups'
+import { QueryBuilderGroups } from '../../../common/groups/query-builder-groups'
 import { QueryBuilderTree } from './query-builder-tree'
 
 export const QueryBuilder = (): ReactElement => {

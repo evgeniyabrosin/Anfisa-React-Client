@@ -27,7 +27,7 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
     const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
     const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
 
-    dtreeStore.openTableModal(nextStepIndex)
+    dtreeStore.openModalViewVariants(nextStepIndex)
   }
 
   const getDerivedVariants = (type: string) => {

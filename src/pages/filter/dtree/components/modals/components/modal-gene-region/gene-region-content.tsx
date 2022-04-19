@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import { Input } from '@ui/input'
-import modalGeneRegionStore from '../../../modals/components/modal-gene-region/modal-gene-region.store'
-import { AllNotMods } from './all-not-mods'
-import { DisabledVariantsAmount } from './disabled-variants-amount'
+import { AllNotMods } from '../../../query-builder/ui/all-not-mods'
+import { DisabledVariantsAmount } from '../../../query-builder/ui/disabled-variants-amount'
+import modalGeneRegionStore from './modal-gene-region.store'
 
 interface IProps {
   locusCondition: string
