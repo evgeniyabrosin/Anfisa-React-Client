@@ -1,9 +1,9 @@
 import { ChangeEvent, ReactElement } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import modalFiltersStore from '../modal-enum.store'
 
 export const EnumList = observer((): ReactElement => {
@@ -18,24 +18,23 @@ export const EnumList = observer((): ReactElement => {
 
           return (
             variantNumbers !== 0 && (
-              <div key={variantName} className="flex items-center mb-2 text-14">
-                <Checkbox
-                  checked={dtreeStore.selectedFilters.includes(variantName)}
-                  className="-mt-0.5 mr-1 cursor-pointer"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    modalFiltersStore.selectCheckGroupItem(
-                      e.target.checked,
-                      variantName,
-                    )
-                  }
-                />
-
+              <Checkbox
+                key={variantName}
+                checked={dtreeStore.selectedFilters.includes(variantName)}
+                className="flex items-center mb-2 text-14"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  modalFiltersStore.selectCheckGroupItem(
+                    e.target.checked,
+                    variantName,
+                  )
+                }
+              >
                 <span className="text-black">{variantName}</span>
 
                 <span className="text-grey-blue ml-2">
                   {variantNumbers} {t('dtree.variants')}
                 </span>
-              </div>
+              </Checkbox>
             )
           )
         })

@@ -1,6 +1,5 @@
 import { MouseEvent, ReactElement, useRef, useState } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
-import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { get } from 'lodash'
 import { observer } from 'mobx-react-lite'
@@ -8,6 +7,7 @@ import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,

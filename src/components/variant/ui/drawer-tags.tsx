@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -7,6 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
@@ -71,26 +71,16 @@ const DrawerTagModal = observer(({ close }: any) => {
           const checked = localCheckedTags.includes(tagName)
 
           return (
-            <div key={tagName} className="flex items-center mb-4">
-              <Checkbox
-                checked={checked}
-                className="w-4 h-4"
-                onChange={e =>
-                  drawerTagsStore.handleCheckTag(e.target.checked, tagName)
-                }
-              />
-
-              <span className="text-12 ml-1">{tagName}</span>
-
-              {/* TODO: The need of this feature is in doubt  */}
-
-              {/* <span
-              className="ml-2 cursor-pointer hover:text-blue-bright"
-              onClick={() => handleClick(tagName)}
+            <Checkbox
+              key={tagName}
+              checked={checked}
+              className="flex items-center mb-4 text-12"
+              onChange={e =>
+                drawerTagsStore.handleCheckTag(e.target.checked, tagName)
+              }
             >
-              {Object.keys(variantStore.tagsWithNotes).includes(tagName) && '(#)'}
-            </span> */}
-            </div>
+              {tagName}
+            </Checkbox>
           )
         })}
       </div>

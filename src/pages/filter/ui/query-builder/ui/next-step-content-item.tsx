@@ -1,5 +1,4 @@
 import { ReactElement, useState } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -9,6 +8,7 @@ import { StepTypeEnum } from '@core/enum/step-type-enum'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
@@ -187,14 +187,13 @@ export const NextStepContentItem = observer(
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div> */}
             {!isNumeric && (
-              <label className="flex items-center pl-4 text-14">
-                <Checkbox
-                  checked={isNotMode}
-                  className="mr-1"
-                  onChange={() => editStepAttribute(index, currNo, isNotMode)}
-                />
+              <Checkbox
+                checked={isNotMode}
+                className="flex items-center pl-4 text-14"
+                onChange={() => editStepAttribute(index, currNo, isNotMode)}
+              >
                 {t('dtree.negate')}
-              </label>
+              </Checkbox>
             )}
           </div>
 

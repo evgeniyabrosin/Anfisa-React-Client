@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
+import { Checkbox } from '@ui/checkbox/checkbox'
 import inheritanceModeStore from './inheritance-mode.store'
 
 interface IProblemGroupsProps {
@@ -36,13 +36,14 @@ export const ProblemGroups = observer(
 
         <div className="flex items-center justify-between mt-4">
           {problemGroups.map(problemGroup => (
-            <div key={problemGroup} className="flex items-center">
-              <Checkbox
-                checked={problemGroupValues.includes(problemGroup)}
-                onChange={e => handleChangeProblemGroups(e, problemGroup)}
-              />
-              <span className="text-14 leading-16px ml-2">{problemGroup}</span>
-            </div>
+            <Checkbox
+              key={problemGroup}
+              checked={problemGroupValues.includes(problemGroup)}
+              onChange={e => handleChangeProblemGroups(e, problemGroup)}
+              className="flex items-center text-14 leading-16px"
+            >
+              {problemGroup}
+            </Checkbox>
           ))}
         </div>
       </React.Fragment>
