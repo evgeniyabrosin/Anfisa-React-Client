@@ -6,7 +6,7 @@ export interface ICheckInputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   className?: Argument
   disabled?: boolean
-  type?: 'checkbox' | 'radio'
+  type: 'checkbox' | 'radio'
   id?: string
 }
 
@@ -16,7 +16,7 @@ export const CheckInput: FC<ICheckInputProps> = ({
   onChange,
   id,
   className,
-  type = 'radio',
+  type,
   children,
 }) => {
   const isCheckbox = type === 'checkbox'
