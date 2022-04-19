@@ -15,9 +15,9 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
 import { GlbPagesNames } from '@glb/glb-names'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { TPropertyStatus } from '@service-providers/common'
-import modalFiltersStore from '../../dtree/ui/modal-edit/components/modal-enum/modal-enum.store'
+import modalFiltersStore from '../../dtree/modals/components/modal-enum/modal-enum.store'
 import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {

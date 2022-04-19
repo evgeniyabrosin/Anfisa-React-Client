@@ -4,8 +4,8 @@ import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/active-step.store'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
-import modalEditStore from '@pages/filter/dtree/ui/modal-edit/modal-edit.store'
+import modalEditStore from '@pages/filter/dtree/modals/modals-control.strore'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 
 export const changeEnumAttribute = (currentMode?: ModeTypes) => {

@@ -6,7 +6,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { showToast } from '@utils/notifications/showToast'
 
-class DtreeModalStore {
+class ModalsVisibilityStore {
   groupNameToChange = ''
   groupIndexToChange = 0
   dtreeOperation = ''
@@ -220,4 +220,4 @@ class DtreeModalStore {
   }
 }
 
-export default new DtreeModalStore()
+export default new ModalsVisibilityStore()

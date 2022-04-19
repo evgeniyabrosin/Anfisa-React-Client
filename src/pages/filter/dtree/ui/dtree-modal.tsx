@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { showToast } from '@utils/notifications/showToast'
 
 interface Props {

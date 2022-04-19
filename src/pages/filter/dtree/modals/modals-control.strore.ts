@@ -7,7 +7,7 @@ import {
   IFuncPropertyStatus,
   TPropertyStatus,
 } from '@service-providers/common'
-import dtreeModalStore from '../../modals.store'
+import dtreeModalStore from './modals-visibility.store'
 
 export const selectOptions = ['--', '0', '0-1', '1', '1-2', '2']
 
@@ -18,7 +18,7 @@ export interface IParams {
   request?: any[]
 }
 
-class ModalEditStore {
+class ModalsControlStore {
   constructor() {
     makeAutoObservable(this)
   }
@@ -107,4 +107,4 @@ class ModalEditStore {
   }
 }
 
-export default new ModalEditStore()
+export default new ModalsControlStore()

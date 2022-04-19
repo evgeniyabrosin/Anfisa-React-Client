@@ -6,11 +6,11 @@ import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
-import { SelectedGroupItem } from '@pages/filter/refiner/selected-group-item'
 import { ConditionJoinMode } from '@service-providers/common'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import { QueryBuilderSearch } from '../../../dtree/ui/query-builder/query-builder-search'
 import { AllNotMods } from '../../../dtree/ui/query-builder/ui/all-not-mods'
+import { SelectedGroupItem } from '../../middle-column/selected-group-item'
 import filterAttributesStore from './enum-panel.store'
 
 const variantsPerPage = 12

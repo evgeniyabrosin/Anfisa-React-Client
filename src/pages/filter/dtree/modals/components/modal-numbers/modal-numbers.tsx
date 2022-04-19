@@ -2,14 +2,14 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { NumericCondition } from '@components/numeric-condition'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
-import { EditModalButtons } from '@pages/filter/dtree/ui/modal-edit/components/edit-modal-buttons'
+import { EditModalButtons } from '@pages/filter/dtree/modals/components/edit-modal-buttons'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
-import { HeaderModal } from '../../../query-builder/ui/header-modal'
-import { ModalBase } from '../../../query-builder/ui/modal-base'
-import { SelectModalButtons } from '../../../query-builder/ui/select-modal-buttons'
-import modalEditStore from '../../modal-edit.store'
+import { HeaderModal } from '../../../ui/query-builder/ui/header-modal'
+import { ModalBase } from '../../../ui/query-builder/ui/modal-base'
+import { SelectModalButtons } from '../../../ui/query-builder/ui/select-modal-buttons'
+import modalEditStore from '../../modals-control.strore'
 
 export const ModalNumbers = observer((): ReactElement | null => {
   const groups = modalEditStore.currentStepGroups

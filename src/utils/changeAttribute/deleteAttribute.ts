@@ -1,7 +1,7 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/active-step.store'
-import modalEditStore from '@pages/filter/dtree/ui/modal-edit/modal-edit.store'
+import modalEditStore from '@pages/filter/dtree/modals/modals-control.strore'
 
 export const deleteAttribute = (): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'

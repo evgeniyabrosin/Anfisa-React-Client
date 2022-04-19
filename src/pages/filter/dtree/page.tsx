@@ -16,7 +16,7 @@ import { Header } from '@components/header'
 import { GlbPagesNames } from '@glb/glb-names'
 import { ErrorPage } from '../../error/error'
 import { FilterControl } from '../common/filter-control/filter-control'
-import { ModalsBlock } from './modals-block'
+import { ModalsContainer } from './modals/modals-container'
 import { QueryBuilder } from './ui/query-builder/query-builder'
 
 const FilterPage = observer((): ReactElement => {
@@ -93,7 +93,7 @@ const FilterPage = observer((): ReactElement => {
 
   return (
     <Fragment>
-      <ModalsBlock />
+      <ModalsContainer />
 
       <div className="overflow-hidden">
         <Header>

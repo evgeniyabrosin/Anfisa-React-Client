@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import filterStore from '@store/filter'
-import { FilterRefinerGroupItem } from '../refiner/filter-refiner-group-item'
+import { FilterRefinerGroupItem } from './filter-refiner-group-item'
 
 export const SelectedGroupHeader = observer((): ReactElement => {
   const groupVariantSum = filterStore.selectedGroupItem.variants

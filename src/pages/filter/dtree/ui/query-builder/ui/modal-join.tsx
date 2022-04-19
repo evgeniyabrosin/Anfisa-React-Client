@@ -5,7 +5,7 @@ import { ActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 
 interface IProps {
   handleAddAttribute: (action: ActionType) => void

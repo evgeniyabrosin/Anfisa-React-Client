@@ -4,10 +4,10 @@ import { makeAutoObservable } from 'mobx'
 import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
 import modalEditStore, {
   IParams,
-} from '@pages/filter/dtree/ui/modal-edit/modal-edit.store'
+} from '@pages/filter/dtree/modals/modals-control.strore'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
 import { getCurrentModeType } from '@utils/getCurrentModeType'

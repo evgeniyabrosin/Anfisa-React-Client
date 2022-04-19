@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { ModalJoin } from './modal-join'
 
 // TODO: `currentGroup` prop is used only for empty group test

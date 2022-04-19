@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { DtreeOperations } from '@core/enum/dtree-operations'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { ModalBase } from './query-builder/ui/modal-base'
 
 const confirmationText = {

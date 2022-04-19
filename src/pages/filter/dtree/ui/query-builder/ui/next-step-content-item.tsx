@@ -16,10 +16,10 @@ import { FnLabel } from '@components/fn-label'
 import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/active-step.store'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 import { editStepAttribute } from '@utils/editStepAttribute'
 import { getNumericExpression } from '@utils/getNumericExpression'
-import modalFiltersStore from '../../modal-edit/components/modal-enum/modal-enum.store'
+import modalFiltersStore from '../../../modals/components/modal-enum/modal-enum.store'
 import { DropDownJoin } from './dropdown-join'
 
 const ContentControl = styled.div`

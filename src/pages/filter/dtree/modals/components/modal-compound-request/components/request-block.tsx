@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
-import modalEditStore, { selectOptions } from '../../../modal-edit.store'
+import modalEditStore, { selectOptions } from '../../../modals-control.strore'
 import modalCompoundRequestStore from '../modal-compound-request.store'
 
 interface IRequestBlockProps {

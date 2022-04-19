@@ -1,8 +1,8 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/active-step.store'
-import dtreeModalStore from '@pages/filter/dtree/modals.store'
-import modalEditStore from '@pages/filter/dtree/ui/modal-edit/modal-edit.store'
+import modalEditStore from '@pages/filter/dtree/modals/modals-control.strore'
+import dtreeModalStore from '@pages/filter/dtree/modals/modals-visibility.store'
 
 export const changeNumericAttribute = (numericData: any[]) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
