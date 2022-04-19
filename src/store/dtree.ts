@@ -6,7 +6,7 @@ import { FilterCountsType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
-import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { CreateEmptyStepPositions } from '@pages/filter/dtree/active-step.store'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -19,7 +19,7 @@ import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
-} from '../pages/filter/active-step.store'
+} from '../pages/filter/dtree/active-step.store'
 import datasetStore from './dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 

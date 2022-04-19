@@ -7,8 +7,8 @@ import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { validateNotes } from '@utils/validation/validateNotes'
-import { HeaderModal } from '../../filter/ui/query-builder/ui/header-modal'
-import { ModalBase } from '../../filter/ui/query-builder/ui/modal-base'
+import { HeaderModal } from '../../filter/dtree/ui/query-builder/ui/header-modal'
+import { ModalBase } from '../../filter/dtree/ui/query-builder/ui/modal-base'
 
 export const ModalNotes = observer(() => {
   const ref = useRef<any>(null)
