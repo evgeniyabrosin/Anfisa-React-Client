@@ -19,6 +19,7 @@ export const CheckInput: FC<ICheckInputProps> = ({
   type = 'radio',
   children,
 }) => {
+  const isCheckbox = type === 'checkbox'
   return (
     <label htmlFor={id} className={cn(className)}>
       <input
@@ -28,8 +29,8 @@ export const CheckInput: FC<ICheckInputProps> = ({
         disabled={disabled}
         onChange={onChange}
         className={cn({
-          'mr-2': type === 'checkbox',
-          'mr-1': type !== 'checkbox',
+          'mr-2 w-4 h-4': isCheckbox,
+          'mr-1': !isCheckbox,
         })}
       />
       {children}

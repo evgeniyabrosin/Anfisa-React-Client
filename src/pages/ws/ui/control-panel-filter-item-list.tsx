@@ -42,7 +42,7 @@ export const FilterItemList = observer(
               key={item}
               checked={checked}
               onChange={e => handleCheck(e.target.checked, item)}
-              className="flex items-center mb-4 text-12"
+              className="flex items-center mb-4 text-12 font-medium"
             >
               <span data-testid={MainTableDataCy.checkboxListElement}>
                 {item}
