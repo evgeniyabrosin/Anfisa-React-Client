@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { Fragment, MouseEvent, ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -65,7 +65,10 @@ export const NextStepHeader = observer(
                 name="Options"
                 className="cursor-pointer text-blue-bright"
                 stroke={false}
-                onClick={showModal}
+                onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
+                  isVisibleModal && event.stopPropagation()
+                }}
+                onClick={isVisibleModal ? hideModal : showModal}
               />
             )}
 
