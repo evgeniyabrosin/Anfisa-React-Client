@@ -6,7 +6,7 @@ import { FilterCountsType } from '@declarations'
 import { getApiUrl } from '@core/get-api-url'
 import filterStore from '@store/filter'
 import { GlbPagesNames } from '@glb/glb-names'
-import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -19,7 +19,7 @@ import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
-} from '../pages/filter/active-step.store'
+} from '../pages/filter/dtree/components/active-step.store'
 import datasetStore from './dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
@@ -95,8 +95,8 @@ class DtreeStore {
   stepAmout = 0
 
   isModalSaveDatasetVisible = false
-  isTableModalVisible = false
-  tableModalIndexNumber: null | number = null
+  isModalViewVariantsVisible = false
+  modalViewVariantsIndexNumber: null | number = null
 
   requestData: IRequestData[] = []
 
@@ -419,15 +419,15 @@ class DtreeStore {
     this.isModalSaveDatasetVisible = false
   }
 
-  openTableModal(index?: number) {
-    this.isTableModalVisible = true
+  openModalViewVariants(index?: number) {
+    this.isModalViewVariantsVisible = true
 
-    if (index) this.tableModalIndexNumber = index
+    if (index) this.modalViewVariantsIndexNumber = index
   }
 
-  closeTableModal = () => {
-    this.isTableModalVisible = false
-    this.tableModalIndexNumber = null
+  closeModalViewVariants = () => {
+    this.isModalViewVariantsVisible = false
+    this.modalViewVariantsIndexNumber = null
   }
 
   // 4. Other UI control functions

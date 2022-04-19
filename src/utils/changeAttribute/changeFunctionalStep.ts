@@ -1,10 +1,10 @@
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/active-step.store'
-import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import modalEditStore from '@pages/filter/dtree/components/modals/modals-control.store'
+import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility.store'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
-import dtreeModalStore from '../../pages/filter/modals.store'
 
 export const changeFunctionalStep = (
   params: any,
@@ -18,7 +18,7 @@ export const changeFunctionalStep = (
     code,
   })
 
-  const { groupIndexToChange } = dtreeModalStore
+  const { groupIndexToChange } = modalsVisibilityStore
   const { location } = modalEditStore
   const { activeStepIndex } = activeStepStore
 
