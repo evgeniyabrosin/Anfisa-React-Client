@@ -71,7 +71,7 @@ export const FilterControl = observer((): ReactElement => {
             }}
           />
 
-          {page === GlbPagesNames.Filter && (
+          {page === GlbPagesNames.Dtree && (
             <Button
               text="Text editor"
               className="ml-2"
@@ -81,7 +81,7 @@ export const FilterControl = observer((): ReactElement => {
             />
           )}
           {/* Temporarily removed in Refiner page */}
-          {page === GlbPagesNames.Filter && (
+          {page === GlbPagesNames.Dtree && (
             <>
               <Button
                 text="Undo"

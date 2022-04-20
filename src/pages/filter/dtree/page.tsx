@@ -61,7 +61,7 @@ const FilterPage = observer((): ReactElement => {
     if (type === 'all') {
       if (isXL) return formatNumber(toJS(dirinfoStore.dsinfo.total))
 
-      if (filterStore.method === GlbPagesNames.Filter) {
+      if (filterStore.method === GlbPagesNames.Dtree) {
         return formatNumber(toJS(dtreeStore.statAmount[0]))
       }
 
@@ -71,7 +71,7 @@ const FilterPage = observer((): ReactElement => {
     }
 
     if (type === 'transcribedVariants') {
-      if (filterStore.method === GlbPagesNames.Filter) {
+      if (filterStore.method === GlbPagesNames.Dtree) {
         return formatNumber(toJS(dtreeStore.statAmount[1]))
       }
 
@@ -81,7 +81,7 @@ const FilterPage = observer((): ReactElement => {
     }
 
     if (type === 'transcripts') {
-      if (filterStore.method === GlbPagesNames.Filter) {
+      if (filterStore.method === GlbPagesNames.Dtree) {
         return formatNumber(toJS(dtreeStore.statAmount[2]))
       }
 

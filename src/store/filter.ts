@@ -156,7 +156,7 @@ export class FilterStore {
   }
 
   public resetData() {
-    this.method = GlbPagesNames.Filter
+    this.method = GlbPagesNames.Dtree
     this.selectedGroupItem = {}
     this.resetSelectedFilters()
   }

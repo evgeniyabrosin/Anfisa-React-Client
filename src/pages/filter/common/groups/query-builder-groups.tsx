@@ -34,7 +34,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
   )
 
   const additionalHeight: number =
-    filterStore.method === GlbPagesNames.Filter ? 300 : 260
+    filterStore.method === GlbPagesNames.Dtree ? 300 : 260
 
   return (
     <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -46,7 +46,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
         />
       </div>
 
-      {filterStore.method === GlbPagesNames.Filter && (
+      {filterStore.method === GlbPagesNames.Dtree && (
         <div className="flex items-center justify-between w-full h-8 mb-2">
           <div className="text-blue-bright font-medium">
             {activeStep &&

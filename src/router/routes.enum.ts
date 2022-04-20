@@ -4,13 +4,13 @@ import { GlbPagesNames } from '@glb/glb-names'
 export const Routes = Glb.makeEnum({
   Root: '/',
   WS: '/ws',
-  Filter: '/filter',
-  Refiner: '/filter/refiner/',
+  Dtree: '/filter/dtree',
+  Refiner: '/filter/refiner',
   IGV: '/igv',
 })
 
 export const RouteNames = Glb.makeEnum({
-  [Routes.Filter]: GlbPagesNames.Filter,
+  [Routes.Dtree]: GlbPagesNames.Dtree,
   [Routes.Refiner]: GlbPagesNames.Refiner,
   [Routes.WS]: GlbPagesNames.Table,
   [Routes.Root]: GlbPagesNames.Root,

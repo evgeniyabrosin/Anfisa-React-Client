@@ -29,7 +29,7 @@ export const RouterBase = (): ReactElement => {
         <Switch>
           <Route path={Routes.Root} exact component={MainPage} />
           <Route path={Routes.WS} exact component={WSPage} />
-          <Route path={Routes.Filter} exact component={FilterPage} />
+          <Route path={Routes.Dtree} exact component={FilterPage} />
           <Route path={Routes.Refiner} exact component={RefinerPage} />
           <Route path={Routes.IGV} exact component={IgvPage} />
           <Route component={notFoundPage} />

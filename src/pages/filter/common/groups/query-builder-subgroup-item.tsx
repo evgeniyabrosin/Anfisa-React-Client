@@ -100,7 +100,7 @@ export const QueryBuilderSubgroupItem = observer(
     const handleAttrClick = (group: StatList) => {
       const page = filterStore.method
 
-      if (page === GlbPagesNames.Filter) {
+      if (page === GlbPagesNames.Dtree) {
         openAttrListForDtree(group)
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setSelectedGroupItem(group)

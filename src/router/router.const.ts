@@ -11,8 +11,8 @@ export const getPageRoute = (
     case GlbPagesNames.Table:
       route = Routes.WS
       break
-    case GlbPagesNames.Filter:
-      route = Routes.Filter
+    case GlbPagesNames.Dtree:
+      route = Routes.Dtree
       break
     case GlbPagesNames.Refiner:
       route = Routes.Refiner
