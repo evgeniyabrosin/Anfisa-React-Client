@@ -36,9 +36,9 @@ export const NextStepHeader = observer(
   ({ isExpanded, expandContent, index, isExcluded }: IProps): ReactElement => {
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
-    const currentStep = dtreeStore.getStepData[index]
+    const currentStep = dtreeStore.filteredStepData[index]
 
-    const difference = dtreeStore.getStepData[index].difference
+    const difference = dtreeStore.filteredStepData[index].difference
 
     const toggleExclude = (
       stepIndex: number,
@@ -75,7 +75,7 @@ export const NextStepHeader = observer(
             <Step>
               {t('dtree.step')}{' '}
               {dtreeStore.algorithmFilterValue
-                ? dtreeStore.getStepData[index].step
+                ? dtreeStore.filteredStepData[index].step
                 : index + 1}
             </Step>
 

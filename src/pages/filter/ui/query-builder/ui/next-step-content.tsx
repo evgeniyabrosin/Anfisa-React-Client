@@ -29,14 +29,14 @@ const ContentEditor = styled.div`
 
 export const NextStepContent = observer(
   ({ index }: INextStepContentProps): ReactElement => {
-    const groups = dtreeStore.getStepData[index].groups
+    const groups = dtreeStore.filteredStepData[index].groups
 
     const [expanded, setExpanded] = useState<Record<number, boolean>>({})
     const expandGroup = (id: number) => () => {
       setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
     }
 
-    const currentStepData = dtreeStore.getStepData[index]
+    const currentStepData = dtreeStore.filteredStepData[index]
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 
@@ -136,9 +136,9 @@ export const NextStepContent = observer(
                 className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono"
                 data-testid={DecisionTreesResultsDataCy.contentEditor}
               >
-                {dtreeStore.stepData[index].comment && (
+                {dtreeStore.filteredStepData[index].comment && (
                   <div className="text-white mb-2">
-                    {dtreeStore.stepData[index].comment}
+                    {dtreeStore.filteredStepData[index].comment}
                   </div>
                 )}
 

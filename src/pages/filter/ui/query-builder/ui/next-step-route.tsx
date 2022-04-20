@@ -95,7 +95,7 @@ export const NextStepRoute = observer(
   ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
     const { variantCounts, dnaVariantsCounts } = datasetStore.fixedStatAmount
 
-    const currentStep = dtreeStore.getStepData[index]
+    const currentStep = dtreeStore.filteredStepData[index]
     const startFilterCounts = currentStep.startFilterCounts
 
     const changedStartCounts = startFilterCounts
