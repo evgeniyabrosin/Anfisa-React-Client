@@ -68,7 +68,7 @@ export const QuerySelected = observer((): ReactElement => {
             })}
           </span>
 
-          {dnaVariantsCounts && dnaVariantsCounts > 0 && (
+          {dnaVariantsCounts !== 0 && (
             <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcribedVariants', {
                 all: formatNumber(dnaVariantsCounts),
@@ -76,7 +76,7 @@ export const QuerySelected = observer((): ReactElement => {
             </span>
           )}
 
-          {transcriptsCounts && transcriptsCounts > 0 && (
+          {transcriptsCounts !== 0 && (
             <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
               {t('filter.transcripts', {
                 all: formatNumber(transcriptsCounts),
