@@ -284,6 +284,11 @@ class DtreeStore {
     return this.algorithmFilterValue ? data : stepData
   }
 
+  get isTreeEmpty(): boolean {
+    const isFirstStepEmpty = this.stepData[0]?.groups.length === 0
+    return this.stepData.length === 2 && isFirstStepEmpty
+  }
+
   insertStep(position: CreateEmptyStepPositions, index: number) {
     const localStepData = [...this.stepData]
 

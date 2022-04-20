@@ -12,7 +12,7 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 export const QueryBuilderTotalNumbers = observer((): ReactElement => {
   const variants = toJS(dirinfoStore.dsinfo).total
 
-  const stepData = toJS(dtreeStore.stepData)
+  const { stepData, isTreeEmpty } = dtreeStore
 
   const stepIndex = stepData.findIndex(
     element => element.isActive || element.isReturnedVariantsActive,
@@ -21,11 +21,9 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
   const currentStep = stepData[stepIndex]
   const difference = currentStep?.difference
   const startFilterCounts = currentStep?.startFilterCounts
+
   const hasReturnedVariants = Boolean(difference)
   const hasStartVariants = Boolean(startFilterCounts)
-
-  const isFirstStepEmpty = stepData[0]?.groups.length === 0
-  const isTreeEmpty = stepData.length === 2 && isFirstStepEmpty
   const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
   const openTableModal = (isReturnedVariants = true) => {
