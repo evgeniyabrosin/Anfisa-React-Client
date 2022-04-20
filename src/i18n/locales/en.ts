@@ -29,10 +29,19 @@ export const en = {
       frontend: 'Frontend: Anfisa {version}',
       backend: 'Backend: {version}',
     },
-    presetFilterAction: {
-      modify: 'Preset has been modified',
-      join: 'Preset has been joined',
-      delete: 'Preset has been deleted',
+    presetAction: {
+      success: {
+        create: 'Preset "{presetName}" has been created',
+        modify: 'Preset "{presetName}" has been modified',
+        join: 'Preset "{presetName}" has been joined',
+        delete: 'Preset "{presetName}" has been deleted',
+      },
+      error: {
+        create: 'Error when creating the "{presetName}" preset',
+        modify: 'Error when modifying the "{presetName}" preset',
+        join: 'Error when joining the "{presetName}" preset',
+        delete: 'Error when deleting the "{presetName}" preset',
+      },
     },
     selectSecondaryPlaceholder: 'Select secondary...',
   },
@@ -126,6 +135,7 @@ export const en = {
   },
   filter: {
     method: 'Filtering method',
+    results: 'Results',
     selectedVariants: 'Selected variants',
     show: 'Show {amount} variants',
     variants: 'Variants: {all}',
@@ -142,6 +152,7 @@ export const en = {
     prohibitToOpen: 'You cannot open XL-dataset on Filter Refiner',
     chooseProblemGroup: 'Choose any problem group first',
     notValidName: 'Preset name is not valid',
+    conditionsAdded: '{count} added',
     chart: {
       seeAll: 'See all',
       hide: 'Hide',
@@ -150,6 +161,10 @@ export const en = {
     },
     delete: 'Delete',
     copy: 'Copy',
+    errors: {
+      loadPreset: 'Failed to load preset "{presetName}"',
+      joinPreset: 'Failed to join preset "{presetName}"',
+    },
   },
   dtree: {
     variants: 'variants',

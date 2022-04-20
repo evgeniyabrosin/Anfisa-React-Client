@@ -3,7 +3,6 @@ import { makeAutoObservable } from 'mobx'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
 import { showToast } from '@utils/notifications/showToast'
 
 class DtreeModalStore {
@@ -52,7 +51,7 @@ class DtreeModalStore {
 
     showToast(notification, 'success')
 
-    filterStore.setActionName()
+    dtreeStore.setActionName()
 
     dtreeStore.resetCurrentDtreeName()
   }

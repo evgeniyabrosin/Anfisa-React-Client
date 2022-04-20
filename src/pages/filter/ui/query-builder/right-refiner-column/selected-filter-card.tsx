@@ -2,11 +2,8 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import { StatListType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useToggle } from '@core/hooks/use-toggle'
-import datasetStore from '@store/dataset'
-import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
 import { ConditionJoinMode } from '@service-providers/common'
 import {
@@ -15,28 +12,35 @@ import {
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
 import { AllNotModeLabel } from '../../all-not-mode-label'
+import { ConditionModalOptionsPopup } from './condition-modal-options-popup'
 import { EnumFilter } from './enum-filter'
-import { FuncFilter } from './func-filter/func-filter'
-import { ModalOptions } from './modal-options'
+import { FuncFilter } from './func-filter'
 import { NumericFilter } from './numeric-filter'
 
 interface ISelectedFilterCardProps {
-  filterId: string
-  filterCondition: TCondition
+  isActive: boolean
+  onSelect: () => void
+  onDelete: () => void
+  condition: TCondition
 }
 
 export const SelectedFilterCard = observer(
-  ({ filterId, filterCondition }: ISelectedFilterCardProps): ReactElement => {
-    const filterType: string = filterCondition[0]
-    const filterName: string = filterCondition[1]
+  ({
+    isActive,
+    onSelect,
+    onDelete,
+    condition,
+  }: ISelectedFilterCardProps): ReactElement => {
+    // TODO: mobx warning for out of bounds read from condition
+    //       not all of conditions have 3rd and 4th value
+    const filterType: string = condition[0]
+    const filterName: string = condition[1]
     const filterMode: ConditionJoinMode | undefined =
       filterType !== FilterKindEnum.Numeric
-        ? (filterCondition[2] as ConditionJoinMode)
+        ? (condition[2] as ConditionJoinMode)
         : undefined
-    const filterContent: string[] = filterCondition[3] || []
-    const filterExpression: TFuncArgs = filterCondition[4]!
-
-    const isFilterActive = filterId === filterStore.activeFilterId
+    const filterContent: string[] = condition[3] || []
+    const filterExpression: TFuncArgs = condition[4]!
 
     const [isFilterContentVisible, showFilterContent, hideFilterContent] =
       useToggle(true)
@@ -56,25 +60,13 @@ export const SelectedFilterCard = observer(
       isModalOptionsVisible ? hideModalOptions() : showModalOptions()
     }
 
-    const handleOpenFilter = () => {
-      filterStore.setActiveFilterId(filterId)
-      filterStore.setIsRedacorMode()
-      filterStore.resetSelectedGroupItem()
-
-      const selectedGroupItem = datasetStore.startDsStat['stat-list'].find(
-        (filter: StatListType) => filter.name === filterName,
-      )
-
-      filterStore.setSelectedGroupItem(selectedGroupItem)
-    }
-
     return (
       <>
         <div
           className={cn('relative flex flex-col px-3 cursor-pointer', {
-            'bg-blue-tertiary': isFilterActive,
+            'bg-blue-tertiary': isActive,
           })}
-          onClick={handleOpenFilter}
+          onClick={onSelect}
         >
           <div className="flex py-4 justify-between">
             <div className="flex" onClick={toggleFilterContentVisibility}>
@@ -102,9 +94,9 @@ export const SelectedFilterCard = observer(
             />
 
             {isModalOptionsVisible && (
-              <ModalOptions
-                closeModal={hideModalOptions}
-                filterId={filterId}
+              <ConditionModalOptionsPopup
+                onClose={hideModalOptions}
+                onDeleteCondition={onDelete}
                 filterName={filterName}
               />
             )}
@@ -116,24 +108,19 @@ export const SelectedFilterCard = observer(
         {isFilterContentVisible && filterType === FilterKindEnum.Numeric && (
           <NumericFilter
             filterName={filterName}
-            isFilterActive={isFilterActive}
-            numericExpression={filterCondition[2] as TNumericConditionBounds}
+            isFilterActive={isActive}
+            numericExpression={condition[2] as TNumericConditionBounds}
           />
         )}
 
         {isFilterContentVisible && filterType === FilterKindEnum.Enum && (
-          <EnumFilter
-            filterId={filterId}
-            isFilterActive={isFilterActive}
-            filterContent={filterContent}
-          />
+          <EnumFilter isFilterActive={isActive} filterContent={filterContent} />
         )}
 
         {isFilterContentVisible && filterType === FilterKindEnum.Func && (
           <FuncFilter
-            filterId={filterId}
             filterName={filterName}
-            isFilterActive={isFilterActive}
+            isFilterActive={isActive}
             filterContent={filterContent}
             filterExpression={filterExpression}
           />

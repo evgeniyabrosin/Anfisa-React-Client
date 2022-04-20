@@ -1,5 +1,4 @@
 import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
 import { IDsStatArguments } from '@service-providers/filtering-regime'
 
 export const addToActionHistory = (
@@ -8,15 +7,10 @@ export const addToActionHistory = (
 ) => {
   const actionHistory = [...dtreeStore.actionHistory]
 
-  const filtersHistory = JSON.parse(
-    JSON.stringify(filterStore.selectedFiltersHistory),
-  )
-
   const nextIndex = dtreeStore.actionHistoryIndex + 1
 
   if (dtreeStore.actionHistoryIndex > -1) {
     actionHistory.length = nextIndex
-    filtersHistory.length = nextIndex
   }
 
   actionHistory.push(body)
@@ -25,6 +19,8 @@ export const addToActionHistory = (
 
   if (isFilterRefiner) {
     // TODO: implement this logic
+    //  we need some base store for undo/redo,
+    //  and local inherited stores for dtree and filter refiner
     // const filters = filterStore.selectedFilters
     // filtersHistory.push(filters)
     // filterStore.setSelectedFiltersHistory(filtersHistory)

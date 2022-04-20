@@ -239,7 +239,7 @@ class CustomInheritanceModeStore {
       JSON.parse(`{"scenario":{${this.stringScenario}}}`),
     ]
 
-    functionPanelStore.sumbitConditions(custInhModeConditions)
+    functionPanelStore.submitConditions(custInhModeConditions)
 
     filterStore.resetStatFuncData()
     this.clearData()

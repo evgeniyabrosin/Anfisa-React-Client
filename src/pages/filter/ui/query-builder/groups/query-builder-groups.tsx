@@ -11,8 +11,14 @@ import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer((): ReactElement => {
+  // TODO: don't use filterStore method to decide what page is it
+  //       queryBuilder should be a component property
   const { filterValue, setFilterValue, filteredQueryBuilder } =
-    useFilterQueryBuilder()
+    useFilterQueryBuilder(
+      filterStore.method === GlbPagesNames.Refiner
+        ? filterStore.stat.queryBuilder
+        : dtreeStore.stat.queryBuilder,
+    )
 
   const groupNames = Object.keys(filteredQueryBuilder)
   const subGroupData = Object.values(filteredQueryBuilder)

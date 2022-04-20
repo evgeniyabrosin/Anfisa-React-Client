@@ -10,6 +10,7 @@ import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import filterPresetsStore from '@store/filter-presets'
 import filterZone from '@store/filterZone'
 import operations from '@store/operations'
 import { Routes } from '@router/routes.enum'
@@ -62,7 +63,7 @@ export const ModalSaveDataset = observer(() => {
 
     if (
       pathName === PatnNameEnum.Ws &&
-      !datasetStore.activePreset &&
+      !filterPresetsStore.activePreset &&
       conditions.length === 0
     ) {
       setError(DatasetCreationErrorsEnum.ChooseAnyFilter)
@@ -85,7 +86,6 @@ export const ModalSaveDataset = observer(() => {
     }
 
     filterZone.resetAllSelectedItems()
-    datasetStore.resetActivePreset()
     isDone && history.push(`${Routes.WS}?ds=${value}`)
   }
 
@@ -117,11 +117,9 @@ export const ModalSaveDataset = observer(() => {
     pathName === PatnNameEnum.Ws && datasetStore.initDatasetAsync(value)
     operations.resetSavingStatus()
 
-    datasetStore.setActivePreset('')
     datasetStore.resetData()
     datasetStore.clearZone()
-    datasetStore.resetConditions()
-    filterStore.resetData()
+    filterStore.reset()
     dtreeStore.resetData()
     filterZone.resetAllSelectedItems()
   }

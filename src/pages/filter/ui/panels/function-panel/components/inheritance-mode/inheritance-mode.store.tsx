@@ -98,9 +98,9 @@ class InheritanceModeStore {
   public selectAllVariants = (): void => {
     if (functionPanelStore.filteredComplexVariants.length === 0) return
 
-    const { selectedFilter } = filterStore
+    const { selectedCondition } = filterStore
 
-    const variantsValues = selectedFilter
+    const variantsValues = selectedCondition
       ? functionPanelStore.complexVariants.map(variant => variant[0])
       : functionPanelStore.filteredComplexVariants.map(variant => variant[0])
 
@@ -130,7 +130,7 @@ class InheritanceModeStore {
       },
     ]
 
-    functionPanelStore.sumbitConditions(conditions)
+    functionPanelStore.submitConditions(conditions)
 
     filterStore.resetStatFuncData()
     this.resetAllFields()

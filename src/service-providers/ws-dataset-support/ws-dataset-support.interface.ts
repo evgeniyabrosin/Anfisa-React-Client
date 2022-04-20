@@ -10,7 +10,7 @@ import {
 export interface IWsListArguments {
   ds: string
   filter?: string
-  conditions?: TCondition[]
+  conditions?: ReadonlyArray<TCondition>
   zone?: TZoneSetting[]
 }
 
@@ -79,7 +79,7 @@ export interface IMacroTaggingArguments {
   tag: string
   off?: true | any
   filter?: string
-  conditions?: TCondition[]
+  conditions?: ReadonlyArray<TCondition>
   dtree?: string
   code?: string
   no?: string

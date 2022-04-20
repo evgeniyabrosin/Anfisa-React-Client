@@ -6,17 +6,21 @@ import { DtreeOperations } from '@core/enum/dtree-operations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { showToast } from '@utils/notifications/showToast'
 import dtreeModalStore from '../modals.store'
-interface Props {
+
+interface IDtreePresetActionModalProps {
   close: () => void
+  onSelect: (action: ActionFilterEnum) => void
 }
 
 const actions = [ActionFilterEnum.Modify, ActionFilterEnum.Delete]
 
-export const DtreeModal = ({ close }: Props): ReactElement => {
+export const DtreePresetActionModal = ({
+  close,
+  onSelect,
+}: IDtreePresetActionModalProps): ReactElement => {
   const ref = useRef(null)
 
   const handleClick = (action: ActionFilterEnum) => {
@@ -48,7 +52,7 @@ export const DtreeModal = ({ close }: Props): ReactElement => {
         notification = t('dtree.noChanges')
       }
 
-      !notification && filterStore.setActionName(action)
+      !notification && onSelect(action)
     }
 
     notification && showToast(notification, 'error')

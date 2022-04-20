@@ -2,10 +2,10 @@ import { ReactElement, useRef } from 'react'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
-import filterStore from '@store/filter'
 
-interface Props {
+interface IPresetActionsModalProps {
   close: () => void
+  onSelect: (action: ActionFilterEnum) => void
 }
 
 const actions = [
@@ -15,11 +15,14 @@ const actions = [
   ActionFilterEnum.Delete,
 ]
 
-export const FilterModal = ({ close }: Props): ReactElement => {
+export const PresetActionsModal = ({
+  close,
+  onSelect,
+}: IPresetActionsModalProps): ReactElement => {
   const ref = useRef(null)
 
   const handleClick = (action: ActionFilterEnum) => {
-    filterStore.setActionName(action)
+    onSelect(action)
     close()
   }
 

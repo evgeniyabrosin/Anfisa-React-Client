@@ -7,6 +7,7 @@ import filterStore from '@store/filter'
 import { TRequestCondition } from '@service-providers/common'
 import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getFilteredRequestCondition } from '@utils/function-panel/getFilteredRequestCondition'
+import { getPureRequestString } from '@utils/function-panel/getPureRequestString'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
@@ -14,7 +15,6 @@ import { getResetRequestData } from '@utils/getResetRequestData'
 import { getResetType } from '@utils/getResetType'
 import { getSortedArray } from '@utils/getSortedArray'
 import functionPanelStore from '../../function-panel.store'
-import { getPureRequestString } from './../../../../../../../utils/function-panel/getPureRequestString'
 
 class CompoundRequestStore {
   private _requestCondition: TRequestCondition[] = [
@@ -224,7 +224,7 @@ class CompoundRequestStore {
       },
     ]
 
-    functionPanelStore.sumbitConditions(conditions)
+    functionPanelStore.submitConditions(conditions)
 
     this.clearData()
     filterStore.resetStatFuncData()

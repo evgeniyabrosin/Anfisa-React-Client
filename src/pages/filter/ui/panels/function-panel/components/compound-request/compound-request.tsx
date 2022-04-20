@@ -16,7 +16,7 @@ import { RequestConditions } from './request-conditions'
 import { ResetSelect } from './reset-select'
 
 export const CompoundRequest = observer((): ReactElement => {
-  const { selectedFilter, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -25,10 +25,11 @@ export const CompoundRequest = observer((): ReactElement => {
 
   // set/reset data
   useEffect(() => {
-    if (selectedFilter && isRedactorMode) {
-      const selectedFilterConditions = selectedFilter[4] as ICompoundRequestArgs
+    if (selectedCondition && isRedactorMode) {
+      const selectedFilterConditions =
+        selectedCondition[4] as ICompoundRequestArgs
       const selectedFilterRequest = selectedFilterConditions['request']
-      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+      const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       compoundRequestStore.setCurrentMode(getCurrentModeType(conditionJoinType))
       compoundRequestStore.setRequestCondition(selectedFilterRequest)
@@ -39,7 +40,7 @@ export const CompoundRequest = observer((): ReactElement => {
       compoundRequestStore.clearRequestCondition()
       compoundRequestStore.resetCurrentMode()
     }
-  }, [isRedactorMode, selectedFilter])
+  }, [isRedactorMode, selectedCondition])
 
   // update data
   useEffect(() => {

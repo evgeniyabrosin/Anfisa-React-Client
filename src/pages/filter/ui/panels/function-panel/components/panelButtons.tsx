@@ -21,12 +21,6 @@ export const PanelButtons = observer(
 
     const isRedactorMode = filterStore.isRedactorMode
 
-    const handleAddConditions = () => {
-      onSubmit()
-      filterStore.resetSelectedGroupItem()
-      filterStore.resetActiveFilterId()
-    }
-
     return (
       <div className="flex items-center justify-end mt-5">
         <Button
@@ -41,7 +35,7 @@ export const PanelButtons = observer(
             text={
               isRedactorMode ? t('dtree.saveChanges') : t('dtree.addAttribute')
             }
-            onClick={handleAddConditions}
+            onClick={onSubmit}
             disabled={disabled}
           />
         </div>

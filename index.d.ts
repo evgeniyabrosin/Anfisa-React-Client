@@ -139,8 +139,6 @@ export interface StatList {
   incomplete?: boolean
 }
 
-export type StatListType = StatList | Record<string, any>
-
 export interface FilterList {
   name: string
   standard: boolean

@@ -1,3 +1,4 @@
+import { adaptFilteringStatsCounts } from '@service-providers/common'
 import { IDtreeStatResponse, TDtreeStat } from './decision-trees.interface'
 
 export const adaptDtreeStatResponse = (
@@ -5,7 +6,7 @@ export const adaptDtreeStatResponse = (
 ): TDtreeStat => {
   return {
     list: response['stat-list'],
-    filteredCounts: response['filtered-counts'],
-    totalCounts: response['total-counts'],
+    filteredCounts: adaptFilteringStatsCounts(response['filtered-counts']),
+    totalCounts: adaptFilteringStatsCounts(response['total-counts']),
   }
 }

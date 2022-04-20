@@ -34,10 +34,12 @@ export class ServiceProviderBase {
     Object.keys(data).forEach(key => {
       const entry = data[key]
 
-      if (typeof entry === 'object') {
-        result.append(key, JSON.stringify(entry))
-      } else {
-        result.append(key, entry as string)
+      if (entry != null) {
+        if (typeof entry === 'object') {
+          result.append(key, JSON.stringify(entry))
+        } else {
+          result.append(key, entry as string)
+        }
       }
     })
 

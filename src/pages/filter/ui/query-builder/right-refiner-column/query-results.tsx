@@ -6,9 +6,9 @@ import filterStore from '@store/filter'
 import { SelectedFilterCard } from './selected-filter-card'
 
 export const QueryResults = observer((): ReactElement => {
-  const selectedFilters = filterStore.selectedFiltersArray
+  const { conditions, selectedConditionIndex } = filterStore
 
-  if (selectedFilters.length === 0) {
+  if (conditions.length === 0) {
     return (
       <div
         style={{ height: 'calc(100vh - 276px)' }}
@@ -26,11 +26,13 @@ export const QueryResults = observer((): ReactElement => {
       className="overflow-y-scroll"
       style={{ height: 'calc(100vh - 320px)' }}
     >
-      {selectedFilters.map(([filterId, filterCondition]) => (
-        <div key={filterId} className="flex flex-col">
+      {conditions.map((condition, index) => (
+        <div key={`${condition[1]}_${index}`} className="flex flex-col">
           <SelectedFilterCard
-            filterId={filterId}
-            filterCondition={filterCondition}
+            isActive={index === selectedConditionIndex}
+            condition={condition}
+            onSelect={() => filterStore.selectCondition(index)}
+            onDelete={() => filterStore.removeCondition(index)}
           />
         </div>
       ))}

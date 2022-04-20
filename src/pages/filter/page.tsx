@@ -54,39 +54,36 @@ const FilterPage = observer((): ReactElement => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dsName, history])
 
-  const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
-    datasetStore.fixedStatAmount
-
   const getFiltersValue = (type: string) => {
     if (type === 'all') {
       if (isXL) return formatNumber(toJS(dirinfoStore.dsinfo.total))
 
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(toJS(dtreeStore.statAmount[0]))
+        return formatNumber(dtreeStore.statAmount?.variants)
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(toJS(variantCounts))
+        return formatNumber(filterStore.stat.filteredCounts?.variants)
       }
     }
 
     if (type === 'transcribedVariants') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(toJS(dtreeStore.statAmount[1]))
+        return formatNumber(dtreeStore.statAmount?.transcribedVariants)
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(toJS(dnaVariantsCounts))
+        return formatNumber(filterStore.stat.filteredCounts?.variants)
       }
     }
 
     if (type === 'transcripts') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(toJS(dtreeStore.statAmount[2]))
+        return formatNumber(dtreeStore.statAmount?.transcripts)
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(transcriptsCounts)
+        return formatNumber(filterStore.stat.filteredCounts?.transcripts)
       }
     }
   }

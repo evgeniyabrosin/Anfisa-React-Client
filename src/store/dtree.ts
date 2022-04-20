@@ -3,10 +3,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { FilterCountsType } from '@declarations'
+import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
-import filterStore from '@store/filter'
-import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { TFilteringStatCounts } from '@service-providers/common'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -15,7 +15,6 @@ import filteringRegimeProvider from '@service-providers/filtering-regime/filteri
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getDataFromCode } from '@utils/getDataFromCode'
-import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
@@ -56,6 +55,7 @@ class DtreeStore {
   currentDtreeName = ''
   previousDtreeName = ''
   createNewDtreeName = ''
+  actionName: ActionFilterEnum | undefined = undefined
 
   statFuncData: any = []
   scenario: any
@@ -161,18 +161,8 @@ class DtreeStore {
     )
   }
 
-  get statAmount(): number[] {
-    return this.stat.filteredCounts ?? []
-  }
-
-  get getQueryBuilder() {
-    const isRefiner = filterStore.method === GlbPagesNames.Refiner
-
-    const statList = isRefiner
-      ? toJS(datasetStore.dsStat['stat-list'])
-      : this.stat.list
-
-    return getQueryBuilder(statList)
+  get statAmount(): TFilteringStatCounts | undefined {
+    return this.stat.filteredCounts
   }
 
   getStepIndexForApi = (index: number) => {
@@ -576,7 +566,7 @@ class DtreeStore {
       this.stepData[index].isReturnedVariantsActive = true
     }
 
-    this.stat.setSource({
+    this.stat.setQuery({
       datasetName: datasetStore.datasetName,
       code: this.dtreeCode,
       stepIndex: indexForApi,
@@ -634,6 +624,10 @@ class DtreeStore {
     runInAction(() => {
       this.isCountsReceived = isReceived
     })
+  }
+
+  setActionName(actionName?: ActionFilterEnum): void {
+    this.actionName = actionName
   }
 }
 
