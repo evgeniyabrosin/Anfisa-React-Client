@@ -8,7 +8,7 @@ import Tooltip from 'rc-tooltip'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
-import { ScrollShadower } from '@ui/scroll-shadower/scroll-shadower'
+import { ScrollShadowier } from '@ui/scroll-shadower/scroll-shadowier'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
@@ -205,7 +205,7 @@ export const DrawerWindow = observer(
         onStartScroll={handleStartScroll}
         className="cursor-grab"
       >
-        <ScrollShadower height="100%" width="100%">
+        <ScrollShadowier height="100%" width="100%">
           <div
             className={cn('py-3 pr-3   content-child')}
             id={`drawer-${aspect.name}`}
@@ -227,7 +227,7 @@ export const DrawerWindow = observer(
               />
             )}
           </div>
-        </ScrollShadower>
+        </ScrollShadowier>
       </ScrollContainer>
     )
   },
