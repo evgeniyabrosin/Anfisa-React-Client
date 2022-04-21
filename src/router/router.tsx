@@ -11,6 +11,7 @@ import MainPage from '@pages/main/page'
 import notFoundPage from '@pages/not-found/not-found.page'
 import RefinerPage from '@pages/refiner/page'
 import WSPage from '@pages/ws/page'
+import { DemoPage } from '@pages/demo-page'
 
 export const RouterBase = (): ReactElement => {
   let baseName = '/'
@@ -27,6 +28,7 @@ export const RouterBase = (): ReactElement => {
         <ToastContainer />
 
         <Switch>
+          <Route path="/demo" exact component={DemoPage} />
           <Route path={Routes.Root} exact component={MainPage} />
           <Route path={Routes.WS} exact component={WSPage} />
           <Route path={Routes.Filter} exact component={FilterPage} />
