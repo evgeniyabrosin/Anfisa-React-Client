@@ -68,7 +68,7 @@ module.exports = {
     'alignItems', // The align-items utilities like items-center
     'alignSelf', // The align-self utilities like self-end
     // 'animation', // The animation utilities like animate-none
-    // 'appearance', // The appearance utilities like appearance-none
+    'appearance', // The appearance utilities like appearance-none
     // 'backdropBlur', // The backdrop-blur utilities like backdrop-blur-md
     // 'backdropBrightness', // The backdrop-brightness utilities like backdrop-brightness-100
     // 'backdropContrast', // The backdrop-contrast utilities like backdrop-contrast-100

@@ -1,17 +1,16 @@
 import { useState } from 'react'
 
-import dtreeStore from '@store/dtree'
+import { TStatUnitsQueryBuilder } from '@store/common'
 
-export const useFilterQueryBuilder = () => {
-  const queryBuilder = dtreeStore.getQueryBuilder
+export const useFilterQueryBuilder = (queryBuilder: TStatUnitsQueryBuilder) => {
   const entriesQueryBuilder = Object.entries(queryBuilder)
 
   const [filterValue, setFilterValue] = useState('')
 
   const filteredEntriesQueryBuilder = entriesQueryBuilder
     .map(group => {
-      const filteredSubGroups = group[1].filter(subGrup => {
-        const name = subGrup.name.toLowerCase()
+      const filteredSubGroups = group[1].filter(subGroup => {
+        const name = subGroup.name.toLowerCase()
         const fixedFilterValue = filterValue.toLowerCase()
 
         return name.includes(fixedFilterValue)

@@ -1,49 +1,40 @@
 import { Fragment, ReactElement, useEffect } from 'react'
-import isEmpty from 'lodash/isEmpty'
-import { reaction } from 'mobx'
+import { Option } from 'react-dropdown'
 import { observer } from 'mobx-react-lite'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import presetStore, { DEFAULT_PRESET_LABEL } from '@store/filterPreset'
+import filterPresetsStore from '@store/filter-presets'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Input } from '@ui/input'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/dataset-creation-button'
 import { FilterButton } from '../../filter-button'
-import { FilterModal } from '../../filter-modal'
+import { PresetActionsModal } from '../../preset-actions-modal'
 import filterControlRefinerStore from './filter-control-refiner.store'
 
 export const FilterControlRefiner = observer((): ReactElement => {
-  const { activePreset, presets, createPresetName } = filterControlRefinerStore
+  const { actionName, activePreset, presets, presetNameForAction } =
+    filterControlRefinerStore
 
-  const isSelectedFiltersEmpty: boolean = isEmpty(
-    filterStore.selectedFiltersArray,
-  )
+  const isSelectedFiltersEmpty: boolean = filterStore.isConditionsEmpty
 
-  const isApplyDisabled =
-    activePreset.startsWith(DEFAULT_PRESET_LABEL) &&
-    (filterStore.actionName === ActionFilterEnum.Modify ||
-      filterStore.actionName === ActionFilterEnum.Delete)
+  const isActionMode = !!actionName
+  const isApplyDisabled = !presetNameForAction
 
   useEffect(() => {
-    const dispose = reaction(
-      () => datasetStore.activePreset,
-      () => {
-        if (!datasetStore.activePreset) datasetStore.resetActivePreset()
-      },
-    )
-
-    return () => dispose()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (isSelectedFiltersEmpty) filterStore.resetActionName()
+    if (isSelectedFiltersEmpty) filterControlRefinerStore.resetActionName()
   }, [isSelectedFiltersEmpty])
+
+  const handlePresetSelect = ({ value }: Option) => {
+    if (isActionMode) {
+      filterControlRefinerStore.setPresetNameForAction(value)
+    } else {
+      filterPresetsStore.setActivePreset(value)
+    }
+  }
 
   return (
     <Fragment>
@@ -56,27 +47,29 @@ export const FilterControlRefiner = observer((): ReactElement => {
 
             <span
               className="text-blue-bright text-14 cursor-pointer"
-              onClick={() => filterStore.setActionName(ActionFilterEnum.Create)}
+              onClick={() =>
+                filterControlRefinerStore.setActionName(ActionFilterEnum.Create)
+              }
             >
               {t('filter.createPreset')}
             </span>
           </div>
 
-          {filterStore.actionName === ActionFilterEnum.Create ? (
+          {actionName === ActionFilterEnum.Create ? (
             <Input
-              value={createPresetName}
+              value={presetNameForAction}
               placeholder={t('filter.presetName')}
               className="bg-blue-lighter text-white border-2 border-blue-bright"
               style={{ width: 209 }}
               onChange={e =>
-                filterControlRefinerStore.setCreatePresetName(e.target.value)
+                filterControlRefinerStore.setPresetNameForAction(e.target.value)
               }
             />
           ) : (
             <DropDown
               options={presets}
-              value={activePreset}
-              onSelect={args => presetStore.loadPreset(args.value)}
+              value={isActionMode ? presetNameForAction : activePreset}
+              onSelect={handlePresetSelect}
             />
           )}
         </div>
@@ -84,21 +77,24 @@ export const FilterControlRefiner = observer((): ReactElement => {
         {!isSelectedFiltersEmpty && (
           <PopperButton
             ButtonElement={FilterButton}
-            ModalElement={FilterModal}
+            ButtonProps={{
+              text: actionName,
+            }}
+            ModalElement={PresetActionsModal}
+            ModalProps={{
+              onSelect: (action: ActionFilterEnum) => {
+                filterControlRefinerStore.setActionName(action)
+              },
+            }}
           />
         )}
 
-        {filterStore.actionName && (
+        {actionName && (
           <>
             <Button
               text={t('general.apply')}
               size="md"
-              onClick={() =>
-                filterControlRefinerStore.applyAction(
-                  createPresetName,
-                  isSelectedFiltersEmpty,
-                )
-              }
+              onClick={() => filterControlRefinerStore.applyAction()}
               disabled={isApplyDisabled}
               className="text-white mt-auto ml-2"
             />
@@ -109,8 +105,7 @@ export const FilterControlRefiner = observer((): ReactElement => {
               variant={'secondary-dark'}
               className="mt-auto ml-2"
               onClick={() => {
-                filterControlRefinerStore.setCreatePresetName('')
-                filterStore.resetActionName()
+                filterControlRefinerStore.resetAction()
               }}
             />
           </>

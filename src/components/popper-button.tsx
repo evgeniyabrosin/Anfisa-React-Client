@@ -4,9 +4,12 @@ import cn, { Argument } from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 
+// TODO: types
 interface Props {
   ButtonElement: any
+  ButtonProps?: any
   ModalElement: any
+  ModalProps?: any
   ButtonElementClassName?: Argument
   title?: string
   data?: any
@@ -15,7 +18,9 @@ interface Props {
 
 export const PopperButton = ({
   ButtonElement,
+  ButtonProps,
   ModalElement,
+  ModalProps,
   ButtonElementClassName,
   title,
   data,
@@ -31,6 +36,7 @@ export const PopperButton = ({
     <Fragment>
       {data && data.length === 0 && type && (
         <ButtonElement
+          {...ButtonProps}
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
@@ -42,6 +48,7 @@ export const PopperButton = ({
       )}
       {!type && (
         <ButtonElement
+          {...ButtonProps}
           refEl={setReferenceElement}
           isOpen={isOpen}
           className={cn(ButtonElementClassName)}
@@ -59,7 +66,7 @@ export const PopperButton = ({
           style={styles.popper}
           {...attributes.popper}
         >
-          <ModalElement close={close} title={title} />
+          <ModalElement {...ModalProps} close={close} title={title} />
         </div>
       )}
     </Fragment>

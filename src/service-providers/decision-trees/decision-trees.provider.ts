@@ -10,7 +10,6 @@ import {
   TGetFullDtreeStatOptions,
   TGetFullDtreeStatParams,
 } from './decision-trees.interface'
-import { getIncompleteProps } from './decision-trees.utils'
 
 class DecisionTreesProvider extends ServiceProviderBase {
   constructor() {
@@ -35,61 +34,29 @@ class DecisionTreesProvider extends ServiceProviderBase {
     return response.data
   }
 
-  public async getFullDtreeStat(
+  public getFullDtreeStat(
     params: TGetFullDtreeStatParams,
     options: TGetFullDtreeStatOptions = {},
   ): Promise<TDtreeStat> {
-    const { abortSignal, onPartialResponse } = options
-
-    const statResponse = await this.getDtreeStat(
-      {
-        ...params,
-        tm: '0',
-      },
-      {
-        signal: options.abortSignal,
-      },
+    return filteringProvider.getFullStatUnitsBase(
+      () =>
+        this.getDtreeStat(
+          {
+            ...params,
+            tm: 0,
+          },
+          {
+            signal: options.abortSignal,
+          },
+        ).then(response => ({
+          response: adaptDtreeStatResponse(response),
+          unitsRequest: {
+            ...params,
+            rq_id: response['rq-id'],
+          },
+        })),
+      options,
     )
-
-    const requestId = statResponse['rq-id']
-
-    let result = adaptDtreeStatResponse(statResponse)
-    let incompleteProps = getIncompleteProps(result.list)
-
-    while (incompleteProps.length > 0) {
-      if (abortSignal && abortSignal.aborted) {
-        throw new DOMException('fetchDtreeStat aborted', 'AbortError')
-      }
-
-      if (onPartialResponse) {
-        onPartialResponse(result)
-      }
-
-      const { units } = await filteringProvider.getStatUnits(
-        {
-          ...params,
-          rq_id: requestId,
-          tm: '1',
-          units: incompleteProps,
-        },
-        {
-          signal: abortSignal,
-        },
-      )
-
-      result = {
-        ...result,
-        list: result.list.map(prop => {
-          const { name } = prop
-
-          return units.find(item => item.name === name) ?? prop
-        }),
-      }
-
-      incompleteProps = getIncompleteProps(result.list)
-    }
-
-    return result
   }
 }
 

@@ -5,8 +5,6 @@ import { ISScrollShadowierProps } from '@ui/scroll-shadower/scroll-shadowier.int
 export const Container = styled.div<ISScrollShadowierProps>`
   height: ${({ height }) => height};
   width: ${({ width }) => width};
-  overflow-x: auto;
-  display: flex;
 `
 
 export const RootContainer = styled.div`

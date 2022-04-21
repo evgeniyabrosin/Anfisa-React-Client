@@ -31,11 +31,9 @@ const MainPage = (): ReactElement => {
   }, [params])
 
   useEffect(() => {
-    datasetStore.setActivePreset('')
     datasetStore.resetData()
     datasetStore.clearZone()
-    datasetStore.resetConditions()
-    filterStore.resetData()
+    filterStore.reset()
     dtreeStore.resetData()
     filterZone.resetAllSelectedItems()
     variantStore.resetIsActiveVariant()

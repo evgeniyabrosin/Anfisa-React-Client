@@ -7,14 +7,12 @@ import { ICompoundRequestArgs } from '@service-providers/common/common.interface
 import { getScenarioValue } from '@utils/filter-refiner/getScenarioValue'
 
 interface ICompoundRequestViewProps {
-  filterId: string
   isFilterActive: boolean
   filterContent: string[]
   filterExpression: ICompoundRequestArgs
 }
 
 export const CompoundRequestView = ({
-  filterId,
   isFilterActive,
   filterExpression,
 }: ICompoundRequestViewProps): ReactElement => {
@@ -43,7 +41,7 @@ export const CompoundRequestView = ({
 
       <div className="flex flex-wrap mt-2">
         {request.map(([reqNumber, reqCondition], idx) => (
-          <div key={filterId + idx} className="pb-2">
+          <div key={idx} className="pb-2">
             <div className="px-4">
               <span className="text-grey-blue">Scenario</span>
 
@@ -55,7 +53,7 @@ export const CompoundRequestView = ({
                 className={cn('flex items-center pl-4 py-1', {
                   'pt-2': idx === 0,
                 })}
-                key={filterId + group + idx}
+                key={group + idx}
               >
                 <span>{group}</span>
 

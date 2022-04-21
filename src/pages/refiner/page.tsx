@@ -31,8 +31,6 @@ const RefinerPage = observer((): ReactElement => {
     const initAsync = async () => {
       await dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
 
-      datasetStore.fetchDsStatAsync()
-
       if (!datasetStore.isXL) datasetStore.fetchWsListAsync()
     }
 

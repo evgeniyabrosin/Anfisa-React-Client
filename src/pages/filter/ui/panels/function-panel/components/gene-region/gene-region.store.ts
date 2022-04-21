@@ -62,7 +62,7 @@ class GeneRegionStore {
       { locus: this.locusValue },
     ]
 
-    functionPanelStore.sumbitConditions(conditions)
+    functionPanelStore.submitConditions(conditions)
 
     this.resetLocusValue()
     filterStore.resetStatFuncData()

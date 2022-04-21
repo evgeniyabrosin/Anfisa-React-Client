@@ -1,13 +1,14 @@
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { ActionType, StatList } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
-import { SubKinds } from '@core/enum/sub-kinds-enum'
 import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
 import activeStepStore from '@pages/filter/active-step.store'
 import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
-import { TEnumCondition } from '@service-providers/common'
+import {
+  EnumPropertyStatusSubKinds,
+  TEnumCondition,
+} from '@service-providers/common'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
@@ -21,7 +22,7 @@ class ModalEnumStore {
   groupsPerPage = 100
 
   currentMode?: ModeTypes
-  currentGroupSubKind?: SubKinds
+  currentGroupSubKind?: EnumPropertyStatusSubKinds
 
   constructor() {
     makeAutoObservable(this)
@@ -35,7 +36,7 @@ class ModalEnumStore {
     this.currentMode = undefined
   }
 
-  public setCurrentGroupSubKind(subKind: SubKinds) {
+  public setCurrentGroupSubKind(subKind: EnumPropertyStatusSubKinds) {
     this.currentGroupSubKind = subKind
   }
 
@@ -128,21 +129,12 @@ class ModalEnumStore {
   }
 
   public get originGroupList(): [string, number][] {
-    const currentStepIndex = activeStepStore.activeStepIndex
-    const currentGroupIndex = dtreeModalStore.groupIndexToChange
+    const selectedGroup = modalEditStore.attributeStatusToChange as StatList
 
-    const currentGroup =
-      dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    // TODO: getter should not have side effects
+    this.currentGroupSubKind = selectedGroup?.['sub-kind']
 
-    if (currentGroup) {
-      const selectedGroup = modalEditStore.attributeStatusToChange as StatList
-
-      this.currentGroupSubKind = selectedGroup?.['sub-kind']
-
-      return selectedGroup?.variants ?? []
-    } else {
-      return toJS(dtreeStore.selectedGroups[2]) ?? []
-    }
+    return selectedGroup?.variants ?? []
   }
 
   public get filteredGroupList(): [string, number][] {
@@ -162,10 +154,6 @@ class ModalEnumStore {
 
   public get pagesNumbers(): number {
     return Math.ceil(this.filteredGroupList.length / this.groupsPerPage)
-  }
-
-  public get groupSubKind(): string {
-    return filterStore.selectedGroupItem['sub-kind']
   }
 }
 

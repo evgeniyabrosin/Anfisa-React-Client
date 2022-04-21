@@ -2,9 +2,11 @@ import {
   DatasetKinds,
   ISolutionEntryDescription,
   TCondition,
+  TFilteringStat,
   TItemsCount,
   TPropertyStatus,
-} from 'service-providers/common/common.interface'
+} from '../common'
+import { TGetFullStatUnitsOptions } from '../filtering-regime'
 
 // dtree_set
 
@@ -137,7 +139,7 @@ export interface IDtreeCounts {
 
 export interface IDtreeStatArguments {
   ds: string
-  tm?: string
+  tm?: number
   dtree?: string
   code?: string
   no?: string
@@ -177,11 +179,7 @@ export interface IDtreeCmp {
   cmp: string[][]
 }
 
-export type TDtreeStat = {
-  list: TPropertyStatus[]
-  filteredCounts: TItemsCount
-  totalCounts: TItemsCount
-}
+export type TDtreeStat = TFilteringStat
 
 export type TGetFullDtreeStatParams = {
   ds: string
@@ -189,7 +187,4 @@ export type TGetFullDtreeStatParams = {
   code: string
 }
 
-export type TGetFullDtreeStatOptions = {
-  abortSignal?: AbortSignal
-  onPartialResponse?: (response: TDtreeStat) => void
-}
+export type TGetFullDtreeStatOptions = TGetFullStatUnitsOptions<TDtreeStat>

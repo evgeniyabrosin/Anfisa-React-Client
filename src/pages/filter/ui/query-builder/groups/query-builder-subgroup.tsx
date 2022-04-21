@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import { StatList } from '@declarations'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import { TPropertyStatus } from '@service-providers/common'
 import { ExpandContentButton } from '../ui/expand-content-button'
 import { QueryBuilderSubgroupItem } from './query-builder-subgroup-item'
 
 interface IProps {
   groupName: string
-  subGroupData: StatList[]
+  subGroupData: TPropertyStatus[]
   isContentExpanded: boolean
   changeIndicator: number
   isModal?: boolean

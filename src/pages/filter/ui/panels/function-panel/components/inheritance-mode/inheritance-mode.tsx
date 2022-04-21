@@ -14,7 +14,7 @@ import inheritanceModeStore from './inheritance-mode.store'
 import { ProblemGroups } from './problem-groups'
 
 export const InheritanceMode = observer(() => {
-  const { selectedFilter, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode } = filterStore
 
   const { problemGroups, filteredComplexVariants, complexVariants } =
     functionPanelStore
@@ -59,17 +59,17 @@ export const InheritanceMode = observer(() => {
 
   // set/reset data
   useEffect(() => {
-    if (selectedFilter && isRedactorMode) {
+    if (selectedCondition && isRedactorMode) {
       const selectedFilterProblemGroups =
-        selectedFilter[4] as IInheritanceModeArgs
+        selectedCondition[4] as IInheritanceModeArgs
 
-      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+      const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       inheritanceModeStore.setCurrentMode(getCurrentModeType(conditionJoinType))
       inheritanceModeStore.setProblemGroupValues(
         selectedFilterProblemGroups['problem_group'] || [problemGroups[0]],
       )
-      inheritanceModeStore.setVariantValues(selectedFilter[3] as string[])
+      inheritanceModeStore.setVariantValues(selectedCondition[3] as string[])
     }
 
     if (!isRedactorMode) {
@@ -79,7 +79,7 @@ export const InheritanceMode = observer(() => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRedactorMode, selectedFilter])
+  }, [isRedactorMode, selectedCondition])
 
   // to avoid displaying this data on the another func attr
   useEffect(() => {
@@ -98,7 +98,7 @@ export const InheritanceMode = observer(() => {
 
       <ComplexVariants
         variantValues={variantValues}
-        variants={selectedFilter ? complexVariants : filteredComplexVariants}
+        variants={selectedCondition ? complexVariants : filteredComplexVariants}
         handleChangeVariants={handleChangeVariants}
       />
 

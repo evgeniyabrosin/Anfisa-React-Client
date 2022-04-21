@@ -3,12 +3,10 @@ import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
-import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
-import { ConditionJoinMode } from '@service-providers/common'
-import { getCurrentModeType } from '@utils/getCurrentModeType'
-import filterAttributesStore from '../filterAttributes.store'
+import { TVariant } from '@service-providers/common'
+import filterAttributesStore from '../current-filter.store'
 import { QueryBuilderSearch } from '../query-builder/query-builder-search'
 import { AllNotMods } from '../query-builder/ui/all-not-mods'
 import { SelectedGroupItem } from '../selected-group-item'
@@ -17,49 +15,29 @@ const variantsPerPage = 12
 
 export const EnumPanel = observer((): ReactElement => {
   const {
-    currentGroup: { groupName },
-    allEnumVariants,
-    groupSubKind,
+    attributeName,
+    enumVariants,
+    attributeSubKind,
+    initialEnumVariants,
+    initialEnumMode,
   } = filterAttributesStore
 
-  const { selectedFilter, isRedactorMode } = filterStore
-
-  const [selectedVariants, setSelectedVariants] = useState<string[]>([])
+  const [mode, setMode] = useState(initialEnumMode)
+  const [selectedVariants, setSelectedVariants] = useState(
+    initialEnumVariants ?? [],
+  )
 
   const [searchValue, setSearchValue] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
 
-  // set/reset data
-  useEffect(() => {
-    if (selectedFilter && isRedactorMode) {
-      const selectedFilters = selectedFilter[3] || []
-
-      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
-
-      filterAttributesStore.setCurrentMode(
-        getCurrentModeType(conditionJoinType),
-      )
-
-      setSelectedVariants(selectedFilters)
-    }
-
-    if (!isRedactorMode) {
-      setSelectedVariants([])
-      setCurrentPage(0)
-      setSearchValue('')
-    }
-
-    return () => filterAttributesStore.resetCurrentMode()
-  }, [isRedactorMode, selectedFilter])
-
   useEffect(() => {
     setSearchValue('')
     setCurrentPage(0)
-  }, [groupName])
+  }, [attributeName])
 
   const preparedSearchValue = searchValue.toLocaleLowerCase()
 
-  const filteredVariants = allEnumVariants.filter(variant =>
+  const filteredVariants = enumVariants.filter(variant =>
     variant[0].toLocaleLowerCase().includes(preparedSearchValue),
   )
 
@@ -70,10 +48,7 @@ export const EnumPanel = observer((): ReactElement => {
     (currentPage + 1) * variantsPerPage,
   )
 
-  const handleCheckGroupItem = (
-    checked: boolean,
-    variant: [string, number],
-  ) => {
+  const handleCheckGroupItem = (checked: boolean, variant: TVariant) => {
     const variantName = variant[0]
 
     if (checked) {
@@ -87,21 +62,19 @@ export const EnumPanel = observer((): ReactElement => {
 
   const handleClear = () => {
     setSelectedVariants([])
-
+    setMode(undefined)
     setCurrentPage(0)
-
-    filterAttributesStore.resetCurrentMode()
   }
 
-  const handleAddConditions = () => {
-    filterAttributesStore.addValuesToCurrentGroupEnumFilter(selectedVariants)
-    setCurrentPage(0)
-    setSelectedVariants([])
-    filterStore.resetSelectedGroupItem()
-    filterStore.resetActiveFilterId()
+  const toggleMode = (mode: ModeTypes) => {
+    setMode(currentMode => (currentMode === mode ? undefined : mode))
   }
 
-  const handleChange = (value: string) => {
+  const handleSave = () => {
+    filterAttributesStore.saveEnum(selectedVariants, mode)
+  }
+
+  const handleSearchChange = (value: string) => {
     setSearchValue(value)
 
     if (currentPage !== 0) {
@@ -116,24 +89,20 @@ export const EnumPanel = observer((): ReactElement => {
       <div className="flex mt-3">
         <QueryBuilderSearch
           value={searchValue}
-          onChange={handleChange}
+          onChange={handleSearchChange}
           isSubgroupItemSearch
         />
       </div>
 
       <div className="flex justify-end mt-2 -mb-4">
         <AllNotMods
-          groupSubKind={groupSubKind}
-          isAllModeChecked={filterAttributesStore.currentMode === ModeTypes.All}
-          isNotModeChecked={filterAttributesStore.currentMode === ModeTypes.Not}
+          groupSubKind={attributeSubKind}
+          isAllModeChecked={mode === ModeTypes.All}
+          isNotModeChecked={mode === ModeTypes.Not}
           isAllModeDisabled={selectedVariants.length < 2}
           isNotModeDisabled={selectedVariants.length === 0}
-          toggleAllMode={() =>
-            filterAttributesStore.setCurrentMode(ModeTypes.All)
-          }
-          toggleNotMode={() =>
-            filterAttributesStore.setCurrentMode(ModeTypes.Not)
-          }
+          toggleAllMode={() => toggleMode(ModeTypes.All)}
+          toggleNotMode={() => toggleMode(ModeTypes.Not)}
         />
       </div>
 
@@ -173,9 +142,11 @@ export const EnumPanel = observer((): ReactElement => {
 
         <Button
           text={
-            isRedactorMode ? t('dtree.saveChanges') : t('dtree.addAttribute')
+            initialEnumVariants
+              ? t('dtree.saveChanges')
+              : t('dtree.addAttribute')
           }
-          onClick={handleAddConditions}
+          onClick={handleSave}
           disabled={isBlockAddBtn}
         />
       </div>

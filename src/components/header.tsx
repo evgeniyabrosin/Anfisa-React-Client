@@ -46,14 +46,12 @@ export const Header = observer(({ children }: Props): ReactElement => {
     }
 
     history.push(`${history.location.pathname}?ds=${datasetName}`)
-    datasetStore.setDatasetName(history.location.pathname)
+    datasetStore.setDatasetName(datasetName)
 
     if (datasetName && !variantStore.dsName) {
       variantStore.setDsName(datasetName)
     }
 
-    datasetStore.resetConditions()
-    datasetStore.resetActivePreset()
     datasetStore.initDatasetAsync(datasetName)
   }
 

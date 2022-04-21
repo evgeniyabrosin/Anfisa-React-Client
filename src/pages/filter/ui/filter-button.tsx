@@ -3,15 +3,14 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import filterStore from '@store/filter'
 import { Button, ButtonProps } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 
 export const FilterButton = observer(
-  ({ refEl, className, ...rest }: ButtonProps): ReactElement => (
+  ({ refEl, className, text, ...rest }: ButtonProps): ReactElement => (
     <Button
-      text={filterStore.actionName || t('filter.actions')}
+      text={text || t('filter.actions')}
       refEl={refEl}
       size="md"
       icon={<Icon name="Arrow" className="transform -rotate-90" />}

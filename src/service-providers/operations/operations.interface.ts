@@ -6,7 +6,7 @@ import {
 export interface IBaseExportArguments {
   ds: string
   filter?: string
-  conditions?: TCondition[]
+  conditions?: ReadonlyArray<TCondition>
 }
 
 // export

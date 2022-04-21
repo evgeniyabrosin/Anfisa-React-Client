@@ -13,7 +13,7 @@ import { ModalBase } from './modal-base'
 
 export const ModalSelectAttribute = observer((): ReactElement => {
   const { filterValue, setFilterValue, filteredQueryBuilder } =
-    useFilterQueryBuilder()
+    useFilterQueryBuilder(dtreeStore.stat.queryBuilder)
 
   const [readScrollPosition] = useScrollPosition({
     elem: '#attributes-container',

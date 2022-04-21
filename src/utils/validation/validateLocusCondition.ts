@@ -41,6 +41,7 @@ export const validateLocusCondition = ({
 
     const params = `{"locus":"${value}"}`
 
+    // TODO: why fetching in validation function???
     if ((currentStepIndex || currentStepIndex === 0) && groupName) {
       dtreeStore.fetchStatFuncAsync(groupName, params)
     } else {

@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react'
 import Checkbox from 'react-three-state-checkbox'
 
+import { TVariant } from '@service-providers/common'
+
 interface IProps {
-  handleCheckGroupItem: (checked: boolean, variant: [string, number]) => void
-  variant: [string, number]
+  handleCheckGroupItem: (checked: boolean, variant: TVariant) => void
+  variant: TVariant
   isSelected: boolean
 }
 

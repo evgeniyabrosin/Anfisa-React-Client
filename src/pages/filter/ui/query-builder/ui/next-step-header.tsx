@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { Fragment, MouseEvent, ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -36,9 +36,9 @@ export const NextStepHeader = observer(
   ({ isExpanded, expandContent, index, isExcluded }: IProps): ReactElement => {
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
-    const currentStep = dtreeStore.getStepData[index]
+    const currentStep = dtreeStore.filteredStepData[index]
 
-    const difference = dtreeStore.getStepData[index].difference
+    const difference = dtreeStore.filteredStepData[index].difference
 
     const toggleExclude = (
       stepIndex: number,
@@ -65,14 +65,17 @@ export const NextStepHeader = observer(
                 name="Options"
                 className="cursor-pointer text-blue-bright"
                 stroke={false}
-                onClick={showModal}
+                onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
+                  isVisibleModal && event.stopPropagation()
+                }}
+                onClick={isVisibleModal ? hideModal : showModal}
               />
             )}
 
             <Step>
               {t('dtree.step')}{' '}
               {dtreeStore.algorithmFilterValue
-                ? dtreeStore.getStepData[index].step
+                ? dtreeStore.filteredStepData[index].step
                 : index + 1}
             </Step>
 

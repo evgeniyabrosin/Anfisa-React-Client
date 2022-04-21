@@ -11,6 +11,7 @@ import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
+import { FilterRefinerStatCounts } from '@pages/filter/ui/query-builder/right-refiner-column/filter-refiner-stat-counts'
 import { showToast } from '@utils/notifications/showToast'
 import { QueryResults } from './query-results'
 
@@ -18,20 +19,18 @@ export const QuerySelected = observer((): ReactElement => {
   const history = useHistory()
   const params = useParams()
 
-  const { conditions } = filterStore
+  const {
+    conditions,
+    isConditionsFetching,
+    stat: { filteredCounts },
+  } = filterStore
 
-  const selectedFiltersAmount = filterStore.selectedFiltersArray.length
+  const filteredVariantsCount = filteredCounts?.variants
 
-  const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
-    datasetStore.fixedStatAmount
-
-  const selectedVariants =
-    conditions.length === 0 ? variantCounts : datasetStore.filteredNo.length
-
-  const handleClick = () => {
+  const handleApplyClick = () => {
     const conditions = JSON.stringify(filterStore.conditions)
 
-    variantCounts && variantCounts > 2600
+    filteredVariantsCount == null || filteredVariantsCount > 2600
       ? showToast(t('filter.tooMuchVariants'), 'error')
       : history.push(
           `${Routes.WS}?ds=${params.get('ds')}&conditions=${conditions}`,
@@ -42,47 +41,18 @@ export const QuerySelected = observer((): ReactElement => {
   }
 
   const clearAlSelectedFilters = () => {
-    if (selectedFiltersAmount === 0) return
-
-    if (datasetStore.activePreset) {
-      datasetStore.resetActivePreset()
-    }
-
-    filterStore.resetSelectedFilters()
-    datasetStore.fetchDsStatAsync()
-
-    if (!datasetStore.isXL) {
-      datasetStore.fetchWsListAsync()
-    }
+    filterStore.clearConditions()
   }
 
   return (
     <div className="w-1/3 ">
       <div className="flex items-center px-4 py-3 border-b border-grey-disabled bg-grey-tertiary">
-        <div className="flex flex-wrap">
-          <span className="font-bold text-20 w-full">{t('dtree.results')}</span>
-
-          <span className="text-12 leading-14px mt-1 font-medium">
-            {t('filter.variants', {
-              all: formatNumber(variantCounts),
-            })}
-          </span>
-
-          {dnaVariantsCounts && dnaVariantsCounts > 0 && (
-            <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
-              {t('filter.transcribedVariants', {
-                all: formatNumber(dnaVariantsCounts),
-              })}
-            </span>
-          )}
-
-          {transcriptsCounts && transcriptsCounts > 0 && (
-            <span className="text-12 leading-14px font-medium border-l-2 border-grey-disabled mt-1 ml-2 pl-2">
-              {t('filter.transcripts', {
-                all: formatNumber(transcriptsCounts),
-              })}
-            </span>
-          )}
+        <div>
+          <span className="font-bold text-20">{t('dtree.results')}</span>
+          <FilterRefinerStatCounts
+            className="text-12 font-medium leading-14px mt-1"
+            counts={!isConditionsFetching ? filteredCounts : undefined}
+          />
         </div>
 
         {datasetStore.isXL ? (
@@ -95,17 +65,18 @@ export const QuerySelected = observer((): ReactElement => {
           <Button
             className="ml-auto"
             text={t('general.apply', {
-              amount: formatNumber(selectedVariants),
+              amount: formatNumber(filteredVariantsCount),
             })}
-            onClick={handleClick}
+            disabled={isConditionsFetching || filteredVariantsCount == null}
+            onClick={handleApplyClick}
           />
         )}
       </div>
 
-      {selectedFiltersAmount > 0 && (
+      {!isConditionsFetching && conditions.length > 0 && (
         <div className="flex items-center justify-between px-4 py-3 border-b border-grey-light text-14">
           <div className="text-grey-blue">
-            {filterStore.selectedFiltersArray.length} added
+            {t('filter.conditionsAdded', { count: conditions.length })}
           </div>
 
           <div
@@ -117,7 +88,7 @@ export const QuerySelected = observer((): ReactElement => {
         </div>
       )}
 
-      {datasetStore.isLoadingDsStat ? <Loader /> : <QueryResults />}
+      {isConditionsFetching ? <Loader /> : <QueryResults />}
     </div>
   )
 })

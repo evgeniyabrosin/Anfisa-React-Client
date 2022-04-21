@@ -54,7 +54,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   const history = useHistory()
   const alreadyOpened = !!params.get('variant')
 
-  const { selectedFiltersArray } = filterStore
+  const filterConditions = filterStore.conditions
 
   const { selectedGenes, selectedGenesList, selectedSamples, selectedTags } =
     zoneStore
@@ -132,13 +132,10 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   }
 
   const resetTableToInitial = () => {
-    filterStore.resetData()
+    filterStore.reset()
     zoneStore.resetAllSelectedItems()
     datasetStore.clearZone()
-    datasetStore.resetActivePreset()
-    datasetStore.resetPrevPreset()
     datasetStore.fetchWsListAsync(false, 'reset')
-    datasetStore.resetConditions()
   }
 
   useEffect(() => {
@@ -170,7 +167,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
 
   const renderNoResults = useCallback(() => {
     const isFiltersSelected =
-      selectedFiltersArray.length > 0 ||
+      filterConditions.length > 0 ||
       selectedGenes.length > 0 ||
       selectedGenesList.length > 0 ||
       selectedSamples.length > 0 ||
@@ -193,7 +190,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
       return null
     }
   }, [
-    selectedFiltersArray,
+    filterConditions.length,
     selectedGenes,
     selectedGenesList,
     selectedSamples,

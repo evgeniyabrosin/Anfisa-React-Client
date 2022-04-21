@@ -18,7 +18,7 @@ import compoundHetStore, {
 } from './compound-het.store'
 
 export const CompundHet = observer((): ReactElement => {
-  const { selectedFilter, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -26,9 +26,9 @@ export const CompundHet = observer((): ReactElement => {
 
   // set/reset data
   useEffect(() => {
-    if (selectedFilter && isRedactorMode) {
-      const selectedFilterApprox = selectedFilter[4] as ICompoundHetArgs
-      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+    if (selectedCondition && isRedactorMode) {
+      const selectedFilterApprox = selectedCondition[4] as ICompoundHetArgs
+      const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       compoundHetStore.setCurrentMode(getCurrentModeType(conditionJoinType))
       compoundHetStore.setInitialApprox(selectedFilterApprox['approx'])
@@ -38,7 +38,7 @@ export const CompundHet = observer((): ReactElement => {
       compoundHetStore.resetInitialApprox()
       compoundHetStore.resetCurrentMode()
     }
-  }, [isRedactorMode, selectedFilter])
+  }, [isRedactorMode, selectedCondition])
 
   // update data
   useEffect(() => {

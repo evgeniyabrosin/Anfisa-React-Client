@@ -97,7 +97,7 @@ class CompoundHetStore {
       { approx: this.initialApprox ?? null, state: null },
     ]
 
-    functionPanelStore.sumbitConditions(conditions)
+    functionPanelStore.submitConditions(conditions)
 
     filterStore.resetStatFuncData()
     this.resetInitialApprox()

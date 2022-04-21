@@ -6,18 +6,16 @@ import { FinalStep } from './ui/final-step'
 import { NextStep } from './ui/next-step'
 
 export const QueryBuilderTreeView = observer((): ReactElement => {
-  const poitnCounts = dtreeStore.pointCounts
-
-  const stepData = dtreeStore.getStepData
+  const { filteredStepData, pointCounts } = dtreeStore
 
   useEffect(() => {
-    dtreeStore.updatePointCounts(poitnCounts)
+    dtreeStore.updatePointCounts(pointCounts)
     dtreeStore.setAcceptedVariants()
-  }, [poitnCounts])
+  }, [pointCounts])
 
   return (
     <div id="parent" className="flex flex-col overflow-auto h-full">
-      {stepData.map((element, index: number) => {
+      {filteredStepData.map((element, index: number) => {
         const key = element.groups
           ? JSON.stringify(element.groups) + element.startFilterCounts + index
           : index
