@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react'
 
 import { Checkbox } from '@ui/checkbox/checkbox'
-
 import { TVariant } from '@service-providers/common'
 
 interface IProps {

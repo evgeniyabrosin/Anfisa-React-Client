@@ -179,6 +179,7 @@ export const DrawerWindow = observer(
               style={{
                 height: get(layout, aspect.name, 0).h,
               }}
+              ref={ref}
             >
               {aspect.type === 'pre' ? (
                 <DrawerPreView
