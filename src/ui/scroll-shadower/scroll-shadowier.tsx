@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
 
-import { ISScrollShadowierProps } from '@ui/scroll-shadower/scroll-shadowier.interface'
 import {
   Container,
   RootContainer,
@@ -10,10 +9,7 @@ import {
   ShadowTop,
 } from '@ui/scroll-shadower/scroll-shadowier.styles'
 
-export const ScrollShadowier: FC<ISScrollShadowierProps> = ({
-  children,
-  ...props
-}) => {
+export const ScrollShadowier: FC = ({ children, ...props }) => {
   const ref = useRef<HTMLDivElement>(null)
   const left = useRef<HTMLDivElement>(null)
   const right = useRef<HTMLDivElement>(null)

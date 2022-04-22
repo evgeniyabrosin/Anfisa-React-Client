@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
-import { ISScrollShadowierProps } from '@ui/scroll-shadower/scroll-shadowier.interface'
-
-export const Container = styled.div<ISScrollShadowierProps>`
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
+export const Container = styled.div`
+  height: fit-content;
+  width: fit-content;
+  overflow: auto;
 `
 
 export const RootContainer = styled.div`

@@ -91,7 +91,7 @@ export const DrawerWindow = observer(
               0,
             )
 
-            const openedH = clientHeight * 0.0208 + 1.3
+            const openedH = clientHeight * 0.021 + 1.3
 
             setLayout((prev: IGridLayout[]) => {
               const clonedLayout: any[] = clone(prev)
@@ -172,14 +172,13 @@ export const DrawerWindow = observer(
           onStartScroll={handleStartScroll}
           className="cursor-grab"
         >
-          <ScrollShadowier height="100%" width="100%">
+          <ScrollShadowier>
             <div
-              className={cn('py-3 pr-3   content-child')}
+              className={cn('content-child')}
               id={`drawer-${aspect.name}`}
               style={{
                 height: get(layout, aspect.name, 0).h,
               }}
-              ref={ref}
             >
               {aspect.type === 'pre' ? (
                 <DrawerPreView
