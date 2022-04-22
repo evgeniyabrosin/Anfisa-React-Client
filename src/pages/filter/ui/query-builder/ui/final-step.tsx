@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
-import { RadioButton } from '@ui/radio-button'
+import { Radio } from '@ui/radio'
 import activeStepStore, {
   ActiveStepOptions,
   CreateEmptyStepPositions,
@@ -72,23 +72,21 @@ export const FinalStep = observer(
               <Step className="mb-2 mt-2">{t('dtree.finalStep')}</Step>
 
               <div className="flex ml-4">
-                <div className="flex items-center mr-3">
-                  <RadioButton
-                    isChecked={!currentStep.excluded}
-                    onChange={() => toggleExclude(index, 'BOOL-TRUE')}
-                  />
+                <Radio
+                  checked={!currentStep.excluded}
+                  onChange={() => toggleExclude(index, 'BOOL-TRUE')}
+                  className="flex items-center mr-3"
+                >
+                  <Operation>{t('dtree.include')}</Operation>
+                </Radio>
 
-                  <Operation className="ml-1">{t('dtree.include')}</Operation>
-                </div>
-
-                <div className="flex items-center">
-                  <RadioButton
-                    isChecked={currentStep.excluded}
-                    onChange={() => toggleExclude(index, 'BOOL-FALSE')}
-                  />
-
-                  <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
-                </div>
+                <Radio
+                  checked={currentStep.excluded}
+                  onChange={() => toggleExclude(index, 'BOOL-FALSE')}
+                  className="flex items-center mr-3"
+                >
+                  <Operation>{t('dtree.exclude')}</Operation>
+                </Radio>
               </div>
             </div>
             <StepDivider />

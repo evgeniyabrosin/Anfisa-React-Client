@@ -8,7 +8,7 @@ import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
-import { RadioButton } from '@ui/radio-button'
+import { Radio } from '@ui/radio'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { changeStep } from '@utils/changeStep'
 import { ExpandContentButton } from './expand-content-button'
@@ -98,23 +98,21 @@ export const NextStepHeader = observer(
                 hidden: !currentStep.groups || currentStep.groups.length === 0,
               })}
             >
-              <div className="flex items-center mr-3">
-                <RadioButton
-                  isChecked={!currentStep.excluded}
-                  onChange={() => toggleExclude(index, 'BOOL-TRUE')}
-                />
+              <Radio
+                checked={!currentStep.excluded}
+                onChange={() => toggleExclude(index, 'BOOL-TRUE')}
+                className="flex items-center mr-3"
+              >
+                <Operation>{t('dtree.include')}</Operation>
+              </Radio>
 
-                <Operation className="ml-1">{t('dtree.include')}</Operation>
-              </div>
-
-              <div className="flex items-center">
-                <RadioButton
-                  isChecked={currentStep.excluded}
-                  onChange={() => toggleExclude(index, 'BOOL-FALSE')}
-                />
-
-                <Operation className="ml-1 ">{t('dtree.exclude')}</Operation>
-              </div>
+              <Radio
+                checked={currentStep.excluded}
+                onChange={() => toggleExclude(index, 'BOOL-FALSE')}
+                className="flex items-center mr-3"
+              >
+                <Operation>{t('dtree.exclude')}</Operation>
+              </Radio>
             </div>
           </div>
 

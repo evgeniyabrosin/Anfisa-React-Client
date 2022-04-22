@@ -172,6 +172,10 @@ class ZoneStore {
     this.isFather = false
     this.isMother = false
     this.isProband = false
+    this.setModeNOT(false)
+    this.setModeWithNotes(false)
+    this.modeNotSubmitted = false
+    this.modeWithNotesSubmitted = false
   }
 
   async fetchTagSelectAsync() {
