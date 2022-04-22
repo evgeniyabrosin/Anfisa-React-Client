@@ -31,7 +31,7 @@ export class FilterPresetsStore {
     )
   }
 
-  public get fetchingPresets(): boolean {
+  public get isFetchingPresets(): boolean {
     return this.presets.isFetching
   }
 
