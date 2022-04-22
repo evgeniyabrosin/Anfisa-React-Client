@@ -31,6 +31,10 @@ export class FilterPresetsStore {
     )
   }
 
+  public get isFetchingPresets(): boolean {
+    return this.presets.isFetching
+  }
+
   public get availablePresets(): ISolutionEntryDescription[] {
     return toJS(this.presets.data) ?? []
   }
