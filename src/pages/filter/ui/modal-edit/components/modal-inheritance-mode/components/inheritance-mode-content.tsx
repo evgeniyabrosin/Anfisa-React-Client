@@ -1,5 +1,4 @@
 import { ChangeEvent, Fragment } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
@@ -7,6 +6,7 @@ import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import { DisabledVariantsAmount } from '../../../../query-builder/ui/disabled-variants-amount'
 import { ModsDivider } from '../../../../query-builder/ui/mods-divider'
@@ -43,16 +43,16 @@ export const InheritanceModeContent = observer(
           <div>{t('dtree.problemGroup')}</div>
 
           {problemGroups.map((group: string) => (
-            <div key={group}>
-              <Checkbox
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setProblemGroups(e.target.checked, group)
-                }
-                checked={selectedProblemGroups.includes(group)}
-                className="mx-1 cursor-pointer"
-              />
-              <span>{group}</span>
-            </div>
+            <Checkbox
+              key={group}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setProblemGroups(e.target.checked, group)
+              }
+              checked={selectedProblemGroups.includes(group)}
+              className="ml-1 cursor-pointer"
+            >
+              {group}
+            </Checkbox>
           ))}
 
           <Button

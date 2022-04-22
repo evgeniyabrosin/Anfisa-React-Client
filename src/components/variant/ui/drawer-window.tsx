@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
-import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
@@ -18,6 +17,7 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
 import {
   ICommonAspectDescriptor,

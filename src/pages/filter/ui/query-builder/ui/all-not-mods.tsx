@@ -1,7 +1,8 @@
-import Checkbox from 'react-three-state-checkbox'
+import { observer } from 'mobx-react-lite'
 
 import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { ModsDivider } from './mods-divider'
 interface IAllNotModsProps {
   isNotModeDisabled?: boolean
@@ -13,47 +14,45 @@ interface IAllNotModsProps {
   groupSubKind?: string
 }
 
-export const AllNotMods = ({
-  isAllModeDisabled,
-  isNotModeDisabled,
-  isAllModeChecked,
-  isNotModeChecked,
-  toggleAllMode,
-  toggleNotMode,
-  groupSubKind,
-}: IAllNotModsProps) => {
-  const isAllModeAvailable =
-    groupSubKind === SubKinds.Multi || groupSubKind === SubKinds.InheritanceZ
+export const AllNotMods = observer(
+  ({
+    isAllModeDisabled,
+    isNotModeDisabled,
+    isAllModeChecked,
+    isNotModeChecked,
+    toggleAllMode,
+    toggleNotMode,
+    groupSubKind,
+  }: IAllNotModsProps) => {
+    const isAllModeAvailable =
+      groupSubKind === SubKinds.Multi || groupSubKind === SubKinds.InheritanceZ
 
-  return (
-    <div className="flex text-14 text-blue-bright">
-      {isAllModeAvailable && (
-        <>
-          <div className="flex items-center">
+    return (
+      <div className="flex text-14 text-blue-bright">
+        {isAllModeAvailable && (
+          <>
             <Checkbox
+              className="flex items-center"
               checked={isAllModeChecked ?? false}
-              className="mr-1 cursor-pointer"
               disabled={isAllModeDisabled}
               onChange={toggleAllMode}
-            />
+            >
+              {t('dtree.all')}
+            </Checkbox>
 
-            <span>{t('dtree.all')}</span>
-          </div>
+            <ModsDivider />
+          </>
+        )}
 
-          <ModsDivider />
-        </>
-      )}
-
-      <div className="flex items-center">
         <Checkbox
+          className="flex items-center"
           checked={isNotModeChecked ?? false}
-          className="mr-1 cursor-pointer"
           disabled={isNotModeDisabled}
           onChange={toggleNotMode}
-        />
-
-        <span>{t('dtree.not')}</span>
+        >
+          {t('dtree.not')}
+        </Checkbox>
       </div>
-    </div>
-  )
-}
+    )
+  },
+)
