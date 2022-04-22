@@ -4,6 +4,10 @@ import { makeAutoObservable } from 'mobx'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
 
+export enum ZoneName {
+  symbol = 'Symbol',
+}
+
 class ZoneStore {
   selectedGenes: string[] = []
   selectedGenesList: string[] = []
@@ -231,6 +235,28 @@ class ZoneStore {
   submitTagsMode() {
     this.modeNotSubmitted = this.isModeNOT
     this.modeWithNotesSubmitted = this.isModeWithNotes
+  }
+
+  addItem(itemName: string, zone: ZoneName) {
+    switch (zone) {
+      case ZoneName.symbol:
+        this.addGene(itemName)
+        break
+
+      default:
+        break
+    }
+  }
+
+  removeItem(itemName: string, zone: ZoneName) {
+    switch (zone) {
+      case ZoneName.symbol:
+        this.removeGene(itemName, 'slow')
+        break
+
+      default:
+        break
+    }
   }
 }
 

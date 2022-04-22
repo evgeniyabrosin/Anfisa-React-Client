@@ -14,6 +14,7 @@ type Props = {
   isTags?: boolean
 }
 
+// TODO: fix it
 export const FilterTags = observer(
   ({ data, isGenes, isGenesList, isSamples, isTags }: Props) => {
     const deleteTag = (item: string) => {

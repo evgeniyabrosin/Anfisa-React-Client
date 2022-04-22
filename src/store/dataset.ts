@@ -327,6 +327,7 @@ export class DatasetStore {
     return this.filteredNo
   }
 
+  // TODO: fix
   async fetchZoneListAsync(zone: string) {
     const zoneList = (await wsDatasetProvider.getZoneList({
       ds: this.datasetName,
@@ -340,6 +341,7 @@ export class DatasetStore {
     })
   }
 
+  // TODO: fix
   async fetchSamplesZoneAsync() {
     const zoneList = (await wsDatasetProvider.getZoneList({
       ds: this.datasetName,

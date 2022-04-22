@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
+import zoneStore, { ZoneName } from '@store/filterZone'
 import { ControlPanelDivider } from './control-panel-divider'
 import { EditFilter } from './control-panel-edit-filter'
 import { FilterItemGenes } from './control-panel-filter-genes'
@@ -12,6 +13,7 @@ import { FilterItemTags } from './control-panel-filter-tags'
 import { ControlPanelPreset } from './control-panel-preset'
 import { Results } from './control-panel-settings'
 import { DatasetCreationButton } from './dataset-creation-button'
+import { ZoneItem } from './zones/zone-item'
 
 export const ControlPanel = observer((): ReactElement => {
   const sectionClassName = 'rounded flex bg-white bg-opacity-2 p-4'
@@ -31,7 +33,14 @@ export const ControlPanel = observer((): ReactElement => {
 
         {!datasetStore.isXL && (
           <div className="flex ml-5 bg-blue-lighter rounded-sm py-2 px-3">
-            <FilterItemGenes title={t('ds.gene')} />
+            <ZoneItem
+              title={t('ds.gene')}
+              itemList={datasetStore.genes}
+              selectedItemList={zoneStore.selectedGenes}
+              zone={ZoneName.symbol}
+            />
+
+            {/* <FilterItemGenes title={t('ds.gene')} /> */}
 
             <ControlPanelDivider className="bg-blue-secondary" />
 
