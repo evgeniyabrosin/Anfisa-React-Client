@@ -29,7 +29,8 @@ export const VariantsCount: FC<IVariantsCountProps> = ({
       {showVariants && (
         <span
           className={cn('text-12 leading-14px text-white ml-auto', {
-            'ml-2': showDnaVariants || showTranscripts || children,
+            'mr-2': showDnaVariants || showTranscripts,
+            'mr-6': !showDnaVariants && !showTranscripts && children,
           })}
           data-testid={MainTableDataCy.numVariants}
         >

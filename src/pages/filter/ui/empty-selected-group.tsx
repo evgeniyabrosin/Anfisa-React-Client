@@ -10,7 +10,7 @@ export const EmptySelectedGroup = ({ className }: Props): ReactElement => (
   <div className={cn('w-1/3', className)}>
     <div
       className="flex items-center justify-center border border-grey-disabled"
-      style={{ height: 'calc(100vh - 203px)' }}
+      style={{ height: 'calc(100vh - 193px)' }}
     >
       <p className="leading-16px text-grey-blue align-center">
         {t('dtree.selectAttribute')}

@@ -26,7 +26,7 @@ export const SelectedGroup = observer((): ReactElement => {
         'border border-grey-disabled pt-3 px-4 w-1/3 overflow-y-auto',
         { 'bg-blue-tertiary': isRedactorMode },
       )}
-      style={{ height: 'calc(100vh - 203px)' }}
+      style={{ height: 'calc(100vh - 192px)' }}
     >
       <AttributeHeader attrStatus={selectedAttributeStatus} />
 
