@@ -18,7 +18,7 @@ import compoundHetStore, {
 } from './compound-het.store'
 
 export const CompundHet = observer((): ReactElement => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isChanging } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -53,10 +53,26 @@ export const CompundHet = observer((): ReactElement => {
   const handleClear = () => {
     compoundHetStore.handleResetFields()
     compoundHetStore.resetCurrentMode()
+    filterStore.setChanging(true)
+  }
+
+  const onSubmit = () => {
+    compoundHetStore.handleSumbitCondtions()
+    filterStore.setChanging(false)
+  }
+
+  const toggleNotMode = () => {
+    compoundHetStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setChanging(true)
+  }
+
+  const onSelect = (arg: Option) => {
+    compoundHetStore.handleChangeApprox(arg)
+    filterStore.setChanging(true)
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className="text-red-secondary">
         {compoundHetStore.statFuncStatus}
       </div>
@@ -67,7 +83,7 @@ export const CompundHet = observer((): ReactElement => {
           <DropDown
             value={initialApprox || approxOptions[0]}
             options={CompoundHetSelectOptions}
-            onSelect={(arg: Option) => compoundHetStore.handleChangeApprox(arg)}
+            onSelect={onSelect}
           />
         </div>
 
@@ -76,7 +92,7 @@ export const CompundHet = observer((): ReactElement => {
           isNotModeDisabled={
             simpleVariants ? simpleVariants.length === 0 : true
           }
-          toggleNotMode={() => compoundHetStore.setCurrentMode(ModeTypes.Not)}
+          toggleNotMode={toggleNotMode}
         />
       </div>
 
@@ -85,10 +101,10 @@ export const CompundHet = observer((): ReactElement => {
       </div>
 
       <PanelButtons
-        onSubmit={() => compoundHetStore.handleSumbitCondtions()}
+        onSubmit={onSubmit}
         resetFields={handleClear}
-        disabled={!simpleVariants}
+        disabled={!simpleVariants || !isChanging}
       />
-    </React.Fragment>
+    </>
   )
 })
