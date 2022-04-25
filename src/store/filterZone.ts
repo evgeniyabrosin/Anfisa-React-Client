@@ -154,6 +154,7 @@ class ZoneStore {
     if (type === 'isTags') this.selectedTags = this.localTags
   }
 
+  // TODO: delete it after complete refactor
   syncSelectedAndLocalFilters(type: string) {
     if (type === 'isGenes') this.localGenes = this.selectedGenes
 
@@ -277,6 +278,17 @@ class ZoneStore {
     switch (zone) {
       case ZoneName.symbol:
         this.localGenes = this.selectedGenes
+        break
+
+      default:
+        break
+    }
+  }
+
+  clearLocalItems(zone: ZoneName): void {
+    switch (zone) {
+      case ZoneName.symbol:
+        this.localGenes = []
         break
 
       default:

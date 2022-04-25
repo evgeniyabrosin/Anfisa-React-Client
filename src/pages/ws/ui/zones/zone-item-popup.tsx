@@ -22,9 +22,7 @@ export const ZoneItemPopup = observer(
     zone: ZoneName
   }): ReactElement => {
     useEffect(
-      () => () => {
-        zoneStore.setSelectedItemsToLocalItems(zone)
-      },
+      () => () => zoneStore.setSelectedItemsToLocalItems(zone),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
     )
@@ -33,6 +31,7 @@ export const ZoneItemPopup = observer(
       datasetStore.fetchZoneListAsync(zone)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
     const [searchValue, setSearchValue] = useState('')
 
     const filteredItemList = itemList.filter(itemName =>
@@ -73,7 +72,12 @@ export const ZoneItemPopup = observer(
               <span className="text-14 text-grey-blue">
                 {zoneStore.getSelectedItemsQuantity(zone) + ' Selected'}
               </span>
-              <span className="cursor-pointer">{t('general.clearAll')}</span>
+              <span
+                className="cursor-pointer"
+                onClick={() => zoneStore.clearLocalItems(zone)}
+              >
+                {t('general.clearAll')}
+              </span>
             </div>
 
             <div className="mt-5 h-60 overflow-y-scroll">
