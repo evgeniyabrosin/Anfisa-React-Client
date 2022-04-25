@@ -1,17 +1,10 @@
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
-import Checkbox from 'react-three-state-checkbox'
-import { toJS } from 'mobx'
+import { ChangeEvent, ReactElement, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import zoneStore, { ZoneName } from '@store/filterZone'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { InputSearch } from '@components/input-search'
 import { PopupCard } from '@components/popup-card/popup-card'
 import { Portal } from '@components/portal/portal'
@@ -37,10 +30,9 @@ export const ZoneItemPopup = observer(
 
     useEffect(() => {
       datasetStore.fetchZoneListAsync(zone)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const [searchValue, setSearchValue] = useState('')
-
-    const selectedItemsQuantity = 0
 
     const filteredItemList = itemList.filter(itemName =>
       itemName.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
@@ -51,7 +43,7 @@ export const ZoneItemPopup = observer(
 
       zoneStore.createSelectedZoneFilter('isGenes')
       datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
-      datasetStore.fetchWsListAsync(datasetStore.isXL)
+      datasetStore.fetchWsListAsync()
     }
 
     const handleCheck = (
@@ -78,7 +70,7 @@ export const ZoneItemPopup = observer(
 
             <div>
               <span className="text-14 text-grey-blue">
-                {selectedItemsQuantity + ' Selected'}
+                {zoneStore.getSelectedItemsQuantity(zone) + ' Selected'}
               </span>
               <span className="cursor-pointer">{t('general.clearAll')}</span>
             </div>
@@ -87,14 +79,14 @@ export const ZoneItemPopup = observer(
               {filteredItemList.map(itemName => {
                 return (
                   <div key={itemName}>
-                    <span>{itemName}</span>
                     <Checkbox
-                      checked={false}
+                      checked={zoneStore.localGenes.includes(itemName)}
                       className="w-4 h-4"
-                      onChange={event =>
+                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
                         handleCheck(event.target.checked, itemName, zone)
                       }
                     />
+                    <span>{itemName}</span>
                   </div>
                 )
               })}

@@ -241,7 +241,7 @@ class ZoneStore {
     this.modeWithNotesSubmitted = this.isModeWithNotes
   }
 
-  addItem(itemName: string, zone: ZoneName) {
+  addItem(itemName: string, zone: ZoneName): void {
     switch (zone) {
       case ZoneName.symbol:
         this.addGene(itemName)
@@ -252,11 +252,21 @@ class ZoneStore {
     }
   }
 
-  removeItem(itemName: string, zone: ZoneName) {
+  removeItem(itemName: string, zone: ZoneName): void {
     switch (zone) {
       case ZoneName.symbol:
         this.removeGene(itemName, 'slow')
         break
+
+      default:
+        break
+    }
+  }
+
+  getSelectedItemsQuantity(zone: ZoneName): number | undefined {
+    switch (zone) {
+      case ZoneName.symbol:
+        return this.localGenes.length
 
       default:
         break
