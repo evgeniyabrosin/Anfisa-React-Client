@@ -16,7 +16,7 @@ import { RequestConditions } from './request-conditions'
 import { ResetSelect } from './reset-select'
 
 export const CompoundRequest = observer((): ReactElement => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isChanging } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -54,8 +54,18 @@ export const CompoundRequest = observer((): ReactElement => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
+  const resetFields = () => {
+    compoundRequestStore.clearData()
+    filterStore.setChanging(true)
+  }
+
+  const onSubmit = () => {
+    compoundRequestStore.handleSumbitCondtions()
+    filterStore.setChanging(false)
+  }
+
   return (
-    <React.Fragment>
+    <>
       <AprroxAndState simpleVariants={simpleVariants} />
 
       <RequestConditions activeRequestIndex={activeRequestIndex} />
@@ -69,10 +79,10 @@ export const CompoundRequest = observer((): ReactElement => {
       <DisabledVariantsAmount variants={simpleVariants} disabled={true} />
 
       <PanelButtons
-        onSubmit={() => compoundRequestStore.handleSumbitCondtions()}
-        resetFields={() => compoundRequestStore.clearData()}
-        disabled={!simpleVariants}
+        onSubmit={onSubmit}
+        resetFields={resetFields}
+        disabled={!simpleVariants || !isChanging}
       />
-    </React.Fragment>
+    </>
   )
 })

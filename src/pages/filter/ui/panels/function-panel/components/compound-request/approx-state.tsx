@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 import { approxOptions } from '@core/approxOptions'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import compoundRequestStore from './compound-request.store'
@@ -41,7 +42,10 @@ export const AprroxAndState = ({
     <AllNotMods
       isNotModeChecked={compoundRequestStore.currentMode === ModeTypes.Not}
       isNotModeDisabled={simpleVariants ? simpleVariants.length === 0 : true}
-      toggleNotMode={() => compoundRequestStore.setCurrentMode(ModeTypes.Not)}
+      toggleNotMode={() => {
+        compoundRequestStore.setCurrentMode(ModeTypes.Not)
+        filterStore.setChanging(true)
+      }}
     />
   </div>
 )

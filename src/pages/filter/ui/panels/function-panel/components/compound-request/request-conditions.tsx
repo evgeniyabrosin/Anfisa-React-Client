@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
 import { selectOptions } from '@pages/filter/ui/modal-edit/modal-edit.store'
@@ -26,17 +27,21 @@ export const RequestConditions = observer(
                 'flex justify-between w-full shadow-dark py-2 my-2 px-2 cursor-pointer step-content-area',
                 index === activeRequestIndex ? 'bg-blue-medium' : 'bg-white',
               )}
-              onClick={() => compoundRequestStore.handleActiveRequest(index)}
+              onClick={() => {
+                compoundRequestStore.handleActiveRequest(index)
+                filterStore.setChanging(true)
+              }}
             >
               <div className="flex cursor-pointer step-content-area">
                 <InputNumber
                   value={item[0]}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     compoundRequestStore.handleRequestConditionNumber(
                       index,
                       e.target.value,
                     )
-                  }
+                    filterStore.setChanging(true)
+                  }}
                   className="shadow-dark w-1/3 h-5 bg-blue-medium"
                 />
               </div>
@@ -47,9 +52,10 @@ export const RequestConditions = observer(
                     <div
                       className="step-content-area"
                       key={group}
-                      onClick={() =>
+                      onClick={() => {
                         compoundRequestStore.handleActiveRequest(index)
-                      }
+                        filterStore.setChanging(true)
+                      }}
                     >
                       <span className="cursor-pointer step-content-area">
                         {group}
@@ -63,6 +69,7 @@ export const RequestConditions = observer(
                             currNo,
                             e.target,
                           )
+                          filterStore.setChanging(true)
                         }}
                         className="w-auto ml-1"
                         options={selectOptions}
