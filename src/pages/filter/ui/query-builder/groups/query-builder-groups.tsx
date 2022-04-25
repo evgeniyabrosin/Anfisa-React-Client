@@ -11,11 +11,14 @@ import { QueryBuilderSearch } from '../query-builder-search'
 import { QueryBuilderSubgroup } from './query-builder-subgroup'
 
 export const QueryBuilderGroups = observer((): ReactElement => {
+  // TODO: don't use filterStore method to decide what page is it
+  //       queryBuilder should be a component property
   const { filterValue, setFilterValue, filteredQueryBuilder } =
-    useFilterQueryBuilder()
-
-  const groupNames = Object.keys(filteredQueryBuilder)
-  const subGroupData = Object.values(filteredQueryBuilder)
+    useFilterQueryBuilder(
+      filterStore.method === GlbPagesNames.Refiner
+        ? filterStore.stat.queryBuilder
+        : dtreeStore.stat.queryBuilder,
+    )
 
   const chunkSize = 2
 
@@ -64,11 +67,12 @@ export const QueryBuilderGroups = observer((): ReactElement => {
         style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
       >
         <DeferRender chunkSize={chunkSize}>
-          {groupNames.map((groupName, index) => (
+          {filteredQueryBuilder.map(({ name, attributes, power }) => (
             <QueryBuilderSubgroup
-              groupName={groupName}
-              subGroupData={subGroupData[index]}
-              key={groupName}
+              key={name}
+              groupName={name}
+              predictionPower={power}
+              subGroupData={attributes}
               changeIndicator={dtreeStore.filterChangeIndicator}
               isContentExpanded={dtreeStore.isFilterContentExpanded}
             />

@@ -16,7 +16,6 @@ import { GeneRegionView } from './components/gene-region-view'
 import { InheritanceModeView } from './components/inheritance-mode-view'
 
 interface IFuncFilterProps {
-  filterId: string
   filterName: string
   isFilterActive: boolean
   filterContent: string[]
@@ -24,7 +23,6 @@ interface IFuncFilterProps {
 }
 
 export const FuncFilter = ({
-  filterId,
   filterName,
   isFilterActive,
   filterContent,
@@ -33,7 +31,6 @@ export const FuncFilter = ({
   <>
     {filterName === FuncStepTypesEnum.InheritanceMode && (
       <InheritanceModeView
-        filterId={filterId}
         isFilterActive={isFilterActive}
         filterContent={filterContent}
         filterExpression={filterExpression as IInheritanceModeArgs}
@@ -42,7 +39,6 @@ export const FuncFilter = ({
 
     {filterName === FuncStepTypesEnum.CustomInheritanceMode && (
       <CustomInheritanceModeView
-        filterId={filterId}
         isFilterActive={isFilterActive}
         filterContent={filterContent}
         filterExpression={filterExpression as ICustomInheritanceModeArgs}
@@ -67,7 +63,6 @@ export const FuncFilter = ({
 
     {filterName === FuncStepTypesEnum.CompoundRequest && (
       <CompoundRequestView
-        filterId={filterId}
         isFilterActive={isFilterActive}
         filterContent={filterContent}
         filterExpression={filterExpression as ICompoundRequestArgs}

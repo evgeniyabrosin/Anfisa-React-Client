@@ -1,10 +1,6 @@
 /* eslint-disable max-lines */
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { DsStatType, StatListType } from '@declarations'
-import dtreeStore from '@store/dtree'
-import filterStore from '@store/filter'
-import presetStore from '@store/filterPreset'
 import variantStore from '@store/variant'
 import {
   IRecordDescriptor,
@@ -12,24 +8,20 @@ import {
   TItemsCount,
 } from '@service-providers/common/common.interface'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
-import { IDsStatArguments } from '@service-providers/filtering-regime'
-import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
-import { IWsListArguments } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
-import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
-import { addToActionHistory } from '@utils/addToActionHistory'
-import { fetchStatunitsAsync } from '@utils/fetchStatunitsAsync'
 import {
   IDsListArguments,
   ITabReport,
-} from './../service-providers/dataset-level/dataset-level.interface'
-import { IZoneDescriptor } from './../service-providers/ws-dataset-support/ws-dataset-support.interface'
+} from '@service-providers/dataset-level/dataset-level.interface'
+import {
+  IWsListArguments,
+  IZoneDescriptor,
+} from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
+import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import dirinfoStore from './dirinfo'
 
 const INCREASE_INDEX = 50
 
 export class DatasetStore {
-  dsStat: DsStatType = {}
-  startDsStat: DsStatType = {}
   variantsAmount = 0
   tabReport: ITabReport[] = []
   genes: string[] = []
@@ -43,13 +35,14 @@ export class DatasetStore {
   filteredNo: number[] = []
 
   datasetName = ''
-  activePreset = ''
-  prevPreset = ''
-  startPresetConditions: TCondition[] = []
   zone: any[] = []
   statAmount: TItemsCount | null = null
   memorizedConditions:
-    | { conditions: TCondition[]; activePreset: string; zone: any[] }
+    | {
+        conditions: ReadonlyArray<TCondition>
+        activePreset: string
+        zone: any[]
+      }
     | undefined = undefined
 
   indexTabReport = 0
@@ -58,10 +51,15 @@ export class DatasetStore {
   isXL = true
   isLoadingTabReport = false
   isFetchingMore = false
-  isLoadingDsStat = false
   isFilterDisabled = false
 
   reportsLoaded = false
+
+  // TODO: temporary for avoid circular dependencies
+  getConditions = (): ReadonlyArray<TCondition> => []
+  getActivePreset = (): string => ''
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getJobStatusAsync = (taskId: string): Promise<any> => Promise.resolve()
 
   constructor() {
     makeAutoObservable(this)
@@ -91,21 +89,8 @@ export class DatasetStore {
     this.isFilterDisabled = value
   }
 
-  setActivePreset(value: string) {
-    this.activePreset = value
-  }
-
-  setPrevPreset(value: string) {
-    this.prevPreset = value
-  }
-
   setSelectedVariantNumber(index: number | undefined) {
     this.selectedVariantNumber = index
-  }
-
-  resetActivePreset() {
-    this.activePreset = ''
-    presetStore.setIsPresetDataModified()
   }
 
   setIsLoadingTabReport(value: boolean) {
@@ -154,31 +139,16 @@ export class DatasetStore {
     this.zone = []
   }
 
-  async setConditionsAsync() {
-    await this.fetchDsStatAsync()
-  }
-
-  resetPrevPreset() {
-    this.prevPreset = ''
-  }
-
   resetData() {
     this.datasetName = ''
     this.genes = []
     this.genesList = []
     this.samples = []
     this.tags = []
-    this.dsStat = {}
-    this.startDsStat = {}
     this.variantsAmount = 0
     this.statAmount = null
-    this.prevPreset = ''
     this.wsRecords = []
     this.tabReport = []
-  }
-
-  resetConditions() {
-    this.startPresetConditions = []
   }
 
   async initDatasetAsync(datasetName: string = this.datasetName) {
@@ -194,78 +164,7 @@ export class DatasetStore {
       await this.fetchWsListAsync('withoutTabReport')
 
       await this.fetchFilteredTabReportAsync()
-
-      this.fetchDsStatAsync()
     }
-  }
-
-  async fetchDsStatAsync(
-    shouldSaveInHistory = true,
-    bodyFromHistory?: IDsStatArguments,
-  ): Promise<DsStatType> {
-    this.isLoadingDsStat = true
-
-    const localBody: IDsStatArguments = {
-      ds: this.datasetName,
-      tm: 0,
-    }
-
-    let { conditions } = filterStore
-
-    if (!this.isFilterDisabled && conditions.length > 0) {
-      localBody.conditions = conditions
-    }
-
-    if (this.activePreset && conditions.length === 0) {
-      localBody.filter = this.activePreset
-    }
-
-    if (shouldSaveInHistory) {
-      addToActionHistory(localBody, true)
-    }
-
-    const checkedBodyFromHistory = bodyFromHistory ?? localBody
-    const body = shouldSaveInHistory ? localBody : checkedBodyFromHistory
-
-    const result = await filteringRegimeProvider.getDsStat(body)
-
-    dtreeStore.setStatRequestId(result['rq-id'])
-
-    const conditionFromHistory = checkedBodyFromHistory.conditions
-
-    if (conditionFromHistory) {
-      conditions = conditionFromHistory
-    }
-
-    const statList = result['stat-list']
-
-    fetchStatunitsAsync(statList)
-
-    runInAction(() => {
-      this.dsStat = result
-
-      if (Object.keys(this.startDsStat).length === 0) {
-        this.startDsStat = this.dsStat
-      }
-
-      if (this.isXL) {
-        this.statAmount = result['filtered-counts']
-      }
-
-      this.variantsAmount = result['total-counts']['0']
-      this.isLoadingDsStat = false
-    })
-
-    return result
-  }
-
-  updatePresetLoad(dsStatData: DsStatType) {
-    filterStore.resetSelectedFilters()
-    this.startPresetConditions = dsStatData.conditions
-
-    filterStore.setConditionsFromPreset(dsStatData.conditions)
-
-    if (!this.isXL) this.fetchWsListAsync()
   }
 
   async fetchTabReportAsync() {
@@ -388,13 +287,11 @@ export class DatasetStore {
 
     const params: IWsListArguments | IDsListArguments = {
       ds: this.datasetName,
-      filter: this.activePreset,
+      filter: this.getActivePreset(),
     }
 
-    const { conditions } = filterStore
-
     if (!this.isFilterDisabled) {
-      params.conditions = kind === 'reset' ? [] : conditions
+      params.conditions = kind === 'reset' ? [] : this.getConditions()
       ;(params as IWsListArguments).zone = this.zone
     }
 
@@ -439,14 +336,10 @@ export class DatasetStore {
     })
   }
 
-  setStatList(statList: StatListType) {
-    this.dsStat['stat-list'] = statList
-  }
-
   memorizeFilterConditions() {
     this.memorizedConditions = {
-      conditions: toJS(filterStore.conditions),
-      activePreset: this.activePreset,
+      conditions: toJS(this.getConditions()),
+      activePreset: this.getActivePreset(),
       zone: toJS(this.zone),
     }
   }

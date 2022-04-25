@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
-import Checkbox from 'react-three-state-checkbox'
 import cn from 'classnames'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
@@ -16,7 +15,9 @@ import { observer } from 'mobx-react-lite'
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
 import { theme } from '@theme'
+import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
 import {
   ICommonAspectDescriptor,
@@ -62,6 +63,9 @@ export const DrawerWindow = observer(
       isWindowOpen && aspect.name === 'view_transcripts'
 
     const isChecked = filterSelection !== DrawerClass.normClass
+
+    const igvUrls = dirinfoStore.dsinfo['igv-urls'] as string[] | undefined
+    const shouldShowIgvBtn = igvUrls && aspect.name === 'view_gen'
 
     return (
       <>
@@ -129,7 +133,7 @@ export const DrawerWindow = observer(
         >
           <span className="uppercase">{aspect.title}</span>
           <div className="flex">
-            {aspect.name === 'view_gen' && <IgvButton />}
+            {shouldShowIgvBtn && <IgvButton />}
             {shouldShowCheckbox && (
               <label
                 className="mx-8 whitespace-nowrap flex items-center cursor-pointer"

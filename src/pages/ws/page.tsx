@@ -43,7 +43,7 @@ const WSPage = observer((): ReactElement => {
     if (stringifyedConditions && !conditions.length) {
       const conditions: TCondition[] = JSON.parse(stringifyedConditions)
 
-      conditions.forEach(condtion => filterStore.addFilterBlock(condtion))
+      conditions.forEach(condtion => filterStore.addCondition(condtion))
     }
 
     const initAsync = async () => {

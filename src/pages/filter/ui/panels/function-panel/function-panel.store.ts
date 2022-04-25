@@ -1,10 +1,11 @@
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { TFuncCondition } from '@service-providers/common/common.interface'
-import { getQueryBuilder } from '@utils/getQueryBuilder'
+import {
+  IFuncPropertyStatus,
+  TFuncCondition,
+} from '@service-providers/common/common.interface'
 
 class FunctionPanelStore {
   constructor() {
@@ -26,36 +27,25 @@ class FunctionPanelStore {
   }
 
   public get filterName(): string {
-    return filterStore.selectedGroupItem.name
+    return filterStore.selectedAttributeStatus?.name ?? ''
   }
 
   public get filterGroup(): string {
-    return filterStore.selectedGroupItem.vgroup
+    return filterStore.selectedAttributeStatus?.vgroup ?? ''
   }
 
   public get problemGroups(): string[] {
-    let attrData: any
-
-    const statList = toJS(datasetStore.startDsStat['stat-list'])
-    const subGroups = Object.values(getQueryBuilder(statList))
-
-    subGroups.map(subGroup => {
-      subGroup.map((item, currNo) => {
-        if (item.name === FuncStepTypesEnum.CustomInheritanceMode) {
-          attrData = subGroup[currNo]
-        }
-      })
-    })
-
-    return attrData.family
+    return (
+      (
+        filterStore.initialStat.getAttributeStatusByName(
+          FuncStepTypesEnum.CustomInheritanceMode,
+        ) as IFuncPropertyStatus | undefined
+      )?.family ?? []
+    )
   }
 
-  public sumbitConditions(condition: TFuncCondition): void {
-    if (datasetStore.activePreset) datasetStore.resetActivePreset()
-
-    filterStore.isRedactorMode
-      ? filterStore.addFilterToFilterBlock(condition)
-      : filterStore.addFilterBlock(condition)
+  public submitConditions(condition: TFuncCondition): void {
+    filterStore.saveCurrentCondition(condition)
   }
 
   public fetchStatFunc(componentName: string, params: string) {

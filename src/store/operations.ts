@@ -6,15 +6,12 @@ import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
-import { GlbPagesNames } from '@glb/glb-names'
 import {
   ICsvExportArguments,
   IDs2WsArguments,
 } from '@service-providers/operations/operations.interface'
 import operationsProvider from '@service-providers/operations/operations.provider'
-import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 import datasetStore from './dataset'
-import dirinfoStore from './dirinfo'
 
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
@@ -23,21 +20,25 @@ class OperationsStore {
 
   constructor() {
     makeAutoObservable(this)
+
+    // TODO: temporary for avoid circular references
+    datasetStore.getJobStatusAsync = taskId => this.getJobStatusAsync(taskId)
   }
 
-  async macroTaggingAsync({ tag, off }: { tag: string; off?: boolean }) {
-    await wsDatasetProvider.updateMicroTagging({
-      ds: datasetStore.datasetName,
-      tag,
-      conditions: filterStore.conditions,
-      filter: datasetStore.activePreset,
-      off,
-    })
+  /* TODO: not used anywhere
+    async macroTaggingAsync({ tag, off }: { tag: string; off?: boolean }) {
+      await wsDatasetProvider.updateMicroTagging({
+        ds: datasetStore.datasetName,
+        tag,
+        conditions: filterStore.conditions,
+        filter: filterPresetsStore.activePreset,
+        off,
+      })
 
-    datasetStore.initDatasetAsync(datasetStore.datasetName)
-    dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
-  }
-
+      datasetStore.initDatasetAsync(datasetStore.datasetName)
+      dirinfoStore.fetchDsinfoAsync(datasetStore.datasetName)
+    }
+  */
   async exportReportAsync(exportType?: ExportTypeEnum) {
     const { conditions } = filterStore
 
@@ -99,26 +100,24 @@ class OperationsStore {
   ): Promise<{ ok: boolean; message?: string }> {
     this.resetIsCreationOver()
 
-    const { conditions } = filterStore
-
     const params: IDs2WsArguments = {
       ds: datasetStore.datasetName,
       ws: wsName,
     }
 
-    const isRefiner = filterStore.method === GlbPagesNames.Refiner
+    const isRefiner = pathName === Routes.Refiner
     const isMainTable = pathName === Routes.WS
 
-    const { variantCounts } = datasetStore.fixedStatAmount
+    let compareValue: number
 
-    const compareValue =
-      variantCounts && (isRefiner || isMainTable)
-        ? variantCounts
-        : dtreeStore.acceptedVariants
-
-    if ((isRefiner || isMainTable) && conditions) {
-      params.conditions = conditions
+    if (isRefiner || isMainTable) {
+      compareValue =
+        (isRefiner
+          ? filterStore.stat.filteredCounts?.variants
+          : datasetStore.fixedStatAmount.variantCounts) ?? 0
+      params.conditions = filterStore.conditions
     } else {
+      compareValue = dtreeStore.acceptedVariants
       params.code = dtreeStore.dtreeCode
     }
 

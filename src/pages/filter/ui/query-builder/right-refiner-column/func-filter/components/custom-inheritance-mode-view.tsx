@@ -6,14 +6,12 @@ import { ICustomInheritanceModeArgs } from '@service-providers/common/common.int
 import { getScenarioValue } from '@utils/filter-refiner/getScenarioValue'
 
 interface ICustomInheritanceModeViewProps {
-  filterId: string
   isFilterActive: boolean
   filterContent: string[]
   filterExpression: ICustomInheritanceModeArgs
 }
 
 export const CustomInheritanceModeView = ({
-  filterId,
   isFilterActive,
   filterExpression,
 }: ICustomInheritanceModeViewProps): ReactElement => {
@@ -34,7 +32,7 @@ export const CustomInheritanceModeView = ({
             className={cn('flex items-center pl-4 py-1', {
               'pt-2': idx === 0,
             })}
-            key={filterId + group}
+            key={group}
           >
             <span>{group}</span>
 

@@ -13,7 +13,7 @@ import { PanelButtons } from '../panelButtons'
 import customInheritanceModeStore from './custom-inheritance-mode.store'
 
 export const CustomInheritanceMode = observer(() => {
-  const { selectedFilter, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode } = filterStore
 
   const { simpleVariants, problemGroups } = functionPanelStore
 
@@ -29,13 +29,13 @@ export const CustomInheritanceMode = observer(() => {
 
   // set/reset data
   useEffect(() => {
-    if (selectedFilter && isRedactorMode) {
+    if (selectedCondition && isRedactorMode) {
       const selectedFilterScenario =
-        selectedFilter[4] as ICustomInheritanceModeArgs
+        selectedCondition[4] as ICustomInheritanceModeArgs
       const selectedFilterScenarioArray = Object.entries(
         selectedFilterScenario['scenario'],
       )
-      const conditionJoinType = selectedFilter[2] as ConditionJoinMode
+      const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       customInheritanceModeStore.setCurrentMode(
         getCurrentModeType(conditionJoinType),
@@ -48,7 +48,7 @@ export const CustomInheritanceMode = observer(() => {
       customInheritanceModeStore.clearResetValue()
       customInheritanceModeStore.resetCurrentMode()
     }
-  }, [isRedactorMode, selectedFilter])
+  }, [isRedactorMode, selectedCondition])
 
   // update data
   useEffect(() => {

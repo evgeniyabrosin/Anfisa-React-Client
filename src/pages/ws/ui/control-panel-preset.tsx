@@ -1,31 +1,25 @@
 import { ReactElement } from 'react'
 import { Option } from 'react-dropdown'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { FilterList } from '@declarations'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import filterPresetStore from '@store/filterPreset'
+import filterPresetsStore from '@store/filter-presets'
 import { DropDown } from '@ui/dropdown'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelTitle } from './control-panel-title'
 
-export const Preset = observer((): ReactElement => {
-  const presets: string[] = get(datasetStore, 'dsStat.filter-list', []).map(
-    (preset: FilterList) => preset.name,
-  )
+export const ControlPanelPreset = observer((): ReactElement => {
+  const { activePreset, availablePresets, isFetchingPresets } =
+    filterPresetsStore
 
-  const onSelectAsync = async (arg: Option, reset?: string) => {
-    datasetStore.setActivePreset(arg.value)
+  const options: string[] = (availablePresets ?? []).map(preset => preset.name)
+  const active = isFetchingPresets ? t('dtree.loading') : activePreset
 
-    filterPresetStore.loadPresetAsync(arg.value)
+  const onSelectAsync = (arg: Option) => {
+    filterPresetsStore.setActivePreset(arg.value)
 
     datasetStore.fetchWsListAsync('reset')
-    datasetStore.setIsLoadingTabReport(true)
-
-    reset && datasetStore.resetActivePreset()
-    reset && datasetStore.resetPrevPreset()
   }
 
   return (
@@ -33,11 +27,9 @@ export const Preset = observer((): ReactElement => {
       <div className="flex items-center justify-between">
         <ControlPanelTitle title={t('ds.preset')} />
 
-        {datasetStore.activePreset && (
+        {activePreset && (
           <span
-            onClick={() =>
-              onSelectAsync({ value: '', label: '' } as Option, 'reset')
-            }
+            onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
             className="text-14 text-blue-bright cursor-pointer"
           >
             {t('general.clear')}
@@ -45,13 +37,16 @@ export const Preset = observer((): ReactElement => {
         )}
       </div>
 
-      <div data-testid={MainTableDataCy.selectPreset}>
+      <div className="relative" data-testid={MainTableDataCy.selectPreset}>
         <DropDown
-          options={presets}
-          value={datasetStore.activePreset}
+          options={options}
+          value={active}
           onSelect={onSelectAsync}
           placeholder={t('general.selectAnOption')}
         />
+        {isFetchingPresets && (
+          <div className="absolute top-0 bottom-0 left-0 right-0" />
+        )}
       </div>
     </div>
   )

@@ -45,7 +45,7 @@ export interface IDsInfo extends IBaseDatasetDescriptor {
 export interface IDsListArguments {
   ds: string
   filter?: string
-  conditions?: TCondition[]
+  conditions?: ReadonlyArray<TCondition>
   dtree?: string
   code?: string
   no?: string

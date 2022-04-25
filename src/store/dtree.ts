@@ -3,10 +3,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { FilterCountsType } from '@declarations'
+import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
-import filterStore from '@store/filter'
-import { GlbPagesNames } from '@glb/glb-names'
 import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { TFilteringStatCounts } from '@service-providers/common'
 import {
   IDsStatArguments,
   IStatfuncArguments,
@@ -15,7 +15,6 @@ import filteringRegimeProvider from '@service-providers/filtering-regime/filteri
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getDataFromCode } from '@utils/getDataFromCode'
-import { getQueryBuilder } from '@utils/getQueryBuilder'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
@@ -56,6 +55,7 @@ class DtreeStore {
   currentDtreeName = ''
   previousDtreeName = ''
   createNewDtreeName = ''
+  actionName: ActionFilterEnum | undefined = undefined
 
   statFuncData: any = []
   scenario: any
@@ -72,6 +72,7 @@ class DtreeStore {
   pointCounts: [number | null][] = []
   acceptedVariants = 0
 
+  evalStatus = undefined
   savingStatus: any = []
   shouldLoadTableModal = false
 
@@ -160,18 +161,8 @@ class DtreeStore {
     )
   }
 
-  get statAmount(): number[] {
-    return this.stat.filteredCounts ?? []
-  }
-
-  get getQueryBuilder() {
-    const isRefiner = filterStore.method === GlbPagesNames.Refiner
-
-    const statList = isRefiner
-      ? toJS(datasetStore.dsStat['stat-list'])
-      : this.stat.list
-
-    return getQueryBuilder(statList)
+  get statAmount(): TFilteringStatCounts | undefined {
+    return this.stat.filteredCounts
   }
 
   getStepIndexForApi = (index: number) => {
@@ -221,6 +212,7 @@ class DtreeStore {
       this.dtree = result
       this.dtreeCode = newCode
       this.dtreeList = result['dtree-list']
+      this.evalStatus = result['eval-status']
     })
 
     const isLoadingNewTree = !body.has('code')
@@ -263,25 +255,30 @@ class DtreeStore {
 
   // 2. UI functions to display adding / deleting / editing steps
 
-  get getStepData() {
-    let stepData = cloneDeep(this.stepData)
-    let data: IStepData[] = []
+  get filteredStepData(): IStepData[] {
+    const searchValue = this.algorithmFilterValue.toLowerCase()
 
-    if (stepData[0] && stepData[0].groups && this.algorithmFilterValue) {
-      stepData = stepData.filter((item, currNo: number) =>
-        item.groups.find((subItem: any[]) => {
-          if (
-            subItem[1]
-              .toLocaleLowerCase()
-              .includes(this.algorithmFilterValue.toLocaleLowerCase())
-          ) {
-            return (data = [...data, stepData[currNo]])
-          }
-        }),
-      )
-    }
+    if (!searchValue) return this.stepData
 
-    return this.algorithmFilterValue ? data : stepData
+    const filteredStepData = this.stepData.filter(({ groups }) => {
+      return groups.some(condition => {
+        const name = condition[1].toLowerCase()
+        if (name.includes(searchValue)) return true
+
+        const valueVariants = condition[3]
+        if (!valueVariants) return false
+
+        const valueVariantList = Object.values(valueVariants)
+
+        return valueVariantList.some(varaintName => {
+          if (typeof varaintName !== 'string') return false
+
+          return varaintName?.toLowerCase().includes(searchValue)
+        })
+      })
+    })
+
+    return filteredStepData
   }
 
   insertStep(position: CreateEmptyStepPositions, index: number) {
@@ -569,7 +566,7 @@ class DtreeStore {
       this.stepData[index].isReturnedVariantsActive = true
     }
 
-    this.stat.setSource({
+    this.stat.setQuery({
       datasetName: datasetStore.datasetName,
       code: this.dtreeCode,
       stepIndex: indexForApi,
@@ -627,6 +624,10 @@ class DtreeStore {
     runInAction(() => {
       this.isCountsReceived = isReceived
     })
+  }
+
+  setActionName(actionName?: ActionFilterEnum): void {
+    this.actionName = actionName
   }
 }
 

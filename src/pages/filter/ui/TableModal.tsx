@@ -13,7 +13,7 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/variant'
 import { Icon } from '@ui/icon'
-import { RadioButton } from '@ui/radio-button'
+import { Radio } from '@ui/radio'
 import { VariantBody } from '@components/variant/ui/body'
 import { GlbPagesNames } from '@glb/glb-names'
 import { TCondition } from '@service-providers/common/common.interface'
@@ -207,25 +207,25 @@ export const TableModal = observer(() => {
             <div className="flex w-full overflow-hidden rounded-lg">
               <div className="flex flex-col bg-white rounded-l-lg overflow-auto">
                 <div className="flex px-[14px] py-4">
-                  <div className="flex items-center mr-[14px]">
-                    <RadioButton
-                      isDisabled={variantSize === 'LARGE'}
-                      isChecked={!isSampleMode}
-                      onChange={toggleMode}
-                    />
+                  <Radio
+                    id="full-list"
+                    onChange={toggleMode}
+                    disabled={variantSize === 'LARGE'}
+                    checked={!isSampleMode}
+                    className="flex items-center mr-[14px]"
+                  >
+                    {t('dtree.fullList')}
+                  </Radio>
 
-                    <div className="ml-[6px]">{t('dtree.fullList')}</div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <RadioButton
-                      isDisabled={variantSize === 'SMALL'}
-                      isChecked={isSampleMode}
-                      onChange={toggleMode}
-                    />
-
-                    <p className="ml-[6px]">{t('dtree.samples25')}</p>
-                  </div>
+                  <Radio
+                    id="sample-25"
+                    disabled={variantSize === 'SMALL'}
+                    checked={isSampleMode}
+                    onChange={toggleMode}
+                    className="flex items-center"
+                  >
+                    {t('dtree.samples25')}
+                  </Radio>
                 </div>
                 <table className="min-w-full table-auto">
                   <thead>

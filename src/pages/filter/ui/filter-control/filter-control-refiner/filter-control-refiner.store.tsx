@@ -1,130 +1,93 @@
-import { get } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
-import { FilterList } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import presetStore from '@store/filterPreset'
-import { compareConditions } from '@utils/filter-refiner/compareConditions'
-import { showToast } from '@utils/notifications/showToast'
-import { validatePresetName } from '@utils/validation/validatePresetName'
+import filterPresetsStore from '@store/filter-presets'
 
 class FilterControlRefinerStore {
-  private _createPresetName = ''
+  private _presetNameForAction = ''
+  private _actionName: ActionFilterEnum | undefined = undefined
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  public get createPresetName(): string {
-    return this._createPresetName
+  public get presetNameForAction(): string {
+    return this._presetNameForAction
   }
 
-  public setCreatePresetName(presetName: string) {
-    this._createPresetName = presetName
+  public setPresetNameForAction(presetName: string) {
+    this._presetNameForAction = presetName
+  }
+
+  public get actionName(): ActionFilterEnum | undefined {
+    return this._actionName
+  }
+
+  public setActionName(actionName: ActionFilterEnum) {
+    if (this._actionName === actionName) {
+      return
+    }
+    if (actionName === ActionFilterEnum.Delete) {
+      this._presetNameForAction = filterPresetsStore.activePresetInfo?.standard
+        ? ''
+        : filterPresetsStore.activePreset
+    } else if (actionName === ActionFilterEnum.Create || !this._actionName) {
+      this._presetNameForAction = ''
+    }
+
+    this._actionName = actionName
+  }
+
+  public resetActionName() {
+    this._actionName = undefined
+  }
+
+  public resetAction() {
+    this.resetActionName()
+    this._presetNameForAction = ''
   }
 
   public get activePreset(): string {
-    return datasetStore.activePreset
+    return filterPresetsStore.activePreset
   }
 
   public get presets(): string[] {
-    return get(datasetStore, 'dsStat.filter-list', [])
-      .filter(this.isPresetAbleToBeModified)
-      .map((preset: FilterList) => preset.name)
+    const { availablePresets } = filterPresetsStore
+    const presets =
+      this.actionName === ActionFilterEnum.Delete ||
+      this.actionName === ActionFilterEnum.Modify
+        ? availablePresets?.filter(preset => !preset.standard)
+        : availablePresets
+
+    return presets.map(preset => preset.name)
   }
 
-  public isPresetAbleToBeModified(preset: FilterList): boolean {
-    return filterStore.actionName === ActionFilterEnum.Delete ||
-      filterStore.actionName === ActionFilterEnum.Modify
-      ? !preset.standard
-      : true
-  }
-
-  public applyAction = (
-    createPresetName: string,
-    isSelectedFiltersEmpty: boolean,
-  ): void => {
+  public applyAction(): void {
     const { conditions } = filterStore
+    const { presetNameForAction, actionName } = this
 
-    if (filterStore.actionName === ActionFilterEnum.Delete) {
-      if (!datasetStore.activePreset) {
-        showToast(t('error.choosePresetFirst'), 'error')
-
-        return
-      }
-
-      presetStore.deletePreset()
-      filterStore.resetSelectedFilters()
-      datasetStore.fetchDsStatAsync()
+    if (!actionName || !presetNameForAction) {
+      return
     }
 
-    if (filterStore.actionName === ActionFilterEnum.Join) {
-      if (!datasetStore.activePreset) {
-        showToast(t('error.choosePresetFirst'), 'error')
+    // TODO: handle the pending state of the process
 
-        return
-      }
-
-      const isConditionsAbleToJoin = compareConditions({
-        currentConditions: conditions,
-        startConditions: datasetStore.startPresetConditions,
-        currentPreset: datasetStore.activePreset,
-        prevPreset: datasetStore.prevPreset,
-      })
-
-      if (!isConditionsAbleToJoin) {
-        showToast(t('error.cantJoinTheSamePreset'), 'error')
-
-        return
-      }
-
-      presetStore.joinPreset(datasetStore.activePreset)
+    switch (actionName) {
+      case ActionFilterEnum.Create:
+        filterPresetsStore.createPreset(presetNameForAction, conditions)
+        break
+      case ActionFilterEnum.Modify:
+        filterPresetsStore.modifyPreset(presetNameForAction, conditions)
+        break
+      case ActionFilterEnum.Join:
+        filterStore.joinPresetConditions(presetNameForAction)
+        break
+      case ActionFilterEnum.Delete:
+        filterPresetsStore.deletePreset(presetNameForAction)
+        break
     }
-
-    if (filterStore.actionName === ActionFilterEnum.Create) {
-      const isPresetNameValid = validatePresetName(createPresetName)
-
-      if (!isPresetNameValid) {
-        showToast(t('filter.notValidName'), 'error')
-
-        return
-      }
-
-      if (isSelectedFiltersEmpty) {
-        showToast(t('error.chooseFiltersFirst'), 'error')
-
-        return
-      }
-
-      presetStore.createPreset(createPresetName)
-      this.setCreatePresetName('')
-    }
-
-    if (filterStore.actionName === ActionFilterEnum.Modify) {
-      if (!datasetStore.activePreset) {
-        showToast(t('error.choosePresetFirst'), 'error')
-
-        return
-      }
-
-      const isConditionsAbleToModify = compareConditions({
-        currentConditions: conditions,
-        startConditions: datasetStore.startPresetConditions,
-        currentPreset: datasetStore.activePreset,
-        prevPreset: datasetStore.prevPreset,
-      })
-
-      if (!isConditionsAbleToModify) {
-        showToast(t('error.noChangesToModify'), 'error')
-
-        return
-      }
-
-      presetStore.modifyPreset(datasetStore.activePreset)
-    }
+    this.resetAction()
   }
 }
 

@@ -9,7 +9,7 @@ import { FilterItemGenes } from './control-panel-filter-genes'
 import { FilterItemGenesList } from './control-panel-filter-genes-list'
 import { FilterItemSamples } from './control-panel-filter-samples'
 import { FilterItemTags } from './control-panel-filter-tags'
-import { Preset } from './control-panel-preset'
+import { ControlPanelPreset } from './control-panel-preset'
 import { Results } from './control-panel-settings'
 import { DatasetCreationButton } from './dataset-creation-button'
 
@@ -19,7 +19,7 @@ export const ControlPanel = observer((): ReactElement => {
   return (
     <div className="w-auto flex pb-3 px-4 bg-blue-dark">
       <div className={sectionClassName}>
-        <Preset />
+        <ControlPanelPreset />
 
         <ControlPanelDivider />
 

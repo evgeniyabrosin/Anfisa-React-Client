@@ -16,10 +16,10 @@ const functionsMap: Record<string, any> = {
 }
 
 export const FunctionPanel = (): ReactElement => {
-  const selectedFilter = filterStore.selectedGroupItem
+  const selectedFilter = filterStore.selectedAttributeStatus
 
   const Component: FunctionComponent<Record<string, any>> =
-    functionsMap[selectedFilter.name]
+    functionsMap[selectedFilter?.name ?? '']
 
   if (!Component) {
     return <Fragment />

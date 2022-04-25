@@ -119,7 +119,7 @@ const getVariantsChartConfig = (
   }
 
   const sortedVariants = variants
-    .slice()
+    .filter(variant => variant[1] > 0)
     .sort((firstVariant, secondVariant) => secondVariant[1] - firstVariant[1])
 
   return {
