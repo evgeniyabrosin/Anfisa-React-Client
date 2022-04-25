@@ -12,22 +12,28 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 export const QueryBuilderTotalNumbers = observer((): ReactElement => {
   const variants = toJS(dirinfoStore.dsinfo).total
 
-  const stepData = toJS(dtreeStore.stepData)
+  const { stepData, isTreeEmpty } = dtreeStore
 
   const stepIndex = stepData.findIndex(
     element => element.isActive || element.isReturnedVariantsActive,
   )
 
-  const returnedVariants = stepData[stepIndex]?.difference
-  const startVariants = stepData[stepIndex]?.startFilterCounts
-  const hasReturnedVariants = Boolean(returnedVariants)
-  const hasStartVariants = Boolean(startVariants)
+  const currentStep = stepData[stepIndex]
+  const difference = currentStep?.difference
+  const startFilterCounts = currentStep?.startFilterCounts
+
+  const hasReturnedVariants = Boolean(difference)
+  const hasStartVariants = Boolean(startFilterCounts)
+  const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
   const openTableModal = (isReturnedVariants = true) => {
+    const hasEmptyStep = stepData.some(element => element.groups.length === 0)
+
     const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
     const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
+    const fixedNextStepIndex = hasEmptyStep ? nextStepIndex - 1 : nextStepIndex
 
-    dtreeStore.openTableModal(nextStepIndex)
+    dtreeStore.openTableModal(fixedNextStepIndex)
   }
 
   const getDerivedVariants = (type: string) => {
@@ -80,7 +86,7 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
         )}
       </div>
       <div className="flex">
-        {hasReturnedVariants && (
+        {shouldShowReturnedVariants && (
           <Button
             dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
             onClick={() => openTableModal(true)}
