@@ -13,7 +13,7 @@ import { PanelButtons } from '../panelButtons'
 import customInheritanceModeStore from './custom-inheritance-mode.store'
 
 export const CustomInheritanceMode = observer(() => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isChanging } = filterStore
 
   const { simpleVariants, problemGroups } = functionPanelStore
 
@@ -21,10 +21,12 @@ export const CustomInheritanceMode = observer(() => {
 
   const setComplexScenario = (resetName: string): void => {
     customInheritanceModeStore.setComplexScenario(resetName)
+    filterStore.setChanging(true)
   }
 
   const setSingleScenario = (group: string, selectValue: string): void => {
     customInheritanceModeStore.setSingleScenario(group, selectValue)
+    filterStore.setChanging(true)
   }
 
   // set/reset data
@@ -64,8 +66,23 @@ export const CustomInheritanceMode = observer(() => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
+  const onSubmit = () => {
+    customInheritanceModeStore.handleSumbitCondtions()
+    filterStore.setChanging(false)
+  }
+
+  const resetFields = () => {
+    customInheritanceModeStore.clearData()
+    filterStore.setChanging(true)
+  }
+
+  const toggleNotMode = () => {
+    customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setChanging(true)
+  }
+
   return (
-    <React.Fragment>
+    <>
       <CustomInheritanceModeContent
         problemGroups={problemGroups}
         handleSetScenario={setSingleScenario}
@@ -75,16 +92,14 @@ export const CustomInheritanceMode = observer(() => {
         isNotModeChecked={
           customInheritanceModeStore.currentMode === ModeTypes.Not
         }
-        toggleNotMode={() =>
-          customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
-        }
+        toggleNotMode={toggleNotMode}
       />
 
       <PanelButtons
-        onSubmit={() => customInheritanceModeStore.handleSumbitCondtions()}
-        resetFields={() => customInheritanceModeStore.clearData()}
-        disabled={!simpleVariants}
+        onSubmit={onSubmit}
+        resetFields={resetFields}
+        disabled={!simpleVariants || !isChanging}
       />
-    </React.Fragment>
+    </>
   )
 })

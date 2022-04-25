@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { resetOptions } from '@core/resetOptions'
@@ -34,7 +33,7 @@ export const CustomInheritanceModeContent = observer(
       dtreeStore.statFuncData.variants ?? filterStore.statFuncData?.variants
 
     return (
-      <Fragment>
+      <>
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div>{t('dtree.scenario')}</div>
 
@@ -73,7 +72,7 @@ export const CustomInheritanceModeContent = observer(
         </div>
 
         <DisabledVariantsAmount variants={variants} disabled={true} />
-      </Fragment>
+      </>
     )
   },
 )
