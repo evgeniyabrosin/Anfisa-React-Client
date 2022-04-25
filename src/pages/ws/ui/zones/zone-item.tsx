@@ -45,7 +45,7 @@ export const ZoneItem = ({
         }}
         className="flex justify-between mt-0.4"
       >
-        <FilterTags data={selectedItemList} isGenes />
+        <FilterTags data={selectedItemList} zone={zone} />
 
         {shouldShowPopup && (
           <ZoneItemPopup

@@ -252,10 +252,10 @@ class ZoneStore {
     }
   }
 
-  removeItem(itemName: string, zone: ZoneName): void {
+  removeItem(itemName: string, zone: ZoneName, type = 'slow'): void {
     switch (zone) {
       case ZoneName.symbol:
-        this.removeGene(itemName, 'slow')
+        this.removeGene(itemName, type)
         break
 
       default:
