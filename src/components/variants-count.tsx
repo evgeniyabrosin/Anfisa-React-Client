@@ -28,7 +28,9 @@ export const VariantsCount: FC<IVariantsCountProps> = ({
     <div className="text-white flex-grow flex justify-end mr-6 items-center">
       {showVariants && (
         <span
-          className="text-12 leading-14px text-white ml-auto font-bold"
+          className={cn('text-12 leading-14px text-white ml-auto', {
+            'ml-2': showDnaVariants || showTranscripts || children,
+          })}
           data-testid={MainTableDataCy.numVariants}
         >
           {t('filter.variants', {
@@ -39,10 +41,10 @@ export const VariantsCount: FC<IVariantsCountProps> = ({
 
       {showTranscripts && (
         <span
-          className={cn(
-            'text-12 leading-14px text-white border-blue-lighter font-bold',
-            { 'border-l-2 ml-2 pl-2': showVariants, 'mr-3': showDnaVariants },
-          )}
+          className={cn('text-12 leading-14px text-white border-blue-lighter', {
+            'border-l-2 pl-2': showVariants,
+            'mr-3': showDnaVariants,
+          })}
         >
           {t('filter.transcripts', {
             all: formatNumber(transcriptsCounts),
@@ -56,9 +58,9 @@ export const VariantsCount: FC<IVariantsCountProps> = ({
 
       {showDnaVariants && (
         <span
-          className={cn('text-12 leading-14px text-grey-blue font-bold', {
+          className={cn('text-12 leading-14px text-grey-blue', {
             'ml-3': showTranscripts || showDnaVariants,
-            'mr-6': !!children,
+            'mr-6': children,
           })}
         >
           {t('filter.transcribedVariants', {
