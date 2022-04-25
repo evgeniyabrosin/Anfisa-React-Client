@@ -1,5 +1,6 @@
 import { ReactElement, useState } from 'react'
 
+import { t } from '@i18n'
 import { ZoneName } from '@store/filterZone'
 import { Button } from '@ui/button'
 import { FilterTags } from '../filter-tags'
@@ -20,9 +21,16 @@ export const ZoneItem = ({
   const isEmptySelectedItemList = selectedItemList.length === 0
   return (
     <div>
-      <div className="text-sm leading-16px  text-grey-blue font-medium mb-2 mr-3">
+      <div className="text-sm leading-16px  text-grey-blue font-medium mb-2 mr-3 flex justify-between">
         <span>{title}</span>
-        {!isEmptySelectedItemList && <span>{'Edit'}</span>}
+        {!isEmptySelectedItemList && (
+          <span
+            className="flex item-center justify-between cursor-pointer text-blue-bright"
+            onClick={() => setShouldShowPopup(!shouldShowPopup)}
+          >
+            {t('ds.edit')}
+          </span>
+        )}
       </div>
 
       {isEmptySelectedItemList && (
@@ -30,9 +38,7 @@ export const ZoneItem = ({
           text="Add +"
           className=" h-4"
           style={{ padding: 0 }}
-          onClick={() => {
-            setShouldShowPopup(!shouldShowPopup)
-          }}
+          onClick={() => setShouldShowPopup(!shouldShowPopup)}
         />
       )}
 

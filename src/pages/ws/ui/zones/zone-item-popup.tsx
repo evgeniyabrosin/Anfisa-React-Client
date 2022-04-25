@@ -21,12 +21,13 @@ export const ZoneItemPopup = observer(
     onClose: () => void
     zone: ZoneName
   }): ReactElement => {
-    // useEffect(
-    //   () => () => {
-    //     // handleDatasetStore.resetImportData()
-    //   },
-    //   [],
-    // )
+    useEffect(
+      () => () => {
+        zoneStore.setSelectedItemsToLocalItems(zone)
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    )
 
     useEffect(() => {
       datasetStore.fetchZoneListAsync(zone)

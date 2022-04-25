@@ -272,6 +272,17 @@ class ZoneStore {
         break
     }
   }
+
+  setSelectedItemsToLocalItems(zone: ZoneName): void {
+    switch (zone) {
+      case ZoneName.symbol:
+        this.localGenes = this.selectedGenes
+        break
+
+      default:
+        break
+    }
+  }
 }
 
 export default new ZoneStore()
