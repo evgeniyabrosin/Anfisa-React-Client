@@ -36,7 +36,7 @@ export const FilterRefinerStatCounts = ({
       {counts && counts.transcripts > 0 && (
         <span className="border-l-2 border-grey-disabled ml-2 pl-2">
           {t('filter.transcripts', {
-            all: formatNumber(counts.variants),
+            all: formatNumber(counts.transcripts),
           })}
         </span>
       )}
