@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import cn from 'classnames'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
@@ -109,14 +108,12 @@ export const QueryBuilderSubgroupItem = observer(
       }
     }
 
-    /* TODO: if variants length > 100  add another visualisation */
     const isChartVisible =
       isVisibleSubGroupItem &&
       !isModal &&
       ((subGroupItem.kind === AttributeKinds.ENUM &&
         subGroupItem.variants &&
-        subGroupItem.variants.length > 0 &&
-        subGroupItem.variants.length < 100) ||
+        subGroupItem.variants.length > 0) ||
         (subGroupItem.kind === AttributeKinds.NUMERIC &&
           subGroupItem.histogram &&
           subGroupItem.histogram.length > 0))
@@ -163,10 +160,7 @@ export const QueryBuilderSubgroupItem = observer(
           </div>
         </div>
         {isChartVisible && (
-          <QueryBuilderSubgroupChart
-            // TODO: StatList -> TPropertyStatus refactoring
-            subGroupItem={toJS(subGroupItem) as TPropertyStatus}
-          />
+          <QueryBuilderSubgroupChart subGroupItem={subGroupItem} />
         )}
       </div>
     )

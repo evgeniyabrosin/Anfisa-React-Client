@@ -5,6 +5,7 @@ import { BarChart } from './bar-chart'
 import { ChartType } from './chart.interface'
 import { HistogramChart } from './histogram-chart'
 import { PieChart } from './pie-chart'
+import { TreeMapChart } from './tree-map-chart'
 import { useChartConfig } from './utils'
 
 interface IQueryBuilderSubgroupChartProps {
@@ -27,6 +28,9 @@ export const QueryBuilderSubgroupChart = ({
       break
     case ChartType.Pie:
       chart = <PieChart data={chartConfig.data} />
+      break
+    case ChartType.TreeMap:
+      chart = <TreeMapChart data={chartConfig.data} />
       break
     case ChartType.Histogram:
       chart = (

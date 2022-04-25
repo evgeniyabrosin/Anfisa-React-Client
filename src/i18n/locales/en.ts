@@ -157,7 +157,7 @@ export const en = {
       seeAll: 'See all',
       hide: 'Hide',
       total: 'Total',
-      variants: '{value} variants',
+      variants: '{value} {value, plural, one {variant} other {variants}}',
     },
     delete: 'Delete',
     copy: 'Copy',

@@ -19,6 +19,7 @@ import {
   THistogramChartConfig,
   THistogramChartData,
   TPieChartConfig,
+  TTreeMapChartConfig,
 } from '../chart.interface'
 
 const HISTOGRAM_FLOAT_LOG_ZERO = -16
@@ -109,13 +110,25 @@ const getHistogramChartConfig = (
 const getVariantsChartConfig = (
   variants: TVariant[] | undefined,
   renderMode: TAttributeRenderMode | undefined,
-): TPieChartConfig | TBarChartConfig | undefined => {
+): TPieChartConfig | TBarChartConfig | TTreeMapChartConfig | undefined => {
   if (
     !variants ||
     (renderMode !== AttributeChartRenderModes.Bar &&
-      renderMode !== AttributeChartRenderModes.Pie)
+      renderMode !== AttributeChartRenderModes.Pie &&
+      renderMode !== AttributeChartRenderModes.TreeMap)
   ) {
     return undefined
+  }
+  let type: ChartType
+  switch (renderMode) {
+    case AttributeChartRenderModes.Pie:
+      type = ChartType.Pie
+      break
+    case AttributeChartRenderModes.TreeMap:
+      type = ChartType.TreeMap
+      break
+    default:
+      type = ChartType.Bar
   }
 
   const sortedVariants = variants
@@ -123,10 +136,7 @@ const getVariantsChartConfig = (
     .sort((firstVariant, secondVariant) => secondVariant[1] - firstVariant[1])
 
   return {
-    type:
-      renderMode === AttributeChartRenderModes.Bar
-        ? ChartType.Bar
-        : ChartType.Pie,
+    type,
     data: sortedVariants,
   }
 }
