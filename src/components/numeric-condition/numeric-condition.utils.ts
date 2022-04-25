@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 
+import filterStore from '@store/filter'
 import {
   INumericPropertyStatus,
   TNumericConditionBounds,
@@ -101,9 +102,13 @@ export const useConditionBoundsValue = (
           setValue(prevValue =>
             updateNumericValue(prevValue, index, elementValue),
           )
+          filterStore.setChanging(true)
         }
       },
-      clearValue: () => setValue(defaultValue),
+      clearValue: () => {
+        setValue(defaultValue)
+        filterStore.setChanging(true)
+      },
     }
   }
 
@@ -291,14 +296,19 @@ export const useCenterDistanceValue = (
           newCenter,
           coerceDistance(currentValue[1], newCenter, attrData),
         ])
+        filterStore.setChanging(true)
       },
       setDistance: (newDistance: number | null) => {
         setValue(currentValue => [
           coerceCenter(currentValue[0], newDistance, attrData),
           newDistance,
         ])
+        filterStore.setChanging(true)
       },
-      clearValue: () => setValue([null, null]),
+      clearValue: () => {
+        setValue([null, null])
+        filterStore.setChanging(true)
+      },
     }),
     [attrData],
   )
