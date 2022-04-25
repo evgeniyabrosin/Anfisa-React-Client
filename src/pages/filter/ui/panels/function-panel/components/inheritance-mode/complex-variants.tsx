@@ -1,10 +1,10 @@
 import React, { ChangeEvent } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import inheritanceModeStore from './inheritance-mode.store'
 
@@ -49,18 +49,17 @@ export const ComplexVariants = observer(
           <div>
             {variants.map(([variantName, variantValue]) => {
               return (
-                <div key={variantName} className="flex items-center mt-4">
-                  <Checkbox
-                    checked={variantValues.includes(variantName)}
-                    onChange={e => {
-                      handleChangeVariants(e, variantName)
-                    }}
-                  />
-                  <span className="text-14 leading-16px ml-2">
-                    {variantName}
-                  </span>
-                  <span className="text-14 leading-16px text-grey-blue ml-1">{`(${variantValue})`}</span>
-                </div>
+                <Checkbox
+                  key={variantName}
+                  checked={variantValues.includes(variantName)}
+                  onChange={e => {
+                    handleChangeVariants(e, variantName)
+                  }}
+                  className="flex items-center mt-4 text-14 leading-16px"
+                >
+                  <span>{variantName}</span>
+                  <span className="text-grey-blue ml-1">{`(${variantValue})`}</span>
+                </Checkbox>
               )
             })}
           </div>

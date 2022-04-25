@@ -1,7 +1,7 @@
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
 import zoneStore from '@store/filterZone'
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 
 interface Props {
@@ -30,45 +30,26 @@ export const FilterItemList = observer(
 
     return (
       <div className="mt-5 h-60 overflow-y-scroll">
-        {items.map(item => (
-          <div key={item} className="flex items-center mb-4">
-            {isGenes && (
-              <Checkbox
-                checked={zoneStore.localGenes.includes(item)}
-                className="w-4 h-4"
-                onChange={e => handleCheck(e.target.checked, item)}
-              />
-            )}
-            {isGenesList && (
-              <Checkbox
-                checked={zoneStore.localGenesList.includes(item)}
-                className="w-4 h-4"
-                onChange={e => handleCheck(e.target.checked, item)}
-              />
-            )}
-            {isSamples && (
-              <Checkbox
-                checked={zoneStore.localSamples.includes(item)}
-                className="w-4 h-4"
-                onChange={e => handleCheck(e.target.checked, item)}
-              />
-            )}
-            {isTags && (
-              <Checkbox
-                checked={zoneStore.localTags.includes(item)}
-                className="w-4 h-4"
-                onChange={e => handleCheck(e.target.checked, item)}
-              />
-            )}
+        {items.map(item => {
+          const checked =
+            (isGenes && zoneStore.localGenes.includes(item)) ||
+            (isGenesList && zoneStore.localGenesList.includes(item)) ||
+            (isSamples && zoneStore.localSamples.includes(item)) ||
+            (isTags && zoneStore.localTags.includes(item))
 
-            <span
-              className="text-12 ml-1"
-              data-testid={MainTableDataCy.checkboxListElement}
+          return (
+            <Checkbox
+              key={item}
+              checked={checked}
+              onChange={e => handleCheck(e.target.checked, item)}
+              className="flex items-center mb-4 text-12 font-medium"
             >
-              {item}
-            </span>
-          </div>
-        ))}
+              <span data-testid={MainTableDataCy.checkboxListElement}>
+                {item}
+              </span>
+            </Checkbox>
+          )
+        })}
       </div>
     )
   },

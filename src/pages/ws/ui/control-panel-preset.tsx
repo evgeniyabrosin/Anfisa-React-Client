@@ -10,14 +10,16 @@ import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelTitle } from './control-panel-title'
 
 export const ControlPanelPreset = observer((): ReactElement => {
-  const { activePreset, availablePresets } = filterPresetsStore
+  const { activePreset, availablePresets, isFetchingPresets } =
+    filterPresetsStore
 
   const options: string[] = (availablePresets ?? []).map(preset => preset.name)
+  const active = isFetchingPresets ? t('dtree.loading') : activePreset
 
   const onSelectAsync = (arg: Option) => {
     filterPresetsStore.setActivePreset(arg.value)
 
-    datasetStore.fetchWsListAsync(false, 'reset')
+    datasetStore.fetchWsListAsync('reset')
   }
 
   return (
@@ -35,13 +37,16 @@ export const ControlPanelPreset = observer((): ReactElement => {
         )}
       </div>
 
-      <div data-testid={MainTableDataCy.selectPreset}>
+      <div className="relative" data-testid={MainTableDataCy.selectPreset}>
         <DropDown
           options={options}
-          value={activePreset}
+          value={active}
           onSelect={onSelectAsync}
           placeholder={t('general.selectAnOption')}
         />
+        {isFetchingPresets && (
+          <div className="absolute top-0 bottom-0 left-0 right-0" />
+        )}
       </div>
     </div>
   )

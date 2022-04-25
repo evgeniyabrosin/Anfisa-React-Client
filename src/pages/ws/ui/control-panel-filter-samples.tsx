@@ -62,7 +62,7 @@ const ModalElement = observer(({ close, title }: ModalProps) => {
 
     zoneStore.createSelectedZoneFilter('isSamples')
     datasetStore.addZone(['Has_Variant', zoneStore.selectedSamples])
-    await datasetStore.fetchWsListAsync(datasetStore.isXL)
+    await datasetStore.fetchWsListAsync()
 
     datasetStore.fetchFilteredTabReportAsync()
     zoneStore.paintSelectedSamples()

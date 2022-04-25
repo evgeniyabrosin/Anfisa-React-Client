@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import Checkbox from 'react-three-state-checkbox'
 import { observer } from 'mobx-react-lite'
 
+import { Checkbox } from '@ui/checkbox/checkbox'
 import { PopupCard } from '@components/popup-card/popup-card'
 import { Portal } from '@components/portal/portal'
 import handleDatasetStore from '../handle-dataset.store'
@@ -19,26 +19,22 @@ export const ExportModal = observer(() => {
         onApply={handleDatasetStore.exportDataset}
         isLoading={handleDatasetStore.isExporting}
       >
-        <div className="flex items-center mb-4">
-          <Checkbox
-            checked={handleDatasetStore.isSupportSelected}
-            className="w-4 h-4"
-            onChange={e => handleDatasetStore.toggleSupport(e.target.checked)}
-          />
-
-          <span className="text-12 ml-1">with support</span>
-        </div>
-        <div className="flex items-center mb-4">
-          <Checkbox
-            checked={handleDatasetStore.isDocumentationSelected}
-            className="w-4 h-4"
-            onChange={e =>
-              handleDatasetStore.toggleDocumentation(e.target.checked)
-            }
-          />
-
-          <span className="text-12 ml-1">with documentation</span>
-        </div>
+        <Checkbox
+          checked={handleDatasetStore.isSupportSelected}
+          className="flex items-center mb-4 text-12"
+          onChange={e => handleDatasetStore.toggleSupport(e.target.checked)}
+        >
+          with support
+        </Checkbox>
+        <Checkbox
+          checked={handleDatasetStore.isDocumentationSelected}
+          className="flex items-center mb-4 text-12"
+          onChange={e =>
+            handleDatasetStore.toggleDocumentation(e.target.checked)
+          }
+        >
+          with documentation
+        </Checkbox>
       </PopupCard>
     </Portal>
   )
