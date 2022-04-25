@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import filterStore from '@store/filter'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 
@@ -25,11 +26,12 @@ export const DisabledVariantsAmount = observer(
             checked={
               disabled ? true : dtreeStore.selectedFilters.includes(variant[0])
             }
-            onChange={(e: any) =>
+            onChange={(e: any) => {
               !disabled &&
-              handleCheckGroupItem &&
-              handleCheckGroupItem(e.target.checked, variant[0])
-            }
+                handleCheckGroupItem &&
+                handleCheckGroupItem(e.target.checked, variant[0])
+              filterStore.setChanging(true)
+            }}
           >
             <span
               className="text-black"
