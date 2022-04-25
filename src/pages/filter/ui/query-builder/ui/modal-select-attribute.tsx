@@ -20,10 +20,6 @@ export const ModalSelectAttribute = observer((): ReactElement => {
     storageId: 'attributesModalScrollPos',
   })
 
-  const groupNames = Object.keys(filteredQueryBuilder)
-
-  const subGroupData = Object.values(filteredQueryBuilder)
-
   const modalBaseRef = useRef(null)
 
   const handleClose = () => {
@@ -57,11 +53,12 @@ export const ModalSelectAttribute = observer((): ReactElement => {
             {t('dtree.loading')}
           </div>
         ) : (
-          groupNames.map((groupName, index) => (
+          filteredQueryBuilder.map(({ name, attributes, power }) => (
             <QueryBuilderSubgroup
-              groupName={groupName}
-              subGroupData={subGroupData[index]}
-              key={groupName}
+              key={name}
+              groupName={name}
+              predictionPower={power}
+              subGroupData={attributes}
               changeIndicator={dtreeStore.filterModalChangeIndicator}
               isContentExpanded={dtreeStore.isFilterModalContentExpanded}
               isModal
