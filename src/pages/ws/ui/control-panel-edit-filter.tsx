@@ -22,7 +22,7 @@ export const EditFilter = observer((): ReactElement => {
 
   const switchHandler = (checked: boolean) => {
     datasetStore.setIsFilterDisabled(!checked)
-    datasetStore.fetchWsListAsync(datasetStore.isXL)
+    datasetStore.fetchWsListAsync()
   }
 
   return (
