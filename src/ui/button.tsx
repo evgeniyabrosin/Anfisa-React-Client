@@ -4,6 +4,7 @@ import { CSSProperties } from 'styled-components'
 
 export interface ButtonProps {
   text?: string | JSX.Element
+  textSize?: 'xs' | 'sm' | 'md'
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   variant?:
@@ -26,6 +27,7 @@ export interface ButtonProps {
 
 export const Button = ({
   text,
+  textSize,
   size = 'md',
   disabled = false,
   variant = 'primary',
@@ -58,7 +60,7 @@ export const Button = ({
       padding = 'py-0.5 ' + (text ? 'px-1' : 'px-0.5')
       break
     case 'sm':
-      padding = 'py-1 ' + (text ? 'px-2' : 'px-1')
+      padding = 'py-1 ' + (text ? 'px-4' : 'px-1')
       break
     case 'md':
       padding = 'px-2 ' + (isPrimary || isPrimaryDark ? 'py-2' : 'py-1.5')
@@ -85,7 +87,7 @@ export const Button = ({
       'hover:border-blue-hover': isSecondary || isSecondaryDark,
       'active:border-blue-active': isSecondary || isSecondaryDark,
       //default diestruction
-      'border-2 border-red-secondary': isDiestruction,
+      'border-2 border-red-secondxary': isDiestruction,
       //hover diestruction
       'hover:border-red-hover': isDiestruction,
       'active:border-red-active': isDiestruction,
@@ -134,7 +136,11 @@ export const Button = ({
       style={style}
     >
       {prepend}
-      {text && <span className="mx-2 text-xs leading-14px">{text}</span>}
+      {text && (
+        <span className={`mx-1 text-${textSize || 'xs'} leading-14px`}>
+          {text}
+        </span>
+      )}
       {icon}
       {append}
     </button>

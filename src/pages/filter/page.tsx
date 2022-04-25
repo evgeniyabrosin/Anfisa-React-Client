@@ -1,18 +1,17 @@
-import React, { Fragment, ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 import { useHistory } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
-import { formatNumber } from '@core/format-number'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
-import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Header } from '@components/header'
+import { VariantsCount } from '@components/variants-count'
 import { GlbPagesNames } from '@glb/glb-names'
 import { ErrorPage } from '../error/error'
 import { ModalsBlock } from './modals-block'
@@ -56,73 +55,57 @@ const FilterPage = observer((): ReactElement => {
 
   const getFiltersValue = (type: string) => {
     if (type === 'all') {
-      if (isXL) return formatNumber(toJS(dirinfoStore.dsinfo.total))
+      if (isXL) return toJS(dirinfoStore.dsinfo.total) as number
 
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(dtreeStore.statAmount?.variants)
+        return dtreeStore.statAmount?.variants
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(filterStore.stat.filteredCounts?.variants)
+        return filterStore.stat.filteredCounts?.variants
       }
     }
 
     if (type === 'transcribedVariants') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(dtreeStore.statAmount?.transcribedVariants)
+        return dtreeStore.statAmount?.transcribedVariants
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(filterStore.stat.filteredCounts?.variants)
+        return filterStore.stat.filteredCounts?.variants
       }
     }
 
     if (type === 'transcripts') {
       if (filterStore.method === GlbPagesNames.Filter) {
-        return formatNumber(dtreeStore.statAmount?.transcripts)
+        return dtreeStore.statAmount?.transcripts
       }
 
       if (filterStore.method === GlbPagesNames.Refiner) {
-        return formatNumber(filterStore.stat.filteredCounts?.transcripts)
+        return filterStore.stat.filteredCounts?.transcripts
       }
     }
   }
 
   return (
-    <Fragment>
+    <>
       <ModalsBlock />
 
       <div className="overflow-hidden">
         <Header>
-          <div className="text-white flex-grow flex justify-end pr-6">
-            <span className="text-12 leading-14px text-white mt-2 ml-auto font-bold">
-              {t('filter.variants', {
-                all: getFiltersValue('all'),
-              })}
-            </span>
-
-            {!isXL && (
-              <React.Fragment>
-                <span className="header-variants-info">
-                  {t('filter.transcribedVariants', {
-                    all: getFiltersValue('transcribedVariants'),
-                  })}
-                </span>
-
-                <span className="header-variants-info">
-                  {t('filter.transcripts', {
-                    all: getFiltersValue('transcripts'),
-                  })}
-                </span>
-              </React.Fragment>
-            )}
-          </div>
+          <VariantsCount
+            variantCounts={getFiltersValue('all')}
+            transcriptsCounts={getFiltersValue('transcribedVariants')}
+            dnaVariantsCounts={getFiltersValue('transcripts')}
+            showDnaVariants={!isXL}
+            showTranscripts={!isXL}
+          />
         </Header>
 
         <FilterControl />
         <QueryBuilder />
       </div>
-    </Fragment>
+    </>
   )
 })
 

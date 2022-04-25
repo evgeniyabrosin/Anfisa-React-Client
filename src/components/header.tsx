@@ -56,7 +56,7 @@ export const Header = observer(({ children }: Props): ReactElement => {
   }
 
   return (
-    <div className="bg-blue-dark flex flex-row justify-between items-center px-4 py-3">
+    <div className="bg-blue-dark flex flex-row justify-between items-center px-[18px] py-3">
       <div className="flex flex-row justify-between items-center grow-0 shrink-1 min-w-0 mr-4">
         <Link to={Routes.Root}>
           <Logo mode="white" className="mr-4" />
@@ -76,7 +76,7 @@ export const Header = observer(({ children }: Props): ReactElement => {
           </span>
         </span>
         {!isHomepage && (
-          <Fragment>
+          <>
             <Divider orientation="vertical" />
             <Breadcrumbs
               datasetName={ds}
@@ -84,7 +84,7 @@ export const Header = observer(({ children }: Props): ReactElement => {
               className="grow-0 shrink-1 min-w-0"
               isXlDatasetAllowed={isXlDatasetAllowed}
             />
-          </Fragment>
+          </>
         )}
       </div>
 
