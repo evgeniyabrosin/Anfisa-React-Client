@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
 import { TVariant } from '@service-providers/common'
@@ -21,6 +22,8 @@ export const EnumPanel = observer((): ReactElement => {
     initialEnumVariants,
     initialEnumMode,
   } = filterAttributesStore
+
+  const { isChanging } = filterStore
 
   const [mode, setMode] = useState(initialEnumMode)
   const [selectedVariants, setSelectedVariants] = useState(
@@ -50,6 +53,7 @@ export const EnumPanel = observer((): ReactElement => {
 
   const handleCheckGroupItem = (checked: boolean, variant: TVariant) => {
     const variantName = variant[0]
+    filterStore.setChanging(true)
 
     if (checked) {
       setSelectedVariants([...selectedVariants, variantName])
@@ -68,10 +72,12 @@ export const EnumPanel = observer((): ReactElement => {
 
   const toggleMode = (mode: ModeTypes) => {
     setMode(currentMode => (currentMode === mode ? undefined : mode))
+    filterStore.setChanging(true)
   }
 
   const handleSave = () => {
     filterAttributesStore.saveEnum(selectedVariants, mode)
+    filterStore.setChanging(false)
   }
 
   const handleSearchChange = (value: string) => {
@@ -82,7 +88,7 @@ export const EnumPanel = observer((): ReactElement => {
     }
   }
 
-  const isBlockAddBtn = selectedVariants.length === 0
+  const isBlockAddBtn = selectedVariants.length === 0 || !isChanging
 
   return (
     <div>

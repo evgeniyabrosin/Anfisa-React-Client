@@ -33,6 +33,7 @@ export class FilterStore {
   private _attributeNameToAdd: string = ''
   private _presetModifiedState: PresetModifiedState =
     PresetModifiedState.NotPreset
+  private _isChanging = false
 
   constructor() {
     makeAutoObservable(this)
@@ -136,6 +137,10 @@ export class FilterStore {
     return this._presetModifiedState === PresetModifiedState.Modified
   }
 
+  public get isChanging(): boolean {
+    return this._isChanging
+  }
+
   public addCondition(condition: TCondition): number {
     this._conditions.push(condition)
 
@@ -210,6 +215,10 @@ export class FilterStore {
 
   public setMethod(method: GlbPagesNames | FilterControlOptions) {
     this.method = method
+  }
+
+  public setChanging(value: boolean = true) {
+    this._isChanging = value
   }
 
   public joinPresetConditions(presetName: string) {

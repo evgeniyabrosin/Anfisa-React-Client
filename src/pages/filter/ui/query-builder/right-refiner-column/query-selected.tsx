@@ -22,6 +22,7 @@ export const QuerySelected = observer((): ReactElement => {
   const {
     conditions,
     isConditionsFetching,
+    isChanging,
     stat: { filteredCounts },
   } = filterStore
 
@@ -43,6 +44,12 @@ export const QuerySelected = observer((): ReactElement => {
   const clearAlSelectedFilters = () => {
     filterStore.clearConditions()
   }
+
+  const isDisabledApplyButton =
+    isConditionsFetching ||
+    filteredVariantsCount == null ||
+    !conditions.length ||
+    isChanging
 
   return (
     <div className="w-1/3 ">
@@ -67,7 +74,7 @@ export const QuerySelected = observer((): ReactElement => {
             text={t('general.apply', {
               amount: formatNumber(filteredVariantsCount),
             })}
-            disabled={isConditionsFetching || filteredVariantsCount == null}
+            disabled={isDisabledApplyButton}
             onClick={handleApplyClick}
           />
         )}
