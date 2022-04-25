@@ -87,7 +87,7 @@ export const Button = ({
       'hover:border-blue-hover': isSecondary || isSecondaryDark,
       'active:border-blue-active': isSecondary || isSecondaryDark,
       //default diestruction
-      'border-2 border-red-secondxary': isDiestruction,
+      'border-2 border-red-secondary': isDiestruction,
       //hover diestruction
       'hover:border-red-hover': isDiestruction,
       'active:border-red-active': isDiestruction,
