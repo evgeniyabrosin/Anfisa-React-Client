@@ -1,5 +1,4 @@
 import { MouseEvent, ReactElement, useState } from 'react'
-import { toJS } from 'mobx'
 
 import { t } from '@i18n'
 import zoneStore, { ZoneName } from '@store/filterZone'

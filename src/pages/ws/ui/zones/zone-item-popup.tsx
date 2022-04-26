@@ -33,7 +33,15 @@ export const ZoneItemPopup = observer(
     )
 
     useEffect(() => {
-      datasetStore.fetchZoneListAsync(zone)
+      if (zone === ZoneName.tagSelect) {
+        datasetStore.fetchTagSelectAsync()
+        if (zoneStore.selectedTags.length > 0) {
+          zoneStore.syncSelectedAndLocalFilters('isTags')
+        }
+      } else {
+        datasetStore.fetchZoneListAsync(zone)
+      }
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

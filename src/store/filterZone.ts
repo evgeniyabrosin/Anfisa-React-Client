@@ -8,6 +8,7 @@ export enum ZoneName {
   symbol = 'Symbol',
   panels = 'Panels',
   hasVariant = 'Has_Variant',
+  tagSelect = '_tags',
 }
 
 class ZoneStore {
@@ -166,6 +167,9 @@ class ZoneStore {
       case ZoneName.hasVariant:
         this.selectedSamples = this.localSamples
         break
+      case ZoneName.tagSelect:
+        this.selectedTags = this.localTags
+        break
       default:
         break
     }
@@ -273,6 +277,10 @@ class ZoneStore {
         this.addSample(itemName)
         break
 
+      case ZoneName.tagSelect:
+        this.addLocalTag(itemName)
+        break
+
       default:
         break
     }
@@ -292,6 +300,10 @@ class ZoneStore {
         this.removeSample(itemName, type)
         break
 
+      case ZoneName.tagSelect:
+        this.removeLocalTag(itemName, type)
+        break
+
       default:
         break
     }
@@ -307,6 +319,9 @@ class ZoneStore {
 
       case ZoneName.hasVariant:
         return this.localSamples.length
+
+      case ZoneName.tagSelect:
+        return this.localTags.length
 
       default:
         break
@@ -327,6 +342,10 @@ class ZoneStore {
         this.localSamples = this.selectedSamples
         break
 
+      case ZoneName.tagSelect:
+        this.localTags = this.selectedTags
+        break
+
       default:
         break
     }
@@ -344,6 +363,10 @@ class ZoneStore {
 
       case ZoneName.hasVariant:
         this.localSamples = []
+        break
+
+      case ZoneName.tagSelect:
+        this.localTags = []
         break
 
       default:

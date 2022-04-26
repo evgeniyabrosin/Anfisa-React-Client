@@ -257,8 +257,6 @@ export class DatasetStore {
   }
 
   async fetchTagSelectAsync() {
-    if (this.isXL) return
-
     const tagSelect = await wsDatasetProvider.getTagSelect({
       ds: this.datasetName,
     })
@@ -313,7 +311,6 @@ export class DatasetStore {
     return this.filteredNo
   }
 
-  // TODO: fix for another zones
   async fetchZoneListAsync(zone: string) {
     const zoneList = (await wsDatasetProvider.getZoneList({
       ds: this.datasetName,
@@ -331,6 +328,10 @@ export class DatasetStore {
 
       case ZoneName.hasVariant:
         this.samples = zoneList.variants
+        break
+
+      case ZoneName.tagSelect:
+        this.tags = zoneList.variants
         break
 
       default:

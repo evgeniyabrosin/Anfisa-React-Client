@@ -6,7 +6,6 @@ import datasetStore from '@store/dataset'
 import zoneStore, { ZoneName } from '@store/filterZone'
 import { ControlPanelDivider } from './control-panel-divider'
 import { EditFilter } from './control-panel-edit-filter'
-import { FilterItemTags } from './control-panel-filter-tags'
 import { ControlPanelPreset } from './control-panel-preset'
 import { Results } from './control-panel-settings'
 import { DatasetCreationButton } from './dataset-creation-button'
@@ -62,7 +61,13 @@ export const ControlPanel = observer((): ReactElement => {
 
             <ControlPanelDivider className="bg-blue-secondary" />
 
-            <FilterItemTags title={t('ds.tags')} />
+            <ZoneItem
+              title={t('ds.tags')}
+              itemList={datasetStore.tags}
+              selectedItemList={zoneStore.selectedTags}
+              localItemList={zoneStore.localTags}
+              zone={ZoneName.tagSelect}
+            />
           </div>
         )}
 
