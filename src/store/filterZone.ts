@@ -45,7 +45,7 @@ class ZoneStore {
     this.localGenes = this.localGenes.filter(gene => geneName !== gene)
 
     if (type === 'fast') {
-      this.createSelectedZoneFilter('isGenes')
+      this.selectedGenes = this.localGenes
 
       datasetStore.removeZone(['Symbol', this.selectedGenes])
     }
@@ -65,7 +65,7 @@ class ZoneStore {
     )
 
     if (type === 'fast') {
-      this.createSelectedZoneFilter('isGenesList')
+      this.selectedGenesList = this.localGenesList
 
       datasetStore.removeZone(['Panels', this.selectedGenesList])
     }
@@ -85,7 +85,7 @@ class ZoneStore {
     )
 
     if (type === 'fast') {
-      this.createSelectedZoneFilter('isSamples')
+      this.selectedSamples = this.localSamples
 
       datasetStore.removeZone(['Has_Variant', this.selectedSamples])
     }
@@ -137,7 +137,7 @@ class ZoneStore {
     tagName === '_note' && this.setModeWithNotes(false)
 
     if (type === 'fast') {
-      this.createSelectedZoneFilter('isTags')
+      this.selectedTags = this.localTags
 
       datasetStore.removeZone(['_tags', this.selectedTags])
     }
@@ -147,13 +147,6 @@ class ZoneStore {
     this.localTags = []
     this.resetModeNOT()
     this.resetModeWithNotes()
-  }
-
-  createSelectedZoneFilter(type: string) {
-    if (type === 'isGenes') this.selectedGenes = this.localGenes
-    if (type === 'isGenesList') this.selectedGenesList = this.localGenesList
-    if (type === 'isSamples') this.selectedSamples = this.localSamples
-    if (type === 'isTags') this.selectedTags = this.localTags
   }
 
   applySelectedZoneFilter(zone: ZoneName): void {
@@ -173,17 +166,6 @@ class ZoneStore {
       default:
         break
     }
-  }
-
-  // TODO: delete it after complete refactor
-  syncSelectedAndLocalFilters(type: string) {
-    if (type === 'isGenes') this.localGenes = this.selectedGenes
-
-    if (type === 'isGenesList') this.localGenesList = this.selectedGenesList
-
-    if (type === 'isSamples') this.localSamples = this.selectedSamples
-
-    if (type === 'isTags') this.localTags = this.selectedTags
   }
 
   resetAllSelectedItems() {

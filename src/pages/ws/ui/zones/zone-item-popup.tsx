@@ -35,9 +35,6 @@ export const ZoneItemPopup = observer(
     useEffect(() => {
       if (zone === ZoneName.tagSelect) {
         datasetStore.fetchTagSelectAsync()
-        if (zoneStore.selectedTags.length > 0) {
-          zoneStore.syncSelectedAndLocalFilters('isTags')
-        }
       } else {
         datasetStore.fetchZoneListAsync(zone)
       }
