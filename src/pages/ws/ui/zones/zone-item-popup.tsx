@@ -22,7 +22,10 @@ export const ZoneItemPopup = observer(
     zone: ZoneName
   }): ReactElement => {
     useEffect(
-      () => () => zoneStore.setSelectedItemsToLocalItems(zone),
+      () => () => {
+        zoneStore.setSelectedItemsToLocalItems(zone)
+        zoneStore.clearZoneItemCoordinates()
+      },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
     )
@@ -65,6 +68,7 @@ export const ZoneItemPopup = observer(
           onClose={onClose}
           onApply={handleApply}
           className="relative bottom-16"
+          coordinates={zoneStore.zoneItemCoordinates}
         >
           <div>
             <InputSearch

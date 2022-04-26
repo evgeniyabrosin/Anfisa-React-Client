@@ -28,6 +28,8 @@ class ZoneStore {
   isModeWithNotes = false
   modeWithNotesSubmitted = false
 
+  zoneItemCoordinates: { x: number; y: number } | null = null
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -294,6 +296,14 @@ class ZoneStore {
       default:
         break
     }
+  }
+
+  setZoneItemCoordinates(xCoordinate: number, yCoordinate: number) {
+    this.zoneItemCoordinates = { x: xCoordinate, y: yCoordinate }
+  }
+
+  clearZoneItemCoordinates() {
+    this.zoneItemCoordinates = null
   }
 }
 

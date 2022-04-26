@@ -17,6 +17,7 @@ export interface IPopupCardProps {
   onApply?: () => void
   isApplyDisabled?: boolean
   isLoading?: boolean
+  coordinates?: { x: number; y: number } | null
 }
 
 export const PopupCard = ({
@@ -29,9 +30,17 @@ export const PopupCard = ({
   onApply,
   isLoading,
   isApplyDisabled = false,
+  coordinates,
 }: React.PropsWithChildren<IPopupCardProps>) => {
   return (
-    <div className={cn('bg-white shadow-card rounded', className)}>
+    <div
+      className={cn('bg-white shadow-card rounded', className)}
+      style={{
+        inset: '0px auto auto 0px',
+        position: `${coordinates ? 'absolute' : 'relative'}`,
+        transform: `translate(${coordinates?.x}px, ${coordinates?.y}px)`,
+      }}
+    >
       <div className="px-4 pt-4">
         <div className="flex justify-between mb-5 items-center">
           <p className="text-blue-dark  font-medium ">{title}</p>

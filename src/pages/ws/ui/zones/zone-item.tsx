@@ -1,7 +1,7 @@
-import { ReactElement, useState } from 'react'
+import { MouseEvent, ReactElement, useState } from 'react'
 
 import { t } from '@i18n'
-import { ZoneName } from '@store/filterZone'
+import zoneStore, { ZoneName } from '@store/filterZone'
 import { Button } from '@ui/button'
 import { FilterTags } from '../filter-tags'
 import { ZoneItemPopup } from './zone-item-popup'
@@ -19,6 +19,13 @@ export const ZoneItem = ({
 }): ReactElement => {
   const [shouldShowPopup, setShouldShowPopup] = useState(false)
   const isEmptySelectedItemList = selectedItemList.length === 0
+
+  const handleOpenPopup = (event: MouseEvent) => {
+    setShouldShowPopup(!shouldShowPopup)
+
+    zoneStore.setZoneItemCoordinates(event.clientX - 50, event.clientY + 30)
+  }
+
   return (
     <div>
       <div className="text-sm leading-16px  text-grey-blue font-medium mb-2 mr-3 flex justify-between">
@@ -26,7 +33,7 @@ export const ZoneItem = ({
         {!isEmptySelectedItemList && (
           <span
             className="flex item-center justify-between cursor-pointer text-blue-bright"
-            onClick={() => setShouldShowPopup(!shouldShowPopup)}
+            onClick={handleOpenPopup}
           >
             {t('ds.edit')}
           </span>
@@ -38,7 +45,7 @@ export const ZoneItem = ({
           text="Add +"
           className=" h-4"
           style={{ padding: 0 }}
-          onClick={() => setShouldShowPopup(!shouldShowPopup)}
+          onClick={handleOpenPopup}
         />
       )}
 
