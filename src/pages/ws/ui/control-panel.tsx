@@ -37,8 +37,6 @@ export const ControlPanel = observer((): ReactElement => {
               zone={ZoneName.symbol}
             />
 
-            {/* <FilterItemGenes title={t('ds.gene')} /> */}
-
             <ControlPanelDivider className="bg-blue-secondary" />
 
             <ZoneItem
