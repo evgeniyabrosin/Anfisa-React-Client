@@ -6,7 +6,7 @@ import { theme } from '@theme'
 import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
 import { Loader } from '@components/loader'
-import { Table } from './table/table'
+import { Table } from './table'
 
 const Styles = styled.div`
   overflow-x: auto;

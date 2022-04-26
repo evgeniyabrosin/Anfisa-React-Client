@@ -26,11 +26,14 @@ import Lines from '@icons/lines'
 import Loupe from '@icons/loupe'
 import Options from '@icons/options'
 import Rect from '@icons/rect'
+import Redo from '@icons/redo'
 import Settings from '@icons/settings'
 import SettingsFat from '@icons/settings-fat'
 import Sort from '@icons/sort'
 import ThreadAdd from '@icons/thread-add'
 import ThreadClose from '@icons/thread-close'
+import Undo from '@icons/undo'
+
 interface IconItem {
   size: number
   viewBox: { w: number; h: number }
@@ -47,29 +50,31 @@ export type TIcons =
   | 'Close'
   | 'Collapse'
   | 'ClosePadded'
+  | 'Cloud'
   | 'CopyLink'
   | 'Copy'
   | 'Delete'
   | 'Dnd'
+  | 'Ellipsis'
   | 'Export'
   | 'Expand'
   | 'File'
   | 'Filter'
   | 'Folder'
   | 'FullScreen'
+  | 'Import'
   | 'Info'
   | 'Lines'
   | 'Loupe'
   | 'Options'
   | 'Rect'
+  | 'Redo'
   | 'Settings'
   | 'SettingsFat'
   | 'Sort'
   | 'ThreadAdd'
   | 'ThreadClose'
-  | 'Ellipsis'
-  | 'Import'
-  | 'Cloud'
+  | 'Undo'
 
 const iconItems: Record<TIcons, IconItem> = {
   Add,
@@ -79,29 +84,31 @@ const iconItems: Record<TIcons, IconItem> = {
   Close,
   Collapse,
   ClosePadded,
+  Cloud,
   CopyLink,
   Copy,
   Delete,
   Dnd,
+  Ellipsis,
   Export,
   Expand,
   File,
   Filter,
   Folder,
   FullScreen,
+  Import,
   Info,
   Lines,
   Loupe,
   Options,
   Rect,
+  Redo,
   Settings,
   SettingsFat,
   Sort,
   ThreadAdd,
   ThreadClose,
-  Ellipsis,
-  Import,
-  Cloud,
+  Undo,
 }
 
 interface IconProps {

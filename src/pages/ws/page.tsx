@@ -20,9 +20,9 @@ import { VariantDrawer } from '@components/variant/drawer'
 import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
 import { TCondition } from '@service-providers/common/common.interface'
-import { ControlPanel } from './ui/control-panel'
-import { ModalNotes } from './ui/modal-notes'
-import { TableVariants } from './ui/table-variants'
+import { ModalNotes } from './ui//table/modal-notes'
+import { ControlPanel } from './ui/control-panel/control-panel'
+import { TableVariants } from './ui/table/table-variants'
 
 const WSPage = observer((): ReactElement => {
   const params = useParams()

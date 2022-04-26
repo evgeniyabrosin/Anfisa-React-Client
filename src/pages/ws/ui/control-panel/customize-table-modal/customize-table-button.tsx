@@ -14,7 +14,7 @@ interface Props {
   dataTestId?: string
 }
 
-export const TableProperiesButton = ({
+export const CustomizeTableButton = ({
   refEl,
   isOpen,
   onClick,
@@ -27,7 +27,7 @@ export const TableProperiesButton = ({
     onMouseUp={onMouseUp}
     text={t('ds.customizeTable')}
     variant="secondary-dark"
-    prepend={<Icon name="Settings" />}
+    prepend={<Icon name="Settings" className="text-blue-bright" />}
     append={
       <Icon
         name="Arrow"

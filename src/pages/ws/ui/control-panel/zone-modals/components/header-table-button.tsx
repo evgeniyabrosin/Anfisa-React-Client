@@ -1,36 +1,30 @@
+import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-import { Icon } from '@ui/icon'
-
-interface Props {
+interface IHeaderTableButtonProps {
   refEl: any
-  text: string
+  text?: string
   onClick: () => void
   noIcon?: boolean
   className?: Argument
-  specialIcon?: boolean
   dataTestId?: string
+  icon?: ReactElement
 }
 
 export const HeaderTableButton = ({
   text,
   refEl,
   onClick,
-  noIcon,
   className,
-  specialIcon,
   dataTestId,
-}: Props) => (
+  icon,
+}: IHeaderTableButtonProps) => (
   <div
     ref={refEl}
     onClick={onClick}
     className={cn('flex item-center justify-between cursor-pointer', className)}
     data-testid={dataTestId}
   >
-    {specialIcon && '+'}
-
-    <p>{text}</p>
-
-    {!noIcon && <Icon name="Filter" />}
+    {icon ? icon : <p>{text}</p>}
   </div>
 )

@@ -7,7 +7,6 @@ import datasetStore from '@store/dataset'
 import filterPresetsStore from '@store/filter-presets'
 import { DropDown } from '@ui/dropdown'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
-import { ControlPanelTitle } from './control-panel-title'
 
 export const ControlPanelPreset = observer((): ReactElement => {
   const { activePreset, availablePresets, isFetchingPresets } =
@@ -25,8 +24,6 @@ export const ControlPanelPreset = observer((): ReactElement => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <ControlPanelTitle title={t('ds.preset')} />
-
         {activePreset && (
           <span
             onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
@@ -42,7 +39,7 @@ export const ControlPanelPreset = observer((): ReactElement => {
           options={options}
           value={active}
           onSelect={onSelectAsync}
-          placeholder={t('general.selectAnOption')}
+          placeholder={t('general.selectPreset')}
         />
         {isFetchingPresets && (
           <div className="absolute top-0 bottom-0 left-0 right-0" />

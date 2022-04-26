@@ -7,6 +7,6 @@ type Props = {
 
 export const ControlPanelDivider = ({ className }: Props): ReactElement => (
   <div
-    className={cn('bg-blue-lighter mx-4 rounded-sm w-0.5 h-full', className)}
+    className={cn('h-3/4 bg-blue-lighter mx-4 rounded-sm w-0.5', className)}
   />
 )

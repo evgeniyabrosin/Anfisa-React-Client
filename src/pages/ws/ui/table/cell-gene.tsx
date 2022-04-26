@@ -10,7 +10,7 @@ import datasetStore from '@store/dataset'
 import columnsStore from '@store/wsColumns'
 import { CellI } from './cell-interfaces'
 import { PlusIcon } from './plus-icon'
-import { RowHeight } from './table/table'
+import { RowHeight } from './table'
 
 export const CellGene = observer(({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value[0]', []) as string[]

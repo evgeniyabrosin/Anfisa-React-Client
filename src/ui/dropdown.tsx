@@ -32,8 +32,9 @@ const StyledDropDown = styled(DropdownBase)<{
     text-overflow: ellipsis;
     cursor: pointer;
     border-radius: 4px;
-    width: 209px;
+    width: 192px;
     padding-right: 20px;
+    height: 32px;
 
     :hover {
       box-shadow: none;
