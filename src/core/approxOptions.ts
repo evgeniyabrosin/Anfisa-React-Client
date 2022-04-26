@@ -1,5 +1,5 @@
 export const approxOptions = [
-  'shared transcript',
   'shared gene',
+  'shared transcript',
   'non-intersecting transcripts',
 ]

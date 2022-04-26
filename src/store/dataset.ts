@@ -48,7 +48,7 @@ export class DatasetStore {
   indexTabReport = 0
   indexFilteredNo = 0
 
-  isXL = true
+  isXL?: boolean = undefined
   isLoadingTabReport = false
   isFetchingMore = false
   isFilterDisabled = false

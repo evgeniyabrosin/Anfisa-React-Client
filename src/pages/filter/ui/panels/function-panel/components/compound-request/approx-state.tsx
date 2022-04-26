@@ -1,47 +1,38 @@
-import { ReactElement } from 'react'
+import { ChangeEvent, ReactElement } from 'react'
 
 import { approxOptions } from '@core/approxOptions'
-import { ModeTypes } from '@core/enum/mode-types-enum'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import { Select } from '@ui/select'
-import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
-import compoundRequestStore from './compound-request.store'
 
 interface IAprroxAndStateProps {
-  simpleVariants: string[]
+  approx: string
+  setApprox: (value: ApproxNameTypes) => void
 }
 
 export const AprroxAndState = ({
-  simpleVariants,
+  approx,
+  setApprox,
 }: IAprroxAndStateProps): ReactElement => (
-  <div className="flex justify-between items-center w-full mt-4 text-14">
-    <div className="flex">
-      <div className="flex items-center">
-        <span className="mr-2 text-18 leading-14px">{'Approx:'}</span>
+  <div className="flex">
+    <div className="flex items-center">
+      <span className="mr-2 text-18 leading-14px">{'Approx:'}</span>
 
-        <Select
-          value={approxOptions[2]}
-          options={approxOptions}
-          disabled={true}
-        />
-      </div>
-
-      <div className="flex items-center ml-3">
-        <span>{t('dtree.state')}</span>
-
-        <Select
-          options={['-current-']}
-          value="-current-"
-          className="w-full ml-2"
-          disabled={true}
-        />
-      </div>
+      <Select
+        value={approx}
+        options={approxOptions}
+        disabled={datasetStore.isXL}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+          setApprox(e.target.value as ApproxNameTypes)
+        }
+      />
     </div>
 
-    <AllNotMods
-      isNotModeChecked={compoundRequestStore.currentMode === ModeTypes.Not}
-      isNotModeDisabled={simpleVariants ? simpleVariants.length === 0 : true}
-      toggleNotMode={() => compoundRequestStore.setCurrentMode(ModeTypes.Not)}
-    />
+    <div className="flex items-center ml-3">
+      <span>{t('dtree.state')}</span>
+
+      <Select options={['current']} className="w-full ml-2" disabled={true} />
+    </div>
   </div>
 )

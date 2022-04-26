@@ -1,13 +1,16 @@
 import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable } from 'mobx'
 
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
 import { TRequestCondition } from '@service-providers/common'
 import { TFuncCondition } from '@service-providers/common/common.interface'
 import { getFilteredRequestCondition } from '@utils/function-panel/getFilteredRequestCondition'
 import { getPureRequestString } from '@utils/function-panel/getPureRequestString'
+import { getApproxValue } from '@utils/getApproxValue'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
@@ -17,44 +20,33 @@ import { getSortedArray } from '@utils/getSortedArray'
 import functionPanelStore from '../../function-panel.store'
 
 class CompoundRequestStore {
-  private _requestCondition: TRequestCondition[] = [
-    [1, {}] as TRequestCondition,
-  ]
-  private _resetValue: string = ''
-  private _activeRequestIndex = this.requestCondition.length - 1
-  private _currentMode?: ModeTypes
+  public requestCondition: TRequestCondition[] = [[1, {}] as TRequestCondition]
+  public resetValue: string = ''
+  public activeRequestIndex = this.requestCondition.length - 1
+  public currentMode?: ModeTypes
+  public approx = datasetStore.isXL
+    ? ApproxNameTypes.Non_Intersecting_Transcript
+    : ApproxNameTypes.Shared_Gene
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  public get requestCondition(): TRequestCondition[] {
-    return this._requestCondition
-  }
-
-  public get resetValue(): string {
-    return this._resetValue
-  }
-
-  public get activeRequestIndex(): number {
-    return this._activeRequestIndex
-  }
-
-  public get currentMode(): ModeTypes | undefined {
-    return this._currentMode
-  }
-
   public setActiveRequestIndex(idx: number) {
-    this._activeRequestIndex = idx
+    this.activeRequestIndex = idx
   }
 
   public resetActiveRequestIndex() {
-    this._activeRequestIndex = this.requestCondition.length - 1
+    this.activeRequestIndex = this.requestCondition.length - 1
+  }
+
+  public setApprox = (approx: ApproxNameTypes) => {
+    this.approx = approx
   }
 
   public setCurrentMode(modeType?: ModeTypes): void {
     if (!modeType) {
-      this._currentMode = undefined
+      this.currentMode = undefined
     }
 
     if (this.currentMode === modeType) {
@@ -63,27 +55,33 @@ class CompoundRequestStore {
       return
     }
 
-    this._currentMode = modeType
+    this.currentMode = modeType
   }
 
   public resetCurrentMode(): void {
-    this._currentMode = undefined
+    this.currentMode = undefined
   }
 
   public setRequestCondition(requestCondition: TRequestCondition[]) {
-    this._requestCondition = requestCondition
+    this.requestCondition = requestCondition
   }
 
   public setResetValue(resetValue: string) {
-    this._resetValue = resetValue
+    this.resetValue = resetValue
   }
 
   public clearRequestCondition() {
-    this._requestCondition = [[1, {}] as TRequestCondition]
+    this.requestCondition = [[1, {}] as TRequestCondition]
   }
 
   public clearResetValue() {
-    this._resetValue = ''
+    this.resetValue = ''
+  }
+
+  public clearApprox() {
+    this.approx = datasetStore.isXL
+      ? ApproxNameTypes.Non_Intersecting_Transcript
+      : ApproxNameTypes.Shared_Gene
   }
 
   public get selectedFilterValue(): string {
@@ -95,7 +93,7 @@ class CompoundRequestStore {
       request: filteredRequestCondition,
     }).replace(/\s+/g, '')
 
-    return `"request":${getPureRequestString(requestString)}}`
+    return getPureRequestString(requestString)
   }
 
   // request creation step by step
@@ -218,7 +216,7 @@ class CompoundRequestStore {
       getConditionJoinMode(this.currentMode),
       ['True'],
       {
-        approx: null,
+        approx: datasetStore.isXL ? null : getApproxValue(this.approx),
         state: null,
         request: JSON.parse(`${getPureRequestString(requestString)}`),
       },
@@ -235,6 +233,7 @@ class CompoundRequestStore {
     this.resetCurrentMode()
     this.clearResetValue()
     this.clearRequestCondition()
+    this.clearApprox()
   }
 }
 
