@@ -60,7 +60,12 @@ export const ZoneItemPopup = observer(
 
     return (
       <Portal>
-        <PopupCard title={title} onClose={onClose} onApply={handleApply}>
+        <PopupCard
+          title={title}
+          onClose={onClose}
+          onApply={handleApply}
+          className="relative bottom-16"
+        >
           <div>
             <InputSearch
               value={searchValue}
@@ -68,31 +73,34 @@ export const ZoneItemPopup = observer(
               onChange={event => setSearchValue(event.target.value)}
             />
 
-            <div>
+            <div className="my-5 flex justify-between">
               <span className="text-14 text-grey-blue">
                 {zoneStore.getSelectedItemsQuantity(zone) + ' Selected'}
               </span>
               <span
-                className="cursor-pointer"
+                className="cursor-pointer text-12 text-blue-bright leading-14"
                 onClick={() => zoneStore.clearLocalItems(zone)}
               >
                 {t('general.clearAll')}
               </span>
             </div>
 
-            <div className="mt-5 h-60 overflow-y-scroll">
+            <div className="h-60 overflow-y-scroll">
               {filteredItemList.map(itemName => {
                 return (
-                  <div key={itemName}>
+                  <label
+                    key={itemName}
+                    className="flex items-center mb-4 text-12 font-medium cursor-pointer"
+                  >
                     <Checkbox
                       checked={zoneStore.localGenes.includes(itemName)}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mr-2"
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
                         handleCheck(event.target.checked, itemName, zone)
                       }
                     />
-                    <span>{itemName}</span>
-                  </div>
+                    <span data-testid="checkbox-list-element">{itemName}</span>
+                  </label>
                 )
               })}
             </div>
