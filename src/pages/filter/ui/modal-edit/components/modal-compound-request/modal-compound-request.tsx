@@ -2,7 +2,9 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
@@ -19,21 +21,10 @@ import { RequestControlButtons } from './components/request-control-buttons'
 import modalCompoundRequestStore from './modal-compound-request.store'
 
 export const ModalCompoundRequest = observer((): ReactElement => {
-  const {
-    variants,
-    approxValues,
-    approxOptions,
-    groupName,
-    currentStepGroups,
-  } = modalEditStore
+  const { variants, groupName, currentStepGroups } = modalEditStore
 
-  const {
-    stateCondition,
-    requestCondition,
-    approxCondition,
-    stateOptions,
-    activeRequestIndex,
-  } = modalCompoundRequestStore
+  const { requestCondition, activeRequestIndex, approx } =
+    modalCompoundRequestStore
 
   const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeModalStore.groupIndexToChange
@@ -43,14 +34,22 @@ export const ModalCompoundRequest = observer((): ReactElement => {
 
   const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
 
-  const handleSetCondition = (value: string, type: string) => {
-    modalCompoundRequestStore.setCondition(value, type)
+  const handleSetCondition = (approx: ApproxNameTypes) => {
+    modalCompoundRequestStore.setApprox(approx)
   }
 
   useEffect(() => {
     if (currentGroup) {
       modalCompoundRequestStore.checkExistedSelectedFilters(currentGroup)
+
+      return
     }
+
+    modalCompoundRequestStore.setApprox(
+      datasetStore.isXL
+        ? ApproxNameTypes.Non_Intersecting_Transcript
+        : ApproxNameTypes.Shared_Gene,
+    )
 
     return () => dtreeStore.resetStatFuncData()
 
@@ -70,11 +69,7 @@ export const ModalCompoundRequest = observer((): ReactElement => {
 
       <div className="flex justify-between w-full mt-4 text-14">
         <ApproxStateModalMods
-          approxOptions={approxOptions}
-          approxValues={approxValues}
-          approxCondition={approxCondition}
-          stateOptions={stateOptions}
-          stateCondition={stateCondition}
+          approx={approx}
           handleSetCondition={handleSetCondition}
         />
 

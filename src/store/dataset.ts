@@ -48,7 +48,7 @@ export class DatasetStore {
   indexTabReport = 0
   indexFilteredNo = 0
 
-  isXL = true
+  isXL?: boolean = undefined
   isLoadingTabReport = false
   isFetchingMore = false
   isFilterDisabled = false
@@ -161,7 +161,7 @@ export class DatasetStore {
     const shouldDataBeUpdated = isTabReportEmpty && isWsRecordsEmpty
 
     if (shouldDataBeUpdated) {
-      await this.fetchWsListAsync(this.isXL, 'withoutTabReport')
+      await this.fetchWsListAsync('withoutTabReport')
 
       await this.fetchFilteredTabReportAsync()
     }
@@ -282,7 +282,7 @@ export class DatasetStore {
     })
   }
 
-  async fetchWsListAsync(isXL?: boolean, kind?: string) {
+  async fetchWsListAsync(kind?: string) {
     this.setIsLoadingTabReport(true)
 
     const params: IWsListArguments | IDsListArguments = {
@@ -292,35 +292,20 @@ export class DatasetStore {
 
     if (!this.isFilterDisabled) {
       params.conditions = kind === 'reset' ? [] : this.getConditions()
-      if (!isXL) {
-        ;(params as IWsListArguments).zone = this.zone
-      }
+      ;(params as IWsListArguments).zone = this.zone
     }
 
     this.indexFilteredNo = 0
 
-    if (isXL) {
-      const dsList = await datasetProvider.getDsList(params)
-      const taskResult = await this.getJobStatusAsync(dsList.task_id)
+    const wsList = await wsDatasetProvider.getWsList(params)
+    runInAction(() => {
+      this.filteredNo = wsList.records
+        ? wsList.records.map((variant: { no: number }) => variant.no)
+        : []
 
-      runInAction(() => {
-        this.filteredNo = taskResult?.data?.[0].samples
-          ? taskResult.data[0].samples.map(
-              (variant: { no: number }) => variant.no,
-            )
-          : []
-      })
-    } else {
-      const wsList = await wsDatasetProvider.getWsList(params)
-      runInAction(() => {
-        this.filteredNo = wsList.records
-          ? wsList.records.map((variant: { no: number }) => variant.no)
-          : []
-
-        this.statAmount = wsList['filtered-counts']
-        this.wsRecords = wsList.records
-      })
-    }
+      this.statAmount = wsList['filtered-counts']
+      this.wsRecords = wsList.records
+    })
 
     if (kind !== 'withoutTabReport') await this.fetchFilteredTabReportAsync()
 

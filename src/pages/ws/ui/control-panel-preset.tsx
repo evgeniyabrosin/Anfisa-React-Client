@@ -19,7 +19,7 @@ export const ControlPanelPreset = observer((): ReactElement => {
   const onSelectAsync = (arg: Option) => {
     filterPresetsStore.setActivePreset(arg.value)
 
-    datasetStore.fetchWsListAsync(false, 'reset')
+    datasetStore.fetchWsListAsync('reset')
   }
 
   return (

@@ -1,19 +1,24 @@
 import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import { TFuncCondition } from '@service-providers/common/common.interface'
+import {
+  ICompoundHetArgs,
+  TFuncCondition,
+} from '@service-providers/common/common.interface'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { getApproxName } from '@utils/getApproxName'
+import { getApproxValue } from '@utils/getApproxValue'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import dtreeModalStore from '../../../../modals.store'
 import modalEditStore, { IParams } from '../../modal-edit.store'
 
 class ModalCompoundHetStore {
-  stateCondition = '-current-'
-  approxCondition = 'transcript'
-  stateOptions: string[] = [this.stateCondition]
+  public approx: ApproxNameTypes = ApproxNameTypes.Non_Intersecting_Transcript
 
   currentMode?: ModeTypes
 
@@ -29,17 +34,9 @@ class ModalCompoundHetStore {
     this.currentMode = undefined
   }
 
-  public setStateCondition(condtition: string): void {
-    this.stateCondition = condtition
-  }
-
-  public setApproxCondition(condtition: string): void {
-    this.approxCondition = condtition
-  }
-
-  public resetConditions(): void {
-    this.stateCondition = '-current-'
-    this.approxCondition = 'transcript'
+  public setApprox(approx: ApproxNameTypes) {
+    this.approx = approx
+    this.fetchStatFunc()
   }
 
   public openModalAttribute(): void {
@@ -52,84 +49,60 @@ class ModalCompoundHetStore {
     dtreeStore.addSelectedFilter(modalEditStore.variants[0][0])
 
     const params: IParams = {
-      approx:
-        this.approxCondition === 'transcript' ? null : this.approxCondition,
-    }
-
-    if (this.stateCondition) {
-      params.state =
-        JSON.stringify(this.stateOptions) === JSON.stringify(['-current-'])
-          ? null
-          : this.stateOptions
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
     }
 
     addAttributeToStep(action, 'func', null, params, this.currentMode)
 
     dtreeStore.resetSelectedFilters()
     dtreeModalStore.closeModalCompoundHet()
-    this.resetCurrentMode()
+    this.resetData()
   }
 
   public closeModal(): void {
     dtreeModalStore.closeModalCompoundHet()
-    this.resetCurrentMode()
+    this.resetData()
   }
 
   public getApprox(approxValue: string): null | string {
     return approxValue === 'transcript' ? null : `${approxValue}`
   }
 
-  public setCondition = (value: string, type: string) => {
-    if (type === 'approx') {
-      this.setApproxCondition(value)
-
-      const params = `{"approx":${this.getApprox(value)},"state":${
-        this.stateCondition !== '-current-' ? `"${this.stateCondition}"` : null
-      }}`
-
-      dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
-    }
-
-    if (type === 'state') {
-      this.setStateCondition(value)
-
-      const params = `{"approx":${this.getApprox(
-        this.approxCondition,
-      )},"state":${value !== '-current-' ? `"${value}"` : null}}`
-
-      dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
-    }
-  }
-
   public saveChanges = () => {
-    const params: IParams = { approx: this.approxCondition }
-
-    if (this.stateCondition) {
-      params.state =
-        JSON.stringify(this.stateOptions) === JSON.stringify(['-current-'])
-          ? null
-          : this.stateOptions
+    const params: IParams = {
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
     }
 
     changeFunctionalStep(params, this.currentMode)
     dtreeModalStore.closeModalCompoundHet()
-    this.resetCurrentMode()
+    this.resetData()
   }
 
-  public fetchStatFunc(currentGroup: TFuncCondition): void {
-    const params = `{"approx":${this.getApprox(this.approxCondition)},"state":${
-      this.stateCondition === '-current-' || !this.stateCondition
-        ? null
-        : `"${this.stateCondition}"`
-    }}`
+  public fetchStatFunc(currentGroup?: TFuncCondition): void {
+    const params = JSON.stringify({
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
+      state: null,
+    })
 
     if (currentGroup) {
       const conditionJoinType = currentGroup[2]
 
       this.currentMode = getCurrentModeType(conditionJoinType)
+
+      if (!datasetStore.isXL) {
+        const currentGroupApprox = currentGroup[4] as ICompoundHetArgs
+        const approxName = getApproxName(
+          currentGroupApprox['approx'] || undefined,
+        )
+        this.setApprox(approxName)
+      }
     }
 
     dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
+  }
+
+  public resetData() {
+    this.resetCurrentMode()
   }
 }
 

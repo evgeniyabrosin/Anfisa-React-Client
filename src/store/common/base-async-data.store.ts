@@ -72,16 +72,18 @@ export abstract class BaseAsyncDataStore<Data, Query> {
 
     const { keepPreviousData } = { ...defaultOptions, ...options }
 
+    let lastOnlineQuery: Query | undefined
     let disposeObserver: () => void
 
     onBecomeObserved(this, 'data', () => {
       const disposeInvalidator = reaction(
         () => this.query,
         () => {
+          lastOnlineQuery = this.query
           this.reconcile(keepPreviousData ?? false)
         },
         {
-          fireImmediately: !this.lastUpdate,
+          fireImmediately: !comparer.structural(lastOnlineQuery, this.query),
         },
       )
 

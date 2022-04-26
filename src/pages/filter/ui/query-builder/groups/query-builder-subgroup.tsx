@@ -3,12 +3,14 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import { PredictionPowerIndicator } from '@components/prediction-power-indicator'
 import { TPropertyStatus } from '@service-providers/common'
 import { ExpandContentButton } from '../ui/expand-content-button'
 import { QueryBuilderSubgroupItem } from './query-builder-subgroup-item'
 
 interface IProps {
   groupName: string
+  predictionPower: number | undefined
   subGroupData: TPropertyStatus[]
   isContentExpanded: boolean
   changeIndicator: number
@@ -18,6 +20,7 @@ interface IProps {
 export const QueryBuilderSubgroup = observer(
   ({
     groupName,
+    predictionPower,
     subGroupData,
     isContentExpanded,
     changeIndicator,
@@ -54,7 +57,16 @@ export const QueryBuilderSubgroup = observer(
             },
           )}
         >
-          <span data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}>
+          {predictionPower !== undefined && (
+            <PredictionPowerIndicator
+              className="mr-2"
+              value={predictionPower}
+            />
+          )}
+          <span
+            data-testid={DecisionTreesResultsDataCy.groupGraphHeaders}
+            className="flex-1"
+          >
             {groupName}
           </span>
 
