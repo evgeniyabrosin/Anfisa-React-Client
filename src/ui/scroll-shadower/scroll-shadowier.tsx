@@ -1,125 +1,139 @@
 import React, { FC, useEffect, useRef } from 'react'
+import cn, { Argument } from 'classnames'
 
 import {
-  Container,
-  RootContainer,
-  ShadowBottom,
-  ShadowLeft,
-  ShadowRight,
-  ShadowTop,
-} from '@ui/scroll-shadower/scroll-shadowier.styles'
+  createShadow,
+  createTrigger,
+  DisplayValue,
+  Placement,
+} from '@ui/scroll-shadower/scroll-shadowier.utils'
 
-export const ScrollShadowier: FC = ({ children, ...props }) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const left = useRef<HTMLDivElement>(null)
-  const right = useRef<HTMLDivElement>(null)
-  const bottom = useRef<HTMLDivElement>(null)
-  const top = useRef<HTMLDivElement>(null)
+interface Prop {
+  classname: Argument
+}
+
+export const ScrollShadowier: FC<Prop> = ({ classname, children }) => {
+  const shadowsRef = useRef<HTMLDivElement>(null)
+  const scrollableRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const resizeHandler = () => {
-      if (
-        !ref.current ||
-        !top.current ||
-        !bottom.current ||
-        !left.current ||
-        !right.current
-      ) {
-        return
-      }
-
-      const {
-        offsetWidth = 0,
-        offsetHeight = 0,
-        clientHeight = 0,
-        clientWidth = 0,
-      } = ref.current || {}
-
-      const verticalOffset = offsetHeight - clientHeight
-      const horizontalOffset = offsetWidth - clientWidth
-
-      bottom.current.style.bottom = verticalOffset + 'px'
-      bottom.current.style.right = horizontalOffset + 'px'
-
-      top.current.style.right = horizontalOffset + 'px'
-
-      right.current.style.right = horizontalOffset + 'px'
-      right.current.style.bottom = verticalOffset + 'px'
-
-      left.current.style.bottom = verticalOffset + 'px'
+    const scrollable = scrollableRef.current
+    const shadows = shadowsRef.current
+    if (!scrollable || !shadows) {
+      return
     }
 
-    const scrollHandler = () => {
-      if (
-        !ref.current ||
-        !top.current ||
-        !bottom.current ||
-        !left.current ||
-        !right.current
-      ) {
-        return
-      }
+    const area = scrollable?.firstElementChild as HTMLDivElement
 
-      const none = 'none'
-      const initial = 'initial'
-
-      const {
-        scrollWidth = 0,
-        scrollLeft = 0,
-        offsetWidth = 0,
-        scrollHeight = 0,
-        scrollTop = 0,
-        offsetHeight = 0,
-        clientHeight = 0,
-        clientWidth = 0,
-      } = ref.current || {}
-
-      const verticalOffset = offsetHeight - clientHeight
-      const horizontalOffset = offsetWidth - clientWidth
-
-      const onLeft = scrollLeft != 0
-      const onRight = scrollLeft + offsetWidth + horizontalOffset < scrollWidth
-      const onTop = scrollTop > 0
-      const onBottom = scrollTop + offsetHeight + verticalOffset < scrollHeight
-
-      left.current.style.display = onLeft ? initial : none
-      right.current.style.display = onRight ? initial : none
-      top.current.style.display = onTop ? initial : none
-      bottom.current.style.display = onBottom ? initial : none
+    if (!area) {
+      return
     }
-    /* const options = {
-      root: ref.current,
-      rootMargin: '0px',
-      threshold: [0.0, 1.0],
-    }*/
-    const resizeObserver = new ResizeObserver(resizeHandler)
-    //const scrollObserver = new IntersectionObserver(scrollHandler, options)
 
-    scrollHandler()
-    resizeHandler()
+    const topTrigger = createTrigger(area, Placement.top)
+    const rightTrigger = createTrigger(area, Placement.right)
+    const bottomTrigger = createTrigger(area, Placement.bottom)
+    const leftTrigger = createTrigger(area, Placement.left)
 
-    const node = ref.current
-    if (!node) return
+    const topShadow = createShadow(shadows, Placement.top)
+    const rightShadow = createShadow(shadows, Placement.right)
+    const bottomShadow = createShadow(shadows, Placement.bottom)
+    const leftShadow = createShadow(shadows, Placement.left)
 
-    //scrollObserver.observe(ref.current)
-    node.addEventListener('scroll', scrollHandler)
-    resizeObserver.observe(node)
+    const resizeObserver = new ResizeObserver(entries => {
+      const {
+        contentRect: { width, height },
+      } = entries[0]
+      shadows.style.width = `${width}px`
+      shadows.style.height = `${height}px`
+    })
+
+    resizeObserver.observe(scrollable)
+
+    const intersectionObserver = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          switch (entry.target) {
+            case topTrigger:
+              topShadow.style.display = entry.isIntersecting
+                ? DisplayValue.none
+                : DisplayValue.block
+              break
+            case rightTrigger:
+              rightShadow.style.display = entry.isIntersecting
+                ? DisplayValue.none
+                : DisplayValue.block
+              break
+            case bottomTrigger:
+              bottomShadow.style.display = entry.isIntersecting
+                ? DisplayValue.none
+                : DisplayValue.block
+              break
+            case leftTrigger:
+              leftShadow.style.display = entry.isIntersecting
+                ? DisplayValue.none
+                : DisplayValue.block
+              break
+          }
+        }
+      },
+      {
+        root: scrollable,
+      },
+    )
+    intersectionObserver.observe(topTrigger)
+    intersectionObserver.observe(rightTrigger)
+    intersectionObserver.observe(bottomTrigger)
+    intersectionObserver.observe(leftTrigger)
+
     return () => {
-      resizeObserver.unobserve(node)
-      node.removeEventListener('scroll', scrollHandler)
-      //scrollObserver.unobserve(ref.current)
+      ;[
+        topTrigger,
+        rightTrigger,
+        bottomTrigger,
+        leftTrigger,
+        topShadow,
+        rightShadow,
+        bottomShadow,
+        leftShadow,
+      ].forEach(target => target.remove())
+      intersectionObserver.disconnect()
+      resizeObserver.disconnect()
     }
   }, [])
 
   return (
-    <RootContainer>
-      <ShadowBottom ref={bottom} />
-      <ShadowTop ref={top} />
-      <ShadowLeft ref={left} />
-      <ShadowRight ref={right} />
-      <Container ref={ref} {...props}>
-        {children}
-      </Container>
-    </RootContainer>
+    <div
+      className={cn(classname)}
+      style={{
+        position: 'relative',
+      }}
+    >
+      <div
+        ref={shadowsRef}
+        style={{ position: 'absolute', left: 0, top: 0 }}
+      ></div>
+      <div
+        ref={scrollableRef}
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          overflow: 'auto',
+        }}
+      >
+        <div
+          style={{
+            position: 'relative',
+            width: 'fit-content',
+            height: 'fit-content',
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
   )
 }
