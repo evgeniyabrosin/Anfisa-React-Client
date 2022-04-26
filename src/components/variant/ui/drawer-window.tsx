@@ -19,7 +19,6 @@ import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
-import { ScrollShadowier } from '@ui/scroll-shadower/scroll-shadowier'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
@@ -172,31 +171,28 @@ export const DrawerWindow = observer(
           onStartScroll={handleStartScroll}
           className="cursor-grab"
         >
-          <ScrollShadowier>
-            <div
-              className={cn('content-child')}
-              id={`drawer-${aspect.name}`}
-              style={{
-                height: get(layout, aspect.name, 0).h,
-              }}
-              ref={ref}
-            >
-              {aspect.type === 'pre' ? (
-                <DrawerPreView
-                  {...(aspect as ICommonAspectDescriptor &
-                    IPreAspectDescriptor)}
-                />
-              ) : (
-                <DrawerTable
-                  {...(aspect as ICommonAspectDescriptor &
-                    ITableAspectDescriptor)}
-                  name={aspect.name}
-                  shouldAddShadow={shouldAddShadow}
-                  filterSelection={filterSelection}
-                />
-              )}
-            </div>
-          </ScrollShadowier>
+          <div
+            className={cn('content-child')}
+            id={`drawer-${aspect.name}`}
+            style={{
+              height: get(layout, aspect.name, 0).h,
+            }}
+            ref={ref}
+          >
+            {aspect.type === 'pre' ? (
+              <DrawerPreView
+                {...(aspect as ICommonAspectDescriptor & IPreAspectDescriptor)}
+              />
+            ) : (
+              <DrawerTable
+                {...(aspect as ICommonAspectDescriptor &
+                  ITableAspectDescriptor)}
+                name={aspect.name}
+                shouldAddShadow={shouldAddShadow}
+                filterSelection={filterSelection}
+              />
+            )}
+          </div>
         </ScrollContainer>
       </>
     )
