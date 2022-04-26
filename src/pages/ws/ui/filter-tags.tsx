@@ -7,18 +7,18 @@ import { Icon } from '@ui/icon'
 
 // TODO: add types
 // type Props = {
-//   data?: string[]
+//   list?: string[]
 //   zone: ZoneName
 // }
 
-export const FilterTags = observer(({ data, zone }: any) => {
+export const FilterTags = observer(({ list, zone }: any) => {
   const deleteTag = (item: string) => {
     zoneStore.removeItem(item, zone, 'fast')
 
     datasetStore.fetchWsListAsync()
   }
 
-  const visibleTagsData = data?.slice(0, 2)
+  const visibleTagsData = list?.slice(0, 2)
 
   return (
     <div className="flex flex-wrap items-center w-auto max-w-full">
@@ -43,11 +43,11 @@ export const FilterTags = observer(({ data, zone }: any) => {
         <div
           className={cn(
             'items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg flex-nowrap',
-            data && data.length >= 3 ? 'inline-flex' : 'hidden',
+            list && list.length >= 3 ? 'inline-flex' : 'hidden',
           )}
         >
           {'+ '}
-          {data && data.length - 2}
+          {list && list.length - 2}
         </div>
       </div>
     </div>

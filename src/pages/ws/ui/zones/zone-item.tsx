@@ -9,13 +9,15 @@ import { ZoneItemPopup } from './zone-item-popup'
 export const ZoneItem = ({
   title,
   itemList,
-  zone,
   selectedItemList,
+  localItemList,
+  zone,
 }: {
   title: string
   itemList: string[]
-  zone: ZoneName
   selectedItemList: string[]
+  localItemList: string[]
+  zone: ZoneName
 }): ReactElement => {
   const [shouldShowPopup, setShouldShowPopup] = useState(false)
   const isEmptySelectedItemList = selectedItemList.length === 0
@@ -28,8 +30,8 @@ export const ZoneItem = ({
 
   return (
     <div>
-      <div className="text-sm leading-16px  text-grey-blue font-medium mb-2 mr-3 flex justify-between">
-        <span>{title}</span>
+      <div className="text-sm leading-16px  text-grey-blue font-medium mb-2 flex justify-between">
+        <span className="pr-2">{title}</span>
         {!isEmptySelectedItemList && (
           <span
             className="flex item-center justify-between cursor-pointer text-blue-bright"
@@ -58,7 +60,7 @@ export const ZoneItem = ({
         }}
         className="flex justify-between mt-0.4"
       >
-        <FilterTags data={selectedItemList} zone={zone} />
+        <FilterTags list={selectedItemList} zone={zone} />
 
         {shouldShowPopup && (
           <ZoneItemPopup
@@ -66,6 +68,7 @@ export const ZoneItem = ({
             itemList={itemList}
             zone={zone}
             onClose={() => setShouldShowPopup(false)}
+            localItemList={localItemList}
           />
         )}
       </div>

@@ -6,6 +6,7 @@ import datasetStore from './dataset'
 
 export enum ZoneName {
   symbol = 'Symbol',
+  panels = 'Panels',
 }
 
 class ZoneStore {
@@ -148,12 +149,22 @@ class ZoneStore {
 
   createSelectedZoneFilter(type: string) {
     if (type === 'isGenes') this.selectedGenes = this.localGenes
-
     if (type === 'isGenesList') this.selectedGenesList = this.localGenesList
-
     if (type === 'isSamples') this.selectedSamples = this.localSamples
-
     if (type === 'isTags') this.selectedTags = this.localTags
+  }
+
+  applySelectedZoneFilter(zone: ZoneName): void {
+    switch (zone) {
+      case ZoneName.symbol:
+        this.selectedGenes = this.localGenes
+        break
+      case ZoneName.panels:
+        this.selectedGenesList = this.localGenesList
+        break
+      default:
+        break
+    }
   }
 
   // TODO: delete it after complete refactor
@@ -250,6 +261,10 @@ class ZoneStore {
         this.addGene(itemName)
         break
 
+      case ZoneName.panels:
+        this.addGenesList(itemName)
+        break
+
       default:
         break
     }
@@ -259,6 +274,10 @@ class ZoneStore {
     switch (zone) {
       case ZoneName.symbol:
         this.removeGene(itemName, type)
+        break
+
+      case ZoneName.panels:
+        this.removeGenesList(itemName, type)
         break
 
       default:
@@ -271,6 +290,9 @@ class ZoneStore {
       case ZoneName.symbol:
         return this.localGenes.length
 
+      case ZoneName.panels:
+        return this.localGenesList.length
+
       default:
         break
     }
@@ -282,6 +304,10 @@ class ZoneStore {
         this.localGenes = this.selectedGenes
         break
 
+      case ZoneName.panels:
+        this.localGenesList = this.selectedGenesList
+        break
+
       default:
         break
     }
@@ -291,6 +317,10 @@ class ZoneStore {
     switch (zone) {
       case ZoneName.symbol:
         this.localGenes = []
+        break
+
+      case ZoneName.panels:
+        this.localGenesList = []
         break
 
       default:

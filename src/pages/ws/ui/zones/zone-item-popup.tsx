@@ -15,11 +15,13 @@ export const ZoneItemPopup = observer(
     itemList,
     onClose,
     zone,
+    localItemList,
   }: {
     title: string
     itemList: string[]
     onClose: () => void
     zone: ZoneName
+    localItemList: string[]
   }): ReactElement => {
     useEffect(
       () => () => {
@@ -44,8 +46,8 @@ export const ZoneItemPopup = observer(
     const handleApply = () => {
       onClose()
 
-      zoneStore.createSelectedZoneFilter('isGenes')
-      datasetStore.addZone(['Symbol', zoneStore.selectedGenes])
+      zoneStore.applySelectedZoneFilter(zone)
+      datasetStore.addZone([zone, localItemList])
       datasetStore.fetchWsListAsync()
     }
 
@@ -98,7 +100,7 @@ export const ZoneItemPopup = observer(
                     className="flex items-center mb-4 text-12 font-medium cursor-pointer"
                   >
                     <Checkbox
-                      checked={zoneStore.localGenes.includes(itemName)}
+                      checked={localItemList.includes(itemName)}
                       className="w-4 h-4 mr-2"
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
                         handleCheck(event.target.checked, itemName, zone)

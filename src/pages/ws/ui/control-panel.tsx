@@ -6,7 +6,6 @@ import datasetStore from '@store/dataset'
 import zoneStore, { ZoneName } from '@store/filterZone'
 import { ControlPanelDivider } from './control-panel-divider'
 import { EditFilter } from './control-panel-edit-filter'
-import { FilterItemGenesList } from './control-panel-filter-genes-list'
 import { FilterItemSamples } from './control-panel-filter-samples'
 import { FilterItemTags } from './control-panel-filter-tags'
 import { ControlPanelPreset } from './control-panel-preset'
@@ -36,6 +35,7 @@ export const ControlPanel = observer((): ReactElement => {
               title={t('ds.gene')}
               itemList={datasetStore.genes}
               selectedItemList={zoneStore.selectedGenes}
+              localItemList={zoneStore.localGenes}
               zone={ZoneName.symbol}
             />
 
@@ -43,7 +43,13 @@ export const ControlPanel = observer((): ReactElement => {
 
             <ControlPanelDivider className="bg-blue-secondary" />
 
-            <FilterItemGenesList title={t('ds.geneList')} />
+            <ZoneItem
+              title={t('ds.geneList')}
+              itemList={datasetStore.genesList}
+              selectedItemList={zoneStore.selectedGenesList}
+              localItemList={zoneStore.localGenesList}
+              zone={ZoneName.panels}
+            />
 
             <ControlPanelDivider className="bg-blue-secondary" />
 
