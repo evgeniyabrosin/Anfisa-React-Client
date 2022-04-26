@@ -20,13 +20,17 @@ export const CustomInheritanceMode = observer(() => {
   const { selectStates, scenario, resetValue } = customInheritanceModeStore
 
   const setComplexScenario = (resetName: string): void => {
+    if (resetValue !== resetName) filterStore.setTouched(true)
     customInheritanceModeStore.setComplexScenario(resetName)
-    filterStore.setTouched(true)
   }
 
   const setSingleScenario = (group: string, selectValue: string): void => {
+    problemGroups.forEach((gName, index) => {
+      if (gName === group && selectStates[index] !== selectValue) {
+        filterStore.setTouched(true)
+      }
+    })
     customInheritanceModeStore.setSingleScenario(group, selectValue)
-    filterStore.setTouched(true)
   }
 
   // set/reset data

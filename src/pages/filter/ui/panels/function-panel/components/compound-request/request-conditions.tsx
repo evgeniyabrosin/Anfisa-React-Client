@@ -36,11 +36,13 @@ export const RequestConditions = observer(
                 <InputNumber
                   value={item[0]}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    if (item[0] !== Number.parseInt(e.target.value)) {
+                      filterStore.setTouched(true)
+                    }
                     compoundRequestStore.handleRequestConditionNumber(
                       index,
                       e.target.value,
                     )
-                    filterStore.setTouched(true)
                   }}
                   className="shadow-dark w-1/3 h-5 bg-blue-medium"
                 />
@@ -48,39 +50,43 @@ export const RequestConditions = observer(
 
               <div className="flex flex-1 justify-between step-content-area">
                 {functionPanelStore.problemGroups.map(
-                  (group: string, currNo: number) => (
-                    <div
-                      className="step-content-area"
-                      key={group}
-                      onClick={() => {
-                        compoundRequestStore.handleActiveRequest(index)
-                        filterStore.setTouched(true)
-                      }}
-                    >
-                      <span className="cursor-pointer step-content-area">
-                        {group}
-                      </span>
-
-                      <Select
-                        onClick={(e: MouseEvent<any>) => e.stopPropagation()}
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                          compoundRequestStore.handleSetSingleRequest(
-                            index,
-                            currNo,
-                            e.target,
-                          )
-                          filterStore.setTouched(true)
+                  (group: string, currNo: number) => {
+                    const value = getSelectedValue(
+                      group,
+                      index,
+                      compoundRequestStore.requestCondition,
+                    )
+                    return (
+                      <div
+                        className="step-content-area"
+                        key={group}
+                        onClick={() => {
+                          compoundRequestStore.handleActiveRequest(index)
                         }}
-                        className="w-auto ml-1"
-                        options={selectOptions}
-                        value={getSelectedValue(
-                          group,
-                          index,
-                          compoundRequestStore.requestCondition,
-                        )}
-                      />
-                    </div>
-                  ),
+                      >
+                        <span className="cursor-pointer step-content-area">
+                          {group}
+                        </span>
+
+                        <Select
+                          onClick={(e: MouseEvent<any>) => e.stopPropagation()}
+                          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                            if (value !== e.target.value) {
+                              filterStore.setTouched(true)
+                            }
+                            compoundRequestStore.handleSetSingleRequest(
+                              index,
+                              currNo,
+                              e.target,
+                            )
+                          }}
+                          className="w-auto ml-1"
+                          options={selectOptions}
+                          value={value}
+                        />
+                      </div>
+                    )
+                  },
                 )}
               </div>
             </div>

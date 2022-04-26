@@ -66,9 +66,9 @@ export const CompundHet = observer((): ReactElement => {
     filterStore.setTouched(false)
   }
 
-  const setApprox = (approx: ApproxNameTypes) => {
-    compoundHetStore.setApprox(approx)
-    filterStore.setTouched(true)
+  const setApprox = (newApprox: ApproxNameTypes) => {
+    if (newApprox !== approx) filterStore.setTouched(true)
+    compoundHetStore.setApprox(newApprox)
   }
 
   const toggleNotMode = () => {

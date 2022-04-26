@@ -72,9 +72,9 @@ export const GeneRegion = observer(() => {
   }
 
   const onChangeInput = (e: any) => {
+    if (locusValue !== e.target.value) filterStore.setTouched(true)
     geneRegionStore.setLocusValue(e.target.value)
     validateValue(e.target.value)
-    filterStore.setTouched(true)
   }
 
   const onSubmit = () => {

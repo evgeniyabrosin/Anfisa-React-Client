@@ -74,9 +74,9 @@ export const CompoundRequest = observer((): ReactElement => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
-  const setApprox = (approx: ApproxNameTypes) => {
-    compoundRequestStore.setApprox(approx)
-    filterStore.setTouched(true)
+  const setApprox = (newApprox: ApproxNameTypes) => {
+    if (newApprox !== approx) filterStore.setTouched(true)
+    compoundRequestStore.setApprox(newApprox)
   }
 
   const toggleNotMode = () => {
