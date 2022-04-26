@@ -9,8 +9,7 @@ import {
   TFilteringStatCounts,
   TPropertyStatus,
 } from '@service-providers/common'
-
-export type TStatUnitsQueryBuilder = Record<string, TPropertyStatus[]>
+import { getQueryBuilder, TQueryBuilder } from '@utils/query-builder'
 
 export abstract class BaseStatUnitsStore<
   Data extends TFilteringStat,
@@ -42,18 +41,11 @@ export abstract class BaseStatUnitsStore<
     return toJS(this.data?.filteredCounts)
   }
 
-  get queryBuilder(): TStatUnitsQueryBuilder {
-    const groups: TStatUnitsQueryBuilder = {}
-
-    if (this.list) {
-      for (const item of this.list) {
-        if (groups[item.vgroup]) {
-          groups[item.vgroup].push(item)
-        } else {
-          groups[item.vgroup] = [item]
-        }
-      }
+  get queryBuilder(): TQueryBuilder {
+    if (!this.list || !this.filteredCounts) {
+      return []
     }
-    return groups
+
+    return getQueryBuilder(this.list, this.filteredCounts)
   }
 }

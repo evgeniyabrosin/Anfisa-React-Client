@@ -1,13 +1,13 @@
 import { tableColumnMap } from '@core/table-column-map'
-import { CellFilter } from './ui/cell-filter'
-import { CellGene } from './ui/cell-gene'
-import { CellInSilico } from './ui/cell-in-silico'
-import { PredicationI } from './ui/cell-interfaces'
-import { CellPopulation } from './ui/cell-population'
-import { CellProteinChange } from './ui/cell-protein-change'
-import { CellSamples } from './ui/cell-samples'
-import { CellTags } from './ui/cell-tags'
-import { CellVariant } from './ui/cell-variant'
+import { CellInSilico } from './ui//table/cell-in-silico'
+import { PredicationI } from './ui//table/cell-interfaces'
+import { CellPopulation } from './ui//table/cell-population'
+import { CellProteinChange } from './ui//table/cell-protein-change'
+import { CellSamples } from './ui//table/cell-samples'
+import { CellTags } from './ui//table/cell-tags'
+import { CellVariant } from './ui//table/cell-variant'
+import { CellFilter } from './ui/table/cell-filter'
+import { CellGene } from './ui/table/cell-gene'
 
 export const variantColumnTable = [
   {

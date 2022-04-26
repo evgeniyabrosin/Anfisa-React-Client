@@ -11,7 +11,7 @@ import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
-import { FilterMods } from '@pages/ws/ui/filter-mods'
+import { FilterMods } from '@pages/ws/ui/table/filter-mods'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 
 interface Props {

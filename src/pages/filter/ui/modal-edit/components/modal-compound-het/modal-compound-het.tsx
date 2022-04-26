@@ -2,7 +2,9 @@ import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/active-step.store'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
@@ -17,11 +19,9 @@ import { EditModalButtons } from '../edit-modal-buttons'
 import modalCompoundHetStore from './modal-compound-het.store'
 
 export const ModalCompoundHet = observer((): ReactElement => {
-  const { variants, approxValues, approxOptions, currentStepGroups } =
-    modalEditStore
+  const { variants, currentStepGroups } = modalEditStore
 
-  const { stateOptions, stateCondition, approxCondition } =
-    modalCompoundHetStore
+  const { approx } = modalCompoundHetStore
 
   const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = dtreeModalStore.groupIndexToChange
@@ -32,13 +32,24 @@ export const ModalCompoundHet = observer((): ReactElement => {
   const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
 
   useEffect(() => {
-    modalCompoundHetStore.fetchStatFunc(currentGroup)
+    if (currentGroup) {
+      modalCompoundHetStore.fetchStatFunc(currentGroup)
+
+      return
+    }
+
+    modalCompoundHetStore.setApprox(
+      datasetStore.isXL
+        ? ApproxNameTypes.Non_Intersecting_Transcript
+        : ApproxNameTypes.Shared_Gene,
+    )
 
     return () => dtreeStore.resetStatFuncData()
-  }, [currentGroup])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const handleSetCondition = (value: string, type: string) => {
-    modalCompoundHetStore.setCondition(value, type)
+  const handleSetCondition = (value: ApproxNameTypes) => {
+    modalCompoundHetStore.setApprox(value)
   }
 
   const handleAddAttribute = (action: ActionType) => {
@@ -54,11 +65,7 @@ export const ModalCompoundHet = observer((): ReactElement => {
 
       <div className="flex justify-between w-full mt-4 text-14">
         <ApproxStateModalMods
-          approxOptions={approxOptions}
-          approxValues={approxValues}
-          approxCondition={approxCondition}
-          stateOptions={stateOptions}
-          stateCondition={stateCondition}
+          approx={approx}
           handleSetCondition={handleSetCondition}
         />
 

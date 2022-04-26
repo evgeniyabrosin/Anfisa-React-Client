@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    _env_: {
+      REACT_APP_URL_BACKEND: string
+    }
+  }
+}
+
 export interface DsDistItem {
   name: string
   'upd-time': Date

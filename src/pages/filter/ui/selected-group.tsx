@@ -1,7 +1,8 @@
-import { ReactElement } from 'react'
+import { ReactElement, useRef } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
+import useClientHeight from '@core/hooks/use-client-height'
 import filterStore from '@store/filter'
 import { AttributeKinds } from '@service-providers/common'
 import { AttributeHeader } from './attribute-header'
@@ -13,6 +14,10 @@ import { NumericPanel } from './panels/numeric-panel'
 export const SelectedGroup = observer((): ReactElement => {
   const { selectedAttributeStatus } = filterStore
 
+  const nonEmptyDivRef = useRef<any>()
+
+  const nonEmptyBlockHeight = useClientHeight(nonEmptyDivRef)
+
   if (!selectedAttributeStatus) {
     return <EmptySelectedGroup />
   }
@@ -22,11 +27,12 @@ export const SelectedGroup = observer((): ReactElement => {
 
   return (
     <div
+      ref={nonEmptyDivRef}
       className={cn(
         'border border-grey-disabled pt-3 px-4 w-1/3 overflow-y-auto',
         { 'bg-blue-tertiary': isRedactorMode },
       )}
-      style={{ height: 'calc(100vh - 203px)' }}
+      style={{ height: nonEmptyBlockHeight }}
     >
       <AttributeHeader attrStatus={selectedAttributeStatus} />
 

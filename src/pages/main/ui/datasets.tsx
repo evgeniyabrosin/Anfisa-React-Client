@@ -6,6 +6,7 @@ import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
+import { DocLinks } from '../components/doc-links'
 import { HandleDataset } from '../components/handle-dataset'
 import { DatasetsList } from './datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
@@ -22,7 +23,7 @@ export const Datasets = (): ReactElement => {
         isOpen ? 'pl-4' : 'pl-2',
       ])}
       style={{
-        width: isOpen ? '320px' : 'auto',
+        width: isOpen ? '372px' : 'auto',
       }}
     >
       <div
@@ -49,7 +50,10 @@ export const Datasets = (): ReactElement => {
           <FilterSortDatasets />
 
           <DatasetsList />
+
           <HandleDataset />
+
+          <DocLinks />
         </React.Fragment>
       )}
     </div>

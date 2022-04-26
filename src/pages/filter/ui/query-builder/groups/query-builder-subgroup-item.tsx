@@ -11,14 +11,16 @@ import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
+import { PredictionPowerIndicator } from '@components/prediction-power-indicator'
 import { GlbPagesNames } from '@glb/glb-names'
 import { AttributeKinds, TPropertyStatus } from '@service-providers/common'
+import { TQueryBuilderAttribute } from '@utils/query-builder'
 import dtreeModalStore from '../../../modals.store'
 import modalFiltersStore from '../../modal-edit/components/modal-enum/modal-enum.store'
 import { QueryBuilderSubgroupChart } from './chart/query-builder-subgroup-chart'
 
 interface IProps {
-  subGroupItem: TPropertyStatus
+  subGroupItem: TQueryBuilderAttribute
   isModal?: boolean
   groupName: string
 }
@@ -100,7 +102,7 @@ export const QueryBuilderSubgroupItem = observer(
     const handleAttrClick = (group: TPropertyStatus) => {
       const page = filterStore.method
 
-      if (page === GlbPagesNames.Filter) {
+      if (page === GlbPagesNames.Dtree) {
         openAttrListForDtree(group)
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setAttributeToAdd(group.name)
@@ -133,6 +135,14 @@ export const QueryBuilderSubgroupItem = observer(
 
             {subGroupItem.kind === AttributeKinds.FUNC && (
               <FnLabel subGroup={true} />
+            )}
+            {subGroupItem.power && (
+              <div className="w-5 pr-0.5 mr-0.5 inline-flex align-center justify-center">
+                <PredictionPowerIndicator
+                  value={subGroupItem.power.value}
+                  comment={subGroupItem.power.comment}
+                />
+              </div>
             )}
 
             <span
