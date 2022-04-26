@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
+import { ZoneName } from '@store/filterZone'
 import variantStore from '@store/variant'
 import {
   IRecordDescriptor,
@@ -319,23 +320,22 @@ export class DatasetStore {
       zone,
     })) as IZoneDescriptor
 
-    runInAction(() => {
-      zone === 'Symbol'
-        ? (this.genes = zoneList.variants)
-        : (this.genesList = zoneList.variants)
-    })
-  }
+    switch (zone) {
+      case ZoneName.symbol:
+        this.genes = zoneList.variants
+        break
 
-  // TODO: fix
-  async fetchSamplesZoneAsync() {
-    const zoneList = (await wsDatasetProvider.getZoneList({
-      ds: this.datasetName,
-      zone: 'Has_Variant',
-    })) as IZoneDescriptor
+      case ZoneName.panels:
+        this.genesList = zoneList.variants
+        break
 
-    runInAction(() => {
-      this.samples = zoneList.variants
-    })
+      case ZoneName.hasVariant:
+        this.samples = zoneList.variants
+        break
+
+      default:
+        break
+    }
   }
 
   memorizeFilterConditions() {

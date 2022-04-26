@@ -7,6 +7,7 @@ import datasetStore from './dataset'
 export enum ZoneName {
   symbol = 'Symbol',
   panels = 'Panels',
+  hasVariant = 'Has_Variant',
 }
 
 class ZoneStore {
@@ -162,6 +163,9 @@ class ZoneStore {
       case ZoneName.panels:
         this.selectedGenesList = this.localGenesList
         break
+      case ZoneName.hasVariant:
+        this.selectedSamples = this.localSamples
+        break
       default:
         break
     }
@@ -265,6 +269,10 @@ class ZoneStore {
         this.addGenesList(itemName)
         break
 
+      case ZoneName.hasVariant:
+        this.addSample(itemName)
+        break
+
       default:
         break
     }
@@ -280,6 +288,10 @@ class ZoneStore {
         this.removeGenesList(itemName, type)
         break
 
+      case ZoneName.hasVariant:
+        this.removeSample(itemName, type)
+        break
+
       default:
         break
     }
@@ -292,6 +304,9 @@ class ZoneStore {
 
       case ZoneName.panels:
         return this.localGenesList.length
+
+      case ZoneName.hasVariant:
+        return this.localSamples.length
 
       default:
         break
@@ -308,6 +323,10 @@ class ZoneStore {
         this.localGenesList = this.selectedGenesList
         break
 
+      case ZoneName.hasVariant:
+        this.localSamples = this.selectedSamples
+        break
+
       default:
         break
     }
@@ -321,6 +340,10 @@ class ZoneStore {
 
       case ZoneName.panels:
         this.localGenesList = []
+        break
+
+      case ZoneName.hasVariant:
+        this.localSamples = []
         break
 
       default:
