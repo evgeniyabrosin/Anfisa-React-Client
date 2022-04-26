@@ -4,7 +4,7 @@ import { CSSProperties } from 'styled-components'
 
 export interface ButtonProps {
   text?: string | JSX.Element
-  textSize?: 'xs' | 'sm' | 'md'
+  textSize?: 'xs' | 'sm'
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
   variant?:
@@ -27,7 +27,7 @@ export interface ButtonProps {
 
 export const Button = ({
   text,
-  textSize,
+  textSize = 'sm',
   size = 'md',
   disabled = false,
   variant = 'primary',
@@ -137,9 +137,7 @@ export const Button = ({
     >
       {prepend}
       {text && (
-        <span className={`mx-1 text-${textSize || 'xs'} leading-14px`}>
-          {text}
-        </span>
+        <span className={`mx-1 text-${textSize} leading-14px`}>{text}</span>
       )}
       {icon}
       {append}
