@@ -27,5 +27,6 @@
   ],
   "exclude": [
     "cypress"
-  ]
+  ],
+  "typeRoots": ["node_modules/@types", "index.d.ts"],
 }

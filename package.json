@@ -100,7 +100,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "scripts": {
-    "start": "yarn & craco start",
+    "start": "node ./env.js && yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
     "stylelint": "stylelint \"**/*.css\" --config stylelint.config.js",
