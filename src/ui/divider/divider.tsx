@@ -1,5 +1,8 @@
 import { ReactElement } from 'react'
 import cn from 'classnames'
+import styled from 'styled-components'
+
+import { theme } from '@theme'
 
 interface IDividerProps {
   className?: string
@@ -22,3 +25,20 @@ export const Divider = ({
     </div>
   )
 }
+
+interface ICircleDividerProp {
+  size?: string
+  color?: string
+}
+
+export const CircleDivider = styled.div<ICircleDividerProp>`
+  width: ${({ size }) => size} !important;
+  height: ${({ size }) => size} !important;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: ${({ color }) =>
+    color ? color : theme('colors.blue.lighter')};
+  flex-shrink: 0;
+  flex-grow: 0;
+  overflow: hidden;
+`

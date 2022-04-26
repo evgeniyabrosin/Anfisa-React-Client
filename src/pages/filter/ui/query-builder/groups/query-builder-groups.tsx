@@ -37,7 +37,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
   )
 
   const additionalHeight: number =
-    filterStore.method === GlbPagesNames.Dtree ? 300 : 260
+    filterStore.method === GlbPagesNames.Dtree ? 300 : 253
 
   return (
     <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">

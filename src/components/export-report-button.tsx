@@ -37,9 +37,11 @@ export const ExportReportButton = observer(
         prepend={<Icon name="Export" />}
         onClick={rest.onClick}
         style={{
-          width: '135px',
+          width: '157px',
           pointerEvents: operationsStore.isExportingReport ? 'none' : 'inherit',
         }}
+        className="bg-blue-secondary hover:bg-blue-lighter active:bg-blue-lighter"
+        textSize="sm"
         append={
           <Icon
             name="Arrow"
@@ -49,6 +51,7 @@ export const ExportReportButton = observer(
             )}
           />
         }
+        onMouseUp={e => e.stopPropagation()}
       />
     )
   },
