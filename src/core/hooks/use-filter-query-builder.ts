@@ -1,29 +1,26 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { TStatUnitsQueryBuilder } from '@store/common'
+import { TQueryBuilder } from '@utils/query-builder'
 
-export const useFilterQueryBuilder = (queryBuilder: TStatUnitsQueryBuilder) => {
-  const entriesQueryBuilder = Object.entries(queryBuilder)
-
+export const useFilterQueryBuilder = (queryBuilder: TQueryBuilder) => {
   const [filterValue, setFilterValue] = useState('')
 
-  const filteredEntriesQueryBuilder = entriesQueryBuilder
-    .map(group => {
-      const filteredSubGroups = group[1].filter(subGroup => {
-        const name = subGroup.name.toLowerCase()
-        const fixedFilterValue = filterValue.toLowerCase()
+  const preparedFilterValue = filterValue.toLowerCase()
 
-        return name.includes(fixedFilterValue)
-      })
-
-      group[1] = filteredSubGroups
-
-      return group
-    })
-    .filter(group => group[1].length > 0)
-
-  const filteredQueryBuilder = Object.fromEntries(filteredEntriesQueryBuilder)
-
+  const filteredQueryBuilder = useMemo(
+    () =>
+      queryBuilder
+        .map(group => {
+          return {
+            ...group,
+            attributes: group.attributes.filter(attr =>
+              attr.name.toLowerCase().includes(preparedFilterValue),
+            ),
+          }
+        })
+        .filter(group => group.attributes.length > 0),
+    [queryBuilder, preparedFilterValue],
+  )
   return {
     filterValue,
     setFilterValue,

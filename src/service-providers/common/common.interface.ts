@@ -1,3 +1,4 @@
+import { ApproxValueTypes } from '@core/enum/approxValueTypes'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 
 export enum DatasetKinds {
@@ -47,12 +48,11 @@ export interface ICustomInheritanceModeArgs {
 }
 
 export interface ICompoundHetArgs {
-  approx: string | null
-  state: string | null
+  approx: ApproxValueTypes | null
 }
 
 export interface ICompoundRequestArgs {
-  approx: string | null
+  approx: ApproxValueTypes | null
   request: TRequestCondition[]
   state?: string | null
 }

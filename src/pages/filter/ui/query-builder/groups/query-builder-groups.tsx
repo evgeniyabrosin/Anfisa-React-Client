@@ -20,9 +20,6 @@ export const QueryBuilderGroups = observer((): ReactElement => {
         : dtreeStore.stat.queryBuilder,
     )
 
-  const groupNames = Object.keys(filteredQueryBuilder)
-  const subGroupData = Object.values(filteredQueryBuilder)
-
   const chunkSize = 2
 
   const activeStepIndex = dtreeStore.stepData.findIndex(
@@ -40,7 +37,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
   )
 
   const additionalHeight: number =
-    filterStore.method === GlbPagesNames.Filter ? 300 : 253
+    filterStore.method === GlbPagesNames.Dtree ? 300 : 253
 
   return (
     <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
@@ -52,7 +49,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
         />
       </div>
 
-      {filterStore.method === GlbPagesNames.Filter && (
+      {filterStore.method === GlbPagesNames.Dtree && (
         <div className="flex items-center justify-between w-full h-8 mb-2">
           <div className="text-blue-bright font-medium">
             {activeStep &&
@@ -70,11 +67,12 @@ export const QueryBuilderGroups = observer((): ReactElement => {
         style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
       >
         <DeferRender chunkSize={chunkSize}>
-          {groupNames.map((groupName, index) => (
+          {filteredQueryBuilder.map(({ name, attributes, power }) => (
             <QueryBuilderSubgroup
-              groupName={groupName}
-              subGroupData={subGroupData[index]}
-              key={groupName}
+              key={name}
+              groupName={name}
+              predictionPower={power}
+              subGroupData={attributes}
               changeIndicator={dtreeStore.filterChangeIndicator}
               isContentExpanded={dtreeStore.isFilterContentExpanded}
             />

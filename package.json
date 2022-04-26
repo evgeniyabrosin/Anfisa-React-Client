@@ -1,6 +1,6 @@
 {
   "name": "anfisa-react-client",
-  "version": "0.4.10",
+  "version": "0.4.22",
   "private": true,
   "dependencies": {
     "@monaco-editor/react": "4.3.1",
@@ -100,7 +100,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "scripts": {
-    "start": "yarn & craco start",
+    "start": "node ./env.js && yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
     "stylelint": "stylelint \"**/*.css\" --config stylelint.config.js",

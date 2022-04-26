@@ -15,7 +15,7 @@ export const CompoundHetView = ({
   filterExpression,
 }: ICompoundHetViewProps): ReactElement => {
   const approx: string = filterExpression['approx'] || approxOptions[2]
-  const state: string = filterExpression['state'] || 'current'
+  const state: string = 'current'
 
   return (
     <div

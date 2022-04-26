@@ -63,8 +63,12 @@ export class FilterStore {
           this.filteredStat.reset()
         }
 
-        // TODO: refactoring
-        if (!datasetStore.isXL) {
+        // TODO: refactoring: remove it (main table store should control ws_list data)
+        if (
+          !datasetStore.isXL &&
+          query.datasetName &&
+          this.method === GlbPagesNames.Refiner
+        ) {
           datasetStore.fetchWsListAsync()
         }
       },
@@ -188,7 +192,7 @@ export class FilterStore {
   }
 
   public reset() {
-    this.method = GlbPagesNames.Filter
+    this.method = GlbPagesNames.Dtree
     this._attributeNameToAdd = ''
     this.clearConditions()
   }
@@ -249,6 +253,8 @@ export class FilterStore {
   }
 
   private setConditions(conditions: ReadonlyArray<TCondition>): void {
+    this._selectedConditionIndex = -1
+    this._attributeNameToAdd = ''
     this._conditions = cloneDeep(conditions) as TCondition[]
   }
 

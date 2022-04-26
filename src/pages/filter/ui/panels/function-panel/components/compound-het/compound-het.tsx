@@ -1,41 +1,45 @@
 import React, { ReactElement, useEffect } from 'react'
-import { Option } from 'react-dropdown'
 import { observer } from 'mobx-react-lite'
 
-import { approxOptions } from '@core/approxOptions'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import { DropDown } from '@ui/dropdown'
 import { AllNotMods } from '@pages/filter/ui/query-builder/ui/all-not-mods'
 import { DisabledVariantsAmount } from '@pages/filter/ui/query-builder/ui/disabled-variants-amount'
 import { ConditionJoinMode } from '@service-providers/common'
 import { ICompoundHetArgs } from '@service-providers/common/common.interface'
+import { getApproxName } from '@utils/getApproxName'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import functionPanelStore from '../../function-panel.store'
+import { AprroxAndState } from '../compound-request/approx-state'
 import { PanelButtons } from '../panelButtons'
-import compoundHetStore, {
-  CompoundHetSelectOptions,
-} from './compound-het.store'
+import compoundHetStore from './compound-het.store'
 
 export const CompundHet = observer((): ReactElement => {
   const { selectedCondition, isRedactorMode } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
-  const { initialApprox } = compoundHetStore
+  const { approx } = compoundHetStore
 
   // set/reset data
   useEffect(() => {
     if (selectedCondition && isRedactorMode) {
-      const selectedFilterApprox = selectedCondition[4] as ICompoundHetArgs
       const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       compoundHetStore.setCurrentMode(getCurrentModeType(conditionJoinType))
-      compoundHetStore.setInitialApprox(selectedFilterApprox['approx'])
+
+      if (!datasetStore.isXL) {
+        const selectedFilterApprox = selectedCondition[4] as ICompoundHetArgs
+        const approxName = getApproxName(
+          selectedFilterApprox['approx'] || undefined,
+        )
+        compoundHetStore.setApprox(approxName)
+      }
     }
 
     if (!isRedactorMode) {
-      compoundHetStore.resetInitialApprox()
+      compoundHetStore.resetApprox()
       compoundHetStore.resetCurrentMode()
     }
   }, [isRedactorMode, selectedCondition])
@@ -43,7 +47,7 @@ export const CompundHet = observer((): ReactElement => {
   // update data
   useEffect(() => {
     compoundHetStore.getStatFuncStatusAsync()
-  }, [initialApprox])
+  }, [approx])
 
   // to avoid displaying this data on the another func attr
   useEffect(() => {
@@ -60,16 +64,11 @@ export const CompundHet = observer((): ReactElement => {
       <div className="text-red-secondary">
         {compoundHetStore.statFuncStatus}
       </div>
-      <div className="flex justify-between items-center mt-4">
-        <div className="flex items-center">
-          <span className="mr-2 text-18 leading-14px">Approx:</span>
-
-          <DropDown
-            value={initialApprox || approxOptions[0]}
-            options={CompoundHetSelectOptions}
-            onSelect={(arg: Option) => compoundHetStore.handleChangeApprox(arg)}
-          />
-        </div>
+      <div className="flex justify-between items-center w-full mt-4 text-14">
+        <AprroxAndState
+          approx={approx}
+          setApprox={compoundHetStore.setApprox}
+        />
 
         <AllNotMods
           isNotModeChecked={compoundHetStore.currentMode === ModeTypes.Not}

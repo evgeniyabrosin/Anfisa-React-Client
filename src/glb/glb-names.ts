@@ -3,7 +3,7 @@ import { Glb } from '@glb/glb'
 export const GlbPagesNames = Glb.makeEnum({
   Root: 'root',
   Table: 'table',
-  Filter: 'filter',
+  Dtree: 'dtree',
   Refiner: 'refiner',
   IGV: 'IGV',
 })

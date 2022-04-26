@@ -26,7 +26,7 @@ const HandleDatasetButton = ({ refEl, onClick }: any) => {
 
 export const HandleDataset = observer(() => {
   return (
-    <div className="absolute bottom-2">
+    <div className="absolute" style={{ bottom: 90 }}>
       <PopperButton
         ModalElement={HandleDatasetModal}
         ButtonElement={HandleDatasetButton}

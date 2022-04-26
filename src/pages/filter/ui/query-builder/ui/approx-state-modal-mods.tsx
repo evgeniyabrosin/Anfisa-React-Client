@@ -1,24 +1,18 @@
-import { Fragment } from 'react'
+import { ChangeEvent, Fragment } from 'react'
 
+import { approxOptions } from '@core/approxOptions'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import { Select } from '@ui/select'
 
 interface IProps {
-  approxOptions: string[]
-  approxValues: string[]
-  approxCondition: string
-  stateOptions: string[]
-  stateCondition: string
-  handleSetCondition: (value: string, type: string) => void
+  approx: string
+  handleSetCondition: (approx: ApproxNameTypes) => void
 }
 
 export const ApproxStateModalMods = ({
-  approxOptions,
-  approxValues,
-  approxCondition,
-  stateOptions,
-  stateCondition,
+  approx,
   handleSetCondition,
 }: IProps) => (
   <Fragment>
@@ -26,26 +20,20 @@ export const ApproxStateModalMods = ({
       <span>{t('dtree.approx')}</span>
 
       <Select
+        value={approx}
         options={approxOptions}
-        values={approxValues}
-        value={approxCondition}
-        onChange={(e: any) => handleSetCondition(e.target.value, 'approx')}
-        className="w-full ml-2"
-        approx
         disabled={datasetStore.isXL}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+          handleSetCondition(e.target.value as ApproxNameTypes)
+        }
+        className="w-full ml-2"
       />
     </div>
 
     <div className="flex w-1/4">
       <span>{t('dtree.state')}</span>
 
-      <Select
-        options={stateOptions}
-        value={stateCondition}
-        onChange={(e: any) => handleSetCondition(e.target.value, 'state')}
-        className="w-full ml-2"
-        disabled={!(stateOptions.length > 1)}
-      />
+      <Select className="w-full ml-2" disabled={true} options={['current']} />
     </div>
   </Fragment>
 )

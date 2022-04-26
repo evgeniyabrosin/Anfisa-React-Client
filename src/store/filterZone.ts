@@ -32,7 +32,7 @@ class ZoneStore {
     this.localGenes = [...this.localGenes, gene]
   }
 
-  removeGene(geneName: string, type: string) {
+  removeGene = (geneName: string, type: string) => {
     this.localGenes = this.localGenes.filter(gene => geneName !== gene)
 
     if (type === 'fast') {
@@ -50,7 +50,7 @@ class ZoneStore {
     this.localGenesList = [...this.localGenesList, gene]
   }
 
-  removeGenesList(geneName: string, type: string) {
+  removeGenesList = (geneName: string, type: string) => {
     this.localGenesList = this.localGenesList.filter(
       genesList => geneName !== genesList,
     )
@@ -70,7 +70,7 @@ class ZoneStore {
     this.localSamples = [...this.localSamples, sample]
   }
 
-  removeSample(sample: string, type: string) {
+  removeSample = (sample: string, type: string) => {
     this.localSamples = this.localSamples.filter(
       sampleItem => sampleItem !== sample,
     )
@@ -122,7 +122,7 @@ class ZoneStore {
     this.localTags = [...this.localTags, tagName]
   }
 
-  removeLocalTag(tagName: string, type: string) {
+  removeLocalTag = (tagName: string, type: string) => {
     this.localTags = this.localTags.filter(tag => tag !== tagName)
 
     tagName === '_note' && this.setModeWithNotes(false)

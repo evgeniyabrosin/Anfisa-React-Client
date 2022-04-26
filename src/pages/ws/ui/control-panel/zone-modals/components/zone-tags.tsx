@@ -3,35 +3,29 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import datasetStore from '@store/dataset'
-import zoneStore from '@store/filterZone'
 import { Icon } from '@ui/icon'
 
-type Props = {
-  data?: string[]
-  isGenes?: boolean
-  isGenesList?: boolean
-  isSamples?: boolean
-  isTags?: boolean
+interface IZoneTagsProps {
+  selectedTagsList: string[]
+  title: string
+  removeZoneTag: (geneName: string, type: string) => void
 }
 
-export const FilterTags = observer(
-  ({ data, isGenes, isGenesList, isSamples, isTags }: Props) => {
+export const ZoneTags = observer(
+  ({ selectedTagsList, removeZoneTag }: IZoneTagsProps) => {
     const deleteTag = (item: string) => {
-      isGenes && zoneStore.removeGene(item, 'fast')
-      isGenesList && zoneStore.removeGenesList(item, 'fast')
-      isSamples && zoneStore.removeSample(item, 'fast')
-      isTags && zoneStore.removeLocalTag(item, 'fast')
+      removeZoneTag(item, 'fast')
       datasetStore.fetchWsListAsync()
     }
 
-    const visibleTagsData = data?.slice(0, 2)
+    const visibleTagsData = selectedTagsList?.slice(0, 1)
 
     return (
       <Fragment>
         <div className="flex flex-wrap items-center w-auto max-w-full">
           {visibleTagsData?.map((item: string) => (
             <div key={item}>
-              <div className="inline-flex items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg w-auto max-w-full">
+              <div className="inline-flex items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-secondary rounded-lg w-auto max-w-full">
                 <div className="truncate w-auto" style={{ maxWidth: 70 }}>
                   {item === '_note' ? item.replace('_note', 'notes') : item}
                 </div>
@@ -49,12 +43,14 @@ export const FilterTags = observer(
           <div>
             <div
               className={cn(
-                'items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-bright rounded-lg flex-nowrap',
-                data && data.length >= 3 ? 'inline-flex' : 'hidden',
+                'items-center justify-between px-2 text-12 mx-0.5 text-white bg-blue-secondary rounded-lg flex-nowrap',
+                selectedTagsList && selectedTagsList.length > 1
+                  ? 'inline-flex'
+                  : 'hidden',
               )}
             >
-              {'+ '}
-              {data && data.length - 2}
+              {'+'}
+              {selectedTagsList && selectedTagsList.length - 1}
             </div>
           </div>
         </div>

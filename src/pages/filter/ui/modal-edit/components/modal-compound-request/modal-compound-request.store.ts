@@ -2,13 +2,22 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import modalEditStore, {
   IParams,
 } from '@pages/filter/ui/modal-edit/modal-edit.store'
+import {
+  ICompoundRequestArgs,
+  TRequestCondition,
+} from '@service-providers/common'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeFunctionalStep } from '@utils/changeAttribute/changeFunctionalStep'
+import { getApproxName } from '@utils/getApproxName'
+import { getApproxValue } from '@utils/getApproxValue'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import { getFuncParams } from '@utils/getFuncParams'
 import { getRequestData } from '@utils/getRequestData'
@@ -18,13 +27,11 @@ import { getSortedArray } from '@utils/getSortedArray'
 import dtreeModalStore from '../../../../modals.store'
 
 class ModalCompoundRequestStore {
-  requestCondition: ({}[] | [number, any])[] = [[1, {}]]
-  stateCondition = '-current-'
-  approxCondition = 'transcript'
-  resetValue = ''
-  stateOptions: string[] = [this.stateCondition]
-  activeRequestIndex: number = this.requestCondition.length - 1
-  currentMode?: ModeTypes
+  public requestCondition: TRequestCondition[] = [[1, {}] as TRequestCondition]
+  public resetValue = ''
+  public activeRequestIndex: number = this.requestCondition.length - 1
+  public currentMode?: ModeTypes
+  public approx: ApproxNameTypes = ApproxNameTypes.Non_Intersecting_Transcript
 
   constructor() {
     makeAutoObservable(this)
@@ -32,7 +39,7 @@ class ModalCompoundRequestStore {
 
   // root functions
 
-  public setCurrentMode(modeType: ModeTypes) {
+  public setCurrentMode(modeType?: ModeTypes) {
     this.currentMode = modeType
   }
 
@@ -40,16 +47,9 @@ class ModalCompoundRequestStore {
     this.currentMode = undefined
   }
 
-  public setRequestCondition(requestCondition: ({}[] | [number, any])[]): void {
-    this.requestCondition = requestCondition
-  }
-
-  public setStateCondition(stateCondition: string): void {
-    this.stateCondition = stateCondition
-  }
-
-  public setApproxCondition(approxCondition: string): void {
-    this.approxCondition = approxCondition
+  public setApprox(approx: ApproxNameTypes) {
+    this.approx = approx
+    this.sendRequest()
   }
 
   public setResetValue(resetValue: string): void {
@@ -60,26 +60,28 @@ class ModalCompoundRequestStore {
     this.activeRequestIndex = index
   }
 
-  public sendRequest(newRequestCondition: ({}[] | [number, any])[]): void {
+  public setRequestCondition(requestCondition: TRequestCondition[]): void {
+    this.requestCondition = requestCondition
+  }
+
+  // request control functions
+
+  public sendRequest(newRequestCondition?: ({}[] | [number, any])[]): void {
     const requestString = getFuncParams(modalEditStore.groupName, {
-      request: newRequestCondition,
+      request: newRequestCondition || this.requestCondition,
     })
       .slice(10)
       .replace(/\s+/g, '')
 
     const approx =
-      this.approxCondition === 'transcript' ? null : `"${this.approxCondition}"`
-
-    const params = `{"approx":${approx},"state":${
-      this.stateCondition === '-current-' || !this.stateCondition
+      this.approx === ApproxNameTypes.Shared_Transcript
         ? null
-        : `"${this.stateCondition}"`
-    },"request":${requestString}}`
+        : `"${getApproxValue(this.approx)}"`
+
+    const params = `{"approx":${approx},"state":${null},"request":${requestString}}`
 
     dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
   }
-
-  // request control functions
 
   public setActiveRequest(requestBlockIndex: number, event: any): void {
     const classList = Array.from(event.target.classList)
@@ -139,44 +141,6 @@ class ModalCompoundRequestStore {
     this.setRequestCondition(newRequestCondition)
 
     this.sendRequest(newRequestCondition)
-  }
-
-  // approx, state control function
-
-  public setCondition(value: string, type: string): void {
-    if (type === 'approx') {
-      this.setApproxCondition(value)
-
-      const request = getFuncParams(modalEditStore.groupName, {
-        approx: value,
-        request: this.requestCondition,
-      })
-        .slice(10)
-        .replace(/\s+/g, '')
-
-      const approx = value === 'transcript' ? null : `"${value}"`
-
-      const params = `{"approx":${approx},"state":${
-        this.stateCondition !== '-current-' ? `"${this.stateCondition}"` : null
-      },"request":${request}}`
-
-      dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
-    }
-
-    if (type === 'state') {
-      this.setStateCondition(value)
-
-      const approx =
-        this.approxCondition === 'transcript'
-          ? null
-          : `"${this.approxCondition}"`
-
-      const params = `{"approx":${approx},"state":${
-        value !== '-current-' ? `"${value}"` : null
-      }}`
-
-      dtreeStore.fetchStatFuncAsync(modalEditStore.groupName, params)
-    }
   }
 
   // helper fucntion
@@ -251,18 +215,8 @@ class ModalCompoundRequestStore {
   // final functions to add/save filter
 
   public addAttribute(action: ActionType): void {
-    const approx =
-      this.approxCondition === 'transcript' ? null : `"${this.approxCondition}"`
-
     const params: IParams = {
-      approx,
-    }
-
-    if (this.stateCondition) {
-      params.state =
-        JSON.stringify(this.stateOptions) === JSON.stringify(['-current-'])
-          ? null
-          : this.stateOptions
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
     }
 
     params.request = this.requestCondition
@@ -277,18 +231,8 @@ class ModalCompoundRequestStore {
   }
 
   public saveChanges(): void {
-    const approx =
-      this.approxCondition === 'transcript' ? null : `"${this.approxCondition}"`
-
     const params: IParams = {
-      approx,
-    }
-
-    if (this.stateCondition) {
-      params.state =
-        JSON.stringify(this.stateOptions) === JSON.stringify(['-current-'])
-          ? null
-          : this.stateOptions
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
     }
 
     params.request = this.requestCondition
@@ -303,8 +247,6 @@ class ModalCompoundRequestStore {
   // other control functions
 
   public resetData() {
-    this.stateCondition = '-current-'
-    this.approxCondition = 'transcript'
     this.resetValue = ''
     this.requestCondition = [[1, {}]]
     this.resetCurrentMode()
@@ -323,39 +265,45 @@ class ModalCompoundRequestStore {
   }
 
   public checkExistedSelectedFilters(currentGroup: any[]) {
-    const approx =
-      this.approxCondition === 'transcript' ? null : `"${this.approxCondition}"`
+    const request = currentGroup[currentGroup.length - 1].request
 
-    const { groupName } = modalEditStore
+    this.setResetValue(getResetType(request[request.length - 1][1]))
+
+    this.setRequestCondition(request)
+
+    const conditionJoinType = currentGroup[2]
+
+    this.setCurrentMode(getCurrentModeType(conditionJoinType))
+
+    if (!datasetStore.isXL) {
+      const selectedFilterApprox = currentGroup[4] as ICompoundRequestArgs
+
+      const approxName = getApproxName(
+        selectedFilterApprox['approx'] || undefined,
+      )
+
+      this.setApprox(approxName)
+    }
 
     const requestString = getFuncParams(
-      groupName,
+      FuncStepTypesEnum.CompoundRequest,
       currentGroup[currentGroup.length - 1],
     )
       .slice(10)
       .replace(/\s+/g, '')
 
-    this.setResetValue(
-      getResetType(
-        currentGroup[currentGroup.length - 1].request[
-          currentGroup[currentGroup.length - 1].request.length - 1
-        ][1],
-      ),
+    dtreeStore.fetchStatFuncAsync(
+      FuncStepTypesEnum.CompoundRequest,
+      this.getParams(requestString),
     )
+  }
 
-    this.setRequestCondition(currentGroup[currentGroup.length - 1].request)
-
-    const params = `{"approx":${approx},"state":${
-      this.stateCondition === '-current-' || !this.stateCondition
-        ? null
-        : `"${this.stateCondition}"`
-    },"request":${requestString}}`
-
-    const conditionJoinType = currentGroup[2]
-
-    this.currentMode = getCurrentModeType(conditionJoinType)
-
-    dtreeStore.fetchStatFuncAsync(groupName, params)
+  public getParams(requestString: string) {
+    return JSON.stringify({
+      approx: datasetStore.isXL ? null : getApproxValue(this.approx),
+      state: null,
+      request: JSON.parse(requestString),
+    })
   }
 }
 

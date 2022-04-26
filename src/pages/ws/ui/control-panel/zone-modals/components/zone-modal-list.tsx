@@ -4,7 +4,7 @@ import zoneStore from '@store/filterZone'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 
-interface Props {
+interface IZoneModalListProps {
   items: string[]
   isGenes?: boolean
   isGenesList?: boolean
@@ -12,8 +12,8 @@ interface Props {
   isTags?: boolean
 }
 
-export const FilterItemList = observer(
-  ({ items, isGenes, isGenesList, isSamples, isTags }: Props) => {
+export const ZoneModalList = observer(
+  ({ items, isGenes, isGenesList, isSamples, isTags }: IZoneModalListProps) => {
     const handleCheck = (checked: boolean, name: string) => {
       if (checked) {
         isGenes && zoneStore.addGene(name)
