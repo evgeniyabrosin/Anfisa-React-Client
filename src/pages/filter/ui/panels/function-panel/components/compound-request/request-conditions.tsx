@@ -29,7 +29,7 @@ export const RequestConditions = observer(
               )}
               onClick={() => {
                 compoundRequestStore.handleActiveRequest(index)
-                filterStore.setChanging(true)
+                filterStore.setTouched(true)
               }}
             >
               <div className="flex cursor-pointer step-content-area">
@@ -40,7 +40,7 @@ export const RequestConditions = observer(
                       index,
                       e.target.value,
                     )
-                    filterStore.setChanging(true)
+                    filterStore.setTouched(true)
                   }}
                   className="shadow-dark w-1/3 h-5 bg-blue-medium"
                 />
@@ -54,7 +54,7 @@ export const RequestConditions = observer(
                       key={group}
                       onClick={() => {
                         compoundRequestStore.handleActiveRequest(index)
-                        filterStore.setChanging(true)
+                        filterStore.setTouched(true)
                       }}
                     >
                       <span className="cursor-pointer step-content-area">
@@ -69,7 +69,7 @@ export const RequestConditions = observer(
                             currNo,
                             e.target,
                           )
-                          filterStore.setChanging(true)
+                          filterStore.setTouched(true)
                         }}
                         className="w-auto ml-1"
                         options={selectOptions}

@@ -23,7 +23,7 @@ export const EnumPanel = observer((): ReactElement => {
     initialEnumMode,
   } = filterAttributesStore
 
-  const { isChanging } = filterStore
+  const { isFilterTouched } = filterStore
 
   const [mode, setMode] = useState(initialEnumMode)
   const [selectedVariants, setSelectedVariants] = useState(
@@ -53,7 +53,7 @@ export const EnumPanel = observer((): ReactElement => {
 
   const handleCheckGroupItem = (checked: boolean, variant: TVariant) => {
     const variantName = variant[0]
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
 
     if (checked) {
       setSelectedVariants([...selectedVariants, variantName])
@@ -72,12 +72,12 @@ export const EnumPanel = observer((): ReactElement => {
 
   const toggleMode = (mode: ModeTypes) => {
     setMode(currentMode => (currentMode === mode ? undefined : mode))
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   const handleSave = () => {
     filterAttributesStore.saveEnum(selectedVariants, mode)
-    filterStore.setChanging(false)
+    filterStore.setTouched(false)
   }
 
   const handleSearchChange = (value: string) => {
@@ -88,7 +88,7 @@ export const EnumPanel = observer((): ReactElement => {
     }
   }
 
-  const isBlockAddBtn = selectedVariants.length === 0 || !isChanging
+  const isBlockAddBtn = selectedVariants.length === 0 || !isFilterTouched
 
   return (
     <div>

@@ -15,14 +15,14 @@ export const NumericPanel = observer((): ReactElement | null => {
   const { attributeStatus: attrData, initialNumericValue: initialValue } =
     currentFilterStore
 
-  const { isChanging } = filterStore
+  const { isFilterTouched } = filterStore
 
   if (!attrData || attrData.kind !== AttributeKinds.NUMERIC) {
     return null
   }
 
   const saveCondition = (value: TNumericConditionBounds) => {
-    filterStore.setChanging(false)
+    filterStore.setTouched(false)
     currentFilterStore.saveNumeric(value)
   }
 
@@ -47,7 +47,7 @@ export const NumericPanel = observer((): ReactElement | null => {
             disabled={
               hasErrors ||
               (value[0] === null && value[2] === null) ||
-              !isChanging
+              !isFilterTouched
             }
           />
         </div>

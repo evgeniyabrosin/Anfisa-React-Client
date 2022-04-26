@@ -15,7 +15,7 @@ export const PanelButtons = observer(
   ({ onSubmit, resetFields, disabled }: IPanelButtons): ReactElement => {
     const handleClear = () => {
       filterStore.resetStatFuncData()
-      filterStore.setChanging(true)
+      filterStore.setTouched(true)
       resetFields()
     }
 

@@ -13,7 +13,7 @@ import { PanelButtons } from '../panelButtons'
 import customInheritanceModeStore from './custom-inheritance-mode.store'
 
 export const CustomInheritanceMode = observer(() => {
-  const { selectedCondition, isRedactorMode, isChanging } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants, problemGroups } = functionPanelStore
 
@@ -21,12 +21,12 @@ export const CustomInheritanceMode = observer(() => {
 
   const setComplexScenario = (resetName: string): void => {
     customInheritanceModeStore.setComplexScenario(resetName)
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   const setSingleScenario = (group: string, selectValue: string): void => {
     customInheritanceModeStore.setSingleScenario(group, selectValue)
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   // set/reset data
@@ -68,17 +68,17 @@ export const CustomInheritanceMode = observer(() => {
 
   const onSubmit = () => {
     customInheritanceModeStore.handleSumbitCondtions()
-    filterStore.setChanging(false)
+    filterStore.setTouched(false)
   }
 
   const resetFields = () => {
     customInheritanceModeStore.clearData()
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   const toggleNotMode = () => {
     customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   return (
@@ -98,7 +98,7 @@ export const CustomInheritanceMode = observer(() => {
       <PanelButtons
         onSubmit={onSubmit}
         resetFields={resetFields}
-        disabled={!simpleVariants || !isChanging}
+        disabled={!simpleVariants || !isFilterTouched}
       />
     </>
   )

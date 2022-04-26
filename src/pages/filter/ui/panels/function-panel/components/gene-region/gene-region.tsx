@@ -17,7 +17,7 @@ import { PanelButtons } from '../panelButtons'
 import geneRegionStore from './gene-region.store'
 
 export const GeneRegion = observer(() => {
-  const { selectedCondition, isRedactorMode, isChanging } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -33,7 +33,7 @@ export const GeneRegion = observer(() => {
     geneRegionStore.resetLocusValue()
     setIsErrorVisible(false)
     geneRegionStore.resetCurrentMode()
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   // set/reset data
@@ -68,18 +68,18 @@ export const GeneRegion = observer(() => {
 
   const toggleNotMode = () => {
     geneRegionStore.setCurrentMode(ModeTypes.Not)
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   const onChangeInput = (e: any) => {
     geneRegionStore.setLocusValue(e.target.value)
     validateValue(e.target.value)
-    filterStore.setChanging(true)
+    filterStore.setTouched(true)
   }
 
   const onSubmit = () => {
     geneRegionStore.handleSumbitCondtions()
-    filterStore.setChanging(false)
+    filterStore.setTouched(false)
   }
 
   return (
@@ -119,7 +119,7 @@ export const GeneRegion = observer(() => {
       <PanelButtons
         onSubmit={onSubmit}
         resetFields={handleResetFields}
-        disabled={!simpleVariants || isErrorVisible || !isChanging}
+        disabled={!simpleVariants || isErrorVisible || !isFilterTouched}
       />
     </React.Fragment>
   )

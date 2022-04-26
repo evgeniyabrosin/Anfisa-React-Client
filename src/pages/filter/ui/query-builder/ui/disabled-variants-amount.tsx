@@ -30,7 +30,7 @@ export const DisabledVariantsAmount = observer(
               !disabled &&
                 handleCheckGroupItem &&
                 handleCheckGroupItem(e.target.checked, variant[0])
-              filterStore.setChanging(true)
+              filterStore.setTouched(true)
             }}
           >
             <span

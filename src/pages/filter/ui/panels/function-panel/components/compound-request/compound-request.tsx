@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
@@ -21,7 +22,7 @@ import { RequestConditions } from './request-conditions'
 import { ResetSelect } from './reset-select'
 
 export const CompoundRequest = observer((): ReactElement => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -73,22 +74,35 @@ export const CompoundRequest = observer((): ReactElement => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
+  const setApprox = (approx: ApproxNameTypes) => {
+    compoundRequestStore.setApprox(approx)
+    filterStore.setTouched(true)
+  }
+
+  const toggleNotMode = () => {
+    compoundRequestStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setTouched(true)
+  }
+
+  const onSubmit = () => {
+    compoundRequestStore.handleSumbitCondtions()
+    filterStore.setTouched(false)
+  }
+
+  const resetFields = () => {
+    compoundRequestStore.clearData()
+    filterStore.setTouched(true)
+  }
+
   return (
-    <React.Fragment>
+    <>
       <div className="flex justify-between items-center w-full mt-4 text-14">
-        <AprroxAndState
-          approx={approx}
-          setApprox={compoundRequestStore.setApprox}
-        />
+        <AprroxAndState approx={approx} setApprox={setApprox} />
 
         <AllNotMods
           isNotModeChecked={compoundRequestStore.currentMode === ModeTypes.Not}
-          isNotModeDisabled={
-            simpleVariants ? simpleVariants.length === 0 : true
-          }
-          toggleNotMode={() =>
-            compoundRequestStore.setCurrentMode(ModeTypes.Not)
-          }
+          isNotModeDisabled={simpleVariants ? !simpleVariants.length : true}
+          toggleNotMode={toggleNotMode}
         />
       </div>
 
@@ -103,10 +117,10 @@ export const CompoundRequest = observer((): ReactElement => {
       <DisabledVariantsAmount variants={simpleVariants} disabled={true} />
 
       <PanelButtons
-        onSubmit={() => compoundRequestStore.handleSumbitCondtions()}
-        resetFields={() => compoundRequestStore.clearData()}
-        disabled={!simpleVariants}
+        onSubmit={onSubmit}
+        resetFields={resetFields}
+        disabled={!simpleVariants || !isFilterTouched}
       />
-    </React.Fragment>
+    </>
   )
 })

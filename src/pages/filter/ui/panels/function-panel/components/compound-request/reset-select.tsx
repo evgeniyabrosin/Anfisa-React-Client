@@ -16,7 +16,7 @@ export const ResetSelect = observer(
         options={resetOptions}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
           compoundRequestStore.handleSetComplexRequest(e.target.value)
-          filterStore.setChanging(true)
+          filterStore.setTouched(true)
         }}
         className="w-full ml-2"
         value={compoundRequestStore.resetValue}

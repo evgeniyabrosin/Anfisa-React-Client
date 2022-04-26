@@ -102,12 +102,12 @@ export const useConditionBoundsValue = (
           setValue(prevValue =>
             updateNumericValue(prevValue, index, elementValue),
           )
-          filterStore.setChanging(true)
+          filterStore.setTouched(true)
         }
       },
       clearValue: () => {
         setValue(defaultValue)
-        filterStore.setChanging(true)
+        filterStore.setTouched(true)
       },
     }
   }
@@ -296,18 +296,18 @@ export const useCenterDistanceValue = (
           newCenter,
           coerceDistance(currentValue[1], newCenter, attrData),
         ])
-        filterStore.setChanging(true)
+        filterStore.setTouched(true)
       },
       setDistance: (newDistance: number | null) => {
         setValue(currentValue => [
           coerceCenter(currentValue[0], newDistance, attrData),
           newDistance,
         ])
-        filterStore.setChanging(true)
+        filterStore.setTouched(true)
       },
       clearValue: () => {
         setValue([null, null])
-        filterStore.setChanging(true)
+        filterStore.setTouched(true)
       },
     }),
     [attrData],

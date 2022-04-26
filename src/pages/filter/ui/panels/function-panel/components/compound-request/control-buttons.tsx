@@ -20,7 +20,7 @@ export const ControlButtons = observer(
             RequestBlockOperations.Add,
             activeRequestIndex,
           )
-          filterStore.setChanging(true)
+          filterStore.setTouched(true)
         }}
         text="Add"
         variant="secondary"
@@ -34,7 +34,7 @@ export const ControlButtons = observer(
             RequestBlockOperations.Remove,
             activeRequestIndex,
           )
-          filterStore.setChanging(true)
+          filterStore.setTouched(true)
         }}
         text="Remove"
         variant="secondary"
