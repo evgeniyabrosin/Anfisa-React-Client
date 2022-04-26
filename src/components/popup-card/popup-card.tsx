@@ -1,7 +1,9 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { useRef } from 'react'
 import cn, { Argument } from 'classnames'
+import noop from 'lodash/noop'
 
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -18,6 +20,7 @@ export interface IPopupCardProps {
   isApplyDisabled?: boolean
   isLoading?: boolean
   coordinates?: { x: number; y: number } | null
+  shouldCloseOnOutsideClick?: boolean
 }
 
 export const PopupCard = ({
@@ -31,7 +34,15 @@ export const PopupCard = ({
   isLoading,
   isApplyDisabled = false,
   coordinates,
+  shouldCloseOnOutsideClick,
 }: React.PropsWithChildren<IPopupCardProps>) => {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const onCloseForOutsideClick =
+    shouldCloseOnOutsideClick && onClose ? onClose : noop
+
+  useOutsideClick(ref, onCloseForOutsideClick)
+
   return (
     <div
       className={cn('bg-white shadow-card rounded', className)}
@@ -40,6 +51,7 @@ export const PopupCard = ({
         position: `${coordinates ? 'absolute' : 'relative'}`,
         transform: `translate(${coordinates?.x}px, ${coordinates?.y}px)`,
       }}
+      ref={ref}
     >
       <div className="px-4 pt-4">
         <div className="flex justify-between mb-5 items-center">

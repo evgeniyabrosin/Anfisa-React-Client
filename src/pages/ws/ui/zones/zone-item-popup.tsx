@@ -69,6 +69,7 @@ export const ZoneItemPopup = observer(
           onApply={handleApply}
           className="relative bottom-16"
           coordinates={zoneStore.zoneItemCoordinates}
+          shouldCloseOnOutsideClick={true}
         >
           <div>
             <InputSearch
