@@ -7,7 +7,7 @@ export type FilterControlOptions = Exclude<
 >
 
 export const FilterControlOptions: FilterControlOption[] = [
-  { value: GlbPagesNames.Filter, label: 'Decision Tree' },
+  { value: GlbPagesNames.Dtree, label: 'Decision Tree' },
   { value: GlbPagesNames.Refiner, label: 'Filter Refiner' },
 ]
 
@@ -17,7 +17,7 @@ export interface FilterControlOption {
 }
 
 export const FilterControlOptionsNames = Glb.makeEnum({
-  [GlbPagesNames.Filter]: 'Decision Tree',
+  [GlbPagesNames.Dtree]: 'Decision Tree',
   [GlbPagesNames.Refiner]: 'Filter Refiner',
 })
 

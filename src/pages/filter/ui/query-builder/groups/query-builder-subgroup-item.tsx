@@ -102,7 +102,7 @@ export const QueryBuilderSubgroupItem = observer(
     const handleAttrClick = (group: TPropertyStatus) => {
       const page = filterStore.method
 
-      if (page === GlbPagesNames.Filter) {
+      if (page === GlbPagesNames.Dtree) {
         openAttrListForDtree(group)
       } else if (page === GlbPagesNames.Refiner) {
         filterStore.setAttributeToAdd(group.name)

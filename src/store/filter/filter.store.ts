@@ -192,7 +192,7 @@ export class FilterStore {
   }
 
   public reset() {
-    this.method = GlbPagesNames.Filter
+    this.method = GlbPagesNames.Dtree
     this._attributeNameToAdd = ''
     this.clearConditions()
   }

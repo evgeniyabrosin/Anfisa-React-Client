@@ -20,7 +20,7 @@ interface Props {
   children?: ReactElement | ReactNode
 }
 
-const allowedXlDatasetRotes: PageRoute[] = [Routes.Refiner, Routes.Filter]
+const allowedXlDatasetRotes: PageRoute[] = [Routes.Refiner, Routes.Dtree]
 
 export const Header = observer(({ children }: Props): ReactElement => {
   const params = useParams()

@@ -43,7 +43,7 @@ export const ModalSaveDataset = observer(() => {
 
     if (
       pathName === PatnNameEnum.Filter &&
-      filterStore.method === GlbPagesNames.Filter &&
+      filterStore.method === GlbPagesNames.Dtree &&
       dtreeStore.acceptedVariants === 0
     ) {
       setError(DatasetCreationErrorsEnum.EmptyDataset)

@@ -57,7 +57,7 @@ export const en = {
     base: 'Derived from {name}',
     pickDataset: 'Select dataset',
     table: 'Main Table',
-    filter: 'Decision Tree Panel',
+    dtree: 'Decision Tree Panel',
     refiner: 'Filter Refiner',
   },
   ds: {
