@@ -12,7 +12,7 @@ export enum DisplayValue {
 }
 
 export const getBackground = (placement: Placement) => {
-  return `linear-gradient(to ${placement}, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.25))`
+  return `linear-gradient(to ${placement}, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.3))`
 }
 
 export const createShadow = (
