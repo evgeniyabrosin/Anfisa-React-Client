@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export enum DrawerClass {
   normClass = 'norm',
@@ -62,16 +62,6 @@ export const useScrollShadow = (
       setShouldAddShadow(!isStartPosition)
     }
   }
-
-  useEffect(() => {
-    if (element) {
-      console.log(element.childNodes[0].childNodes[0])
-      /*const topShadow = createShadow(element, 'top')
-      const rightShadow = createShadow(element, 'right')
-      const bottomShadow = createShadow(element, 'bottom')
-      const leftShadow = createShadow(element, 'left')*/
-    }
-  }, [element])
 
   return { shouldAddShadow, handleScroll, handleStartScroll }
 }

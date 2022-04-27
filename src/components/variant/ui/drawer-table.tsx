@@ -14,6 +14,7 @@ interface IDrawerTableProps
     ITableAspectDescriptor {
   shouldAddShadow: boolean
   filterSelection: string
+  refCol: any
 }
 
 export const DrawerTable = ({
@@ -21,6 +22,7 @@ export const DrawerTable = ({
   rows,
   shouldAddShadow,
   filterSelection,
+  refCol,
 }: IDrawerTableProps): ReactElement => {
   const onMouseDownHandler = (event: MouseEvent) => {
     event.stopPropagation()
@@ -56,6 +58,7 @@ export const DrawerTable = ({
                         'p-3 text-blue-bright whitespace-nowrap sticky left-0',
                         `${shouldAddShadow ? blueBg : ''}`,
                       )}
+                      ref={index === 0 ? refCol : null}
                     >
                       <span
                         className="cursor-auto"
