@@ -155,16 +155,8 @@ export class DatasetStore {
     this.datasetName = datasetName
 
     await dirinfoStore.fetchDsinfoAsync(datasetName)
-
-    const isTabReportEmpty = this.tabReport.length === 0
-    const isWsRecordsEmpty = this.wsRecords.length === 0
-    const shouldDataBeUpdated = isTabReportEmpty && isWsRecordsEmpty
-
-    if (shouldDataBeUpdated) {
-      await this.fetchWsListAsync('withoutTabReport')
-
-      await this.fetchFilteredTabReportAsync()
-    }
+    await this.fetchWsListAsync('withoutTabReport')
+    await this.fetchFilteredTabReportAsync()
   }
 
   async fetchTabReportAsync() {
