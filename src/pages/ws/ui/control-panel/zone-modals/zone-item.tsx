@@ -3,6 +3,7 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import zoneStore from '@store/filterZone'
 import { PopperButton } from '@components/popper-button'
 import { ControlPanelDivider } from '../control-panel-divider'
 import { HeaderTableButton } from './components/header-table-button'
@@ -26,6 +27,10 @@ export const ZoneItem = observer(
     dataTestId,
     isLast,
   }: IZoneItemProps): ReactElement => {
+    const setCoordinatesFromEvent = (event: MouseEvent) => {
+      zoneStore.setZoneItemCoordinates(event.clientX - 60, event.clientY - 10)
+    }
+
     const ButtonElementEdit = ({ refEl, onClick }: any) => (
       <HeaderTableButton
         text="+"
@@ -54,6 +59,7 @@ export const ZoneItem = observer(
           ModalElement={modalElement}
           data={selectedTagsList}
           type="add"
+          onClick={setCoordinatesFromEvent}
         />
 
         <div className="flex justify-between">

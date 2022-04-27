@@ -24,6 +24,8 @@ class ZoneStore {
   isModeWithNotes = false
   modeWithNotesSubmitted = false
 
+  zoneItemCoordinates: { x: number; y: number } | null = null
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -235,6 +237,14 @@ class ZoneStore {
   submitTagsMode() {
     this.modeNotSubmitted = this.isModeNOT
     this.modeWithNotesSubmitted = this.isModeWithNotes
+  }
+
+  setZoneItemCoordinates(xCoordinate: number, yCoordinate: number) {
+    this.zoneItemCoordinates = { x: xCoordinate, y: yCoordinate }
+  }
+
+  clearZoneItemCoordinates() {
+    this.zoneItemCoordinates = null
   }
 }
 

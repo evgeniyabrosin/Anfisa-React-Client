@@ -5,6 +5,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import zoneStore from '@store/filterZone'
 import { PopperTableModal } from '@components/popper-table-modal'
+import { ZoneItemPortalWrapper } from './components/zone-item-portal-wrapper'
 import { ZoneModalList } from './components/zone-modal-list'
 
 interface IGenesModalProps {
@@ -37,23 +38,25 @@ export const GenesModal = observer(({ close, title }: IGenesModalProps) => {
   }
 
   return (
-    <PopperTableModal
-      title={title}
-      searchInputPlaceholder={t('ds.searchFilter')}
-      onClose={close}
-      searchValue={searchValue}
-      onApply={handleApplyAsync}
-      onClearAll={onClearAll}
-      onChange={setSearchValue}
-      className="mt-7"
-      isGenes={true}
-    >
-      <ZoneModalList
-        items={datasetStore.genes.filter(item =>
-          item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
-        )}
+    <ZoneItemPortalWrapper>
+      <PopperTableModal
+        title={title}
+        searchInputPlaceholder={t('ds.searchFilter')}
+        onClose={close}
+        searchValue={searchValue}
+        onApply={handleApplyAsync}
+        onClearAll={onClearAll}
+        onChange={setSearchValue}
+        className="mt-7"
         isGenes={true}
-      />
-    </PopperTableModal>
+      >
+        <ZoneModalList
+          items={datasetStore.genes.filter(item =>
+            item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+          )}
+          isGenes={true}
+        />
+      </PopperTableModal>
+    </ZoneItemPortalWrapper>
   )
 })

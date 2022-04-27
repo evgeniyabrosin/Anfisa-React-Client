@@ -14,6 +14,7 @@ interface Props {
   title?: string
   data?: any
   type?: string
+  onClick?: (event?: any) => void
 }
 
 export const PopperButton = ({
@@ -25,12 +26,18 @@ export const PopperButton = ({
   title,
   data,
   type,
+  onClick,
 }: Props): ReactElement => {
   const [isOpen, open, close] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState<any>(null)
 
   const { styles, attributes } = usePopper(referenceElement, popperElement)
+
+  const onClickHandler = (event: MouseEvent) => {
+    onClick && onClick(event)
+    isOpen ? close() : open()
+  }
 
   return (
     <Fragment>
@@ -43,7 +50,7 @@ export const PopperButton = ({
           onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
             isOpen && event.stopPropagation()
           }}
-          onClick={isOpen ? close : open}
+          onClick={onClickHandler}
         />
       )}
       {!type && (
@@ -55,7 +62,7 @@ export const PopperButton = ({
           onMouseUp={(event: MouseEvent<HTMLButtonElement>) => {
             isOpen && event.stopPropagation()
           }}
-          onClick={isOpen ? close : open}
+          onClick={onClickHandler}
         />
       )}
 
