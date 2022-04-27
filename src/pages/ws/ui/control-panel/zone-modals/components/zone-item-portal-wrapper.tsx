@@ -1,10 +1,14 @@
-import { useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import zoneStore from '@store/filterZone'
 import { Portal } from '@components/portal/portal'
 
-export const ZoneItemPortalWrapper = observer(({ children }: any) => {
+interface IProps {
+  children: ReactElement
+}
+
+export const ZoneItemPortalWrapper = observer(({ children }: IProps) => {
   const { zoneItemCoordinates } = zoneStore
   useEffect(() => () => zoneStore.clearZoneItemCoordinates(), [])
 
