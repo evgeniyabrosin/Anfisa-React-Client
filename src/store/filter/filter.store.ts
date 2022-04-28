@@ -80,7 +80,7 @@ export class FilterStore {
         if (presetName) {
           this.loadPreset(presetName)
         } else {
-          this.setPresetModifiedState(PresetModifiedState.NotPreset)
+          this.resetPreset()
         }
       },
     )
@@ -291,5 +291,13 @@ export class FilterStore {
           }),
       t('filter.errors.loadPreset', { presetName }),
     )
+  }
+
+  private resetPreset(): void {
+    if (this._presetModifiedState !== PresetModifiedState.Modified) {
+      this.clearConditions()
+    }
+
+    this.setPresetModifiedState(PresetModifiedState.NotPreset)
   }
 }
