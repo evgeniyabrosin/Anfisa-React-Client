@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
-import { HeaderModal } from '@pages/filter/ui/query-builder/ui/header-modal'
-import { ModalBase } from '@pages/filter/ui/query-builder/ui/modal-base'
+import { HeaderModal } from '@pages/filter/dtree/components/modals/components/ui/header-modal'
+import { ModalBase } from '@pages/filter/dtree/components/modals/components/ui/modal-base'
 import { validateNotes } from '@utils/validation/validateNotes'
 
 export const ModalNotes = observer(() => {

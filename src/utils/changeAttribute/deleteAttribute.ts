@@ -1,7 +1,7 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/active-step.store'
-import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
 
 export const deleteAttribute = (): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -13,7 +13,7 @@ export const deleteAttribute = (): void => {
 
   const { activeStepIndex } = activeStepStore
 
-  const { location } = modalEditStore
+  const { location } = modalsControlStore
 
   const [indexForApi] = location
 
