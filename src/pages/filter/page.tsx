@@ -47,8 +47,6 @@ const FilterPage = observer((): ReactElement => {
       dtreeStore.resetAlgorithmFilterValue()
       dtreeStore.resetCurrentDtreeName()
       dtreeStore.resetData()
-      dirinfoStore.resetData()
-      datasetStore.resetData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dsName, history])

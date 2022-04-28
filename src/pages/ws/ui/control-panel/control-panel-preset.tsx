@@ -23,7 +23,9 @@ export const ControlPanelPreset = observer((): ReactElement => {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      {/* TODO: need designer's decision */}
+
+      {/* <div className="flex items-center justify-between">
         {activePreset && (
           <span
             onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
@@ -32,7 +34,7 @@ export const ControlPanelPreset = observer((): ReactElement => {
             {t('general.clear')}
           </span>
         )}
-      </div>
+      </div> */}
 
       <div className="relative" data-testid={MainTableDataCy.selectPreset}>
         <DropDown
