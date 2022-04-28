@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
@@ -16,7 +17,7 @@ import { PanelButtons } from '../panelButtons'
 import compoundHetStore from './compound-het.store'
 
 export const CompundHet = observer((): ReactElement => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -57,25 +58,38 @@ export const CompundHet = observer((): ReactElement => {
   const handleClear = () => {
     compoundHetStore.handleResetFields()
     compoundHetStore.resetCurrentMode()
+    filterStore.setTouched(true)
+  }
+
+  const onSubmit = () => {
+    compoundHetStore.handleSumbitCondtions()
+    filterStore.setTouched(false)
+  }
+
+  const setApprox = (newApprox: ApproxNameTypes) => {
+    if (newApprox !== approx) filterStore.setTouched(true)
+    compoundHetStore.setApprox(newApprox)
+  }
+
+  const toggleNotMode = () => {
+    compoundHetStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setTouched(true)
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className="text-red-secondary">
         {compoundHetStore.statFuncStatus}
       </div>
       <div className="flex justify-between items-center w-full mt-4 text-14">
-        <AprroxAndState
-          approx={approx}
-          setApprox={compoundHetStore.setApprox}
-        />
+        <AprroxAndState approx={approx} setApprox={setApprox} />
 
         <AllNotMods
           isNotModeChecked={compoundHetStore.currentMode === ModeTypes.Not}
           isNotModeDisabled={
             simpleVariants ? simpleVariants.length === 0 : true
           }
-          toggleNotMode={() => compoundHetStore.setCurrentMode(ModeTypes.Not)}
+          toggleNotMode={toggleNotMode}
         />
       </div>
 
@@ -84,10 +98,10 @@ export const CompundHet = observer((): ReactElement => {
       </div>
 
       <PanelButtons
-        onSubmit={() => compoundHetStore.handleSumbitCondtions()}
+        onSubmit={onSubmit}
         resetFields={handleClear}
-        disabled={!simpleVariants}
+        disabled={!simpleVariants || !isFilterTouched}
       />
-    </React.Fragment>
+    </>
   )
 })

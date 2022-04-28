@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { RequestBlockOperations } from '@core/enum/request-block-operations'
+import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import compoundRequestStore from './compound-request.store'
 
@@ -14,12 +15,13 @@ export const ControlButtons = observer(
   ({ activeRequestIndex }: IControlButtonsProps): ReactElement => (
     <div className="flex">
       <Button
-        onClick={() =>
+        onClick={() => {
           compoundRequestStore.handleRequestBlocksAmount(
             RequestBlockOperations.Add,
             activeRequestIndex,
           )
-        }
+          filterStore.setTouched(true)
+        }}
         text="Add"
         variant="secondary"
         className={cn('mr-4')}
@@ -27,12 +29,13 @@ export const ControlButtons = observer(
       />
 
       <Button
-        onClick={() =>
+        onClick={() => {
           compoundRequestStore.handleRequestBlocksAmount(
             RequestBlockOperations.Remove,
             activeRequestIndex,
           )
-        }
+          filterStore.setTouched(true)
+        }}
         text="Remove"
         variant="secondary"
         className={cn(

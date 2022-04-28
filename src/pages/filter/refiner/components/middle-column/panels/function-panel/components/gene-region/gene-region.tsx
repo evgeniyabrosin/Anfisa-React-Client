@@ -17,7 +17,7 @@ import { PanelButtons } from '../panelButtons'
 import geneRegionStore from './gene-region.store'
 
 export const GeneRegion = observer(() => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants } = functionPanelStore
 
@@ -33,6 +33,7 @@ export const GeneRegion = observer(() => {
     geneRegionStore.resetLocusValue()
     setIsErrorVisible(false)
     geneRegionStore.resetCurrentMode()
+    filterStore.setTouched(true)
   }
 
   // set/reset data
@@ -65,6 +66,22 @@ export const GeneRegion = observer(() => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
+  const toggleNotMode = () => {
+    geneRegionStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setTouched(true)
+  }
+
+  const onChangeInput = (e: any) => {
+    if (locusValue !== e.target.value) filterStore.setTouched(true)
+    geneRegionStore.setLocusValue(e.target.value)
+    validateValue(e.target.value)
+  }
+
+  const onSubmit = () => {
+    geneRegionStore.handleSumbitCondtions()
+    filterStore.setTouched(false)
+  }
+
   return (
     <React.Fragment>
       <div className="mt-4">
@@ -78,18 +95,12 @@ export const GeneRegion = observer(() => {
             isNotModeDisabled={
               simpleVariants ? simpleVariants.length === 0 : true
             }
-            toggleNotMode={() => geneRegionStore.setCurrentMode(ModeTypes.Not)}
+            toggleNotMode={toggleNotMode}
           />
         </div>
 
         <div className="relative flex">
-          <Input
-            value={locusValue}
-            onChange={e => {
-              geneRegionStore.setLocusValue(e.target.value)
-              validateValue(e.target.value)
-            }}
-          />
+          <Input value={locusValue} onChange={onChangeInput} />
 
           {isErrorVisible && (
             <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
@@ -106,9 +117,9 @@ export const GeneRegion = observer(() => {
       </div>
 
       <PanelButtons
-        onSubmit={() => geneRegionStore.handleSumbitCondtions()}
+        onSubmit={onSubmit}
         resetFields={handleResetFields}
-        disabled={!simpleVariants || isErrorVisible}
+        disabled={!simpleVariants || isErrorVisible || !isFilterTouched}
       />
     </React.Fragment>
   )

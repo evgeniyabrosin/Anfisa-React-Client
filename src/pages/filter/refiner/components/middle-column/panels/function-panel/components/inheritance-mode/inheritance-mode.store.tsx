@@ -133,6 +133,7 @@ class InheritanceModeStore {
     functionPanelStore.submitConditions(conditions)
 
     filterStore.resetStatFuncData()
+    filterStore.setTouched(false)
     this.resetAllFields()
   }
 }

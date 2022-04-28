@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { Select } from '@ui/select'
 import compoundRequestStore from './compound-request.store'
 
@@ -13,9 +14,12 @@ export const ResetSelect = observer(
 
       <Select
         options={resetOptions}
-        onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+          if (compoundRequestStore.resetValue !== e.target.value) {
+            filterStore.setTouched(true)
+          }
           compoundRequestStore.handleSetComplexRequest(e.target.value)
-        }
+        }}
         className="w-full ml-2"
         value={compoundRequestStore.resetValue}
         reset

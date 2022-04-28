@@ -14,7 +14,7 @@ import inheritanceModeStore from './inheritance-mode.store'
 import { ProblemGroups } from './problem-groups'
 
 export const InheritanceMode = observer(() => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { problemGroups, filteredComplexVariants, complexVariants } =
     functionPanelStore
@@ -26,6 +26,7 @@ export const InheritanceMode = observer(() => {
     problemGroup: string,
   ) => {
     inheritanceModeStore.updateProblemGroupValues(e, problemGroup)
+    filterStore.setTouched(true)
   }
 
   const handleChangeVariants = (
@@ -33,8 +34,8 @@ export const InheritanceMode = observer(() => {
     variantName: string,
   ) => {
     inheritanceModeStore.updateVariantValues(e, variantName)
+    filterStore.setTouched(true)
   }
-
   // update data
   useEffect(() => {
     functionPanelStore.fetchStatFunc(
@@ -87,7 +88,7 @@ export const InheritanceMode = observer(() => {
   }, [])
 
   return (
-    <React.Fragment>
+    <>
       <ProblemGroups
         problemGroups={problemGroups}
         problemGroupValues={problemGroupValues}
@@ -105,8 +106,8 @@ export const InheritanceMode = observer(() => {
       <PanelButtons
         onSubmit={inheritanceModeStore.handleSumbitCondtions}
         resetFields={inheritanceModeStore.resetAllFields}
-        disabled={variantValues.length === 0}
+        disabled={!variantValues.length || !isFilterTouched}
       />
-    </React.Fragment>
+    </>
   )
 })

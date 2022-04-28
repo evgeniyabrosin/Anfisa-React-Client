@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import { InputNumber } from '@ui/input-number'
@@ -43,7 +43,7 @@ export const NumericConditionNeighborhood = ({
   const maxDistance = isFloat ? (max - min) / 2 : Math.ceil((max - min) / 2)
 
   return (
-    <Fragment>
+    <>
       <div className={className}>
         <div className="relative flex items-center mb-3">
           <div className="relative grow flex items-center py-6">
@@ -132,6 +132,6 @@ export const NumericConditionNeighborhood = ({
       </div>
       {controls &&
         controls({ value: conditionValue, hasErrors: false, clearValue })}
-    </Fragment>
+    </>
   )
 }

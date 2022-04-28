@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import filterStore from '@store/filter'
 import { InputNumber } from '@ui/input-number'
 import { Select } from '@ui/select'
 import { selectOptions } from '@pages/filter/dtree/components/modals/modals-control-store'
@@ -26,54 +27,66 @@ export const RequestConditions = observer(
                 'flex justify-between w-full shadow-dark py-2 my-2 px-2 cursor-pointer step-content-area',
                 index === activeRequestIndex ? 'bg-blue-medium' : 'bg-white',
               )}
-              onClick={() => compoundRequestStore.handleActiveRequest(index)}
+              onClick={() => {
+                compoundRequestStore.handleActiveRequest(index)
+                filterStore.setTouched(true)
+              }}
             >
               <div className="flex cursor-pointer step-content-area">
                 <InputNumber
                   value={item[0]}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    if (item[0] !== Number.parseInt(e.target.value)) {
+                      filterStore.setTouched(true)
+                    }
                     compoundRequestStore.handleRequestConditionNumber(
                       index,
                       e.target.value,
                     )
-                  }
+                  }}
                   className="shadow-dark w-1/3 h-5 bg-blue-medium"
                 />
               </div>
 
               <div className="flex flex-1 justify-between step-content-area">
                 {functionPanelStore.problemGroups.map(
-                  (group: string, currNo: number) => (
-                    <div
-                      className="step-content-area"
-                      key={group}
-                      onClick={() =>
-                        compoundRequestStore.handleActiveRequest(index)
-                      }
-                    >
-                      <span className="cursor-pointer step-content-area">
-                        {group}
-                      </span>
-
-                      <Select
-                        onClick={(e: MouseEvent<any>) => e.stopPropagation()}
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                          compoundRequestStore.handleSetSingleRequest(
-                            index,
-                            currNo,
-                            e.target,
-                          )
+                  (group: string, currNo: number) => {
+                    const value = getSelectedValue(
+                      group,
+                      index,
+                      compoundRequestStore.requestCondition,
+                    )
+                    return (
+                      <div
+                        className="step-content-area"
+                        key={group}
+                        onClick={() => {
+                          compoundRequestStore.handleActiveRequest(index)
                         }}
-                        className="w-auto ml-1"
-                        options={selectOptions}
-                        value={getSelectedValue(
-                          group,
-                          index,
-                          compoundRequestStore.requestCondition,
-                        )}
-                      />
-                    </div>
-                  ),
+                      >
+                        <span className="cursor-pointer step-content-area">
+                          {group}
+                        </span>
+
+                        <Select
+                          onClick={(e: MouseEvent<any>) => e.stopPropagation()}
+                          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                            if (value !== e.target.value) {
+                              filterStore.setTouched(true)
+                            }
+                            compoundRequestStore.handleSetSingleRequest(
+                              index,
+                              currNo,
+                              e.target,
+                            )
+                          }}
+                          className="w-auto ml-1"
+                          options={selectOptions}
+                          value={value}
+                        />
+                      </div>
+                    )
+                  },
                 )}
               </div>
             </div>

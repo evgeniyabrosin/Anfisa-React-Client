@@ -13,17 +13,23 @@ import { PanelButtons } from '../panelButtons'
 import customInheritanceModeStore from './custom-inheritance-mode.store'
 
 export const CustomInheritanceMode = observer(() => {
-  const { selectedCondition, isRedactorMode } = filterStore
+  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
 
   const { simpleVariants, problemGroups } = functionPanelStore
 
   const { selectStates, scenario, resetValue } = customInheritanceModeStore
 
   const setComplexScenario = (resetName: string): void => {
+    if (resetValue !== resetName) filterStore.setTouched(true)
     customInheritanceModeStore.setComplexScenario(resetName)
   }
 
   const setSingleScenario = (group: string, selectValue: string): void => {
+    problemGroups.forEach((gName, index) => {
+      if (gName === group && selectStates[index] !== selectValue) {
+        filterStore.setTouched(true)
+      }
+    })
     customInheritanceModeStore.setSingleScenario(group, selectValue)
   }
 
@@ -64,8 +70,23 @@ export const CustomInheritanceMode = observer(() => {
     return () => filterStore.resetStatFuncData()
   }, [])
 
+  const onSubmit = () => {
+    customInheritanceModeStore.handleSumbitCondtions()
+    filterStore.setTouched(false)
+  }
+
+  const resetFields = () => {
+    customInheritanceModeStore.clearData()
+    filterStore.setTouched(true)
+  }
+
+  const toggleNotMode = () => {
+    customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
+    filterStore.setTouched(true)
+  }
+
   return (
-    <React.Fragment>
+    <>
       <CustomInheritanceModeContent
         problemGroups={problemGroups}
         handleSetScenario={setSingleScenario}
@@ -75,16 +96,14 @@ export const CustomInheritanceMode = observer(() => {
         isNotModeChecked={
           customInheritanceModeStore.currentMode === ModeTypes.Not
         }
-        toggleNotMode={() =>
-          customInheritanceModeStore.setCurrentMode(ModeTypes.Not)
-        }
+        toggleNotMode={toggleNotMode}
       />
 
       <PanelButtons
-        onSubmit={() => customInheritanceModeStore.handleSumbitCondtions()}
-        resetFields={() => customInheritanceModeStore.clearData()}
-        disabled={!simpleVariants}
+        onSubmit={onSubmit}
+        resetFields={resetFields}
+        disabled={!simpleVariants || !isFilterTouched}
       />
-    </React.Fragment>
+    </>
   )
 })

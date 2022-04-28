@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  ReactElement,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { adjustHistogramData } from '@core/histograms'
 import { t } from '@i18n'
@@ -90,7 +84,7 @@ export const NumericConditionRange = ({
   }
 
   return (
-    <Fragment>
+    <>
       <div className={className}>
         <div className="my-2">
           <label className="inline-flex items-center text-sm">
@@ -208,6 +202,6 @@ export const NumericConditionRange = ({
           hasErrors: errors.includes(true),
           clearValue,
         })}
-    </Fragment>
+    </>
   )
 }
