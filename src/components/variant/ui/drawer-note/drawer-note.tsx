@@ -38,10 +38,10 @@ const DrawerNoteModal = observer(({ close }: any) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
 
-  const ref = useRef(null)
+  const wrapperRef = useRef(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  useOutsideClick(ref, () => close())
+  useOutsideClick(wrapperRef, () => close())
 
   useEffect(() => {
     setValue(variantStore.noteText)
@@ -106,15 +106,27 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div ref={ref} className={classNames(styles.modalWrapper, 'bg-blue-light')}>
-      <div className={styles.modalTitle}>
-        <span>{t('variant.notesFor')} </span>
+    <div
+      ref={wrapperRef}
+      className={classNames(styles['modal-wrapper'], 'bg-blue-light')}
+    >
+      <div className={styles['modal-title']}>
+        <div>
+          <span>{t('variant.notesFor')} </span>
 
-        <span className="text-blue-bright">
-          {`[${genInfo}] `}
+          <span className="text-blue-bright">
+            {`[${genInfo}] `}
 
-          <span dangerouslySetInnerHTML={{ __html: hg19 }} />
-        </span>
+            <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+          </span>
+        </div>
+
+        <Icon
+          name="Close"
+          onClick={close}
+          size={16}
+          className="cursor-pointer"
+        />
       </div>
 
       <div>
@@ -132,7 +144,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             handleChange(event.target.value)
           }
           className={classNames(
-            styles.modalTextArea,
+            styles['modal-text-area'],
             'focus:border-l-2 focus:border-blue-bright',
           )}
         />
