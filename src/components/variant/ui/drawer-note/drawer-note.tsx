@@ -1,3 +1,5 @@
+import styles from './drawer-note.module.css'
+
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import get from 'lodash/get'
@@ -37,6 +39,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
   const [error, setError] = useState('')
 
   const ref = useRef(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useOutsideClick(ref, () => close())
 
@@ -65,6 +68,36 @@ const DrawerNoteModal = observer(({ close }: any) => {
     close()
   }
 
+  const textAreaValue = textareaRef.current?.value
+
+  // resize textarea height
+  useEffect(() => {
+    if (!textareaRef.current) return
+
+    if (textAreaValue === '') {
+      textareaRef.current.style.height = '55px'
+      return
+    }
+
+    // if value = '' && focus===false max-width = 44px
+
+    // Reset field height
+    textareaRef.current.style.height = 'inherit'
+
+    // Get the computed styles for the element
+    const computed = window.getComputedStyle(textareaRef.current)
+
+    // Calculate the height
+    const height =
+      parseInt(computed.getPropertyValue('border-top-width'), 10) +
+      parseInt(computed.getPropertyValue('padding-top'), 10) +
+      textareaRef.current.scrollHeight +
+      parseInt(computed.getPropertyValue('padding-bottom'), 10) +
+      parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+
+    textareaRef.current.style.height = `${height}px`
+  }, [textAreaValue])
+
   const handleChange = (note: string) => {
     const validationResult = validateNotes(note)
 
@@ -73,11 +106,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div
-      ref={ref}
-      className="w-96 bg-blue-light flex flex-col py-5 px-4 rounded-xl"
-    >
-      <span className="w-full">
+    <div ref={ref} className={classNames(styles.modalWrapper, 'bg-blue-light')}>
+      <div className={styles.modalTitle}>
         <span>{t('variant.notesFor')} </span>
 
         <span className="text-blue-bright">
@@ -85,8 +115,9 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
           <span dangerouslySetInnerHTML={{ __html: hg19 }} />
         </span>
-      </span>
-      <div className="relative mt-3">
+      </div>
+
+      <div>
         {error && (
           <div className="absolute -top-2.5 text-12 text-red-secondary">
             {error}
@@ -94,13 +125,16 @@ const DrawerNoteModal = observer(({ close }: any) => {
         )}
 
         <textarea
-          placeholder="Enter text"
-          className="w-full mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
-          rows={15}
+          ref={textareaRef}
+          placeholder={t('variant.textAboutSomething')}
           value={value}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-            handleChange(e.target.value)
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+            handleChange(event.target.value)
           }
+          className={classNames(
+            styles.modalTextArea,
+            'focus:border-l-2 focus:border-blue-bright',
+          )}
         />
       </div>
 

@@ -1,0 +1,22 @@
+.modalWrapper {
+  width: 468px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  padding: 16px;
+
+}
+
+.modalTitle {
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.modalTextArea {
+  resize: none;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 12px;
+  border: 2px solid transparent;
+  outline: none;
+}
