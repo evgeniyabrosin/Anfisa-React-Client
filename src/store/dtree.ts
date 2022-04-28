@@ -5,7 +5,7 @@ import { makeAutoObservable, runInAction, toJS } from 'mobx'
 import { FilterCountsType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
-import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
+import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
 import { TFilteringStatCounts } from '@service-providers/common'
 import {
   IDsStatArguments,
@@ -18,7 +18,7 @@ import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
-} from '../pages/filter/active-step.store'
+} from '../pages/filter/dtree/components/active-step.store'
 import datasetStore from './dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
@@ -96,7 +96,7 @@ class DtreeStore {
   stepAmout = 0
 
   isModalSaveDatasetVisible = false
-  isTableModalVisible = false
+  isModalViewVariantsVisible = false
   tableModalIndexNumber: null | number = null
 
   requestData: IRequestData[] = []
@@ -421,14 +421,14 @@ class DtreeStore {
     this.isModalSaveDatasetVisible = false
   }
 
-  openTableModal(index?: number) {
-    this.isTableModalVisible = true
+  openModalViewVariants(index?: number) {
+    this.isModalViewVariantsVisible = true
 
     if (index) this.tableModalIndexNumber = index
   }
 
-  closeTableModal = () => {
-    this.isTableModalVisible = false
+  closeModalViewVariants = () => {
+    this.isModalViewVariantsVisible = false
     this.tableModalIndexNumber = null
   }
 

@@ -1,4 +1,4 @@
-import { TScenario } from '@pages/filter/ui/panels/function-panel/function-panel.interface'
+import { TScenario } from '@pages/filter/refiner/components/middle-column/panels/function-panel/function-panel.interface'
 
 export const getSelectValue = (
   scenario: TScenario[],

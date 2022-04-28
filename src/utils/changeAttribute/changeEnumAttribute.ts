@@ -3,10 +3,10 @@ import uniq from 'lodash/uniq'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/active-step.store'
-import modalEditStore from '@pages/filter/ui/modal-edit/modal-edit.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
-import dtreeModalStore from '../../pages/filter/modals.store'
+import modalsVisibilityStore from '../../pages/filter/dtree/components/modals/modals-visibility-store'
 
 export const changeEnumAttribute = (currentMode?: ModeTypes) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
@@ -16,9 +16,9 @@ export const changeEnumAttribute = (currentMode?: ModeTypes) => {
     code,
   })
 
-  const { groupIndexToChange } = dtreeModalStore
+  const { groupIndexToChange } = modalsVisibilityStore
   const { activeStepIndex } = activeStepStore
-  const { location } = modalEditStore
+  const { location } = modalsControlStore
 
   const attribute: any[] =
     dtreeStore.stepData[activeStepIndex].groups[groupIndexToChange]

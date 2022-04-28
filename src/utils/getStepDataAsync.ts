@@ -1,5 +1,5 @@
 import dtreeStore, { IStepData } from '@store/dtree'
-import activeStepStore from '@pages/filter/active-step.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
 import { getDataFromCode } from './getDataFromCode'
 
