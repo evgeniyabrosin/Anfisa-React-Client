@@ -31,20 +31,16 @@ export const FilterControlQueryBuilder = observer((): ReactElement => {
     actionName,
   } = dtreeStore
 
-  const handleSelect = (value: string) => {
-    dtreeStore.setCurrentDtreeName(value)
+  const handleSelect = (dtreeName: string) => {
+    dtreeStore.setCurrentDtreeName(dtreeName)
 
-    if (
-      dtreeStore.dtreeCode.length > 13 &&
-      dtreeStore.startDtreeCode === dtreeStore.dtreeCode &&
-      currentDtreeName === previousDtreeName
-    ) {
+    if (dtreeName === previousDtreeName) {
       return
     }
 
     const body = new URLSearchParams({
       ds: datasetStore.datasetName,
-      dtree: value,
+      dtree: dtreeName,
     })
 
     dtreeStore.fetchDtreeSetAsync(body)
