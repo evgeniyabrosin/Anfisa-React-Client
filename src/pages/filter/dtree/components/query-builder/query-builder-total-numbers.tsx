@@ -27,7 +27,12 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
   const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
   const openTableModal = (isReturnedVariants = true) => {
-    const hasEmptyStep = stepData.some(element => element.groups.length === 0)
+    const hasEmptyStep = stepData.some(element => {
+      if (!element.isFinalStep) {
+        return element.groups.length === 0
+      }
+      return false
+    })
 
     const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
     const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
