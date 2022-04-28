@@ -1,5 +1,5 @@
 import { GlbPagesNames } from '@glb/glb-names'
-import { FilterControlOptions } from '@pages/filter/ui/filter-control/filter-control.const'
+import { FilterControlOptions } from '@pages/filter/common/filter-control/filter-control.const'
 import { PageRoute, Routes } from './routes.enum'
 
 export const getPageRoute = (
@@ -11,8 +11,8 @@ export const getPageRoute = (
     case GlbPagesNames.Table:
       route = Routes.WS
       break
-    case GlbPagesNames.Filter:
-      route = Routes.Filter
+    case GlbPagesNames.Dtree:
+      route = Routes.Dtree
       break
     case GlbPagesNames.Refiner:
       route = Routes.Refiner
