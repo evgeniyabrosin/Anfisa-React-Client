@@ -245,6 +245,7 @@ export const en = {
     viewReturnedVariants: 'View returned variants',
     showReturnedVariantsForStep: 'Show {returnValue} variants for step {index}',
     dtreeDeleteConfirmation: 'Do you really want to delete this tree?',
+    inactiveField: 'Inactive field',
   },
   error: {
     getBack: 'Back to home',

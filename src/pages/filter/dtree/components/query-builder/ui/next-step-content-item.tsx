@@ -21,6 +21,7 @@ import { getNumericExpression } from '@utils/getNumericExpression'
 import modalFiltersStore from '../../modals/components/modal-enum/modal-enum.store'
 import modalsVisibilityStore from '../../modals/modals-visibility-store'
 import { DropDownJoin } from './dropdown-join'
+import { InactiveFieldLabel } from './inactive-field-label'
 
 const ContentControl = styled.div`
   display: flex;
@@ -74,13 +75,15 @@ export const NextStepContentItem = observer(
     // }
     const [isVisible, setIsVisible] = useState(false)
     const limitSize = 3
+    const stepType = group[0]
+    const groupName = group[1]
 
-    const array = group.find((elem: any) => Array.isArray(elem))
+    const stepCondition = group.find(Array.isArray)
 
     const getButtonMessage = () => {
-      if (group[0] === StepTypeEnum.Numeric) return ''
+      if (stepType === StepTypeEnum.Numeric) return ''
 
-      const size = array.length - limitSize
+      const size = stepCondition.length - limitSize
 
       return expanded ? `Hide ${size} variants` : `Show ${size} variants`
     }
@@ -180,12 +183,16 @@ export const NextStepContentItem = observer(
               {group.includes(StepTypeEnum.Func) && (
                 <FnLabel currentStep={currentStep} className="shadow-dark" />
               )}
-              {`${group[1]}`}
+              {groupName || (
+                <InactiveFieldLabel stepIndex={index} groupIndex={currNo} />
+              )}
             </div>
+
             {/* TODO: add switch to step after implementation in backend */}
             {/* <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div> */}
+
             {!isNumeric && (
               <Checkbox
                 checked={isNotMode}
@@ -211,17 +218,16 @@ export const NextStepContentItem = observer(
             )}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
-              {group[0] === StepTypeEnum.Numeric &&
-                getNumericExpression(array, group[1])}
+              {stepType === StepTypeEnum.Numeric &&
+                getNumericExpression(stepCondition, groupName)}
 
-              {group[0] !== StepTypeEnum.Numeric &&
-                array
-                  .slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
+              {stepType !== StepTypeEnum.Numeric &&
+                stepCondition
+                  ?.slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
                   .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
 
-              {group[0] !== StepTypeEnum.Numeric && array.length > 3 && (
+              {stepType !== StepTypeEnum.Numeric && stepCondition?.length > 3 && (
                 <div
-                  key={Math.random()}
                   className="text-blue-bright cursor-pointer"
                   onClick={setExpandOnClick}
                 >
