@@ -1,18 +1,14 @@
-import { ReactElement, useRef } from 'react'
-import cn, { Argument } from 'classnames'
-import noop from 'lodash/noop'
+import { ReactElement } from 'react'
+import { Argument } from 'classnames'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
-import { Button } from '@ui/button'
-import { Icon } from '@ui/icon'
 import { InputSearch } from '@components/input-search'
 import { FilterMods } from '@pages/ws/ui/table/filter-mods'
-import { MainTableDataCy } from './data-testid/main-table.cy'
+import { PopupCard } from './popup-card/popup-card'
 
 interface Props {
   title?: string
@@ -57,16 +53,6 @@ export const PopperTableModal = observer(
     notShowSelectedPanel,
     className,
   }: Props) => {
-    const ref = useRef(null)
-
-    const onOutsideClick = () => {
-      isTags && zoneStore.unselectAllTags()
-
-      onClose && onClose()
-    }
-
-    useOutsideClick(ref, onOutsideClick ?? noop)
-
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
       isGenesList && zoneStore.unselectAllGenesList()
@@ -97,18 +83,14 @@ export const PopperTableModal = observer(
     }
 
     return (
-      <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
+      <PopupCard
+        className={className}
+        title={title ?? ''}
+        onClose={handleClose}
+        onApply={handleApply}
+        shouldCloseOnOutsideClick={true}
+      >
         <div className="px-4 pt-4">
-          <div className="flex justify-between mb-5 items-center">
-            <p className="text-blue-dark  font-medium ">{title}</p>
-            <Icon
-              name="Close"
-              onClick={handleClose}
-              size={16}
-              className="cursor-pointer"
-            />
-          </div>
-
           {!isNotSearchable && (
             <InputSearch
               value={searchValue}
@@ -143,21 +125,7 @@ export const PopperTableModal = observer(
           {isTags && <FilterMods />}
         </div>
         <div className="w-full pl-4">{children}</div>
-        <div className="flex justify-end pb-4 px-4 mt-4">
-          <Button
-            text={t('general.cancel')}
-            variant="secondary"
-            onClick={handleClose}
-          />
-
-          <Button
-            text={t('general.apply')}
-            className="ml-3"
-            onClick={handleApply}
-            dataTestId={MainTableDataCy.applyButton}
-          />
-        </div>
-      </div>
+      </PopupCard>
     )
   },
 )
