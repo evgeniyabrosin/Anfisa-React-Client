@@ -75,6 +75,7 @@ export const ZoneItem = observer(
             title={title}
             ButtonElement={ButtonElementEdit}
             ModalElement={modalElement}
+            onClick={setCoordinatesFromEvent}
           />
         )}
 
