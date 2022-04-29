@@ -13,6 +13,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { PopupCard } from '@components/popup-card/popup-card'
 import { getParsedValue } from '@utils/drawer/getParsedValue'
 import { validateNotes } from '@utils/validation/validateNotes'
 
@@ -80,76 +81,55 @@ const DrawerNoteModal = observer(({ close }: any) => {
   }
 
   return (
-    <div
-      ref={wrapperRef}
-      className={classNames(styles['modal-wrapper'], 'bg-blue-light')}
-    >
-      <div className={styles['modal-title']}>
-        <div>
-          <span>{t('variant.notesFor')} </span>
+    <PopupCard
+      title={
+        <div className={styles['modal-title']}>
+          <span>
+            {t('variant.notesFor')}{' '}
+            <span className="text-blue-bright">
+              {`[${genInfo}] `}
 
-          <span className="text-blue-bright">
-            {`[${genInfo}] `}
-
-            <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+              <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+            </span>
           </span>
         </div>
-
-        <Icon
-          name="Close"
-          onClick={close}
-          size={16}
-          className="cursor-pointer"
-        />
-      </div>
-
-      <div>
-        {error && (
-          <div className="absolute -top-2.5 text-12 text-red-secondary">
-            {error}
-          </div>
-        )}
-
-        <textarea
-          ref={textareaRef}
-          placeholder={t('variant.textAboutSomething')}
-          value={value}
-          onChange={handleChange}
-          className={classNames(
-            styles['modal-text-area'],
-            'focus:border-l-2 focus:border-blue-bright',
-          )}
-        />
-      </div>
-
-      <div className="flex justify-between mt-4">
+      }
+      isBlueBg={true}
+      additionalBottomButton={
+        variantStore.noteText ? (
+          <Button
+            text={t('general.delete')}
+            onClick={deleteNoteAsync}
+            variant="diestruction"
+          />
+        ) : undefined
+      }
+      cancelText={t('general.cancel')}
+      onClose={close}
+      applyText={t('variant.saveNote')}
+      onApply={handleSaveNoteAsync}
+    >
+      <div className={styles['modal-wrapper']}>
         <div>
-          {variantStore.noteText && (
-            <Button
-              text={t('general.delete')}
-              onClick={deleteNoteAsync}
-              variant="diestruction"
-            />
+          {error && (
+            <div className="absolute -top-2.5 text-12 text-red-secondary">
+              {error}
+            </div>
           )}
-        </div>
 
-        <div className="flex items-center">
-          <Button
-            text={t('general.cancel')}
-            onClick={close}
-            variant="secondary"
-          />
-
-          <Button
-            text="Save note"
-            dataTestId={VariantDrawerDataCy.saveNote}
-            disabled={!value || !value.trim() || !!error}
-            className="ml-2"
-            onClick={handleSaveNoteAsync}
+          <textarea
+            ref={textareaRef}
+            placeholder={t('variant.textAboutSomething')}
+            value={value}
+            onChange={handleChange}
+            className={classNames(
+              styles['modal-text-area'],
+              'focus:border-l-2 focus:border-blue-bright',
+            )}
           />
         </div>
       </div>
-    </div>
+    </PopupCard>
   )
 })
 

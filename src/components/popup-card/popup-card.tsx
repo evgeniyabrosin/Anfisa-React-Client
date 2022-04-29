@@ -9,7 +9,7 @@ import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { Loader } from '@components/loader'
 
 export interface IPopupCardProps {
-  title: string
+  title: string | JSX.Element
   cancelText?: string
   applyText?: string
   className?: Argument
@@ -17,6 +17,8 @@ export interface IPopupCardProps {
   onApply?: () => void
   isApplyDisabled?: boolean
   isLoading?: boolean
+  isBlueBg?: boolean
+  additionalBottomButton?: JSX.Element
 }
 
 export const PopupCard = ({
@@ -29,9 +31,17 @@ export const PopupCard = ({
   onApply,
   isLoading,
   isApplyDisabled = false,
+  isBlueBg = false,
+  additionalBottomButton,
 }: React.PropsWithChildren<IPopupCardProps>) => {
   return (
-    <div className={cn('bg-white shadow-card rounded', className)}>
+    <div
+      className={cn(
+        'shadow-card rounded',
+        `${isBlueBg ? 'bg-blue-light' : 'bg-white'}`,
+        className,
+      )}
+    >
       <div className="px-4 pt-4">
         <div className="flex justify-between mb-5 items-center">
           <p className="text-blue-dark  font-medium ">{title}</p>
@@ -44,26 +54,31 @@ export const PopupCard = ({
         </div>
       </div>
       <div className="w-full px-4">{children}</div>
-      <div className="flex justify-end pb-4 px-4 mt-4">
-        <Button
-          text={cancelText || t('general.cancel')}
-          variant="secondary"
-          onClick={onClose}
-        />
 
-        <Button
-          disabled={isApplyDisabled || isLoading}
-          text={
-            isLoading ? (
-              <Loader size="xs" color="white" />
-            ) : (
-              applyText || t('general.apply')
-            )
-          }
-          className="ml-3"
-          onClick={onApply}
-          dataTestId={MainTableDataCy.applyButton}
-        />
+      <div className="flex justify-between pb-4 px-4 mt-4">
+        <div>{additionalBottomButton && additionalBottomButton}</div>
+
+        <div className="flex">
+          <Button
+            text={cancelText || t('general.cancel')}
+            variant="secondary"
+            onClick={onClose}
+          />
+
+          <Button
+            disabled={isApplyDisabled || isLoading}
+            text={
+              isLoading ? (
+                <Loader size="xs" color="white" />
+              ) : (
+                applyText || t('general.apply')
+              )
+            }
+            className="ml-3"
+            onClick={onApply}
+            dataTestId={MainTableDataCy.applyButton}
+          />
+        </div>
       </div>
     </div>
   )
