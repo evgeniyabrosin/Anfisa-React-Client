@@ -49,6 +49,24 @@ module.exports = {
         }
       },
     },
+    css: {
+      loaderOptions: options => {
+        if ('modules' in options) {
+          return {
+            ...options,
+            modules: {
+              ...options.modules,
+              exportLocalsConvention: className => [
+                className,
+                className.replace(/-./g, x => x[1].toUpperCase()),
+              ],
+            },
+          }
+        }
+
+        return options
+      },
+    },
   },
   webpack: {
     plugins: {

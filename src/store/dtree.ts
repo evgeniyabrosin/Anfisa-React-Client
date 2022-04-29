@@ -239,6 +239,8 @@ class DtreeStore {
 
       if (result.request) this.request = result.request
     })
+
+    return result
   }
 
   setActionHistory(updatedActionHistory: IDsStatArguments[]) {
