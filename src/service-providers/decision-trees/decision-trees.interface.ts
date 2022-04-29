@@ -27,6 +27,8 @@ export enum InstrModifyingActionNames {
   NEGATE = 'NEGATE',
   JOIN_AND = 'JOIN-AND',
   JOIN_OR = 'JOIN-OR',
+  UP_JOIN_AND = 'UP-JOIN-AND',
+  UP_JOIN_OR = 'UP-JOIN-OR',
   SPLIT = 'SPLIT',
   BOOL_TRUE = 'BOOL-TRUE',
   BOOL_FALSE = 'BOOL-FALSE',

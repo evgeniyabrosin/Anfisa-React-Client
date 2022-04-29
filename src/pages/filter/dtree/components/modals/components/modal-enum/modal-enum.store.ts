@@ -138,10 +138,11 @@ class ModalEnumStore {
   }
 
   public get filteredGroupList(): [string, number][] {
-    return this.originGroupList.filter((variant: [string, number]) =>
-      variant[0]
-        .toLocaleLowerCase()
-        .includes(this.searchValue.toLocaleLowerCase()),
+    return this.originGroupList.filter(
+      ([variantName, variantValue]) =>
+        variantName
+          .toLocaleLowerCase()
+          .includes(this.searchValue.toLocaleLowerCase()) && variantValue > 0,
     )
   }
 
