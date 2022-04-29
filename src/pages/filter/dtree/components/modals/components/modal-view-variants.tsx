@@ -205,7 +205,7 @@ export const ModalViewVariants = observer(() => {
         ) : (
           <>
             <div className="flex w-full overflow-hidden rounded-lg">
-              <div className="flex flex-col bg-white rounded-l-lg overflow-auto">
+              <div className="w-1/4 flex flex-col bg-white rounded-l-lg overflow-auto">
                 <div className="flex px-[14px] py-4">
                   <Radio
                     id="full-list"
@@ -227,13 +227,16 @@ export const ModalViewVariants = observer(() => {
                     {t('dtree.samples25')}
                   </Radio>
                 </div>
+
                 <table className="min-w-full table-auto">
                   <thead>
                     <tr className="border-y-[0.5px] border-grey-blue">
                       <th className="px-4 py-3">Gene</th>
+
                       <th className="px-4 py-3">Variant</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {toJS(variantList).map(
                       (
@@ -262,6 +265,7 @@ export const ModalViewVariants = observer(() => {
                               className="text-sm font-normal py-[30px] px-[16px]"
                               dangerouslySetInnerHTML={{ __html: gene }}
                             />
+
                             <th
                               className="text-xs font-normal py-[30px] px-[16px]"
                               dangerouslySetInnerHTML={{ __html: variantB }}
@@ -273,7 +277,8 @@ export const ModalViewVariants = observer(() => {
                   </tbody>
                 </table>
               </div>
-              <div className="flex flex-col rounded-r-lg w-full">
+
+              <div className="w-3/4 flex flex-col rounded-r-lg">
                 <div className="flex px-4 py-2 justify-between w-full bg-blue-dark">
                   <div
                     className="flex justify-center text-16 font-semi-bold text-blue-bright"
@@ -281,6 +286,7 @@ export const ModalViewVariants = observer(() => {
                       __html: variantList[variantIndex]?.lb ?? '',
                     }}
                   />
+
                   <div className="flex justify-center items-center">
                     <Icon
                       name={isCollapsed ? 'Expand' : 'Collapse'}
@@ -288,7 +294,9 @@ export const ModalViewVariants = observer(() => {
                       size={16}
                       className="cursor-pointer text-white"
                     />
+
                     <div className="bg-blue-lighter mx-3 rounded-sm w-0.5 h-[20px]" />
+
                     <Icon
                       name="Close"
                       onClick={dtreeStore.closeModalViewVariants}
@@ -297,6 +305,7 @@ export const ModalViewVariants = observer(() => {
                     />
                   </div>
                 </div>
+
                 <div
                   ref={variantContainerRef}
                   className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
