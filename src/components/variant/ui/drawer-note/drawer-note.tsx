@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
+import { useResizeTextAreaHeight } from '@core/hooks/use-resize-text-area-height'
 import { t } from '@i18n'
 import variantStore from '@store/variant'
 import { Button } from '@ui/button'
@@ -43,6 +44,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
   useOutsideClick(wrapperRef, () => close())
 
+  useResizeTextAreaHeight(textareaRef.current)
+
   useEffect(() => {
     setValue(variantStore.noteText)
   }, [])
@@ -68,41 +71,12 @@ const DrawerNoteModal = observer(({ close }: any) => {
     close()
   }
 
-  const textAreaValue = textareaRef.current?.value
-
-  // resize textarea height
-  useEffect(() => {
-    if (!textareaRef.current) return
-
-    if (textAreaValue === '') {
-      textareaRef.current.style.height = '55px'
-      return
-    }
-
-    // if value = '' && focus===false max-width = 44px
-
-    // Reset field height
-    textareaRef.current.style.height = 'inherit'
-
-    // Get the computed styles for the element
-    const computed = window.getComputedStyle(textareaRef.current)
-
-    // Calculate the height
-    const height =
-      parseInt(computed.getPropertyValue('border-top-width'), 10) +
-      parseInt(computed.getPropertyValue('padding-top'), 10) +
-      textareaRef.current.scrollHeight +
-      parseInt(computed.getPropertyValue('padding-bottom'), 10) +
-      parseInt(computed.getPropertyValue('border-bottom-width'), 10)
-
-    textareaRef.current.style.height = `${height}px`
-  }, [textAreaValue])
-
-  const handleChange = (note: string) => {
-    const validationResult = validateNotes(note)
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = event.target
+    const validationResult = validateNotes(value)
 
     validationResult.error ? setError(validationResult.error) : setError('')
-    setValue(note)
+    setValue(value)
   }
 
   return (
@@ -140,9 +114,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
           ref={textareaRef}
           placeholder={t('variant.textAboutSomething')}
           value={value}
-          onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-            handleChange(event.target.value)
-          }
+          onChange={handleChange}
           className={classNames(
             styles['modal-text-area'],
             'focus:border-l-2 focus:border-blue-bright',
