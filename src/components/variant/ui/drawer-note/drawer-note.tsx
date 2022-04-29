@@ -122,10 +122,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
             placeholder={t('variant.textAboutSomething')}
             value={value}
             onChange={handleChange}
-            className={classNames(
-              styles['modal-text-area'],
-              'focus:border-l-2 focus:border-blue-bright',
-            )}
+            className={styles['modal-text-area']}
           />
         </div>
       </div>
