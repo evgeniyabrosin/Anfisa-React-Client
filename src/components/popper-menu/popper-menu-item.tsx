@@ -6,7 +6,7 @@ import { Icon, TIcons } from '@ui/icon'
 export interface IPopperMenuItemProps {
   iconName?: TIcons
   className?: Argument
-  onClick?: () => void
+  onClick?: (event: any) => void
   isDisabled?: boolean
 }
 
