@@ -17,7 +17,7 @@ export const SelectedDataset = observer((): ReactElement => {
   }
 
   return (
-    <div className="flex-grow grid gap-4 grid-cols-3 p-4">
+    <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
       <Card className="col-span-1 xl:col-span-3">
         <div className="flex items-start justify-between flex-wrap">
           <CardTitle

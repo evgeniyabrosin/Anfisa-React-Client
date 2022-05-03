@@ -26,20 +26,22 @@ export const ZoneItem = observer(
     dataTestId,
     isLast,
   }: IZoneItemProps): ReactElement => {
-    const ButtonElementEdit = ({ refEl, onClick }: any) => (
+    const ButtonElementEdit = ({ refEl, onClick, onMouseUp }: any) => (
       <HeaderTableButton
         text="+"
         refEl={refEl}
         onClick={onClick}
+        onMouseUp={onMouseUp}
         className="text-blue-bright mt-px ml-1"
       />
     )
 
-    const ButtonElementAdd = ({ refEl, onClick }: any) => (
+    const ButtonElementAdd = ({ refEl, onClick, onMouseUp }: any) => (
       <HeaderTableButton
         text={`${t('general.add')} ${title}`}
         refEl={refEl}
         onClick={onClick}
+        onMouseUp={onMouseUp}
         noIcon={true}
         className="flex items-center text-14 text-blue-bright"
         dataTestId={dataTestId}

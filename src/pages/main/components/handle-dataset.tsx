@@ -8,13 +8,14 @@ import { ExportModal } from './modals/export-modal'
 import { HandleDatasetModal } from './modals/handle-dataset-modal'
 import { ImportModal } from './modals/import-modal'
 
-const HandleDatasetButton = ({ refEl, onClick }: any) => {
+const HandleDatasetButton = ({ refEl, onClick, onMouseUp }: any) => {
   return (
     <Button
       refEl={refEl}
       onClick={onClick}
       className="rounded"
       prepend={<Icon name="Ellipsis" />}
+      onMouseUp={onMouseUp}
       style={{
         width: '36px',
         height: '28px',
@@ -26,7 +27,7 @@ const HandleDatasetButton = ({ refEl, onClick }: any) => {
 
 export const HandleDataset = observer(() => {
   return (
-    <div className="absolute" style={{ bottom: 90 }}>
+    <div className="ml-4 mt-4">
       <PopperButton
         ModalElement={HandleDatasetModal}
         ButtonElement={HandleDatasetButton}

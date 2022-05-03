@@ -8,7 +8,7 @@ import { Icon } from '@ui/icon'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { DocLinks } from '../components/doc-links'
 import { HandleDataset } from '../components/handle-dataset'
-import { DatasetsList } from './datasets-list'
+import { DatasetsList } from './datasets-list/datasets-list'
 import { FilterSortDatasets } from './filter-sort-datasets'
 
 export const Datasets = (): ReactElement => {
@@ -16,18 +16,16 @@ export const Datasets = (): ReactElement => {
 
   return (
     <div
-      className={cn([
-        'bg-blue-lighter',
-        'flex-shrink-0',
-        'pt-4',
-        isOpen ? 'pl-4' : 'pl-2',
-      ])}
-      style={{
-        width: isOpen ? '372px' : 'auto',
-      }}
+      className={cn(
+        'bg-blue-lighter flex flex-col flex-shrink-0 pt-[18px] h-full overflow-auto',
+        {
+          'w-[372px]': isOpen,
+          'w-auto': !isOpen,
+        },
+      )}
     >
       <div
-        className={cn('flex justify-between mb-3', isOpen ? 'pr-4' : 'pr-2')}
+        className={cn('flex justify-between mb-3', isOpen ? 'px-4' : 'px-2')}
       >
         {isOpen && (
           <div
@@ -39,22 +37,26 @@ export const Datasets = (): ReactElement => {
         )}
         <Button
           dataTestId={FilterDatasetDataCy.leftPanelArrowButton}
-          size="sm"
+          size="md"
           icon={<Icon name="Arrow" />}
-          className={cn('bg-blue-dark transform', { 'rotate-180': !isOpen })}
+          className={cn('bg-blue-bright transform rounded-md', {
+            'rotate-180': !isOpen,
+          })}
           onClick={isOpen ? close : open}
         />
       </div>
       {isOpen && (
-        <React.Fragment>
+        <>
           <FilterSortDatasets />
 
           <DatasetsList />
 
-          <HandleDataset />
+          <div className="flex flex-col flex-1 w-full justify-end">
+            <HandleDataset />
 
-          <DocLinks />
-        </React.Fragment>
+            <DocLinks />
+          </div>
+        </>
       )}
     </div>
   )

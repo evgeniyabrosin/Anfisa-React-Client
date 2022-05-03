@@ -10,7 +10,7 @@ import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
-import { InputSearch } from '@components/input-search'
+import { InputSearch } from '@components/input-search/input-search'
 import { FilterMods } from '@pages/ws/ui/table/filter-mods'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 

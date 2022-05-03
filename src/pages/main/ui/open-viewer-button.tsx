@@ -32,6 +32,7 @@ const ButtonBase = ({ isOpen, refEl, ...rest }: PropsButton): ReactElement => (
     refEl={refEl}
     size="md"
     onClick={rest.onClick}
+    {...rest}
     append={
       <Icon
         name="Arrow"
