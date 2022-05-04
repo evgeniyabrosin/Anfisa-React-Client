@@ -40,6 +40,7 @@ export const QueryResults = observer((): ReactElement => {
           <SelectedFilterCard
             isActive={index === selectedConditionIndex}
             condition={condition}
+            index={index}
           />
         </div>
       ))}

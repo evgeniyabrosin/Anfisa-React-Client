@@ -23,10 +23,11 @@ import { NumericFilter } from './numeric-filter'
 interface ISelectedFilterCardProps {
   isActive: boolean
   condition: TCondition
+  index: number
 }
 
 export const SelectedFilterCard = observer(
-  ({ isActive, condition }: ISelectedFilterCardProps): ReactElement => {
+  ({ isActive, condition, index }: ISelectedFilterCardProps): ReactElement => {
     const { selectedConditionIndex } = filterStore
 
     // TODO: mobx warning for out of bounds read from condition
@@ -55,7 +56,7 @@ export const SelectedFilterCard = observer(
           className={cn('relative flex flex-col px-3 cursor-pointer', {
             'bg-blue-tertiary': isActive,
           })}
-          onClick={() => filterStore.selectCondition(selectedConditionIndex)}
+          onClick={() => filterStore.selectCondition(index)}
         >
           <div className="flex py-4 justify-between">
             <div className="flex" onClick={toggleFilterContentVisibility}>
