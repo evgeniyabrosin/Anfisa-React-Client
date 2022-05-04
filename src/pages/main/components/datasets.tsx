@@ -6,10 +6,10 @@ import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
-import { DocLinks } from '../components/doc-links'
-import { HandleDataset } from '../components/handle-dataset'
 import { DatasetsList } from './datasets-list/datasets-list'
+import { DocLinks } from './doc-links'
 import { FilterSortDatasets } from './filter-sort-datasets'
+import { HandleDataset } from './handle-dataset/handle-dataset'
 
 export const Datasets = (): ReactElement => {
   const [isOpen, open, close] = useToggle(true)

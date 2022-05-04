@@ -1,5 +1,5 @@
 import dirinfoStore from '@store/dirinfo'
-import { DatasetsListItem } from '@pages/main/ui/datasets-list/datasets-list-item'
+import { DatasetsListItem } from '@pages/main/components/datasets-list/datasets-list-item'
 import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 
 export const datasetNameByKey =

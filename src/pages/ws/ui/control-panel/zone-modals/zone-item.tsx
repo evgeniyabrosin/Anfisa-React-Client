@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -17,6 +17,12 @@ interface IZoneItemProps {
   isLast?: boolean
 }
 
+interface IZoneItemButtonProps {
+  refEl: HTMLDivElement | null
+  onClick: (event?: MouseEvent<HTMLDivElement>) => void
+  onMouseUp: (event?: MouseEvent<HTMLDivElement>) => void
+}
+
 export const ZoneItem = observer(
   ({
     title,
@@ -26,7 +32,11 @@ export const ZoneItem = observer(
     dataTestId,
     isLast,
   }: IZoneItemProps): ReactElement => {
-    const ButtonElementEdit = ({ refEl, onClick, onMouseUp }: any) => (
+    const ButtonElementEdit = ({
+      refEl,
+      onClick,
+      onMouseUp,
+    }: IZoneItemButtonProps) => (
       <HeaderTableButton
         text="+"
         refEl={refEl}
@@ -36,7 +46,11 @@ export const ZoneItem = observer(
       />
     )
 
-    const ButtonElementAdd = ({ refEl, onClick, onMouseUp }: any) => (
+    const ButtonElementAdd = ({
+      refEl,
+      onClick,
+      onMouseUp,
+    }: IZoneItemButtonProps) => (
       <HeaderTableButton
         text={`${t('general.add')} ${title}`}
         refEl={refEl}

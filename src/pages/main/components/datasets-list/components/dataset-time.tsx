@@ -10,18 +10,18 @@ interface IDatasetTimeProps {
 
 export const DatasetTime: FC<IDatasetTimeProps> = ({ time, isActive }) => (
   <div
-    className={cn('flex ml-auto text-10 leading-18px whitespace-nowrap', {
-      'text-white': isActive,
-      'text-grey-blue': !isActive,
-    })}
+    className={cn(
+      'flex ml-auto text-10 leading-18px whitespace-nowrap',
+      isActive ? 'text-white' : 'text-grey-blue',
+    )}
   >
     <div>{formatDate(time)}</div>
 
     <div
-      className={cn('border-l my-1 mx-1', {
-        'border-white': isActive,
-        'border-blue-secondary': !isActive,
-      })}
+      className={cn(
+        'border-l my-1 mx-1',
+        isActive ? 'border-white' : 'border-blue-secondary',
+      )}
     />
 
     <div>{formatTime(time)}</div>

@@ -3,7 +3,7 @@ import cn, { Argument } from 'classnames'
 import Tooltip from 'rc-tooltip'
 
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
-import { XLBage } from '@pages/main/ui/datasets-list/components/dataset-bage'
+import { XLBage } from '@pages/main/components/datasets-list/components/dataset-bage'
 
 interface IDsNameProps {
   dsName: any
@@ -26,15 +26,19 @@ export const DatasetName: FC<IDsNameProps> = ({
 
   const isXL = kind?.toLocaleLowerCase() === 'xl'
 
-  const name =
-    isXL && dsName.substring(0, 3).toLocaleLowerCase() === 'xl_'
-      ? dsName.substring(3)
-      : dsName
+  const name = isXL && /^xl_.*/i.test(dsName) ? dsName.substring(3) : dsName
 
-  const hasTooltip =
-    datasetRef?.current?.getBoundingClientRect().width +
-      datasetRef?.current?.getBoundingClientRect().x >
-    230
+  const { x = 0, width = 0 } =
+    datasetRef?.current?.getBoundingClientRect() || {}
+
+  const hasTooltip = width + x > 230
+
+  const fontColor = kind === null ? 'text-grey-blue' : 'text-white'
+  const fontWeight = isXL
+    ? 'font-bold'
+    : isActive || isActiveParent
+    ? 'font-medium'
+    : ''
 
   return (
     <>
@@ -48,11 +52,10 @@ export const DatasetName: FC<IDsNameProps> = ({
         <div
           ref={datasetRef}
           className={cn(
-            kind === null ? 'text-grey-blue' : 'text-white',
             'text-sm leading-18px relative ml-2 pr-4',
+            fontColor,
+            fontWeight,
             {
-              'font-bold': isXL,
-              'font-medium': (isActive || isActiveParent) && !isXL,
               truncate: !isChildrenVisible,
               'py-2': !kind,
             },
