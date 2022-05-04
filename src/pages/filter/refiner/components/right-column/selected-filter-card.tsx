@@ -9,7 +9,6 @@ import { Icon } from '@ui/icon'
 import { PopperButton } from '@components/popper-button'
 import { ConditionJoinMode } from '@service-providers/common'
 import {
-  TCondition,
   TFuncArgs,
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
@@ -22,13 +21,13 @@ import { NumericFilter } from './numeric-filter'
 
 interface ISelectedFilterCardProps {
   isActive: boolean
-  condition: TCondition
   index: number
 }
 
 export const SelectedFilterCard = observer(
-  ({ isActive, condition, index }: ISelectedFilterCardProps): ReactElement => {
-    const { selectedConditionIndex } = filterStore
+  ({ isActive, index }: ISelectedFilterCardProps): ReactElement => {
+    const { conditions } = filterStore
+    const condition = conditions[index]
 
     // TODO: mobx warning for out of bounds read from condition
     //       not all of conditions have 3rd and 4th value
