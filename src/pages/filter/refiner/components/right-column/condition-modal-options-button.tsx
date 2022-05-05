@@ -4,7 +4,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 
 interface IProps {
-  refEl: any
+  refEl: HTMLElement
   onClick?: () => void
 }
 
@@ -24,7 +24,6 @@ export const ConditionModalOptionsButton = ({
           stroke={false}
         />
       }
-      onMouseUp={e => e.stopPropagation()}
     />
   )
 }
