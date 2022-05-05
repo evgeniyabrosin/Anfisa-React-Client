@@ -158,6 +158,7 @@ export const en = {
       hide: 'Hide',
       total: 'Total',
       variants: '{value} variants',
+      shownSignificantItems: 'Shown {items} significant items (total: {total})',
     },
     delete: 'Delete',
     copy: 'Copy',
