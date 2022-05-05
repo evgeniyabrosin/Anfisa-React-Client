@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { t } from '@i18n'
-import { InfoList } from './info-list'
+import { InfoList } from './components/info-list'
 
 export const DatasetGeneral = (): ReactElement => {
   return (

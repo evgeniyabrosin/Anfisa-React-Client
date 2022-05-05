@@ -7,13 +7,13 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from '@core/hooks/use-params'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
-import { DatasetName } from '@pages/main/components/datasets-list/components/dataset-name'
-import { DatasetTime } from '@pages/main/components/datasets-list/components/dataset-time'
+import { DatasetName } from '@pages/main/components/sidebar/datasets-list/components/dataset-name'
+import { DatasetTime } from '@pages/main/components/sidebar/datasets-list/components/dataset-time'
 import {
   DEFAULT_DATASET_P,
   LEVEL_DATASET_P,
-} from '@pages/main/components/datasets-list/datasets-list.constants'
-import { datasetNameByKey } from '@pages/main/components/datasets-list/datasets-list.utils'
+} from '@pages/main/components/sidebar/datasets-list/datasets-list.constants'
+import { datasetNameByKey } from '@pages/main/components/sidebar/datasets-list/datasets-list.utils'
 import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import { DatasetType } from './components/dataset-type'
 

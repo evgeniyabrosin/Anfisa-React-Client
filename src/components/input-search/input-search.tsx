@@ -6,7 +6,7 @@ import cn, { Argument } from 'classnames'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '../data-testid/decision-tree-results.cy'
 
-interface Props {
+interface IInputSearchProps {
   placeholder?: string
   value: string
   className?: Argument
@@ -14,7 +14,7 @@ interface Props {
   big?: boolean
 }
 
-export const InputSearch = ({ ...rest }: Props): ReactElement => {
+export const InputSearch = ({ ...rest }: IInputSearchProps): ReactElement => {
   const { className, big = false, ...tempRest } = rest
 
   return (
@@ -22,7 +22,7 @@ export const InputSearch = ({ ...rest }: Props): ReactElement => {
       <input
         type="text"
         data-testid={DecisionTreesResultsDataCy.searchGraphResults}
-        className={!big ? styles.inputSearch : styles.inputSearchBig}
+        className={cn(styles.inputSearch, big && styles.inputSearch_big)}
         {...tempRest}
       />
 

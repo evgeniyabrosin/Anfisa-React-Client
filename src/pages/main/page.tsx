@@ -10,8 +10,8 @@ import filterZone from '@store/filterZone'
 import variantStore from '@store/variant'
 import { Header } from '@components/header'
 import { ErrorPage } from '@pages/error/error'
-import { Datasets } from './components/datasets'
-import { SelectedDataset } from './components/selected-dataset'
+import { SelectedDataset } from './components/selected-dataset/selected-dataset'
+import { Datasets } from './components/sidebar/datasets'
 
 const MainPage = (): ReactElement => {
   const params = useParams()

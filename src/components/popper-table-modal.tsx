@@ -14,7 +14,7 @@ import { InputSearch } from '@components/input-search/input-search'
 import { FilterMods } from '@pages/ws/ui/table/filter-mods'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 
-interface Props {
+interface IPopperTableModalProps {
   title?: string
   selectedAmount?: number
   searchValue: string
@@ -56,7 +56,7 @@ export const PopperTableModal = observer(
     isNotSearchable,
     notShowSelectedPanel,
     className,
-  }: Props) => {
+  }: IPopperTableModalProps) => {
     const ref = useRef(null)
 
     const onOutsideClick = () => {

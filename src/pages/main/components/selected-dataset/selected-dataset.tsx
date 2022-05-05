@@ -5,9 +5,9 @@ import { t } from '@i18n'
 import dirinfoStore from '@store/dirinfo'
 import { Card, CardTitle } from '@ui/card'
 import { DatasetCard } from '@components/data-testid/dataset-card.cy'
-import { DatasetsFieldsList } from './dataset-fileds-list'
-import { DatasetGeneral } from './dataset-general'
-import { OpenViewerButton } from './open-viewer-button'
+import { DatasetsFieldsList } from './components/dataset-fields-list/dataset-fileds-list'
+import { DatasetGeneral } from './components/dataset-general/dataset-general'
+import { OpenViewerButton } from './components/open-viewer-button/open-viewer-button'
 
 export const SelectedDataset = observer((): ReactElement => {
   if (!dirinfoStore.selectedDirinfoName) {

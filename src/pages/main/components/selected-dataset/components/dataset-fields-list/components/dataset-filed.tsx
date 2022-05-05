@@ -1,9 +1,9 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
 import { Card, CardTitle } from '@ui/card'
 
-interface Props {
+interface IDatasetFieldProps {
   label: string
   value: string
   className?: Argument
@@ -13,8 +13,8 @@ export const DatasetField = ({
   label,
   value,
   className,
-}: Props): ReactElement => {
-  if (!value) return <Fragment />
+}: IDatasetFieldProps): ReactElement | null => {
+  if (!value) return null
 
   return (
     <Card className={cn(className)}>

@@ -1,9 +1,9 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import { InfoTextItem } from './info-text-item'
 
-interface Props {
+interface IDocsListProps {
   data: any[]
   activeName: string
   baseDatasetName?: string
@@ -15,11 +15,11 @@ export const DocsList = ({
   activeName,
   baseDatasetName,
   onClick,
-}: Props): ReactElement => {
-  if (!data[1]) return <Fragment />
+}: IDocsListProps): ReactElement | null => {
+  if (!data[1]) return null
 
   return (
-    <Fragment>
+    <>
       {baseDatasetName && (
         <InfoTextItem>
           {t('home.base', {
@@ -29,7 +29,7 @@ export const DocsList = ({
       )}
 
       {data[1].map((doc: string[]) => {
-        if (!doc) return <Fragment />
+        if (!doc) return null
 
         return (
           <div key={doc[0]}>
@@ -61,6 +61,6 @@ export const DocsList = ({
           </div>
         )
       })}
-    </Fragment>
+    </>
   )
 }

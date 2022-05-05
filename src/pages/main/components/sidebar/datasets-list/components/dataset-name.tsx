@@ -3,7 +3,7 @@ import cn, { Argument } from 'classnames'
 import Tooltip from 'rc-tooltip'
 
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
-import { XLBage } from '@pages/main/components/datasets-list/components/dataset-bage'
+import { XLBage } from '@pages/main/components/sidebar/datasets-list/components/dataset-bage'
 
 interface IDsNameProps {
   dsName: any

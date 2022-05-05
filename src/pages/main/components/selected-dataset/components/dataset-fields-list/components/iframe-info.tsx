@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
@@ -42,7 +42,7 @@ export const IframeInfo = observer(({ id }: Props): ReactElement => {
       )}
 
       {!Array.isArray(dirinfoStore.infoFrameLink) && (
-        <Fragment>
+        <>
           {isImg ? (
             <img
               src={dirinfoStore.infoFrameLink}
@@ -55,7 +55,7 @@ export const IframeInfo = observer(({ id }: Props): ReactElement => {
               className="flex-grow"
             />
           )}
-        </Fragment>
+        </>
       )}
     </div>
   )
