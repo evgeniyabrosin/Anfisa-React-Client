@@ -99,6 +99,7 @@ export const NextStepHeader = observer(
               })}
             >
               <Radio
+                id={index + 'include'}
                 checked={!currentStep.excluded}
                 onChange={() => toggleExclude(index, 'BOOL-TRUE')}
                 className="flex items-center mr-3"
@@ -107,6 +108,7 @@ export const NextStepHeader = observer(
               </Radio>
 
               <Radio
+                id={index + 'exclude'}
                 checked={currentStep.excluded}
                 onChange={() => toggleExclude(index, 'BOOL-FALSE')}
                 className="flex items-center mr-3"

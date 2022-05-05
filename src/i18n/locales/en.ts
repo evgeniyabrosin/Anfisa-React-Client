@@ -12,6 +12,7 @@ export const en = {
     clearAll: 'Clear All',
     cancel: 'Cancel',
     apply: 'Apply',
+    applyFilters: 'Apply Filters',
     clear: 'Clear',
     replace: 'Replace',
     add: '+ Add',

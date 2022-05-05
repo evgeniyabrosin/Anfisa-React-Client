@@ -1,0 +1,45 @@
+.checkbox {
+    display: none;
+    &:checked + .checkmark {
+        background-color: theme('colors.blue.bright');
+        border: 1px solid theme('colors.blue.bright');
+    }
+    &:disabled:checked + .checkmark {
+        background-color: theme('colors.grey.disabled');
+        border: 1px solid theme('colors.grey.disabled');
+    }
+    &:checked + .checkmark::after {
+        border-right: 1px solid theme('colors.white');
+        border-bottom: 1px solid theme('colors.white');
+    }
+    &:checked + .label {
+        font-weight: 700;
+    }
+  }
+
+.checkmark {
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid theme('colors.grey.blue');
+    border-radius: 0.125rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        width: 5px;
+        height: 9px;
+        transform: translate(-50%, -50%) rotateZ(40deg);
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+    }
+}
+
+.label {
+    margin-left: 8px;
+    cursor: pointer;
+}

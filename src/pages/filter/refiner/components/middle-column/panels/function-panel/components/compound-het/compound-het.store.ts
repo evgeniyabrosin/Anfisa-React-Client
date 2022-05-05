@@ -32,12 +32,8 @@ class CompoundHetStore {
   }
 
   public setCurrentMode(modeType?: ModeTypes): void {
-    if (!modeType) {
+    if (!modeType || this.currentMode === modeType) {
       this.currentMode = undefined
-    }
-
-    if (this.currentMode === modeType) {
-      this.resetCurrentMode()
 
       return
     }

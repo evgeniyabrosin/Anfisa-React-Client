@@ -7,10 +7,10 @@ import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
 import { InputSearch } from '@components/input-search'
-import { FilterMods } from '@pages/ws/ui/table/filter-mods'
+import { ZoneModalMods } from '@pages/ws/ui/control-panel/zone-modals/components/zone-modal-mods'
 import { PopupCard } from './popup-card/popup-card'
 
-interface Props {
+interface IPopperTableModalProps {
   title?: string
   selectedAmount?: number
   searchValue: string
@@ -52,7 +52,7 @@ export const PopperTableModal = observer(
     isNotSearchable,
     notShowSelectedPanel,
     className,
-  }: Props) => {
+  }: IPopperTableModalProps) => {
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
       isGenesList && zoneStore.unselectAllGenesList()
@@ -90,41 +90,51 @@ export const PopperTableModal = observer(
         onApply={handleApply}
         shouldCloseOnOutsideClick={true}
       >
-        <div className="px-4 pt-4">
+        <div className="">
           {!isNotSearchable && (
             <InputSearch
               value={searchValue}
               placeholder={searchInputPlaceholder}
               onChange={e => onChange && onChange(e.target.value)}
+              isModal
             />
           )}
           {!notShowSelectedPanel && (
-            <div className="flex justify-between mt-5">
+            <div className="flex justify-between items-center mt-4">
               {viewType ? (
-                <span className="text-14 text-grey-blue">
+                <span className="text-12 text-grey-blue">
                   {selectedAmount} {'Selected'}
                 </span>
               ) : (
-                <span className="text-14 text-grey-blue">
+                <span className="text-12 text-grey-blue">
                   {defintSelectedAmount() || 0} {'Selected'}
                 </span>
               )}
 
-              <span className="text-12 text-blue-bright leading-14">
+              <div className="flex text-blue-bright text-14 leading-5">
                 {onSelectAll && (
-                  <span className="cursor-pointer mr-3" onClick={onSelectAll}>
-                    {t('general.selectAll')}
-                  </span>
+                  <div className="flex">
+                    <div className="cursor-pointer" onClick={onSelectAll}>
+                      {t('general.selectAll')}
+                    </div>
+
+                    <div className="w-[2px] h-full mx-2 bg-blue-light" />
+                  </div>
                 )}
+
                 <span className="cursor-pointer" onClick={onClearAll}>
                   {t('general.clearAll')}
                 </span>
-              </span>
+              </div>
             </div>
           )}
-          {isTags && <FilterMods />}
+
+          {isTags && <ZoneModalMods />}
+
+          <div className="h-px w-full bg-blue-light mt-4" />
         </div>
-        <div className="w-full pl-4">{children}</div>
+
+        <div className="w-full">{children}</div>
       </PopupCard>
     )
   },

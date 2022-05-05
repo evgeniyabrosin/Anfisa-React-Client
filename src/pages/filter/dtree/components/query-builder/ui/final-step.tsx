@@ -73,6 +73,7 @@ export const FinalStep = observer(
 
               <div className="flex ml-4">
                 <Radio
+                  id={index + 'include'}
                   checked={!currentStep.excluded}
                   onChange={() => toggleExclude(index, 'BOOL-TRUE')}
                   className="flex items-center mr-3"
@@ -81,6 +82,7 @@ export const FinalStep = observer(
                 </Radio>
 
                 <Radio
+                  id={index + 'exclude'}
                   checked={currentStep.excluded}
                   onChange={() => toggleExclude(index, 'BOOL-FALSE')}
                   className="flex items-center mr-3"

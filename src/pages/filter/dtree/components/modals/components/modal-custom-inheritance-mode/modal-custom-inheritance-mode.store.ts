@@ -40,7 +40,13 @@ class ModalCustomInheritanceModeStore {
     makeAutoObservable(this)
   }
 
-  public setCurrentMode(modeType: ModeTypes) {
+  public setCurrentMode(modeType?: ModeTypes) {
+    if (!modeType || this.currentMode === modeType) {
+      this.currentMode = undefined
+
+      return
+    }
+
     this.currentMode = modeType
   }
 

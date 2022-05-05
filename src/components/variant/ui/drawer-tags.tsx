@@ -67,14 +67,15 @@ const DrawerTagModal = observer(({ close }: any) => {
       </span>
 
       <div className="mt-4 h-auto overflow-auto" style={{ maxHeight: 300 }}>
-        {tags.map(tagName => {
+        {tags.map((tagName, index) => {
           const checked = localCheckedTags.includes(tagName)
 
           return (
             <Checkbox
-              key={tagName}
+              key={tagName + index}
+              id={tagName + index}
               checked={checked}
-              className="flex items-center mb-4 text-12"
+              className="mb-2 text-14"
               onChange={e =>
                 drawerTagsStore.handleCheckTag(e.target.checked, tagName)
               }
@@ -91,6 +92,7 @@ const DrawerTagModal = observer(({ close }: any) => {
           onChange={(e: any) =>
             drawerTagsStore.handleChangeCustomTag(e.target.value)
           }
+          isModal
         />
 
         <div className="flex justify-between">

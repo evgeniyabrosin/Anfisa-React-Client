@@ -1,0 +1,1 @@
+window._env_ = {"REACT_APP_URL_BACKEND":"https://demo.forome.org/app","REACT_APP_IGV_SERVICE_URL":"https://anfisa-bams.s3.us-south.cloud-object-storage.appdomain.cloud"}

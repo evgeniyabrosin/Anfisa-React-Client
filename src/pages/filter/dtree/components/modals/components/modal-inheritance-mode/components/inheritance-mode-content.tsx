@@ -44,12 +44,13 @@ export const InheritanceModeContent = observer(
 
           {problemGroups.map((group: string) => (
             <Checkbox
+              id={group}
               key={group}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setProblemGroups(e.target.checked, group)
               }
               checked={selectedProblemGroups.includes(group)}
-              className="ml-1 cursor-pointer"
+              className="ml-1"
             >
               {group}
             </Checkbox>
