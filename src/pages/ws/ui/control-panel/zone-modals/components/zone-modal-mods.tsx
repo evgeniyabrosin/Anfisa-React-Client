@@ -6,12 +6,9 @@ import { t } from '@i18n'
 import zoneStore from '@store/filterZone'
 import { Checkbox } from '@ui/checkbox/checkbox'
 
-export const FilterMods = observer((): ReactElement => {
-  const handleCheck = (
-    target: EventTarget & HTMLInputElement,
-    name: string,
-  ) => {
-    if (target.checked && name) {
+export const ZoneModalMods = observer((): ReactElement => {
+  const handleCheck = (checked: boolean, name: string) => {
+    if (checked && name) {
       name === FilterModsEnum.NOTMode && zoneStore.setModeNOT(true)
       name === FilterModsEnum.VariantsWithNotesOnly &&
         zoneStore.setModeWithNotes(true)
@@ -26,21 +23,26 @@ export const FilterMods = observer((): ReactElement => {
     <Fragment>
       <div className="flex my-2">
         <Checkbox
-          className="mr-6 flex items-center text-12"
+          id={'zone-not-mode'}
+          className="mr-6 text-12"
           checked={zoneStore.isModeNOT}
           onChange={e =>
-            handleCheck(e.target, (e.target.name = FilterModsEnum.NOTMode))
+            handleCheck(
+              e.target.checked,
+              (e.target.name = FilterModsEnum.NOTMode),
+            )
           }
         >
           {t('ds.notMode')}
         </Checkbox>
 
         <Checkbox
-          className="mr-6 flex items-center text-12"
+          id={'zone-notes-mode'}
+          className="mr-6 text-12"
           checked={zoneStore.isModeWithNotes}
           onChange={e =>
             handleCheck(
-              e.target,
+              e.target.checked,
               (e.target.name = FilterModsEnum.VariantsWithNotesOnly),
             )
           }
@@ -48,8 +50,6 @@ export const FilterMods = observer((): ReactElement => {
           {t('ds.variantsWithNotesOnly')}
         </Checkbox>
       </div>
-
-      <div className="border border-blue-light -mb-1.5" />
     </Fragment>
   )
 })

@@ -179,7 +179,7 @@ export const NextStepContentItem = observer(
               </NotModeWrapper>
             )}
 
-            <div className="flex items-center text-14 font-medium mr-2">
+            <div className="flex items-center text-14 mr-2">
               {group.includes(StepTypeEnum.Func) && (
                 <FnLabel currentStep={currentStep} className="shadow-dark" />
               )}
@@ -195,8 +195,9 @@ export const NextStepContentItem = observer(
 
             {!isNumeric && (
               <Checkbox
+                id={currNo + index}
                 checked={isNotMode}
-                className="flex items-center pl-4 text-14"
+                className="ml-2 text-14"
                 onChange={() => editStepAttribute(index, currNo, isNotMode)}
               >
                 {t('dtree.negate')}

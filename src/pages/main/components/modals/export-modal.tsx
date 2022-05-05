@@ -20,15 +20,18 @@ export const ExportModal = observer(() => {
         isLoading={handleDatasetStore.isExporting}
       >
         <Checkbox
+          id={'with-support-checkbox'}
           checked={handleDatasetStore.isSupportSelected}
-          className="flex items-center mb-4 text-12"
+          className="mb-4 text-12"
           onChange={e => handleDatasetStore.toggleSupport(e.target.checked)}
         >
           with support
         </Checkbox>
+
         <Checkbox
+          id={'with-documentation-checkbox'}
           checked={handleDatasetStore.isDocumentationSelected}
-          className="flex items-center mb-4 text-12"
+          className="mb-4 text-12"
           onChange={e =>
             handleDatasetStore.toggleDocumentation(e.target.checked)
           }

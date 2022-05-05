@@ -1,7 +1,9 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { useRef } from 'react'
 import cn, { Argument } from 'classnames'
+import noop from 'lodash/noop'
 
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -17,6 +19,7 @@ export interface IPopupCardProps {
   onApply?: () => void
   isApplyDisabled?: boolean
   isLoading?: boolean
+  shouldCloseOnOutsideClick?: boolean
 }
 
 export const PopupCard = ({
@@ -29,12 +32,23 @@ export const PopupCard = ({
   onApply,
   isLoading,
   isApplyDisabled = false,
+  shouldCloseOnOutsideClick = false,
 }: React.PropsWithChildren<IPopupCardProps>) => {
+  const ref = useRef(null)
+
+  const handleOutsideClick =
+    onClose && shouldCloseOnOutsideClick ? onClose : noop
+
+  useOutsideClick(ref, handleOutsideClick)
   return (
-    <div className={cn('bg-white shadow-card rounded', className)}>
+    <div
+      style={{ minWidth: 342 }}
+      className={cn('bg-white shadow-card rounded-lg', className)}
+      ref={ref}
+    >
       <div className="px-4 pt-4">
-        <div className="flex justify-between mb-5 items-center">
-          <p className="text-blue-dark  font-medium ">{title}</p>
+        <div className="flex justify-between mb-4 items-center">
+          <span className="text-blue-dark font-medium">{title}</span>
           <Icon
             name="Close"
             onClick={onClose}
@@ -42,28 +56,30 @@ export const PopupCard = ({
             className="cursor-pointer"
           />
         </div>
-      </div>
-      <div className="w-full px-4">{children}</div>
-      <div className="flex justify-end pb-4 px-4 mt-4">
-        <Button
-          text={cancelText || t('general.cancel')}
-          variant="secondary"
-          onClick={onClose}
-        />
 
-        <Button
-          disabled={isApplyDisabled || isLoading}
-          text={
-            isLoading ? (
-              <Loader size="xs" color="white" />
-            ) : (
-              applyText || t('general.apply')
-            )
-          }
-          className="ml-3"
-          onClick={onApply}
-          dataTestId={MainTableDataCy.applyButton}
-        />
+        <div className="w-full">{children}</div>
+        <div className="flex justify-end pb-4 mt-3">
+          <Button
+            text={cancelText || t('general.cancel')}
+            variant="cancel"
+            onClick={onClose}
+          />
+
+          <Button
+            disabled={isApplyDisabled || isLoading}
+            variant="secondary"
+            text={
+              isLoading ? (
+                <Loader size="xs" color="white" />
+              ) : (
+                applyText || t('general.applyFilters')
+              )
+            }
+            className="ml-3"
+            onClick={onApply}
+            dataTestId={MainTableDataCy.applyButton}
+          />
+        </div>
       </div>
     </div>
   )

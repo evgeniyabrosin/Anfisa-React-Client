@@ -40,6 +40,12 @@ class ModalCompoundRequestStore {
   // root functions
 
   public setCurrentMode(modeType?: ModeTypes) {
+    if (!modeType || this.currentMode === modeType) {
+      this.currentMode = undefined
+
+      return
+    }
+
     this.currentMode = modeType
   }
 

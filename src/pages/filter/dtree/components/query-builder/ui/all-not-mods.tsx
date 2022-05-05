@@ -32,6 +32,7 @@ export const AllNotMods = observer(
         {isAllModeAvailable && (
           <>
             <Checkbox
+              id={'all-mode-checkbox'}
               className="flex items-center"
               checked={isAllModeChecked ?? false}
               disabled={isAllModeDisabled}
@@ -45,6 +46,7 @@ export const AllNotMods = observer(
         )}
 
         <Checkbox
+          id={'not-mode-checkbox'}
           className="flex items-center"
           checked={isNotModeChecked ?? false}
           disabled={isNotModeDisabled}

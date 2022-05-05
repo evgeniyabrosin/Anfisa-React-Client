@@ -46,18 +46,20 @@ export const ComplexVariants = observer(
         </div>
 
         <div className="flex justify-between">
-          <div>
+          <div className="text-14 leading-4 mt-4">
             {variants.map(([variantName, variantValue]) => {
               return (
                 <Checkbox
                   key={variantName}
+                  id={variantName + variantValue}
                   checked={variantValues.includes(variantName)}
                   onChange={e => {
                     handleChangeVariants(e, variantName)
                   }}
-                  className="flex items-center mt-4 text-14 leading-16px"
+                  className="mb-4"
                 >
                   <span>{variantName}</span>
+
                   <span className="text-grey-blue ml-1">{`(${variantValue})`}</span>
                 </Checkbox>
               )

@@ -34,13 +34,14 @@ export const ProblemGroups = observer(
           </span>
         </div>
 
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-3">
           {problemGroups.map(problemGroup => (
             <Checkbox
+              id={problemGroup}
               key={problemGroup}
               checked={problemGroupValues.includes(problemGroup)}
               onChange={e => handleChangeProblemGroups(e, problemGroup)}
-              className="flex items-center text-14 leading-16px"
+              className="text-14 leading-4"
             >
               {problemGroup}
             </Checkbox>
