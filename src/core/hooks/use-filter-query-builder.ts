@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { TQueryBuilder } from '@utils/query-builder'
+import { TQueryBuilder, TQueryBuilderAttribute } from '@utils/query-builder'
 
 export const useFilterQueryBuilder = (queryBuilder: TQueryBuilder) => {
   const [filterValue, setFilterValue] = useState('')
@@ -13,9 +13,25 @@ export const useFilterQueryBuilder = (queryBuilder: TQueryBuilder) => {
         .map(group => {
           return {
             ...group,
-            attributes: group.attributes.filter(attr =>
-              attr.name.toLowerCase().includes(preparedFilterValue),
-            ),
+            attributes: group.attributes.reduce((acc, attr) => {
+              const hasPreparedFilterValue = attr.name
+                .toLowerCase()
+                .includes(preparedFilterValue)
+
+              if (!hasPreparedFilterValue) return acc
+
+              if ('variants' in attr) {
+                const hasVariantCounts = attr.variants?.some(
+                  ([, variantCounts]) => variantCounts > 0,
+                )
+
+                if (!hasVariantCounts) return acc
+              }
+
+              acc.push(attr)
+
+              return acc
+            }, [] as TQueryBuilderAttribute[]),
           }
         })
         .filter(group => group.attributes.length > 0),
