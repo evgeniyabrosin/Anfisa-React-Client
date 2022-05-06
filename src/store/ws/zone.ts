@@ -1,10 +1,16 @@
-import { difference } from 'lodash'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 
+import { IZoneDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
-import datasetStore from './dataset'
+import datasetStore from '../dataset'
 
 class ZoneStore {
+  genes: string[] = []
+  genesList: string[] = []
+  tags: string[] = []
+  samples: string[] = []
+  zone: any[] = []
+
   selectedGenes: string[] = []
   selectedGenesList: string[] = []
   selectedSamples: string[] = []
@@ -28,6 +34,78 @@ class ZoneStore {
     makeAutoObservable(this)
   }
 
+  setZoneIndex(zone: [string, string[]], index: number): void {
+    this.zone[index] = zone
+  }
+
+  addZone(zone: [string, string[], false?]) {
+    if (zone[1].length === 0) {
+      this.zone = this.zone.filter(item => item[0] !== zone[0])
+
+      return
+    }
+
+    if (this.zone.length === 0) {
+      this.zone = [...this.zone, zone]
+
+      return
+    }
+
+    const indexOfExistingZone = this.zone.findIndex(elem => elem[0] === zone[0])
+
+    indexOfExistingZone !== -1
+      ? (this.zone[indexOfExistingZone] = zone)
+      : (this.zone = [...this.zone, zone])
+  }
+
+  removeZone(zone: [string, string[]]) {
+    this.zone.map((item, index) => {
+      if (item[0] === zone[0]) {
+        this.setZoneIndex(zone, index)
+      }
+    })
+
+    this.zone = this.zone.filter(item => item[1].length > 0)
+  }
+
+  clearZone() {
+    this.zone = []
+  }
+
+  async fetchZoneListAsync(zone: string) {
+    const zoneList = (await wsDatasetProvider.getZoneList({
+      ds: datasetStore.datasetName,
+      zone,
+    })) as IZoneDescriptor
+
+    runInAction(() => {
+      zone === 'Symbol'
+        ? (this.genes = zoneList.variants)
+        : (this.genesList = zoneList.variants)
+    })
+  }
+
+  async fetchZoneSamplesAsync() {
+    const zoneList = (await wsDatasetProvider.getZoneList({
+      ds: datasetStore.datasetName,
+      zone: 'Has_Variant',
+    })) as IZoneDescriptor
+
+    runInAction(() => {
+      this.samples = zoneList.variants
+    })
+  }
+
+  async fetchZoneTagsAsync() {
+    const tagSelect = await wsDatasetProvider.getTagSelect({
+      ds: datasetStore.datasetName,
+    })
+
+    runInAction(() => {
+      this.tags = [...tagSelect['tag-list']].filter(item => item !== '_note')
+    })
+  }
+
   addGene(gene: string) {
     this.localGenes = [...this.localGenes, gene]
   }
@@ -38,7 +116,7 @@ class ZoneStore {
     if (type === 'fast') {
       this.createSelectedZoneFilter('isGenes')
 
-      datasetStore.removeZone(['Symbol', this.selectedGenes])
+      this.removeZone(['Symbol', this.selectedGenes])
     }
   }
 
@@ -58,7 +136,7 @@ class ZoneStore {
     if (type === 'fast') {
       this.createSelectedZoneFilter('isGenesList')
 
-      datasetStore.removeZone(['Panels', this.selectedGenesList])
+      this.removeZone(['Panels', this.selectedGenesList])
     }
   }
 
@@ -78,7 +156,7 @@ class ZoneStore {
     if (type === 'fast') {
       this.createSelectedZoneFilter('isSamples')
 
-      datasetStore.removeZone(['Has_Variant', this.selectedSamples])
+      this.removeZone(['Has_Variant', this.selectedSamples])
     }
 
     this.paintSelectedSamples()
@@ -130,7 +208,7 @@ class ZoneStore {
     if (type === 'fast') {
       this.createSelectedZoneFilter('isTags')
 
-      datasetStore.removeZone(['_tags', this.selectedTags])
+      this.removeZone(['_tags', this.selectedTags])
     }
   }
 
@@ -161,6 +239,10 @@ class ZoneStore {
   }
 
   resetAllSelectedItems() {
+    this.genes = []
+    this.genesList = []
+    this.samples = []
+    this.tags = []
     this.selectedGenes = []
     this.selectedGenesList = []
     this.selectedSamples = []
@@ -176,44 +258,6 @@ class ZoneStore {
     this.setModeWithNotes(false)
     this.modeNotSubmitted = false
     this.modeWithNotesSubmitted = false
-  }
-
-  async fetchTagSelectAsync() {
-    if (this.selectedTags.length === 0 && !this.isModeWithNotes) {
-      datasetStore.indexTabReport = 0
-      await datasetStore.fetchTabReportAsync()
-
-      return
-    }
-
-    this.isModeWithNotes && this.selectedTags.push('_note')
-
-    if (!this.isModeWithNotes && this.selectedTags.includes('_note')) {
-      this.selectedTags = this.selectedTags.filter(item => item !== '_note')
-    }
-
-    const filteredData = await Promise.all(
-      (this.isModeNOT
-        ? difference(datasetStore.tags, this.selectedTags)
-        : this.selectedTags
-      ).map(async tag => {
-        const tagSelect = await wsDatasetProvider.getTagSelect({
-          ds: datasetStore.datasetName,
-          tag,
-        })
-
-        const currentNo = tagSelect['tag-rec-list']
-
-        return currentNo
-      }),
-    )
-
-    const uniqueNo = Array.from(new Set(filteredData.flat()))
-
-    datasetStore.indexFilteredNo = 0
-    datasetStore.filteredNo = uniqueNo as number[]
-
-    await datasetStore.fetchFilteredTabReportAsync()
   }
 
   setModeNOT(value: boolean) {

@@ -11,8 +11,9 @@ import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import filterPresetsStore from '@store/filter-presets'
-import filterZone from '@store/filterZone'
 import operations from '@store/operations'
+import mainTableStore from '@store/ws/main-table.store'
+import zoneStore from '@store/ws/zone'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Attention } from '@ui/icons/attention'
@@ -38,7 +39,7 @@ export const ModalSaveDataset = observer(() => {
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
-    const { variantCounts } = datasetStore.fixedStatAmount
+    const { variantCounts } = mainTableStore.fixedStatAmount
     const { conditions } = filterStore
 
     if (
@@ -85,7 +86,7 @@ export const ModalSaveDataset = observer(() => {
       return
     }
 
-    filterZone.resetAllSelectedItems()
+    zoneStore.resetAllSelectedItems()
     isDone && history.push(`${Routes.WS}?ds=${value}`)
   }
 
@@ -118,10 +119,10 @@ export const ModalSaveDataset = observer(() => {
     operations.resetSavingStatus()
 
     datasetStore.resetData()
-    datasetStore.clearZone()
+    zoneStore.clearZone()
     filterStore.reset()
     dtreeStore.resetData()
-    filterZone.resetAllSelectedItems()
+    zoneStore.resetAllSelectedItems()
   }
 
   const handleChange = (name: string) => {

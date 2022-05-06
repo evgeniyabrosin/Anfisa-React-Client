@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { theme } from '@theme'
-import datasetStore from '@store/dataset'
-import columnsStore from '@store/wsColumns'
+import columnsStore from '@store/ws/columns'
+import mainTableStore from '@store/ws/main-table.store'
 import { Loader } from '@components/loader'
 import { Table } from './table'
 
@@ -42,13 +42,16 @@ const Styles = styled.div`
 `
 
 export const TableVariants = observer((): ReactElement => {
-  if (datasetStore.isLoadingTabReport) return <Loader />
+  if (mainTableStore.isLoadingTabReport) return <Loader />
 
   const { columnDataListForRender } = columnsStore
 
   return (
     <Styles className="flex-1 overflow-auto">
-      <Table columns={columnDataListForRender} data={datasetStore.tabReport} />
+      <Table
+        columns={columnDataListForRender}
+        data={mainTableStore.tabReport}
+      />
     </Styles>
   )
 })

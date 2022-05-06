@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { FilterModsEnum } from '@core/enum/filter-mods-enum'
 import { t } from '@i18n'
-import zoneStore from '@store/filterZone'
+import zoneStore from '@store/ws/zone'
 import { Checkbox } from '@ui/checkbox/checkbox'
 
 export const ZoneModalMods = observer((): ReactElement => {

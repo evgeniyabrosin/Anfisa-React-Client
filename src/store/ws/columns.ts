@@ -3,10 +3,11 @@ import { makeAutoObservable } from 'mobx'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { tableColumnMap } from '@core/table-column-map'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { variantColumnTable } from '@pages/ws/columns'
 
 export const columnsToIgnore: string[] = ['Gene', 'Variant']
+
 class ColumnsStore {
   columns: any[] = Object.values(tableColumnMap)
   viewType: ViewTypeEnum = ViewTypeEnum.Cozy

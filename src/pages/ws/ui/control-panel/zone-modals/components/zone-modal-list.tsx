@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 
-import zoneStore from '@store/filterZone'
+import zoneStore from '@store/ws/zone'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 

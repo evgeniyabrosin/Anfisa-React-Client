@@ -2,6 +2,7 @@ import { get } from 'lodash'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { IGridLayout, ReccntDisplayItem } from '@declarations'
+import mainTableStore from '@store/ws/main-table.store'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import {
   IReccntArguments,
@@ -9,7 +10,7 @@ import {
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
-import datasetStore from './dataset'
+import datasetStore from '../dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
 const DRAWER_DEFAULT_HEIGHT = 1
@@ -51,21 +52,21 @@ export class VariantStore {
   }
 
   prevVariant() {
-    datasetStore.filteredNo.length === 0
+    mainTableStore.filteredNo.length === 0
       ? (this.index += 1)
       : (this.index =
-          datasetStore.filteredNo[
-            datasetStore.filteredNo.indexOf(this.index) - 1
+          mainTableStore.filteredNo[
+            mainTableStore.filteredNo.indexOf(this.index) - 1
           ])
     this.fetchVarinatInfoAsync()
   }
 
   nextVariant() {
-    datasetStore.filteredNo.length === 0
+    mainTableStore.filteredNo.length === 0
       ? (this.index += 1)
       : (this.index =
-          datasetStore.filteredNo[
-            datasetStore.filteredNo.indexOf(this.index) + 1
+          mainTableStore.filteredNo[
+            mainTableStore.filteredNo.indexOf(this.index) + 1
           ])
 
     this.fetchVarinatInfoAsync()
@@ -127,7 +128,7 @@ export class VariantStore {
     if (datasetStore.isXL) return
 
     const details = toJS(
-      datasetStore.wsRecords.find(record => record.no === this.index),
+      mainTableStore.wsRecords?.find(record => record.no === this.index),
     )
 
     const label = details?.lb

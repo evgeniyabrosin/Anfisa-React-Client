@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { PageRoute, RouteNames, Routes } from '@router/routes.enum'
 import { Divider } from '@ui/divider'
 import { Breadcrumbs } from '@components/breadcrumbs'
@@ -53,7 +53,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     }
 
     datasetStore.initDatasetAsync(datasetName)
-    datasetStore.fetchWsListAsync()
   }
 
   return (

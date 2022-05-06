@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { showToast } from '@utils/notifications/showToast'

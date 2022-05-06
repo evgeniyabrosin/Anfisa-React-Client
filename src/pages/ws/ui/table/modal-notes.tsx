@@ -4,7 +4,7 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { Button } from '@ui/button'
 import { HeaderModal } from '@pages/filter/dtree/components/modals/components/ui/header-modal'
 import { ModalBase } from '@pages/filter/dtree/components/modals/components/ui/modal-base'

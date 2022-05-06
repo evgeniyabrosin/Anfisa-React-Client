@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { Button } from '@ui/button'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { Input } from '@ui/input'

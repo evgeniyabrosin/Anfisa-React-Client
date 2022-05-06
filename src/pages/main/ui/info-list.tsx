@@ -2,10 +2,12 @@ import { Fragment, ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
+import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { DocsList } from './docs-list'
+
 export const InfoList = observer((): ReactElement => {
-  const docs = get(dirinfoStore, 'dsinfo.doc', [])
+  const docs = get(datasetStore, 'dsInfo.doc', [])
   const baseDatasetName = dirinfoStore.ancestorsDsInfo[0][0]
 
   if (!docs[1]) return <Fragment />

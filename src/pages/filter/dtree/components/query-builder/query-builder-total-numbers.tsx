@@ -4,13 +4,13 @@ import { observer } from 'mobx-react-lite'
 
 import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
-import dirinfoStore from '@store/dirinfo'
+import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 
 export const QueryBuilderTotalNumbers = observer((): ReactElement => {
-  const variants = toJS(dirinfoStore.dsinfo).total
+  const variants = toJS(datasetStore.dsInfo).total
 
   const { stepData, isTreeEmpty } = dtreeStore
 

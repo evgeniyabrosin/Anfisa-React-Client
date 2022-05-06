@@ -19,9 +19,6 @@ export class FilterPresetsStore {
   constructor() {
     makeAutoObservable(this)
 
-    // TODO: temporary for avoid circular dependencies
-    datasetStore.getActivePreset = () => this.activePreset
-
     reaction(
       () => datasetStore.datasetName,
       datasetName => {

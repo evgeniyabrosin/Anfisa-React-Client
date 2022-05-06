@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { theme } from '@theme'
-import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import mainTableStore from '@store/ws/main-table.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
@@ -93,7 +93,7 @@ interface INextStepRouteProps {
 
 export const NextStepRoute = observer(
   ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
-    const { variantCounts, dnaVariantsCounts } = datasetStore.fixedStatAmount
+    const { variantCounts, dnaVariantsCounts } = mainTableStore.fixedStatAmount
 
     const currentStep = dtreeStore.filteredStepData[index]
     const startFilterCounts = currentStep.startFilterCounts

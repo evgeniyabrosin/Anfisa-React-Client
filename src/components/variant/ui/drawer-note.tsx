@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
