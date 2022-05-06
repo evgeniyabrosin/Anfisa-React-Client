@@ -9,7 +9,7 @@ import handleDatasetStore from './handle-dataset.store'
 
 export const HandleDataset = observer(() => {
   return (
-    <div className="ml-4 mt-4">
+    <div className="ml-4 flex">
       <PopperButton
         ModalElement={HandleDatasetModal}
         ButtonElement={HandleDatasetButton}

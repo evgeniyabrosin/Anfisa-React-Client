@@ -28,11 +28,14 @@ export const Datasets = (): ReactElement => {
         className={cn('flex justify-between mb-3', isOpen ? 'px-4' : 'px-2')}
       >
         {isOpen && (
-          <div
-            data-testid={FilterDatasetDataCy.leftPanelHeader}
-            className="font-bold text-white text-20 leading-6"
-          >
-            {t('home.datasets')}
+          <div className="flex items-center">
+            <div
+              data-testid={FilterDatasetDataCy.leftPanelHeader}
+              className="font-bold text-white text-20 leading-6"
+            >
+              {t('home.datasets')}
+            </div>
+            <HandleDataset />
           </div>
         )}
         <Button
@@ -51,11 +54,7 @@ export const Datasets = (): ReactElement => {
 
           <DatasetsList />
 
-          <div className="flex flex-col flex-1 w-full justify-end">
-            <HandleDataset />
-
-            <DocLinks />
-          </div>
+          <DocLinks />
         </>
       )}
     </div>
