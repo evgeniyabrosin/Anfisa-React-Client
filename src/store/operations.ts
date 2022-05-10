@@ -5,8 +5,6 @@ import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { getApiUrl } from '@core/get-api-url'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import mainTableStore from '@store/ws/main-table.store'
-import zoneStore from '@store/ws/zone'
 import { Routes } from '@router/routes.enum'
 import {
   ICsvExportArguments,
@@ -14,6 +12,7 @@ import {
 } from '@service-providers/operations/operations.interface'
 import operationsProvider from '@service-providers/operations/operations.provider'
 import datasetStore from './dataset'
+
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true
@@ -21,6 +20,9 @@ class OperationsStore {
 
   constructor() {
     makeAutoObservable(this)
+
+    // TODO: temporary for avoid circular references
+    datasetStore.getJobStatusAsync = taskId => this.getJobStatusAsync(taskId)
   }
 
   /* TODO: not used anywhere
@@ -48,8 +50,8 @@ class OperationsStore {
       params.conditions = conditions
     }
 
-    if (zoneStore.zone.length > 0) {
-      params.zone = zoneStore.zone
+    if (datasetStore.zone.length > 0) {
+      params.zone = datasetStore.zone
     }
 
     try {
@@ -112,7 +114,7 @@ class OperationsStore {
       compareValue =
         (isRefiner
           ? filterStore.stat.filteredCounts?.variants
-          : mainTableStore.fixedStatAmount.variantCounts) ?? 0
+          : datasetStore.fixedStatAmount.variantCounts) ?? 0
       params.conditions = filterStore.conditions
     } else {
       compareValue = dtreeStore.acceptedVariants
@@ -128,7 +130,7 @@ class OperationsStore {
       }
     }
 
-    mainTableStore.setIsLoadingTabReport(true)
+    datasetStore.setIsLoadingTabReport(true)
 
     const response = await operationsProvider.createWorkspace(params)
 
@@ -140,7 +142,7 @@ class OperationsStore {
 
     this.setIsCreationOver()
 
-    mainTableStore.setIsLoadingTabReport(false)
+    datasetStore.setIsLoadingTabReport(false)
 
     return { ok: true }
   }

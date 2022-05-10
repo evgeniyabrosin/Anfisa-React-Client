@@ -38,6 +38,9 @@ export class FilterStore {
   constructor() {
     makeAutoObservable(this)
 
+    // TODO: temporary for avoid circular references
+    datasetStore.getConditions = () => this.conditions
+
     reaction(
       () => this.datasetName,
       datasetName => {
@@ -59,6 +62,15 @@ export class FilterStore {
           this.filteredStat.setQuery(query)
         } else {
           this.filteredStat.reset()
+        }
+
+        // TODO: refactoring: remove it (main table store should control ws_list data)
+        if (
+          !datasetStore.isXL &&
+          query.datasetName &&
+          this.method === GlbPagesNames.Refiner
+        ) {
+          datasetStore.fetchWsListAsync()
         }
       },
     )

@@ -6,6 +6,7 @@ import datasetStore from '@store/dataset'
 import dirInfoStore from '@store/dirinfo'
 import operationsProvider from '@service-providers/operations/operations.provider'
 import { downloadFile } from '@utils/download-file/download-file'
+
 class HandleDatasetStore {
   public isImportModalShown = false
   public isExportModalShown = false
@@ -21,11 +22,11 @@ class HandleDatasetStore {
   }
 
   public get isExportDisabled() {
-    return !Object.keys(datasetStore.dsInfo).length || datasetStore.isXL
+    return !Object.keys(dirInfoStore.dsinfo).length || datasetStore.isXL
   }
 
   public get selectedDatasetName() {
-    return datasetStore.dsInfo.name as string
+    return dirInfoStore.dsinfo.name as string
   }
 
   constructor() {

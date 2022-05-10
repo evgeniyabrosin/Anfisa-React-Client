@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
+import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Header } from '@components/header'
@@ -34,7 +35,7 @@ const FilterPage = observer((): ReactElement => {
         code: 'return False',
       })
 
-      await datasetStore.fetchDsinfoAsync(dsName)
+      await dirinfoStore.fetchDsinfoAsync(dsName)
 
       await dtreeStore.fetchDtreeSetAsync(body)
     }
@@ -52,7 +53,7 @@ const FilterPage = observer((): ReactElement => {
 
   const getFiltersValue = (type: string) => {
     if (type === 'all') {
-      if (isXL) return toJS(datasetStore.dsInfo.total) as number
+      if (isXL) return toJS(dirinfoStore.dsinfo.total) as number
 
       if (filterStore.method === GlbPagesNames.Dtree) {
         return dtreeStore.statAmount?.variants

@@ -21,7 +21,6 @@ import { getNumericExpression } from '@utils/getNumericExpression'
 import modalFiltersStore from '../../modals/components/modal-enum/modal-enum.store'
 import modalsVisibilityStore from '../../modals/modals-visibility-store'
 import { DropDownJoin } from './dropdown-join'
-import { InactiveFieldLabel } from './inactive-field-label'
 
 const ContentControl = styled.div`
   display: flex;
@@ -75,15 +74,13 @@ export const NextStepContentItem = observer(
     // }
     const [isVisible, setIsVisible] = useState(false)
     const limitSize = 3
-    const stepType = group[0]
-    const groupName = group[1]
 
-    const stepCondition = group.find(Array.isArray)
+    const array = group.find((elem: any) => Array.isArray(elem))
 
     const getButtonMessage = () => {
-      if (stepType === StepTypeEnum.Numeric) return ''
+      if (group[0] === StepTypeEnum.Numeric) return ''
 
-      const size = stepCondition.length - limitSize
+      const size = array.length - limitSize
 
       return expanded ? `Hide ${size} variants` : `Show ${size} variants`
     }
@@ -179,25 +176,20 @@ export const NextStepContentItem = observer(
               </NotModeWrapper>
             )}
 
-            <div className="flex items-center text-14 mr-2">
+            <div className="flex items-center text-14 font-medium mr-2">
               {group.includes(StepTypeEnum.Func) && (
                 <FnLabel currentStep={currentStep} className="shadow-dark" />
               )}
-              {groupName || (
-                <InactiveFieldLabel stepIndex={index} groupIndex={currNo} />
-              )}
+              {`${group[1]}`}
             </div>
-
             {/* TODO: add switch to step after implementation in backend */}
             {/* <div className="pt-1.5">
               <Switch isChecked={isChecked} onChange={toggleChecked} />
             </div> */}
-
             {!isNumeric && (
               <Checkbox
-                id={currNo + index}
                 checked={isNotMode}
-                className="ml-2 text-14"
+                className="flex items-center pl-4 text-14"
                 onChange={() => editStepAttribute(index, currNo, isNotMode)}
               >
                 {t('dtree.negate')}
@@ -219,16 +211,17 @@ export const NextStepContentItem = observer(
             )}
 
             <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
-              {stepType === StepTypeEnum.Numeric &&
-                getNumericExpression(stepCondition, groupName)}
+              {group[0] === StepTypeEnum.Numeric &&
+                getNumericExpression(array, group[1])}
 
-              {stepType !== StepTypeEnum.Numeric &&
-                stepCondition
-                  ?.slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
+              {group[0] !== StepTypeEnum.Numeric &&
+                array
+                  .slice(0, expanded ? Number.MAX_SAFE_INTEGER : limitSize)
                   .map((item: any[]) => <div key={Math.random()}>{item}</div>)}
 
-              {stepType !== StepTypeEnum.Numeric && stepCondition?.length > 3 && (
+              {group[0] !== StepTypeEnum.Numeric && array.length > 3 && (
                 <div
+                  key={Math.random()}
                   className="text-blue-bright cursor-pointer"
                   onClick={setExpandOnClick}
                 >

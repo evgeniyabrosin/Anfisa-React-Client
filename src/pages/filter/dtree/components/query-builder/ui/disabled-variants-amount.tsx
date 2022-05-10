@@ -21,8 +21,7 @@ export const DisabledVariantsAmount = observer(
         variants.map((variant: any) => (
           <Checkbox
             key={variant}
-            id={variant[0]}
-            className="mb-2"
+            className="flex items-center py-1"
             disabled={disabled}
             checked={
               disabled ? true : dtreeStore.selectedFilters.includes(variant[0])
@@ -34,7 +33,10 @@ export const DisabledVariantsAmount = observer(
               filterStore.setTouched(true)
             }}
           >
-            <span data-testid={DecisionTreesResultsDataCy.variantsList}>
+            <span
+              className="text-black"
+              data-testid={DecisionTreesResultsDataCy.variantsList}
+            >
               {variant[0]}
             </span>
 

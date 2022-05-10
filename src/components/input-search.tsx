@@ -5,21 +5,24 @@ import { Icon } from '@ui/icon'
 import { Input } from '@ui/input'
 import { DecisionTreesResultsDataCy } from '../../src/components/data-testid/decision-tree-results.cy'
 
-interface IInputSearchProps {
+interface Props {
   placeholder?: string
   value: string
   className?: Argument
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  isModal?: boolean
+  filter?: boolean
 }
 
-export const InputSearch = ({ ...rest }: IInputSearchProps): ReactElement => {
-  const { className, ...tempRest } = rest
+export const InputSearch = ({ ...rest }: Props): ReactElement => {
+  const { className, filter, ...tempRest } = rest
 
   return (
     <div className={cn('relative', className)}>
       <Input
         data-testid={DecisionTreesResultsDataCy.searchGraphResults}
+        className={cn({
+          'outline-none rounded-2xl': filter,
+        })}
         {...tempRest}
       />
 

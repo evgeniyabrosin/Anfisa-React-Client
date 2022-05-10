@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
 import { IColumns } from '@declarations'
-import columnsStore, { columnsToIgnore } from '@store/ws/columns'
+import columnsStore, { columnsToIgnore } from '@store/wsColumns'
 
 export class ColumnListStore {
   public get filteredColumns(): IColumns[] {

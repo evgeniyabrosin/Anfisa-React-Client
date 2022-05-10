@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import zoneStore from '@store/ws/zone'
+import datasetStore from '@store/dataset'
+import zoneStore from '@store/filterZone'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { ZoneModalList } from './components/zone-modal-list'
 
@@ -16,7 +17,8 @@ export const GenesListModal = observer(
     const [searchValue, setSearchValue] = useState('')
 
     useEffect(() => {
-      zoneStore.genesList.length <= 0 && zoneStore.fetchZoneListAsync('Panels')
+      datasetStore.genesList.length <= 0 &&
+        datasetStore.fetchZoneListAsync('Panels')
 
       if (zoneStore.selectedGenesList.length > 0) {
         zoneStore.syncSelectedAndLocalFilters('isGenesList')
@@ -26,7 +28,8 @@ export const GenesListModal = observer(
 
     const handleApplyAsync = async () => {
       zoneStore.createSelectedZoneFilter('isGenesList')
-      zoneStore.addZone(['Panels', zoneStore.selectedGenesList])
+      datasetStore.addZone(['Panels', zoneStore.selectedGenesList])
+      await datasetStore.fetchWsListAsync()
 
       close()
     }
@@ -48,7 +51,7 @@ export const GenesListModal = observer(
         isGenesList={true}
       >
         <ZoneModalList
-          items={zoneStore.genesList.filter(item =>
+          items={datasetStore.genesList.filter(item =>
             item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
           )}
           isGenesList={true}

@@ -6,9 +6,8 @@ import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import mainTableStore from '@store/ws/main-table.store'
-import variantStore from '@store/ws/variant'
-import zoneStore from '@store/ws/zone'
+import filterZone from '@store/filterZone'
+import variantStore from '@store/variant'
 import { Header } from '@components/header'
 import { ErrorPage } from '@pages/error/error'
 import { Datasets } from './ui/datasets'
@@ -22,24 +21,23 @@ const MainPage = (): ReactElement => {
       const dsName = params.get('ds') || ''
 
       if (dsName) {
-        await datasetStore.fetchDsinfoAsync(dsName)
+        await dirinfoStore.fetchDsinfoAsync(dsName)
       }
 
       dirinfoStore.setSelectedDirinfoName(dsName)
-      datasetStore.setDatasetName(dsName)
     }
+
     handlerAsync()
   }, [params])
 
   useEffect(() => {
     datasetStore.resetData()
-    zoneStore.clearZone()
+    datasetStore.clearZone()
     filterStore.reset()
     dtreeStore.resetData()
-    zoneStore.resetAllSelectedItems()
+    filterZone.resetAllSelectedItems()
     variantStore.resetIsActiveVariant()
     variantStore.resetData()
-    mainTableStore.resetData()
   }, [])
 
   return (

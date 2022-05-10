@@ -11,8 +11,8 @@ export const en = {
     selectAll: 'Select All',
     clearAll: 'Clear All',
     cancel: 'Cancel',
+    create: 'Create',
     apply: 'Apply',
-    applyFilters: 'Apply Filters',
     clear: 'Clear',
     replace: 'Replace',
     add: '+ Add',
@@ -45,6 +45,27 @@ export const en = {
       },
     },
     selectSecondaryPlaceholder: 'Select secondary...',
+  },
+  presetControl: {
+    selectPreset: 'Select Preset',
+    createNewPreset: 'Create New Preset',
+    join: 'Join',
+    apply: 'Apply Filter',
+    delete: 'Delete',
+    modify: 'Modify',
+    createDialog: {
+      title: 'Create Preset',
+      create: 'Create',
+      presetName: 'Preset Name',
+      presetNamePlaceholder: 'Enter Preset Name',
+    },
+    deleteDialog: {
+      title: 'Delete Filter Preset',
+      message:
+        'Deleting a Filter preset "{presetName}" will permanently remove it from your system.',
+      cancel: 'No, Keep Preset',
+      confirm: 'Yes, Delete Preset',
+    },
   },
   home: {
     title: 'Home',
@@ -159,7 +180,6 @@ export const en = {
       hide: 'Hide',
       total: 'Total',
       variants: '{value} variants',
-      shownSignificantItems: 'Shown {items} significant items (total: {total})',
     },
     delete: 'Delete',
     copy: 'Copy',
@@ -217,6 +237,7 @@ export const en = {
     approx: 'Approx',
     state: 'State',
     locus: 'Locus',
+    chromosomeNameIsNotCorrect: 'Chromosome name is incorrect',
     minimalCountsOfEventsOnCompoundRequest:
       'Minimal count of events should be more than 0',
     fullList: 'Full list',
@@ -247,7 +268,6 @@ export const en = {
     viewReturnedVariants: 'View returned variants',
     showReturnedVariantsForStep: 'Show {returnValue} variants for step {index}',
     dtreeDeleteConfirmation: 'Do you really want to delete this tree?',
-    inactiveField: 'Inactive field',
   },
   error: {
     getBack: 'Back to home',

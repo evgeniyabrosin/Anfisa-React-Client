@@ -1,22 +1,26 @@
-import { ReactElement } from 'react'
+import { ReactElement, useRef } from 'react'
 
 import { copyToClipboard } from '@core/copy-to-clipboard'
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import {
-  IPopperMenuProps,
-  PopperMenu,
-} from '@components/popper-menu/popper-menu'
-import { PopperMenuItem } from '@components/popper-menu/popper-menu-item'
 import { showToast } from '@utils/notifications/showToast'
 
+interface IConditionModalOptionsPopup {
+  onClose: () => void
+  onDeleteCondition: () => void
+  filterName: string
+}
+
 export const ConditionModalOptionsPopup = ({
-  close,
-}: IPopperMenuProps): ReactElement => {
-  const { selectedConditionIndex, conditions } = filterStore
-  const filterName = conditions[selectedConditionIndex]?.[1] ?? ''
+  onClose,
+  onDeleteCondition,
+  filterName,
+}: IConditionModalOptionsPopup): ReactElement => {
+  const ref = useRef(null)
+
+  useOutsideClick(ref, () => onClose())
 
   const handleCopyFilterName = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -25,38 +29,37 @@ export const ConditionModalOptionsPopup = ({
 
     showToast(t('ds.copied'), 'info')
 
-    close()
+    onClose()
   }
 
   const handleDeleteFilterBlock = (e: React.MouseEvent) => {
     e.stopPropagation()
-    filterStore.removeCondition(selectedConditionIndex)
-    close()
+    onDeleteCondition()
   }
 
   return (
-    <PopperMenu close={close} className="w-32">
-      <PopperMenuItem
-        onClick={handleDeleteFilterBlock}
-        data-testid={DecisionTreeModalDataCy.joinByAnd}
-      >
-        <div className="flex items-center justify-between">
-          <span className="mr-2">{t('filter.delete')}</span>
+    <div ref={ref} className="top-4 right-6 absolute z-50 text-14 font-normal">
+      <div className="top-8 flex flex-col justify-between px-0 py-0 bg-white rounded-md shadow-dark">
+        <div
+          onClick={handleDeleteFilterBlock}
+          className="flex items-center justify-between py-2 px-2 rounded-br-none rounded-bl-none rounded-l-md rounded-r-md cursor-pointer hover:bg-blue-bright hover:text-white"
+          data-testId={DecisionTreeModalDataCy.joinByAnd}
+        >
+          <div className="mr-2">{t('filter.delete')}</div>
 
           <Icon name="Delete" />
         </div>
-      </PopperMenuItem>
 
-      <PopperMenuItem
-        onClick={handleCopyFilterName}
-        data-testid={DecisionTreeModalDataCy.joinByOr}
-      >
-        <div className="flex items-center justify-between">
-          <span className="mr-2">{t('filter.copy')}</span>
+        <div
+          onClick={handleCopyFilterName}
+          className="flex items-center justify-between py-2 px-2 rounded-bl-md rounded-br-md cursor-pointer hover:bg-blue-bright hover:text-white"
+          data-testId={DecisionTreeModalDataCy.joinByOr}
+        >
+          <div>{t('filter.copy')}</div>
 
           <Icon name="Copy" className="text-grey-blue" />
         </div>
-      </PopperMenuItem>
-    </PopperMenu>
+      </div>
+    </div>
   )
 }

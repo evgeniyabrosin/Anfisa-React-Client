@@ -26,9 +26,7 @@ export type TBaseChartConfig<Type extends ChartType, Data> = {
 }
 
 export type TPieChartConfig = TBaseChartConfig<ChartType.Pie, TPieChartData>
-export type TBarChartConfig = TBaseChartConfig<ChartType.Bar, TBarChartData> & {
-  totalItems: number
-}
+export type TBarChartConfig = TBaseChartConfig<ChartType.Bar, TBarChartData>
 export type THistogramChartConfig = TBaseChartConfig<
   ChartType.Histogram,
   THistogramChartData

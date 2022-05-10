@@ -25,8 +25,6 @@ const HISTOGRAM_FLOAT_LOG_ZERO = -16
 
 const FLOAT_ROUND_PRECISION = 100
 
-const BAR_CHART_MAX_ITEMS = 40
-
 const floatRound = (num: number): number =>
   Math.round(num * FLOAT_ROUND_PRECISION) / FLOAT_ROUND_PRECISION
 
@@ -115,8 +113,7 @@ const getVariantsChartConfig = (
   if (
     !variants ||
     (renderMode !== AttributeChartRenderModes.Bar &&
-      renderMode !== AttributeChartRenderModes.Pie &&
-      renderMode !== AttributeChartRenderModes.TreeMap)
+      renderMode !== AttributeChartRenderModes.Pie)
   ) {
     return undefined
   }
@@ -125,19 +122,11 @@ const getVariantsChartConfig = (
     .filter(variant => variant[1] > 0)
     .sort((firstVariant, secondVariant) => secondVariant[1] - firstVariant[1])
 
-  const type =
-    renderMode === AttributeChartRenderModes.Pie ? ChartType.Pie : ChartType.Bar
-
-  if (type === ChartType.Bar) {
-    return {
-      type,
-      data: sortedVariants.slice(0, BAR_CHART_MAX_ITEMS),
-      totalItems: sortedVariants.length,
-    }
-  }
-
   return {
-    type,
+    type:
+      renderMode === AttributeChartRenderModes.Bar
+        ? ChartType.Bar
+        : ChartType.Pie,
     data: sortedVariants,
   }
 }

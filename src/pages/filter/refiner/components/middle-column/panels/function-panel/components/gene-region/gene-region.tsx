@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Input } from '@ui//input'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
@@ -10,6 +11,7 @@ import { DisabledVariantsAmount } from '@pages/filter/dtree/components/query-bui
 import { ConditionJoinMode } from '@service-providers/common'
 import { IGeneRegionArgs } from '@service-providers/common/common.interface'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
+import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import functionPanelStore from '../../function-panel.store'
 import { PanelButtons } from '../panelButtons'
 import geneRegionStore from './gene-region.store'
@@ -19,13 +21,19 @@ export const GeneRegion = observer(() => {
 
   const { simpleVariants } = functionPanelStore
 
-  const [error, setError] = useState<string>('')
-  const [locusValue, setLocusValue] = useState<string>('')
+  const { locusValue, selectedFilterValue } = geneRegionStore
+
+  const [isErrorVisible, setIsErrorVisible] = useState<boolean>(false)
+
+  const validateValue = (value: string): void => {
+    validateLocusCondition({ value, setIsErrorVisible })
+  }
 
   const handleResetFields = () => {
+    geneRegionStore.resetLocusValue()
+    setIsErrorVisible(false)
     geneRegionStore.resetCurrentMode()
     filterStore.setTouched(true)
-    setLocusValue('')
   }
 
   // set/reset data
@@ -36,51 +44,43 @@ export const GeneRegion = observer(() => {
       const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       geneRegionStore.setCurrentMode(getCurrentModeType(conditionJoinType))
-      setLocusValue(selectedFilterLocusValue)
+      geneRegionStore.setLocusValue(selectedFilterLocusValue)
     }
 
     if (!isRedactorMode) {
-      setLocusValue('')
+      geneRegionStore.resetLocusValue()
       geneRegionStore.resetCurrentMode()
     }
   }, [isRedactorMode, selectedCondition])
 
-  const handleSetLocusValue = async (value: string) => {
-    if (locusValue !== value) {
-      filterStore.setTouched(true)
-    }
-
-    setLocusValue(value)
-
-    const result = await functionPanelStore.fetchStatFunc(
+  // update data
+  useEffect(() => {
+    functionPanelStore.fetchStatFunc(
       FuncStepTypesEnum.GeneRegion,
-      `{"locus":"${value}"}`,
+      selectedFilterValue,
     )
+  }, [selectedFilterValue])
 
-    if (result.err) {
-      setError(result.err)
-    }
-
-    if (!result.err && error) {
-      setError('')
-    }
-  }
-
-  const handleSumbitCondtions = () => {
-    geneRegionStore.handleSumbitCondtions(locusValue)
-    setLocusValue('')
-    filterStore.setTouched(false)
-  }
+  // to avoid displaying this data on the another func attr
+  useEffect(() => {
+    return () => filterStore.resetStatFuncData()
+  }, [])
 
   const toggleNotMode = () => {
     geneRegionStore.setCurrentMode(ModeTypes.Not)
     filterStore.setTouched(true)
   }
 
-  // to avoid displaying this data on the another func attr
-  useEffect(() => {
-    return () => filterStore.resetStatFuncData()
-  }, [])
+  const onChangeInput = (e: any) => {
+    if (locusValue !== e.target.value) filterStore.setTouched(true)
+    geneRegionStore.setLocusValue(e.target.value)
+    validateValue(e.target.value)
+  }
+
+  const onSubmit = () => {
+    geneRegionStore.handleSumbitCondtions()
+    filterStore.setTouched(false)
+  }
 
   return (
     <React.Fragment>
@@ -100,16 +100,11 @@ export const GeneRegion = observer(() => {
         </div>
 
         <div className="relative flex">
-          <Input
-            value={locusValue}
-            onChange={e => {
-              handleSetLocusValue(e.target.value)
-            }}
-          />
+          <Input value={locusValue} onChange={onChangeInput} />
 
-          {error && (
+          {isErrorVisible && (
             <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
-              {error}
+              {t('dtree.chromosomeNameIsNotCorrect')}
             </div>
           )}
         </div>
@@ -117,14 +112,14 @@ export const GeneRegion = observer(() => {
         <DisabledVariantsAmount
           variants={simpleVariants}
           disabled={true}
-          isErrorVisible={!!error}
+          isErrorVisible={isErrorVisible}
         />
       </div>
 
       <PanelButtons
-        onSubmit={handleSumbitCondtions}
+        onSubmit={onSubmit}
         resetFields={handleResetFields}
-        disabled={!!error || !isFilterTouched}
+        disabled={!simpleVariants || isErrorVisible || !isFilterTouched}
       />
     </React.Fragment>
   )

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
-import dirInfoStore from '@store/dirinfo'
+import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
 import { Button } from '@ui/button'
@@ -58,7 +58,7 @@ const Panel = ({ close }: IPopperMenuProps): ReactElement => {
   const goToPage = (name: GlbPagesNames) => {
     const route = getPageRoute(name)
 
-    history.push(`${route}?ds=${dirInfoStore.selectedDirinfoName}`)
+    history.push(`${route}?ds=${dirinfoStore.selectedDirinfoName}`)
     filterStore.setMethod(name)
   }
 
@@ -74,7 +74,7 @@ const Panel = ({ close }: IPopperMenuProps): ReactElement => {
             key={index}
             data-testid={DatasetInfoDataCy.viewerOption}
             onClick={() => {
-              datasetStore.setIsXL(datasetStore.dsInfo.kind === 'xl')
+              datasetStore.setIsXL(dirinfoStore.dsinfo.kind === 'xl')
               goToPage(pageName)
             }}
           >

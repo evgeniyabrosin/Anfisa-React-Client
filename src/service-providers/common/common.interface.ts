@@ -113,7 +113,6 @@ export enum AttributeKinds {
 export enum AttributeChartRenderModes {
   Pie = 'pie',
   Bar = 'bar',
-  TreeMap = 'tree-map',
   Linear = 'linear',
   Log = 'log',
   Neighborhood = 'neighborhood',

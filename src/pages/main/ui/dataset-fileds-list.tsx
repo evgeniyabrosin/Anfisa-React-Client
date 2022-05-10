@@ -5,19 +5,19 @@ import { observer } from 'mobx-react-lite'
 
 import { Versions } from '@declarations'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Card, CardTitle } from '@ui/card'
 import { Icon } from '@ui/icon'
 import { DatasetField } from './dataset-filed'
 import { IframeInfo } from './iframe-info'
-interface ICommonDetailsProps {
+
+interface Props {
   className?: Argument
   versions: Versions
 }
 
 const CommonDetails = observer(
-  ({ className, versions }: ICommonDetailsProps): ReactElement => (
+  ({ className, versions }: Props): ReactElement => (
     <Card className={cn(className)}>
       <CardTitle text={t('home.info')} className="mb-4" />
 
@@ -100,7 +100,7 @@ const InfoDetails = observer((): ReactElement => {
 })
 
 export const DatasetsFieldsList = observer((): ReactElement => {
-  const versions: Versions = get(datasetStore, 'dsInfo.meta.versions')
+  const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions')
   const hasInfoDetails = !!dirinfoStore.infoFrameLink
 
   return (

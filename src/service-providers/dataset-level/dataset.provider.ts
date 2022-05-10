@@ -1,5 +1,3 @@
-import { AxiosRequestConfig } from 'axios'
-
 import { ServiceProviderBase } from '../common/service-provider-base'
 import {
   IDsInfo,
@@ -41,13 +39,8 @@ class DatasetProvider extends ServiceProviderBase {
     return this.post<TRecdata>('/recdata', params).then(res => res.data)
   }
 
-  public getTabReport(
-    params: ITabReportArguments,
-    options: Partial<AxiosRequestConfig> = {},
-  ): Promise<ITabReport[]> {
-    return this.post<ITabReport[]>('/tab_report', params, options).then(
-      res => res.data,
-    )
+  public getTabReport(params: ITabReportArguments): Promise<ITabReport[]> {
+    return this.post<ITabReport[]>('/tab_report', params).then(res => res.data)
   }
 
   public getVSetup(params: IVsetupArguments): Promise<IVsetupAspectDescriptor> {

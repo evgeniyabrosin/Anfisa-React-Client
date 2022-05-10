@@ -17,10 +17,9 @@ import { tableColumnMap } from '@core/table-column-map'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import filterStore from '@store/filter'
-import columnsStore from '@store/ws/columns'
-import mainTableStore from '@store/ws/main-table.store'
-import variantStore from '@store/ws/variant'
-import zoneStore from '@store/ws/zone'
+import zoneStore from '@store/filterZone'
+import variantStore from '@store/variant'
+import columnsStore from '@store/wsColumns'
 import { Routes } from '@router/routes.enum'
 import { Loader } from '@components/loader'
 import { NoResultsFound } from '@components/no-results-found'
@@ -46,7 +45,7 @@ export const isRowSelected = (
   rowIndex: number,
   activeIndex: number,
 ): boolean => {
-  return toJS(mainTableStore.filteredNo)[rowIndex] === activeIndex
+  return toJS(datasetStore.filteredNo)[rowIndex] === activeIndex
 }
 
 export const Table = observer(({ columns, data }: Props): ReactElement => {
@@ -92,7 +91,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   }
 
   const isFiltered = (): boolean => {
-    return toJS(mainTableStore.filteredNo).length > 0
+    return toJS(datasetStore.filteredNo).length > 0
   }
 
   const [readScrollPosition, writeScrollPosition] = useScrollPosition({
@@ -110,9 +109,9 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
         variantStore.setDrawerVisible(true)
       }
 
-      const idx = isFiltered() ? toJS(mainTableStore.filteredNo)[index] : index
+      const idx = isFiltered() ? toJS(datasetStore.filteredNo)[index] : index
 
-      mainTableStore.setSelectedVariantNumber(idx)
+      datasetStore.setSelectedVariantNumber(idx)
 
       variantStore.setIndex(idx)
 
@@ -135,8 +134,8 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   const resetTableToInitial = () => {
     filterStore.reset()
     zoneStore.resetAllSelectedItems()
-    zoneStore.clearZone()
-    // datasetStore.fetchWsListAsync('reset') // fix to smth reset
+    datasetStore.clearZone()
+    datasetStore.fetchWsListAsync('reset')
   }
 
   useEffect(() => {
@@ -146,10 +145,10 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
       })
 
     const handleResize = debounce(() => {
-      mainTableStore.setIsLoadingTabReport(true)
+      datasetStore.setIsLoadingTabReport(true)
 
       setTimeout(() => {
-        mainTableStore.setIsLoadingTabReport(false)
+        datasetStore.setIsLoadingTabReport(false)
       }, 500)
     }, 500)
 
@@ -164,7 +163,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
   useEffect(() => {
     readScrollPosition()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mainTableStore.isLoadingTabReport])
+  }, [datasetStore.isLoadingTabReport])
 
   const renderNoResults = useCallback(() => {
     const isFiltersSelected =
@@ -174,7 +173,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
       selectedSamples.length > 0 ||
       selectedTags.length > 0
 
-    if (mainTableStore.wsRecords?.length === 0) {
+    if (datasetStore.tabReport.length === 0) {
       return isFiltersSelected ? (
         <NoResultsFound
           text={t('general.noResultsFoundByFilters')}
@@ -202,8 +201,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
     ({ index, style }) => {
       const row = rows[index]
 
-      const isLoading =
-        mainTableStore.isFetchingMore && index === rows.length - 1
+      const isLoading = datasetStore.isFetchingMore && index === rows.length - 1
 
       prepareRow(row)
 
@@ -273,25 +271,25 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
       prepareRow,
       rows,
       variantStore.index,
-      mainTableStore.isFetchingMore,
+      datasetStore.isFetchingMore,
     ],
   )
 
   const handleScrollAsync = debounce(async () => {
-    const datasetVariantsAmount = toJS(mainTableStore.filteredNo).length
-    const lastLoadedVariant = mainTableStore.indexFilteredNo
+    const datasetVariantsAmount = toJS(datasetStore.filteredNo).length
+    const lastLoadedVariant = datasetStore.indexFilteredNo
 
     const isNeedToLoadMore =
       datasetVariantsAmount > 0 && lastLoadedVariant < datasetVariantsAmount
 
     if (isNeedToLoadMore) {
-      await mainTableStore.fetchFilteredTabReportAsync()
+      await datasetStore.fetchFilteredTabReportAsync()
 
       return
     }
 
-    if (!mainTableStore.reportsLoaded) {
-      await mainTableStore.fetchTabReportAsync()
+    if (!datasetStore.reportsLoaded) {
+      await datasetStore.fetchTabReportAsync()
     }
   }, 100)
 
@@ -336,7 +334,7 @@ export const Table = observer(({ columns, data }: Props): ReactElement => {
 
       {renderNoResults()}
 
-      {toJS(mainTableStore.tabReport).length > 0 && (
+      {toJS(datasetStore.tabReport).length > 0 && (
         <Autosizer>
           {({ height }) => (
             <div {...getTableBodyProps()} className="text-12 tbody">

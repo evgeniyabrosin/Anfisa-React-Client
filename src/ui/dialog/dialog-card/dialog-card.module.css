@@ -1,0 +1,51 @@
+.dialog-card {
+  padding: theme("spacing.4");
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  color: theme("colors.black");
+  background: theme("colors.white");
+  border-radius: theme("borderRadius.xl");
+  box-shadow: theme("boxShadow.card");
+
+  &__title {
+    @apply typography-m;
+
+    font-weight: bold;
+    flex: 0 0 auto;
+    padding: 0 theme("spacing.6") theme("spacing.5") 0;
+  }
+
+  &__content {
+    @apply text-sm;
+
+    position: relative;
+    flex: 1 0 auto;
+    overflow: auto;
+  }
+
+  &__actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: theme("spacing.6");
+
+    & > * {
+      margin-left: theme("spacing.3")
+    }
+  }
+
+  &__close {
+    position: absolute;
+    z-index: 999;
+    top: theme("spacing.5");
+    right: theme("spacing.5");
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+}

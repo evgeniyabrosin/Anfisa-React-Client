@@ -20,9 +20,8 @@ export const EnumList = observer((): ReactElement => {
             variantNumbers !== 0 && (
               <Checkbox
                 key={variantName}
-                id={variant[0]}
                 checked={dtreeStore.selectedFilters.includes(variantName)}
-                className="mb-2 text-14"
+                className="flex items-center mb-2 text-14"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   modalFiltersStore.selectCheckGroupItem(
                     e.target.checked,
@@ -30,7 +29,7 @@ export const EnumList = observer((): ReactElement => {
                   )
                 }
               >
-                <span>{variantName}</span>
+                <span className="text-black">{variantName}</span>
 
                 <span className="text-grey-blue ml-2">
                   {variantNumbers} {t('dtree.variants')}

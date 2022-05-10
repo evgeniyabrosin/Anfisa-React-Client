@@ -7,7 +7,6 @@ import Tooltip from 'rc-tooltip'
 
 import { formatDate } from '@core/format-date'
 import { useParams } from '@core/hooks/use-params'
-import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
@@ -88,7 +87,7 @@ export const DatasetsListItem = observer(({ item }: Props): ReactElement => {
 
     if (hasChildren) {
       setIsOpenFolder(prev => !prev)
-      datasetStore.setDsInfo(item as IDirInfoDatasetDescriptor)
+      dirinfoStore.setDsInfo(item as IDirInfoDatasetDescriptor)
     }
 
     dirinfoStore.setInfoFrameLink('')

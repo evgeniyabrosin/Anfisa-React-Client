@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import variantStore from '@store/ws/variant'
+import variantStore from '@store/variant'
 import { Button } from '@ui/button'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { Input } from '@ui/input'
@@ -67,15 +67,14 @@ const DrawerTagModal = observer(({ close }: any) => {
       </span>
 
       <div className="mt-4 h-auto overflow-auto" style={{ maxHeight: 300 }}>
-        {tags.map((tagName, index) => {
+        {tags.map(tagName => {
           const checked = localCheckedTags.includes(tagName)
 
           return (
             <Checkbox
-              key={tagName + index}
-              id={tagName + index}
+              key={tagName}
               checked={checked}
-              className="mb-2 text-14"
+              className="flex items-center mb-4 text-12"
               onChange={e =>
                 drawerTagsStore.handleCheckTag(e.target.checked, tagName)
               }
@@ -92,7 +91,6 @@ const DrawerTagModal = observer(({ close }: any) => {
           onChange={(e: any) =>
             drawerTagsStore.handleChangeCustomTag(e.target.value)
           }
-          isModal
         />
 
         <div className="flex justify-between">

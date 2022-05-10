@@ -4,16 +4,14 @@ import { observer } from 'mobx-react-lite'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { useToggle } from '@core/hooks/use-toggle'
-import filterStore from '@store/filter'
 import { Icon } from '@ui/icon'
-import { PopperButton } from '@components/popper-button'
 import { ConditionJoinMode } from '@service-providers/common'
 import {
+  TCondition,
   TFuncArgs,
   TNumericConditionBounds,
 } from '@service-providers/common/common.interface'
 import { AllNotModeLabel } from './all-not-mode-label'
-import { ConditionModalOptionsButton } from './condition-modal-options-button'
 import { ConditionModalOptionsPopup } from './condition-modal-options-popup'
 import { EnumFilter } from './enum-filter'
 import { FuncFilter } from './func-filter'
@@ -21,14 +19,18 @@ import { NumericFilter } from './numeric-filter'
 
 interface ISelectedFilterCardProps {
   isActive: boolean
-  index: number
+  onSelect: () => void
+  onDelete: () => void
+  condition: TCondition
 }
 
 export const SelectedFilterCard = observer(
-  ({ isActive, index }: ISelectedFilterCardProps): ReactElement => {
-    const { conditions } = filterStore
-    const condition = conditions[index]
-
+  ({
+    isActive,
+    onSelect,
+    onDelete,
+    condition,
+  }: ISelectedFilterCardProps): ReactElement => {
     // TODO: mobx warning for out of bounds read from condition
     //       not all of conditions have 3rd and 4th value
     const filterType: string = condition[0]
@@ -43,10 +45,19 @@ export const SelectedFilterCard = observer(
     const [isFilterContentVisible, showFilterContent, hideFilterContent] =
       useToggle(true)
 
+    const [isModalOptionsVisible, showModalOptions, hideModalOptions] =
+      useToggle(false)
+
     const toggleFilterContentVisibility = (event: React.MouseEvent) => {
       event.stopPropagation()
 
       isFilterContentVisible ? hideFilterContent() : showFilterContent()
+    }
+
+    const toggleModalOptionsVisibility = (event: React.MouseEvent) => {
+      event.stopPropagation()
+
+      isModalOptionsVisible ? hideModalOptions() : showModalOptions()
     }
 
     return (
@@ -55,7 +66,7 @@ export const SelectedFilterCard = observer(
           className={cn('relative flex flex-col px-3 cursor-pointer', {
             'bg-blue-tertiary': isActive,
           })}
-          onClick={() => filterStore.selectCondition(index)}
+          onClick={onSelect}
         >
           <div className="flex py-4 justify-between">
             <div className="flex" onClick={toggleFilterContentVisibility}>
@@ -75,10 +86,20 @@ export const SelectedFilterCard = observer(
               />
             </div>
 
-            <PopperButton
-              ButtonElement={ConditionModalOptionsButton}
-              ModalElement={ConditionModalOptionsPopup}
+            <Icon
+              name="Options"
+              className="cursor-pointer text-blue-bright"
+              stroke={false}
+              onClick={toggleModalOptionsVisibility}
             />
+
+            {isModalOptionsVisible && (
+              <ConditionModalOptionsPopup
+                onClose={hideModalOptions}
+                onDeleteCondition={onDelete}
+                filterName={filterName}
+              />
+            )}
           </div>
 
           <div className="bg-grey-light h-px w-full" />

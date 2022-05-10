@@ -26,13 +26,7 @@ class ModalCompoundHetStore {
     makeAutoObservable(this)
   }
 
-  public setCurrentMode(modeType?: ModeTypes) {
-    if (!modeType || this.currentMode === modeType) {
-      this.currentMode = undefined
-
-      return
-    }
-
+  public setCurrentMode(modeType: ModeTypes) {
     this.currentMode = modeType
   }
 

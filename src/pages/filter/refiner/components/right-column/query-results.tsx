@@ -39,7 +39,9 @@ export const QueryResults = observer((): ReactElement => {
         <div key={`${condition[1]}_${index}`} className="flex flex-col">
           <SelectedFilterCard
             isActive={index === selectedConditionIndex}
-            index={index}
+            condition={condition}
+            onSelect={() => filterStore.selectCondition(index)}
+            onDelete={() => filterStore.removeCondition(index)}
           />
         </div>
       ))}

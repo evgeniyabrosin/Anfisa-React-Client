@@ -18,18 +18,15 @@ export const SelectedGroupItem = ({
     handleCheckGroupItem(event.target.checked, variant)
   }
 
-  const [variantName, variantValue] = variant
-
   return (
     <Checkbox
-      id={variantName + variantValue}
       checked={isSelected}
+      className="flex items-center mb-2 text-14"
       onChange={handleCheck}
-      className="mb-2 text-14"
     >
-      <span>{variantName}</span>
+      <span className="text-black">{variant[0]}</span>
 
-      <span className="text-grey-blue ml-2">({variantValue})</span>
+      <span className="text-grey-blue ml-2">({variant[1]})</span>
     </Checkbox>
   )
 }

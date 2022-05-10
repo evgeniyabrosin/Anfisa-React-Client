@@ -46,6 +46,7 @@ export const QueryBuilderSearch = observer(
           className="w-full"
           placeholder={t('filter.searchForAField')}
           value={value}
+          filter
           onChange={e => {
             onChange(e.target.value)
           }}
