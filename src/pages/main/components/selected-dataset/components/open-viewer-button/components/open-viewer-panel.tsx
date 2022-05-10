@@ -1,17 +1,12 @@
 import { ReactElement } from 'react'
 import { useHistory } from 'react-router-dom'
-import cn from 'classnames'
-import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirInfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
-import { Button } from '@ui/button'
-import { Icon } from '@ui/icon'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
-import { PopperButton } from '@components/popper-button'
 import {
   IPopperMenuProps,
   PopperMenu,
@@ -19,32 +14,7 @@ import {
 import { PopperMenuItem } from '@components/popper-menu/popper-menu-item'
 import { GlbPagesNames } from '@glb/glb-names'
 
-interface PropsButton {
-  isOpen?: boolean
-  refEl: any
-  onClick?: () => void
-}
-
-const ButtonBase = ({ isOpen, refEl, ...rest }: PropsButton): ReactElement => (
-  <Button
-    text={t('home.openInViewer')}
-    dataTestId={DatasetInfoDataCy.openInViewer}
-    refEl={refEl}
-    size="md"
-    onClick={rest.onClick}
-    append={
-      <Icon
-        name="Arrow"
-        className={cn(
-          'transform transition-transform',
-          isOpen ? 'rotate-90' : '-rotate-90',
-        )}
-      />
-    }
-  />
-)
-
-const Panel = ({ close }: IPopperMenuProps): ReactElement => {
+export const OpenViewerPanel = ({ close }: IPopperMenuProps): ReactElement => {
   const history = useHistory()
 
   let pages = Object.values(GlbPagesNames).filter(
@@ -85,7 +55,3 @@ const Panel = ({ close }: IPopperMenuProps): ReactElement => {
     </PopperMenu>
   )
 }
-
-export const OpenViewerButton = observer(() => {
-  return <PopperButton ButtonElement={ButtonBase} ModalElement={Panel} />
-})

@@ -5,7 +5,10 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
-import { IDirInfo } from '@service-providers/vault-level/vault-level.interface'
+import {
+  IDirInfo,
+  IDirInfoDatasetDescriptor,
+} from '@service-providers/vault-level/vault-level.interface'
 import vaultProvider from '@service-providers/vault-level/vault-level.provider'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
@@ -13,6 +16,7 @@ type SortDirectionsType = Record<SortDatasets, SortDirection>
 class DirInfoStore {
   dirinfo: IDirInfo | undefined
   selectedDirinfoName = ''
+  dsinfo: IDirInfoDatasetDescriptor | undefined
   sortType: SortDatasets | undefined = SortDatasets.Name
   filterValue = ''
   sortDirections: SortDirectionsType = {
@@ -66,6 +70,10 @@ class DirInfoStore {
     runInAction(() => {
       this.sortDirections = clonedSortDirection
     })
+  }
+
+  setDsInfo(dsinfo: IDirInfoDatasetDescriptor) {
+    this.dsinfo = dsinfo as any
   }
 
   get dsDistKeys() {

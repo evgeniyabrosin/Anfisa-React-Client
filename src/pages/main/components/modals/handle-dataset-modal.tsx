@@ -6,7 +6,7 @@ import {
   PopperMenu,
 } from '@components/popper-menu/popper-menu'
 import { PopperMenuItem } from '@components/popper-menu/popper-menu-item'
-import handleDatasetStore from '../handle-dataset.store'
+import handleDatasetStore from '../handle-dataset/handle-dataset.store'
 
 export const HandleDatasetModal = observer(({ close }: IPopperMenuProps) => {
   return (

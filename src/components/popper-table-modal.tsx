@@ -96,7 +96,6 @@ export const PopperTableModal = observer(
               value={searchValue}
               placeholder={searchInputPlaceholder}
               onChange={e => onChange && onChange(e.target.value)}
-              isModal
             />
           )}
           {!notShowSelectedPanel && (
