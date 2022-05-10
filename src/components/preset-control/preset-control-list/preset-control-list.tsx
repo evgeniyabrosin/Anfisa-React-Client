@@ -25,10 +25,11 @@ export const PresetControlList = ({
   onModify,
   onDelete,
 }: IPresetControlListProps): ReactElement => {
-  const [contextMenuItem, setContextMenuItem] = useState<{
-    name: string
-    element: HTMLElement
-  } | null>(null)
+  const [contextMenuItem, setContextMenuItem] =
+    useState<{
+      name: string
+      element: HTMLElement
+    } | null>(null)
 
   const closeContextMenu = () => {
     setContextMenuItem(null)
