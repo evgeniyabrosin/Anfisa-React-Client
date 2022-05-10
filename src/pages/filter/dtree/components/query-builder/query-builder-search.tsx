@@ -5,7 +5,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import { InputSearch } from '@components/input-search'
+import { InputSearch } from '@components/input-search/input-search'
 
 interface IProps {
   value: string
@@ -46,7 +46,6 @@ export const QueryBuilderSearch = observer(
           className="w-full"
           placeholder={t('filter.searchForAField')}
           value={value}
-          filter
           onChange={e => {
             onChange(e.target.value)
           }}

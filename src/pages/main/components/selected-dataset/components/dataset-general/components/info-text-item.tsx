@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
 
-interface Props {
+interface IInfoTextItemProps {
   children?: ReactElement | ReactNode
   className?: Argument
   isClickable?: boolean
@@ -17,7 +17,7 @@ export const InfoTextItem = ({
   isTitleBaseInfo,
   className,
   ...rest
-}: Props): ReactElement => {
+}: IInfoTextItemProps): ReactElement => {
   return (
     <div
       className={cn(

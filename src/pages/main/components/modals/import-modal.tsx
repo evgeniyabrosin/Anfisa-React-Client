@@ -5,7 +5,7 @@ import { Input } from '@ui/input'
 import { PopupCard } from '@components/popup-card/popup-card'
 import { Portal } from '@components/portal/portal'
 import { Upload } from '@components/upload/upload'
-import handleDatasetStore from '../handle-dataset.store'
+import handleDatasetStore from '../handle-dataset/handle-dataset.store'
 
 export const ImportModal = observer(() => {
   useEffect(() => () => handleDatasetStore.resetImportData(), [])

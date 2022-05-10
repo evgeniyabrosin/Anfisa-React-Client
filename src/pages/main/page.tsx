@@ -10,8 +10,8 @@ import filterZone from '@store/filterZone'
 import variantStore from '@store/variant'
 import { Header } from '@components/header'
 import { ErrorPage } from '@pages/error/error'
-import { Datasets } from './ui/datasets'
-import { SelectedDataset } from './ui/selected-dataset'
+import { SelectedDataset } from './components/selected-dataset/selected-dataset'
+import { Datasets } from './components/sidebar/datasets'
 
 const MainPage = (): ReactElement => {
   const params = useParams()
@@ -43,7 +43,7 @@ const MainPage = (): ReactElement => {
   return (
     <div className="min-h-full h-full flex flex-col">
       <Header />
-      <div className="flex flex-row flex-grow">
+      <div className="flex flex-row flex-grow h-full overflow-hidden">
         <Datasets />
 
         <SelectedDataset />

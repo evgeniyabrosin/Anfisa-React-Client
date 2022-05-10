@@ -1,14 +1,15 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import dirinfoStore from '@store/dirinfo'
 import { DocsList } from './docs-list'
-export const InfoList = observer((): ReactElement => {
+
+export const InfoList = observer((): ReactElement | null => {
   const docs = get(dirinfoStore, 'dsinfo.doc', [])
   const baseDatasetName = dirinfoStore.ancestorsDsInfo[0][0]
 
-  if (!docs[1]) return <Fragment />
+  if (!docs[1]) return null
 
   const handleClickAsync = async (doc: any, isBaseInfo?: boolean) => {
     dirinfoStore.setActiveInfoName(doc[0])
