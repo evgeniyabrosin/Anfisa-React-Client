@@ -11,9 +11,9 @@ export interface ButtonProps {
     | 'primary'
     | 'secondary'
     | 'secondary-dark'
+    | 'tertiary'
     | 'primary-dark'
     | 'diestruction'
-    | 'cancel'
   className?: Argument
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void
@@ -50,7 +50,7 @@ export const Button = ({
   const isPrimaryDark = variant === 'primary-dark'
   const isSecondaryDark = variant === 'secondary-dark'
   const isDiestruction = variant === 'diestruction'
-  const isCancel = variant === 'cancel'
+  const isTertiary = variant === 'tertiary'
 
   const isDefaultBackground: boolean =
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
@@ -88,13 +88,15 @@ export const Button = ({
       //hover secondary
       'hover:border-blue-hover': isSecondary || isSecondaryDark,
       'active:border-blue-active': isSecondary || isSecondaryDark,
+      //default tertiary
+      'border-2 border-grey-disabled': isTertiary,
+      //hover tertiary
+      'hover:border-grey-light': isTertiary,
       //default diestruction
       'border-2 border-red-secondary': isDiestruction,
       //hover diestruction
       'hover:border-red-hover': isDiestruction,
       'active:border-red-active': isDiestruction,
-      //default cancel
-      'border-2 border-grey-disabled': isCancel,
       //disabled general
       'cursor-not-allowed': disabled,
       'text-grey-blue': disabled,
@@ -103,7 +105,8 @@ export const Button = ({
       'hover:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       'active:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       //disabled secondary
-      'border-grey-disabled': disabled && (isDiestruction || isSecondaryDark),
+      'border-grey-disabled':
+        disabled && (isDiestruction || isSecondary || isSecondaryDark),
       'hover:border-grey-disabled':
         disabled && (isSecondary || isSecondaryDark),
       'active:border-grey-disabled':

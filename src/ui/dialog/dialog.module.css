@@ -1,0 +1,31 @@
+.dialog {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transition-timing-function: ease-in-out;
+  transition-property: opacity, transform;
+  transform: translate(-50%, -50%);
+
+  &_s {
+    width: 468px;
+  }
+
+  &_m {
+    width: 580px;
+  }
+
+  &_l {
+    width: 640px;
+  }
+
+  &_entering,
+  &_entered {
+    opacity: 1;
+  }
+
+  &_exiting,
+  &_exited {
+    opacity: 0;
+    transform: translate(-50%, -75%);
+  }
+}
