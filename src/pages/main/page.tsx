@@ -1,5 +1,6 @@
 import { ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
+import { toJS } from 'mobx'
 
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
@@ -15,6 +16,8 @@ import { Datasets } from './ui/datasets'
 import { SelectedDataset } from './ui/selected-dataset'
 
 const MainPage = (): ReactElement => {
+  console.log('info', toJS(dirinfoStore.info))
+
   const params = useParams()
 
   useEffect(() => {
