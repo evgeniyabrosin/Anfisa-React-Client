@@ -53,7 +53,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     }
 
     datasetStore.initDatasetAsync(datasetName)
-    datasetStore.fetchWsListAsync()
   }
 
   return (

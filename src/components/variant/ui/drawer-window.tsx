@@ -14,6 +14,7 @@ import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
+import { theme } from '@theme'
 import dirinfoStore from '@store/dirinfo'
 import variantStore from '@store/variant'
 import { Checkbox } from '@ui/checkbox/checkbox'
@@ -69,7 +70,7 @@ export const DrawerWindow = observer(
     return (
       <>
         <div
-          className="flex justify-between p-3 rounded-t text-white cursor-pointer hover:bg-blue-bright"
+          className="flex justify-between p-3 rounded-t font-bold text-white cursor-pointer hover:bg-blue-bright"
           onClick={e => {
             const target = e.target as HTMLButtonElement
 
@@ -130,7 +131,7 @@ export const DrawerWindow = observer(
             variantStore.checkRecodsDisplaying()
           }}
         >
-          <span className="uppercase font-bold">{aspect.title}</span>
+          <span className="uppercase">{aspect.title}</span>
           <div className="flex">
             {shouldShowIgvBtn && <IgvButton />}
             {shouldShowCheckbox && (
@@ -138,17 +139,23 @@ export const DrawerWindow = observer(
                 className="mx-8 whitespace-nowrap flex items-center cursor-pointer"
                 onClick={(event: MouseEvent) => event.stopPropagation()}
               >
+                <span className="pr-2 font-normal text-xs">
+                  {t('variant.showSelectionOnly')}
+                </span>
                 <Checkbox
-                  id={'drawer-window-checkbox'}
+                  className={cn(
+                    'h-4 w-4 cursor-pointer',
+                    isChecked
+                      ? ''
+                      : `appearance-none border-solid border border-${theme(
+                          'colors.grey.blue',
+                        )} rounded-sm`,
+                  )}
                   checked={isChecked}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     handleSelection(event.target.checked)
                   }}
-                >
-                  <span className="text-xs">
-                    {t('variant.showSelectionOnly')}
-                  </span>
-                </Checkbox>
+                />
               </label>
             )}
 

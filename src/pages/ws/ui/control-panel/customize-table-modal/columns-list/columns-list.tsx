@@ -32,7 +32,7 @@ export const ColumnsList = observer((): ReactElement => {
   const { filteredColumns, toggleColumnHidden } = columnListStore
 
   return (
-    <div className="mt-3">
+    <div className="mt-3 w-64 pr-4">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {provided => (

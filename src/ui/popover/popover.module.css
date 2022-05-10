@@ -1,0 +1,14 @@
+.popover {
+  transition-timing-function: ease-in-out;
+  transition-property: opacity;
+
+  &_entering,
+  &_entered {
+    opacity: 1;
+  }
+
+  &_exiting,
+  &_exited {
+    opacity: 0;
+  }
+}

@@ -285,13 +285,7 @@ export type ChangeStepActionType =
 
 export type FilterCountsType = number | '...' | null
 
-export type ActionType =
-  | 'INSERT'
-  | 'REPLACE'
-  | 'JOIN-AND'
-  | 'JOIN-OR'
-  | 'UP-JOIN-AND'
-  | 'UP-JOIN-OR'
+export type ActionType = 'INSERT' | 'REPLACE' | 'JOIN-AND' | 'JOIN-OR'
 
 export type AttributeType = 'enum' | 'numeric' | 'func'
 

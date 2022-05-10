@@ -22,19 +22,19 @@ export const ControlPanelPreset = observer((): ReactElement => {
   }
 
   return (
-    <div className="relative">
+    <div>
       {/* TODO: need designer's decision */}
 
-      <div className="absolute -top-5 right-0">
+      {/* <div className="flex items-center justify-between">
         {activePreset && (
           <span
             onClick={() => onSelectAsync({ value: '', label: '' } as Option)}
-            className="text-12 text-blue-bright cursor-pointer"
+            className="text-14 text-blue-bright cursor-pointer"
           >
             {t('general.clear')}
           </span>
         )}
-      </div>
+      </div> */}
 
       <div className="relative" data-testid={MainTableDataCy.selectPreset}>
         <DropDown

@@ -8,19 +8,36 @@ import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import functionPanelStore from '../../function-panel.store'
 
 class GeneRegionStore {
+  private _locusValue: string = ''
   private _currentMode?: ModeTypes
 
   constructor() {
     makeAutoObservable(this)
   }
 
+  public get locusValue(): string {
+    return this._locusValue
+  }
+
   public get currentMode(): ModeTypes | undefined {
     return this._currentMode
   }
 
+  public setLocusValue(locusValue: string) {
+    this._locusValue = locusValue
+  }
+
+  public resetLocusValue() {
+    this._locusValue = ''
+  }
+
   public setCurrentMode(modeType?: ModeTypes): void {
-    if (!modeType || this.currentMode === modeType) {
+    if (!modeType) {
       this._currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
 
       return
     }
@@ -32,17 +49,22 @@ class GeneRegionStore {
     this._currentMode = undefined
   }
 
-  public handleSumbitCondtions(locusValue: string): void {
+  public get selectedFilterValue(): string {
+    return `{"locus":"${this.locusValue}"}`
+  }
+
+  public handleSumbitCondtions(): void {
     const conditions: TFuncCondition = [
       'func',
       FuncStepTypesEnum.GeneRegion,
       getConditionJoinMode(this.currentMode),
       ['True'],
-      { locus: locusValue },
+      { locus: this.locusValue },
     ]
 
     functionPanelStore.submitConditions(conditions)
 
+    this.resetLocusValue()
     filterStore.resetStatFuncData()
   }
 }

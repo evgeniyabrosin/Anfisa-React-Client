@@ -1,0 +1,14 @@
+.context-menu-button {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-card {
+  @apply popup-card;
+
+  min-width: 80px;
+  margin-top: theme("spacing.1");
+}

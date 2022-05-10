@@ -1,5 +1,4 @@
 import { ReactElement } from 'react'
-import cn from 'classnames'
 
 import { Icon } from '@ui/icon'
 import { Switch } from '@ui/switch'
@@ -19,9 +18,7 @@ export const ColumnNameItem = ({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <Icon name="Dnd" />
-        <span className={cn('text-12 my-1', { 'font-medium': isChecked })}>
-          {name}
-        </span>
+        <span className="text-12 my-1">{name}</span>
       </div>
 
       <Switch onChange={onClickSwitch} isChecked={isChecked} />

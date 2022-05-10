@@ -2,9 +2,9 @@ import { ReactElement, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import { validateLocusCondition } from '@utils/validation/validateLocusCondition'
 import { GeneRegionContent } from '../../../query-builder/ui/gene-region-content'
 import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
@@ -15,8 +15,12 @@ import { SelectModalButtons } from '../ui/select-modal-buttons'
 import modalGeneRegionStore from './modal-gene-region.store'
 
 export const ModalGeneRegion = observer((): ReactElement => {
-  const { variants, currentStepGroups } = modalsControlStore
-  const { locusCondition } = modalGeneRegionStore
+  const {
+    groupName,
+    variants,
+
+    currentStepGroups,
+  } = modalsControlStore
 
   const currentStepIndex = activeStepStore.activeStepIndex
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
@@ -26,23 +30,21 @@ export const ModalGeneRegion = observer((): ReactElement => {
 
   const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
 
-  const [error, setError] = useState<string>('')
+  const { locusCondition } = modalGeneRegionStore
 
-  const handleSetValue = async (value: string) => {
+  const [isErrorVisible, setIsErrorVisible] = useState(false)
+
+  const handleSetValue = (value: string) => {
     modalGeneRegionStore.setLocusCondition(value)
+  }
 
-    const result = await dtreeStore.fetchStatFuncAsync(
-      FuncStepTypesEnum.GeneRegion,
-      `{"locus":"${value}"}`,
-    )
-
-    if (result.err) {
-      setError(result.err)
-    }
-
-    if (!result.err && error) {
-      setError('')
-    }
+  const validateValue = (value: string) => {
+    validateLocusCondition({
+      value,
+      setIsErrorVisible,
+      groupName,
+      currentStepIndex,
+    })
   }
 
   const handleAddAttribute = (action: ActionType) => {
@@ -68,8 +70,9 @@ export const ModalGeneRegion = observer((): ReactElement => {
 
       <GeneRegionContent
         locusCondition={locusCondition}
+        validateValue={validateValue}
         handleSetValue={handleSetValue}
-        error={error}
+        isErrorVisible={isErrorVisible}
         variants={variants}
       />
 
@@ -77,7 +80,7 @@ export const ModalGeneRegion = observer((): ReactElement => {
         <EditModalButtons
           handleClose={() => modalGeneRegionStore.closeModal()}
           handleSaveChanges={() => modalGeneRegionStore.saveChanges()}
-          disabled={!!error}
+          disabled={isErrorVisible}
         />
       ) : (
         <SelectModalButtons
@@ -85,7 +88,7 @@ export const ModalGeneRegion = observer((): ReactElement => {
           handleModals={() => modalGeneRegionStore.openModalAttribute()}
           handleModalJoin={() => modalsControlStore.openModalJoin()}
           handleAddAttribute={handleAddAttribute}
-          disabled={!!error}
+          disabled={isErrorVisible}
           currentGroup={currentGroupToModify ?? currentStepGroups}
         />
       )}

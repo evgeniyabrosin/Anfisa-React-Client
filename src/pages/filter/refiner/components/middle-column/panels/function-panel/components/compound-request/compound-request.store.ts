@@ -45,8 +45,12 @@ class CompoundRequestStore {
   }
 
   public setCurrentMode(modeType?: ModeTypes): void {
-    if (!modeType || this.currentMode === modeType) {
+    if (!modeType) {
       this.currentMode = undefined
+    }
+
+    if (this.currentMode === modeType) {
+      this.resetCurrentMode()
 
       return
     }

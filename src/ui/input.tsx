@@ -1,18 +1,17 @@
 import { ChangeEvent, CSSProperties, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-interface IInputProps {
+interface Props {
   placeholder?: string
   value: string
   className?: Argument
   style?: CSSProperties
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   label?: string
-  isModal?: boolean
 }
 
-export const Input = ({ ...rest }: IInputProps): ReactElement => {
-  const { className, style, label, isModal, ...tempRest } = rest
+export const Input = ({ ...rest }: Props): ReactElement => {
+  const { className, style, label, ...tempRest } = rest
 
   const classNameString: string = cn(className)
 
@@ -26,11 +25,9 @@ export const Input = ({ ...rest }: IInputProps): ReactElement => {
       <input
         type="text"
         className={cn(
-          'text-sm rounded-full border w-full leading-tight px-3',
+          'text-sm rounded border w-full leading-tight py-1.5 px-3',
           {
             'border-grey-blue': isDefaultBorder,
-            'py-1': isModal,
-            'py-1.5': !isModal,
           },
           className,
         )}

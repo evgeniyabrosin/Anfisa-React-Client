@@ -54,7 +54,7 @@ export const CustomizeTableModal = observer(
         <>
           {!variantStore.drawerVisible && <ColumnsList />}
           <div
-            className={cn('mt-4 mb-5', {
+            className={cn('mt-4 mb-7 mr-4', {
               'border-t-[1px] border-t-blue-light': !variantStore.drawerVisible,
             })}
           >

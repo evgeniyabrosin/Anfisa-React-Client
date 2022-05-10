@@ -23,13 +23,7 @@ export const QueryBuilderSubgroupChart = ({
   let chart: ReactNode = null
   switch (chartConfig.type) {
     case ChartType.Bar:
-      chart = (
-        <BarChart
-          data={chartConfig.data}
-          totalItems={chartConfig.totalItems}
-          height={150}
-        />
-      )
+      chart = <BarChart data={chartConfig.data} height={150} />
       break
     case ChartType.Pie:
       chart = <PieChart data={chartConfig.data} />
