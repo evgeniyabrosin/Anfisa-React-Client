@@ -40,7 +40,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
     filterStore.method === GlbPagesNames.Dtree ? 300 : 226
 
   return (
-    <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter">
+    <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter h-full">
       <div id="input" className="flex mb-3 w-full static">
         <QueryBuilderSearch
           value={filterValue}

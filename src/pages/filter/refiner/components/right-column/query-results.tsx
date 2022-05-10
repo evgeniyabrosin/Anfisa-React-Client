@@ -1,7 +1,6 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import useClientHeight from '@core/hooks/use-client-height'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { SelectedFilterCard } from './selected-filter-card'
@@ -9,19 +8,9 @@ import { SelectedFilterCard } from './selected-filter-card'
 export const QueryResults = observer((): ReactElement => {
   const { conditions, selectedConditionIndex } = filterStore
 
-  const emptyDivkRef = useRef<any>()
-  const nonEmptyDivRef = useRef<any>()
-
-  const emptyBlockHeight = useClientHeight(emptyDivkRef)
-  const nonEmptyBlockHeight = useClientHeight(nonEmptyDivRef)
-
-  if (conditions.length === 0) {
+  if (!conditions.length) {
     return (
-      <div
-        ref={emptyDivkRef}
-        style={{ height: emptyBlockHeight }}
-        className="flex items-center justify-center border-b border-grey-disabled"
-      >
+      <div className="flex items-center justify-center border-b border-grey-disabled flex-1">
         <p className="leading-16px text-grey-blue">
           {t('general.noResultsFound')}
         </p>
@@ -30,11 +19,7 @@ export const QueryResults = observer((): ReactElement => {
   }
 
   return (
-    <div
-      ref={nonEmptyDivRef}
-      className="overflow-y-scroll"
-      style={{ height: nonEmptyBlockHeight }}
-    >
+    <div className="overflow-y-auto flex-1">
       {conditions.map((condition, index) => (
         <div key={`${condition[1]}_${index}`} className="flex flex-col">
           <SelectedFilterCard

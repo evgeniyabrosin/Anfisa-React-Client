@@ -52,7 +52,7 @@ export const QuerySelected = observer((): ReactElement => {
     isFilterTouched
 
   return (
-    <div className="w-1/3">
+    <div className="w-1/3 flex flex-col">
       <div className="flex items-center px-4 py-3 border-b border-grey-disabled bg-grey-tertiary">
         <div>
           <span className="font-bold text-20">{t('dtree.results')}</span>
