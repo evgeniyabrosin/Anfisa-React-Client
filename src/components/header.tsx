@@ -36,10 +36,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     filterStore.setMethod(page)
   }, [path])
 
-  useEffect(() => {
-    dirinfoStore.fetchDirInfoAsync()
-  }, [ds])
-
   const handleChangeDataset = (datasetName: string) => {
     if (datasetName === ds) {
       return

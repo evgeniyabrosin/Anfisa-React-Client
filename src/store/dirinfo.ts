@@ -5,20 +5,11 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
-import { IDirInfo } from '@service-providers/vault-level/vault-level.interface'
-import vaultProvider from '@service-providers/vault-level/vault-level.provider'
 import { LocalDirInfoStore } from './common/local-dirinfo.store'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
 class DirInfoStore {
-  readonly info = new LocalDirInfoStore()
-  //
-
-  dirinfo: IDirInfo | undefined
-  // get dirinfo() {
-  //   return this.info.data
-  // }
   selectedDirinfoName = ''
   sortType: SortDatasets | undefined = SortDatasets.Name
   filterValue = ''
@@ -29,6 +20,12 @@ class DirInfoStore {
   infoFrameLink: string | string[] = ''
   iframeInfoFullscreen = false
   activeInfoName = ''
+
+  readonly info = new LocalDirInfoStore()
+
+  get dirinfo() {
+    return this.info.data
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -144,12 +141,7 @@ class DirInfoStore {
     return [[]]
   }
 
-  async fetchDirInfoAsync() {
-    this.dirinfo = await vaultProvider.getDirInfo()
-  }
-
   resetData() {
-    this.dirinfo = undefined
     this.selectedDirinfoName = ''
     this.filterValue = ''
     this.infoFrameLink = ''
