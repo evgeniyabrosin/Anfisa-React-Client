@@ -5,6 +5,7 @@ interface IHeaderTableButtonProps {
   refEl: any
   text?: string
   onClick: () => void
+  onMouseUp: () => void
   noIcon?: boolean
   className?: Argument
   dataTestId?: string
@@ -15,6 +16,7 @@ export const HeaderTableButton = ({
   text,
   refEl,
   onClick,
+  onMouseUp,
   className,
   dataTestId,
   icon,
@@ -22,6 +24,7 @@ export const HeaderTableButton = ({
   <div
     ref={refEl}
     onClick={onClick}
+    onMouseUp={onMouseUp}
     className={cn('flex item-center justify-between cursor-pointer', className)}
     data-testid={dataTestId}
   >

@@ -11,6 +11,7 @@ export const en = {
     selectAll: 'Select All',
     clearAll: 'Clear All',
     cancel: 'Cancel',
+    create: 'Create',
     apply: 'Apply',
     applyFilters: 'Apply Filters',
     clear: 'Clear',
@@ -45,6 +46,27 @@ export const en = {
       },
     },
     selectSecondaryPlaceholder: 'Select secondary...',
+  },
+  presetControl: {
+    selectPreset: 'Select Preset',
+    createNewPreset: 'Create New Preset',
+    join: 'Join',
+    apply: 'Apply Filter',
+    delete: 'Delete',
+    modify: 'Modify',
+    createDialog: {
+      title: 'Create Preset',
+      create: 'Create',
+      presetName: 'Preset Name',
+      presetNamePlaceholder: 'Enter Preset Name',
+    },
+    deleteDialog: {
+      title: 'Delete Filter Preset',
+      message:
+        'Deleting a Filter preset "{presetName}" will permanently remove it from your system.',
+      cancel: 'No, Keep Preset',
+      confirm: 'Yes, Delete Preset',
+    },
   },
   home: {
     title: 'Home',

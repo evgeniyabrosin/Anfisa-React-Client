@@ -61,7 +61,7 @@ export const PopupCard = ({
         <div className="flex justify-end pb-4 mt-3">
           <Button
             text={cancelText || t('general.cancel')}
-            variant="cancel"
+            variant="tertiary"
             onClick={onClose}
           />
 

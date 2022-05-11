@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { PopupCard } from '@components/popup-card/popup-card'
 import { Portal } from '@components/portal/portal'
-import handleDatasetStore from '../handle-dataset.store'
+import handleDatasetStore from '../handle-dataset/handle-dataset.store'
 
 export const ExportModal = observer(() => {
   useEffect(() => () => handleDatasetStore.resetExportData(), [])

@@ -145,9 +145,8 @@ const getVariantsChartConfig = (
 export const useChartConfig = (
   status: TPropertyStatus,
 ): TChartConfig | undefined => {
-  const prevSourceRef = useRef<
-    TNumericPropertyHistogram | TVariant[] | undefined
-  >()
+  const prevSourceRef =
+    useRef<TNumericPropertyHistogram | TVariant[] | undefined>()
 
   const configRef = useRef<TChartConfig>()
   const isNumeric = status.kind === AttributeKinds.NUMERIC

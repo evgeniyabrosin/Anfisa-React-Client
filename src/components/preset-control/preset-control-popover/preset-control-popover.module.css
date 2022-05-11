@@ -1,0 +1,42 @@
+.preset-control-card {
+  @apply popup-card;
+
+  width: 300px;
+  margin-top: theme("spacing.3");
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 theme("spacing.3");
+    border-bottom: 1px solid theme("colors.blue.light");
+  }
+
+  &__createButton {
+    @apply typography-s;
+
+    font-weight: theme("fontWeight.medium");
+    color: theme("colors.blue.bright");
+
+    &_disabled {
+      color: theme("colors.grey.disabled");
+    }
+  }
+
+  &__list {
+    margin-top: theme("spacing.1");
+    overflow: auto;
+    max-height: 252px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: theme("spacing.3");
+  }
+
+  &__button {
+    margin: 0 0 0 theme("spacing.3");
+  }
+}
