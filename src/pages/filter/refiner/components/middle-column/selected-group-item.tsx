@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { TVariant } from '@service-providers/common'
 
-interface IProps {
+interface ISelectedGroupItemProps {
   handleCheckGroupItem: (checked: boolean, variant: TVariant) => void
   variant: TVariant
   isSelected: boolean
@@ -13,7 +13,7 @@ export const SelectedGroupItem = ({
   isSelected,
   variant,
   handleCheckGroupItem,
-}: IProps): ReactElement => {
+}: ISelectedGroupItemProps): ReactElement => {
   const handleCheck = (event: any) => {
     handleCheckGroupItem(event.target.checked, variant)
   }
