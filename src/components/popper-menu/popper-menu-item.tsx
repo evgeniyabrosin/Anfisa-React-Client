@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import cn, { Argument } from 'classnames'
 
 import { Icon, TIcons } from '@ui/icon'
@@ -6,7 +6,7 @@ import { Icon, TIcons } from '@ui/icon'
 export interface IPopperMenuItemProps {
   iconName?: TIcons
   className?: Argument
-  onClick?: () => void
+  onClick?: (event: MouseEvent) => void
   isDisabled?: boolean
 }
 

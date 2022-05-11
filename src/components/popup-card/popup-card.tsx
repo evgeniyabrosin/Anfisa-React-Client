@@ -1,7 +1,9 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { useRef } from 'react'
 import cn, { Argument } from 'classnames'
+import noop from 'lodash/noop'
 
+import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
@@ -19,6 +21,7 @@ export interface IPopupCardProps {
   isLoading?: boolean
   isBlueBg?: boolean
   additionalBottomButton?: JSX.Element
+  shouldCloseOnOutsideClick?: boolean
 }
 
 export const PopupCard = ({
@@ -33,7 +36,14 @@ export const PopupCard = ({
   isApplyDisabled = false,
   isBlueBg = false,
   additionalBottomButton,
+  shouldCloseOnOutsideClick = false,
 }: React.PropsWithChildren<IPopupCardProps>) => {
+  const ref = useRef(null)
+
+  const handleOutsideClick =
+    onClose && shouldCloseOnOutsideClick ? onClose : noop
+
+  useOutsideClick(ref, handleOutsideClick)
   return (
     <div
       className={cn(
@@ -43,8 +53,8 @@ export const PopupCard = ({
       )}
     >
       <div className="px-4 pt-4">
-        <div className="flex justify-between mb-5 items-center">
-          <p className="text-blue-dark  font-medium ">{title}</p>
+        <div className="flex justify-between mb-4 items-center">
+          <span className="text-blue-dark font-medium">{title}</span>
           <Icon
             name="Close"
             onClick={onClose}

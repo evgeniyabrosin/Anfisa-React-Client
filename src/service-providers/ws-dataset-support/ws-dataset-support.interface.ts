@@ -16,10 +16,10 @@ export interface IWsListArguments {
 
 export interface IWsList {
   ds: string
-  'total-counts': TItemsCount
-  'filtered-counts': TItemsCount
+  totalCounts: TItemsCount
+  filteredCounts: TItemsCount
   records: IRecordDescriptor[]
-  'active-samples?': string
+  activeSamples: string
 }
 
 // zone_list

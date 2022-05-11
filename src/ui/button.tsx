@@ -11,6 +11,7 @@ export interface ButtonProps {
     | 'primary'
     | 'secondary'
     | 'secondary-dark'
+    | 'tertiary'
     | 'primary-dark'
     | 'diestruction'
   className?: Argument
@@ -49,6 +50,7 @@ export const Button = ({
   const isPrimaryDark = variant === 'primary-dark'
   const isSecondaryDark = variant === 'secondary-dark'
   const isDiestruction = variant === 'diestruction'
+  const isTertiary = variant === 'tertiary'
 
   const isDefaultBackground: boolean =
     /bg-blue-bright/.test(classNameString) || !/bg-[\w-]*/.test(classNameString)
@@ -86,6 +88,10 @@ export const Button = ({
       //hover secondary
       'hover:border-blue-hover': isSecondary || isSecondaryDark,
       'active:border-blue-active': isSecondary || isSecondaryDark,
+      //default tertiary
+      'border-2 border-grey-disabled': isTertiary,
+      //hover tertiary
+      'hover:border-grey-light': isTertiary,
       //default diestruction
       'border-2 border-red-secondary': isDiestruction,
       //hover diestruction
@@ -99,7 +105,8 @@ export const Button = ({
       'hover:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       'active:bg-grey-disabled': disabled && (isPrimary || isPrimaryDark),
       //disabled secondary
-      'border-grey-disabled': disabled && (isDiestruction || isSecondaryDark),
+      'border-grey-disabled':
+        disabled && (isDiestruction || isSecondary || isSecondaryDark),
       'hover:border-grey-disabled':
         disabled && (isSecondary || isSecondaryDark),
       'active:border-grey-disabled':

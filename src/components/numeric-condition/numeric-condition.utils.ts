@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 
+import filterStore from '@store/filter'
 import {
   INumericPropertyStatus,
   TNumericConditionBounds,
@@ -98,12 +99,16 @@ export const useConditionBoundsValue = (
     settersRef.current = {
       updateValue: (index, elementValue) => {
         if (!Number.isNaN(value) && elementValue !== undefined) {
-          setValue(prevValue =>
-            updateNumericValue(prevValue, index, elementValue),
-          )
+          setValue(prevValue => {
+            if (prevValue[index] !== elementValue) filterStore.setTouched(true)
+            return updateNumericValue(prevValue, index, elementValue)
+          })
         }
       },
-      clearValue: () => setValue(defaultValue),
+      clearValue: () => {
+        setValue(defaultValue)
+        filterStore.setTouched(true)
+      },
     }
   }
 
@@ -286,19 +291,26 @@ export const useCenterDistanceValue = (
 
   const setters = useMemo(
     () => ({
-      setCenter: (newCenter: number | null) => {
-        setValue(currentValue => [
-          newCenter,
-          coerceDistance(currentValue[1], newCenter, attrData),
-        ])
+      setCenter: (newCenter: number | null) =>
+        setValue(currentValue => {
+          if (currentValue[0] !== newCenter) filterStore.setTouched(true)
+          return [
+            newCenter,
+            coerceDistance(currentValue[1], newCenter, attrData),
+          ]
+        }),
+      setDistance: (newDistance: number | null) =>
+        setValue(currentValue => {
+          if (currentValue[1] !== newDistance) filterStore.setTouched(true)
+          return [
+            coerceCenter(currentValue[0], newDistance, attrData),
+            newDistance,
+          ]
+        }),
+      clearValue: () => {
+        setValue([null, null])
+        filterStore.setTouched(true)
       },
-      setDistance: (newDistance: number | null) => {
-        setValue(currentValue => [
-          coerceCenter(currentValue[0], newDistance, attrData),
-          newDistance,
-        ])
-      },
-      clearValue: () => setValue([null, null]),
     }),
     [attrData],
   )

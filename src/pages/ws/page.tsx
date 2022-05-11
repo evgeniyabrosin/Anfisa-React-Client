@@ -8,7 +8,8 @@ import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import variantStore from '@store/variant'
+import mainTableStore from '@store/ws/main-table.store'
+import variantStore from '@store/ws/variant'
 import { ExportPanelModal } from '@components/export-panel-modal'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
@@ -16,7 +17,7 @@ import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { VariantsCount } from '@components/variants-count'
 import { ErrorPage } from '@pages/error/error'
-import { ModalSaveDataset } from '@pages/filter/ui/query-builder/ui/modal-save-dataset'
+import { ModalSaveDataset } from '@pages/filter/dtree/components/modals/components/modal-save-dataset'
 import { TCondition } from '@service-providers/common/common.interface'
 import { ModalNotes } from './ui//table/modal-notes'
 import { ControlPanel } from './ui/control-panel/control-panel'
@@ -60,7 +61,7 @@ const WSPage = observer((): ReactElement => {
   }, [])
 
   const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
-    datasetStore.fixedStatAmount
+    mainTableStore.fixedStatAmount
 
   return (
     <Fragment>

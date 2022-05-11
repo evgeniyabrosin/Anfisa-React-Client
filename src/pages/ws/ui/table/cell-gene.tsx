@@ -6,8 +6,8 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { geneColorMap } from '@core/gene-color-map'
-import datasetStore from '@store/dataset'
-import columnsStore from '@store/wsColumns'
+import columnsStore from '@store/ws/columns'
+import mainTableStore from '@store/ws/main-table.store'
 import { CellI } from './cell-interfaces'
 import { PlusIcon } from './plus-icon'
 import { RowHeight } from './table'
@@ -16,8 +16,8 @@ export const CellGene = observer(({ cell }: CellI): ReactElement => {
   const value = get(cell, 'value[0]', []) as string[]
   const rowIndex = get(cell, 'row.index', -1)
 
-  const records = toJS(datasetStore?.wsRecords)
-  const iconColor = records?.[rowIndex]?.cl.split('-')[0]
+  const records = toJS(mainTableStore?.wsRecords)
+  const iconColor = records?.[rowIndex]?.cl.split('-')[0] || 0
 
   const geneCellHeight =
     columnsStore.viewType === ViewTypeEnum.Compact

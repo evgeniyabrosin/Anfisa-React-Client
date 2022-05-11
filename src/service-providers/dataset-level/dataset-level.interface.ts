@@ -38,6 +38,11 @@ export interface IDsInfo extends IBaseDatasetDescriptor {
   'unit-groups': string[]
   cohorts: string[]
   'export-max-count': number
+  'igv-urls'?: string[]
+  name: string
+  note: string
+  total: number
+  ancestors: any[]
 }
 
 // ds_list

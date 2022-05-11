@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { CopyToClipboard } from '@components/copy-to-clipboard'
 import { CellI } from './cell-interfaces'
 import { isRowSelected } from './table'

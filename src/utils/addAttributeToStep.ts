@@ -1,7 +1,7 @@
 import { ActionType, AttributeType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/active-step.store'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import datasetStore from '../store/dataset'
 

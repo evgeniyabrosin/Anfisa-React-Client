@@ -7,7 +7,7 @@ import {
 } from 'react-beautiful-dnd'
 import { observer } from 'mobx-react-lite'
 
-import columnsStore from '@store/wsColumns'
+import columnsStore from '@store/ws/columns'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ColumnListStore } from './columns-list.store'
 import { ColumnNameItem } from './components/column-name-item'
@@ -32,7 +32,7 @@ export const ColumnsList = observer((): ReactElement => {
   const { filteredColumns, toggleColumnHidden } = columnListStore
 
   return (
-    <div className="mt-3 w-64 pr-4">
+    <div className="mt-3">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {provided => (

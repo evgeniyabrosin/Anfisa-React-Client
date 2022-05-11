@@ -1,0 +1,27 @@
+.backdrop {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: theme("colors.backdrop");
+  transition-property: opacity;
+
+  &_invisible {
+    background-color: transparent;
+  }
+
+  &_entering,
+  &_entered {
+    opacity: 1;
+  }
+
+  &_exiting,
+  &_exited {
+    opacity: 0;
+  }
+}

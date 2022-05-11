@@ -1,8 +1,13 @@
 const themeColors = require('./src/theme/colors.js')
+const components = require('./src/theme/components.js')
 
 module.exports = {
   mode: 'jit',
-  content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  content: [
+    './src/theme/components.css',
+    './src/**/*.{js,jsx,ts,tsx}',
+    './public/index.html',
+  ],
   // darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
@@ -11,6 +16,10 @@ module.exports = {
         '16px': '16px',
         '18px': '18px',
         '24px': '24px',
+        12: '12px',
+        16: '16px',
+        20: '20px',
+        28: '28px',
       },
       fontSize: {
         10: '10px',
@@ -30,6 +39,7 @@ module.exports = {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
+      backdrop: 'rgba(0, 0, 0, 0.25)',
       ...themeColors,
     },
     fontFamily: {
@@ -205,5 +215,10 @@ module.exports = {
     'width', // The width utilities like w-0.5
     'wordBreak', // The word-break utilities like break-words
     'zIndex', // The z-index utilities like z-30
+  ],
+  plugins: [
+    ({ addComponents, theme }) => {
+      addComponents(components(theme))
+    },
   ],
 }

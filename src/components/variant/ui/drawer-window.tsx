@@ -14,9 +14,8 @@ import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
-import { theme } from '@theme'
-import dirinfoStore from '@store/dirinfo'
-import variantStore from '@store/variant'
+import datasetStore from '@store/dataset'
+import variantStore from '@store/ws/variant'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
 import {
@@ -64,13 +63,13 @@ export const DrawerWindow = observer(
 
     const isChecked = filterSelection !== DrawerClass.normClass
 
-    const igvUrls = dirinfoStore.dsinfo['igv-urls'] as string[] | undefined
+    const igvUrls = datasetStore.dsInfo['igv-urls'] as string[] | undefined
     const shouldShowIgvBtn = igvUrls && aspect.name === 'view_gen'
 
     return (
       <>
         <div
-          className="flex justify-between p-3 rounded-t font-bold text-white cursor-pointer hover:bg-blue-bright"
+          className="flex justify-between p-3 rounded-t text-white cursor-pointer hover:bg-blue-bright"
           onClick={e => {
             const target = e.target as HTMLButtonElement
 
@@ -131,7 +130,7 @@ export const DrawerWindow = observer(
             variantStore.checkRecodsDisplaying()
           }}
         >
-          <span className="uppercase">{aspect.title}</span>
+          <span className="uppercase font-bold">{aspect.title}</span>
           <div className="flex">
             {shouldShowIgvBtn && <IgvButton />}
             {shouldShowCheckbox && (
@@ -139,23 +138,17 @@ export const DrawerWindow = observer(
                 className="mx-8 whitespace-nowrap flex items-center cursor-pointer"
                 onClick={(event: MouseEvent) => event.stopPropagation()}
               >
-                <span className="pr-2 font-normal text-xs">
-                  {t('variant.showSelectionOnly')}
-                </span>
                 <Checkbox
-                  className={cn(
-                    'h-4 w-4 cursor-pointer',
-                    isChecked
-                      ? ''
-                      : `appearance-none border-solid border border-${theme(
-                          'colors.grey.blue',
-                        )} rounded-sm`,
-                  )}
+                  id={'drawer-window-checkbox'}
                   checked={isChecked}
                   onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     handleSelection(event.target.checked)
                   }}
-                />
+                >
+                  <span className="text-xs">
+                    {t('variant.showSelectionOnly')}
+                  </span>
+                </Checkbox>
               </label>
             )}
 

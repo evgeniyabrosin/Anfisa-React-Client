@@ -2,7 +2,6 @@ import { Fragment } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
 import { Icon } from '@ui/icon'
 
 interface IZoneTagsProps {
@@ -15,7 +14,6 @@ export const ZoneTags = observer(
   ({ selectedTagsList, removeZoneTag }: IZoneTagsProps) => {
     const deleteTag = (item: string) => {
       removeZoneTag(item, 'fast')
-      datasetStore.fetchWsListAsync()
     }
 
     const visibleTagsData = selectedTagsList?.slice(0, 1)

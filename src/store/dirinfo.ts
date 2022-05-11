@@ -3,24 +3,20 @@ import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
-import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
-import { HgModes } from '@service-providers/dataset-level/dataset-level.interface'
 import {
   IDirInfo,
   IDirInfoDatasetDescriptor,
 } from '@service-providers/vault-level/vault-level.interface'
 import vaultProvider from '@service-providers/vault-level/vault-level.provider'
-import datasetStore from './dataset'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
 class DirInfoStore {
   dirinfo: IDirInfo | undefined
   selectedDirinfoName = ''
-  dsinfo: DsInfoType = {}
+  dsinfo: IDirInfoDatasetDescriptor | undefined
   sortType: SortDatasets | undefined = SortDatasets.Name
   filterValue = ''
   sortDirections: SortDirectionsType = {
@@ -153,35 +149,13 @@ class DirInfoStore {
     this.dirinfo = await vaultProvider.getDirInfo()
   }
 
-  async fetchDsinfoAsync(name: string) {
-    const response = await fetch(getApiUrl(`dsinfo?ds=${name}`), {
-      method: 'POST',
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dsinfo = result
-    })
-
-    datasetStore.setIsXL(result?.kind === 'xl')
-  }
-
   resetData() {
     this.dirinfo = undefined
     this.selectedDirinfoName = ''
-    this.dsinfo = {}
     this.filterValue = ''
     this.infoFrameLink = ''
     this.iframeInfoFullscreen = false
     this.activeInfoName = ''
-  }
-
-  // TODO: update type after implantion IDsInfo interface
-  get locusMode(): HgModes {
-    const meta: any = this.dsinfo.meta
-    const hgModeValue: HgModes = meta?.modes?.[0]
-    return hgModeValue
   }
 }
 
