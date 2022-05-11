@@ -113,6 +113,13 @@ export const en = {
     tooMuchVariants:
       'There are too many variants to export. The number of variants should be less than 300',
     deleteDataset: 'Delete Dataset',
+    deleteDialog: {
+      title: 'Delete Dataset',
+      message:
+        'Deleting a Dataset "{datasetName}" will permanently remove it from your system.',
+      cancel: 'No, Keep Dataset',
+      confirm: 'Yes, Delete Dataset',
+    },
   },
   dsCreation: {
     createDeriveDS: 'Create Derive DS',

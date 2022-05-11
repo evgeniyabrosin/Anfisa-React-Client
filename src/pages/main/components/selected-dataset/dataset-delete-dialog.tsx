@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import { Dialog } from '@ui/dialog'
 
 interface IPresetDeleteDialogProps {
@@ -14,18 +15,19 @@ export const DatasetDeleteDialog = ({
   isOpen,
   onClose,
   onDelete,
-  datasetName,
 }: IPresetDeleteDialogProps): ReactElement => {
+  const { datasetName } = datasetStore
+
   return (
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      title={t('presetControl.deleteDialog.title')}
-      cancelText={t('presetControl.deleteDialog.cancel')}
-      applyText={t('presetControl.deleteDialog.confirm')}
+      title={t('ds.deleteDialog.title')}
+      cancelText={t('ds.deleteDialog.cancel')}
+      applyText={t('ds.deleteDialog.confirm')}
       onApply={onDelete}
     >
-      <p>{t('presetControl.deleteDialog.message', { datasetName })}</p>
+      <p>{t('ds.deleteDialog.message', { datasetName })}</p>
     </Dialog>
   )
 }
