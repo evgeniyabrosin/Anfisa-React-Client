@@ -157,6 +157,10 @@ class DirInfoStore {
     this.iframeInfoFullscreen = false
     this.activeInfoName = ''
   }
+
+  deleteDataset(datasetName: string): void {
+    vaultProvider.dropDs({ ds: datasetName })
+  }
 }
 
 export default new DirInfoStore()

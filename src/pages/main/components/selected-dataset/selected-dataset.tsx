@@ -2,7 +2,9 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import { Button } from '@ui/button'
 import { Card, CardTitle } from '@ui/card'
 import { DatasetCard } from '@components/data-testid/dataset-card.cy'
 import { DatasetsFieldsList } from './components/dataset-fields-list/dataset-fileds-list'
@@ -31,6 +33,11 @@ export const SelectedDataset = observer((): ReactElement => {
         </div>
 
         <DatasetGeneral />
+
+        <Button
+          text="Delete Dataset"
+          onClick={() => dirinfoStore.deleteDataset(datasetStore.datasetName)}
+        />
       </Card>
 
       <DatasetsFieldsList />
