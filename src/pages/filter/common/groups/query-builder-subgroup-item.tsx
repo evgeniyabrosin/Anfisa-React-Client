@@ -140,7 +140,7 @@ export const QueryBuilderSubgroupItem = observer(
             />
 
             {subGroupItem.kind === AttributeKinds.FUNC && (
-              <FnLabel subGroup={true} />
+              <FnLabel className="mr-1" />
             )}
             {subGroupItem.power && (
               <div className="w-5 pr-0.5 mr-0.5 inline-flex align-center justify-center">

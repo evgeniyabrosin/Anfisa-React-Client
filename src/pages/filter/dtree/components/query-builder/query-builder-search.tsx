@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -7,7 +7,7 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { InputSearch } from '@components/input-search/input-search'
 
-interface IProps {
+interface IQueryBuilderSearchProps {
   value: string
   onChange: (item: string) => void
   isFilter?: boolean
@@ -22,7 +22,7 @@ export const QueryBuilderSearch = observer(
     isFilter,
     isModal,
     isSubgroupItemSearch,
-  }: IProps): ReactElement => {
+  }: IQueryBuilderSearchProps): ReactElement => {
     const handleClick = (operation: string) => {
       if (isFilter) {
         operation === 'expand' && dtreeStore.expandFilterContent()
@@ -41,7 +41,7 @@ export const QueryBuilderSearch = observer(
     }
 
     return (
-      <Fragment>
+      <>
         <InputSearch
           className="w-full"
           placeholder={t('filter.searchForAField')}
@@ -74,7 +74,7 @@ export const QueryBuilderSearch = observer(
             </div>
           </div>
         )}
-      </Fragment>
+      </>
     )
   },
 )

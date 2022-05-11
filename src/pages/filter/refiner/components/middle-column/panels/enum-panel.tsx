@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
@@ -8,11 +8,10 @@ import { Button } from '@ui/button'
 import { Pagintaion } from '@components/pagintaion'
 import { QueryBuilderSearch } from '@pages/filter/dtree/components/query-builder/query-builder-search'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
+import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
 import { TVariant } from '@service-providers/common'
 import { SelectedGroupItem } from '../selected-group-item'
 import filterAttributesStore from './current-filter.store'
-
-const variantsPerPage = 12
 
 export const EnumPanel = observer((): ReactElement => {
   const {
@@ -23,13 +22,15 @@ export const EnumPanel = observer((): ReactElement => {
     initialEnumMode,
   } = filterAttributesStore
 
-  const { isFilterTouched } = filterStore
+  const { selectedAttributeStatus, isFilterTouched } = filterStore
+
+  const ref = useRef<HTMLDivElement>(null)
 
   const [mode, setMode] = useState(initialEnumMode)
   const [selectedVariants, setSelectedVariants] = useState(
     initialEnumVariants ?? [],
   )
-
+  const [variantsPerPage, setVariantsPerPage] = useState<number>(12)
   const [searchValue, setSearchValue] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -37,6 +38,29 @@ export const EnumPanel = observer((): ReactElement => {
     setSearchValue('')
     setCurrentPage(0)
   }, [attributeName])
+
+  useEffect(
+    () => {
+      const element = ref.current as Element
+
+      if (!element) return
+
+      const observer = new ResizeObserver(entries => {
+        const { height } = entries[0].contentRect
+        const heightOfElement = 32
+
+        if (height / heightOfElement !== variantsPerPage) {
+          setVariantsPerPage(height / 32)
+        }
+      })
+      observer.observe(element)
+
+      return () => {
+        observer.unobserve(element)
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ref.current],
+  )
 
   const preparedSearchValue = searchValue.toLocaleLowerCase()
 
@@ -57,11 +81,12 @@ export const EnumPanel = observer((): ReactElement => {
 
     if (checked) {
       setSelectedVariants([...selectedVariants, variantName])
-    } else {
-      setSelectedVariants(
-        selectedVariants.filter(element => element !== variantName),
-      )
+      return
     }
+
+    setSelectedVariants(
+      selectedVariants.filter(element => element !== variantName),
+    )
   }
 
   const handleClear = () => {
@@ -91,44 +116,47 @@ export const EnumPanel = observer((): ReactElement => {
   const isBlockAddBtn = selectedVariants.length === 0 || !isFilterTouched
 
   return (
-    <div>
-      <div className="flex mt-3">
-        <QueryBuilderSearch
-          value={searchValue}
-          onChange={handleSearchChange}
-          isSubgroupItemSearch
-        />
-      </div>
+    <div className="flex flex-col h-full">
+      <AttributeHeader
+        chosenAttributes={selectedVariants.length}
+        allAttributes={enumVariants.length}
+        attrStatus={selectedAttributeStatus!}
+      />
 
-      <div className="flex justify-end mt-2 -mb-4">
-        <AllNotMods
-          groupSubKind={attributeSubKind}
-          isAllModeChecked={mode === ModeTypes.All}
-          isNotModeChecked={mode === ModeTypes.Not}
-          isAllModeDisabled={selectedVariants.length < 2}
-          isNotModeDisabled={selectedVariants.length === 0}
-          toggleAllMode={() => toggleMode(ModeTypes.All)}
-          toggleNotMode={() => toggleMode(ModeTypes.Not)}
-        />
-      </div>
+      <div className="bg-grey-light h-px w-full my-4" />
 
-      <div className="mt-4">
-        <div className="flex-1 mt-4 overflow-y-auto">
-          {variantsPage.length > 0 ? (
-            variantsPage.map(variant => (
-              <SelectedGroupItem
-                key={variant[0]}
-                isSelected={selectedVariants.includes(variant[0])}
-                variant={variant}
-                handleCheckGroupItem={handleCheckGroupItem}
-              />
-            ))
-          ) : (
-            <div className="flex justify-center items-center text-14 text-grey-blue">
-              {t('dtree.noFilters')}
-            </div>
-          )}
-        </div>
+      <QueryBuilderSearch
+        value={searchValue}
+        onChange={handleSearchChange}
+        isSubgroupItemSearch
+      />
+
+      <AllNotMods
+        groupSubKind={attributeSubKind}
+        isAllModeChecked={mode === ModeTypes.All}
+        isNotModeChecked={mode === ModeTypes.Not}
+        isAllModeDisabled={selectedVariants.length < 2}
+        isNotModeDisabled={!selectedVariants.length}
+        toggleAllMode={() => toggleMode(ModeTypes.All)}
+        toggleNotMode={() => toggleMode(ModeTypes.Not)}
+        classname="flex justify-end mt-4 mb-[-37px]"
+      />
+
+      <div className="flex-1 mt-4 overflow-y-auto" ref={ref}>
+        {variantsPage.length > 0 ? (
+          variantsPage.map(variant => (
+            <SelectedGroupItem
+              key={variant[0]}
+              isSelected={selectedVariants.includes(variant[0])}
+              variant={variant}
+              handleCheckGroupItem={handleCheckGroupItem}
+            />
+          ))
+        ) : (
+          <div className="flex justify-center items-center text-14 text-grey-blue">
+            {t('dtree.noFilters')}
+          </div>
+        )}
       </div>
 
       {pagesCount > 1 && (
@@ -138,7 +166,7 @@ export const EnumPanel = observer((): ReactElement => {
           setPageNumber={setCurrentPage}
         />
       )}
-      <div className="flex items-center justify-end mt-2">
+      <div className="flex items-center justify-end mt-2 pb-[40px]">
         <Button
           variant="secondary"
           text={t('general.clear')}

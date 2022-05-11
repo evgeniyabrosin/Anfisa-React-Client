@@ -25,7 +25,7 @@ export const SelectedGroupItem = ({
       id={variantName + variantValue}
       checked={isSelected}
       onChange={handleCheck}
-      className="mb-2 text-14"
+      className="mb-4 text-14 flex items-center h-4 w-fit"
     >
       <span>{variantName}</span>
 

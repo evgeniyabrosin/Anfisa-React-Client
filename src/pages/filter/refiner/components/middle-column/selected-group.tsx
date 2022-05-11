@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 
 import filterStore from '@store/filter'
 import { AttributeKinds } from '@service-providers/common'
-import { AttributeHeader } from './attribute-header'
 import { EmptySelectedGroup } from './empty-selected-group'
 import { EnumPanel } from './panels/enum-panel'
 import { FunctionPanel } from './panels/function-panel/function-panel'
@@ -23,14 +22,12 @@ export const SelectedGroup = observer((): ReactElement => {
   return (
     <div
       className={cn(
-        'border border-grey-disabled pt-3 px-4 w-1/3 overflow-y-auto ',
-        { 'bg-blue-tertiary': isRedactorMode },
+        'border-r border-grey-disabled pt-4 px-4 w-1/3 overflow-y-auto h-full',
+        {
+          'bg-blue-tertiary': isRedactorMode,
+        },
       )}
     >
-      <AttributeHeader attrStatus={selectedAttributeStatus} />
-
-      <div className="bg-grey-light h-px w-full mt-4" />
-
       {selectedAttributeStatus.kind === AttributeKinds.ENUM && (
         <EnumPanel key={panelKey} />
       )}

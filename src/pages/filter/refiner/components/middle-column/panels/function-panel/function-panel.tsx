@@ -1,6 +1,7 @@
 import { Fragment, FunctionComponent, ReactElement } from 'react'
 
 import filterStore from '@store/filter'
+import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
 import { CompundHet } from './components/compound-het/compound-het'
 import { CompoundRequest } from './components/compound-request/compound-request'
 import { CustomInheritanceMode } from './components/custom-inheritance-mode/custom-inheritance-mode'
@@ -17,6 +18,7 @@ const functionsMap: Record<string, any> = {
 
 export const FunctionPanel = (): ReactElement => {
   const selectedFilter = filterStore.selectedAttributeStatus
+  const { selectedAttributeStatus } = filterStore
 
   const Component: FunctionComponent<Record<string, any>> =
     functionsMap[selectedFilter?.name ?? '']
@@ -25,5 +27,13 @@ export const FunctionPanel = (): ReactElement => {
     return <Fragment />
   }
 
-  return <Component />
+  return (
+    <>
+      <AttributeHeader attrStatus={selectedAttributeStatus!} />
+
+      <div className="bg-grey-light h-px w-full my-4" />
+
+      <Component />
+    </>
+  )
 }

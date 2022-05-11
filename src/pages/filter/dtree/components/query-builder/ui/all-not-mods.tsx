@@ -1,9 +1,11 @@
+import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { SubKinds } from '@core/enum/sub-kinds-enum'
 import { t } from '@i18n'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { ModsDivider } from './mods-divider'
+
 interface IAllNotModsProps {
   isNotModeDisabled?: boolean
   isNotModeChecked?: boolean
@@ -12,6 +14,7 @@ interface IAllNotModsProps {
   isAllModeChecked?: boolean
   toggleAllMode?: () => void
   groupSubKind?: string
+  classname?: Argument
 }
 
 export const AllNotMods = observer(
@@ -23,17 +26,18 @@ export const AllNotMods = observer(
     toggleAllMode,
     toggleNotMode,
     groupSubKind,
+    classname,
   }: IAllNotModsProps) => {
     const isAllModeAvailable =
       groupSubKind === SubKinds.Multi || groupSubKind === SubKinds.InheritanceZ
 
     return (
-      <div className="flex text-14 text-blue-bright">
+      <div className={cn('flex text-14', classname)}>
         {isAllModeAvailable && (
           <>
             <Checkbox
               id={'all-mode-checkbox'}
-              className="flex items-center"
+              className="flex items-center text-center"
               checked={isAllModeChecked ?? false}
               disabled={isAllModeDisabled}
               onChange={toggleAllMode}
@@ -47,7 +51,7 @@ export const AllNotMods = observer(
 
         <Checkbox
           id={'not-mode-checkbox'}
-          className="flex items-center"
+          className="flex items-center text-center"
           checked={isNotModeChecked ?? false}
           disabled={isNotModeDisabled}
           onChange={toggleNotMode}
