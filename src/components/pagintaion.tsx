@@ -11,7 +11,7 @@ enum Actions {
   next = 'next',
   last = 'last',
 }
-interface IProps {
+interface IPagintaionProps {
   pagesNumbers: number
   currentPage: number
   setPageNumber: (value: number) => void
@@ -31,7 +31,7 @@ const Separator = styled.div`
 `
 
 export const Pagintaion = observer(
-  ({ pagesNumbers, currentPage, setPageNumber }: IProps) => {
+  ({ pagesNumbers, currentPage, setPageNumber }: IPagintaionProps) => {
     const testPage = currentPage + 1
     const isFirstPage = currentPage === 0
     const isLastPage = testPage === pagesNumbers
