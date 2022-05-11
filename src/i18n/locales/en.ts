@@ -112,6 +112,7 @@ export const en = {
     variantsWithNotesOnly: 'Variants with notes only',
     tooMuchVariants:
       'There are too many variants to export. The number of variants should be less than 300',
+    deleteDataset: 'Delete Dataset',
   },
   dsCreation: {
     createDeriveDS: 'Create Derive DS',
