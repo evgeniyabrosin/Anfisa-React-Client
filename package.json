@@ -118,7 +118,7 @@
     "webpack": "5.72.0"
   },
   "scripts": {
-    "start": "node ./env.js && yarn & craco start",
+    "start": "yarn & craco start",
     "lint": "eslint -c .eslintrc.js --ext js,ts,tsx src cypress",
     "lint:fix": "yarn lint --fix",
     "stylelint": "stylelint \"**/*.css\" --config stylelint.config.js",
