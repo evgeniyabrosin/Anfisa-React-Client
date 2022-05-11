@@ -2,14 +2,13 @@ import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
-import { Button } from '@ui/button'
 import { Card, CardTitle } from '@ui/card'
 import { DatasetCard } from '@components/data-testid/dataset-card.cy'
 import { DatasetsFieldsList } from './components/dataset-fields-list/dataset-fileds-list'
 import { DatasetGeneral } from './components/dataset-general/dataset-general'
 import { OpenViewerButton } from './components/open-viewer-button/open-viewer-button'
+import { DeleteDatasetButton } from './delete-dataset-button'
 
 export const SelectedDataset = observer((): ReactElement => {
   if (!dirinfoStore.selectedDirinfoName) {
@@ -17,8 +16,6 @@ export const SelectedDataset = observer((): ReactElement => {
       <span className="m-auto text-grey-blue">{t('home.pickDataset')}</span>
     )
   }
-
-  const { isPossibleDeleteDataset, datasetName } = datasetStore
 
   return (
     <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
@@ -36,12 +33,7 @@ export const SelectedDataset = observer((): ReactElement => {
 
         <DatasetGeneral />
 
-        {isPossibleDeleteDataset && (
-          <Button
-            text="Delete Dataset"
-            onClick={() => dirinfoStore.deleteDataset(datasetName)}
-          />
-        )}
+        <DeleteDatasetButton />
       </Card>
 
       <DatasetsFieldsList />
