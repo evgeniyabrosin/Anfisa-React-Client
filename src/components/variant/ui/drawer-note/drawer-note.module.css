@@ -24,7 +24,7 @@
   border: 2px solid transparent;
   outline: none;
 
-  &: focus {
+  &:focus {
     border: 2px solid theme('colors.blue.bright');
   }
 }
