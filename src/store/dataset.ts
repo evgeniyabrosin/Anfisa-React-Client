@@ -5,10 +5,16 @@ import { HgModes } from '@service-providers/dataset-level/dataset-level.interfac
 import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import { IDsInfo } from './../service-providers/dataset-level/dataset-level.interface'
 
+const CHECK_WORD_FOR_DELETE_DATSET = 'test'
+
 export class DatasetStore {
   datasetName = ''
   dsInfo: IDsInfo | Record<string, unknown> = {}
   isXL?: boolean = undefined
+
+  get isPossibleDeleteDataset(): boolean {
+    return this.datasetName.toLowerCase().includes(CHECK_WORD_FOR_DELETE_DATSET)
+  }
 
   constructor() {
     makeAutoObservable(this)

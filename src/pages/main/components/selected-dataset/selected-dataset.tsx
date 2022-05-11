@@ -18,6 +18,8 @@ export const SelectedDataset = observer((): ReactElement => {
     )
   }
 
+  const { isPossibleDeleteDataset, datasetName } = datasetStore
+
   return (
     <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
       <Card className="col-span-1 xl:col-span-3">
@@ -34,10 +36,12 @@ export const SelectedDataset = observer((): ReactElement => {
 
         <DatasetGeneral />
 
-        <Button
-          text="Delete Dataset"
-          onClick={() => dirinfoStore.deleteDataset(datasetStore.datasetName)}
-        />
+        {isPossibleDeleteDataset && (
+          <Button
+            text="Delete Dataset"
+            onClick={() => dirinfoStore.deleteDataset(datasetName)}
+          />
+        )}
       </Card>
 
       <DatasetsFieldsList />
