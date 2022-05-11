@@ -22,7 +22,7 @@ export const SelectedGroup = observer((): ReactElement => {
   return (
     <div
       className={cn(
-        'border-r border-grey-disabled pt-4 px-4 w-1/3 overflow-y-auto h-full',
+        'flex flex-col border-r border-grey-disabled pt-4 px-4 w-1/3 overflow-y-auto h-full',
         {
           'bg-blue-tertiary': isRedactorMode,
         },

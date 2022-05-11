@@ -116,7 +116,7 @@ export const EnumPanel = observer((): ReactElement => {
   const isBlockAddBtn = selectedVariants.length === 0 || !isFilterTouched
 
   return (
-    <div className="flex flex-col h-full">
+    <>
       <AttributeHeader
         chosenAttributes={selectedVariants.length}
         allAttributes={enumVariants.length}
@@ -184,6 +184,6 @@ export const EnumPanel = observer((): ReactElement => {
           disabled={isBlockAddBtn}
         />
       </div>
-    </div>
+    </>
   )
 })
