@@ -30,7 +30,7 @@ export const ZoneModalList = observer(
 
     return (
       <div
-        className="mt-5 overflow-y-auto"
+        className="pt-4 overflow-y-auto"
         style={{ height: 'auto', maxHeight: 240 }}
       >
         {items.map((itemName, index) => {
@@ -46,7 +46,7 @@ export const ZoneModalList = observer(
               onChange={e => handleCheck(e.target.checked, itemName)}
               id={itemName + index}
               datatestId={MainTableDataCy.checkboxListElement}
-              className="mb-2 text-12"
+              className="mb-3 text-12"
             >
               {itemName}
             </Checkbox>

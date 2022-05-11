@@ -1,4 +1,4 @@
-import { Fragment, ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -63,41 +63,47 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
   }
 
   return (
-    <div className="flex items-center p-4 border-b border-grey-light bg-blue-dark justify-between">
+    <div className="flex items-center p-4 border-b border-grey-light justify-between">
       <div className="flex flex-wrap">
-        <span className="font-bold text-white w-full">
-          {t('dtree.results')}
-        </span>
+        <span className="font-bold text-2xl w-full">{t('dtree.results')}</span>
 
-        <span className="text-12 leading-14px text-grey-blue mt-2">
-          {t('ds.totalVariants')}
-          {formatNumber(variants)}
-        </span>
+        <div className="flex items-center mt-1 text-sm font-medium">
+          <span className="flex items-center">
+            {t('ds.totalVariants')}
 
-        {toJS(dtreeStore.stepData).length > 0 && (
-          <Fragment>
-            <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
-              <span>{t('dtree.acceptedVariants')}</span>
+            {formatNumber(variants)}
+          </span>
 
-              <span>{formatNumber(getDerivedVariants('included') || 0)}</span>
-            </div>
+          <div className="w-[2px] mx-2 h-full rounded-md bg-grey-disabled" />
 
-            <div className="text-12 leading-14px text-grey-blue mt-2 ml-2">
-              <span>{t('dtree.rejectedVariants')}</span>
+          {toJS(dtreeStore.stepData).length > 0 && (
+            <>
+              <span className="flex items-center">
+                {t('dtree.acceptedVariants')}
 
-              <span>{formatNumber(getDerivedVariants('excluded') || 0)}</span>
-            </div>
-          </Fragment>
-        )}
+                {formatNumber(getDerivedVariants('included') || 0)}
+              </span>
+
+              <div className="w-[2px] mx-2 h-full rounded-md bg-grey-disabled" />
+
+              <span className="flex items-center">
+                {t('dtree.rejectedVariants')}
+
+                {formatNumber(getDerivedVariants('excluded') || 0)}
+              </span>
+            </>
+          )}
+        </div>
       </div>
+
       <div className="flex">
         {shouldShowReturnedVariants && (
           <Button
             dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
             onClick={() => openTableModal(true)}
             text={t('dtree.viewReturnedVariants')}
-            variant="secondary-dark"
-            className="ml-auto"
+            variant="secondary"
+            className="ml-auto  min-h-32"
           />
         )}
 
@@ -105,8 +111,8 @@ export const QueryBuilderTotalNumbers = observer((): ReactElement => {
           <Button
             onClick={() => openTableModal(false)}
             text={t('dtree.viewVariants')}
-            variant="secondary-dark"
-            className="ml-5"
+            variant="secondary"
+            className="ml-5 min-h-32"
           />
         )}
       </div>
