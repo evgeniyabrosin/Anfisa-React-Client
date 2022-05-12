@@ -104,7 +104,7 @@ module.exports = {
     'borderColor', // The border-color utilities like border-green-700
     // 'borderOpacity', // The border-color opacity utilities like border-opacity-25
     'borderRadius', // The border-radius utilities like rounded-l-3xl
-    // 'borderStyle', // The border-style utilities like border-dotted
+    'borderStyle', // The border-style utilities like border-dotted
     'borderWidth', // The border-width utilities like border-l-2
     // 'boxDecorationBreak', // The box-decoration-break utilities like decoration-slice
     'boxShadow', // The box-shadow utilities like shadow-lg

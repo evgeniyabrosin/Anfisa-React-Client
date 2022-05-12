@@ -37,8 +37,12 @@ export const NextStepHeader = observer(
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
     const currentStep = dtreeStore.filteredStepData[index]
+    const { returnPointIndex } = currentStep
 
-    const difference = dtreeStore.filteredStepData[index].difference
+    const difference =
+      returnPointIndex !== null
+        ? dtreeStore.pointCounts[returnPointIndex]?.[dtreeStore.isXl ? 0 : 1]
+        : null
 
     const toggleExclude = (
       stepIndex: number,

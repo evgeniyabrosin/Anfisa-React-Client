@@ -2,18 +2,21 @@
 import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { FilterCountsType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { getApiUrl } from '@core/get-api-url'
 import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
-import { TFilteringStatCounts } from '@service-providers/common'
+import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
+import {
+  DtreeSetPointKinds,
+  IDtreeSetPoint,
+  PointCount,
+} from '@service-providers/decision-trees'
 import {
   IDsStatArguments,
   IStatfuncArguments,
 } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
-import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
@@ -30,8 +33,8 @@ export type IStepData = {
   excluded: boolean
   isActive: boolean
   isReturnedVariantsActive: boolean
-  startFilterCounts: FilterCountsType
-  difference: FilterCountsType
+  conditionPointIndex: number | null
+  returnPointIndex: number | null
   comment?: string
   condition?: string
   isFinalStep?: boolean
@@ -43,6 +46,11 @@ interface IRequestData {
     setCode: string
     statCode: string
   }
+}
+
+interface IDtreeFilteredCounts {
+  accepted: number
+  rejected: number
 }
 
 class DtreeStore {
@@ -69,8 +77,7 @@ class DtreeStore {
   selectedFilters: string[] = []
   dtreeStepIndices: string[] = []
 
-  pointCounts: [number | null][] = []
-  acceptedVariants = 0
+  pointCounts: PointCount[] = []
 
   evalStatus = undefined
   savingStatus: any = []
@@ -108,6 +115,62 @@ class DtreeStore {
     makeAutoObservable(this)
   }
 
+  get statAmount(): TFilteringStatCounts | undefined {
+    return this.stat.filteredCounts
+  }
+
+  get isXl(): boolean {
+    return !this.dtree || this.dtree.kind === 'xl'
+  }
+
+  get acceptedVariants(): number {
+    const counts = this.pointCounts
+
+    return this.stepData.reduce((acc, { excluded, returnPointIndex }) => {
+      if (!excluded && returnPointIndex !== null) {
+        return acc + (counts[returnPointIndex]?.[0] ?? 0)
+      }
+
+      return acc
+    }, 0)
+  }
+
+  /**
+   * totalFilteredCounts returns accepted and rejected variants for XL dataset,
+   * and transcribed variants for WS
+   */
+  get totalFilteredCounts(): IDtreeFilteredCounts | undefined {
+    if (!this.dtree || !this.isCountsReceived) {
+      return undefined
+    }
+    const isXl = this.isXl
+    const points: IDtreeSetPoint[] = this.dtree.points
+    const totalCounts: TItemsCount = this.dtree['total-counts']
+    const counts = this.pointCounts
+
+    let accepted = 0
+
+    for (let i = 0; i < points.length; ++i) {
+      const { kind, decision } = points[i]
+
+      if (kind === DtreeSetPointKinds.RETURN && decision === true) {
+        const count = counts[i]
+
+        if (!count) {
+          return undefined
+        }
+        accepted += count[isXl ? 0 : 1] ?? 0
+      }
+    }
+
+    const rejected = (totalCounts[isXl ? 0 : 1] as number) - accepted
+
+    return {
+      accepted,
+      rejected,
+    }
+  }
+
   // 1. Functions to load / draw / edit decision trees
 
   async drawDecesionTreeAsync(isLoadingNewTree: boolean) {
@@ -118,8 +181,8 @@ class DtreeStore {
         excluded: true,
         isActive: false,
         isReturnedVariantsActive: false,
-        startFilterCounts: null,
-        difference: null,
+        conditionPointIndex: 0,
+        returnPointIndex: null,
       },
     ]
 
@@ -130,14 +193,16 @@ class DtreeStore {
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
+    const points: unknown[] | undefined = this.dtree?.points
+
     const finalStep: IStepData = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
       isActive: false,
       isReturnedVariantsActive: false,
-      startFilterCounts: null,
-      difference: null,
+      conditionPointIndex: null,
+      returnPointIndex: points ? points.length - 1 : null,
       isFinalStep: true,
     }
 
@@ -159,10 +224,6 @@ class DtreeStore {
       nextActiveStep,
       ActiveStepOptions.StartedVariants,
     )
-  }
-
-  get statAmount(): TFilteringStatCounts | undefined {
-    return this.stat.filteredCounts
   }
 
   getStepIndexForApi = (index: number) => {
@@ -297,30 +358,8 @@ class DtreeStore {
       return element
     })
 
-    const isPositionBefore = position === CreateEmptyStepPositions.BEFORE
-    const isFirstStep = index === 0
-    const prevStepIndex = isFirstStep ? index : index - 1
-
-    const currentStepIndex = isPositionBefore ? prevStepIndex : index
-
-    const prevStartFilterCounts =
-      localStepData?.[currentStepIndex].startFilterCounts
-    const prevDifference = localStepData?.[currentStepIndex].difference
-
-    const isStepCalculated =
-      typeof prevStartFilterCounts === 'number' &&
-      typeof prevDifference === 'number'
-
-    const newStartFilterCounts = isStepCalculated
-      ? prevStartFilterCounts - prevDifference
-      : prevStartFilterCounts
-
-    const startFilterCounts =
-      isFirstStep && isPositionBefore
-        ? prevStartFilterCounts
-        : newStartFilterCounts
-
-    const startSpliceIndex = isPositionBefore ? index : index + 1
+    const startSpliceIndex =
+      position === CreateEmptyStepPositions.BEFORE ? index : index + 1
 
     localStepData.splice(startSpliceIndex, 0, {
       step: index,
@@ -328,8 +367,11 @@ class DtreeStore {
       excluded: true,
       isActive: true,
       isReturnedVariantsActive: false,
-      startFilterCounts,
-      difference: 0,
+      conditionPointIndex:
+        startSpliceIndex < this.stepData.length - 1
+          ? this.stepData[startSpliceIndex].conditionPointIndex
+          : this.stepData[this.stepData.length - 1].returnPointIndex,
+      returnPointIndex: null,
     })
 
     localStepData.forEach((item, currNo: number) => {
@@ -337,7 +379,7 @@ class DtreeStore {
     })
 
     runInAction(() => {
-      this.stepData = [...localStepData]
+      this.stepData = localStepData
     })
 
     this.resetLocalDtreeCode()
@@ -460,41 +502,9 @@ class DtreeStore {
     })
   }
 
-  setPointCounts(pointCounts: [number | null][] | number[][]) {
+  setPointCounts(pointCounts: PointCount[]) {
     runInAction(() => {
-      this.pointCounts = JSON.parse(JSON.stringify(pointCounts))
-    })
-  }
-
-  updatePointCounts(pointCounts: [number | null][]) {
-    const localStepData = [...this.stepData]
-
-    const counts = toJS(pointCounts)
-
-    localStepData.forEach((element, index) => {
-      const startCountsIndex = this.getStepIndexForApi(index)
-      const differenceCountsIndex = startCountsIndex + 1
-
-      const isFinalStep = index === localStepData.length - 1
-
-      if (isFinalStep) {
-        element.difference = counts[counts.length - 1]?.[0]
-      } else {
-        element.startFilterCounts = counts[startCountsIndex]?.[0]
-        element.difference = counts[differenceCountsIndex]?.[0]
-      }
-    })
-
-    runInAction(() => {
-      this.stepData = [...localStepData]
-    })
-  }
-
-  setAcceptedVariants() {
-    const calculatedAcceptedVariants = calculateAcceptedVariants(this.stepData)
-
-    runInAction(() => {
-      this.acceptedVariants = calculatedAcceptedVariants
+      this.pointCounts = pointCounts
     })
   }
 

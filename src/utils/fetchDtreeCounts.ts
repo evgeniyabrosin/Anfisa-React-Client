@@ -1,6 +1,7 @@
 import { getApiUrl } from '@core/get-api-url'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import { PointCount } from '@service-providers/decision-trees'
 
 export const fetchDtreeCountsAsync = async (
   code: string,
@@ -29,7 +30,7 @@ export const fetchDtreeCountsAsync = async (
   })
 
   const result = await response.json()
-  const pointCounts: [number | null][] = result['point-counts']
+  const pointCounts: PointCount[] = result['point-counts']
 
   dtreeStore.setPointCounts(pointCounts)
 

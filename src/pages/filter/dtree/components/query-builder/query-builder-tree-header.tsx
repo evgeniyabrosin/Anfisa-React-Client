@@ -9,6 +9,7 @@ import { QueryBuilderSearch } from './query-builder-search'
 
 const TreeHeader = styled.div`
   width: 13%;
+  min-width: 133px;
   display: flex;
   align-items: center;
 `

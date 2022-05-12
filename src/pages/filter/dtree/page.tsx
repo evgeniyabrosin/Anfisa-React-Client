@@ -92,8 +92,8 @@ const FilterPage = observer((): ReactElement => {
         <Header>
           <VariantsCount
             variantCounts={getFiltersValue('all')}
-            transcriptsCounts={getFiltersValue('transcribedVariants')}
-            dnaVariantsCounts={getFiltersValue('transcripts')}
+            transcriptsCounts={getFiltersValue('transcripts')}
+            dnaVariantsCounts={getFiltersValue('transcribedVariants')}
             showDnaVariants={!isXL}
             showTranscripts={!isXL}
           />

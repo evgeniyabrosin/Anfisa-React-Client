@@ -74,8 +74,6 @@ export type ChangeStepActionType =
   | 'BOOL-TRUE'
   | 'BOOL-FALSE'
 
-export type FilterCountsType = number | '...' | null
-
 export type ActionType =
   | 'INSERT'
   | 'REPLACE'
