@@ -119,7 +119,8 @@ export const en = {
         'Deleting a Dataset "{datasetName}" will permanently remove it from your system.',
       cancel: 'No, Keep Dataset',
       confirm: 'Yes, Delete Dataset',
-      toastMessage: 'Dataset "{datasetName}" has been deleted.',
+      toastSucces: 'Dataset "{datasetName}" has been deleted.',
+      toastError: 'Something went wrong. Dataset not deleted.',
     },
   },
   dsCreation: {

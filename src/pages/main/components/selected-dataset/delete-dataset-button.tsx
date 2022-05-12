@@ -6,7 +6,6 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Button } from '@ui/button'
-import { showToast } from '@utils/notifications'
 import { DatasetDeleteDialog } from './dataset-delete-dialog'
 
 interface IProps {
@@ -37,10 +36,6 @@ export const DeleteDatasetButton = observer(
           onDelete={() => {
             closeDeleteDialog()
             dirinfoStore.deleteDataset(datasetName)
-            showToast(
-              t('ds.deleteDialog.toastMessage', { datasetName }),
-              'success',
-            )
           }}
         />
       </>
