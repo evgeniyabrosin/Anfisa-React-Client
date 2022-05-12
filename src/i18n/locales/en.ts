@@ -146,6 +146,7 @@ export const en = {
     showSelectionOnly: 'Show selection only',
     saveNote: 'Save note',
     noDataToShow: 'No data to show',
+    textAboutSomething: 'Text about something',
   },
   numericCondition: {
     limitedRange: 'Limited range',

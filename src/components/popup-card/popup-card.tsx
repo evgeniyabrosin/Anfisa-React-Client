@@ -11,7 +11,7 @@ import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { Loader } from '@components/loader'
 
 export interface IPopupCardProps {
-  title: string
+  title: string | JSX.Element
   cancelText?: string
   applyText?: string
   className?: Argument
@@ -19,6 +19,8 @@ export interface IPopupCardProps {
   onApply?: () => void
   isApplyDisabled?: boolean
   isLoading?: boolean
+  isBlueBg?: boolean
+  additionalBottomButton?: JSX.Element
   shouldCloseOnOutsideClick?: boolean
 }
 
@@ -32,6 +34,8 @@ export const PopupCard = ({
   onApply,
   isLoading,
   isApplyDisabled = false,
+  isBlueBg = false,
+  additionalBottomButton,
   shouldCloseOnOutsideClick = false,
 }: React.PropsWithChildren<IPopupCardProps>) => {
   const ref = useRef(null)
@@ -42,9 +46,11 @@ export const PopupCard = ({
   useOutsideClick(ref, handleOutsideClick)
   return (
     <div
-      style={{ minWidth: 342 }}
-      className={cn('bg-white shadow-card rounded-lg', className)}
-      ref={ref}
+      className={cn(
+        'shadow-card rounded',
+        `${isBlueBg ? 'bg-blue-light' : 'bg-white'}`,
+        className,
+      )}
     >
       <div className="px-4 pt-4">
         <div className="flex justify-between mb-4 items-center">
@@ -56,23 +62,26 @@ export const PopupCard = ({
             className="cursor-pointer"
           />
         </div>
+      </div>
+      <div className="w-full px-4">{children}</div>
 
-        <div className="w-full">{children}</div>
-        <div className="flex justify-end pb-4 mt-3">
+      <div className="flex justify-between pb-4 px-4 mt-4">
+        <div>{additionalBottomButton && additionalBottomButton}</div>
+
+        <div className="flex">
           <Button
             text={cancelText || t('general.cancel')}
-            variant="tertiary"
+            variant="secondary"
             onClick={onClose}
           />
 
           <Button
             disabled={isApplyDisabled || isLoading}
-            variant="secondary"
             text={
               isLoading ? (
                 <Loader size="xs" color="white" />
               ) : (
-                applyText || t('general.applyFilters')
+                applyText || t('general.apply')
               )
             }
             className="ml-3"
