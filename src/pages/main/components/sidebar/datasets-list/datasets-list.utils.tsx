@@ -6,11 +6,11 @@ export const datasetNameByKey =
   (level: number = 0) =>
   // eslint-disable-next-line react/display-name
   (key: string) => {
-    const { dirinfo } = dirinfoStore
+    const { dirInfoData } = dirinfoStore
 
-    if (!dirinfo) return null
+    if (!dirInfoData) return null
 
-    const item: IDirInfoDatasetDescriptor = dirinfo['ds-dict'][key]
+    const item: IDirInfoDatasetDescriptor = dirInfoData['ds-dict'][key]
 
     if (!level && (!item || item.ancestors.length > 0)) return null
 

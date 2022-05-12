@@ -2,7 +2,7 @@ import { BaseAsyncDataStore } from '@store/common'
 import { IDirInfo } from '@service-providers/vault-level/vault-level.interface'
 import vaultProvider from '@service-providers/vault-level/vault-level.provider'
 
-export class LocalDirInfoStore extends BaseAsyncDataStore<IDirInfo, null> {
+export class DirInfoAsyncStore extends BaseAsyncDataStore<IDirInfo, null> {
   constructor() {
     super()
     this.setQuery(null)

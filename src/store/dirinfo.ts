@@ -6,7 +6,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
 import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
-import { LocalDirInfoStore } from './common/local-dirinfo.store'
+import { DirInfoAsyncStore } from './common/dirinfo.async.store'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
@@ -23,10 +23,10 @@ class DirInfoStore {
   iframeInfoFullscreen = false
   activeInfoName = ''
 
-  readonly info = new LocalDirInfoStore()
+  readonly dirinfo = new DirInfoAsyncStore()
 
-  get dirinfo() {
-    return this.info.data
+  get dirInfoData() {
+    return this.dirinfo.data
   }
 
   constructor() {
@@ -79,7 +79,7 @@ class DirInfoStore {
   }
 
   get dsDistKeys() {
-    let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
+    let keys = Object.keys(get(this.dirInfoData, 'ds-dict', {}))
 
     if (this.filterValue) {
       keys = keys.filter(key =>
@@ -99,19 +99,22 @@ class DirInfoStore {
 
     if (this.sortType === SortDatasets.CreatedAt) {
       keys.sort((a, b) => {
-        if (!this.dirinfo?.['ds-dict'][a] || !this.dirinfo?.['ds-dict'][b]) {
-          return 1
-        }
-
         if (
-          !this.dirinfo?.['ds-dict'][a]['create-time'] ||
-          !this.dirinfo?.['ds-dict'][b]['create-time']
+          !this.dirInfoData?.['ds-dict'][a] ||
+          !this.dirInfoData?.['ds-dict'][b]
         ) {
           return 1
         }
 
-        const aDate = new Date(this.dirinfo?.['ds-dict'][a]['create-time'])
-        const bDate = new Date(this.dirinfo?.['ds-dict'][b]['create-time'])
+        if (
+          !this.dirInfoData?.['ds-dict'][a]['create-time'] ||
+          !this.dirInfoData?.['ds-dict'][b]['create-time']
+        ) {
+          return 1
+        }
+
+        const aDate = new Date(this.dirInfoData?.['ds-dict'][a]['create-time'])
+        const bDate = new Date(this.dirInfoData?.['ds-dict'][b]['create-time'])
 
         return this.sortDirections.CreatedAt === SortDirection.ASC
           ? +aDate - +bDate
