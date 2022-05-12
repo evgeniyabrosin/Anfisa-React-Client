@@ -6,17 +6,14 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
 import { t } from '@i18n'
-import {
-  IDirInfo,
-  IDirInfoDatasetDescriptor,
-} from '@service-providers/vault-level/vault-level.interface'
+import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import vaultProvider from '@service-providers/vault-level/vault-level.provider'
 import { showToast } from '@utils/notifications'
+import { DirInfoAsyncStore } from './common/dirinfo.async.store'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
 class DirInfoStore {
-  dirinfo: IDirInfo | undefined
   selectedDirinfoName = ''
   dsinfo: IDirInfoDatasetDescriptor | undefined
   sortType: SortDatasets | undefined = SortDatasets.Name
@@ -28,6 +25,12 @@ class DirInfoStore {
   infoFrameLink: string | string[] = ''
   iframeInfoFullscreen = false
   activeInfoName = ''
+
+  readonly dirinfo = new DirInfoAsyncStore()
+
+  get dirInfoData() {
+    return this.dirinfo.data
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -79,7 +82,7 @@ class DirInfoStore {
   }
 
   get dsDistKeys() {
-    let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
+    let keys = Object.keys(get(this.dirInfoData, 'ds-dict', {}))
 
     if (this.filterValue) {
       keys = keys.filter(key =>
@@ -99,19 +102,22 @@ class DirInfoStore {
 
     if (this.sortType === SortDatasets.CreatedAt) {
       keys.sort((a, b) => {
-        if (!this.dirinfo?.['ds-dict'][a] || !this.dirinfo?.['ds-dict'][b]) {
-          return 1
-        }
-
         if (
-          !this.dirinfo?.['ds-dict'][a]['create-time'] ||
-          !this.dirinfo?.['ds-dict'][b]['create-time']
+          !this.dirInfoData?.['ds-dict'][a] ||
+          !this.dirInfoData?.['ds-dict'][b]
         ) {
           return 1
         }
 
-        const aDate = new Date(this.dirinfo?.['ds-dict'][a]['create-time'])
-        const bDate = new Date(this.dirinfo?.['ds-dict'][b]['create-time'])
+        if (
+          !this.dirInfoData?.['ds-dict'][a]['create-time'] ||
+          !this.dirInfoData?.['ds-dict'][b]['create-time']
+        ) {
+          return 1
+        }
+
+        const aDate = new Date(this.dirInfoData?.['ds-dict'][a]['create-time'])
+        const bDate = new Date(this.dirInfoData?.['ds-dict'][b]['create-time'])
 
         return this.sortDirections.CreatedAt === SortDirection.ASC
           ? +aDate - +bDate
@@ -147,12 +153,7 @@ class DirInfoStore {
     return [[]]
   }
 
-  async fetchDirInfoAsync() {
-    this.dirinfo = await vaultProvider.getDirInfo()
-  }
-
   resetData() {
-    this.dirinfo = undefined
     this.selectedDirinfoName = ''
     this.filterValue = ''
     this.infoFrameLink = ''

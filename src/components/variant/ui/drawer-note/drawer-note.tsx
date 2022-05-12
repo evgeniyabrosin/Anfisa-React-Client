@@ -1,15 +1,19 @@
+import styles from './drawer-note.module.css'
+
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
+import { useResizeTextAreaHeight } from '@core/hooks/use-resize-text-area-height'
 import { t } from '@i18n'
 import variantStore from '@store/ws/variant'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
+import { PopupCard } from '@components/popup-card/popup-card'
 import { getParsedValue } from '@utils/drawer/getParsedValue'
 import { validateNotes } from '@utils/validation/validateNotes'
 
@@ -36,9 +40,12 @@ const DrawerNoteModal = observer(({ close }: any) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
 
-  const ref = useRef(null)
+  const wrapperRef = useRef(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  useOutsideClick(ref, () => close())
+  useOutsideClick(wrapperRef, () => close())
+
+  useResizeTextAreaHeight(textareaRef.current)
 
   useEffect(() => {
     setValue(variantStore.noteText)
@@ -65,73 +72,61 @@ const DrawerNoteModal = observer(({ close }: any) => {
     close()
   }
 
-  const handleChange = (note: string) => {
-    const validationResult = validateNotes(note)
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = event.target
+    const validationResult = validateNotes(value)
 
     validationResult.error ? setError(validationResult.error) : setError('')
-    setValue(note)
+    setValue(value)
   }
 
   return (
-    <div
-      ref={ref}
-      className="w-96 bg-blue-light flex flex-col py-5 px-4 rounded-xl"
+    <PopupCard
+      title={
+        <div className={styles['modal-title']}>
+          <span>
+            {t('variant.notesFor')}{' '}
+            <span className="text-blue-bright">
+              {`[${genInfo}] `}
+
+              <span dangerouslySetInnerHTML={{ __html: hg19 }} />
+            </span>
+          </span>
+        </div>
+      }
+      isBlueBg={true}
+      additionalBottomButton={
+        variantStore.noteText ? (
+          <Button
+            text={t('general.delete')}
+            onClick={deleteNoteAsync}
+            variant="diestruction"
+          />
+        ) : undefined
+      }
+      cancelText={t('general.cancel')}
+      onClose={close}
+      applyText={t('variant.saveNote')}
+      onApply={handleSaveNoteAsync}
     >
-      <span className="w-full">
-        <span>{t('variant.notesFor')} </span>
-
-        <span className="text-blue-bright">
-          {`[${genInfo}] `}
-
-          <span dangerouslySetInnerHTML={{ __html: hg19 }} />
-        </span>
-      </span>
-      <div className="relative mt-3">
-        {error && (
-          <div className="absolute -top-2.5 text-12 text-red-secondary">
-            {error}
-          </div>
-        )}
-
-        <textarea
-          placeholder="Enter text"
-          className="w-full mt-2 p-3 h-80 rounded-lg resize-none mx-auto"
-          rows={15}
-          value={value}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-            handleChange(e.target.value)
-          }
-        />
-      </div>
-
-      <div className="flex justify-between mt-4">
+      <div className={styles['modal-wrapper']}>
         <div>
-          {variantStore.noteText && (
-            <Button
-              text={t('general.delete')}
-              onClick={deleteNoteAsync}
-              variant="diestruction"
-            />
+          {error && (
+            <div className="absolute -top-2.5 text-12 text-red-secondary">
+              {error}
+            </div>
           )}
-        </div>
 
-        <div className="flex items-center">
-          <Button
-            text={t('general.cancel')}
-            onClick={close}
-            variant="secondary"
-          />
-
-          <Button
-            text="Save note"
-            dataTestId={VariantDrawerDataCy.saveNote}
-            disabled={!value || !value.trim() || !!error}
-            className="ml-2"
-            onClick={handleSaveNoteAsync}
+          <textarea
+            ref={textareaRef}
+            placeholder={t('variant.textAboutSomething')}
+            value={value}
+            onChange={handleChange}
+            className={styles['modal-text-area']}
           />
         </div>
       </div>
-    </div>
+    </PopupCard>
   )
 })
 

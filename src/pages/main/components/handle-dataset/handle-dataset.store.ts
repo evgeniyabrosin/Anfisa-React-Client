@@ -119,7 +119,7 @@ class HandleDatasetStore {
   }
 
   private isUniqueDsName(name: string) {
-    return !Object.keys(dirInfoStore.dirinfo?.['ds-dict'] || {}).some(
+    return !Object.keys(dirInfoStore.dirInfoData?.['ds-dict'] || {}).some(
       dsName => dsName === name,
     )
   }

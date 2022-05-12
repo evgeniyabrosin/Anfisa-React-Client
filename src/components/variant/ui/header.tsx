@@ -18,7 +18,7 @@ import {
   IAttributeDescriptors,
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { findElementInRow } from '@utils/mian-table/find-element-in-row'
-import { DrawerNote } from './drawer-note'
+import { DrawerNote } from './drawer-note/drawer-note'
 import { DrawerTags } from './drawer-tags'
 
 interface IVariantHeaderProps {

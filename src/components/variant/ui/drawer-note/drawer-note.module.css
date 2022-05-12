@@ -1,0 +1,30 @@
+.modal-wrapper {
+  width: 468px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+}
+
+.modal-title {
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cross-button {
+  align-self: center;
+}
+
+.modal-text-area {
+  resize: none;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 12px;
+  border: 2px solid transparent;
+  outline: none;
+
+  &:focus {
+    border: 2px solid theme("colors.blue.bright");
+  }
+}

@@ -36,10 +36,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     filterStore.setMethod(page)
   }, [path])
 
-  useEffect(() => {
-    dirinfoStore.fetchDirInfoAsync()
-  }, [ds])
-
   const handleChangeDataset = (datasetName: string) => {
     if (datasetName === ds) {
       return
@@ -69,8 +65,8 @@ export const Header = observer(({ children }: Props): ReactElement => {
           </span>
           <span>
             {t('header.version.backend', {
-              version: dirinfoStore.dirinfo
-                ? toJS(dirinfoStore.dirinfo).version
+              version: dirinfoStore.dirInfoData
+                ? toJS(dirinfoStore.dirInfoData).version
                 : '',
             })}
           </span>
