@@ -33,7 +33,7 @@ export const SelectedDataset = observer((): ReactElement => {
 
         <DatasetGeneral />
 
-        <DeleteDatasetButton />
+        <DeleteDatasetButton className="mt-5" />
       </Card>
 
       <DatasetsFieldsList />

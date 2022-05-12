@@ -9,34 +9,41 @@ import { Button } from '@ui/button'
 import { showToast } from '@utils/notifications'
 import { DatasetDeleteDialog } from './dataset-delete-dialog'
 
-export const DeleteDatasetButton = observer((): ReactElement => {
-  const { isPossibleDeleteDataset, datasetName } = datasetStore
+interface IProps {
+  className?: string
+}
 
-  const [deleteDialog, openDeleteDialog, closeDeleteDialog] = useModal()
+export const DeleteDatasetButton = observer(
+  ({ className }: IProps): ReactElement => {
+    const { isPossibleDeleteDataset, datasetName } = datasetStore
 
-  return (
-    <>
-      {isPossibleDeleteDataset && (
-        <Button
-          text={t('ds.deleteDataset')}
-          onClick={() => {
-            openDeleteDialog()
+    const [deleteDialog, openDeleteDialog, closeDeleteDialog] = useModal()
+
+    return (
+      <>
+        {isPossibleDeleteDataset && (
+          <Button
+            text={t('ds.deleteDataset')}
+            onClick={() => {
+              openDeleteDialog()
+            }}
+            className={className}
+          />
+        )}
+
+        <DatasetDeleteDialog
+          {...deleteDialog}
+          onClose={closeDeleteDialog}
+          onDelete={() => {
+            closeDeleteDialog()
+            dirinfoStore.deleteDataset(datasetName)
+            showToast(
+              t('ds.deleteDialog.toastMessage', { datasetName }),
+              'success',
+            )
           }}
         />
-      )}
-
-      <DatasetDeleteDialog
-        {...deleteDialog}
-        onClose={closeDeleteDialog}
-        onDelete={() => {
-          closeDeleteDialog()
-          dirinfoStore.deleteDataset(datasetName)
-          showToast(
-            t('ds.deleteDialog.toastMessage', { datasetName }),
-            'success',
-          )
-        }}
-      />
-    </>
-  )
-})
+      </>
+    )
+  },
+)
