@@ -1,10 +1,12 @@
 import { ReactElement } from 'react'
+import { useHistory } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 
 import { useModal } from '@core/hooks/use-modal'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
+import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { DatasetDeleteDialog } from './dataset-delete-dialog'
 
@@ -17,6 +19,15 @@ export const DeleteDatasetButton = observer(
     const { isPossibleDeleteDataset, datasetName } = datasetStore
 
     const [deleteDialog, openDeleteDialog, closeDeleteDialog] = useModal()
+
+    const history = useHistory()
+
+    const handleOnDelete = () => {
+      closeDeleteDialog()
+      dirinfoStore.deleteDataset(datasetName)
+      history.push(Routes.Root)
+      dirinfoStore.dirinfo.invalidate()
+    }
 
     return (
       <>
@@ -33,10 +44,7 @@ export const DeleteDatasetButton = observer(
         <DatasetDeleteDialog
           {...deleteDialog}
           onClose={closeDeleteDialog}
-          onDelete={() => {
-            closeDeleteDialog()
-            dirinfoStore.deleteDataset(datasetName)
-          }}
+          onDelete={handleOnDelete}
         />
       </>
     )
