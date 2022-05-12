@@ -19,6 +19,7 @@ import { GlbPagesNames } from '@glb/glb-names'
 import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
+import { ReturnedVariantsDataCy } from '../../../../../../components/data-testid/returned-variants'
 
 const ModalView = styled.div`
   display: flex;
@@ -252,6 +253,7 @@ export const ModalViewVariants = observer(() => {
                         const active = index === variantIndex
                         return (
                           <tr
+                            data-testid={ReturnedVariantsDataCy.sampleButton}
                             key={variant.no}
                             className={cn(
                               'border-y-[0.5px] border-grey-blue cursor-pointer',
@@ -281,6 +283,7 @@ export const ModalViewVariants = observer(() => {
               <div className="w-3/4 flex flex-col rounded-r-lg">
                 <div className="flex px-4 py-2 justify-between w-full bg-blue-dark">
                   <div
+                    data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
                     className="flex justify-center text-16 font-semi-bold text-blue-bright"
                     dangerouslySetInnerHTML={{
                       __html: variantList[variantIndex]?.lb ?? '',

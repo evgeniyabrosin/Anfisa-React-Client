@@ -70,7 +70,7 @@ export const ModalOperation = observer(
             <div
               onClick={() => createStep(index, CreateEmptyStepPositions.AFTER)}
               className="font-normal py-2 px-2 hover:bg-grey-light"
-              data-testId={DecisionTreesResultsDataCy.addStepAfter}
+              data-testid={DecisionTreesResultsDataCy.addStepAfter}
             >
               {t('dtree.addStepAfter')}
             </div>

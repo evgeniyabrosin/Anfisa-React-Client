@@ -29,14 +29,14 @@ export const ExportPanelModal = ({ close }: IPopperMenuProps): ReactElement => {
     <PopperMenu close={close} className="w-32">
       <PopperMenuItem
         onClick={() => handleDownload(ExportTypeEnum.Excel)}
-        data-testid={MainTableDataCy.exportExcel}
+        dataTestId={MainTableDataCy.exportExcel}
       >
         {t('general.excel')}
       </PopperMenuItem>
 
       <PopperMenuItem
         onClick={() => handleDownload(ExportTypeEnum.CSV)}
-        data-testid={MainTableDataCy.exportCsv}
+        dataTestId={MainTableDataCy.exportCsv}
       >
         {t('general.csv')}
       </PopperMenuItem>

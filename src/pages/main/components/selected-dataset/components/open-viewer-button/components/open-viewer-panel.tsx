@@ -42,7 +42,7 @@ export const OpenViewerPanel = ({ close }: IPopperMenuProps): ReactElement => {
         return (
           <PopperMenuItem
             key={index}
-            data-testid={DatasetInfoDataCy.viewerOption}
+            dataTestId={DatasetInfoDataCy.viewerOption}
             onClick={() => {
               datasetStore.setIsXL(datasetStore.dsInfo.kind === 'xl')
               goToPage(pageName)

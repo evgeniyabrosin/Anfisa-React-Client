@@ -1,7 +1,7 @@
 import { CommonSelectors } from '../../../src/components/data-testid/common-selectors.cy'
 import { FilterRefiner } from '../../../src/components/data-testid/filter-refiner.cy'
+import { Helper } from '../../shared/helpers'
 import { BasePage } from '../lib/base-page'
-import { Helper } from '../lib/helpers'
 import { FilterRefinerMenuWidget } from './widgets/filter-refiner.widget'
 import { FilterRefinerLeftPanelWidget } from './widgets/filter-refiner-left-panel.widget'
 import { FilterRefinerFilterWidget } from './widgets/filter-refiner-select-filter.widget'
