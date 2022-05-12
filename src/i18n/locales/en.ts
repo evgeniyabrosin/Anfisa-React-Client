@@ -207,7 +207,7 @@ export const en = {
     applyFilter: 'Apply Filter',
     algorithm: 'Algorithm',
     addAttribute: '+ Add Attribute',
-    addNewAttribute: 'Add attribute',
+    addNewAttribute: 'Add Attribute',
     addByJoining: 'Add by joining',
     nothingSelected: 'Nothing is selected',
     addQuery: 'Add query',

@@ -14,6 +14,7 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
+import { TDtreeModifyingActions } from '@service-providers/decision-trees'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { FilterButton } from '../../common/filter-control/filter-button'
@@ -38,12 +39,10 @@ export const FilterControlDtree = observer((): ReactElement => {
       return
     }
 
-    const body = new URLSearchParams({
+    dtreeStore.fetchDtreeSetAsync({
       ds: datasetStore.datasetName,
       dtree: dtreeName,
     })
-
-    dtreeStore.fetchDtreeSetAsync(body)
     dtreeStore.setQueryBuilderRenderKey(Date.now())
   }
 
@@ -56,11 +55,6 @@ export const FilterControlDtree = observer((): ReactElement => {
   }
 
   const handleClick = () => {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      code: dtreeStore.dtreeCode,
-    })
-
     let instruction, notification
 
     if (actionName === ActionFilterEnum.Create) {
@@ -90,9 +84,11 @@ export const FilterControlDtree = observer((): ReactElement => {
       dtreeStore.setStartDtreeCode()
     }
 
-    body.append('instr', JSON.stringify(instruction))
-
-    dtreeStore.fetchDtreeSetAsync(body)
+    dtreeStore.fetchDtreeSetAsync({
+      ds: datasetStore.datasetName,
+      code: dtreeStore.dtreeCode,
+      instr: (instruction as TDtreeModifyingActions) || [],
+    })
 
     notification && showToast(notification, 'success')
 

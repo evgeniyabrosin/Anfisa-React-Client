@@ -1,6 +1,10 @@
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
 import { ConditionJoinMode } from '@service-providers/common/common.interface'
+import {
+  ActionTypes,
+  AtomModifyingActionName,
+} from '@service-providers/decision-trees'
 
 export const editStepAttribute = (
   stepIndex: number,
@@ -8,11 +12,6 @@ export const editStepAttribute = (
   isNegate: boolean,
 ) => {
   const code = dtreeStore.dtreeCode ?? 'return False'
-
-  const body = new URLSearchParams({
-    ds: datasetStore.datasetName,
-    code,
-  })
 
   const stepIndexForApi = dtreeStore.getStepIndexForApi(stepIndex)
   const location = [stepIndexForApi, locationIndex]
@@ -37,11 +36,16 @@ export const editStepAttribute = (
     filteredAttribute.splice(-2, 0, negation)
   }
 
-  body.append(
-    'instr',
-    JSON.stringify(['ATOM', 'EDIT', location, filteredAttribute]),
-  )
-
   dtreeStore.resetLocalDtreeCode()
-  dtreeStore.fetchDtreeSetAsync(body)
+
+  dtreeStore.fetchDtreeSetAsync({
+    ds: datasetStore.datasetName,
+    code,
+    instr: [
+      ActionTypes.ATOM,
+      AtomModifyingActionName.EDIT,
+      location,
+      filteredAttribute,
+    ],
+  })
 }

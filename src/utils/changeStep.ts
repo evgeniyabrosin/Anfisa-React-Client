@@ -2,6 +2,10 @@ import { toJS } from 'mobx'
 
 import { ChangeStepActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import {
+  ActionTypes,
+  TInstrModifyingActions,
+} from '@service-providers/decision-trees'
 import datasetStore from '../store/dataset'
 
 export const changeStep = (
@@ -9,11 +13,6 @@ export const changeStep = (
   action: ChangeStepActionType,
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
-
-  const body = new URLSearchParams({
-    ds: datasetStore.datasetName,
-    code,
-  })
 
   const locadStepData = toJS(dtreeStore.stepData)
 
@@ -37,8 +36,11 @@ export const changeStep = (
   const defaultLocation = isBooleanAction ? stepIndex + 1 : stepIndex
   const location = isFinalStepIndex && isEmptyTree ? stepIndex : defaultLocation
 
-  body.append('instr', JSON.stringify(['INSTR', action, location]))
-
   dtreeStore.resetLocalDtreeCode()
-  dtreeStore.fetchDtreeSetAsync(body)
+
+  dtreeStore.fetchDtreeSetAsync({
+    ds: datasetStore.datasetName,
+    code,
+    instr: [ActionTypes.INSTR, action, location] as TInstrModifyingActions,
+  })
 }

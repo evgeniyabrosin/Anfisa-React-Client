@@ -28,15 +28,13 @@ const FilterPage = observer((): ReactElement => {
 
   useEffect(() => {
     const initAsync = async () => {
-      const body = new URLSearchParams({
+      await datasetStore.fetchDsinfoAsync(dsName)
+
+      await dtreeStore.fetchDtreeSetAsync({
         ds: dsName,
         tm: '0',
         code: 'return False',
       })
-
-      await datasetStore.fetchDsinfoAsync(dsName)
-
-      await dtreeStore.fetchDtreeSetAsync(body)
     }
 
     initAsync()

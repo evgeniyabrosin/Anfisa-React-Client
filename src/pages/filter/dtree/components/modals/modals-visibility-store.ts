@@ -3,6 +3,10 @@ import { makeAutoObservable } from 'mobx'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset'
 import dtreeStore from '@store/dtree'
+import {
+  ActionTypes,
+  DtreeModifyingActions,
+} from '@service-providers/decision-trees'
 import { showToast } from '@utils/notifications/showToast'
 
 class ModalsVisibilityStore {
@@ -31,23 +35,19 @@ class ModalsVisibilityStore {
   }
 
   public deleteTree(): void {
-    const instruction: string[] = [
-      'DTREE',
-      'DELETE',
-      dtreeStore.currentDtreeName,
-    ]
-
     const notification: string = `${t('dtree.dtree')} "${
       dtreeStore.currentDtreeName
     }" ${t('dtree.hasBeenDeleted')}`
 
-    const body = new URLSearchParams({
+    dtreeStore.fetchDtreeSetAsync({
       ds: datasetStore.datasetName,
       code: dtreeStore.dtreeCode,
-      instr: JSON.stringify(instruction),
+      instr: [
+        ActionTypes.DTREE,
+        DtreeModifyingActions.DELETE,
+        dtreeStore.currentDtreeName,
+      ],
     })
-
-    dtreeStore.fetchDtreeSetAsync(body)
 
     showToast(notification, 'success')
 

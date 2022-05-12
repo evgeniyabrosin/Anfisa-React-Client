@@ -2,6 +2,10 @@ import { ActionType, AttributeType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import {
+  ActionTypes,
+  TPointModifyingActions,
+} from '@service-providers/decision-trees'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import datasetStore from '../store/dataset'
 
@@ -14,11 +18,6 @@ export const addAttributeToStep = (
   // eslint-disable-next-line max-params
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
-
-  const body = new URLSearchParams({
-    ds: datasetStore.datasetName,
-    code,
-  })
 
   const shouldTakeAttributeFromStore = attributeType !== 'numeric'
 
@@ -39,10 +38,16 @@ export const addAttributeToStep = (
 
   const { stepIndexForApi } = activeStepStore
 
-  const instruction = ['POINT', action, +stepIndexForApi, attribute]
-
-  body.append('instr', JSON.stringify(instruction))
+  dtreeStore.fetchDtreeSetAsync({
+    ds: datasetStore.datasetName,
+    code,
+    instr: [
+      ActionTypes.POINT,
+      action,
+      +stepIndexForApi,
+      attribute,
+    ] as TPointModifyingActions,
+  })
 
   dtreeStore.resetLocalDtreeCode()
-  dtreeStore.fetchDtreeSetAsync(body)
 }

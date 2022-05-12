@@ -135,12 +135,10 @@ export const ModalTextEditor = observer((): ReactElement => {
   const handleSave = () => {
     dtreeStore.setNextDtreeCode(dtreeStore.startDtreeCode)
 
-    const body = new URLSearchParams({
+    dtreeStore.fetchDtreeSetAsync({
       ds: datasetStore.datasetName,
       code,
     })
-
-    dtreeStore.fetchDtreeSetAsync(body)
 
     modalsVisibilityStore.closeModalTextEditor()
   }
