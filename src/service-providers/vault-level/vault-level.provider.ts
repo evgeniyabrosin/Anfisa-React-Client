@@ -37,7 +37,7 @@ class VaultProvider extends ServiceProviderBase {
   }
 
   public dropDs(params: IAdmDropDsArguments) {
-    return this.post<any>('adm_drop_ds', params).then(res => res.data)
+    return this.post<string>('adm_drop_ds', params).then(res => res.data)
   }
 }
 

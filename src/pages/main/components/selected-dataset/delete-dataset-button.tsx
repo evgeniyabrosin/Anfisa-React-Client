@@ -8,7 +8,7 @@ import datasetStore from '@store/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
-import { DatasetDeleteDialog } from './dataset-delete-dialog'
+import { Dialog } from '@ui/dialog'
 
 interface IProps {
   className?: string
@@ -19,6 +19,7 @@ export const DeleteDatasetButton = observer(
     const { isPossibleDeleteDataset, datasetName } = datasetStore
 
     const [deleteDialog, openDeleteDialog, closeDeleteDialog] = useModal()
+    const { isOpen } = deleteDialog
 
     const history = useHistory()
 
@@ -41,11 +42,16 @@ export const DeleteDatasetButton = observer(
           />
         )}
 
-        <DatasetDeleteDialog
-          {...deleteDialog}
+        <Dialog
+          isOpen={isOpen}
           onClose={closeDeleteDialog}
-          onDelete={handleOnDelete}
-        />
+          title={t('ds.deleteDialog.title')}
+          cancelText={t('ds.deleteDialog.cancel')}
+          applyText={t('ds.deleteDialog.confirm')}
+          onApply={handleOnDelete}
+        >
+          <p>{t('ds.deleteDialog.message', { datasetName })}</p>
+        </Dialog>
       </>
     )
   },
