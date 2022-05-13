@@ -8,7 +8,7 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/components/active-step.store'
-import modalsVisibilityStore from '../../modals/modals-visibility-store'
+import modalsVisibilityStore from '../../../modals/modals-visibility-store'
 import { NextStepContentItem } from './next-step-content-item'
 
 interface INextStepContentProps {

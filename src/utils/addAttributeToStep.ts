@@ -1,4 +1,5 @@
 import { ActionType, AttributeType } from '@declarations'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
@@ -19,7 +20,7 @@ export const addAttributeToStep = (
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
-  const shouldTakeAttributeFromStore = attributeType !== 'numeric'
+  const shouldTakeAttributeFromStore = attributeType !== FilterKindEnum.Numeric
 
   const currentFilters = shouldTakeAttributeFromStore
     ? dtreeStore.selectedFilters

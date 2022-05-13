@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import dtreeStore from '@store/dtree'
 import { FinalStep } from './ui/final-step'
-import { NextStep } from './ui/next-step'
+import { NextStep } from './ui/next-step/next-step'
 
 export const QueryBuilderTreeView = observer((): ReactElement => {
   const { filteredStepData } = dtreeStore

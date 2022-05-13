@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable } from 'mobx'
 
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
@@ -207,7 +208,7 @@ class CompoundRequestStore {
     }).replace(/\s+/g, '')
 
     const conditions: TFuncCondition = [
-      'func',
+      FilterKindEnum.Func,
       FuncStepTypesEnum.CompoundRequest,
       getConditionJoinMode(this.currentMode),
       ['True'],

@@ -9,15 +9,16 @@ import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tre
 import activeStepStore, {
   CreateEmptyStepPositions,
 } from '@pages/filter/dtree/components/active-step.store'
+import { InstrModifyingActionNames } from '@service-providers/decision-trees'
 import { changeStep } from '@utils/changeStep'
 
-interface IProps {
+interface IModalOperationProps {
   hideModal: () => void
   index: number
 }
 
 export const ModalOperation = observer(
-  ({ hideModal, index }: IProps): ReactElement => {
+  ({ hideModal, index }: IModalOperationProps): ReactElement => {
     const ref = useRef(null)
 
     useOutsideClick(ref, hideModal)
@@ -37,7 +38,7 @@ export const ModalOperation = observer(
       const stepHasAttribute = currentStep.groups.length > 0
 
       stepHasAttribute
-        ? changeStep(stepIndex, 'DELETE')
+        ? changeStep(stepIndex, InstrModifyingActionNames.DELETE)
         : dtreeStore.removeStep(stepIndex)
 
       hideModal()
@@ -76,7 +77,9 @@ export const ModalOperation = observer(
             </div>
 
             <div
-              onClick={() => sendChange(index, 'DUPLICATE')}
+              onClick={() =>
+                sendChange(index, InstrModifyingActionNames.DUPLICATE)
+              }
               className="font-normal py-2 px-2 hover:bg-grey-light"
             >
               {t('dtree.duplicate')}
@@ -84,7 +87,7 @@ export const ModalOperation = observer(
 
             <div
               onClick={() => {
-                sendChange(index, 'NEGATE')
+                sendChange(index, InstrModifyingActionNames.NEGATE)
               }}
               className="font-normal py-2 px-2 hover:bg-grey-light"
             >
@@ -104,7 +107,7 @@ export const ModalOperation = observer(
               <Fragment>
                 <div
                   onClick={() => {
-                    sendChange(index, 'JOIN-AND')
+                    sendChange(index, InstrModifyingActionNames.JOIN_AND)
                   }}
                   className="font-normal py-2 px-2 hover:bg-grey-light"
                 >
@@ -112,7 +115,7 @@ export const ModalOperation = observer(
                 </div>
                 <div
                   onClick={() => {
-                    sendChange(index, 'JOIN-OR')
+                    sendChange(index, InstrModifyingActionNames.JOIN_OR)
                   }}
                   className="step-menu-btn"
                 >
@@ -125,7 +128,7 @@ export const ModalOperation = observer(
           {isSplitPossible && (
             <div
               onClick={() => {
-                sendChange(index, 'SPLIT')
+                sendChange(index, InstrModifyingActionNames.SPLIT)
               }}
               className="step-menu-btn"
             >

@@ -22,7 +22,7 @@ export type TNumericConditionBounds = [
 ]
 
 export type TNumericCondition = [
-  conditionType: 'numeric',
+  conditionType: FilterKindEnum.Numeric | FilterKindEnum.Error,
   propertyName: string,
   bounds: TNumericConditionBounds,
 ]
@@ -62,7 +62,7 @@ export interface IGeneRegionArgs {
 }
 
 export type TEnumCondition = [
-  conditionType: FilterKindEnum.Enum,
+  conditionType: FilterKindEnum.Enum | FilterKindEnum.Error,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
@@ -76,7 +76,7 @@ export type TFuncArgs =
   | IGeneRegionArgs
 
 export type TFuncCondition = [
-  conditionType: 'func',
+  conditionType: FilterKindEnum.Func | FilterKindEnum.Error,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],

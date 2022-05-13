@@ -4,6 +4,7 @@ import { ChangeStepActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
 import {
   ActionTypes,
+  InstrModifyingActionNames,
   TInstrModifyingActions,
 } from '@service-providers/decision-trees'
 import datasetStore from '../store/dataset/dataset'
@@ -25,8 +26,8 @@ export const changeStep = (
   const calculatedIndex = index - emptyStepList.length
   const stepIndex = dtreeStore.getStepIndexForApi(calculatedIndex)
 
-  const isIncludeAction = action === 'BOOL-TRUE'
-  const isExcludeAction = action === 'BOOL-FALSE'
+  const isIncludeAction = action === InstrModifyingActionNames.BOOL_TRUE
+  const isExcludeAction = action === InstrModifyingActionNames.BOOL_FALSE
   const isBooleanAction = isIncludeAction || isExcludeAction
 
   const indexes = toJS(dtreeStore.dtreeStepIndices)

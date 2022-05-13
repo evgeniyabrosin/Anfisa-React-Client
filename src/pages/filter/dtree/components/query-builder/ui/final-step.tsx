@@ -11,9 +11,9 @@ import activeStepStore, {
   CreateEmptyStepPositions,
 } from '@pages/filter/dtree/components/active-step.store'
 import { changeStep } from '@utils/changeStep'
-import { ResultsView, TreeView } from './next-step'
-import { Operation, Step } from './next-step-header'
-import { NextStepRoute } from './next-step-route'
+import { ResultsView, TreeView } from './next-step/next-step'
+import { Operation, Step } from './next-step/next-step-header'
+import { NextStepRoute } from './next-step/next-step-route'
 import { StepDivider } from './step-divider'
 
 interface IFinalStepProps {

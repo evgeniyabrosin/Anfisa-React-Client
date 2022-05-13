@@ -14,7 +14,11 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
-import { TDtreeModifyingActions } from '@service-providers/decision-trees'
+import {
+  ActionTypes,
+  DtreeModifyingActions,
+  TDtreeModifyingActions,
+} from '@service-providers/decision-trees'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { FilterButton } from '../../common/filter-control/filter-button'
@@ -66,7 +70,11 @@ export const FilterControlDtree = observer((): ReactElement => {
         return
       }
 
-      instruction = ['DTREE', 'UPDATE', createNewDtreeName]
+      instruction = [
+        ActionTypes.DTREE,
+        DtreeModifyingActions.UPDATE,
+        createNewDtreeName,
+      ]
       notification = `${t('dtree.dtree')} "${createNewDtreeName}" ${t(
         'dtree.hasBeenCreated',
       )}`
@@ -76,7 +84,11 @@ export const FilterControlDtree = observer((): ReactElement => {
     }
 
     if (actionName === ActionFilterEnum.Modify) {
-      instruction = ['DTREE', 'UPDATE', dtreeStore.currentDtreeName]
+      instruction = [
+        ActionTypes.DTREE,
+        DtreeModifyingActions.UPDATE,
+        dtreeStore.currentDtreeName,
+      ]
       notification = `${t('dtree.dtree')} "${dtreeStore.currentDtreeName}" ${t(
         'dtree.hasBeenModified',
       )}`

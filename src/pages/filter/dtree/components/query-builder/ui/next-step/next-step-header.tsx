@@ -11,9 +11,9 @@ import { Icon } from '@ui/icon'
 import { Radio } from '@ui/radio'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { changeStep } from '@utils/changeStep'
-import { ModalOperation } from '../../modals/components/modal-operation'
-import { ExpandContentButton } from './expand-content-button'
-import { StepDivider } from './step-divider'
+import { ModalOperation } from '../../../modals/components/modal-operation'
+import { ExpandContentButton } from '../expand-content-button'
+import { StepDivider } from '../step-divider'
 
 export const Operation = styled.div`
   font-size: 15px;
@@ -25,7 +25,7 @@ export const Step = styled.div`
   font-weight: 500;
 `
 
-interface IProps {
+interface INextStepHeaderProps {
   isExpanded: boolean
   expandContent: () => void
   index: number
@@ -33,7 +33,12 @@ interface IProps {
 }
 
 export const NextStepHeader = observer(
-  ({ isExpanded, expandContent, index, isExcluded }: IProps): ReactElement => {
+  ({
+    isExpanded,
+    expandContent,
+    index,
+    isExcluded,
+  }: INextStepHeaderProps): ReactElement => {
     const [isVisibleModal, showModal, hideModal] = useToggle(false)
 
     const currentStep = dtreeStore.filteredStepData[index]
