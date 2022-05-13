@@ -6,6 +6,7 @@ import filterStore from '@store/filter'
 import { Button } from '@ui/button'
 import { NumericCondition } from '@components/numeric-condition'
 import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
+import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import currentFilterStore from '@pages/filter/refiner/components/middle-column/panels/current-filter.store'
 import {
   AttributeKinds,
@@ -31,7 +32,7 @@ export const NumericPanel = observer((): ReactElement | null => {
     <>
       <AttributeHeader attrStatus={selectedAttributeStatus!} />
 
-      <div className="bg-grey-light h-px w-full my-4" />
+      <DividerHorizontal />
 
       <NumericCondition
         className="mt-4"

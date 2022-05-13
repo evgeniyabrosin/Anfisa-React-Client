@@ -9,6 +9,7 @@ import { Pagintaion } from '@components/pagintaion'
 import { QueryBuilderSearch } from '@pages/filter/dtree/components/query-builder/query-builder-search'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
+import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import { TVariant } from '@service-providers/common'
 import { SelectedGroupItem } from '../selected-group-item'
 import filterAttributesStore from './current-filter.store'
@@ -123,7 +124,7 @@ export const EnumPanel = observer((): ReactElement => {
         attrStatus={selectedAttributeStatus!}
       />
 
-      <div className="bg-grey-light h-px w-full my-4" />
+      <DividerHorizontal />
 
       <QueryBuilderSearch
         value={searchValue}

@@ -2,6 +2,7 @@ import { Fragment, FunctionComponent, ReactElement } from 'react'
 
 import filterStore from '@store/filter'
 import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
+import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import { CompundHet } from './components/compound-het/compound-het'
 import { CompoundRequest } from './components/compound-request/compound-request'
 import { CustomInheritanceMode } from './components/custom-inheritance-mode/custom-inheritance-mode'
@@ -31,7 +32,7 @@ export const FunctionPanel = (): ReactElement => {
     <>
       <AttributeHeader attrStatus={selectedAttributeStatus!} />
 
-      <div className="bg-grey-light h-px w-full my-4" />
+      <DividerHorizontal />
 
       <Component />
     </>
