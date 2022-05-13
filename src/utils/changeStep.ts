@@ -6,7 +6,7 @@ import {
   ActionTypes,
   TInstrModifyingActions,
 } from '@service-providers/decision-trees'
-import datasetStore from '../store/dataset'
+import datasetStore from '../store/dataset/dataset'
 
 export const changeStep = (
   index: number,

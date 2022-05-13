@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { makeAutoObservable } from 'mobx'
 
 import { getApiUrl } from '@core/get-api-url'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirInfoStore from '@store/dirinfo'
 import operationsProvider from '@service-providers/operations/operations.provider'
 import { downloadFile } from '@utils/download-file/download-file'
@@ -21,11 +21,15 @@ class HandleDatasetStore {
   }
 
   public get isExportDisabled() {
-    return !Object.keys(datasetStore.dsInfo).length || datasetStore.isXL
+    return (
+      (datasetStore.dsInfoData &&
+        !Object.keys(datasetStore.dsInfoData).length) ||
+      datasetStore.isXL
+    )
   }
 
   public get selectedDatasetName() {
-    return datasetStore.dsInfo.name as string
+    return datasetStore.dsInfoData?.name as string
   }
 
   constructor() {

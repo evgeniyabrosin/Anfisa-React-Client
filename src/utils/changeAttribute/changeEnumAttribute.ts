@@ -1,7 +1,7 @@
 import uniq from 'lodash/uniq'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'

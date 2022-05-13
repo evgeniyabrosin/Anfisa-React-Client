@@ -6,20 +6,6 @@ declare global {
   }
 }
 
-export interface Versions {
-  'Anfisa load': string
-  GERP: string
-  annotations: string
-  annotations_build: string
-  annotations_date: string
-  bcftools_annotate_version: string
-  gatk: string
-  gatk_select_variants: string
-  pipeline: string
-  reference: string
-  vep_version: string
-}
-
 export type StatHistogram = [
   type: 'LIN' | 'LOG',
   min: number,

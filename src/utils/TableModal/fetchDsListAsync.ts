@@ -1,4 +1,4 @@
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { TCondition } from '@service-providers/common/common.interface'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'

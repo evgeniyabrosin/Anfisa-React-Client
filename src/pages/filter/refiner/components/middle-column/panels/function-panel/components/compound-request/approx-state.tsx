@@ -3,7 +3,7 @@ import { ChangeEvent, ReactElement } from 'react'
 import { approxOptions } from '@core/approxOptions'
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import { Select } from '@ui/select'
 
 interface IAprroxAndStateProps {

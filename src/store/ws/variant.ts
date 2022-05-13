@@ -10,7 +10,7 @@ import {
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
-import datasetStore from '../dataset'
+import datasetStore from '../dataset/dataset'
 
 const DRAWER_DEFAULT_WIDTH = 6
 const DRAWER_DEFAULT_HEIGHT = 1

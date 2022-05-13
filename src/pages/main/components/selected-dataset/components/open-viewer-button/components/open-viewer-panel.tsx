@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirInfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
@@ -42,11 +42,8 @@ export const OpenViewerPanel = ({ close }: IPopperMenuProps): ReactElement => {
         return (
           <PopperMenuItem
             key={index}
-            dataTestId={DatasetInfoDataCy.viewerOption}
-            onClick={() => {
-              datasetStore.setIsXL(datasetStore.dsInfo.kind === 'xl')
-              goToPage(pageName)
-            }}
+            data-testid={DatasetInfoDataCy.viewerOption}
+            onClick={() => goToPage(pageName)}
           >
             {t(`home.${pageName}`)}
           </PopperMenuItem>

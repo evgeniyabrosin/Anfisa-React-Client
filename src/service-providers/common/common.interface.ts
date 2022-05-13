@@ -190,7 +190,7 @@ export type TPropertyStatus =
 
 export type TDocumentDescriptor = [
   documentName: string,
-  pathToDocument: string,
+  pathToDocument: string[][],
   contentInformation?: unknown,
 ]
 

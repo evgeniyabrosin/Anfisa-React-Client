@@ -5,7 +5,6 @@ import { t } from '@i18n'
 import zoneStore from '@store/ws/zone'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { ZoneModalList } from './components/zone-modal-list'
-
 interface IGenesModalProps {
   close: () => void
   title?: string

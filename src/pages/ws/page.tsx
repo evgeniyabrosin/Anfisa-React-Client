@@ -5,7 +5,7 @@ import { NumberParam, useQueryParams } from 'use-query-params'
 
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import mainTableStore from '@store/ws/main-table.store'
@@ -52,7 +52,7 @@ const WSPage = observer((): ReactElement => {
         variantStore.setDsName(params.get('ds') ?? '')
       }
 
-      await datasetStore.initDatasetAsync(dsName)
+      datasetStore.setDatasetName(dsName)
     }
 
     initAsync()

@@ -1,16 +1,15 @@
 import { ReactElement } from 'react'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { DocsList } from './docs-list'
 
 export const InfoList = observer((): ReactElement | null => {
-  const docs = get(datasetStore, 'dsInfo.doc', [])
+  const docs = datasetStore.dsInfoData?.doc
   const baseDatasetName = dirinfoStore.ancestorsDsInfo[0][0]
 
-  if (!docs[1]) return null
+  if (docs && !docs[1]) return null
 
   const handleClickAsync = async (doc: any, isBaseInfo?: boolean) => {
     dirinfoStore.setActiveInfoName(doc[0])

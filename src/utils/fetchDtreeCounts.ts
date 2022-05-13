@@ -1,5 +1,5 @@
 import { getApiUrl } from '@core/get-api-url'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { PointCount } from '@service-providers/decision-trees'
 

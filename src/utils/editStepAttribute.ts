@@ -1,4 +1,4 @@
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { ConditionJoinMode } from '@service-providers/common/common.interface'
 import {

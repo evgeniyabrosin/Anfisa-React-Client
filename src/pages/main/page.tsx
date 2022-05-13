@@ -2,7 +2,7 @@ import { ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 
 import { useParams } from '@core/hooks/use-params'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -21,10 +21,6 @@ const MainPage = (): ReactElement => {
     const handlerAsync = async () => {
       const dsName = params.get('ds') || ''
 
-      if (dsName) {
-        await datasetStore.fetchDsinfoAsync(dsName)
-      }
-
       dirinfoStore.setSelectedDirinfoName(dsName)
       datasetStore.setDatasetName(dsName)
     }
@@ -32,7 +28,6 @@ const MainPage = (): ReactElement => {
   }, [params])
 
   useEffect(() => {
-    datasetStore.resetData()
     zoneStore.clearZone()
     filterStore.reset()
     dtreeStore.resetData()

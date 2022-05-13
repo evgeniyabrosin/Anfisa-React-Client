@@ -20,7 +20,7 @@ import activeStepStore, {
   ActiveStepOptions,
 } from '../pages/filter/dtree/components/active-step.store'
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
-import datasetStore from './dataset'
+import datasetStore from './dataset/dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
 export type IStepData = {

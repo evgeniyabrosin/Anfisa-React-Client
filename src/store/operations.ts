@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { ExportTypeEnum } from '@core/enum/export-type.enum'
 import { getApiUrl } from '@core/get-api-url'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import mainTableStore from '@store/ws/main-table.store'
@@ -13,7 +14,6 @@ import {
   IDs2WsArguments,
 } from '@service-providers/operations/operations.interface'
 import operationsProvider from '@service-providers/operations/operations.provider'
-import datasetStore from './dataset'
 class OperationsStore {
   savingStatus: [boolean, string] = [false, '']
   isCreationOver = true

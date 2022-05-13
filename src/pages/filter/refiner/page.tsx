@@ -1,10 +1,10 @@
-import React, { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { withErrorBoundary } from 'react-error-boundary'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useDatasetName } from '@core/hooks/use-dataset-name'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirInfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import mainTableStore from '@store/ws/main-table.store'
@@ -18,8 +18,9 @@ import { FilterControl } from '@pages/filter/common/filter-control/filter-contro
 import { ModalSaveDataset } from '@pages/filter/dtree/components/modals/components/modal-save-dataset'
 import { ModalViewVariants } from '@pages/filter/dtree/components/modals/components/modal-view-variants'
 import { FilterRefiner } from '@pages/filter/refiner/components/filter-refiner'
+
 const RefinerPage = observer((): ReactElement => {
-  const isXL = datasetStore.isXL
+  const { isXL } = datasetStore
 
   const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
     mainTableStore.fixedStatAmount
@@ -27,12 +28,6 @@ const RefinerPage = observer((): ReactElement => {
   useDatasetName()
 
   useEffect(() => {
-    const initAsync = async () => {
-      await datasetStore.fetchDsinfoAsync(datasetStore.datasetName)
-    }
-
-    initAsync()
-
     return () => {
       dirInfoStore.resetData()
     }
@@ -46,7 +41,7 @@ const RefinerPage = observer((): ReactElement => {
       <Header>
         <VariantsCount
           variantCounts={
-            isXL ? (toJS(datasetStore.dsInfo).total as number) : variantCounts
+            isXL ? toJS(datasetStore.dsInfoData?.total) : variantCounts
           }
           transcriptsCounts={transcriptsCounts}
           dnaVariantsCounts={dnaVariantsCounts}

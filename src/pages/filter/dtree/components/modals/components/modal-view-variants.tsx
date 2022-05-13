@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import variantStore from '@store/ws/variant'

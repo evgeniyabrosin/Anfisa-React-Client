@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import filterStore from '@store/filter'
 import filterPresetsStore from '@store/filter-presets'
 import variantStore from '@store/ws/variant'
@@ -17,7 +17,7 @@ import { IWsListQuery, WsListAsyncStore } from './ws-list.async.store'
 const INCREASE_INDEX = 50
 
 export class MainTable {
-  private readonly wsList = new WsListAsyncStore()
+  readonly wsList = new WsListAsyncStore()
   tabReport: ITabReport[] = []
 
   selectedVariantNumber?: number
@@ -46,7 +46,7 @@ export class MainTable {
       query => {
         if (datasetStore.isXL) return
 
-        if (!datasetStore.datasetName) {
+        if (!datasetStore.dsInfoData?.name) {
           this.wsList.reset()
         } else {
           this.wsList.setQuery(query)
@@ -72,7 +72,7 @@ export class MainTable {
       ? filterStore.conditions
       : []
     return {
-      datasetName: datasetStore.datasetName,
+      datasetName: datasetStore.dsInfoData?.name,
       filter: filterPresetsStore.activePreset,
       conditions,
       zone: zoneStore.zone,

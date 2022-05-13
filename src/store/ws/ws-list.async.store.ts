@@ -4,7 +4,7 @@ import { IWsList } from '@service-providers/ws-dataset-support/ws-dataset-suppor
 import wsDatasetSupportProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
 
 export interface IWsListQuery {
-  datasetName: string
+  datasetName: string | undefined
   filter?: string
   conditions?: ReadonlyArray<TCondition>
   zone?: TZoneSetting[]

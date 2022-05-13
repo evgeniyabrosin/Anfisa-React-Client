@@ -7,7 +7,7 @@ import {
   TPointModifyingActions,
 } from '@service-providers/decision-trees'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
-import datasetStore from '../store/dataset'
+import datasetStore from '../store/dataset/dataset'
 
 export const addAttributeToStep = (
   action: ActionType,
