@@ -225,7 +225,6 @@ export class MainTable {
 
   resetData() {
     this.variantsAmount = 0
-    this.tabReport = []
   }
 }
 
