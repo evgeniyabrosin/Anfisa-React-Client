@@ -1,6 +1,7 @@
 FROM evgenyabrosin/node:16 as build-deps
 RUN cd /opt && git clone https://github.com/ForomePlatform/Anfisa-React-Client.git && cd ./Anfisa-React-Client && git checkout test-v0.5.12
 WORKDIR /opt/Anfisa-React-Client/
+ENV REACT_APP_URL_BACKEND=https://port.forome.dev/app
 RUN ["yarn", "install"]
 RUN ["yarn", "build"]
 
