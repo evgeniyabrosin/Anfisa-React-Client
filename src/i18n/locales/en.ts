@@ -120,7 +120,7 @@ export const en = {
       cancel: 'No, Keep Dataset',
       confirm: 'Yes, Delete Dataset',
       toastSucces: 'Dataset "{datasetName}" has been deleted.',
-      toastError: 'Something went wrong. Dataset not deleted.',
+      toastError: 'Dataset has not been deleted.',
     },
   },
   dsCreation: {
