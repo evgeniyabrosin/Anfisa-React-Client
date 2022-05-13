@@ -169,10 +169,7 @@ export const QueryBuilderSubgroupItem = observer(
           </div>
         </div>
         {isChartVisible && (
-          <QueryBuilderSubgroupChart
-            // TODO: StatList -> TPropertyStatus refactoring
-            subGroupItem={toJS(subGroupItem) as TPropertyStatus}
-          />
+          <QueryBuilderSubgroupChart subGroupItem={toJS(subGroupItem)} />
         )}
       </div>
     )

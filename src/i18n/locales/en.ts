@@ -180,7 +180,10 @@ export const en = {
       seeAll: 'See all',
       hide: 'Hide',
       total: 'Total',
-      variants: '{value} variants',
+      variants: '{value, plural, one {# variant} other {# variants}}',
+      transcribedVariants:
+        '{value, plural, one {# transcribed variant} other {# transcribed variants}}',
+      transcripts: '{value, plural, one {# transcript} other {# transcripts}}',
       shownSignificantItems: 'Shown {items} significant items (total: {total})',
     },
     delete: 'Delete',
