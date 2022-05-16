@@ -5,7 +5,10 @@ import { makeAutoObservable, runInAction } from 'mobx'
 
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
 import { SortDirection } from '@core/sort-direction.enum'
+import { t } from '@i18n'
 import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
+import vaultProvider from '@service-providers/vault-level/vault-level.provider'
+import { showToast } from '@utils/notifications'
 import { DirInfoAsyncStore } from './common/dirinfo.async.store'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
@@ -156,6 +159,17 @@ class DirInfoStore {
     this.infoFrameLink = ''
     this.iframeInfoFullscreen = false
     this.activeInfoName = ''
+  }
+
+  deleteDataset(datasetName: string): void {
+    vaultProvider
+      .dropDs({ ds: datasetName })
+      .then(() => {
+        showToast(t('ds.deleteDialog.toastSucces', { datasetName }), 'success')
+      })
+      .catch(() => {
+        showToast(t('ds.deleteDialog.toastError'), 'error')
+      })
   }
 }
 

@@ -6,10 +6,15 @@ import {
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { DsInfoAsyncStore } from './ds-info.async.store'
 
+const CHECK_WORD_FOR_DELETE_DATSET = 'test'
 export class DatasetStore {
   private readonly dsInfo = new DsInfoAsyncStore()
 
   datasetName = ''
+
+  get isPossibleDeleteDataset(): boolean {
+    return this.datasetName.toLowerCase().includes(CHECK_WORD_FOR_DELETE_DATSET)
+  }
 
   constructor() {
     makeAutoObservable(this)

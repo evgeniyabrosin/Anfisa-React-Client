@@ -1,6 +1,7 @@
 import { ServiceProviderBase } from '@service-providers/common'
 import { TRecCntResponse } from './../dataset-level/dataset-level.interface'
 import {
+  IAdmDropDsArguments,
   IAdmReloadDsArguments,
   IDirInfo,
   IJobStatusArgument,
@@ -33,6 +34,10 @@ class VaultProvider extends ServiceProviderBase {
 
   public reloadDs(params: IAdmReloadDsArguments) {
     return this.post<string>('adm_reload_ds', params).then(res => res.data)
+  }
+
+  public dropDs(params: IAdmDropDsArguments) {
+    return this.post<string>('adm_drop_ds', params).then(res => res.data)
   }
 }
 
