@@ -103,6 +103,7 @@ export const CustomInheritanceMode = observer(() => {
         onSubmit={onSubmit}
         resetFields={resetFields}
         disabled={!simpleVariants || !isFilterTouched}
+        classname="pb-[40px]"
       />
     </>
   )

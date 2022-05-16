@@ -30,7 +30,7 @@ export const ComplexVariants = observer(
       <>
         <div className="flex items-center justify-between mt-0.5">
           <div className="text-14 leading-16px font-bold text-grey-blue flex">
-            Inheritance mode
+            {t('filter.inheritanceMode')}
             {selectedGroup && (
               <p className="ml-2 text-14 leading-14px text-grey-blue font-normal">
                 ({variantValues.length} Selected)
