@@ -119,7 +119,7 @@ export const getQueryBuilder = (
       ...attr,
       power: getPredictionPower(
         attr,
-        attr.detailed
+        attr.detailed && filteredCounts.transcribedVariants !== null
           ? filteredCounts.transcribedVariants
           : filteredCounts.variants,
       ),

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { FilterList } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
@@ -14,6 +14,11 @@ import { Input } from '@ui/input'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { PopperButton } from '@components/popper-button'
 import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
+import {
+  ActionTypes,
+  DtreeModifyingActions,
+  TDtreeModifyingActions,
+} from '@service-providers/decision-trees'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { FilterButton } from '../../common/filter-control/filter-button'
@@ -38,12 +43,10 @@ export const FilterControlDtree = observer((): ReactElement => {
       return
     }
 
-    const body = new URLSearchParams({
+    dtreeStore.fetchDtreeSetAsync({
       ds: datasetStore.datasetName,
       dtree: dtreeName,
     })
-
-    dtreeStore.fetchDtreeSetAsync(body)
     dtreeStore.setQueryBuilderRenderKey(Date.now())
   }
 
@@ -56,11 +59,6 @@ export const FilterControlDtree = observer((): ReactElement => {
   }
 
   const handleClick = () => {
-    const body = new URLSearchParams({
-      ds: datasetStore.datasetName,
-      code: dtreeStore.dtreeCode,
-    })
-
     let instruction, notification
 
     if (actionName === ActionFilterEnum.Create) {
@@ -72,7 +70,11 @@ export const FilterControlDtree = observer((): ReactElement => {
         return
       }
 
-      instruction = ['DTREE', 'UPDATE', createNewDtreeName]
+      instruction = [
+        ActionTypes.DTREE,
+        DtreeModifyingActions.UPDATE,
+        createNewDtreeName,
+      ]
       notification = `${t('dtree.dtree')} "${createNewDtreeName}" ${t(
         'dtree.hasBeenCreated',
       )}`
@@ -82,7 +84,11 @@ export const FilterControlDtree = observer((): ReactElement => {
     }
 
     if (actionName === ActionFilterEnum.Modify) {
-      instruction = ['DTREE', 'UPDATE', dtreeStore.currentDtreeName]
+      instruction = [
+        ActionTypes.DTREE,
+        DtreeModifyingActions.UPDATE,
+        dtreeStore.currentDtreeName,
+      ]
       notification = `${t('dtree.dtree')} "${dtreeStore.currentDtreeName}" ${t(
         'dtree.hasBeenModified',
       )}`
@@ -90,9 +96,11 @@ export const FilterControlDtree = observer((): ReactElement => {
       dtreeStore.setStartDtreeCode()
     }
 
-    body.append('instr', JSON.stringify(instruction))
-
-    dtreeStore.fetchDtreeSetAsync(body)
+    dtreeStore.fetchDtreeSetAsync({
+      ds: datasetStore.datasetName,
+      code: dtreeStore.dtreeCode,
+      instr: (instruction as TDtreeModifyingActions) || [],
+    })
 
     notification && showToast(notification, 'success')
 

@@ -4,16 +4,15 @@ import { observer } from 'mobx-react-lite'
 import Tooltip from 'rc-tooltip'
 import styled from 'styled-components'
 
-import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
-import mainTableStore from '@store/ws/main-table.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/components/active-step.store'
+import { StepCount } from '@pages/filter/dtree/components/query-builder/ui/step-count'
 
 const StartAmount = styled.div`
   font-size: 13px;
@@ -75,16 +74,6 @@ const ExcludeAmount = styled.div<{ isIncluded: boolean }>`
       : theme('colors.purple.bright')};
 `
 
-const DifferenceCounts = styled.span<{
-  isIncluded: boolean
-}>`
-  border-bottom: 2px dashed
-    ${props =>
-      props.isIncluded
-        ? theme('colors.green.secondary')
-        : theme('colors.purple.bright')};
-`
-
 interface INextStepRouteProps {
   isExpanded: boolean
   index: number
@@ -93,43 +82,28 @@ interface INextStepRouteProps {
 
 export const NextStepRoute = observer(
   ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
-    const { variantCounts, dnaVariantsCounts } = mainTableStore.fixedStatAmount
-
+    const isXl = dtreeStore.isXl
     const currentStep = dtreeStore.filteredStepData[index]
-    const startFilterCounts = currentStep.startFilterCounts
+    const { conditionPointIndex, returnPointIndex } = currentStep
+    const conditionCounts =
+      conditionPointIndex !== null
+        ? dtreeStore.pointCounts[conditionPointIndex]
+        : null
+    const returnCounts =
+      returnPointIndex !== null
+        ? dtreeStore.pointCounts[returnPointIndex]
+        : null
 
-    const changedStartCounts = startFilterCounts
-      ? formatNumber(startFilterCounts)
-      : startFilterCounts
-
-    const changedAllVariants = variantCounts
-      ? formatNumber(variantCounts)
-      : variantCounts
-
-    const alternativeCounts = changedStartCounts || changedAllVariants
-
-    const firstStepValue = dnaVariantsCounts
-      ? changedStartCounts
-      : alternativeCounts
-
+    const isFinalStep = index === dtreeStore.stepData.length - 1
     const isDifferenceActive = currentStep.isReturnedVariantsActive
-    const shouldTooltipAppear = Boolean(currentStep.difference)
+    const shouldTooltipAppear = Boolean(returnCounts?.[0])
 
-    const tooltipConent = t('dtree.showReturnedVariantsForStep', {
+    const tooltipContent = t('dtree.showReturnedVariantsForStep', {
       returnValue: currentStep.excluded ? 'excluded' : 'included',
       index: index + 1,
     })
 
-    const differenceWithCommas = formatNumber(currentStep.difference)
-
-    const defaultStartCounts =
-      index === 0 ? firstStepValue : formatNumber(startFilterCounts)
-
-    const isFinalStep = index === dtreeStore.stepData.length - 1
-
-    const currentStartCounts = isFinalStep
-      ? differenceWithCommas
-      : defaultStartCounts
+    const currentStartCounts = isFinalStep ? returnCounts : conditionCounts
 
     return (
       <div style={{ minHeight: 53 }} className="relative flex h-full w-full">
@@ -139,7 +113,7 @@ export const NextStepRoute = observer(
             isFinalStep ? 'mt-1.5' : 'mt-2.5',
           )}
         >
-          <div>{currentStartCounts}</div>
+          <StepCount isXl={isXl} pointCount={currentStartCounts} />
         </StartAmount>
 
         <div className="flex flex-col items-center w-1/6">
@@ -159,11 +133,11 @@ export const NextStepRoute = observer(
             <Fragment>
               <ExcludeTurn isIncluded={isIncluded}>
                 <div
-                  className="absolute w-full right-4 flex justify-end items-center"
+                  className="absolute w-full right-4 flex justify-end"
                   style={{ top: 48 }}
                 >
                   <Tooltip
-                    overlay={tooltipConent}
+                    overlay={tooltipContent}
                     trigger={shouldTooltipAppear ? ['hover'] : []}
                   >
                     <ExcludeAmount
@@ -176,20 +150,16 @@ export const NextStepRoute = observer(
                       }
                       data-testid={DecisionTreesResultsDataCy.excludeInfo}
                     >
-                      <span>
-                        {isIncluded ? '+' : '-'}
-                        {isDifferenceActive ? (
-                          <DifferenceCounts isIncluded={isIncluded}>
-                            {differenceWithCommas}
-                          </DifferenceCounts>
-                        ) : (
-                          <span>{differenceWithCommas}</span>
-                        )}
-                      </span>
+                      <StepCount
+                        isActive={isDifferenceActive}
+                        prefix={isIncluded ? '+' : '-'}
+                        isXl={isXl}
+                        pointCount={returnCounts}
+                      />
                     </ExcludeAmount>
                   </Tooltip>
 
-                  <div className="ml-1">
+                  <div className="ml-1 pt-0.5">
                     {isIncluded ? (
                       <Icon
                         name="ThreadAdd"

@@ -1,14 +1,13 @@
 import { ReactElement } from 'react'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { Versions } from '@declarations'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { CommonDetails } from '@pages/main/components/selected-dataset/components/dataset-fields-list/components/common-details'
 import { InfoDetails } from '@pages/main/components/selected-dataset/components/dataset-fields-list/components/info-details'
 
 export const DatasetsFieldsList = observer((): ReactElement => {
-  const versions: Versions = get(dirinfoStore, 'dsinfo.meta.versions')
+  const versions = datasetStore.dsInfoData?.meta.versions
   const hasInfoDetails = !!dirinfoStore.infoFrameLink
 
   return (

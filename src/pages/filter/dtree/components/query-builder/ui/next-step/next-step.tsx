@@ -14,6 +14,7 @@ import { NextStepRoute } from './next-step-route'
 
 export const TreeView = styled.div`
   width: 13%;
+  min-width: 132px;
   display: flex;
   height: 117%;
 `

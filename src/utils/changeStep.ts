@@ -2,18 +2,18 @@ import { toJS } from 'mobx'
 
 import { ChangeStepActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
-import datasetStore from '../store/dataset'
+import {
+  ActionTypes,
+  InstrModifyingActionNames,
+  TInstrModifyingActions,
+} from '@service-providers/decision-trees'
+import datasetStore from '../store/dataset/dataset'
 
 export const changeStep = (
   index: number,
   action: ChangeStepActionType,
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
-
-  const body = new URLSearchParams({
-    ds: datasetStore.datasetName,
-    code,
-  })
 
   const locadStepData = toJS(dtreeStore.stepData)
 
@@ -26,8 +26,8 @@ export const changeStep = (
   const calculatedIndex = index - emptyStepList.length
   const stepIndex = dtreeStore.getStepIndexForApi(calculatedIndex)
 
-  const isIncludeAction = action === 'BOOL-TRUE'
-  const isExcludeAction = action === 'BOOL-FALSE'
+  const isIncludeAction = action === InstrModifyingActionNames.BOOL_TRUE
+  const isExcludeAction = action === InstrModifyingActionNames.BOOL_FALSE
   const isBooleanAction = isIncludeAction || isExcludeAction
 
   const indexes = toJS(dtreeStore.dtreeStepIndices)
@@ -37,8 +37,11 @@ export const changeStep = (
   const defaultLocation = isBooleanAction ? stepIndex + 1 : stepIndex
   const location = isFinalStepIndex && isEmptyTree ? stepIndex : defaultLocation
 
-  body.append('instr', JSON.stringify(['INSTR', action, location]))
-
   dtreeStore.resetLocalDtreeCode()
-  dtreeStore.fetchDtreeSetAsync(body)
+
+  dtreeStore.fetchDtreeSetAsync({
+    ds: datasetStore.datasetName,
+    code,
+    instr: [ActionTypes.INSTR, action, location] as TInstrModifyingActions,
+  })
 }

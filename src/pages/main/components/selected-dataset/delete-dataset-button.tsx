@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useModal } from '@core/hooks/use-modal'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'

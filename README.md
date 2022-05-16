@@ -1,12 +1,31 @@
-# Getting Started with Create React App
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Before the beginning
+The following software must be installed:
+[Node.js](https://nodejs.org/en/)
+[GIT](https://git-scm.com/)
+[yarn](https://yarnpkg.com/)
 
-## Available Scripts
-`yarn start`, `yarn test`, `yarn build`, `yarn eject`
+## Cloning
 
-### Environment configuration
-- `REACT_APP_PROXY_AUTH` - at local development we use `src/setupProxy.js` with `http-proxy-middleware` and `auth` setting (basic auth). For fast automatic authorization you can create `.env.development.local` at root folder with following strings:
-- REACT_APP_PROXY_AUTH=login:password
-- REACT_APP_URL_BACKEND=
+ - Clone the project using command `git clone 
+   https://github.com/ForomePlatform/Anfisa-React-Client.git` (via HTTPS) or `git clone
+   git@github.com:ForomePlatform/Anfisa-React-Client.git` (via SSH) in terminal.
+   
+ - The default branch should be `develop`. If not, switch to `develop`  
+   branch using command `git checkout develop`
+
+## Installing dependencies
+Run command `yarn install` in terminal.
+
+## Configuration variables (optional)
+
+For fast automatic authorization you can do the following:
+In the project root create a file named `.env.development.local`
+This file should contain following content:
+
+    REACT_APP_URL_BACKEND=https://demo.forome.org/app
+    REACT_APP_PROXY_AUTH=login:password
+
+Where `login` and `password` correspond your login and password.
+
+## Running the project
+Run command `yarn run start` in terminal. Project should start on `localhost:3000`.

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import variantStore from '@store/ws/variant'
@@ -47,8 +47,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     if (datasetName && !variantStore.dsName) {
       variantStore.setDsName(datasetName)
     }
-
-    datasetStore.initDatasetAsync(datasetName)
   }
 
   return (

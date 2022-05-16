@@ -3,14 +3,14 @@ import { CommonSelectors } from '../../../src/components/data-testid/common-sele
 import { datasetPage } from '../../page-objects/app/datasets-page'
 import { mainTablePage } from '../../page-objects/app/main-table-page'
 import { variantDrawerPage } from '../../page-objects/app/variant-drawer-page'
-import { testData } from '../../page-objects/lib/faker'
-import { Timeouts } from '../../page-objects/lib/timeouts.cy'
+import { TestData } from '../../shared/test-data'
+import { Timeouts } from '../../shared/timeouts'
 
 describe('Regression test of the main table | step 1', () => {
   const link = '/ws?ds=PGP3140_wgs_panel_hl'
   const homozygous = '⏚BGM_Homozygous_Rec'
   const datasetName = 'PGP3140_wgs_panel_hl'
-  const customTag = testData.getFakeData(1)
+  const customTag = TestData.getSentence(1)
 
   it('should open main table for PGP3140_wgs_panel_hl dataset', () => {
     datasetPage.visit()
@@ -98,7 +98,7 @@ describe('Regression test of the main table | step 1', () => {
     )
     mainTablePage.mainTable.tableRow.getButtonByText('p.Y434=').click()
     variantDrawerPage.variantDrawer.addNote.click()
-    variantDrawerPage.variantDrawer.fillSpace.type(testData.getFakeData(4))
+    variantDrawerPage.variantDrawer.fillSpace.type(TestData.getSentence(4))
     cy.intercept('POST', `/app/ws_tags?ds=${datasetName}&rec=**`).as('addNote')
     variantDrawerPage.variantDrawer.saveNote.click()
     cy.wait('@addNote', { timeout: Timeouts.TwentySecondsTimeout })

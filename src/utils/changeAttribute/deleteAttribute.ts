@@ -1,15 +1,15 @@
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
+import {
+  ActionTypes,
+  AtomModifyingActionName,
+  TAtomModifyingActions,
+} from '@service-providers/decision-trees'
 
 export const deleteAttribute = (groupIndexToChange?: number): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
-
-  const body = new URLSearchParams({
-    ds: datasetStore.datasetName,
-    code,
-  })
 
   const { activeStepIndex } = activeStepStore
 
@@ -20,14 +20,14 @@ export const deleteAttribute = (groupIndexToChange?: number): void => {
   const hasOneAttribute =
     dtreeStore.stepData[activeStepIndex].groups.length === 1
 
-  const action = hasOneAttribute ? 'POINT' : 'ATOM'
+  const action = hasOneAttribute ? ActionTypes.POINT : ActionTypes.ATOM
 
   let currentLocation
 
   const isInvalidAttribute =
     groupIndexToChange &&
     typeof groupIndexToChange === 'number' &&
-    action === 'ATOM'
+    action === ActionTypes.ATOM
 
   if (isInvalidAttribute) {
     currentLocation = [indexForApi, groupIndexToChange]
@@ -35,7 +35,13 @@ export const deleteAttribute = (groupIndexToChange?: number): void => {
     currentLocation = hasOneAttribute ? indexForApi : location
   }
 
-  body.append('instr', JSON.stringify([action, 'DELETE', currentLocation]))
-
-  dtreeStore.fetchDtreeSetAsync(body)
+  dtreeStore.fetchDtreeSetAsync({
+    ds: datasetStore.datasetName,
+    code,
+    instr: [
+      action,
+      AtomModifyingActionName.DELETE,
+      currentLocation,
+    ] as TAtomModifyingActions,
+  })
 }

@@ -8,7 +8,7 @@ import {
 // ws_list
 
 export interface IWsListArguments {
-  ds: string
+  ds: string | undefined
   filter?: string
   conditions?: ReadonlyArray<TCondition>
   zone?: TZoneSetting[]

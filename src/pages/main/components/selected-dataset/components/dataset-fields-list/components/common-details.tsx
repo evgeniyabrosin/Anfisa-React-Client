@@ -2,10 +2,10 @@ import React, { ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import { Versions } from '@declarations'
 import { t } from '@i18n'
 import { Card, CardTitle } from '@ui/card'
 import { DatasetField } from '@pages/main/components/selected-dataset/components/dataset-fields-list/components/dataset-filed'
+import { Versions } from '@service-providers/dataset-level/dataset-level.interface'
 
 interface ICommonDetailsProps {
   className?: Argument
