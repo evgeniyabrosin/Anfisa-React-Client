@@ -149,7 +149,7 @@ export const drawHistogram = ({
     }
 
     return `${interval}<div class='font-medium'>${t('filter.chart.variants', {
-      value: formatNumber(value),
+      value,
     })}</div>`
   }
 

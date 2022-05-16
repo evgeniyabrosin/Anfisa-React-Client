@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { DatasetCreationErrorsEnum } from '@core/enum/dataset-creation-errors-enum'
 import { PatnNameEnum } from '@core/enum/path-name-enum'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
@@ -35,7 +35,7 @@ export const ModalSaveDataset = observer(() => {
   const [error, setError] = useState<string>('')
   const startDatasetName = toJS(datasetStore.datasetName)
   const pathName = history.location.pathname
-
+  const { wsList } = mainTableStore
   const isDone = operations.savingStatus[1] === 'Done'
 
   useEffect(() => {
@@ -102,7 +102,8 @@ export const ModalSaveDataset = observer(() => {
       dtreeStore.closeModalSaveDataset()
 
       if (pathName === PatnNameEnum.Ws) {
-        datasetStore.initDatasetAsync(startDatasetName)
+        datasetStore.setDatasetName(startDatasetName)
+        wsList.invalidate()
       }
 
       operations.resetSavingStatus()
@@ -115,10 +116,13 @@ export const ModalSaveDataset = observer(() => {
     isDone && history.push(`${Routes.WS}?ds=${value}`)
 
     dtreeStore.closeModalSaveDataset()
-    pathName === PatnNameEnum.Ws && datasetStore.initDatasetAsync(value)
+
+    if (pathName === PatnNameEnum.Ws) {
+      datasetStore.setDatasetName(value)
+    }
+
     operations.resetSavingStatus()
 
-    datasetStore.resetData()
     zoneStore.clearZone()
     filterStore.reset()
     dtreeStore.resetData()

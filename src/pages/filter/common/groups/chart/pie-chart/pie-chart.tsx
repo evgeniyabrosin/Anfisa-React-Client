@@ -1,6 +1,5 @@
 import { ReactElement, useState } from 'react'
 
-import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
 import { SvgChart } from '@components/svg-chart'
 import { TPieChartData } from '../chart.interface'
@@ -54,8 +53,8 @@ export const PieChart = ({ data }: IPieChartProps): ReactElement | null => {
               (value / totalCountsOnChart) *
               100
             ).toFixed(2)
-            const varaintsQuantityContent = t('filter.chart.variants', {
-              value: formatNumber(value),
+            const variantsQuantityContent = t('filter.chart.variants', {
+              value,
             })
 
             return (
@@ -64,7 +63,7 @@ export const PieChart = ({ data }: IPieChartProps): ReactElement | null => {
                   <StyledIcon color={getPieChartItemColor(index)} />
                   <LavelInfo>
                     <span>{name}</span>
-                    <LabelQuantity>{varaintsQuantityContent}</LabelQuantity>
+                    <LabelQuantity>{variantsQuantityContent}</LabelQuantity>
                   </LavelInfo>
                 </LabelRowLeft>
                 <LabelRowRight>{optionPercentage}%</LabelRowRight>

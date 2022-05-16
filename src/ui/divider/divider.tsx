@@ -7,17 +7,26 @@ import { theme } from '@theme'
 interface IDividerProps {
   className?: string
   orientation: 'vertical' | 'horizontal'
+  color?: 'dark' | 'light'
+  spacing?: 'normal' | 'dense'
 }
 
 export const Divider = ({
   className,
   orientation,
+  color = 'dark',
+  spacing = 'normal',
 }: IDividerProps): ReactElement => {
+  const spacingMargin = spacing === 'normal' ? 4 : 2
+
   return (
     <div
       className={cn(
-        'bg-blue-lighter rounded-full overflow-hidden shrink-0 grow-0',
-        orientation === 'vertical' ? 'w-0.5 h-full mx-4' : 'h-0.5 w-full my-y',
+        'rounded-full overflow-hidden shrink-0 grow-0',
+        color === 'dark' ? 'bg-blue-lighter' : 'bg-grey-disabled',
+        orientation === 'vertical'
+          ? `w-0.5 h-full mx-${spacingMargin}`
+          : `h-0.5 w-full my-${spacingMargin}`,
         className,
       )}
     >

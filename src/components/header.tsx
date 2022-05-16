@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import filterStore from '@store/filter'
 import variantStore from '@store/ws/variant'
@@ -36,10 +36,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     filterStore.setMethod(page)
   }, [path])
 
-  useEffect(() => {
-    dirinfoStore.fetchDirInfoAsync()
-  }, [ds])
-
   const handleChangeDataset = (datasetName: string) => {
     if (datasetName === ds) {
       return
@@ -51,8 +47,6 @@ export const Header = observer(({ children }: Props): ReactElement => {
     if (datasetName && !variantStore.dsName) {
       variantStore.setDsName(datasetName)
     }
-
-    datasetStore.initDatasetAsync(datasetName)
   }
 
   return (
@@ -69,8 +63,8 @@ export const Header = observer(({ children }: Props): ReactElement => {
           </span>
           <span>
             {t('header.version.backend', {
-              version: dirinfoStore.dirinfo
-                ? toJS(dirinfoStore.dirinfo).version
+              version: dirinfoStore.dirInfoData
+                ? toJS(dirinfoStore.dirInfoData).version
                 : '',
             })}
           </span>

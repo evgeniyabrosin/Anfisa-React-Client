@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 
 import { DefaultProblemGroup } from '@core/enum/default-problem-group-enum'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import { IInheritanceModeArgs } from '@service-providers/common/common.interface'
 
 interface IInheritanceModeViewProps {

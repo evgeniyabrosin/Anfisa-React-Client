@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
@@ -228,7 +229,7 @@ class CustomInheritanceModeStore {
 
   public handleSumbitCondtions(): void {
     const custInhModeConditions: TFuncCondition = [
-      'func',
+      FilterKindEnum.Func,
       FuncStepTypesEnum.CustomInheritanceMode,
       getConditionJoinMode(this.currentMode),
       ['True'],

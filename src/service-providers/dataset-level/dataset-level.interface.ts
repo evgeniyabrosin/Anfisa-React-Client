@@ -20,6 +20,20 @@ export enum HgModes {
 }
 
 // this is an auto-generated interface and is not in the documentation
+
+export interface Versions {
+  'Anfisa load': string
+  GERP: string
+  annotations: string
+  annotations_build: string
+  annotations_date: string
+  bcftools_annotate_version: string
+  gatk: string
+  gatk_select_variants: string
+  pipeline: string
+  reference: string
+  vep_version: string
+}
 export interface IDsInfoMeta {
   case?: string
   cohorts?: any[]
@@ -28,17 +42,17 @@ export interface IDsInfoMeta {
   proband?: string
   record_type?: string
   samples?: unknown
-  versions?: unknown
+  versions?: Versions
   [key: string]: unknown
 }
 
 export interface IDsInfo extends IBaseDatasetDescriptor {
   meta: IDsInfoMeta
   classes: IDsInfoClass[]
-  'unit-groups': string[]
+  unitGroups: string[]
   cohorts: string[]
-  'export-max-count': number
-  'igv-urls'?: string[]
+  exportMaxCount: number
+  igvUrls?: string[]
   name: string
   note: string
   total: number

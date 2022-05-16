@@ -1,11 +1,10 @@
 import * as d3 from 'd3'
 
 import { getBounds, getYScaleAndAxis } from '@core/charts'
-import { formatNumber } from '@core/format-number'
-import { t } from '@i18n'
 import { SvgChartRenderParams } from '@components/svg-chart/svg-chart'
 import { TVariant } from '@service-providers/common'
 import { TBarChartData } from '../chart.interface'
+import { getVariantCountsText } from '../utils'
 import { barColor, tickColor } from './bar-chart.styles'
 
 const margin = {
@@ -16,9 +15,7 @@ const margin = {
 }
 
 const renderTooltip = (variant: TVariant): string => {
-  return `${variant[0]}<div class='font-medium'>${t('filter.chart.variants', {
-    value: formatNumber(variant[1]),
-  })}</div>`
+  return `${variant[0]}${getVariantCountsText(variant)}`
 }
 
 export const drawBarChart = ({

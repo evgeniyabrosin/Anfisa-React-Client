@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useKeydown } from '@core/hooks/use-keydown'
 import { useVariantIndex } from '@core/hooks/use-variant-index'
-import datasetStore from '@store/dataset'
+import datasetStore from '@store/dataset/dataset'
 import columnsStore from '@store/ws/columns'
 import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
@@ -18,7 +18,7 @@ import {
   IAttributeDescriptors,
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { findElementInRow } from '@utils/mian-table/find-element-in-row'
-import { DrawerNote } from './drawer-note'
+import { DrawerNote } from './drawer-note/drawer-note'
 import { DrawerTags } from './drawer-tags'
 
 interface IVariantHeaderProps {

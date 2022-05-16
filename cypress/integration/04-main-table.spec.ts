@@ -2,7 +2,7 @@ import { CommonSelectors } from '../../src/components/data-testid/common-selecto
 import { datasetPage } from '../page-objects/app/datasets-page'
 import { mainTablePage } from '../page-objects/app/main-table-page'
 import { variantDrawerPage } from '../page-objects/app/variant-drawer-page'
-import { Timeouts } from '../page-objects/lib/timeouts.cy'
+import { Timeouts } from '../shared/timeouts'
 
 const today = new Date()
 

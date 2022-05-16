@@ -26,14 +26,14 @@ export const FilterRefinerStatCounts = ({
           all: formatNumber(counts?.variants),
         })}
       </span>
-      {counts && counts.transcribedVariants > 0 && (
+      {counts && counts.transcribedVariants !== null && (
         <span className="border-l-2 border-grey-disabled ml-2 pl-2">
           {t('filter.transcribedVariants', {
             all: formatNumber(counts.transcribedVariants),
           })}
         </span>
       )}
-      {counts && counts.transcripts > 0 && (
+      {counts && counts.transcripts !== null && (
         <span className="border-l-2 border-grey-disabled ml-2 pl-2">
           {t('filter.transcripts', {
             all: formatNumber(counts.transcripts),

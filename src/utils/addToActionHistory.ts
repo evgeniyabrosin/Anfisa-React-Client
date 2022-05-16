@@ -1,8 +1,8 @@
 import dtreeStore from '@store/dtree'
-import { IDsStatArguments } from '@service-providers/filtering-regime'
+import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 
 export const addToActionHistory = (
-  body: IDsStatArguments,
+  body: IDtreeSetArguments,
   isFilterRefiner = false,
 ) => {
   const actionHistory = [...dtreeStore.actionHistory]

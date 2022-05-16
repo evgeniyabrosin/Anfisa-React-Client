@@ -9,7 +9,7 @@ describe('Basic browser auth', () => {
   it('type in the input the name of a dataset', () => {
     datasetPage.visit()
     datasetPage.leftPanel.datasetsListElem.getButtonByText(
-      'xl_PGP3140_wgs_NIST-4_2',
+      'PGP3140_wgs_NIST-4_2',
     )
   })
 })
