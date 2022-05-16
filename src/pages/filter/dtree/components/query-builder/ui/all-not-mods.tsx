@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { SubKinds } from '@core/enum/sub-kinds-enum'
@@ -28,12 +29,15 @@ export const AllNotMods = observer(
       groupSubKind === SubKinds.Multi || groupSubKind === SubKinds.InheritanceZ
 
     return (
-      <div className="flex text-14 text-blue-bright">
+      <div className={'flex text-14'}>
         {isAllModeAvailable && (
           <>
             <Checkbox
               id={'all-mode-checkbox'}
-              className="flex items-center"
+              className={cn(
+                'flex items-center',
+                isAllModeDisabled ? ' text-grey-blue' : 'text-blue-bright',
+              )}
               checked={isAllModeChecked ?? false}
               disabled={isAllModeDisabled}
               onChange={toggleAllMode}
@@ -47,7 +51,10 @@ export const AllNotMods = observer(
 
         <Checkbox
           id={'not-mode-checkbox'}
-          className="flex items-center"
+          className={cn(
+            'flex items-center',
+            isNotModeDisabled ? ' text-grey-blue' : 'text-blue-bright',
+          )}
           checked={isNotModeChecked ?? false}
           disabled={isNotModeDisabled}
           onChange={toggleNotMode}
