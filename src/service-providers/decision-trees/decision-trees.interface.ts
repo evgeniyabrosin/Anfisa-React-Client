@@ -139,7 +139,7 @@ export interface IDtreeCountsArguments {
   points: number[]
 }
 
-export interface IDtreeCounts {
+export interface IDtreeCountsResponse {
   'rq-id': string
   'point-counts': PointCount[]
 }

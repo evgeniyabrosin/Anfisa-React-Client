@@ -4,6 +4,7 @@ import { ServiceProviderBase } from '../common'
 import { filteringProvider } from '../filtering-regime'
 import { adaptDtreeStatResponse } from './decision-trees.adapters'
 import {
+  IDtreeCountsResponse,
   IDtreeSetArguments,
   IDtreeSetResponse,
   IDtreeStatArguments,
@@ -18,7 +19,20 @@ class DecisionTreesProvider extends ServiceProviderBase {
     super()
   }
 
-  // TODO: dtree_counts Delayed evaluations of item counts for decision tree points
+  public async getDtreeCounts(
+    params: IDtreeSetArguments,
+    options: Partial<AxiosRequestConfig<string>> = {},
+  ): Promise<IDtreeCountsResponse> {
+    const response = await this.post<IDtreeCountsResponse>(
+      '/dtree_counts',
+      params,
+      options,
+    )
+
+    return response.data
+  }
+  // public async getFullDtreeCounts(): Promise<IDtreeCountsResponse> {}
+
   // TODO: dtree_check  Decision tree code check
   // TODO: dtree_cmp
 
