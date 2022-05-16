@@ -1,4 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
@@ -78,22 +79,26 @@ export const CompundHet = observer((): ReactElement => {
 
   return (
     <>
-      <div className="text-red-secondary">
-        {compoundHetStore.statFuncStatus}
-      </div>
-      <div className="flex justify-between items-center w-full mt-4 text-14">
-        <AprroxAndState approx={approx} setApprox={setApprox} />
+      {compoundHetStore.statFuncStatus && (
+        <div className="text-red-secondary">
+          {compoundHetStore.statFuncStatus}
+        </div>
+      )}
+      <AprroxAndState
+        approx={approx}
+        setApprox={setApprox}
+        className={cn('mb-4', compoundHetStore.statFuncStatus && 'mt-2')}
+      />
 
+      <div className="flex justify-end mb-[-21px]">
         <AllNotMods
           isNotModeChecked={compoundHetStore.currentMode === ModeTypes.Not}
-          isNotModeDisabled={
-            simpleVariants ? simpleVariants.length === 0 : true
-          }
+          isNotModeDisabled={!simpleVariants?.length}
           toggleNotMode={toggleNotMode}
         />
       </div>
 
-      <div className="mt-4">
+      <div className="flex-1">
         <DisabledVariantsAmount variants={simpleVariants} disabled={true} />
       </div>
 
@@ -101,6 +106,7 @@ export const CompundHet = observer((): ReactElement => {
         onSubmit={onSubmit}
         resetFields={handleClear}
         disabled={!simpleVariants || !isFilterTouched}
+        classname="pb-[40px]"
       />
     </>
   )
