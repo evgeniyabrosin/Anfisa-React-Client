@@ -8,6 +8,7 @@ import { DatasetCard } from '@components/data-testid/dataset-card.cy'
 import { DatasetsFieldsList } from './components/dataset-fields-list/dataset-fileds-list'
 import { DatasetGeneral } from './components/dataset-general/dataset-general'
 import { OpenViewerButton } from './components/open-viewer-button/open-viewer-button'
+import { DeleteDatasetButton } from './delete-dataset-button'
 
 export const SelectedDataset = observer((): ReactElement => {
   if (!dirinfoStore.selectedDirinfoName) {
@@ -31,6 +32,8 @@ export const SelectedDataset = observer((): ReactElement => {
         </div>
 
         <DatasetGeneral />
+
+        <DeleteDatasetButton className="mt-5" />
       </Card>
 
       <DatasetsFieldsList />
