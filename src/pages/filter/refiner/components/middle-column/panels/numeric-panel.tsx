@@ -35,11 +35,10 @@ export const NumericPanel = observer((): ReactElement | null => {
       <DividerHorizontal />
 
       <NumericCondition
-        className="mt-4"
         attrData={attrData}
         initialValue={initialValue}
         controls={({ value, hasErrors, clearValue }) => (
-          <div className="flex items-center justify-end mt-1">
+          <div className="flex-1 flex items-end justify-end mt-1 pb-[40px]">
             <Button
               variant={'secondary'}
               text={t('general.clear')}
