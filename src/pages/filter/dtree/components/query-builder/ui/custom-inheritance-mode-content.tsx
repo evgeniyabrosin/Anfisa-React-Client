@@ -46,7 +46,7 @@ export const CustomInheritanceModeContent = observer(
 
               <Select
                 onChange={(e: any) => handleSetScenario(group, e.target.value)}
-                className="w-auto ml-1"
+                className="w-auto ml-2 pl-2 pr-3 py-1 bg-white"
                 options={selectOptions}
                 value={selectStates[index]}
               />
