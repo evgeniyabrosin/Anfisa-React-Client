@@ -8,7 +8,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
 import variantStore from '@store/ws/variant'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { IAttributeDescriptors } from '@service-providers/dataset-level/dataset-level.interface'
 
 export const IgvButton = observer((): ReactElement => {

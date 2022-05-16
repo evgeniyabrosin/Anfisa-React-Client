@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import filterStore from '@store/filter'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { NumericCondition } from '@components/numeric-condition'
 import currentFilterStore from '@pages/filter/refiner/components/middle-column/panels/current-filter.store'
 import {

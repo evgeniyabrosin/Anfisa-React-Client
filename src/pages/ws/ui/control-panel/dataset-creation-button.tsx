@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { ControlPanelDivider } from './control-panel-divider'
 

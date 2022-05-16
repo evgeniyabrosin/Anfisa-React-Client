@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import variantStore from '@store/ws/variant'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { HeaderModal } from '@pages/filter/dtree/components/modals/components/ui/header-modal'
 import { ModalBase } from '@pages/filter/dtree/components/modals/components/ui/modal-base'
 import { validateNotes } from '@utils/validation/validateNotes'

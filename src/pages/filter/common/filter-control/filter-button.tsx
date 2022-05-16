@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import { Button, ButtonProps } from '@ui/button'
+import { Button, ButtonProps } from '@ui/button/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 
@@ -18,6 +18,7 @@ export const FilterButton = observer(
       className={cn('mt-auto ml-2', className)}
       dataTestId={DecisionTreesMenuDataCy.decisionActions}
       onClick={rest.onClick}
+      onMouseUp={e => e.stopPropagation()}
     />
   ),
 )

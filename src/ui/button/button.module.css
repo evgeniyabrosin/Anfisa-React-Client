@@ -1,0 +1,127 @@
+.button {
+  border-radius: 100vh;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: theme("colors.white");
+  background-color: theme("colors.blue.bright");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  &_icon_only {
+    border-radius: 4px;
+    padding: 8px 10px;
+
+    &_l {
+      padding: 12px 14px;
+    }
+
+    &_s {
+      padding: 7px 8px;
+    }
+  }
+
+  &:hover {
+    background-color: theme("colors.blue.hover");
+  }
+
+  &:focus {
+    background-color: theme("colors.blue.active");
+  }
+
+  &:disabled {
+    color: theme("colors.grey.blue");
+    background-color: theme("colors.red.disabled");
+  }
+
+  &_m {
+    padding: 6px 24px;
+  }
+
+  &_l {
+    padding: 6px 32px;
+  }
+
+  &_s {
+    padding: 4px 20px;
+  }
+
+  &_secondary {
+    background-color: inherit;
+    color: theme("colors.blue.dark");
+    border: 2px solid theme("colors.blue.bright");
+
+    &:hover {
+      background-color: inherit;
+      border-color: theme("colors.blue.hover");
+    }
+
+    &:focus {
+      background-color: inherit;
+      border-color: theme("colors.blue.active");
+    }
+
+    &:disabled {
+      color: theme("colors.grey.blue");
+      background-color: inherit;
+      border-color: theme("colors.red.disabled");
+    }
+  }
+
+  &_diestruction {
+    background-color: inherit;
+    color: theme("colors.blue.dark");
+    border: 2px solid theme("colors.red.light");
+
+    &:hover {
+      border-color: theme("colors.red.hover");
+    }
+
+    &:focus {
+      border-color: theme("colors.red.active");
+    }
+
+    &:disabled {
+      border-color: theme("colors.red.disabled");
+    }
+  }
+
+  &_dark {
+    &:disabled {
+      background-color: theme("colors.blue.lighter");
+    }
+  }
+
+  &_secondary_dark {
+    background-color: inherit;
+    color: theme("colors.white");
+    border: 2px solid theme("colors.blue.bright");
+    padding: 4px 22px;
+
+    &_l {
+      padding: 4px 30px;
+    }
+
+    &_s {
+      padding: 2px 18px;
+    }
+
+    &:hover {
+      background-color: inherit;
+      border-color: theme("colors.blue.hover");
+    }
+
+    &:focus {
+      background-color: inherit;
+      border-color: theme("colors.blue.active");
+    }
+
+    &:disabled {
+      color: theme("colors.grey.blue");
+      background-color: inherit;
+      border-color: theme("colors.blue.lighter");
+    }
+  }
+}

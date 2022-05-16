@@ -2,7 +2,7 @@ import { MouseEvent, ReactElement } from 'react'
 import cn from 'classnames'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { Icon } from '@ui/icon'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 

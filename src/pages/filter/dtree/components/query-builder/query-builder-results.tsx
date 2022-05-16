@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { QueryBuilderResultsNumbers } from './query-builder-results-numbers'
 

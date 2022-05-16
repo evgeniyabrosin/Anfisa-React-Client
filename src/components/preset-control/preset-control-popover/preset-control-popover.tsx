@@ -4,7 +4,7 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { IPopoverBaseProps, Popover } from '@ui/popover'
 import { ISolutionEntryDescription } from '@service-providers/common'
 import { PresetControlList } from '../preset-control-list'

@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { Icon } from '@ui/icon'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { HandleDataset } from '../handle-dataset/handle-dataset'
@@ -18,10 +18,7 @@ export const Datasets = (): ReactElement => {
     <div
       className={cn(
         'bg-blue-lighter flex flex-col flex-shrink-0 pt-[18px] h-full overflow-auto',
-        {
-          'w-[372px]': isOpen,
-          'w-auto': !isOpen,
-        },
+        isOpen ? 'w-[372px]' : 'w-auto',
       )}
     >
       <div
@@ -40,7 +37,7 @@ export const Datasets = (): ReactElement => {
         )}
         <Button
           dataTestId={FilterDatasetDataCy.leftPanelArrowButton}
-          size="md"
+          size="sm"
           icon={<Icon name="Arrow" />}
           className={cn('bg-blue-bright transform rounded-md', {
             'rotate-180': !isOpen,

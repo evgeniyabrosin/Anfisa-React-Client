@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { Radio } from '@ui/radio'
 import activeStepStore, {
   ActiveStepOptions,
@@ -96,6 +96,7 @@ export const FinalStep = observer(
               {t('dtree.initialStep')}
             </div>
             <Button
+              size="sm"
               text={t('dtree.addStep')}
               className="absolute -bottom-9 z-1000 left-0"
               onClick={() =>

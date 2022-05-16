@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { DtreeOperations } from '@core/enum/dtree-operations'
 import { t } from '@i18n'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import modalsVisibilityStore from '../modals-visibility-store'
 import { ModalBase } from './ui/modal-base'
 

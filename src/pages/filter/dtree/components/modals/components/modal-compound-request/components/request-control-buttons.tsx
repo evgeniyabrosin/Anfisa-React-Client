@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
-import { Button } from '@ui/button'
+import { Button } from '@ui/button/button'
 import { Select } from '@ui/select'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import modalCompoundRequestStore from '../modal-compound-request.store'
