@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react-lite'
 
-import { resetOptions } from '@core/resetOptions'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import { Checkbox } from '@ui/checkbox/checkbox'
 import { Select } from '@ui/select'
+import { InheritanceModeSelect } from '@pages/filter/dtree/components/query-builder/components/inheritance-mode-select'
 import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import { selectOptions } from '../../modals/modals-control-store'
 import { AllNotMods } from './all-not-mods'
@@ -56,32 +55,10 @@ export const CustomInheritanceModeContent = observer(
 
         <DividerHorizontal />
 
-        <div className="flex justify-between">
-          <span className="text-14 leading-16px font-medium text-grey-blue mt-0.5 mb-2.5">
-            {t('filter.inheritanceMode')}
-          </span>
-
-          <span
-            className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={() => handleReset('empty')}
-          >
-            Reset
-          </span>
-        </div>
-
-        <div>
-          {resetOptions.map(option => (
-            <Checkbox
-              key={option}
-              id={option}
-              onChange={() => handleReset(option)}
-              checked={resetValue === option}
-              className="mb-2 last:mb-0"
-            >
-              {option}
-            </Checkbox>
-          ))}
-        </div>
+        <InheritanceModeSelect
+          resetValue={resetValue}
+          handleReset={handleReset}
+        />
 
         <DividerHorizontal />
 

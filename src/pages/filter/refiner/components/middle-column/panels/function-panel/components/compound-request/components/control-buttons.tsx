@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { RequestBlockOperations } from '@core/enum/request-block-operations'
 import filterStore from '@store/filter'
 import { Button } from '@ui/button'
-import compoundRequestStore from './compound-request.store'
+import compoundRequestStore from '../compound-request.store'
 
 interface IControlButtonsProps {
   activeRequestIndex: number

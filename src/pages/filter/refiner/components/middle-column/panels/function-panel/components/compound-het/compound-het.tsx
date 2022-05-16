@@ -13,7 +13,7 @@ import { ICompoundHetArgs } from '@service-providers/common/common.interface'
 import { getApproxName } from '@utils/getApproxName'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import functionPanelStore from '../../function-panel.store'
-import { AprroxAndState } from '../compound-request/approx-state'
+import { AprroxAndState } from '../compound-request/components/approx-state'
 import { PanelButtons } from '../panelButtons'
 import compoundHetStore from './compound-het.store'
 

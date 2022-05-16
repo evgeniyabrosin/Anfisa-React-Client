@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 
 import { t } from '@i18n'
-import { InputNumber } from '@ui/input-number'
+import { InputNumber } from '@ui/input-number/input-number'
 import {
   RangeSlider,
   RangeSliderMode,

@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { adjustHistogramData } from '@core/histograms'
 import { t } from '@i18n'
-import { InputNumber } from '@ui/input-number'
+import { InputNumber } from '@ui/input-number/input-number'
 import { RangeSliderSide } from '@ui/range-slider'
 import { Switch } from '@ui/switch'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
