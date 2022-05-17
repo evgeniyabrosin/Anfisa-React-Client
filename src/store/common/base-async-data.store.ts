@@ -34,6 +34,7 @@ export abstract class BaseAsyncDataStore<Data, Query> {
   private _error: Error | null = null
   private _query: Query | undefined
   private _data: Data | undefined
+  private lastOnlineQuery: Query | undefined
 
   private abortController: AbortController | null = null
   private readonly cache: Map<string, { lastUpdate: number; data: Data }> =
@@ -72,18 +73,20 @@ export abstract class BaseAsyncDataStore<Data, Query> {
 
     const { keepPreviousData } = { ...defaultOptions, ...options }
 
-    let lastOnlineQuery: Query | undefined
     let disposeObserver: () => void
 
     onBecomeObserved(this, 'data', () => {
       const disposeInvalidator = reaction(
         () => this.query,
         () => {
-          lastOnlineQuery = this.query
+          this.lastOnlineQuery = this.query
           this.reconcile(keepPreviousData ?? false)
         },
         {
-          fireImmediately: !comparer.structural(lastOnlineQuery, this.query),
+          fireImmediately: !comparer.structural(
+            this.lastOnlineQuery,
+            this.query,
+          ),
         },
       )
 
@@ -209,6 +212,7 @@ export abstract class BaseAsyncDataStore<Data, Query> {
     this._error = null
     this._query = undefined
     this._data = undefined
+    this.lastOnlineQuery = undefined
   }
 
   private reconcile(keepData: boolean): void {
