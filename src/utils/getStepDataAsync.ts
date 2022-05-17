@@ -1,27 +1,38 @@
-import { toJS } from 'mobx'
-
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore, { IStepData } from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import { TCondition } from '@service-providers/common'
 import { PointCount } from '@service-providers/decision-trees'
-import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
 import { getDataFromCode } from './getDataFromCode'
 
 export const getStepDataAsync = async (
   isLoadingNewTree: boolean,
 ): Promise<IStepData[]> => {
-  const pointCountsFromDtreeSet: PointCount[] = dtreeStore.dtree['point-counts']
+  const pointCounts: PointCount[] = dtreeStore.dtree['point-counts']
 
   const isXlDataset = dtreeStore.dtree.kind === 'xl'
 
   if (isXlDataset) {
-    const code = dtreeStore.dtreeCode
-    const stepCount = pointCountsFromDtreeSet.length
+    // const code = dtreeStore.dtreeCode
+    // const stepCount = pointCounts.length
 
-    fetchDtreeCountsAsync(code, stepCount)
+    const pointCountsLength = pointCounts.length
+    const points = [...new Array(pointCountsLength).keys()]
+    const rq_id = dtreeStore.dtree['rq-id']
+
+    // TODO: mind about it
+    dtreeStore.dtreeCounts.setQuery({
+      ds: datasetStore.datasetName,
+      tm: '1',
+      code: dtreeStore.dtreeCode,
+      // change it
+      points,
+      rq_id,
+    })
+    // fetchDtreeCountsAsync(code, stepCount)
   } else {
     dtreeStore.setIsCountsReceived(true)
-    dtreeStore.setPointCounts(toJS(pointCountsFromDtreeSet))
+    // dtreeStore.setPointCounts(toJS(pointCounts))
   }
 
   const stepCodes = getDataFromCode(dtreeStore.dtreeCode)

@@ -32,7 +32,7 @@ export const fetchDtreeCountsAsync = async (
   const result = await response.json()
   const pointCounts: PointCount[] = result['point-counts']
 
-  dtreeStore.setPointCounts(pointCounts)
+  // dtreeStore.setPointCounts(pointCounts)
 
   const filteredPointCounts = pointCounts.filter(element => element !== null)
 

@@ -15,8 +15,6 @@ export class DtreeCountsAsyncStore extends BaseAsyncDataStore<
   }
 
   protected fetch(params: IDtreeSetArguments): Promise<IDtreeCountsResponse> {
-    // TODO: use getFullDtreeCounts
-    // return decisionTreesProvider.getDtreeCounts()
-    return decisionTreesProvider.getDtreeCounts(params)
+    return decisionTreesProvider.getFullDtreeCounts(params)
   }
 }

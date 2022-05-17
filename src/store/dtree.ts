@@ -8,7 +8,6 @@ import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
   DtreeSetPointKinds,
   IDtreeSetPoint,
-  PointCount,
 } from '@service-providers/decision-trees'
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
@@ -76,8 +75,6 @@ class DtreeStore {
   selectedFilters: string[] = []
   dtreeStepIndices: string[] = []
 
-  pointCounts: PointCount[] = []
-
   evalStatus = ''
   savingStatus: any = []
   shouldLoadTableModal = false
@@ -111,6 +108,15 @@ class DtreeStore {
   actionHistoryIndex = -1
 
   readonly dtreeCounts = new DtreeCountsAsyncStore()
+
+  get dtreeCountsRqId(): string {
+    return this.dtreeCounts.data?.['rq-id'] ?? ''
+  }
+
+  get pointCounts() {
+    // TODO: if !isXL get data from dtreeSet
+    return this.dtreeCounts.data?.['point-counts'] ?? []
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -498,11 +504,11 @@ class DtreeStore {
     })
   }
 
-  setPointCounts(pointCounts: PointCount[]) {
-    runInAction(() => {
-      this.pointCounts = pointCounts
-    })
-  }
+  // setPointCounts(pointCounts: PointCount[]) {
+  //   runInAction(() => {
+  //     this.pointCounts = pointCounts
+  //   })
+  // }
 
   expandFilterContent() {
     this.isFilterContentExpanded = true

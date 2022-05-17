@@ -31,7 +31,14 @@ class DecisionTreesProvider extends ServiceProviderBase {
 
     return response.data
   }
-  // public async getFullDtreeCounts(): Promise<IDtreeCountsResponse> {}
+
+  public async getFullDtreeCounts(
+    params: IDtreeSetArguments,
+    options: Partial<AxiosRequestConfig<string>> = {},
+  ): Promise<IDtreeCountsResponse> {
+    // TODO: add  loop here
+    return this.getDtreeCounts(params, options)
+  }
 
   // TODO: dtree_check  Decision tree code check
   // TODO: dtree_cmp
