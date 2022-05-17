@@ -167,6 +167,10 @@ export const en = {
     distance: 'Distance',
   },
   filter: {
+    switcher: {
+      fullWord: 'Full word',
+      partWord: 'Any entry',
+    },
     method: 'Filtering method',
     results: 'Results',
     selectedVariants: 'Selected variants',
