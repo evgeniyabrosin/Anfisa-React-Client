@@ -1,5 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
+import { toJS } from 'mobx'
 
+import { getIncompletePoints } from '@service-providers/filtering-regime/filtering-regime.utils'
 import { ServiceProviderBase } from '../common'
 import { filteringProvider } from '../filtering-regime'
 import { adaptDtreeStatResponse } from './decision-trees.adapters'
@@ -36,9 +38,25 @@ class DecisionTreesProvider extends ServiceProviderBase {
   public async getFullDtreeCounts(
     params: IDtreeSetArguments,
     options: IGetFullDreeCountsOptions,
+  ) {
+    return this.getFullDtreeCountsBase(
+      () => this.getDtreeCounts(params),
+      options,
+    )
+  }
+
+  public async getFullDtreeCountsBase(
+    baseRequest: () => Promise<IDtreeCountsResponse>,
+    options: IGetFullDreeCountsOptions,
   ): Promise<IDtreeCountsResponse> {
-    // TODO: add  loop here
-    return this.getDtreeCounts(params)
+    const { abortSignal, onPartialResponse } = options
+
+    const result = await baseRequest()
+
+    const { 'rq-id': rq_id, 'point-counts': pointCounts } = result
+    const incompletePoints = getIncompletePoints(pointCounts)
+
+    return result
   }
 
   // TODO: dtree_check  Decision tree code check
