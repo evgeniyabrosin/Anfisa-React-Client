@@ -1,8 +1,7 @@
-import { BaseAsyncDataStore } from '@store/common'
+import { BaseAsyncDataStore, TBaseDataStoreFetchOptions } from '@store/common'
 import {
   IDtreeCountsArguments,
   IDtreeCountsResponse,
-  IDtreeSetArguments,
 } from '@service-providers/decision-trees'
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
 
@@ -14,7 +13,15 @@ export class DtreeCountsAsyncStore extends BaseAsyncDataStore<
     super()
   }
 
-  protected fetch(params: IDtreeSetArguments): Promise<IDtreeCountsResponse> {
-    return decisionTreesProvider.getFullDtreeCounts(params)
+  protected fetch(
+    params: IDtreeCountsArguments,
+    { abortSignal }: TBaseDataStoreFetchOptions,
+  ): Promise<IDtreeCountsResponse> {
+    return decisionTreesProvider.getFullDtreeCounts(params, {
+      abortSignal,
+      onPartialResponse: data => {
+        this.setData(data)
+      },
+    })
   }
 }

@@ -9,6 +9,7 @@ import {
   IDtreeSetResponse,
   IDtreeStatArguments,
   IDtreeStatResponse,
+  IGetFullDreeCountsOptions,
   TDtreeStat,
   TGetFullDtreeStatOptions,
   TGetFullDtreeStatParams,
@@ -34,10 +35,10 @@ class DecisionTreesProvider extends ServiceProviderBase {
 
   public async getFullDtreeCounts(
     params: IDtreeSetArguments,
-    options: Partial<AxiosRequestConfig<string>> = {},
+    options: IGetFullDreeCountsOptions,
   ): Promise<IDtreeCountsResponse> {
     // TODO: add  loop here
-    return this.getDtreeCounts(params, options)
+    return this.getDtreeCounts(params)
   }
 
   // TODO: dtree_check  Decision tree code check

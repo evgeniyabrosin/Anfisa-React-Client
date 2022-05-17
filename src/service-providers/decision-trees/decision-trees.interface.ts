@@ -144,6 +144,11 @@ export interface IDtreeCountsResponse {
   'point-counts': PointCount[]
 }
 
+export interface IGetFullDreeCountsOptions {
+  abortSignal?: AbortSignal
+  onPartialResponse?: (response: IDtreeCountsResponse) => void
+}
+
 // dtree_stat
 
 export interface IDtreeStatArguments {
