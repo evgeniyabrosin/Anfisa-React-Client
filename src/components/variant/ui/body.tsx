@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { IGridLayout } from '@declarations'
 import { SessionStoreManager } from '@core/storage-management/session-store-manager'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { DrawerWindow } from './drawer-window'
 
 interface Props {

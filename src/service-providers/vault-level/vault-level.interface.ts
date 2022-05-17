@@ -53,7 +53,11 @@ export type TJobStatus =
 export type TAdmUpdateResponse = 'Updated'
 
 // adm_reload_ds
-
-export interface IAdmReloadDsArguments {
+interface IAdmDsQuery {
   ds: string
 }
+export interface IAdmReloadDsArguments extends IAdmDsQuery {}
+
+// adm_drop_ds
+
+export interface IAdmDropDsArguments extends IAdmDsQuery {}

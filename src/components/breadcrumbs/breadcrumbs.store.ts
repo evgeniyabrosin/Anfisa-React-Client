@@ -14,7 +14,7 @@ export class BreadcrumbsStore {
     return this.dataset?.ancestors
       ?.map(([name]) => ({
         name,
-        isXl: dirinfoStore.dirinfo?.['ds-dict']?.[name].kind === 'xl',
+        isXl: dirinfoStore.dirInfoData?.['ds-dict']?.[name].kind === 'xl',
       }))
       ?.reverse()
   }
@@ -41,7 +41,7 @@ export class BreadcrumbsStore {
   }
 
   private getDataset(name: string): IDirInfoDatasetDescriptor | undefined {
-    return toJS(dirinfoStore.dirinfo?.['ds-dict']?.[name])
+    return toJS(dirinfoStore.dirInfoData?.['ds-dict']?.[name])
   }
 }
 

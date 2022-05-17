@@ -6,7 +6,7 @@ import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 
-interface Props {
+interface ICustomizeTableButtonProps {
   refEl: any
   isOpen?: boolean
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
@@ -19,7 +19,7 @@ export const CustomizeTableButton = ({
   isOpen,
   onClick,
   onMouseUp,
-}: Props): ReactElement => (
+}: ICustomizeTableButtonProps): ReactElement => (
   <Button
     dataTestId={MainTableDataCy.customizeTable}
     refEl={refEl}

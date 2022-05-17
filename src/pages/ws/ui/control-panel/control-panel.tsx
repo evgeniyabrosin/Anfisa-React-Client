@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { t } from '@i18n'
-import zoneStore from '@store/filterZone'
+import zoneStore from '@store/ws/zone'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { ControlPanelDivider } from './control-panel-divider'
 import { EditFilter } from './control-panel-edit-filter'

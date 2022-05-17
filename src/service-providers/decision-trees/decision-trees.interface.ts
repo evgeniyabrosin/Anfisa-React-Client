@@ -10,13 +10,20 @@ import { TGetFullStatUnitsOptions } from '../filtering-regime'
 
 // dtree_set
 
+export enum ActionTypes {
+  POINT = 'POINT',
+  ATOM = 'ATOM',
+  INSTR = 'INSTR',
+  DTREE = 'DTREE',
+}
+
 export enum DtreeModifyingActions {
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
 }
 
 export type TDtreeModifyingActions = [
-  actionType: 'DTREE',
+  actionType: ActionTypes.DTREE,
   actionName: DtreeModifyingActions,
   decisionTreeName: string,
 ]
@@ -27,6 +34,8 @@ export enum InstrModifyingActionNames {
   NEGATE = 'NEGATE',
   JOIN_AND = 'JOIN-AND',
   JOIN_OR = 'JOIN-OR',
+  UP_JOIN_AND = 'UP-JOIN-AND',
+  UP_JOIN_OR = 'UP-JOIN-OR',
   SPLIT = 'SPLIT',
   BOOL_TRUE = 'BOOL-TRUE',
   BOOL_FALSE = 'BOOL-FALSE',
@@ -35,10 +44,10 @@ export enum InstrModifyingActionNames {
 }
 
 export type TInstrModifyingActions = [
-  actionType: 'INSTR',
+  actionType: ActionTypes.INSTR,
   actionName: InstrModifyingActionNames,
   pointNo: number,
-  additionalOption: unknown,
+  additionalOption?: unknown,
 ]
 
 export enum PointModyfingActionNames {
@@ -49,7 +58,7 @@ export enum PointModyfingActionNames {
 }
 
 export type TPointModifyingActions = [
-  actionType: 'POINT',
+  actionType: ActionTypes.POINT,
   actionName: PointModyfingActionNames,
   pointNo: number,
   condition: TCondition,
@@ -61,9 +70,9 @@ export enum AtomModifyingActionName {
 }
 
 export type TAtomModifyingActions = [
-  actionType: 'ATOM',
+  actionType: ActionTypes.ATOM,
   actionName: AtomModifyingActionName,
-  atomLocation: [pointNo: number, atomNoInPointAtomList: number],
+  atomLocation: number[],
   additionalArgument?: unknown,
 ]
 
@@ -73,12 +82,14 @@ export type TModifyingAction =
   | TPointModifyingActions
   | TAtomModifyingActions
 
+// dtree_set
+
 export interface IDtreeSetArguments {
   ds: string
   tm?: string
   dtree?: string
   code?: string
-  instr: TModifyingAction
+  instr?: TModifyingAction
 }
 
 export enum DtreeSetPointKinds {
@@ -99,15 +110,13 @@ export interface IDtreeSetPoint {
 
 export type PointCount = TItemsCount | null
 
-export interface IDtreeSet {
+export interface IDtreeSetResponse {
   kind: DatasetKinds
   'total-counts': TItemsCount[]
   'point-counts': PointCount[]
   code: string
   points: IDtreeSetPoint[]
-  'cond-atoms': {
-    [pointNumber: number]: TCondition[]
-  }
+  'cond-atoms': Record<string, TCondition[]>
   labels: string[]
   error?: string
   line?: number

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
-import zoneStore from '@store/filterZone'
+import mainTableStore from '@store/ws/main-table.store'
+import zoneStore from '@store/ws/zone'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { ZoneModalList } from './components/zone-modal-list'
 
@@ -16,7 +16,7 @@ export const TagsModal = observer(({ close, title }: ITagsModalProps) => {
   const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
-    datasetStore.fetchTagSelectAsync()
+    zoneStore.fetchZoneTagsAsync()
 
     if (zoneStore.selectedTags.length > 0) {
       zoneStore.syncSelectedAndLocalFilters('isTags')
@@ -29,18 +29,16 @@ export const TagsModal = observer(({ close, title }: ITagsModalProps) => {
     zoneStore.createSelectedZoneFilter('isTags')
 
     if (zoneStore.isModeNOT) {
-      datasetStore.addZone(['_tags', zoneStore.selectedTags, false])
+      zoneStore.addZone(['_tags', zoneStore.selectedTags, false])
     } else {
-      datasetStore.addZone(['_tags', zoneStore.selectedTags])
+      zoneStore.addZone(['_tags', zoneStore.selectedTags])
     }
 
     if (zoneStore.isModeWithNotes) {
-      datasetStore.addZone(['_tags', [...zoneStore.selectedTags, '_note']])
+      zoneStore.addZone(['_tags', [...zoneStore.selectedTags, '_note']])
     }
 
-    await datasetStore.fetchWsListAsync()
-
-    datasetStore.fetchFilteredTabReportAsync()
+    mainTableStore.fetchFilteredTabReportAsync()
 
     close()
   }
@@ -62,7 +60,7 @@ export const TagsModal = observer(({ close, title }: ITagsModalProps) => {
       isTags={true}
     >
       <ZoneModalList
-        items={datasetStore.tags.filter(item =>
+        items={zoneStore.tags.filter(item =>
           item.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
         )}
         isTags={true}

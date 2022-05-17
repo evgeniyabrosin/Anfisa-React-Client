@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { Tag } from '@ui/tag'
 
 export const TagsContainer = observer(() => {

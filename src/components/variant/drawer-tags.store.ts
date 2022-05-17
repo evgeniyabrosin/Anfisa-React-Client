@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
 import { t } from '@i18n'
-import variantStore from '@store/variant'
+import variantStore from '@store/ws/variant'
 import { ITableAspectDescriptor } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import { findElementInRow } from '@utils/mian-table/find-element-in-row'

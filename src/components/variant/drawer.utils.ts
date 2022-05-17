@@ -32,9 +32,8 @@ export const useScrollShadow = (
   handleScroll: () => void
   handleStartScroll: () => void
 } => {
-  const [startedLeftDistance, setStartedLeftDistance] = useState<number | null>(
-    null,
-  )
+  const [startedLeftDistance, setStartedLeftDistance] =
+    useState<number | null>(null)
 
   const [shouldAddShadow, setShouldAddShadow] = useState(false)
 

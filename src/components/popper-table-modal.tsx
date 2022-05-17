@@ -1,20 +1,16 @@
-import { ReactElement, useRef } from 'react'
-import cn, { Argument } from 'classnames'
-import noop from 'lodash/noop'
+import { ReactElement } from 'react'
+import { Argument } from 'classnames'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
-import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import zoneStore from '@store/filterZone'
-import { Button } from '@ui/button'
-import { Icon } from '@ui/icon'
+import zoneStore from '@store/ws/zone'
 import { InputSearch } from '@components/input-search'
-import { FilterMods } from '@pages/ws/ui/table/filter-mods'
-import { MainTableDataCy } from './data-testid/main-table.cy'
+import { ZoneModalMods } from '@pages/ws/ui/control-panel/zone-modals/components/zone-modal-mods'
+import { PopupCard } from './popup-card/popup-card'
 
-interface Props {
+interface IPopperTableModalProps {
   title?: string
   selectedAmount?: number
   searchValue: string
@@ -56,17 +52,7 @@ export const PopperTableModal = observer(
     isNotSearchable,
     notShowSelectedPanel,
     className,
-  }: Props) => {
-    const ref = useRef(null)
-
-    const onOutsideClick = () => {
-      isTags && zoneStore.unselectAllTags()
-
-      onClose && onClose()
-    }
-
-    useOutsideClick(ref, onOutsideClick ?? noop)
-
+  }: IPopperTableModalProps) => {
     const defineClearFilter = () => {
       isGenes && zoneStore.unselectAllGenes()
       isGenesList && zoneStore.unselectAllGenesList()
@@ -97,18 +83,14 @@ export const PopperTableModal = observer(
     }
 
     return (
-      <div className={cn('bg-white shadow-card rounded', className)} ref={ref}>
-        <div className="px-4 pt-4">
-          <div className="flex justify-between mb-5 items-center">
-            <p className="text-blue-dark  font-medium ">{title}</p>
-            <Icon
-              name="Close"
-              onClick={handleClose}
-              size={16}
-              className="cursor-pointer"
-            />
-          </div>
-
+      <PopupCard
+        className={className}
+        title={title ?? ''}
+        onClose={handleClose}
+        onApply={handleApply}
+        shouldCloseOnOutsideClick={true}
+      >
+        <div className="">
           {!isNotSearchable && (
             <InputSearch
               value={searchValue}
@@ -117,47 +99,42 @@ export const PopperTableModal = observer(
             />
           )}
           {!notShowSelectedPanel && (
-            <div className="flex justify-between mt-5">
+            <div className="flex justify-between items-center mt-4">
               {viewType ? (
-                <span className="text-14 text-grey-blue">
+                <span className="text-12 text-grey-blue">
                   {selectedAmount} {'Selected'}
                 </span>
               ) : (
-                <span className="text-14 text-grey-blue">
+                <span className="text-12 text-grey-blue">
                   {defintSelectedAmount() || 0} {'Selected'}
                 </span>
               )}
 
-              <span className="text-12 text-blue-bright leading-14">
+              <div className="flex text-blue-bright text-14 leading-5">
                 {onSelectAll && (
-                  <span className="cursor-pointer mr-3" onClick={onSelectAll}>
-                    {t('general.selectAll')}
-                  </span>
+                  <div className="flex">
+                    <div className="cursor-pointer" onClick={onSelectAll}>
+                      {t('general.selectAll')}
+                    </div>
+
+                    <div className="w-[2px] h-full mx-2 bg-blue-light" />
+                  </div>
                 )}
+
                 <span className="cursor-pointer" onClick={onClearAll}>
                   {t('general.clearAll')}
                 </span>
-              </span>
+              </div>
             </div>
           )}
-          {isTags && <FilterMods />}
-        </div>
-        <div className="w-full pl-4">{children}</div>
-        <div className="flex justify-end pb-4 px-4 mt-4">
-          <Button
-            text={t('general.cancel')}
-            variant="secondary"
-            onClick={handleClose}
-          />
 
-          <Button
-            text={t('general.apply')}
-            className="ml-3"
-            onClick={handleApply}
-            dataTestId={MainTableDataCy.applyButton}
-          />
+          {isTags && <ZoneModalMods />}
+
+          <div className="h-px w-full bg-blue-light mt-4" />
         </div>
-      </div>
+
+        <div className="w-full">{children}</div>
+      </PopupCard>
     )
   },
 )

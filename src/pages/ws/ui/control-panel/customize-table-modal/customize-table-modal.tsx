@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import { ViewTypeEnum } from '@core/enum/view-type-enum'
 import { t } from '@i18n'
-import variantStore from '@store/variant'
-import columnsStore from '@store/wsColumns'
+import columnsStore from '@store/ws/columns'
+import variantStore from '@store/ws/variant'
 import { PopperTableModal } from '@components/popper-table-modal'
 import { ViewTypeTable } from '@components/view-type-table'
 import { ColumnsList } from './columns-list/columns-list'
@@ -54,7 +54,7 @@ export const CustomizeTableModal = observer(
         <>
           {!variantStore.drawerVisible && <ColumnsList />}
           <div
-            className={cn('mt-4 mb-7 mr-4', {
+            className={cn('mt-4 mb-5', {
               'border-t-[1px] border-t-blue-light': !variantStore.drawerVisible,
             })}
           >

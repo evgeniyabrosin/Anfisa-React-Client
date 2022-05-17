@@ -1,6 +1,6 @@
 import { datasetPage } from '../../page-objects/app/datasets-page'
 import { decisionTreesPage } from '../../page-objects/app/decision-trees-page'
-import { Timeouts } from '../../page-objects/lib/timeouts.cy'
+import { Timeouts } from '../../shared/timeouts'
 
 describe('Regression test of the decision tree', () => {
   const includedVariants = '+5,041,176'

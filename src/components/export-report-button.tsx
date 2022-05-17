@@ -3,8 +3,8 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import datasetStore from '@store/dataset'
 import operationsStore from '@store/operations'
+import mainTableStore from '@store/ws/main-table.store'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { MainTableDataCy } from './data-testid/main-table.cy'
@@ -18,7 +18,7 @@ interface Props {
 
 export const ExportReportButton = observer(
   ({ isOpen, refEl, ...rest }: Props): ReactElement => {
-    const { variantCounts } = datasetStore.fixedStatAmount
+    const { variantCounts } = mainTableStore.fixedStatAmount
     const areVariantsZero = variantCounts === 0
 
     return (

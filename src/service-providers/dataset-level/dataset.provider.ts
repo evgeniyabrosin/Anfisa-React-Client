@@ -1,3 +1,6 @@
+import { AxiosRequestConfig } from 'axios'
+
+import { adaptDataToCamelizedType } from '@service-providers/common'
 import { ServiceProviderBase } from '../common/service-provider-base'
 import {
   IDsInfo,
@@ -24,7 +27,7 @@ class DatasetProvider extends ServiceProviderBase {
   public getDsInfo(params: IDsInfoArguments): Promise<IDsInfo> {
     return this.get<IDsInfo>('/dsinfo', {
       params,
-    }).then(res => res.data)
+    }).then(res => adaptDataToCamelizedType<IDsInfo>(res.data))
   }
 
   public getDsList(params: IDsListArguments): Promise<IDsList> {
@@ -39,8 +42,13 @@ class DatasetProvider extends ServiceProviderBase {
     return this.post<TRecdata>('/recdata', params).then(res => res.data)
   }
 
-  public getTabReport(params: ITabReportArguments): Promise<ITabReport[]> {
-    return this.post<ITabReport[]>('/tab_report', params).then(res => res.data)
+  public getTabReport(
+    params: ITabReportArguments,
+    options: Partial<AxiosRequestConfig> = {},
+  ): Promise<ITabReport[]> {
+    return this.post<ITabReport[]>('/tab_report', params, options).then(
+      res => res.data,
+    )
   }
 
   public getVSetup(params: IVsetupArguments): Promise<IVsetupAspectDescriptor> {

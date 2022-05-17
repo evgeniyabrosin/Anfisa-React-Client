@@ -1,4 +1,4 @@
-import { Timeouts } from './timeouts.cy'
+import { Timeouts } from '../../shared/timeouts'
 
 export class UIElement {
   protected _selector: string

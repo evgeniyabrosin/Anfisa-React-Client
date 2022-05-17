@@ -59,7 +59,7 @@ export const getPredictionPower = (
   }
 
   let count = 0
-  let total: number = counts.reduce((acc, value) => acc + value)
+  let total: number = counts.reduce((acc, value) => acc + value, 0)
 
   if (total < filteredCount) {
     counts.push(filteredCount - total)
@@ -119,7 +119,7 @@ export const getQueryBuilder = (
       ...attr,
       power: getPredictionPower(
         attr,
-        attr.detailed
+        attr.detailed && filteredCounts.transcribedVariants !== null
           ? filteredCounts.transcribedVariants
           : filteredCounts.variants,
       ),

@@ -2,7 +2,7 @@ import { ReactElement } from 'react'
 import cn from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
-import filterZone from '@store/filterZone'
+import zoneStore from '@store/ws/zone'
 import { IQualities } from './cell-samples'
 import { ModalTooltip } from './modal-tooltip'
 
@@ -35,9 +35,9 @@ export const CellSample = ({
       onMouseLeave={hideTooltip}
       key={sample}
       className={cn('relative w-1/3 px-4 py-4', {
-        'bg-orange-light': filterZone.isFather && index === 2,
-        'bg-yellow-light': filterZone.isMother && index === 1,
-        'bg-purple-light': filterZone.isProband && index === 0,
+        'bg-orange-light': zoneStore.isFather && index === 2,
+        'bg-yellow-light': zoneStore.isMother && index === 1,
+        'bg-purple-light': zoneStore.isProband && index === 0,
       })}
     >
       <div>{sample}</div>

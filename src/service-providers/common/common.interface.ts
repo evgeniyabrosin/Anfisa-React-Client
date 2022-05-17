@@ -8,8 +8,8 @@ export enum DatasetKinds {
 
 export type TItemsCount = [
   variantCounts: number,
-  dnaVariantsCounts: number,
-  transcriptsCounts: number,
+  dnaVariantsCounts?: number,
+  transcriptsCounts?: number,
 ]
 
 export type TDateISOString = string
@@ -22,7 +22,7 @@ export type TNumericConditionBounds = [
 ]
 
 export type TNumericCondition = [
-  conditionType: 'numeric',
+  conditionType: FilterKindEnum.Numeric | FilterKindEnum.Error,
   propertyName: string,
   bounds: TNumericConditionBounds,
 ]
@@ -62,7 +62,7 @@ export interface IGeneRegionArgs {
 }
 
 export type TEnumCondition = [
-  conditionType: FilterKindEnum.Enum,
+  conditionType: FilterKindEnum.Enum | FilterKindEnum.Error,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
@@ -76,7 +76,7 @@ export type TFuncArgs =
   | IGeneRegionArgs
 
 export type TFuncCondition = [
-  conditionType: 'func',
+  conditionType: FilterKindEnum.Func | FilterKindEnum.Error,
   propertyName: string,
   joinMode: ConditionJoinMode,
   valueVariants: string[],
@@ -113,6 +113,7 @@ export enum AttributeKinds {
 export enum AttributeChartRenderModes {
   Pie = 'pie',
   Bar = 'bar',
+  TreeMap = 'tree-map',
   Linear = 'linear',
   Log = 'log',
   Neighborhood = 'neighborhood',
@@ -189,7 +190,7 @@ export type TPropertyStatus =
 
 export type TDocumentDescriptor = [
   documentName: string,
-  pathToDocument: string,
+  pathToDocument: string[][],
   contentInformation?: unknown,
 ]
 
@@ -247,8 +248,8 @@ export interface IRecordDescriptor {
 
 export type TFilteringStatCounts = {
   variants: number
-  transcribedVariants: number
-  transcripts: number
+  transcribedVariants: number | null
+  transcripts: number | null
 }
 
 export type TFilteringStat = {

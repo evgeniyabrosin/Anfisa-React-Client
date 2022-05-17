@@ -8,7 +8,7 @@ import {
 import { filteringProvider } from '@service-providers/filtering-regime'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
-import datasetStore from '../dataset'
+import datasetStore from '../dataset/dataset'
 import { AvailablePresetsAsyncStore } from './available-presets.async.store'
 
 export class FilterPresetsStore {
@@ -19,14 +19,15 @@ export class FilterPresetsStore {
   constructor() {
     makeAutoObservable(this)
 
-    // TODO: temporary for avoid circular dependencies
-    datasetStore.getActivePreset = () => this.activePreset
-
     reaction(
       () => datasetStore.datasetName,
       datasetName => {
         this.resetActivePreset()
-        this.presets.setQuery({ datasetName })
+        if (datasetName) {
+          this.presets.setQuery({ datasetName })
+        } else {
+          this.presets.reset()
+        }
       },
     )
   }

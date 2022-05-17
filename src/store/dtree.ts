@@ -2,24 +2,25 @@
 import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { FilterCountsType } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { getApiUrl } from '@core/get-api-url'
-import { CreateEmptyStepPositions } from '@pages/filter/active-step.store'
-import { TFilteringStatCounts } from '@service-providers/common'
+import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
+import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
-  IDsStatArguments,
-  IStatfuncArguments,
-} from '@service-providers/filtering-regime'
+  DtreeSetPointKinds,
+  IDtreeSetPoint,
+  PointCount,
+} from '@service-providers/decision-trees'
+import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
+import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
-import { calculateAcceptedVariants } from '@utils/calculateAcceptedVariants'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import activeStepStore, {
   ActiveStepOptions,
-} from '../pages/filter/active-step.store'
-import datasetStore from './dataset'
+} from '../pages/filter/dtree/components/active-step.store'
+import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
+import datasetStore from './dataset/dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
 export type IStepData = {
@@ -30,8 +31,8 @@ export type IStepData = {
   excluded: boolean
   isActive: boolean
   isReturnedVariantsActive: boolean
-  startFilterCounts: FilterCountsType
-  difference: FilterCountsType
+  conditionPointIndex: number | null
+  returnPointIndex: number | null
   comment?: string
   condition?: string
   isFinalStep?: boolean
@@ -43,6 +44,11 @@ interface IRequestData {
     setCode: string
     statCode: string
   }
+}
+
+interface IDtreeFilteredCounts {
+  accepted: number
+  rejected: number
 }
 
 class DtreeStore {
@@ -69,10 +75,9 @@ class DtreeStore {
   selectedFilters: string[] = []
   dtreeStepIndices: string[] = []
 
-  pointCounts: [number | null][] = []
-  acceptedVariants = 0
+  pointCounts: PointCount[] = []
 
-  evalStatus = undefined
+  evalStatus = ''
   savingStatus: any = []
   shouldLoadTableModal = false
 
@@ -96,16 +101,72 @@ class DtreeStore {
   stepAmout = 0
 
   isModalSaveDatasetVisible = false
-  isTableModalVisible = false
+  isModalViewVariantsVisible = false
   tableModalIndexNumber: null | number = null
 
   requestData: IRequestData[] = []
 
-  actionHistory: IDsStatArguments[] = []
+  actionHistory: IDtreeSetArguments[] = []
   actionHistoryIndex = -1
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  get statAmount(): TFilteringStatCounts | undefined {
+    return this.stat.filteredCounts
+  }
+
+  get isXl(): boolean {
+    return !this.dtree || this.dtree.kind === 'xl'
+  }
+
+  get acceptedVariants(): number {
+    const counts = this.pointCounts
+
+    return this.stepData.reduce((acc, { excluded, returnPointIndex }) => {
+      if (!excluded && returnPointIndex !== null) {
+        return acc + (counts[returnPointIndex]?.[0] ?? 0)
+      }
+
+      return acc
+    }, 0)
+  }
+
+  /**
+   * totalFilteredCounts returns accepted and rejected variants for XL dataset,
+   * and transcribed variants for WS
+   */
+  get totalFilteredCounts(): IDtreeFilteredCounts | undefined {
+    if (!this.dtree || !this.isCountsReceived) {
+      return undefined
+    }
+    const isXl = this.isXl
+    const points: IDtreeSetPoint[] = this.dtree.points
+    const totalCounts: TItemsCount = this.dtree['total-counts']
+    const counts = this.pointCounts
+
+    let accepted = 0
+
+    for (let i = 0; i < points.length; ++i) {
+      const { kind, decision } = points[i]
+
+      if (kind === DtreeSetPointKinds.RETURN && decision === true) {
+        const count = counts[i]
+
+        if (!count) {
+          return undefined
+        }
+        accepted += count[isXl ? 0 : 1] ?? 0
+      }
+    }
+
+    const rejected = (totalCounts[isXl ? 0 : 1] as number) - accepted
+
+    return {
+      accepted,
+      rejected,
+    }
   }
 
   // 1. Functions to load / draw / edit decision trees
@@ -118,8 +179,8 @@ class DtreeStore {
         excluded: true,
         isActive: false,
         isReturnedVariantsActive: false,
-        startFilterCounts: null,
-        difference: null,
+        conditionPointIndex: 0,
+        returnPointIndex: null,
       },
     ]
 
@@ -130,14 +191,16 @@ class DtreeStore {
 
     const stepCodes = getDataFromCode(this.dtreeCode)
 
+    const points: unknown[] | undefined = this.dtree?.points
+
     const finalStep: IStepData = {
       step: newStepData.length,
       groups: [],
       excluded: !stepCodes[stepCodes.length - 1]?.result,
       isActive: false,
       isReturnedVariantsActive: false,
-      startFilterCounts: null,
-      difference: null,
+      conditionPointIndex: null,
+      returnPointIndex: points ? points.length - 1 : null,
       isFinalStep: true,
     }
 
@@ -161,10 +224,6 @@ class DtreeStore {
     )
   }
 
-  get statAmount(): TFilteringStatCounts | undefined {
-    return this.stat.filteredCounts
-  }
-
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
     const shouldGetAnotherIndex = index === indexes.length
@@ -183,21 +242,16 @@ class DtreeStore {
     return stepIndexForApi
   }
 
-  // TODO: change body type
-  async fetchDtreeSetAsync(body: any, shouldSaveInHistory = true) {
+  async fetchDtreeSetAsync(
+    body: IDtreeSetArguments,
+    shouldSaveInHistory = true,
+  ) {
     if (shouldSaveInHistory) addToActionHistory(body)
 
     this.setIsCountsReceived(false)
 
-    const response = await fetch(getApiUrl('dtree_set'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    })
+    const result = await decisionTreesProvider.getDtreeSet(body)
 
-    const result = await response.json()
     const newCode = result.code
 
     runInAction(() => {
@@ -215,7 +269,7 @@ class DtreeStore {
       this.evalStatus = result['eval-status']
     })
 
-    const isLoadingNewTree = !body.has('code')
+    const isLoadingNewTree = !body.code
 
     this.drawDecesionTreeAsync(isLoadingNewTree)
   }
@@ -239,9 +293,11 @@ class DtreeStore {
 
       if (result.request) this.request = result.request
     })
+
+    return result
   }
 
-  setActionHistory(updatedActionHistory: IDsStatArguments[]) {
+  setActionHistory(updatedActionHistory: IDtreeSetArguments[]) {
     runInAction(() => {
       this.actionHistory = [...updatedActionHistory]
     })
@@ -295,30 +351,8 @@ class DtreeStore {
       return element
     })
 
-    const isPositionBefore = position === CreateEmptyStepPositions.BEFORE
-    const isFirstStep = index === 0
-    const prevStepIndex = isFirstStep ? index : index - 1
-
-    const currentStepIndex = isPositionBefore ? prevStepIndex : index
-
-    const prevStartFilterCounts =
-      localStepData?.[currentStepIndex].startFilterCounts
-    const prevDifference = localStepData?.[currentStepIndex].difference
-
-    const isStepCalculated =
-      typeof prevStartFilterCounts === 'number' &&
-      typeof prevDifference === 'number'
-
-    const newStartFilterCounts = isStepCalculated
-      ? prevStartFilterCounts - prevDifference
-      : prevStartFilterCounts
-
-    const startFilterCounts =
-      isFirstStep && isPositionBefore
-        ? prevStartFilterCounts
-        : newStartFilterCounts
-
-    const startSpliceIndex = isPositionBefore ? index : index + 1
+    const startSpliceIndex =
+      position === CreateEmptyStepPositions.BEFORE ? index : index + 1
 
     localStepData.splice(startSpliceIndex, 0, {
       step: index,
@@ -326,8 +360,11 @@ class DtreeStore {
       excluded: true,
       isActive: true,
       isReturnedVariantsActive: false,
-      startFilterCounts,
-      difference: 0,
+      conditionPointIndex:
+        startSpliceIndex < this.stepData.length - 1
+          ? this.stepData[startSpliceIndex].conditionPointIndex
+          : this.stepData[this.stepData.length - 1].returnPointIndex,
+      returnPointIndex: null,
     })
 
     localStepData.forEach((item, currNo: number) => {
@@ -335,7 +372,7 @@ class DtreeStore {
     })
 
     runInAction(() => {
-      this.stepData = [...localStepData]
+      this.stepData = localStepData
     })
 
     this.resetLocalDtreeCode()
@@ -421,14 +458,14 @@ class DtreeStore {
     this.isModalSaveDatasetVisible = false
   }
 
-  openTableModal(index?: number) {
-    this.isTableModalVisible = true
+  openModalViewVariants(index?: number) {
+    this.isModalViewVariantsVisible = true
 
     if (index) this.tableModalIndexNumber = index
   }
 
-  closeTableModal = () => {
-    this.isTableModalVisible = false
+  closeModalViewVariants = () => {
+    this.isModalViewVariantsVisible = false
     this.tableModalIndexNumber = null
   }
 
@@ -458,41 +495,9 @@ class DtreeStore {
     })
   }
 
-  setPointCounts(pointCounts: [number | null][] | number[][]) {
+  setPointCounts(pointCounts: PointCount[]) {
     runInAction(() => {
-      this.pointCounts = JSON.parse(JSON.stringify(pointCounts))
-    })
-  }
-
-  updatePointCounts(pointCounts: [number | null][]) {
-    const localStepData = [...this.stepData]
-
-    const counts = toJS(pointCounts)
-
-    localStepData.forEach((element, index) => {
-      const startCountsIndex = this.getStepIndexForApi(index)
-      const differenceCountsIndex = startCountsIndex + 1
-
-      const isFinalStep = index === localStepData.length - 1
-
-      if (isFinalStep) {
-        element.difference = counts[counts.length - 1]?.[0]
-      } else {
-        element.startFilterCounts = counts[startCountsIndex]?.[0]
-        element.difference = counts[differenceCountsIndex]?.[0]
-      }
-    })
-
-    runInAction(() => {
-      this.stepData = [...localStepData]
-    })
-  }
-
-  setAcceptedVariants() {
-    const calculatedAcceptedVariants = calculateAcceptedVariants(this.stepData)
-
-    runInAction(() => {
-      this.acceptedVariants = calculatedAcceptedVariants
+      this.pointCounts = pointCounts
     })
   }
 

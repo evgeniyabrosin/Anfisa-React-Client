@@ -3,24 +3,19 @@ import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, runInAction } from 'mobx'
 
-import { DsInfoType } from '@declarations'
 import { SortDatasets } from '@core/enum/sort-datasets.enum'
-import { getApiUrl } from '@core/get-api-url'
 import { SortDirection } from '@core/sort-direction.enum'
-import { HgModes } from '@service-providers/dataset-level/dataset-level.interface'
-import {
-  IDirInfo,
-  IDirInfoDatasetDescriptor,
-} from '@service-providers/vault-level/vault-level.interface'
+import { t } from '@i18n'
+import { IDirInfoDatasetDescriptor } from '@service-providers/vault-level/vault-level.interface'
 import vaultProvider from '@service-providers/vault-level/vault-level.provider'
-import datasetStore from './dataset'
+import { showToast } from '@utils/notifications'
+import { DirInfoAsyncStore } from './common/dirinfo.async.store'
 
 type SortDirectionsType = Record<SortDatasets, SortDirection>
 
 class DirInfoStore {
-  dirinfo: IDirInfo | undefined
   selectedDirinfoName = ''
-  dsinfo: DsInfoType = {}
+  dsinfo: IDirInfoDatasetDescriptor | undefined
   sortType: SortDatasets | undefined = SortDatasets.Name
   filterValue = ''
   sortDirections: SortDirectionsType = {
@@ -30,6 +25,12 @@ class DirInfoStore {
   infoFrameLink: string | string[] = ''
   iframeInfoFullscreen = false
   activeInfoName = ''
+
+  readonly dirinfo = new DirInfoAsyncStore()
+
+  get dirInfoData() {
+    return this.dirinfo.data
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -81,7 +82,7 @@ class DirInfoStore {
   }
 
   get dsDistKeys() {
-    let keys = Object.keys(get(this.dirinfo, 'ds-dict', {}))
+    let keys = Object.keys(get(this.dirInfoData, 'ds-dict', {}))
 
     if (this.filterValue) {
       keys = keys.filter(key =>
@@ -101,19 +102,22 @@ class DirInfoStore {
 
     if (this.sortType === SortDatasets.CreatedAt) {
       keys.sort((a, b) => {
-        if (!this.dirinfo?.['ds-dict'][a] || !this.dirinfo?.['ds-dict'][b]) {
-          return 1
-        }
-
         if (
-          !this.dirinfo?.['ds-dict'][a]['create-time'] ||
-          !this.dirinfo?.['ds-dict'][b]['create-time']
+          !this.dirInfoData?.['ds-dict'][a] ||
+          !this.dirInfoData?.['ds-dict'][b]
         ) {
           return 1
         }
 
-        const aDate = new Date(this.dirinfo?.['ds-dict'][a]['create-time'])
-        const bDate = new Date(this.dirinfo?.['ds-dict'][b]['create-time'])
+        if (
+          !this.dirInfoData?.['ds-dict'][a]['create-time'] ||
+          !this.dirInfoData?.['ds-dict'][b]['create-time']
+        ) {
+          return 1
+        }
+
+        const aDate = new Date(this.dirInfoData?.['ds-dict'][a]['create-time'])
+        const bDate = new Date(this.dirInfoData?.['ds-dict'][b]['create-time'])
 
         return this.sortDirections.CreatedAt === SortDirection.ASC
           ? +aDate - +bDate
@@ -149,39 +153,23 @@ class DirInfoStore {
     return [[]]
   }
 
-  async fetchDirInfoAsync() {
-    this.dirinfo = await vaultProvider.getDirInfo()
-  }
-
-  async fetchDsinfoAsync(name: string) {
-    const response = await fetch(getApiUrl(`dsinfo?ds=${name}`), {
-      method: 'POST',
-    })
-
-    const result = await response.json()
-
-    runInAction(() => {
-      this.dsinfo = result
-    })
-
-    datasetStore.setIsXL(result?.kind === 'xl')
-  }
-
   resetData() {
-    this.dirinfo = undefined
     this.selectedDirinfoName = ''
-    this.dsinfo = {}
     this.filterValue = ''
     this.infoFrameLink = ''
     this.iframeInfoFullscreen = false
     this.activeInfoName = ''
   }
 
-  // TODO: update type after implantion IDsInfo interface
-  get locusMode(): HgModes {
-    const meta: any = this.dsinfo.meta
-    const hgModeValue: HgModes = meta?.modes?.[0]
-    return hgModeValue
+  deleteDataset(datasetName: string): void {
+    vaultProvider
+      .dropDs({ ds: datasetName })
+      .then(() => {
+        showToast(t('ds.deleteDialog.toastSucces', { datasetName }), 'success')
+      })
+      .catch(() => {
+        showToast(t('ds.deleteDialog.toastError'), 'error')
+      })
   }
 }
 
