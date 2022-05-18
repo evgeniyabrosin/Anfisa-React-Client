@@ -1,8 +1,10 @@
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
-import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
+import { t } from '@i18n'
+import filterDtreesStore from '@store/filter-dtrees'
 import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
 import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
@@ -16,12 +18,14 @@ import filteringRegimeProvider from '@service-providers/filtering-regime/filteri
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
+import { showToast } from '@utils/notifications'
 import activeStepStore, {
   ActiveStepOptions,
 } from '../pages/filter/dtree/components/active-step.store'
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
+import { DtreeModifiedState } from './filter-dtrees/filter-dtrees.store'
 
 export type IStepData = {
   step: number
@@ -58,9 +62,8 @@ class DtreeStore {
   dtreeCode = ''
   startDtreeCode = ''
   localDtreeCode = ''
-  currentDtreeName = ''
   previousDtreeName = ''
-  createNewDtreeName = ''
+  private _dtreeModifiedState: DtreeModifiedState = DtreeModifiedState.NotDtree
   actionName: ActionFilterEnum | undefined = undefined
 
   statFuncData: any = []
@@ -111,6 +114,17 @@ class DtreeStore {
 
   constructor() {
     makeAutoObservable(this)
+
+    reaction(
+      () => filterDtreesStore.activeDtree,
+      dtreeName => {
+        if (dtreeName) {
+          this.loadDtree(dtreeName)
+        } else {
+          this.resetPreset()
+        }
+      },
+    )
   }
 
   get statAmount(): TFilteringStatCounts | undefined {
@@ -247,8 +261,12 @@ class DtreeStore {
     shouldSaveInHistory = true,
   ) {
     if (shouldSaveInHistory) addToActionHistory(body)
-
     this.setIsCountsReceived(false)
+
+    // TODO[control]: need to be fixed when async store for dree_set is ready
+    if (!body.dtree) {
+      this.setDtreeModifiedState()
+    }
 
     const result = await decisionTreesProvider.getDtreeSet(body)
 
@@ -257,10 +275,10 @@ class DtreeStore {
     runInAction(() => {
       if (
         !this.startDtreeCode ||
-        this.currentDtreeName !== this.previousDtreeName
+        filterDtreesStore.activeDtree !== this.previousDtreeName
       ) {
         this.startDtreeCode = newCode
-        this.setPrevDtreeName(this.currentDtreeName)
+        this.setPrevDtreeName(filterDtreesStore.activeDtree)
       }
 
       this.dtree = result
@@ -307,6 +325,45 @@ class DtreeStore {
     runInAction(() => {
       this.actionHistoryIndex = updatedIndex
     })
+  }
+
+  private loadDtree(dtreeName: string): void {
+    this.isDtreeLoading = true
+
+    this.fetchDtreeSetAsync({
+      ds: datasetStore.datasetName,
+      dtree: dtreeName,
+    })
+      .then(() => {
+        this.setDtreeModifiedState(DtreeModifiedState.NotModified)
+      })
+      .catch(() => {
+        showToast(t('dtree.errors.loadDtree', { dtreeName }), 'error')
+      })
+      .finally(() => {
+        runInAction(() => {
+          this.isDtreeLoading = false
+        })
+      })
+  }
+
+  private setDtreeModifiedState(state?: DtreeModifiedState): void {
+    if (state === undefined) {
+      if (this._dtreeModifiedState === DtreeModifiedState.NotModified) {
+        this._dtreeModifiedState = DtreeModifiedState.Modified
+        filterDtreesStore.resetActiveDtree()
+      }
+    } else if (state !== this._dtreeModifiedState) {
+      this._dtreeModifiedState = state
+    }
+  }
+
+  private resetPreset(): void {
+    if (this._dtreeModifiedState !== DtreeModifiedState.Modified) {
+      // TODO[control]: will be implemented with the new async store for dtree_set
+    }
+
+    this.setDtreeModifiedState(DtreeModifiedState.NotDtree)
   }
 
   // 2. UI functions to display adding / deleting / editing steps
@@ -590,26 +647,6 @@ class DtreeStore {
   resetData() {
     this.filteredCounts = 0
     this.statRequestId = ''
-  }
-
-  setCurrentDtreeName(name: string) {
-    if (this.currentDtreeName) {
-      this.setPrevDtreeName(this.currentDtreeName)
-    }
-
-    this.currentDtreeName = name
-  }
-
-  resetCurrentDtreeName() {
-    this.currentDtreeName = ''
-  }
-
-  setCreateNewDtreeName(dtreeName: string) {
-    this.createNewDtreeName = dtreeName
-  }
-
-  resetCreateNewDtreeName() {
-    this.createNewDtreeName = ''
   }
 
   setPrevDtreeName(name: string) {

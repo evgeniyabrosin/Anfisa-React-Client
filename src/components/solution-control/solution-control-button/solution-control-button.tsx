@@ -1,4 +1,4 @@
-import styles from './preset-control-button.module.css'
+import styles from './solution-control-button.module.css'
 
 import { ButtonHTMLAttributes, ReactElement } from 'react'
 import cn from 'classnames'
@@ -6,34 +6,36 @@ import cn from 'classnames'
 import { t } from '@i18n'
 import { Icon } from '@ui/icon'
 
-interface IPresetControlButtonProps
+interface ISolutionControlButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
-  presetName: string | undefined
+  solutionName: string | undefined
+  controlName: string
   isOpen: boolean
   isDeleteShown: boolean
   onDeleteClick: () => void
 }
 
-export const PresetControlButton = ({
+export const SolutionControlButton = ({
   className,
-  presetName,
+  solutionName,
+  controlName,
   isOpen,
   isDeleteShown,
   onDeleteClick,
   ...buttonProps
-}: IPresetControlButtonProps): ReactElement => {
+}: ISolutionControlButtonProps): ReactElement => {
   return (
     <button
-      className={cn(styles.presetControlButton, className)}
+      className={cn(styles.solutionControlButton, className)}
       {...buttonProps}
     >
-      <span className={styles.presetControlButton__label}>
-        {presetName || t('presetControl.selectPreset')}
+      <span className={styles.solutionControlButton__label}>
+        {solutionName || t('solutionControl.selectSolution', { controlName })}
       </span>
       <span
         className={cn(
-          styles.presetControlButton__icon,
-          isDeleteShown && styles.presetControlButton__icon_delete,
+          styles.solutionControlButton__icon,
+          isDeleteShown && styles.solutionControlButton__icon_delete,
         )}
       >
         {isDeleteShown ? (
@@ -48,8 +50,8 @@ export const PresetControlButton = ({
         ) : (
           <span
             className={cn(
-              styles.presetControlButton__arrow,
-              isOpen && styles.presetControlButton__arrow_open,
+              styles.solutionControlButton__arrow,
+              isOpen && styles.solutionControlButton__arrow_open,
             )}
           />
         )}

@@ -1,13 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-import { t } from '@i18n'
-import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
-import {
-  ActionTypes,
-  DtreeModifyingActions,
-} from '@service-providers/decision-trees'
-import { showToast } from '@utils/notifications/showToast'
 
 class ModalsVisibilityStore {
   groupNameToChange = ''
@@ -28,41 +21,9 @@ class ModalsVisibilityStore {
   isModalNumbersVisible = false
 
   isModalTextEditorVisible = false
-  isModalConfirmationVisible = false
 
   constructor() {
     makeAutoObservable(this)
-  }
-
-  public deleteTree(): void {
-    const notification: string = `${t('dtree.dtree')} "${
-      dtreeStore.currentDtreeName
-    }" ${t('dtree.hasBeenDeleted')}`
-
-    dtreeStore.fetchDtreeSetAsync({
-      ds: datasetStore.datasetName,
-      code: dtreeStore.dtreeCode,
-      instr: [
-        ActionTypes.DTREE,
-        DtreeModifyingActions.DELETE,
-        dtreeStore.currentDtreeName,
-      ],
-    })
-
-    showToast(notification, 'success')
-
-    dtreeStore.setActionName()
-
-    dtreeStore.resetCurrentDtreeName()
-  }
-
-  public openModalConfirmation(dtreeOperation: string): void {
-    this.isModalConfirmationVisible = true
-    this.dtreeOperation = dtreeOperation
-  }
-
-  public closeModalConfirmation(): void {
-    this.isModalConfirmationVisible = false
   }
 
   // 1. Modals for creation brand new tree

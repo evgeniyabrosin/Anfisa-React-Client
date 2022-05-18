@@ -1,4 +1,4 @@
-.preset-control-button {
+.solution-control-button {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -11,7 +11,7 @@
   cursor: pointer;
 
   &__label {
-    flex: 1 0 auto;
+    flex: 1 0 0;
     overflow: hidden;
     text-overflow: ellipsis;
     color: theme("colors.white");

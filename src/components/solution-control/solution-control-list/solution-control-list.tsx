@@ -1,4 +1,4 @@
-import styles from './preset-control-list.module.css'
+import styles from './solution-control-list.module.css'
 
 import { ReactElement, useState } from 'react'
 
@@ -8,23 +8,23 @@ import { MenuList, MenuListItem } from '@ui/menu-list'
 import { Popover } from '@ui/popover'
 import { ISolutionEntryDescription } from '@service-providers/common'
 
-interface IPresetControlListProps {
+interface ISolutionControlListProps {
   className?: string
-  presets: ISolutionEntryDescription[]
+  solutions: ISolutionEntryDescription[]
   selected?: string
-  onSelect: (presetName: string) => void
-  onModify: (presetName: string) => void
-  onDelete: (presetName: string) => void
+  onSelect: (solutionName: string) => void
+  onModify: (solutionName: string) => void
+  onDelete: (solutionName: string) => void
 }
 
-export const PresetControlList = ({
+export const SolutionControlList = ({
   className,
-  presets,
+  solutions,
   selected,
   onSelect,
   onModify,
   onDelete,
-}: IPresetControlListProps): ReactElement => {
+}: ISolutionControlListProps): ReactElement => {
   const [contextMenuItem, setContextMenuItem] =
     useState<{
       name: string
@@ -38,7 +38,7 @@ export const PresetControlList = ({
   return (
     <>
       <MenuList className={className} wrap="nowrap">
-        {presets?.map(({ name, standard }) => (
+        {solutions?.map(({ name, standard }) => (
           <MenuListItem
             key={name}
             label={name}
@@ -72,14 +72,14 @@ export const PresetControlList = ({
         >
           <MenuList isDense>
             <MenuListItem
-              label={t('presetControl.modify')}
+              label={t('solutionControl.modify')}
               onClick={() => {
                 closeContextMenu()
                 onModify(contextMenuItem?.name ?? '')
               }}
             />
             <MenuListItem
-              label={t('presetControl.delete')}
+              label={t('solutionControl.delete')}
               onClick={() => {
                 closeContextMenu()
                 onDelete(contextMenuItem?.name ?? '')
