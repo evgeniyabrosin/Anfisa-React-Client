@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import filterStore from '@store/filter'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 
 interface IPanelButtons {
   onSubmit: () => void

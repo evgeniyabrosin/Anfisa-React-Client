@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { t } from '@i18n'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 
 export const FileMissing = (): ReactElement => {

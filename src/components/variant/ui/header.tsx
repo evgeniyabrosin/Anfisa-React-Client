@@ -11,7 +11,7 @@ import columnsStore from '@store/ws/columns'
 import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import {
   HgModes,

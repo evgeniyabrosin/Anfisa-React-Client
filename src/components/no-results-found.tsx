@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 
 export interface INoResultsFoundProps {
   text: string

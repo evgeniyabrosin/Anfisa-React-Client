@@ -7,7 +7,7 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Dialog } from '@ui/dialog'
 
 interface IProps {

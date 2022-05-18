@@ -10,15 +10,15 @@ import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { DropDown } from '@ui/dropdown'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
+import { FilterControlRefiner } from '@pages/filter/refiner/components/filter-control-refiner'
 import { moveActionHistory } from '@utils/moveActionHistory'
 import { FilterControlDtree } from '../../dtree/components/filter-control-dtree'
 import modalsVisibilityStore from '../../dtree/components/modals/modals-visibility-store'
-import { FilterControlRefiner } from '../../refiner/components/filter-control-refiner/filter-control-refiner'
 import {
   FilterControlOptions,
   FilterControlOptionsNames,

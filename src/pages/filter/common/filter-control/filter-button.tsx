@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import { Button, ButtonProps } from '@ui/button/button'
+import { Button, ButtonProps } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 

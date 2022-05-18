@@ -6,7 +6,7 @@ import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { GlbPagesNames } from '@glb/glb-names'
 
 export const EditFilter = observer((): ReactElement => {

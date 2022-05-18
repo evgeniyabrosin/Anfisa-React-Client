@@ -5,7 +5,7 @@ import noop from 'lodash/noop'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { Loader } from '@components/loader'

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { deleteAttribute } from '@utils/changeAttribute/deleteAttribute'
 

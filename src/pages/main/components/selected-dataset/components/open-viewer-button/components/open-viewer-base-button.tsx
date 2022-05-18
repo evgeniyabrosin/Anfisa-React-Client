@@ -2,7 +2,7 @@ import { ReactElement, RefObject } from 'react'
 import cn from 'classnames'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { DatasetInfoDataCy } from '@components/data-testid/dataset-info.cy'
 

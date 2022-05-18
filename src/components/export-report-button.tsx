@@ -6,19 +6,19 @@ import { t } from '@i18n'
 import { theme } from '@theme'
 import operationsStore from '@store/operations'
 import mainTableStore from '@store/ws/main-table.store'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 import { Loader } from './loader'
 
-interface Props {
+interface IExportReportButtonProps {
   isOpen?: boolean
   refEl: any
   onClick?: () => void
 }
 
 export const ExportReportButton = observer(
-  ({ isOpen, refEl, ...rest }: Props): ReactElement => {
+  ({ isOpen, refEl, ...rest }: IExportReportButtonProps): ReactElement => {
     const { variantCounts } = mainTableStore.fixedStatAmount
     const disabled = !variantCounts
 

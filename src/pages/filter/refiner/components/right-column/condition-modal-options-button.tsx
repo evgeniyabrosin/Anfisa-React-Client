@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 
 interface IProps {

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 
 import { t } from '@i18n'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
 
 export interface IDialogStandardActionsProps {

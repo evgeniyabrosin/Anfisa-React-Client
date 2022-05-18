@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 import { t } from '@i18n'
-import { Button } from '@ui/button/button'
+import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { FilterDatasetDataCy } from '@components/data-testid/filter-dataset.cy'
 import { HandleDataset } from '../handle-dataset/handle-dataset'
