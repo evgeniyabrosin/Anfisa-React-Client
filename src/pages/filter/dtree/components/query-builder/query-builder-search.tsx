@@ -48,7 +48,7 @@ export const QueryBuilderSearch = observer(
     }
 
     return (
-      <div className="flex w-full">
+      <div className="flex w-full items-center">
         <InputSearch
           className="flex-1"
           placeholder={t('filter.searchForAField')}
@@ -68,9 +68,7 @@ export const QueryBuilderSearch = observer(
                   className="mr-2"
                 />
 
-                <span className="text-sm w-[60px]">
-                  {t(`filter.switcher.${isSwitched ? 'fullWord' : 'partWord'}`)}
-                </span>
+                <span className="text-sm">{t('filter.switcher')}</span>
               </div>
             )}
 
