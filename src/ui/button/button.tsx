@@ -1,10 +1,11 @@
 import styles from './button.module.css'
 
-import { MouseEvent, ReactElement } from 'react'
+import { FC, MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
+import _ from 'lodash'
 import { CSSProperties } from 'styled-components'
 
-export interface ButtonProps {
+export interface IButtonProps {
   text?: string | JSX.Element
   textSize?: 'xs' | 'sm'
   size?: 'xs' | 'sm' | 'md'
@@ -28,7 +29,7 @@ export interface ButtonProps {
   style?: CSSProperties
 }
 
-export const Button = ({
+export const Button: FC<IButtonProps> = ({
   text,
   textSize = 'sm',
   size = 'md',
@@ -44,24 +45,28 @@ export const Button = ({
   refEl,
   dataTestId,
   style = {},
-}: ButtonProps): ReactElement => {
-  const isSecondary = variant === 'secondary'
-  const isPrimaryDark = variant === 'primary-dark'
-  const isSecondaryDark = variant === 'secondary-dark'
-  const isDiestruction = variant === 'diestruction'
+}) => {
   const isOnlyIcon = icon && !append && !prepend && !text
 
-  const stylesButton = isOnlyIcon
-    ? cn(
-        styles.button_icon_only,
-        size === 'md' && styles.button_icon_only_l,
-        size === 'xs' && styles.button_icon_only_s,
-      )
-    : cn(
-        size === 'md' && styles.button_l,
-        size === 'sm' && styles.button_m,
-        size === 'xs' && styles.button_s,
-      )
+  const buttonSize = isOnlyIcon
+    ? styles[`button_icon_only_${size}`]
+    : variant === 'secondary-dark'
+    ? styles[`button_secondaryDark_${size}`]
+    : styles[`button_${size}`]
+
+  const buttonStyles = cn(
+    className,
+    styles.button,
+    isOnlyIcon && styles.button_icon_only,
+    buttonSize,
+    styles[`button_${_.camelCase(variant)}`],
+  )
+
+  const textStyle = cn(
+    styles[`buttonText_${textSize}`],
+    prepend && styles.buttonText_left,
+    (icon || append) && styles.buttonText_right,
+  )
 
   const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
     !disabled && onClick && onClick(event)
@@ -79,15 +84,7 @@ export const Button = ({
     <button
       data-testid={dataTestId}
       disabled={disabled}
-      className={cn(
-        className,
-        styles.button,
-        isDiestruction && styles.button_diestruction,
-        isSecondary && styles.button_secondary,
-        isPrimaryDark && styles.button_dark,
-        isSecondaryDark && styles.button_secondary_dark,
-        stylesButton,
-      )}
+      className={buttonStyles}
       ref={refEl}
       onClick={clickHandler}
       onMouseUp={onMouseUpHandler}
@@ -95,9 +92,7 @@ export const Button = ({
       style={style}
     >
       {prepend}
-      {text && (
-        <span className={`mx-1 text-${textSize} leading-14px`}>{text}</span>
-      )}
+      {text && <span className={textStyle}>{text}</span>}
       {icon}
       {append}
     </button>

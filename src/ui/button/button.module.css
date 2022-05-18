@@ -12,15 +12,30 @@
 
   &_icon_only {
     border-radius: 4px;
-    padding: 8px 10px;
 
-    &_l {
+    &_sm {
+      padding: 8px 10px;
+    }
+
+    &_md {
       padding: 12px 14px;
     }
 
-    &_s {
+    &_xs {
       padding: 7px 8px;
     }
+  }
+
+  &_sm {
+    padding: 6px 24px;
+  }
+
+  &_md {
+    padding: 6px 32px;
+  }
+
+  &_xs {
+    padding: 4px 20px;
   }
 
   &:hover {
@@ -34,18 +49,6 @@
   &:disabled {
     color: theme("colors.grey.blue");
     background-color: theme("colors.red.disabled");
-  }
-
-  &_m {
-    padding: 6px 24px;
-  }
-
-  &_l {
-    padding: 6px 32px;
-  }
-
-  &_s {
-    padding: 4px 20px;
   }
 
   &_secondary {
@@ -88,24 +91,27 @@
     }
   }
 
-  &_dark {
+  &_primary-dark {
     &:disabled {
       background-color: theme("colors.blue.lighter");
     }
   }
 
-  &_secondary_dark {
+  &_secondary-dark {
     background-color: inherit;
     color: theme("colors.white");
     border: 2px solid theme("colors.blue.bright");
-    padding: 4px 22px;
 
-    &_l {
+    &_xs {
+      padding: 2px 18px;
+    }
+
+    &_md {
       padding: 4px 30px;
     }
 
-    &_s {
-      padding: 2px 18px;
+    &_sm {
+      padding: 4px 22px;
     }
 
     &:hover {
@@ -123,5 +129,25 @@
       background-color: inherit;
       border-color: theme("colors.blue.lighter");
     }
+  }
+}
+
+.button-text {
+  &_sm {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &_xs {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  &_left {
+    margin-left: 4px;
+  }
+
+  &_right {
+    margin-right: 4px;
   }
 }

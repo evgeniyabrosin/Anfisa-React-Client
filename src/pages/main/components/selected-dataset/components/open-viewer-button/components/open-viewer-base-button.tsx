@@ -21,7 +21,7 @@ export const OpenViewerBaseButton = ({
     text={t('home.openInViewer')}
     dataTestId={DatasetInfoDataCy.openInViewer}
     refEl={refEl}
-    size="md"
+    size="sm"
     onClick={rest.onClick}
     {...rest}
     append={
