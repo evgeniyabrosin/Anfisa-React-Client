@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from 'axios'
-import { toJS } from 'mobx'
 
 import { getIncompletePoints } from '@service-providers/filtering-regime/filtering-regime.utils'
 import { ServiceProviderBase } from '../common'
@@ -44,18 +43,20 @@ class DecisionTreesProvider extends ServiceProviderBase {
 
     let response = await this.getDtreeCounts(params)
 
-    const { 'rq-id': rq_id, 'point-counts': pointCounts } = response
-    let incompletePoints = getIncompletePoints(pointCounts)
+    let incompletePoints = getIncompletePoints(response['point-counts'])
 
     while (incompletePoints.length > 0) {
       if (onPartialResponse) {
         onPartialResponse(response)
       }
 
-      response = await this.getDtreeCounts({
-        ...params,
-        points: incompletePoints,
-      })
+      response = await this.getDtreeCounts(
+        {
+          ...params,
+          points: incompletePoints,
+        },
+        { signal: abortSignal },
+      )
       incompletePoints = getIncompletePoints(response['point-counts'])
     }
 
