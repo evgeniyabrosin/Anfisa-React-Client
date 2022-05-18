@@ -106,7 +106,14 @@ export const CompoundRequest = observer((): ReactElement => {
         />
       </div>
 
-      <RequestConditions activeRequestIndex={activeRequestIndex} />
+      {requestCondition.map(([requestBlockNumber], index) => (
+        <RequestConditions
+          key={index}
+          requestBlockNumber={requestBlockNumber}
+          index={index}
+          activeRequestIndex={activeRequestIndex}
+        />
+      ))}
 
       <div className="flex items-center justify-between w-full mt-4 text-14">
         <ControlButtons activeRequestIndex={activeRequestIndex} />

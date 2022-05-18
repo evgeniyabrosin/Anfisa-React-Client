@@ -85,12 +85,12 @@ export const ModalCompoundRequest = observer((): ReactElement => {
       </div>
 
       <div className="flex flex-col w-full mt-4 text-14">
-        {requestCondition.map((item: any[], index: number) => (
+        {requestCondition.map(([requestBlockNumber], index) => (
           <RequestBlock
-            key={item[index] + index}
+            key={index}
             index={index}
             activeRequestIndex={activeRequestIndex}
-            item={item}
+            requestBlockNumber={requestBlockNumber}
           />
         ))}
       </div>
