@@ -13,23 +13,17 @@ export const getStepDataAsync = async (
   const isXlDataset = dtreeStore.dtree.kind === 'xl'
 
   if (isXlDataset) {
-    // const code = dtreeStore.dtreeCode
-    // const stepCount = pointCounts.length
-
     const pointCountsLength = pointCounts.length
     const points = [...new Array(pointCountsLength).keys()]
     const rq_id = dtreeStore.dtree['rq-id']
 
-    // TODO: mind about it
     dtreeStore.dtreeCounts.setQuery({
       ds: datasetStore.datasetName,
       tm: '1',
       code: dtreeStore.dtreeCode,
-      // change it
       points,
       rq_id,
     })
-    // fetchDtreeCountsAsync(code, stepCount)
   } else {
     dtreeStore.setIsCountsReceived(true)
     // dtreeStore.setPointCounts(toJS(pointCounts))

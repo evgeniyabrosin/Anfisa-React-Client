@@ -63,28 +63,6 @@ class DecisionTreesProvider extends ServiceProviderBase {
     return response
   }
 
-  // public async getFullDtreeCountsBase(
-  //   baseRequest: () => Promise<IDtreeCountsResponse>,
-  //   options: IGetFullDreeCountsOptions,
-  // ): Promise<IDtreeCountsResponse> {
-  //   const { abortSignal, onPartialResponse } = options
-
-  //   const response = await baseRequest()
-
-  //   const { 'rq-id': rq_id, 'point-counts': pointCounts } = response
-  //   const incompletePoints = getIncompletePoints(pointCounts)
-
-  //   while (incompletePoints.length > 0) {
-  //     if (onPartialResponse) {
-  //       onPartialResponse(response)
-  //     }
-
-  //     // this.getDtreeCounts()
-  //   }
-
-  //   return response
-  // }
-
   // TODO: dtree_check  Decision tree code check
   // TODO: dtree_cmp
 
