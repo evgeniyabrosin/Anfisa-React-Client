@@ -6,6 +6,7 @@ import { ServiceProviderBase } from '../common'
 import { filteringProvider } from '../filtering-regime'
 import { adaptDtreeStatResponse } from './decision-trees.adapters'
 import {
+  IDtreeCountsArguments,
   IDtreeCountsResponse,
   IDtreeSetArguments,
   IDtreeSetResponse,
@@ -23,7 +24,7 @@ class DecisionTreesProvider extends ServiceProviderBase {
   }
 
   public async getDtreeCounts(
-    params: IDtreeSetArguments,
+    params: IDtreeCountsArguments,
     options: Partial<AxiosRequestConfig<string>> = {},
   ): Promise<IDtreeCountsResponse> {
     const response = await this.post<IDtreeCountsResponse>(
@@ -36,28 +37,52 @@ class DecisionTreesProvider extends ServiceProviderBase {
   }
 
   public async getFullDtreeCounts(
-    params: IDtreeSetArguments,
+    params: IDtreeCountsArguments,
     options: IGetFullDreeCountsOptions,
   ) {
-    return this.getFullDtreeCountsBase(
-      () => this.getDtreeCounts(params),
-      options,
-    )
-  }
-
-  public async getFullDtreeCountsBase(
-    baseRequest: () => Promise<IDtreeCountsResponse>,
-    options: IGetFullDreeCountsOptions,
-  ): Promise<IDtreeCountsResponse> {
     const { abortSignal, onPartialResponse } = options
 
-    const result = await baseRequest()
+    let response = await this.getDtreeCounts(params)
 
-    const { 'rq-id': rq_id, 'point-counts': pointCounts } = result
-    const incompletePoints = getIncompletePoints(pointCounts)
+    const { 'rq-id': rq_id, 'point-counts': pointCounts } = response
+    let incompletePoints = getIncompletePoints(pointCounts)
 
-    return result
+    while (incompletePoints.length > 0) {
+      if (onPartialResponse) {
+        onPartialResponse(response)
+      }
+
+      response = await this.getDtreeCounts({
+        ...params,
+        points: incompletePoints,
+      })
+      incompletePoints = getIncompletePoints(response['point-counts'])
+    }
+
+    return response
   }
+
+  // public async getFullDtreeCountsBase(
+  //   baseRequest: () => Promise<IDtreeCountsResponse>,
+  //   options: IGetFullDreeCountsOptions,
+  // ): Promise<IDtreeCountsResponse> {
+  //   const { abortSignal, onPartialResponse } = options
+
+  //   const response = await baseRequest()
+
+  //   const { 'rq-id': rq_id, 'point-counts': pointCounts } = response
+  //   const incompletePoints = getIncompletePoints(pointCounts)
+
+  //   while (incompletePoints.length > 0) {
+  //     if (onPartialResponse) {
+  //       onPartialResponse(response)
+  //     }
+
+  //     // this.getDtreeCounts()
+  //   }
+
+  //   return response
+  // }
 
   // TODO: dtree_check  Decision tree code check
   // TODO: dtree_cmp
