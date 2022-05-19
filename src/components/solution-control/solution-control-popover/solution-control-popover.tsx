@@ -1,4 +1,4 @@
-import styles from './preset-control-popover.module.css'
+import styles from './solution-control-popover.module.css'
 
 import { ReactElement } from 'react'
 import cn from 'classnames'
@@ -7,24 +7,26 @@ import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { IPopoverBaseProps, Popover } from '@ui/popover'
 import { ISolutionEntryDescription } from '@service-providers/common'
-import { PresetControlList } from '../preset-control-list'
+import { SolutionControlList } from '../solution-control-list'
 
-interface IPresetControlPopoverProps extends IPopoverBaseProps {
+interface ISolutionControlPopoverProps extends IPopoverBaseProps {
   isCreateDisabled?: boolean
   onCreate: () => void
-  onApply: (presetName: string) => void
-  onJoin?: (presetName: string) => void
-  onSelect: (presetName: string) => void
-  onModify: (presetName: string) => void
-  onDelete: (presetName: string) => void
-  presets: ISolutionEntryDescription[] | undefined
+  onApply: (solutionName: string) => void
+  onJoin?: (solutionName: string) => void
+  onSelect: (solutionName: string) => void
+  onModify: (solutionName: string) => void
+  onDelete: (solutionName: string) => void
+  solutions: ISolutionEntryDescription[] | undefined
   selected: string
+  controlName: string
 }
 
-export const PresetControlPopover = ({
-  presets,
+export const SolutionControlPopover = ({
+  solutions,
   selected,
   isCreateDisabled,
+  controlName,
   onCreate,
   onSelect,
   onApply,
@@ -33,54 +35,54 @@ export const PresetControlPopover = ({
   onModify,
   onClose,
   ...popoverProps
-}: IPresetControlPopoverProps): ReactElement => {
+}: ISolutionControlPopoverProps): ReactElement => {
   return (
     <Popover onClose={onClose} {...popoverProps}>
-      <section className={styles.presetControlCard}>
-        <header className={styles.presetControlCard__header}>
+      <section className={styles.solutionControlCard}>
+        <header className={styles.solutionControlCard__header}>
           <button
             disabled={isCreateDisabled}
             className={cn(
-              styles.presetControlCard__createButton,
+              styles.solutionControlCard__createButton,
               isCreateDisabled &&
-                styles.presetControlCard__createButton_disabled,
+                styles.solutionControlCard__createButton_disabled,
             )}
             onClick={() => {
               onClose?.()
               onCreate()
             }}
           >
-            {t('presetControl.createNewPreset')}
+            {t('solutionControl.createNewSolution', { controlName })}
           </button>
         </header>
-        {presets && (
-          <PresetControlList
-            className={styles.presetControlCard__list}
-            presets={presets}
+        {solutions && (
+          <SolutionControlList
+            className={styles.solutionControlCard__list}
+            solutions={solutions}
             selected={selected}
             onSelect={onSelect}
-            onModify={presetName => {
+            onModify={solutionName => {
               onClose?.()
-              onModify(presetName)
+              onModify(solutionName)
             }}
-            onDelete={presetName => {
+            onDelete={solutionName => {
               onClose?.()
-              onDelete(presetName)
+              onDelete(solutionName)
             }}
           />
         )}
-        <footer className={styles.presetControlCard__actions}>
+        <footer className={styles.solutionControlCard__actions}>
           <Button
-            className={styles.presetControlCard__button}
+            className={styles.solutionControlCard__button}
             variant="tertiary"
             text={t('general.cancel')}
             onClick={onClose}
           />
           {onJoin && (
             <Button
-              className={styles.presetControlCard__button}
+              className={styles.solutionControlCard__button}
               variant="secondary"
-              text={t('presetControl.join')}
+              text={t('solutionControl.join')}
               disabled={!selected}
               onClick={() => {
                 onClose?.()
@@ -89,8 +91,8 @@ export const PresetControlPopover = ({
             />
           )}
           <Button
-            className={styles.presetControlCard__button}
-            text={t('presetControl.apply')}
+            className={styles.solutionControlCard__button}
+            text={t('solutionControl.apply')}
             disabled={!selected}
             onClick={() => {
               onClose?.()

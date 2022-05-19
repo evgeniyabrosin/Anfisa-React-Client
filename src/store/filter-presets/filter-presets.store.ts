@@ -23,7 +23,11 @@ export class FilterPresetsStore {
       () => datasetStore.datasetName,
       datasetName => {
         this.resetActivePreset()
-        this.presets.setQuery({ datasetName })
+        if (datasetName) {
+          this.presets.setQuery({ datasetName })
+        } else {
+          this.presets.reset()
+        }
       },
     )
   }

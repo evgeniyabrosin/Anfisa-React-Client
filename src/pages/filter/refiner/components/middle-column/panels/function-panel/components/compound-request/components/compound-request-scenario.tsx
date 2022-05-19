@@ -27,7 +27,7 @@ export const CompoundRequestScenario: FC<ICompoundRequestScenarioProp> = ({
       filterStore.setTouched(true)
     }
 
-    compoundRequestStore.handleRequestConditionNumber(index, e.target.value)
+    compoundRequestStore.handleRequestConditionNumber(index, +e.target.value)
   }
 
   const hasError = item[0] <= 0

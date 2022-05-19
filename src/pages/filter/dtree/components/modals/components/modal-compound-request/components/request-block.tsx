@@ -11,19 +11,23 @@ import modalsControlStore, {
 import modalCompoundRequestStore from '../modal-compound-request.store'
 
 interface IRequestBlockProps {
+  requestBlockNumber: number
   index: number
   activeRequestIndex: number
-  item: string[]
 }
 
 export const RequestBlock = observer(
-  ({ index, activeRequestIndex, item }: IRequestBlockProps): ReactElement => {
+  ({
+    requestBlockNumber,
+    index,
+    activeRequestIndex,
+  }: IRequestBlockProps): ReactElement => {
     const { problemGroups } = modalsControlStore
 
-    const hasErrors = Number.parseInt(item[0]) <= 0
+    const hasErrors = requestBlockNumber === 0
 
     return (
-      <div className={cn('flex flex-col w-full')}>
+      <div className="flex flex-col w-full">
         <div
           className={cn(
             'flex justify-between w-full shadow-dark py-2 my-2 px-2 cursor-pointer step-content-area',
@@ -35,11 +39,11 @@ export const RequestBlock = observer(
         >
           <div className="flex cursor-pointer step-content-area">
             <InputNumber
-              value={item[0]}
+              value={requestBlockNumber}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 modalCompoundRequestStore.changeRequestConditionNumber(
                   index,
-                  e.target.value,
+                  +e.target.value,
                 )
               }
               className="shadow-dark w-1/3 h-5"

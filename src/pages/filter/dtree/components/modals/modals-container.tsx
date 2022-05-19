@@ -8,7 +8,6 @@ import { ImportModal } from '@pages/main/components/modals/import-modal'
 import handleDatasetStore from '../../../../main/components/handle-dataset/handle-dataset.store'
 import { ModalCompoundHet } from './components/modal-compound-het/modal-compound-het'
 import { ModalCompoundRequest } from './components/modal-compound-request/modal-compound-request'
-import { ModalConfiramtion } from './components/modal-confirmation'
 import { ModalCustomInheritanceMode } from './components/modal-custom-inheritance-mode/modal-custom-inheritance-mode'
 import { ModalEnum } from './components/modal-enum/modal-enum'
 import { ModalGeneRegion } from './components/modal-gene-region/modal-gene-region'
@@ -49,9 +48,7 @@ export const ModalsContainer = observer(
       {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
       {modalsVisibilityStore.isModalTextEditorVisible && <ModalTextEditor />}
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
-      {modalsVisibilityStore.isModalConfirmationVisible && (
-        <ModalConfiramtion />
-      )}
+
       {handleDatasetStore.isExportModalShown}
       {handleDatasetStore.isExportModalShown && <ExportModal />}
       {handleDatasetStore.isImportModalShown && <ImportModal />}

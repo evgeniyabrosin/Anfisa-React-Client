@@ -1,27 +1,29 @@
 import { ReactElement, useEffect, useMemo, useState } from 'react'
 
 import { useModal } from '@core/hooks/use-modal'
-import { PresetControlPopover } from '@components/preset-control/preset-control-popover'
+import { SolutionControlPopover } from '@components/solution-control/solution-control-popover'
 import { ISolutionEntryDescription } from '@service-providers/common'
-import { PresetControlButton } from './preset-control-button'
-import { PresetCreateDialog } from './preset-create-dialog'
-import { PresetDeleteDialog } from './preset-delete-dialog'
+import { SolutionControlButton } from './solution-control-button'
+import { SolutionCreateDialog } from './solution-create-dialog'
+import { SolutionDeleteDialog } from './solution-delete-dialog'
 
-interface IPresetControlProps {
+interface ISolutionControlProps {
   className?: string
-  presets: ISolutionEntryDescription[] | undefined
+  controlName: string
+  solutions: ISolutionEntryDescription[] | undefined
   selected: string
   isCreateDisabled?: boolean
-  onCreate: (presetName: string) => void
-  onApply: (presetName: string) => void
-  onJoin?: (presetName: string) => void
-  onModify: (presetName: string) => void
-  onDelete: (presetName: string) => void
+  onCreate: (solutionName: string) => void
+  onApply: (solutionName: string) => void
+  onJoin?: (solutionName: string) => void
+  onModify: (solutionName: string) => void
+  onDelete: (solutionName: string) => void
 }
 
-export const PresetControl = ({
+export const SolutionControl = ({
   className,
-  presets,
+  solutions,
+  controlName,
   selected: selectedProp,
   isCreateDisabled,
   onCreate,
@@ -29,19 +31,19 @@ export const PresetControl = ({
   onJoin,
   onModify,
   onDelete,
-}: IPresetControlProps): ReactElement => {
+}: ISolutionControlProps): ReactElement => {
   const [selected, setSelected] = useState(selectedProp)
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null)
   const [deleteDialog, openDeleteDialog, closeDeleteDialog] = useModal({
-    presetName: '',
+    solutionName: '',
   })
   const [createDialog, openCreateDialog, closeCreateDialog] = useModal()
 
-  const isSelectedPresetNonStandard = useMemo(
+  const isSelectedSolutionNonStandard = useMemo(
     () =>
       !!selectedProp &&
-      !presets?.find(({ name }) => name === selectedProp)?.standard,
-    [selectedProp, presets],
+      !solutions?.find(({ name }) => name === selectedProp)?.standard,
+    [selectedProp, solutions],
   )
 
   const isPopoverOpen = !!popoverAnchor
@@ -58,49 +60,54 @@ export const PresetControl = ({
 
   return (
     <>
-      <PresetControlButton
+      <SolutionControlButton
         className={className}
-        presetName={selectedProp}
+        solutionName={selectedProp}
+        controlName={controlName}
         isOpen={isPopoverOpen}
-        isDeleteShown={isSelectedPresetNonStandard}
+        isDeleteShown={isSelectedSolutionNonStandard}
         onDeleteClick={() => {
-          openDeleteDialog({ presetName: selectedProp })
+          openDeleteDialog({ solutionName: selectedProp })
         }}
         onClick={event =>
           isPopoverOpen ? closePopover() : setPopoverAnchor(event.currentTarget)
         }
         onMouseUp={event => event.stopPropagation()}
       />
-      <PresetControlPopover
+      <SolutionControlPopover
         isOpen={isPopoverOpen}
         isCreateDisabled={isCreateDisabled}
+        controlName={controlName}
         onClose={closePopover}
         anchorEl={popoverAnchor}
-        presets={presets}
+        solutions={solutions}
         selected={selected}
         onCreate={() => openCreateDialog()}
         onSelect={setSelected}
         onJoin={onJoin}
         onApply={onApply}
         onModify={onModify}
-        onDelete={presetName => openDeleteDialog({ presetName })}
+        onDelete={solutionName => openDeleteDialog({ solutionName })}
       />
-      <PresetDeleteDialog
+      <SolutionDeleteDialog
         {...deleteDialog}
         onClose={closeDeleteDialog}
         onDelete={() => {
           closeDeleteDialog()
-          if (deleteDialog.presetName) {
-            onDelete(deleteDialog.presetName)
+          if (deleteDialog.solutionName) {
+            onDelete(deleteDialog.solutionName)
           }
         }}
+        controlName={controlName}
       />
-      <PresetCreateDialog
+      <SolutionCreateDialog
         {...createDialog}
+        solutions={solutions}
         onClose={closeCreateDialog}
-        onCreate={presetName => {
+        controlName={controlName}
+        onCreate={solutionName => {
           closeCreateDialog()
-          onCreate(presetName)
+          onCreate(solutionName)
         }}
       />
     </>

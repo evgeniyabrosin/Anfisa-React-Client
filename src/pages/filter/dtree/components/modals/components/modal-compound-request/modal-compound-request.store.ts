@@ -132,21 +132,13 @@ class ModalCompoundRequestStore {
 
   public changeRequestConditionNumber(
     requestBlockIndex: number,
-    value: string,
+    value: number,
   ): void {
-    if (+value < 0) return
+    if (value < 0) return
 
-    const newRequestCondition: any[] = cloneDeep(this.requestCondition)
+    this.requestCondition[requestBlockIndex][0] = value
 
-    newRequestCondition.map((item: any[], index: number) => {
-      if (index === requestBlockIndex) {
-        item[0] = +value
-      }
-    })
-
-    this.setRequestCondition(newRequestCondition)
-
-    this.sendRequest(newRequestCondition)
+    this.sendRequest(this.requestCondition)
   }
 
   // helper fucntion

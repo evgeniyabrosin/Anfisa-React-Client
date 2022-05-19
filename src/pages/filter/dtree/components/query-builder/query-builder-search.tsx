@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Icon } from '@ui/icon'
+import { Switch } from '@ui/switch'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { InputSearch } from '@components/input-search/input-search'
 
@@ -13,6 +14,9 @@ interface IQueryBuilderSearchProps {
   isFilter?: boolean
   isModal?: boolean
   isSubgroupItemSearch?: boolean
+  showSwitcher?: boolean
+  onSwitch?: (e: boolean) => void
+  isSwitched?: boolean
 }
 
 export const QueryBuilderSearch = observer(
@@ -22,6 +26,9 @@ export const QueryBuilderSearch = observer(
     isFilter,
     isModal,
     isSubgroupItemSearch,
+    showSwitcher,
+    onSwitch,
+    isSwitched,
   }: IQueryBuilderSearchProps): ReactElement => {
     const handleClick = (operation: string) => {
       if (isFilter) {
@@ -41,9 +48,9 @@ export const QueryBuilderSearch = observer(
     }
 
     return (
-      <>
+      <div className="flex w-full items-center">
         <InputSearch
-          className="w-full"
+          className="flex-1"
           placeholder={t('filter.searchForAField')}
           value={value}
           onChange={e => {
@@ -53,7 +60,19 @@ export const QueryBuilderSearch = observer(
 
         {!isSubgroupItemSearch && (
           <div className="flex items-center justify-between pl-2 text-grey-blue">
-            <div className="mr-1">
+            {showSwitcher && (
+              <div className="mr-2 flex items-center">
+                <Switch
+                  isChecked={!!isSwitched}
+                  onChange={(e: boolean) => onSwitch && onSwitch(e)}
+                  className="mr-2"
+                />
+
+                <span className="text-sm">{t('filter.switcher')}</span>
+              </div>
+            )}
+
+            <div className="mr-2">
               <Icon
                 name="Expand"
                 size={20}
@@ -74,7 +93,7 @@ export const QueryBuilderSearch = observer(
             </div>
           </div>
         )}
-      </>
+      </div>
     )
   },
 )

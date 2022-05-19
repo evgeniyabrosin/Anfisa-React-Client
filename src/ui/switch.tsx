@@ -1,13 +1,15 @@
 import { ReactElement } from 'react'
 import SwitchBase from 'react-switch'
+import cn, { Argument } from 'classnames'
 
 import { theme } from '@theme'
 
-interface Props {
+interface ISwitchProps {
   isChecked: boolean
   disabled?: boolean
   size?: 'sm' | 'md'
   onChange: (checked: boolean) => void
+  className?: Argument
 }
 
 const height = {
@@ -25,7 +27,8 @@ export const Switch = ({
   disabled,
   size = 'md',
   onChange,
-}: Props): ReactElement => (
+  className,
+}: ISwitchProps): ReactElement => (
   <SwitchBase
     onChange={onChange}
     checked={isChecked}
@@ -38,5 +41,6 @@ export const Switch = ({
     handleDiameter={height[size] - 4}
     width={width[size]}
     disabled={disabled}
+    className={cn(className)}
   />
 )
