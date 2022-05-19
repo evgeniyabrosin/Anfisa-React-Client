@@ -183,6 +183,7 @@ export const en = {
     distance: 'Distance',
   },
   filter: {
+    switcher: 'Only starts with',
     method: 'Filtering method',
     results: 'Results',
     selectedVariants: 'Selected variants',

@@ -9,6 +9,7 @@ import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-
 import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
   DtreeSetPointKinds,
+  IDtreeSetArguments,
   IDtreeSetPoint,
   PointCount,
 } from '@service-providers/decision-trees'
@@ -22,7 +23,6 @@ import { showToast } from '@utils/notifications'
 import activeStepStore, {
   ActiveStepOptions,
 } from '../pages/filter/dtree/components/active-step.store'
-import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 import { DtreeModifiedState } from './filter-dtrees/filter-dtrees.store'
@@ -98,6 +98,7 @@ class DtreeStore {
   filterValue = ''
   filterModalValue = ''
   algorithmFilterValue = ''
+  algorithmFilterFullWord = false
   filteredCounts = 0
 
   stepData: IStepData[] = []
@@ -373,10 +374,15 @@ class DtreeStore {
 
     if (!searchValue) return this.stepData
 
-    const filteredStepData = this.stepData.filter(({ groups }) => {
+    const checkValue = (value: string) =>
+      this.algorithmFilterFullWord
+        ? value.startsWith(searchValue)
+        : value.includes(searchValue)
+
+    return this.stepData.filter(({ groups }) => {
       return groups.some(condition => {
         const name = condition[1].toLowerCase()
-        if (name.includes(searchValue)) return true
+        if (checkValue(name)) return true
 
         const valueVariants = condition[3]
         if (!valueVariants) return false
@@ -386,12 +392,10 @@ class DtreeStore {
         return valueVariantList.some(varaintName => {
           if (typeof varaintName !== 'string') return false
 
-          return varaintName?.toLowerCase().includes(searchValue)
+          return checkValue(varaintName?.toLowerCase())
         })
       })
     })
-
-    return filteredStepData
   }
 
   get isTreeEmpty(): boolean {
@@ -606,6 +610,10 @@ class DtreeStore {
 
   setAlgorithmFilterValue(item: string) {
     this.algorithmFilterValue = item
+  }
+
+  setAlgorithmFilterFullWord = (value: boolean) => {
+    this.algorithmFilterFullWord = value
   }
 
   resetAlgorithmFilterValue() {
