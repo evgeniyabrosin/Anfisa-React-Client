@@ -9,7 +9,6 @@ import {
   DtreeSetPointKinds,
   IDtreeSetPoint,
 } from '@service-providers/decision-trees'
-import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -21,6 +20,7 @@ import activeStepStore, {
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
+import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store copy'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
 export type IStepData = {
@@ -53,6 +53,9 @@ interface IDtreeFilteredCounts {
 
 class DtreeStore {
   dtreeList: any
+  get dtreeSetData() {
+    return this.dtreeSet.data
+  }
   dtree: any
   isCountsReceived = false
   dtreeCode = ''
@@ -107,6 +110,7 @@ class DtreeStore {
   actionHistory: IDtreeSetArguments[] = []
   actionHistoryIndex = -1
 
+  readonly dtreeSet = new DtreeSetAsyncStore()
   readonly dtreeCounts = new DtreeCountsAsyncStore()
 
   get dtreeCountsRqId(): string {
@@ -259,24 +263,26 @@ class DtreeStore {
 
     this.setIsCountsReceived(false)
 
-    const result = await decisionTreesProvider.getDtreeSet(body)
+    this.dtreeSet.setQuery(body)
 
-    const newCode = result.code
+    // const result = await decisionTreesProvider.getDtreeSet(body)
 
-    runInAction(() => {
-      if (
-        !this.startDtreeCode ||
-        this.currentDtreeName !== this.previousDtreeName
-      ) {
-        this.startDtreeCode = newCode
-        this.setPrevDtreeName(this.currentDtreeName)
-      }
+    // const newCode = result.code
 
-      this.dtree = result
-      this.dtreeCode = newCode
-      this.dtreeList = result['dtree-list']
-      this.evalStatus = result['eval-status']
-    })
+    // runInAction(() => {
+    //   if (
+    //     !this.startDtreeCode ||
+    //     this.currentDtreeName !== this.previousDtreeName
+    //   ) {
+    //     this.startDtreeCode = newCode
+    //     this.setPrevDtreeName(this.currentDtreeName)
+    //   }
+
+    //   this.dtree = result
+    //   this.dtreeCode = newCode
+    //   this.dtreeList = result['dtree-list']
+    //   this.evalStatus = result['eval-status']
+    // })
 
     const isLoadingNewTree = !body.code
 
