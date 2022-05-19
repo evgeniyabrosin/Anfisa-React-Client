@@ -37,7 +37,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
   )
 
   const additionalHeight: number =
-    filterStore.method === GlbPagesNames.Dtree ? 295 : 226
+    filterStore.method === GlbPagesNames.Dtree ? 266 : 226
 
   return (
     <div className="relative pt-4 px-4 w-1/3 bg-blue-lighter h-full">
@@ -64,7 +64,7 @@ export const QueryBuilderGroups = observer((): ReactElement => {
 
       <div
         className="overflow-y-auto"
-        style={{ maxHeight: `calc(100vh - ${additionalHeight}px)` }}
+        style={{ height: `calc(100vh - ${additionalHeight}px)` }}
       >
         <DeferRender chunkSize={chunkSize}>
           {filteredQueryBuilder.map(({ name, attributes, power }) => (
