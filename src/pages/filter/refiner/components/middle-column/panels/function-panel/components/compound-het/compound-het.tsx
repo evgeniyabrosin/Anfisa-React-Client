@@ -106,7 +106,6 @@ export const CompundHet = observer((): ReactElement => {
         onSubmit={onSubmit}
         resetFields={handleClear}
         disabled={!simpleVariants || !isFilterTouched}
-        classname="pb-[40px]"
       />
     </>
   )

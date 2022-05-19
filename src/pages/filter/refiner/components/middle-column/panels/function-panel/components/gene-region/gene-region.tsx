@@ -105,14 +105,13 @@ export const GeneRegion = observer(() => {
         variants={simpleVariants}
         disabled={true}
         isErrorVisible={!!error}
-        classname="flex-1"
+        classname="mt-[21px] flex-1"
       />
 
       <PanelButtons
         onSubmit={handleSumbitCondtions}
         resetFields={handleResetFields}
         disabled={!!error || !isFilterTouched}
-        classname="pb-[40px]"
       />
     </>
   )

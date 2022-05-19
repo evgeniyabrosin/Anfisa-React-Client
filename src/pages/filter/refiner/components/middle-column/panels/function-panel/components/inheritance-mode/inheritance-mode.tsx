@@ -108,7 +108,6 @@ export const InheritanceMode = observer(() => {
         onSubmit={inheritanceModeStore.handleSumbitCondtions}
         resetFields={inheritanceModeStore.resetAllFields}
         disabled={!variantValues.length || !isFilterTouched}
-        classname="pb-[40px]"
       />
     </>
   )
