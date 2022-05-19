@@ -18,8 +18,6 @@ import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
 
 const FilterPage = observer((): ReactElement => {
-  console.log('dtreeSetData', toJS(dtreeStore.dtreeSetData))
-
   const { isXL } = datasetStore
 
   const history = useHistory()

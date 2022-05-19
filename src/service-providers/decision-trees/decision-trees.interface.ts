@@ -125,7 +125,7 @@ export interface IDtreeSetResponse {
   'eval-status': 'ok' | string
   hash: string
   'dtree-list': ISolutionEntryDescription[]
-  rq_id: string
+  'rq-id': string
 }
 
 // dtree_counts

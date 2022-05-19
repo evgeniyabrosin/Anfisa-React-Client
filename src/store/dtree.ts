@@ -52,13 +52,17 @@ interface IDtreeFilteredCounts {
 }
 
 class DtreeStore {
-  dtreeList: any
+  get dtreeList() {
+    return this.dtreeSetData?.['dtree-list']
+  }
   get dtreeSetData() {
     return this.dtreeSet.data
   }
   dtree: any
   isCountsReceived = false
-  dtreeCode = ''
+  get dtreeCode(): string {
+    return this.dtreeSetData?.code ?? ''
+  }
   startDtreeCode = ''
   localDtreeCode = ''
   currentDtreeName = ''
@@ -78,7 +82,9 @@ class DtreeStore {
   selectedFilters: string[] = []
   dtreeStepIndices: string[] = []
 
-  evalStatus = ''
+  get evalStatus(): string {
+    return this.dtreeSetData?.['eval-status'] ?? ''
+  }
   savingStatus: any = []
   shouldLoadTableModal = false
 
@@ -448,7 +454,7 @@ class DtreeStore {
   // 3.2 Functions for editing loaded tree
 
   setNextDtreeCode(code: string) {
-    this.dtreeCode = code
+    // this.dtreeCode = code
   }
 
   setStartDtreeCode() {

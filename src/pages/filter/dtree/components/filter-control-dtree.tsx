@@ -25,9 +25,7 @@ import { FilterButton } from '../../common/filter-control/filter-button'
 import { DtreePresetActionModal } from './modals/components/dtree-preset-action-modal'
 
 export const FilterControlDtree = observer((): ReactElement => {
-  const trees: string[] = get(dtreeStore, 'dtreeList', []).map(
-    (preset: FilterList) => preset.name,
-  )
+  const trees = get(dtreeStore, 'dtreeList', []).map(preset => preset.name)
 
   const {
     currentDtreeName,
