@@ -1,4 +1,5 @@
-import { BaseStatUnitsStore, TBaseDataStoreFetchOptions } from '@store/common'
+import { TBaseDataStoreFetchOptions } from '@store/common'
+import { BaseStatUnitsStore } from '@store/stat-units'
 import { TCondition } from '@service-providers/common'
 import { filteringProvider, TDsStat } from '@service-providers/filtering-regime'
 

@@ -16,7 +16,7 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
 import { GlbPagesNames } from '@glb/glb-names'
 import { moveActionHistory } from '@utils/moveActionHistory'
-import { FilterControlDtree } from '../../dtree/components/filter-control-dtree'
+import { FilterControlDtree } from '../../dtree/components/filter-control-dtree/filter-control-dtree'
 import modalsVisibilityStore from '../../dtree/components/modals/modals-visibility-store'
 import { FilterControlRefiner } from '../../refiner/components/filter-control-refiner/filter-control-refiner'
 import {

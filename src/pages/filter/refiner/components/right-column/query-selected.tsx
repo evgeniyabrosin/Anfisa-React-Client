@@ -22,7 +22,6 @@ export const QuerySelected = observer((): ReactElement => {
   const {
     conditions,
     isConditionsFetching,
-    isFilterTouched,
     stat: { filteredCounts },
   } = filterStore
 
@@ -49,7 +48,7 @@ export const QuerySelected = observer((): ReactElement => {
     isConditionsFetching ||
     filteredVariantsCount == null ||
     !conditions.length ||
-    isFilterTouched
+    !filteredVariantsCount
 
   return (
     <div className="w-1/3">

@@ -45,27 +45,43 @@ export const en = {
         delete: 'Error when deleting the "{presetName}" preset',
       },
     },
+    dtreeAction: {
+      success: {
+        create: 'Decision tree "{dtreeName}" has been created',
+        modify: 'Decision tree "{dtreeName}" has been modified',
+        delete: 'Decision tree "{dtreeName}" has been deleted',
+      },
+      error: {
+        create: 'Error when creating the "{dtreeName}" decision tree',
+        modify: 'Error when modifying the "{dtreeName}" decision tree',
+        delete: 'Error when deleting the "{dtreeName}" decision tree',
+      },
+    },
     selectSecondaryPlaceholder: 'Select secondary...',
   },
-  presetControl: {
-    selectPreset: 'Select Preset',
-    createNewPreset: 'Create New Preset',
+  solutionControl: {
+    filterPreset: 'Filter Preset',
+    decisionTree: 'Decision Tree',
+    selectSolution: 'Select {controlName}',
+    createNewSolution: 'Create New {controlName}',
     join: 'Join',
     apply: 'Apply Filter',
     delete: 'Delete',
     modify: 'Modify',
     createDialog: {
-      title: 'Create Preset',
+      title: 'Create {controlName}',
       create: 'Create',
-      presetName: 'Preset Name',
-      presetNamePlaceholder: 'Enter Preset Name',
+      controlName: '{controlName} Name',
+      controlNamePlaceholder: 'Enter {controlName} Name',
+      solutionNameAlreadyExists:
+        '{controlName} "{solutionName}" already exists',
     },
     deleteDialog: {
-      title: 'Delete Filter Preset',
+      title: 'Delete {controlName}',
       message:
-        'Deleting a Filter preset "{presetName}" will permanently remove it from your system.',
-      cancel: 'No, Keep Preset',
-      confirm: 'Yes, Delete Preset',
+        'Deleting a {controlName} "{solutionName}" will permanently remove it from your system.',
+      cancel: 'No, Keep {controlName}',
+      confirm: 'Yes, Delete {controlName}',
     },
   },
   home: {
@@ -166,7 +182,11 @@ export const en = {
     center: 'Center',
     distance: 'Distance',
   },
+  unitsList: {
+    functionalUnits: 'Functional Units',
+  },
   filter: {
+    switcher: 'Only starts with',
     method: 'Filtering method',
     results: 'Results',
     selectedVariants: 'Selected variants',
@@ -286,6 +306,9 @@ export const en = {
     showReturnedVariantsForStep: 'Show {returnValue} variants for step {index}',
     dtreeDeleteConfirmation: 'Do you really want to delete this tree?',
     inactiveField: 'Inactive field',
+    errors: {
+      loadDtree: 'Failed to load dtree "{dtreeName}"',
+    },
   },
   error: {
     getBack: 'Back to home',

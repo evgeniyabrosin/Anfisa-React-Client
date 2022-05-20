@@ -43,6 +43,9 @@ export const QueryBuilderTreeHeader = observer((): ReactElement => {
         <QueryBuilderSearch
           value={dtreeStore.algorithmFilterValue}
           onChange={(e: string) => dtreeStore.setAlgorithmFilterValue(e)}
+          showSwitcher
+          isSwitched={dtreeStore.algorithmFilterFullWord}
+          onSwitch={dtreeStore.setAlgorithmFilterFullWord}
         />
       </ResultsHeader>
     </div>

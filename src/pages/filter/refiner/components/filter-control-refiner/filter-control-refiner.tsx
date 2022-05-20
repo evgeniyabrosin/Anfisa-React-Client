@@ -1,9 +1,10 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { t } from '@i18n'
 import filterStore from '@store/filter'
 import filterPresetsStore from '@store/filter-presets'
-import { PresetControl } from '@components/preset-control'
+import { SolutionControl } from '@components/solution-control'
 import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
 import {
   applyPreset,
@@ -18,9 +19,10 @@ export const FilterControlRefiner = observer((): ReactElement => {
 
   return (
     <>
-      <PresetControl
+      <SolutionControl
         selected={activePreset}
-        presets={availablePresets}
+        solutions={availablePresets}
+        controlName={t('solutionControl.filterPreset')}
         isCreateDisabled={filterStore.isConditionsEmpty}
         onCreate={createPreset}
         onApply={applyPreset}
