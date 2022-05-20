@@ -40,7 +40,7 @@ export const CompoundRequestScenario: FC<ICompoundRequestScenarioProp> = ({
           compoundRequestStore.handleActiveRequest(index)
         }}
       >
-        <div className="flex items-center mb-1">
+        <div className="flex items-center mb-2">
           <div className="text-14 leading-16px font-medium text-grey-blue mr-2.5">
             {t('dtree.scenario')}
           </div>
@@ -52,7 +52,7 @@ export const CompoundRequestScenario: FC<ICompoundRequestScenarioProp> = ({
             />
           </div>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           {functionPanelStore.problemGroups.map(
             (group: string, currNo: number) => {
               const value = getSelectedValue(

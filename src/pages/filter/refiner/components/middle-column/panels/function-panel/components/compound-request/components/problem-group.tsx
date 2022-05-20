@@ -33,7 +33,7 @@ export const ProblemGroup: FC<IProblemGroupProp> = ({
 
   return (
     <div
-      className={cn('step-content-area flex', className)}
+      className={cn('step-content-area flex items-center', className)}
       key={group}
       onClick={setActive}
     >
