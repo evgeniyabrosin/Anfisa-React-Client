@@ -1,7 +1,8 @@
-import React, { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
 import filterStore from '@store/filter'
@@ -76,6 +77,22 @@ export const CompundHet = observer((): ReactElement => {
     filterStore.setTouched(true)
   }
 
+  const isButtonDisabled = useMemo(() => {
+    if (!filterStore.conditions.length) {
+      return !simpleVariants
+    }
+
+    if (
+      filterStore.conditions.some(
+        ([, filterName]) => filterName === FuncStepTypesEnum.CompoundHet,
+      )
+    ) {
+      return !isFilterTouched
+    }
+
+    return !simpleVariants
+  }, [isFilterTouched, simpleVariants])
+
   return (
     <>
       <div className="text-red-secondary">
@@ -100,7 +117,7 @@ export const CompundHet = observer((): ReactElement => {
       <PanelButtons
         onSubmit={onSubmit}
         resetFields={handleClear}
-        disabled={!simpleVariants || !isFilterTouched}
+        disabled={isButtonDisabled}
       />
     </>
   )
