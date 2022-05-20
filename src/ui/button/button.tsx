@@ -2,7 +2,7 @@ import styles from './button.module.css'
 
 import { FC, MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
-import _ from 'lodash'
+import { camelCase } from 'lodash'
 import { CSSProperties } from 'styled-components'
 
 export interface IButtonProps {
@@ -61,7 +61,7 @@ export const Button: FC<IButtonProps> = ({
     styles.button,
     isOnlyIcon && styles.button_icon_only,
     buttonSize,
-    styles[`button_${_.camelCase(variant)}`],
+    styles[`button_${camelCase(variant)}`],
   )
 
   const textStyle = cn(
