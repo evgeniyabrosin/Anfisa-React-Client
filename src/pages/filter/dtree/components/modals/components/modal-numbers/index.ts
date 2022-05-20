@@ -1,1 +1,1 @@
-export * from './modal-numbers'
+export * from './modal-numeric'

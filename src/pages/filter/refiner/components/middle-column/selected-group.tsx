@@ -41,9 +41,11 @@ export const SelectedGroup = observer((): ReactElement => {
       {selectedAttributeStatus.kind === AttributeKinds.ENUM && (
         <EnumPanel key={panelKey} />
       )}
+
       {selectedAttributeStatus.kind === AttributeKinds.FUNC && (
         <FunctionPanel key={panelKey} />
       )}
+
       {selectedAttributeStatus.kind === AttributeKinds.NUMERIC && (
         <NumericPanel key={panelKey} />
       )}

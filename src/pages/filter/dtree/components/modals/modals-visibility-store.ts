@@ -18,7 +18,7 @@ class ModalsVisibilityStore {
   isModalGeneRegionVisible = false
 
   isModalEnumVisible = false
-  isModalNumbersVisible = false
+  isModalNumericVisible = false
 
   isModalTextEditorVisible = false
 
@@ -36,7 +36,7 @@ class ModalsVisibilityStore {
     this.isModalAttributeVisible = false
   }
 
-  public openModalJoin() {
+  public openModalJoin = () => {
     this.isModalJoinVisible = true
   }
 
@@ -46,20 +46,20 @@ class ModalsVisibilityStore {
 
   // 2. Modal for numeric attr
 
-  public openModalNumbers(
+  public openModalNumeric(
     groupName: string,
     groupIndex: number | undefined,
     source: string = '',
   ) {
     this.modalSource = source
 
-    this.isModalNumbersVisible = true
+    this.isModalNumericVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalNumbers() {
-    this.isModalNumbersVisible = false
+  public closeModalNumeric = (): void => {
+    this.isModalNumericVisible = false
   }
 
   // 3. Modal for enum attr
@@ -76,7 +76,7 @@ class ModalsVisibilityStore {
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalEnum() {
+  public closeModalEnum = () => {
     this.isModalEnumVisible = false
     dtreeStore.resetSelectedFilters()
   }

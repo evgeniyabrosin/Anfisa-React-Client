@@ -5,71 +5,60 @@ import { NumericCondition } from '@components/numeric-condition'
 import { EditModalButtons } from '@pages/filter/dtree/components/modals/components/ui/edit-modal-buttons'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
+import { dtreeAttributeStore } from '../../../attributes/dtree-attributes.store'
 import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
 import { HeaderModal } from '../ui/header-modal'
 import { ModalBase } from '../ui/modal-base'
 import { SelectModalButtons } from '../ui/select-modal-buttons'
 
-export const ModalNumbers = observer((): ReactElement | null => {
+export const ModalNumeric = observer((): ReactElement | null => {
   const groups = modalsControlStore.currentStepGroups
-  const currentGroup = modalsControlStore.currentGroupToChange
 
-  const initialValue = currentGroup
-    ? currentGroup[currentGroup.length - 1]
-    : undefined
+  const { attributeStatus, initialCondition, initialNumericValue } =
+    dtreeAttributeStore
 
-  const attr = modalsControlStore.attributeStatusToChange
-
-  if (!attr || attr.kind !== 'numeric') {
+  if (!attributeStatus || attributeStatus.kind !== 'numeric') {
     return null
   }
 
-  const handleClose = () => {
-    modalsVisibilityStore.closeModalNumbers()
-  }
-
   const handleModals = () => {
-    handleClose()
+    modalsVisibilityStore.closeModalNumeric()
     modalsVisibilityStore.openModalAttribute()
-  }
-
-  const handleModalJoin = () => {
-    modalsVisibilityStore.openModalJoin()
   }
 
   return (
     <ModalBase minHeight={200}>
       <HeaderModal
-        groupName={attr.title ?? attr.name}
-        handleClose={handleClose}
+        groupName={attributeStatus.title ?? attributeStatus.name}
+        handleClose={modalsVisibilityStore.closeModalNumeric}
       />
       <NumericCondition
         className="pt-3"
-        attrData={attr}
-        initialValue={initialValue}
+        attrData={attributeStatus}
+        initialValue={initialNumericValue}
         controls={({ value, hasErrors }) => {
           const disabled = hasErrors || (value[0] == null && value[2] == null)
 
-          return currentGroup ? (
+          return initialCondition ? (
             <EditModalButtons
-              handleClose={handleClose}
+              handleClose={modalsVisibilityStore.closeModalNumeric}
               handleSaveChanges={() => {
                 changeNumericAttribute(value)
-                handleClose()
+                modalsVisibilityStore.closeModalNumeric()
               }}
               disabled={disabled}
             />
           ) : (
             <SelectModalButtons
               currentGroup={groups}
-              handleClose={handleClose}
+              handleClose={modalsVisibilityStore.closeModalNumeric}
               handleModals={handleModals}
-              handleModalJoin={handleModalJoin}
+              handleModalJoin={modalsVisibilityStore.openModalJoin}
               disabled={disabled}
               handleAddAttribute={action => {
                 addAttributeToStep(action, 'numeric', value)
-                handleClose()
+                modalsVisibilityStore.closeModalNumeric()
               }}
             />
           )

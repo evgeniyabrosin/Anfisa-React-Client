@@ -7,7 +7,6 @@ import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { UnitsList } from '@components/units-list'
-import modalFiltersStore from '@pages/filter/dtree/components/modals/components/modal-enum/modal-enum.store'
 import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility-store'
 import { AttributeKinds, TPropertyStatus } from '@service-providers/common'
 
@@ -65,9 +64,8 @@ export const DtreeUnitsList = observer(
 
       if (kind === AttributeKinds.ENUM) {
         modalsVisibilityStore.openModalEnum(name, undefined, source)
-        modalFiltersStore.setCurrentGroupSubKind(attribute['sub-kind'])
       } else if (kind === AttributeKinds.NUMERIC) {
-        modalsVisibilityStore.openModalNumbers(name, undefined, source)
+        modalsVisibilityStore.openModalNumeric(name, undefined, source)
       } else if (kind === AttributeKinds.FUNC) {
         switch (name as FuncStepTypesEnum) {
           case FuncStepTypesEnum.InheritanceMode:
