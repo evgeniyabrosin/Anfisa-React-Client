@@ -1,0 +1,40 @@
+.units-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  color: theme("colors.black");
+  background: theme("colors.white");
+
+  &_dark {
+    color: theme("colors.white");
+    background: theme("colors.blue.lighter");
+  }
+
+  &__functional {
+    flex: 0 0 auto;
+    padding: theme("spacing.4") 0;
+    margin: 0 theme("spacing.4");
+    border-bottom: 1px solid theme("colors.grey.disabled");
+  }
+
+  &_dark &__functional {
+    border-color: theme("colors.blue.secondary");
+  }
+
+  &__controls {
+    flex: 0 0 auto;
+    padding: theme("spacing.4");
+  }
+
+  &__sub-header {
+    flex: 0 0 auto;
+    padding: 0 theme("spacing.4") theme("spacing.4");
+  }
+
+  &__list {
+    flex: 1 0 0;
+    overflow-y: auto;
+    padding: 0 theme("spacing.4") theme("spacing.4");
+  }
+}

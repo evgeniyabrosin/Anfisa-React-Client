@@ -22,7 +22,7 @@ export const AttributeHeader = ({
 
   return (
     <div className={cn('flex items-center', className)}>
-      {isFunc && <FnLabel subGroup={true} className="-mr-1" />}
+      {isFunc && <FnLabel className="-mr-1" />}
 
       <span className={cn('text-16 ml-2 font-bold cursor-pointer')}>
         {name || title}

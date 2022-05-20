@@ -1,0 +1,70 @@
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &__label {
+    @apply typography-m;
+
+    font-weight: theme("fontWeight.medium");
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: theme("borderRadius.DEFAULT");
+    color: theme("colors.white");
+    background: theme("colors.blue.bright");
+    font-size: 14px;
+    margin-left: theme("spacing.3");
+
+    &:hover {
+      background: theme("colors.blue.hover");
+    }
+
+    &:active {
+      background: theme("colors.blue.active");
+    }
+  }
+}
+
+.menu {
+  @apply popup-card;
+
+  margin-top: theme("spacing.1");
+  min-width: 300px;
+}
+
+.condition {
+  margin-top: theme("spacing.3");
+
+  @apply typography-s;
+
+  &_active {
+    font-weight: theme("fontWeight.medium");
+  }
+
+  &__label {
+    cursor: pointer
+  }
+
+  &__delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: theme("spacing.2");
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: theme("colors.grey.blue");
+    color: theme("colors.black");
+    cursor: pointer;
+
+    &:hover {
+      background: theme("colors.grey.light");
+    }
+  }
+}

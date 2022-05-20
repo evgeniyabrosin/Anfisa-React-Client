@@ -5,6 +5,8 @@
   font-size: 12px;
   line-height: 16px;
   border: 1px solid theme("colors.grey.blue");
+  background: theme("colors.white");
+  color: theme("colors.black");
 
   &:focus {
     outline: none;

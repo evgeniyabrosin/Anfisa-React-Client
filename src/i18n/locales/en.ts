@@ -182,6 +182,9 @@ export const en = {
     center: 'Center',
     distance: 'Distance',
   },
+  unitsList: {
+    functionalUnits: 'Functional Units',
+  },
   filter: {
     switcher: 'Only starts with',
     method: 'Filtering method',

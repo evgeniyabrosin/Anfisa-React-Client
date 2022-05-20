@@ -101,7 +101,10 @@ export const ContentItemHeader = observer(
 
           <div className="flex items-center text-14 mr-2">
             {stepType === FilterKindEnum.Func && (
-              <FnLabel currentStep={currentStep} className="shadow-dark" />
+              <FnLabel
+                isActive={currentStep && currentStep.isActive}
+                className="shadow-dark"
+              />
             )}
             {isStepInvalid ? (
               <InactiveFieldLabel stepIndex={index} groupIndex={currNo} />

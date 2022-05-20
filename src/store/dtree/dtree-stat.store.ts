@@ -1,6 +1,7 @@
 import { computed, IReactionDisposer, makeObservable, reaction } from 'mobx'
 
-import { BaseStatUnitsStore, TBaseDataStoreFetchOptions } from '@store/common'
+import { TBaseDataStoreFetchOptions } from '@store/common'
+import { BaseStatUnitsStore } from '@store/stat-units'
 import { dtreeProvider, TDtreeStat } from '@service-providers/decision-trees'
 
 type TDtreeStatQuery = {
