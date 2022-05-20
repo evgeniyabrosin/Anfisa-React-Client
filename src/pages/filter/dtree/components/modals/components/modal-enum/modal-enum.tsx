@@ -27,9 +27,9 @@ export const ModalEnum = observer((): ReactElement => {
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =
-    dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    dtreeStore.stepList[currentStepIndex].groups[currentGroupIndex]
 
-  const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
+  const currentGroupToModify = dtreeStore.stepList[currentStepIndex].groups
 
   const {
     filteredGroupList,

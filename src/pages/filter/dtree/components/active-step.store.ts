@@ -23,37 +23,38 @@ class ActiveStep {
   }
 
   get stepIndexForApi(): string {
-    const { dtreeStepIndices: indexes, stepData } = toJS(dtreeStore)
+    const { dtreeStepIndices, stepList } = dtreeStore
 
-    const lastIndexFromIndexes = indexes[indexes.length - 1]
+    const lastIndexFromIndexes = dtreeStepIndices[dtreeStepIndices.length - 1]
 
-    // add final step index to indexes
+    // add final step index to dtreeStepIndices
     if (lastIndexFromIndexes) {
       const indexForFinalStep = +lastIndexFromIndexes + 2
 
-      indexes.push(String(indexForFinalStep))
+      dtreeStepIndices.push(String(indexForFinalStep))
     }
 
-    const isTreeEmpty = indexes.length === 0
+    const isTreeEmpty = dtreeStepIndices.length === 0
     const firstStepIndex = '0'
 
-    const emptyStepIndex = stepData.findIndex(
+    const emptyStepIndex = stepList.findIndex(
       ({ groups, isFinalStep }) => groups.length === 0 && !isFinalStep,
     )
     const treeHasEmptyStep = emptyStepIndex !== -1
 
     if (!isTreeEmpty && treeHasEmptyStep) {
-      const copiedIndex = indexes[emptyStepIndex - 1] ?? firstStepIndex
-      indexes.splice(emptyStepIndex, 0, copiedIndex)
+      const copiedIndex = dtreeStepIndices[emptyStepIndex - 1] ?? firstStepIndex
+      dtreeStepIndices.splice(emptyStepIndex, 0, copiedIndex)
     }
 
     // index is undefined in First step and Final step in Empty Tree
-    const indexFromIndexes = indexes[this.activeStepIndex] ?? firstStepIndex
+    const indexFromIndexes =
+      dtreeStepIndices[this.activeStepIndex] ?? firstStepIndex
 
     // 1)Case: For adding attribute in empty step
-    const isFirstElement = !indexes[this.activeStepIndex - 1]
+    const isFirstElement = !dtreeStepIndices[this.activeStepIndex - 1]
     if (this.activeStepIndex === emptyStepIndex && !isFirstElement) {
-      const nextStepIndex = indexes[this.activeStepIndex + 1]
+      const nextStepIndex = dtreeStepIndices[this.activeStepIndex + 1]
 
       return nextStepIndex
     }
@@ -80,19 +81,19 @@ class ActiveStep {
 
     switch (position) {
       case CreateEmptyStepPositions.FINAL:
-        dtreeStore.insertStep(position, previousStepIndex)
+        dtreeStore.insertEmptyStep(position, previousStepIndex)
 
         this.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
         break
 
       case CreateEmptyStepPositions.BEFORE:
-        dtreeStore.insertStep(position, stepIndex)
+        dtreeStore.insertEmptyStep(position, stepIndex)
 
         this.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
         break
 
       case CreateEmptyStepPositions.AFTER:
-        dtreeStore.insertStep(position, stepIndex)
+        dtreeStore.insertEmptyStep(position, stepIndex)
 
         this.makeStepActive(nextStepIndex, ActiveStepOptions.StartedVariants)
         break

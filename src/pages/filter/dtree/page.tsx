@@ -18,6 +18,10 @@ import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
 
 const FilterPage = observer((): ReactElement => {
+  console.log('stepList', toJS(dtreeStore.stepList))
+  console.log('changedStepList', toJS(dtreeStore.changedStepList))
+  // console.log('dtreeStepIndices  page:', toJS(dtreeStore.dtreeStepIndices))
+
   const { isXL } = datasetStore
 
   const history = useHistory()
