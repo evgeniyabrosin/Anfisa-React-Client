@@ -1,7 +1,7 @@
 import { ReactElement, useRef } from 'react'
 
 import useClientHeight from '@core/hooks/use-client-height'
-import { QueryBuilderGroups } from '@pages/filter/common/groups/query-builder-groups'
+import { DtreeUnitsList } from '@pages/filter/dtree/components/dtree-units-list'
 import { QueryBuilderTree } from './query-builder-tree'
 
 export const QueryBuilder = (): ReactElement => {
@@ -14,7 +14,7 @@ export const QueryBuilder = (): ReactElement => {
       className="flex overflow-y-hidden"
       style={{ maxHeight: nonEmptyBlockHeight }}
     >
-      <QueryBuilderGroups />
+      <DtreeUnitsList isModal={false} className="w-1/3" />
 
       <QueryBuilderTree />
     </div>

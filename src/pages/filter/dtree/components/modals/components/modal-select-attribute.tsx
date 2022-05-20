@@ -1,19 +1,16 @@
 import { ReactElement, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { useScrollPosition } from '@core/hooks/use-scroll-position'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
-import { QueryBuilderSubgroup } from '@pages/filter/common/groups/query-builder-subgroup'
-import { QueryBuilderSearch } from '../../query-builder/query-builder-search'
+import { DtreeUnitsList } from '@pages/filter/dtree/components/dtree-units-list'
 import modalsVisibilityStore from '../modals-visibility-store'
 import { HeaderModal } from './ui/header-modal'
 import { ModalBase } from './ui/modal-base'
 
 export const ModalSelectAttribute = observer((): ReactElement => {
-  const { filterValue, setFilterValue, filteredQueryBuilder } =
-    useFilterQueryBuilder(dtreeStore.stat.queryBuilder)
+  const { isLoading } = dtreeStore.stat
 
   const [readScrollPosition] = useScrollPosition({
     elem: '#attributes-container',
@@ -38,34 +35,17 @@ export const ModalSelectAttribute = observer((): ReactElement => {
         groupName={t('dtree.selectAttribute')}
         handleClose={handleClose}
       />
-
-      <div className="flex w-full mt-4">
-        <QueryBuilderSearch
-          value={filterValue}
-          onChange={(value: string) => setFilterValue(value)}
+      {isLoading ? (
+        <div className="flex flex-1 justify-center w-full my-4">
+          {t('dtree.loading')}
+        </div>
+      ) : (
+        <DtreeUnitsList
           isModal
+          className="overflow-hidden -mx-4"
+          listContainerId="attributes-container"
         />
-      </div>
-
-      <div id="attributes-container" className="flex-1 overflow-y-scroll mt-4">
-        {dtreeStore.stat.isLoading ? (
-          <div className="flex justify-center w-full my-4">
-            {t('dtree.loading')}
-          </div>
-        ) : (
-          filteredQueryBuilder.map(({ name, attributes, power }) => (
-            <QueryBuilderSubgroup
-              key={name}
-              groupName={name}
-              predictionPower={power}
-              subGroupData={attributes}
-              changeIndicator={dtreeStore.filterModalChangeIndicator}
-              isContentExpanded={dtreeStore.isFilterModalContentExpanded}
-              isModal
-            />
-          ))
-        )}
-      </div>
+      )}
     </ModalBase>
   )
 })

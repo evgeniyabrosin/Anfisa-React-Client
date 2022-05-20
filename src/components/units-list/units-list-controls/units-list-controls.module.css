@@ -1,0 +1,18 @@
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &__search {
+    flex: 1 0 auto;
+  }
+
+  &__button {
+    margin-left: theme("spacing.2");
+    color: theme("colors.grey.blue");
+
+    &:hover {
+      color: theme("colors.blue.bright");
+    }
+  }
+}

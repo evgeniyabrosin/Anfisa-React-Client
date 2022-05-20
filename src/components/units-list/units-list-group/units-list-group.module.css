@@ -1,0 +1,34 @@
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: theme("spacing.3");
+  color: theme("colors.blue.dark");
+  cursor: pointer;
+
+  @apply typography-m;
+
+  &_collapsed {
+    color: theme("colors.black");
+
+    &:hover {
+      color: theme("colors.blue.dark");
+    }
+  }
+
+  &_dark {
+    color: theme("colors.white");
+  }
+
+  &_dark&_collapsed {
+    color: theme("colors.grey.blue");
+
+    &:hover {
+      color: theme("colors.white");
+    }
+  }
+
+  &__title {
+    flex: 1 0 auto
+  }
+}
