@@ -10,6 +10,20 @@
   justify-content: space-between;
   box-sizing: border-box;
 
+  &_secondary-size {
+    &_xs {
+      padding: 2px 18px;
+    }
+
+    &_md {
+      padding: 4px 30px;
+    }
+
+    &_sm {
+      padding: 4px 22px;
+    }
+  }
+
   &_icon_only {
     border-radius: 4px;
 
@@ -79,14 +93,17 @@
     border: 2px solid theme("colors.red.light");
 
     &:hover {
+      background-color: inherit;
       border-color: theme("colors.red.hover");
     }
 
     &:focus {
+      background-color: inherit;
       border-color: theme("colors.red.active");
     }
 
     &:disabled {
+      background-color: inherit;
       border-color: theme("colors.red.disabled");
     }
   }
@@ -101,18 +118,6 @@
     background-color: inherit;
     color: theme("colors.white");
     border: 2px solid theme("colors.blue.bright");
-
-    &_xs {
-      padding: 2px 18px;
-    }
-
-    &_md {
-      padding: 4px 30px;
-    }
-
-    &_sm {
-      padding: 4px 22px;
-    }
 
     &:hover {
       background-color: inherit;

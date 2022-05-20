@@ -32,7 +32,7 @@ export interface IButtonProps {
 export const Button: FC<IButtonProps> = ({
   text,
   textSize = 'sm',
-  size = 'md',
+  size = 'sm',
   disabled = false,
   variant = 'primary',
   onClick,
@@ -50,8 +50,10 @@ export const Button: FC<IButtonProps> = ({
 
   const buttonSize = isOnlyIcon
     ? styles[`button_icon_only_${size}`]
-    : variant === 'secondary-dark'
-    ? styles[`button_secondaryDark_${size}`]
+    : variant === 'secondary-dark' ||
+      variant === 'diestruction' ||
+      variant === 'secondary'
+    ? styles[`button_secondarySize_${size}`]
     : styles[`button_${size}`]
 
   const buttonStyles = cn(

@@ -27,6 +27,7 @@ export const CustomizeTableButton = ({
     onMouseUp={onMouseUp}
     text={t('ds.customizeTable')}
     variant="secondary-dark"
+    size="sm"
     prepend={<Icon name="Settings" className="text-blue-bright" />}
     append={
       <Icon

@@ -1,5 +1,3 @@
-import { Fragment } from 'react'
-
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
@@ -12,19 +10,19 @@ export const DatasetCreationButton = () => {
   }
 
   return (
-    <Fragment>
+    <>
       <ControlPanelDivider />
 
       <div className="self-stretch flex flex-col justify-center items-center">
         <Button
           text={t('dsCreation.createDeriveDS')}
-          size="md"
+          size="sm"
           variant="secondary-dark"
           className="w-full"
           onClick={handleClick}
           dataTestId={DecisionTreesMenuDataCy.saveDataset}
         />
       </div>
-    </Fragment>
+    </>
   )
 }

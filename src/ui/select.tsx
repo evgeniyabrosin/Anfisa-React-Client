@@ -1,10 +1,10 @@
-import { ChangeEvent, Fragment, MouseEvent, ReactElement } from 'react'
+import { ChangeEvent, MouseEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 
-interface Props {
+interface ISelectProps {
   placeholder?: string
   className?: Argument
   onChange?: (e: ChangeEvent<HTMLSelectElement>) => void
@@ -17,7 +17,7 @@ interface Props {
   values?: string[]
 }
 
-export const Select = observer(({ ...rest }: Props): ReactElement => {
+export const Select = observer(({ ...rest }: ISelectProps): ReactElement => {
   const {
     className,
     options,
@@ -37,11 +37,11 @@ export const Select = observer(({ ...rest }: Props): ReactElement => {
       disabled={disabled}
     >
       {reset && (
-        <Fragment>
+        <>
           <option />
 
           <option value="empty">{t('dtree.empty')}</option>
-        </Fragment>
+        </>
       )}
 
       {options &&
