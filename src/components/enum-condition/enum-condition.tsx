@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
@@ -79,7 +80,10 @@ export const EnumCondition = observer(
           const { height } = entries[0].contentRect
           const heightOfElement = 32
 
-          if (height / heightOfElement !== variantsPerPage) {
+          if (
+            height / heightOfElement !== variantsPerPage &&
+            height / heightOfElement > 12
+          ) {
             setVariantsPerPage(height / 32)
           }
         })
@@ -151,13 +155,17 @@ export const EnumCondition = observer(
 
     return (
       <>
-        <AttributeHeader
-          chosenAttributes={selectedVariants.length}
-          allAttributes={enumVariants.length}
-          attrStatus={filterStore.selectedAttributeStatus!}
-        />
+        {isRefiner && (
+          <>
+            <AttributeHeader
+              chosenAttributes={selectedVariants.length}
+              allAttributes={enumVariants.length}
+              attrStatus={filterStore.selectedAttributeStatus!}
+            />
 
-        <DividerHorizontal />
+            <DividerHorizontal />
+          </>
+        )}
 
         {enumVariants.length > 12 && (
           <QueryBuilderSearch
@@ -168,7 +176,12 @@ export const EnumCondition = observer(
           />
         )}
 
-        <div className="flex justify-between items-center w-full mb-1 text-14">
+        <div
+          className={cn(
+            'flex justify-between items-center w-full mb-4 text-14',
+            !isRefiner && 'mt-6',
+          )}
+        >
           <div className="text-14 text-grey-blue">
             {selectedVariants.length || 0} {t('dtree.selected')}
           </div>
