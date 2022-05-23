@@ -24,6 +24,32 @@ class StepStore {
     return this._steps
   }
 
+  get filteredSteps(): IStepData[] {
+    const searchValue = dtreeStore.algorithmFilterValue.toLowerCase()
+
+    if (!searchValue) return this.steps
+
+    const filteredSteps = this.steps.filter(({ groups }) => {
+      return groups.some(condition => {
+        const name = condition[1].toLowerCase()
+        if (name.includes(searchValue)) return true
+
+        const valueVariants = condition[3]
+        if (!valueVariants) return false
+
+        const valueVariantList = Object.values(valueVariants)
+
+        return valueVariantList.some(varaintName => {
+          if (typeof varaintName !== 'string') return false
+
+          return varaintName?.toLowerCase().includes(searchValue)
+        })
+      })
+    })
+
+    return filteredSteps
+  }
+
   get stepIndexForApi(): string {
     const { dtreeStepIndices } = dtreeStore
 
@@ -141,7 +167,6 @@ class StepStore {
     this._steps = localSteps
   }
 
-  // TODO: restore here
   createEmptyStep(stepIndex: number, position: CreateEmptyStepPositions) {
     const previousStepIndex = stepIndex - 1
     const nextStepIndex = stepIndex + 1

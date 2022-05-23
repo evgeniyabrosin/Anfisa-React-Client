@@ -3,7 +3,6 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import dtreeStore from '@store/dtree'
 import stepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { NextStepContent } from './next-step-content'
@@ -47,7 +46,7 @@ export const NextStep = observer(
       setIsExpanded(prev => !prev)
     }
 
-    const currentStep = dtreeStore.filteredStepData[index]
+    const currentStep = stepStore.filteredSteps[index]
 
     const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -74,7 +73,7 @@ export const NextStep = observer(
             <NextStepRoute
               isExpanded={isExpanded}
               index={index}
-              isIncluded={!dtreeStore.filteredStepData[index].excluded}
+              isIncluded={!currentStep.excluded}
             />
           </TreeView>
 
@@ -89,7 +88,7 @@ export const NextStep = observer(
               isExpanded={isExpanded}
               expandContent={expandContent}
               index={index}
-              isExcluded={dtreeStore.filteredStepData[index].excluded}
+              isExcluded={currentStep.excluded}
             />
 
             {isExpanded && <NextStepContent index={index} />}

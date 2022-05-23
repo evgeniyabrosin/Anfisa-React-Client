@@ -81,7 +81,7 @@ interface INextStepRouteProps {
 export const NextStepRoute = observer(
   ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
     const isXl = dtreeStore.isXl
-    const currentStep = dtreeStore.filteredStepData[index]
+    const currentStep = stepStore.filteredSteps[index]
     const { conditionPointIndex, returnPointIndex } = currentStep
     const conditionCounts =
       conditionPointIndex !== null

@@ -3,7 +3,6 @@ import cn from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import { FilterList } from '@declarations'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'

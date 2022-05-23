@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
-import dtreeStore, { IStepData } from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import {
   EnumPropertyStatusSubKinds,
@@ -40,7 +40,8 @@ export const NextStepContentItem = observer(
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const stepType: FilterKindEnum = group[0]
     const groupName: string = group[1]
-    const currentStep: IStepData = dtreeStore.filteredStepData[index]
+    const currentStep = stepStore.filteredSteps[index]
+
     const currentGroup: TCondition = currentStep.groups[currNo]
     const groupSubKind: EnumPropertyStatusSubKinds = group['sub-kind']
     const conditionValue: string[] | TNumericConditionBounds = group.find(

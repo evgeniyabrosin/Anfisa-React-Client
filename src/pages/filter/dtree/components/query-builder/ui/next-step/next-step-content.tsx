@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import { t } from '@i18n'
-import dtreeStore from '@store/dtree'
 import stepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'
@@ -27,18 +26,16 @@ const ContentEditor = styled.div`
 
 export const NextStepContent = observer(
   ({ index }: INextStepContentProps): ReactElement => {
-    const groups = dtreeStore.filteredStepData[index].groups
+    const currentStep = stepStore.filteredSteps[index]
+
+    const { excluded, condition, groups, comment } = currentStep
 
     const [expanded, setExpanded] = useState<Record<number, boolean>>({})
     const expandGroup = (id: number) => () => {
       setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
     }
 
-    const currentStepData = dtreeStore.filteredStepData[index]
-    const isExcluded = currentStepData.excluded
-    const result = String(!isExcluded)
-
-    const condition = currentStepData.condition ?? null
+    const result = String(!excluded)
 
     const getWords = (text: string | null) => {
       if (!text) return []
@@ -97,7 +94,7 @@ export const NextStepContent = observer(
       return words
     }
 
-    const wordList = getWords(condition)
+    const wordList = getWords(condition ?? null)
 
     const openModal = () => {
       stepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
@@ -134,11 +131,7 @@ export const NextStepContent = observer(
                 className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono"
                 data-testid={DecisionTreesResultsDataCy.contentEditor}
               >
-                {dtreeStore.filteredStepData[index].comment && (
-                  <div className="text-white mb-2">
-                    {dtreeStore.filteredStepData[index].comment}
-                  </div>
-                )}
+                {comment && <div className="text-white mb-2">{comment}</div>}
 
                 <div className="flex">
                   <div className="text-orange-secondary mr-2">{wordList}</div>

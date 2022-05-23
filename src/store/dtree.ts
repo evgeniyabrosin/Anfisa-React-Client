@@ -291,33 +291,6 @@ class DtreeStore {
 
   // 2. UI functions to display adding / deleting / editing steps
 
-  // TODO: move to stepStore
-  get filteredStepData(): IStepData[] {
-    const searchValue = this.algorithmFilterValue.toLowerCase()
-
-    if (!searchValue) return stepStore.steps
-
-    const filteredStepData = stepStore.steps.filter(({ groups }) => {
-      return groups.some(condition => {
-        const name = condition[1].toLowerCase()
-        if (name.includes(searchValue)) return true
-
-        const valueVariants = condition[3]
-        if (!valueVariants) return false
-
-        const valueVariantList = Object.values(valueVariants)
-
-        return valueVariantList.some(varaintName => {
-          if (typeof varaintName !== 'string') return false
-
-          return varaintName?.toLowerCase().includes(searchValue)
-        })
-      })
-    })
-
-    return filteredStepData
-  }
-
   get isTreeEmpty(): boolean {
     const isFirstStepEmpty = this.stepData[0]?.groups.length === 0
     return this.stepData.length === 2 && isFirstStepEmpty

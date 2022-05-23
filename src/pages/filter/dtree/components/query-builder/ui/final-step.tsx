@@ -22,7 +22,7 @@ interface IFinalStepProps {
 
 export const FinalStep = observer(
   ({ index }: IFinalStepProps): ReactElement => {
-    const currentStep = dtreeStore.filteredStepData[index]
+    const currentStep = stepStore.filteredSteps[index]
 
     const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -54,7 +54,7 @@ export const FinalStep = observer(
             <NextStepRoute
               isExpanded={true}
               index={index}
-              isIncluded={!dtreeStore.filteredStepData[index].excluded}
+              isIncluded={!currentStep.excluded}
             />
           </TreeView>
 
