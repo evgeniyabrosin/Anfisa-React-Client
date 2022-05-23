@@ -38,7 +38,11 @@ export const ModalNumeric = observer((): ReactElement | null => {
         attrData={attributeStatus}
         initialValue={initialNumericValue}
         controls={({ value, hasErrors }) => {
-          const disabled = hasErrors || (value[0] == null && value[2] == null)
+          const disabled =
+            hasErrors ||
+            (value[0] == null && value[2] == null) ||
+            (typeof attributeStatus.min !== 'number' &&
+              typeof attributeStatus.max !== 'number')
 
           return initialCondition ? (
             <EditModalButtons
