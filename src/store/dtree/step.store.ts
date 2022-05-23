@@ -1,6 +1,6 @@
 import { toJS } from 'mobx'
 
-import dtreeStore from '@store/dtree'
+import dtreeStore, { IStepData } from '@store/dtree'
 
 export enum ActiveStepOptions {
   StartedVariants = 'startedVariants',
@@ -13,7 +13,7 @@ export enum CreateEmptyStepPositions {
   FINAL = 'FINAL',
 }
 
-class ActiveStep {
+class StepStore {
   activeStepIndex: number = 0
   activeStepOption: ActiveStepOptions = ActiveStepOptions.StartedVariants
 
@@ -21,6 +21,8 @@ class ActiveStep {
     this.activeStepIndex = index
     this.activeStepOption = option
   }
+
+  _steps: IStepData[] = []
 
   get stepIndexForApi(): string {
     const { dtreeStepIndices, stepList } = dtreeStore
@@ -104,4 +106,4 @@ class ActiveStep {
   }
 }
 
-export default new ActiveStep()
+export default new StepStore()

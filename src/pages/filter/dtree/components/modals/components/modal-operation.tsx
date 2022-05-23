@@ -8,7 +8,7 @@ import dtreeStore from '@store/dtree'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   CreateEmptyStepPositions,
-} from '@pages/filter/dtree/components/active-step.store'
+} from '@store/dtree/step.store'
 import { InstrModifyingActionNames } from '@service-providers/decision-trees'
 import { changeStep } from '@utils/changeStep'
 

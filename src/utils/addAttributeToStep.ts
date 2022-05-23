@@ -2,7 +2,7 @@ import { ActionType, AttributeType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import activeStepStore from '@store/dtree/step.store'
 import {
   ActionTypes,
   TPointModifyingActions,

@@ -7,7 +7,7 @@ import dtreeStore from '@store/dtree'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
-} from '@pages/filter/dtree/components/active-step.store'
+} from '@store/dtree/step.store'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'

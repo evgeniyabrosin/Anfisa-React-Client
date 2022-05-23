@@ -11,7 +11,7 @@ import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import activeStepStore, {
   ActiveStepOptions,
-} from '@pages/filter/dtree/components/active-step.store'
+} from '@store/dtree/step.store'
 import { StepCount } from '@pages/filter/dtree/components/query-builder/ui/step-count'
 
 const StartAmount = styled.div`

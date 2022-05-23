@@ -1,7 +1,7 @@
 import { makeAutoObservable, toJS } from 'mobx'
 
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import activeStepStore from '@store/dtree/step.store'
 import {
   AttributeKinds,
   IFuncPropertyStatus,

@@ -1,6 +1,6 @@
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore, { IStepData } from '@store/dtree'
-import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import activeStepStore from '@store/dtree/step.store'
 import { TCondition } from '@service-providers/common'
 import { PointCount } from '@service-providers/decision-trees'
 import { getDataFromCode } from './getDataFromCode'

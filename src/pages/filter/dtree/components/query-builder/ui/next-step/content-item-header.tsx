@@ -6,12 +6,10 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { theme } from '@theme'
 import { IStepData } from '@store/dtree'
+import activeStepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { FnLabel } from '@components/fn-label'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@pages/filter/dtree/components/active-step.store'
 import modalFiltersStore from '@pages/filter/dtree/components/modals/components/modal-enum/modal-enum.store'
 import { EnumPropertyStatusSubKinds } from '@service-providers/common'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'

@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
+import { CreateEmptyStepPositions } from '@store/dtree/step.store'
 import {
   TCondition,
   TFilteringStatCounts,
@@ -18,11 +18,9 @@ import filteringRegimeProvider from '@service-providers/filtering-regime/filteri
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '../pages/filter/dtree/components/active-step.store'
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
+import activeStepStore, { ActiveStepOptions } from './dtree/step.store'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
 import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store'
 import { DtreeStatStore } from './dtree/dtree-stat.store'

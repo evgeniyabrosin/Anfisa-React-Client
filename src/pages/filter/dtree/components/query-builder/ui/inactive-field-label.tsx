@@ -3,7 +3,9 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import { Icon } from '@ui/icon'
 import { deleteAttribute } from '@utils/changeAttribute/deleteAttribute'
-import activeStepStore, { ActiveStepOptions } from '../../active-step.store'
+import activeStepStore, {
+  ActiveStepOptions,
+} from '../../../../../../store/dtree/step.store'
 
 interface IInactiveFieldProps {
   stepIndex: number

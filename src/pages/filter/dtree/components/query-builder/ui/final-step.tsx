@@ -9,7 +9,7 @@ import { Radio } from '@ui/radio'
 import activeStepStore, {
   ActiveStepOptions,
   CreateEmptyStepPositions,
-} from '@pages/filter/dtree/components/active-step.store'
+} from '@store/dtree/step.store'
 import { changeStep } from '@utils/changeStep'
 import { ResultsView, TreeView } from './next-step/next-step'
 import { Operation, Step } from './next-step/next-step-header'
