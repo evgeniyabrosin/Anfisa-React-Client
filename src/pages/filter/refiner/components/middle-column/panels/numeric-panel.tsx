@@ -22,29 +22,33 @@ export const NumericPanel = observer((): ReactElement | null => {
       className="mt-4"
       attrData={attributeStatus}
       initialValue={initialNumericValue}
-      controls={({ value, hasErrors, clearValue }) => (
-        <div className="flex items-center justify-end mt-1">
-          <Button
-            variant={'secondary'}
-            text={t('general.clear')}
-            onClick={clearValue}
-            className="px-5 mr-2"
-          />
-          <Button
-            text={
-              initialNumericValue
-                ? t('dtree.saveChanges')
-                : t('dtree.addAttribute')
-            }
-            onClick={() => refinerAttributeStore.saveNumeric(value)}
-            disabled={
-              hasErrors ||
-              (value[0] === null && value[2] === null) ||
-              !isFilterTouched
-            }
-          />
-        </div>
-      )}
+      controls={({ value, hasErrors, clearValue }) => {
+        const disabled =
+          hasErrors ||
+          (value[0] == null && value[2] == null) ||
+          (typeof attributeStatus.min !== 'number' &&
+            typeof attributeStatus.max !== 'number') ||
+          !isFilterTouched
+        return (
+          <div className="flex items-center justify-end mt-1">
+            <Button
+              variant={'secondary'}
+              text={t('general.clear')}
+              onClick={clearValue}
+              className="px-5 mr-2"
+            />
+            <Button
+              text={
+                initialNumericValue
+                  ? t('dtree.saveChanges')
+                  : t('dtree.addAttribute')
+              }
+              onClick={() => refinerAttributeStore.saveNumeric(value)}
+              disabled={disabled || !isFilterTouched}
+            />
+          </div>
+        )
+      }}
     />
   )
 })
