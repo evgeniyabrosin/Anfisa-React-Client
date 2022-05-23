@@ -52,7 +52,7 @@ export const CompoundRequestScenario: FC<ICompoundRequestScenarioProp> = ({
             />
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           {functionPanelStore.problemGroups.map(
             (group: string, currNo: number) => {
               const value = getSelectedValue(
