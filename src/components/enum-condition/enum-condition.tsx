@@ -84,7 +84,7 @@ export const EnumCondition = observer(
 
           const newCount = height / heightOfElement
           if (newCount !== variantsPerPage && newCount > initialCount) {
-            setVariantsPerPage(height / 32)
+            setVariantsPerPage(newCount)
           }
         })
         observer.observe(element)
