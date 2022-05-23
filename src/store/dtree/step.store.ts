@@ -124,8 +124,22 @@ class StepStore {
     }
   }
 
-  setSteps(response: IDtreeSetResponse): void {
-    this._steps = adaptDtreeSetToSteps(response)
+  setSteps(steps: IStepData[]): void {
+    this._steps = steps
+  }
+
+  removeStep(index: number) {
+    const stepData = this.steps
+
+    stepData.splice(index, 1)
+
+    stepData.map((item, currNo: number) => {
+      item.step = currNo + 1
+    })
+
+    this.makeStepActive(stepData.length - 1, ActiveStepOptions.StartedVariants)
+
+    // this.resetLocalDtreeCode()
   }
 }
 

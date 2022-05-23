@@ -8,6 +8,7 @@ import { useDatasetName } from '@core/hooks/use-dataset-name'
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import filterStore from '@store/filter'
 import { Header } from '@components/header'
 import { VariantsCount } from '@components/variants-count'
@@ -18,9 +19,7 @@ import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
 
 const FilterPage = observer((): ReactElement => {
-  console.log('stepList', toJS(dtreeStore.stepList))
-  console.log('changedStepList', toJS(dtreeStore.changedStepList))
-  // console.log('dtreeStepIndices  page:', toJS(dtreeStore.dtreeStepIndices))
+  console.log('steps', toJS(stepStore.steps))
 
   const { isXL } = datasetStore
 

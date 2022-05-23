@@ -13,6 +13,7 @@ import {
   DtreeSetPointKinds,
   IDtreeSetPoint,
 } from '@service-providers/decision-trees'
+import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision-trees.adapters'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -78,7 +79,7 @@ class DtreeStore {
     const stepCodes = getDataFromCode(this.dtreeCode)
 
     const localStepData: IStepData[] = []
-    // const { activeStepIndex } = stepStore
+
     const atomsEntries = Object.entries(
       (this.dtreeSetData?.['cond-atoms'] as Record<string, TCondition[]>) ?? {},
     )
@@ -224,7 +225,7 @@ class DtreeStore {
       () => this.dtreeSetData,
       response => {
         if (response) {
-          stepStore.setSteps(response)
+          stepStore.setSteps(adaptDtreeSetToSteps(response))
         }
       },
     )
@@ -289,59 +290,6 @@ class DtreeStore {
   }
 
   // 1. Functions to load / draw / edit decision trees
-
-  // async drawDecesionTreeAsync(isLoadingNewTree: boolean) {
-  // const initialStepData: IStepData[] = [
-  //   {
-  //     step: 1,
-  //     groups: [],
-  //     excluded: true,
-  //     isActive: false,
-  //     isReturnedVariantsActive: false,
-  //     conditionPointIndex: 0,
-  //     returnPointIndex: null,
-  //   },
-  // ]
-
-  // const computedStepData = await getStepDataAsync(isLoadingNewTree)
-
-  // const newStepData =
-  //   computedStepData.length === 0 ? initialStepData : computedStepData
-
-  // const stepCodes = getDataFromCode(this.dtreeCode)
-
-  // const points: unknown[] | undefined = this.dtree?.points
-
-  // const finalStep: IStepData = {
-  //   step: newStepData.length,
-  //   groups: [],
-  //   excluded: !stepCodes[stepCodes.length - 1]?.result,
-  //   isActive: false,
-  //   isReturnedVariantsActive: false,
-  //   conditionPointIndex: null,
-  //   returnPointIndex: points ? points.length - 1 : null,
-  //   isFinalStep: true,
-  // }
-
-  // newStepData.push(finalStep)
-
-  // runInAction(() => {
-  //   this.stepData = [...newStepData]
-  //   this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
-  // })
-
-  //   const stepDataActiveIndex = newStepData.findIndex(
-  //     element => element.isActive || element.isReturnedVariantsActive,
-  //   )
-
-  //   const nextActiveStep =
-  //     stepDataActiveIndex === -1 ? newStepData.length - 1 : stepDataActiveIndex
-
-  //   stepStore.makeStepActive(
-  //     nextActiveStep,
-  //     ActiveStepOptions.StartedVariants,
-  //   )
-  // }
 
   getStepIndexForApi = (index: number) => {
     const indexes = toJS(this.dtreeStepIndices)
@@ -501,16 +449,17 @@ class DtreeStore {
     this.resetLocalDtreeCode()
   }
 
-  duplicateStep(index: number) {
-    const clonedStep = cloneDeep(this.stepData[index])
+  // TODO: remove unused fucntion
+  // duplicateStep(index: number) {
+  //   const clonedStep = cloneDeep(this.stepData[index])
 
-    this.stepData.splice(index + 1, 0, clonedStep)
+  //   this.stepData.splice(index + 1, 0, clonedStep)
 
-    this.stepData.map((item, currNo: number) => {
-      item.step = currNo + 1
-    })
-    this.resetLocalDtreeCode()
-  }
+  //   this.stepData.map((item, currNo: number) => {
+  //     item.step = currNo + 1
+  //   })
+  //   this.resetLocalDtreeCode()
+  // }
 
   removeStep(index: number) {
     this.stepData.splice(index, 1)
@@ -523,7 +472,7 @@ class DtreeStore {
       ActiveStepOptions.StartedVariants,
     )
 
-    this.resetLocalDtreeCode()
+    // this.resetLocalDtreeCode()
   }
 
   addSelectedGroup(group: any) {
