@@ -1,6 +1,8 @@
-import { toJS } from 'mobx'
+import { makeAutoObservable, reaction, toJS } from 'mobx'
 
 import dtreeStore, { IStepData } from '@store/dtree'
+import { IDtreeSetResponse } from '@service-providers/decision-trees'
+import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision-trees.adapters'
 
 export enum ActiveStepOptions {
   StartedVariants = 'startedVariants',
@@ -17,12 +19,11 @@ class StepStore {
   activeStepIndex: number = 0
   activeStepOption: ActiveStepOptions = ActiveStepOptions.StartedVariants
 
-  setActiveStep(index: number, option: ActiveStepOptions) {
-    this.activeStepIndex = index
-    this.activeStepOption = option
-  }
-
   _steps: IStepData[] = []
+
+  get steps() {
+    return this._steps
+  }
 
   get stepIndexForApi(): string {
     const { dtreeStepIndices, stepList } = dtreeStore
@@ -72,6 +73,24 @@ class StepStore {
     return indexForApi
   }
 
+  constructor() {
+    makeAutoObservable(this)
+
+    // reaction(
+    //   () => dtreeStore.dtreeSetData,
+    //   response => {
+    //     if (response) {
+    //       this._steps = adaptDtreeSetToSteps(response)
+    //     }
+    //   },
+    // )
+  }
+
+  setActiveStep(index: number, option: ActiveStepOptions) {
+    this.activeStepIndex = index
+    this.activeStepOption = option
+  }
+
   makeStepActive(index: number, option: ActiveStepOptions) {
     this.setActiveStep(index, option)
     dtreeStore.changeStepDataActiveStep(index, option, this.stepIndexForApi)
@@ -103,6 +122,10 @@ class StepStore {
       default:
         break
     }
+  }
+
+  setSteps(response: IDtreeSetResponse): void {
+    this._steps = adaptDtreeSetToSteps(response)
   }
 }
 

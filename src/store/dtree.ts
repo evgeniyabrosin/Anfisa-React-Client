@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import cloneDeep from 'lodash/cloneDeep'
-import { makeAutoObservable, runInAction, toJS } from 'mobx'
+import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { CreateEmptyStepPositions } from '@store/dtree/step.store'
@@ -17,13 +17,12 @@ import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
 import { getDataFromCode } from '@utils/getDataFromCode'
-import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
-import activeStepStore, { ActiveStepOptions } from './dtree/step.store'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
 import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
+import stepStore, { ActiveStepOptions } from './dtree/step.store'
 
 export type IStepData = {
   step: number
@@ -79,7 +78,7 @@ class DtreeStore {
     const stepCodes = getDataFromCode(this.dtreeCode)
 
     const localStepData: IStepData[] = []
-    // const { activeStepIndex } = activeStepStore
+    // const { activeStepIndex } = stepStore
     const atomsEntries = Object.entries(
       (this.dtreeSetData?.['cond-atoms'] as Record<string, TCondition[]>) ?? {},
     )
@@ -221,6 +220,15 @@ class DtreeStore {
   }
 
   constructor() {
+    reaction(
+      () => this.dtreeSetData,
+      response => {
+        if (response) {
+          stepStore.setSteps(response)
+        }
+      },
+    )
+
     makeAutoObservable(this)
   }
 
@@ -329,7 +337,7 @@ class DtreeStore {
   //   const nextActiveStep =
   //     stepDataActiveIndex === -1 ? newStepData.length - 1 : stepDataActiveIndex
 
-  //   activeStepStore.makeStepActive(
+  //   stepStore.makeStepActive(
   //     nextActiveStep,
   //     ActiveStepOptions.StartedVariants,
   //   )
@@ -391,7 +399,7 @@ class DtreeStore {
   async fetchStatFuncAsync(subGroupName: string, param: string) {
     const body: IStatfuncArguments = {
       ds: datasetStore.datasetName,
-      no: activeStepStore.stepIndexForApi,
+      no: stepStore.stepIndexForApi,
       code: this.dtreeCode,
       rq_id: Math.random().toString(),
       unit: subGroupName,
@@ -510,7 +518,7 @@ class DtreeStore {
     this.stepData.map((item, currNo: number) => {
       item.step = currNo + 1
     })
-    activeStepStore.makeStepActive(
+    stepStore.makeStepActive(
       this.stepData.length - 1,
       ActiveStepOptions.StartedVariants,
     )
