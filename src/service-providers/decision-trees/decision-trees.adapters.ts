@@ -17,28 +17,25 @@ export const adaptDtreeStatResponse = (
 export const adaptDtreeSetToSteps = (
   response: IDtreeSetResponse,
 ): IStepData[] => {
-  // TODO: rename names
-  const initialStepData: IStepData[] = [
-    {
-      step: 1,
-      groups: [],
-      excluded: true,
-      isActive: false,
-      isReturnedVariantsActive: false,
-      conditionPointIndex: 0,
-      returnPointIndex: null,
-    },
-  ]
+  const initialStep: IStepData = {
+    step: 1,
+    groups: [],
+    excluded: true,
+    isActive: false,
+    isReturnedVariantsActive: false,
+    conditionPointIndex: 0,
+    returnPointIndex: null,
+  }
 
   const stepCodes = getDataFromCode(response.code)
 
-  const localStepData: IStepData[] = []
+  const localSteps: IStepData[] = []
   const atomsEntries = Object.entries(response['cond-atoms'] ?? {})
 
   atomsEntries.forEach(([key, atom], index) => {
     const conditionPointIndex = parseInt(key, 10)
 
-    localStepData.push({
+    localSteps.push({
       step: index + 1,
       groups: atom.filter((elem: any[]) => elem.length > 0),
       excluded: !stepCodes[index].result,
@@ -53,7 +50,7 @@ export const adaptDtreeSetToSteps = (
     })
   })
 
-  localStepData.forEach((step: IStepData, index: number) => {
+  localSteps.forEach((step: IStepData, index: number) => {
     if (step.groups.length > 1) {
       step.groups.forEach((group: any[], currNo: number) => {
         currNo !== 0 && group.splice(-1, 0, stepCodes[index].types[currNo - 1])
@@ -61,14 +58,12 @@ export const adaptDtreeSetToSteps = (
     }
   })
 
-  //
-  const newStepData =
-    localStepData.length === 0 ? initialStepData : localStepData
+  const newSteps = localSteps.length === 0 ? [initialStep] : localSteps
 
   const points: unknown[] | undefined = response.points
 
   const finalStep: IStepData = {
-    step: newStepData.length,
+    step: newSteps.length,
     groups: [],
     excluded: !stepCodes[stepCodes.length - 1]?.result,
     isActive: false,
@@ -78,7 +73,7 @@ export const adaptDtreeSetToSteps = (
     isFinalStep: true,
   }
 
-  newStepData.push(finalStep)
+  newSteps.push(finalStep)
 
-  return newStepData
+  return newSteps
 }
