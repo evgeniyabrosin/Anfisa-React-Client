@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
@@ -6,15 +6,15 @@ import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { Pagintaion } from '@components/pagintaion'
+import { DtreeAttributeButtons } from '@pages/filter/common/attributes/dtree-attribute-buttons'
+import { RefinerAttributeButtons } from '@pages/filter/common/attributes/refiner-attribute-buttons'
 import { QueryBuilderSearch } from '@pages/filter/dtree/components/query-builder/query-builder-search'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
+import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
+import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import { SelectedGroupItem } from '@pages/filter/refiner/components/middle-column/selected-group-item'
 import { TCondition, TVariant } from '@service-providers/common'
-import { DtreeAttributeButtons } from '../../pages/filter/common/attributes/dtree-attribute-buttons'
-import { RefinerAttributeButtons } from '../../pages/filter/common/attributes/refiner-attribute-buttons'
 import { EnumMods } from './enum-mods'
-
-const variantsPerPage = 12
 
 interface IEnumCondition {
   attributeName: string | undefined
@@ -52,19 +52,45 @@ export const EnumCondition = observer(
     saveEnum,
     addEnum,
   }: IEnumCondition): ReactElement => {
+    const ref = useRef<HTMLDivElement>(null)
+
     const [mode, setMode] = useState(initialEnumMode)
     const [selectedVariants, setSelectedVariants] = useState(
       initialEnumVariants ?? [],
     )
     const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
+    const [variantsPerPage, setVariantsPerPage] = useState<number>(12)
 
-    const isBlockAddBtn = selectedVariants.length === 0 || !isFilterTouched
+    const isBlockAddBtn = !selectedVariants.length || !isFilterTouched
 
     useEffect(() => {
       setSearchValue('')
       setCurrentPage(0)
     }, [attributeName])
+
+    useEffect(
+      () => {
+        const element = ref.current as Element
+
+        if (!element) return
+
+        const observer = new ResizeObserver(entries => {
+          const { height } = entries[0].contentRect
+          const heightOfElement = 32
+
+          if (height / heightOfElement !== variantsPerPage) {
+            setVariantsPerPage(height / 32)
+          }
+        })
+        observer.observe(element)
+
+        return () => {
+          observer.unobserve(element)
+        }
+      }, // eslint-disable-next-line react-hooks/exhaustive-deps
+      [ref.current],
+    )
 
     const preparedSearchValue = searchValue.toLocaleLowerCase()
 
@@ -125,56 +151,67 @@ export const EnumCondition = observer(
 
     return (
       <>
+        <AttributeHeader
+          chosenAttributes={selectedVariants.length}
+          allAttributes={enumVariants.length}
+          attrStatus={filterStore.selectedAttributeStatus!}
+        />
+
+        <DividerHorizontal />
+
         {enumVariants.length > 12 && (
-          <div className="flex mt-3">
-            <QueryBuilderSearch
-              value={searchValue}
-              onChange={handleSearchChange}
-              isSubgroupItemSearch
-            />
-          </div>
+          <QueryBuilderSearch
+            value={searchValue}
+            onChange={handleSearchChange}
+            isSubgroupItemSearch
+            className="mb-4"
+          />
         )}
 
-        <div className="flex justify-between items-center w-full mt-4 text-14">
+        <div className="flex justify-between items-center w-full mb-1 text-14">
           <div className="text-14 text-grey-blue">
             {selectedVariants.length || 0} {t('dtree.selected')}
           </div>
 
-          <div className="flex flex-col">
-            <EnumMods
-              selectAllVariants={selectAllVariants}
-              clearAllVariants={clearAllVariants}
-            />
-
-            <div className="flex justify-end mt-1">
-              <AllNotMods
-                groupSubKind={attributeSubKind}
-                isAllModeChecked={mode === ModeTypes.All}
-                isNotModeChecked={mode === ModeTypes.Not}
-                isAllModeDisabled={selectedVariants.length < 2}
-                isNotModeDisabled={selectedVariants.length === 0}
-                toggleAllMode={() => toggleMode(ModeTypes.All)}
-                toggleNotMode={() => toggleMode(ModeTypes.Not)}
-              />
-            </div>
-          </div>
+          <EnumMods
+            selectAllVariants={selectAllVariants}
+            clearAllVariants={clearAllVariants}
+          />
         </div>
 
-        <div className="flex-1 mb-4">
-          {variantsPage.length > 0 ? (
-            variantsPage.map(variant => (
-              <SelectedGroupItem
-                key={variant[0]}
-                isSelected={selectedVariants.includes(variant[0])}
-                variant={variant}
-                handleCheckGroupItem={handleCheckGroupItem}
-              />
-            ))
-          ) : (
-            <div className="flex justify-center items-center text-14 text-grey-blue">
-              {t('dtree.noFilters')}
-            </div>
-          )}
+        <div
+          className="flex flex-1 mb-4 justify-between flex-row-reverse"
+          ref={ref}
+        >
+          <div>
+            <AllNotMods
+              groupSubKind={attributeSubKind}
+              isAllModeChecked={mode === ModeTypes.All}
+              isNotModeChecked={mode === ModeTypes.Not}
+              isAllModeDisabled={selectedVariants.length < 2}
+              isNotModeDisabled={!selectedVariants.length}
+              toggleAllMode={() => toggleMode(ModeTypes.All)}
+              toggleNotMode={() => toggleMode(ModeTypes.Not)}
+            />
+          </div>
+
+          <div className="h-full">
+            {variantsPage.length > 0 ? (
+              variantsPage.map(variant => (
+                <SelectedGroupItem
+                  key={variant[0]}
+                  isSelected={selectedVariants.includes(variant[0])}
+                  variant={variant}
+                  handleCheckGroupItem={handleCheckGroupItem}
+                  className="last:mb-0"
+                />
+              ))
+            ) : (
+              <div className="flex justify-center items-center text-14 text-grey-blue">
+                {t('dtree.noFilters')}
+              </div>
+            )}
+          </div>
         </div>
 
         {pagesCount > 1 && (

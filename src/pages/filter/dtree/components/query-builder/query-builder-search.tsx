@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -17,6 +18,7 @@ interface IQueryBuilderSearchProps {
   showSwitcher?: boolean
   onSwitch?: (e: boolean) => void
   isSwitched?: boolean
+  className?: Argument
 }
 
 export const QueryBuilderSearch = observer(
@@ -29,6 +31,7 @@ export const QueryBuilderSearch = observer(
     showSwitcher,
     onSwitch,
     isSwitched,
+    className,
   }: IQueryBuilderSearchProps): ReactElement => {
     const handleClick = (operation: string) => {
       if (isFilter) {
@@ -48,7 +51,7 @@ export const QueryBuilderSearch = observer(
     }
 
     return (
-      <div className="flex w-full items-center">
+      <div className={cn('flex w-full items-center', className)}>
         <InputSearch
           className="flex-1"
           placeholder={t('filter.searchForAField')}

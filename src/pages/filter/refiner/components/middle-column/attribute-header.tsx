@@ -29,7 +29,9 @@ export const AttributeHeader = ({
     <div className={cn('flex items-center', className)}>
       {isFunc && <FnLabel />}
 
-      <span className={cn('text-16 ml-1.5 font-bold cursor-pointer')}>
+      <span
+        className={cn('text-16 font-bold cursor-pointer', isFunc && 'ml-1.5')}
+      >
         {name || title}
       </span>
 

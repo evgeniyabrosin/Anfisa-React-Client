@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { TVariant } from '@service-providers/common'
@@ -7,12 +8,14 @@ interface ISelectedGroupItemProps {
   handleCheckGroupItem: (checked: boolean, variant: TVariant) => void
   variant: TVariant
   isSelected: boolean
+  className?: Argument
 }
 
 export const SelectedGroupItem = ({
   isSelected,
   variant,
   handleCheckGroupItem,
+  className,
 }: ISelectedGroupItemProps): ReactElement => {
   const handleCheck = (event: any) => {
     handleCheckGroupItem(event.target.checked, variant)
@@ -25,7 +28,7 @@ export const SelectedGroupItem = ({
       id={variantName + variantValue}
       checked={isSelected}
       onChange={handleCheck}
-      className="mb-4 text-14 flex items-center h-4 w-fit"
+      className={cn('mb-4 text-14 flex items-center h-4 w-fit', className)}
     >
       <span>{variantName}</span>
 
