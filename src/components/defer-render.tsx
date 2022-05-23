@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react'
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react'
 
 interface IDeferRenderProps {
   chunkSize: number
@@ -43,10 +37,10 @@ export const DeferRender = ({
   }, [renderedItemsCount, setRenderedItemsCount, totalCount, chunkSize])
 
   return (
-    <Fragment>
+    <>
       {React.Children.map(children, (child, index) =>
         index < renderedItemsCount ? child : null,
       )}
-    </Fragment>
+    </>
   )
 }

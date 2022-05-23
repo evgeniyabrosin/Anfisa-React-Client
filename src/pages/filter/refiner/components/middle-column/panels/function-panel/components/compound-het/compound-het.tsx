@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useMemo } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
@@ -13,7 +14,7 @@ import { ICompoundHetArgs } from '@service-providers/common/common.interface'
 import { getApproxName } from '@utils/getApproxName'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import functionPanelStore from '../../function-panel.store'
-import { AprroxAndState } from '../compound-request/approx-state'
+import { AprroxAndState } from '../compound-request/components/approx-state'
 import { PanelButtons } from '../panelButtons'
 import compoundHetStore from './compound-het.store'
 
@@ -95,22 +96,26 @@ export const CompundHet = observer((): ReactElement => {
 
   return (
     <>
-      <div className="text-red-secondary">
-        {compoundHetStore.statFuncStatus}
-      </div>
-      <div className="flex justify-between items-center w-full mt-4 text-14">
-        <AprroxAndState approx={approx} setApprox={setApprox} />
+      {compoundHetStore.statFuncStatus && (
+        <div className="text-red-secondary">
+          {compoundHetStore.statFuncStatus}
+        </div>
+      )}
+      <AprroxAndState
+        approx={approx}
+        setApprox={setApprox}
+        className={cn('mb-4', compoundHetStore.statFuncStatus && 'mt-2')}
+      />
 
+      <div className="flex justify-end mb-[-21px]">
         <AllNotMods
           isNotModeChecked={compoundHetStore.currentMode === ModeTypes.Not}
-          isNotModeDisabled={
-            simpleVariants ? simpleVariants.length === 0 : true
-          }
+          isNotModeDisabled={!simpleVariants?.length}
           toggleNotMode={toggleNotMode}
         />
       </div>
 
-      <div className="mt-4">
+      <div className="flex-1">
         <DisabledVariantsAmount variants={simpleVariants} disabled={true} />
       </div>
 

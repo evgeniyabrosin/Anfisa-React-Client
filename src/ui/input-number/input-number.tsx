@@ -1,7 +1,9 @@
+import styles from './input-number.module.css'
+
 import { ChangeEvent, ReactElement } from 'react'
 import cn, { Argument } from 'classnames'
 
-interface Props {
+interface IInputNumberProps {
   placeholder?: string
   disabled?: boolean
   value: string | number
@@ -11,13 +13,13 @@ interface Props {
   max?: number
 }
 
-export const InputNumber = ({ ...rest }: Props): ReactElement => {
+export const InputNumber = ({ ...rest }: IInputNumberProps): ReactElement => {
   const { className, ...tempRest } = rest
 
   return (
     <input
       type="number"
-      className={cn('text-sm rounded leading-tight py-1.5 px-3', className)}
+      className={cn(styles.input, className)}
       {...tempRest}
     />
   )

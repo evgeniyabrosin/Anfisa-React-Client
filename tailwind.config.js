@@ -73,7 +73,8 @@ module.exports = {
   },
   corePlugins: [
     'preflight', // Tailwind's base/reset styles
-    // 'container'	The container component
+    'container', //	The container component
+    'columns',
     // 'accessibility',	The sr-only and not-sr-only utilities
     // 'alignContent', // The align-content utilities like content-end
     'alignItems', // The align-items utilities like items-center

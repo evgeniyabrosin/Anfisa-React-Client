@@ -5,7 +5,7 @@ import filterStore from '@store/filter'
 import { EnumCondition } from '@components/enum-condition/enum-condition'
 import { refinerAttributeStore } from '../../attributes/refiner-attributes.store'
 
-export const EnumPanel = observer((): ReactElement | null => {
+export const EnumPanel = observer((): ReactElement => {
   const {
     attributeName,
     enumVariants,
