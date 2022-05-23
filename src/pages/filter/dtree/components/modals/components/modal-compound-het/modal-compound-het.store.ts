@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
@@ -58,7 +59,13 @@ class ModalCompoundHetStore {
       approx: datasetStore.isXL ? null : getApproxValue(this.approx),
     }
 
-    addAttributeToStep(action, 'func', null, params, this.currentMode)
+    addAttributeToStep(
+      action,
+      FilterKindEnum.Func,
+      null,
+      params,
+      this.currentMode,
+    )
 
     dtreeStore.resetSelectedFilters()
     modalsVisibilityStore.closeModalCompoundHet()

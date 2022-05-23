@@ -1,26 +1,39 @@
-import { makeAutoObservable, toJS } from 'mobx'
-
+import { ActionType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
+import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility-store'
 import {
   AttributeKinds,
   TCondition,
   TNumericConditionBounds,
   TPropertyStatus,
   TVariant,
-} from '@service-providers/common/common.interface'
+} from '@service-providers/common'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
+interface IBaseAttributeStoreParams {
+  getAttributeStatus: () => TPropertyStatus | undefined
+  getInitialCondition: () => TCondition | undefined
+}
 
-// TODO: we can create more general store for using it also in dtree
-export class CurrentFilterStore {
-  constructor() {
-    makeAutoObservable(this)
+export class BaseAttributeStore {
+  private readonly getAttributeStatus: () => TPropertyStatus | undefined
+  private readonly getInitialCondition: () => TCondition | undefined
+
+  constructor(params: IBaseAttributeStoreParams) {
+    this.getAttributeStatus = params.getAttributeStatus
+    this.getInitialCondition = params.getInitialCondition
   }
 
   public get attributeStatus(): TPropertyStatus | undefined {
-    return filterStore.selectedAttributeStatus
+    return this.getAttributeStatus()
+  }
+
+  public get initialCondition(): TCondition | undefined {
+    return this.getInitialCondition()
   }
 
   public get attributeName(): string | undefined {
@@ -30,18 +43,6 @@ export class CurrentFilterStore {
   public get attributeSubKind(): string | undefined {
     if (this.attributeStatus && 'sub-kind' in this.attributeStatus) {
       return this.attributeStatus['sub-kind']
-    }
-
-    return undefined
-  }
-
-  public get initialCondition(): TCondition | undefined {
-    return toJS(filterStore.selectedCondition)
-  }
-
-  public get initialNumericValue(): TNumericConditionBounds | undefined {
-    if (this.initialCondition?.[0] === FilterKindEnum.Numeric) {
-      return this.initialCondition[2]
     }
 
     return undefined
@@ -95,20 +96,55 @@ export class CurrentFilterStore {
     return variants
   }
 
-  public saveEnum(variants: string[], mode: ModeTypes | undefined): void {
+  public get initialNumericValue(): TNumericConditionBounds | undefined {
+    if (this.initialCondition?.[0] === FilterKindEnum.Numeric) {
+      return this.initialCondition[2]
+    }
+
+    return undefined
+  }
+
+  public saveEnum = (
+    selectedVariants: string[],
+    mode: ModeTypes | undefined,
+    isRefiner?: boolean,
+  ) => {
     if (!this.attributeName) {
       return
     }
 
-    filterStore.saveCurrentCondition([
-      FilterKindEnum.Enum,
-      this.attributeName,
-      getConditionJoinMode(mode),
-      variants,
-    ])
+    if (isRefiner) {
+      filterStore.saveCurrentCondition([
+        FilterKindEnum.Enum,
+        this.attributeName,
+        getConditionJoinMode(mode),
+        selectedVariants,
+      ])
+
+      filterStore.setTouched(false)
+    } else {
+      changeEnumAttribute(mode, selectedVariants)
+      modalsVisibilityStore.closeModalEnum()
+    }
   }
 
-  public saveNumeric(value: TNumericConditionBounds): void {
+  public addEnum = (
+    action: ActionType,
+    mode: ModeTypes | undefined,
+    selectedVariants: string[],
+  ) => {
+    addAttributeToStep(
+      action,
+      FilterKindEnum.Enum,
+      selectedVariants,
+      null,
+      mode,
+    )
+
+    modalsVisibilityStore.closeModalEnum()
+  }
+
+  public saveNumeric = (value: TNumericConditionBounds) => {
     if (!this.attributeName) {
       return
     }
@@ -118,7 +154,7 @@ export class CurrentFilterStore {
       this.attributeName,
       value,
     ])
+
+    filterStore.setTouched(false)
   }
 }
-
-export default new CurrentFilterStore()

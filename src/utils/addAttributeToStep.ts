@@ -3,6 +3,7 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
+import { TFuncArgs, TNumericConditionBounds } from '@service-providers/common'
 import {
   ActionTypes,
   TPointModifyingActions,
@@ -13,8 +14,8 @@ import datasetStore from '../store/dataset/dataset'
 export const addAttributeToStep = (
   action: ActionType,
   attributeType: AttributeType,
-  filters: any = null,
-  params: any = null,
+  filters: string[] | TNumericConditionBounds | null = null,
+  params: TFuncArgs | null = null,
   currentMode?: ModeTypes,
   // eslint-disable-next-line max-params
 ): void => {
@@ -22,12 +23,8 @@ export const addAttributeToStep = (
 
   const shouldTakeAttributeFromStore = attributeType !== FilterKindEnum.Numeric
 
-  const currentFilters = shouldTakeAttributeFromStore
-    ? dtreeStore.selectedFilters
-    : filters
-
   const subGroupName = dtreeStore.selectedGroups[1]
-  const attribute = [attributeType, subGroupName, currentFilters]
+  const attribute = [attributeType, subGroupName, filters]
 
   if (shouldTakeAttributeFromStore) {
     const conditionsJoinMode = getConditionJoinMode(currentMode)

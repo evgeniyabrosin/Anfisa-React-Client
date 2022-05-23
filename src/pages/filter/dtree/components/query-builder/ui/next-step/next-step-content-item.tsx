@@ -7,11 +7,7 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
 import dtreeStore, { IStepData } from '@store/dtree'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import {
-  EnumPropertyStatusSubKinds,
-  TCondition,
-  TNumericConditionBounds,
-} from '@service-providers/common'
+import { TCondition, TNumericConditionBounds } from '@service-providers/common'
 import { DropDownJoin } from '../dropdown-join'
 import { ContentItemHeader } from './content-item-header'
 import { ContentItemValues } from './content-item-values'
@@ -42,7 +38,6 @@ export const NextStepContentItem = observer(
     const groupName: string = group[1]
     const currentStep: IStepData = dtreeStore.filteredStepData[index]
     const currentGroup: TCondition = currentStep.groups[currNo]
-    const groupSubKind: EnumPropertyStatusSubKinds = group['sub-kind']
     const conditionValue: string[] | TNumericConditionBounds = group.find(
       Array.isArray,
     )
@@ -78,7 +73,6 @@ export const NextStepContentItem = observer(
             currentStep={currentStep}
             stepType={stepType}
             groupName={groupName}
-            groupSubKind={groupSubKind}
             index={index}
             currNo={currNo}
           />

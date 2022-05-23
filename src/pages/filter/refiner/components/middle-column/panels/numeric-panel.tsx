@@ -7,25 +7,16 @@ import { Button } from '@ui/button'
 import { NumericCondition } from '@components/numeric-condition'
 import { AttributeHeader } from '@pages/filter/refiner/components/middle-column/attribute-header'
 import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
-import currentFilterStore from '@pages/filter/refiner/components/middle-column/panels/current-filter.store'
-import {
-  AttributeKinds,
-  TNumericConditionBounds,
-} from '@service-providers/common/common.interface'
+import { AttributeKinds } from '@service-providers/common/common.interface'
+import { refinerAttributeStore } from '../../attributes/refiner-attributes.store'
 
 export const NumericPanel = observer((): ReactElement | null => {
-  const { attributeStatus: attrData, initialNumericValue: initialValue } =
-    currentFilterStore
+  const { initialNumericValue, attributeStatus } = refinerAttributeStore
 
   const { selectedAttributeStatus, isFilterTouched } = filterStore
 
-  if (!attrData || attrData.kind !== AttributeKinds.NUMERIC) {
+  if (!attributeStatus || attributeStatus.kind !== AttributeKinds.NUMERIC) {
     return null
-  }
-
-  const saveCondition = (value: TNumericConditionBounds) => {
-    filterStore.setTouched(false)
-    currentFilterStore.saveNumeric(value)
   }
 
   return (
@@ -35,8 +26,8 @@ export const NumericPanel = observer((): ReactElement | null => {
       <DividerHorizontal />
 
       <NumericCondition
-        attrData={attrData}
-        initialValue={initialValue}
+        attrData={attributeStatus}
+        initialValue={initialNumericValue}
         controls={({ value, hasErrors, clearValue }) => (
           <div className="flex-1 flex items-end justify-end mt-1 pb-[40px]">
             <Button
@@ -47,9 +38,11 @@ export const NumericPanel = observer((): ReactElement | null => {
             />
             <Button
               text={
-                initialValue ? t('dtree.saveChanges') : t('dtree.addAttribute')
+                initialNumericValue
+                  ? t('dtree.saveChanges')
+                  : t('dtree.addAttribute')
               }
-              onClick={() => saveCondition(value)}
+              onClick={() => refinerAttributeStore.saveNumeric(value)}
               disabled={
                 hasErrors ||
                 (value[0] === null && value[2] === null) ||

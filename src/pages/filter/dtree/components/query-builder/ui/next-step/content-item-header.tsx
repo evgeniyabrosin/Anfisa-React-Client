@@ -12,8 +12,6 @@ import { FnLabel } from '@components/fn-label'
 import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/components/active-step.store'
-import modalFiltersStore from '@pages/filter/dtree/components/modals/components/modal-enum/modal-enum.store'
-import { EnumPropertyStatusSubKinds } from '@service-providers/common'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'
 import { InactiveFieldLabel } from '../inactive-field-label'
 
@@ -30,7 +28,6 @@ interface IContentItemHeaderProps {
   currentStep: IStepData
   stepType: FilterKindEnum
   groupName: string
-  groupSubKind: EnumPropertyStatusSubKinds
   index: number
   currNo: number
 }
@@ -40,7 +37,6 @@ export const ContentItemHeader = observer(
     currentStep,
     stepType,
     groupName,
-    groupSubKind,
     index,
     currNo,
   }: IContentItemHeaderProps): ReactElement => {
@@ -54,11 +50,10 @@ export const ContentItemHeader = observer(
       activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       stepType === FilterKindEnum.Enum &&
-        modalsVisibilityStore.openModalEnum(groupName, currNo) &&
-        modalFiltersStore.setCurrentGroupSubKind(groupSubKind)
+        modalsVisibilityStore.openModalEnum(groupName, currNo)
 
       stepType === FilterKindEnum.Numeric &&
-        modalsVisibilityStore.openModalNumbers(groupName, currNo)
+        modalsVisibilityStore.openModalNumeric(groupName, currNo)
 
       if (stepType === FilterKindEnum.Func) {
         groupName === FuncStepTypesEnum.InheritanceMode &&
