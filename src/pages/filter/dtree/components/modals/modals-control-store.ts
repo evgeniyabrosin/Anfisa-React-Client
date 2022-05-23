@@ -1,7 +1,7 @@
 import { makeAutoObservable, toJS } from 'mobx'
 
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import {
   AttributeKinds,
   IFuncPropertyStatus,
@@ -25,7 +25,7 @@ class ModalsControlStore {
 
   public get location(): [number, number] {
     const locationIndex = modalsVisibilityStore.groupIndexToChange
-    const { stepIndexForApi } = activeStepStore
+    const { stepIndexForApi } = stepStore
 
     return [+stepIndexForApi, locationIndex]
   }
@@ -44,7 +44,7 @@ class ModalsControlStore {
     }
 
     return toJS(
-      dtreeStore.stepList[activeStepStore.activeStepIndex].groups[
+      dtreeStore.stepList[stepStore.activeStepIndex].groups[
         modalsVisibilityStore.groupIndexToChange
       ],
     )
@@ -55,7 +55,7 @@ class ModalsControlStore {
   }
 
   public get currentStepGroups(): string[] {
-    return toJS(dtreeStore.stepList[activeStepStore.activeStepIndex].groups)
+    return toJS(dtreeStore.stepList[stepStore.activeStepIndex].groups)
   }
 
   public get statList(): TPropertyStatus[] {

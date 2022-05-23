@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import { GeneRegionContent } from '../../../query-builder/ui/gene-region-content'
 import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
@@ -18,7 +18,7 @@ export const ModalGeneRegion = observer((): ReactElement => {
   const { variants, currentStepGroups } = modalsControlStore
   const { locusCondition } = modalGeneRegionStore
 
-  const currentStepIndex = activeStepStore.activeStepIndex
+  const currentStepIndex = stepStore.activeStepIndex
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =

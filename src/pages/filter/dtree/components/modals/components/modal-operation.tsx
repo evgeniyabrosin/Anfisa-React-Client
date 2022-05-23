@@ -5,10 +5,8 @@ import { ChangeStepActionType } from '@declarations'
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore, { CreateEmptyStepPositions } from '@store/dtree/step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import activeStepStore, {
-  CreateEmptyStepPositions,
-} from '@store/dtree/step.store'
 import { InstrModifyingActionNames } from '@service-providers/decision-trees'
 import { changeStep } from '@utils/changeStep'
 
@@ -27,7 +25,7 @@ export const ModalOperation = observer(
       stepIndex: number,
       position: CreateEmptyStepPositions,
     ) => {
-      activeStepStore.createEmptyStep(stepIndex, position)
+      stepStore.createEmptyStep(stepIndex, position)
 
       hideModal()
     }
@@ -39,7 +37,7 @@ export const ModalOperation = observer(
 
       stepHasAttribute
         ? changeStep(stepIndex, InstrModifyingActionNames.DELETE)
-        : dtreeStore.removeStep(stepIndex)
+        : stepStore.removeStep(stepIndex)
 
       hideModal()
     }

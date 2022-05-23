@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import { InheritanceModeContent } from '@pages/filter/dtree/components/modals/components/modal-inheritance-mode/components/inheritance-mode-content'
 import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
@@ -18,7 +18,7 @@ import modalInheritanceModeStore from './modal-inheritance-mode.store'
 export const ModalInheritanceMode = observer((): ReactElement => {
   const { groupName, problemGroups, currentStepGroups } = modalsControlStore
 
-  const currentStepIndex = activeStepStore.activeStepIndex
+  const currentStepIndex = stepStore.activeStepIndex
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =

@@ -7,11 +7,9 @@ import styled from 'styled-components'
 import { t } from '@i18n'
 import { theme } from '@theme'
 import dtreeStore from '@store/dtree'
+import stepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { Icon } from '@ui/icon'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/step.store'
 import { StepCount } from '@pages/filter/dtree/components/query-builder/ui/step-count'
 
 const StartAmount = styled.div`
@@ -143,7 +141,7 @@ export const NextStepRoute = observer(
                     <ExcludeAmount
                       isIncluded={isIncluded}
                       onClick={() =>
-                        activeStepStore.makeStepActive(
+                        stepStore.makeStepActive(
                           index,
                           ActiveStepOptions.ReturnedVariants,
                         )

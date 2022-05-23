@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx'
 import { ActionType, StatList } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
 import {
   EnumPropertyStatusSubKinds,
@@ -93,7 +93,7 @@ class ModalEnumStore {
   }
 
   public checkIfSelectedFiltersExist(currentGroup: TEnumCondition) {
-    dtreeStore.stepData[activeStepStore.activeStepIndex].groups[
+    dtreeStore.stepData[stepStore.activeStepIndex].groups[
       modalsVisibilityStore.groupIndexToChange
     ][modalsControlStore.currentGroupLength - 1].forEach((item: string) =>
       dtreeStore.addSelectedFilter(item),

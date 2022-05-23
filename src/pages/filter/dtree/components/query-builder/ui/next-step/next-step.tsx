@@ -4,10 +4,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
 import dtreeStore from '@store/dtree'
+import stepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/step.store'
 import { NextStepContent } from './next-step-content'
 import { NextStepHeader } from './next-step-header'
 import { NextStepRoute } from './next-step-route'
@@ -57,10 +55,7 @@ export const NextStep = observer(
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        activeStepStore.makeStepActive(
-          stepIndex,
-          ActiveStepOptions.StartedVariants,
-        )
+        stepStore.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
       }
     }
 

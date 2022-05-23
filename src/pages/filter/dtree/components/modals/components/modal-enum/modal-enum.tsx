@@ -6,8 +6,8 @@ import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { Pagintaion } from '@components/pagintaion'
-import activeStepStore from '@store/dtree/step.store'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import { QueryBuilderSearch } from '../../../query-builder/query-builder-search'
 import modalsControlStore from '../../modals-control-store'
@@ -23,7 +23,7 @@ import modalFiltersStore from './modal-enum.store'
 export const ModalEnum = observer((): ReactElement => {
   const { groupName, currentStepGroups } = modalsControlStore
 
-  const currentStepIndex = activeStepStore.activeStepIndex
+  const currentStepIndex = stepStore.activeStepIndex
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =

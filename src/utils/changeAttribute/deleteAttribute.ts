@@ -1,6 +1,6 @@
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
 import {
   ActionTypes,
@@ -11,7 +11,7 @@ import {
 export const deleteAttribute = (groupIndexToChange?: number): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
-  const { activeStepIndex } = activeStepStore
+  const { activeStepIndex } = stepStore
 
   const { location } = modalsControlStore
 

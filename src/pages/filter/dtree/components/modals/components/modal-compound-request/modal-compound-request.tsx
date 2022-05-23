@@ -6,7 +6,7 @@ import { ApproxNameTypes } from '@core/enum/approxNameTypes'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import { ApproxStateModalMods } from '@pages/filter/dtree/components/query-builder/ui/approx-state-modal-mods'
 import { DisabledVariantsAmount } from '@pages/filter/dtree/components/query-builder/ui/disabled-variants-amount'
@@ -26,7 +26,7 @@ export const ModalCompoundRequest = observer((): ReactElement => {
   const { requestCondition, activeRequestIndex, approx } =
     modalCompoundRequestStore
 
-  const currentStepIndex = activeStepStore.activeStepIndex
+  const currentStepIndex = stepStore.activeStepIndex
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =

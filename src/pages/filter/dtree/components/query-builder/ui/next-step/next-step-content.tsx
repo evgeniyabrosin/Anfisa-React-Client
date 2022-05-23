@@ -4,10 +4,8 @@ import styled from 'styled-components'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore, { ActiveStepOptions } from '@store/dtree/step.store'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
-import activeStepStore, {
-  ActiveStepOptions,
-} from '@store/dtree/step.store'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'
 import { NextStepContentItem } from './next-step-content-item'
 
@@ -102,7 +100,7 @@ export const NextStepContent = observer(
     const wordList = getWords(condition)
 
     const openModal = () => {
-      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+      stepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
 
       modalsVisibilityStore.openModalAttribute()
     }

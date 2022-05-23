@@ -124,8 +124,8 @@ class StepStore {
     }
   }
 
-  setSteps(steps: IStepData[]): void {
-    this._steps = steps
+  setSteps(stepList: IStepData[]): void {
+    this._steps = stepList
   }
 
   removeStep(index: number) {
@@ -138,8 +138,6 @@ class StepStore {
     })
 
     this.makeStepActive(stepData.length - 1, ActiveStepOptions.StartedVariants)
-
-    // this.resetLocalDtreeCode()
   }
 }
 

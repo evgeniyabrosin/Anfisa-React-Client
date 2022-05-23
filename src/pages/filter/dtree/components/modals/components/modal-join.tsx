@@ -6,7 +6,7 @@ import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { InstrModifyingActionNames } from '@service-providers/decision-trees'
-import activeStepStore, {
+import stepStore, {
   ActiveStepOptions,
 } from '../../../../../../store/dtree/step.store'
 import modalsVisibilityStore from '../modals-visibility-store'
@@ -22,7 +22,7 @@ export const ModalJoin = observer(
     useOutsideClick(ref, () => modalsVisibilityStore.closeModalJoin())
 
     const isReturnedVariants =
-      activeStepStore.activeStepOption === ActiveStepOptions.ReturnedVariants
+      stepStore.activeStepOption === ActiveStepOptions.ReturnedVariants
 
     const handleJoin = (typeOfJoin: ActionType) => {
       handleAddAttribute(typeOfJoin)

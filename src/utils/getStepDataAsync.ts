@@ -1,6 +1,6 @@
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore, { IStepData } from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import { TCondition } from '@service-providers/common'
 import { PointCount } from '@service-providers/decision-trees'
 import { getDataFromCode } from './getDataFromCode'
@@ -32,7 +32,7 @@ export const getStepDataAsync = async (
   const stepCodes = getDataFromCode(dtreeStore.dtreeCode)
 
   const localStepData: IStepData[] = []
-  const { activeStepIndex } = activeStepStore
+  const { activeStepIndex } = stepStore
   const atomsEntries = Object.entries(
     dtreeStore.dtree['cond-atoms'] as Record<string, TCondition[]>,
   )

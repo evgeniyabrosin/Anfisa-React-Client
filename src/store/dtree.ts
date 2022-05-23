@@ -461,20 +461,6 @@ class DtreeStore {
   //   this.resetLocalDtreeCode()
   // }
 
-  removeStep(index: number) {
-    this.stepData.splice(index, 1)
-
-    this.stepData.map((item, currNo: number) => {
-      item.step = currNo + 1
-    })
-    stepStore.makeStepActive(
-      this.stepData.length - 1,
-      ActiveStepOptions.StartedVariants,
-    )
-
-    // this.resetLocalDtreeCode()
-  }
-
   addSelectedGroup(group: any) {
     this.selectedGroups = []
     this.selectedGroups = group

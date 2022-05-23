@@ -1,6 +1,6 @@
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
-import activeStepStore from '@store/dtree/step.store'
+import stepStore from '@store/dtree/step.store'
 import modalsControlStore from '@pages/filter/dtree/components/modals/modals-control-store'
 import {
   ActionTypes,
@@ -13,7 +13,7 @@ export const changeNumericAttribute = (numericData: any[]) => {
 
   const { groupIndexToChange } = modalsVisibilityStore
   const { location } = modalsControlStore
-  const { activeStepIndex } = activeStepStore
+  const { activeStepIndex } = stepStore
 
   const attribute: any[] =
     dtreeStore.stepData[activeStepIndex].groups[groupIndexToChange]
