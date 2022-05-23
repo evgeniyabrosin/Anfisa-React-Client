@@ -24,7 +24,7 @@ import activeStepStore, {
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
-import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store copy'
+import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
 
 export type IStepData = {

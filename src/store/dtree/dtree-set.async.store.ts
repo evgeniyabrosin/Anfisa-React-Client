@@ -3,7 +3,7 @@ import decisionTreesProvider from '@service-providers/decision-trees/decision-tr
 import {
   IDtreeSetArguments,
   IDtreeSetResponse,
-} from './../../service-providers/decision-trees/decision-trees.interface'
+} from '../../service-providers/decision-trees/decision-trees.interface'
 
 export class DtreeSetAsyncStore extends BaseAsyncDataStore<
   IDtreeSetResponse,
