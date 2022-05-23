@@ -39,6 +39,8 @@ interface IEnumCondition {
   ) => void
 }
 
+const initialCount = 12
+
 export const EnumCondition = observer(
   ({
     isRefiner,
@@ -61,7 +63,7 @@ export const EnumCondition = observer(
     )
     const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
-    const [variantsPerPage, setVariantsPerPage] = useState<number>(12)
+    const [variantsPerPage, setVariantsPerPage] = useState<number>(initialCount)
 
     const isBlockAddBtn = !selectedVariants.length || !isFilterTouched
 
@@ -80,10 +82,8 @@ export const EnumCondition = observer(
           const { height } = entries[0].contentRect
           const heightOfElement = 32
 
-          if (
-            height / heightOfElement !== variantsPerPage &&
-            height / heightOfElement > 12
-          ) {
+          const newCount = height / heightOfElement
+          if (newCount !== variantsPerPage && newCount > initialCount) {
             setVariantsPerPage(height / 32)
           }
         })
@@ -167,7 +167,7 @@ export const EnumCondition = observer(
           </>
         )}
 
-        {enumVariants.length > 12 && (
+        {enumVariants.length > initialCount && (
           <QueryBuilderSearch
             value={searchValue}
             onChange={handleSearchChange}
