@@ -43,7 +43,11 @@ class ModalInheritanceModeStore {
     const variants: [string, number][] = dtreeStore.statFuncData.variants
 
     return variants
-      ? variants.filter(([, variantValue]) => variantValue > 0)
+      ? variants.filter(
+          ([variantName, variantValue]) =>
+            dtreeStore.selectedFilters.includes(variantName) ||
+            variantValue > 0,
+        )
       : []
   }
 

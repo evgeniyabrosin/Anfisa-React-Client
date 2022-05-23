@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
 import filterDtreesStore from '@store/filter-dtrees'
 import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
@@ -381,6 +382,15 @@ class DtreeStore {
 
     return this.stepData.filter(({ groups }) => {
       return groups.some(condition => {
+        const isInvalidCondition =
+          condition[0] === FilterKindEnum.Error ||
+          typeof condition[1] !== 'string' ||
+          !condition[0]
+
+        if (isInvalidCondition) {
+          return
+        }
+
         const name = condition[1].toLowerCase()
         if (checkValue(name)) return true
 
