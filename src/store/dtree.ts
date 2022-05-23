@@ -1,14 +1,9 @@
 /* eslint-disable max-lines */
-import cloneDeep from 'lodash/cloneDeep'
+
 import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { CreateEmptyStepPositions } from '@store/dtree/step.store'
-import {
-  TCondition,
-  TFilteringStatCounts,
-  TItemsCount,
-} from '@service-providers/common'
+import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
   DtreeSetPointKinds,
   IDtreeSetPoint,
@@ -17,13 +12,12 @@ import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
-import { getDataFromCode } from '@utils/getDataFromCode'
 import { IDtreeSetArguments } from './../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from './dataset/dataset'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
 import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
-import stepStore, { ActiveStepOptions } from './dtree/step.store'
+import stepStore from './dtree/step.store'
 
 export type IStepData = {
   step: number
@@ -329,56 +323,6 @@ class DtreeStore {
     return this.stepData.length === 2 && isFirstStepEmpty
   }
 
-  // TODO: mpve to stepStore
-  insertEmptyStep(position: CreateEmptyStepPositions, index: number) {
-    const localStepList = [...stepStore.steps]
-
-    localStepList.forEach(element => {
-      element.isActive = false
-
-      return element
-    })
-
-    const startSpliceIndex =
-      position === CreateEmptyStepPositions.BEFORE ? index : index + 1
-
-    localStepList.splice(startSpliceIndex, 0, {
-      step: index,
-      groups: [],
-      excluded: true,
-      isActive: true,
-      isReturnedVariantsActive: false,
-      conditionPointIndex:
-        startSpliceIndex < localStepList.length - 1
-          ? localStepList[startSpliceIndex].conditionPointIndex
-          : localStepList[localStepList.length - 1].returnPointIndex,
-      returnPointIndex: null,
-    })
-
-    localStepList.forEach((item, currNo: number) => {
-      item.step = currNo + 1
-    })
-
-    // runInAction(() => {
-    //   this.stepData = localStepList
-    // })
-    // this.changedStepList = localStepList
-
-    this.resetLocalDtreeCode()
-  }
-
-  // TODO: remove unused fucntion
-  // duplicateStep(index: number) {
-  //   const clonedStep = cloneDeep(this.stepData[index])
-
-  //   this.stepData.splice(index + 1, 0, clonedStep)
-
-  //   this.stepData.map((item, currNo: number) => {
-  //     item.step = currNo + 1
-  //   })
-  //   this.resetLocalDtreeCode()
-  // }
-
   addSelectedGroup(group: any) {
     this.selectedGroups = []
     this.selectedGroups = group
@@ -534,29 +478,6 @@ class DtreeStore {
   toggleIsExcluded(index: number) {
     this.stepData[index].excluded = !this.stepData[index].excluded
     this.resetLocalDtreeCode()
-  }
-
-  changeStepDataActiveStep = (
-    index: number,
-    option: ActiveStepOptions,
-    indexForApi: string,
-  ) => {
-    stepStore.steps.forEach(element => {
-      element.isActive = false
-      element.isReturnedVariantsActive = false
-    })
-
-    if (option === ActiveStepOptions.StartedVariants) {
-      stepStore.steps[index].isActive = true
-    } else {
-      stepStore.steps[index].isReturnedVariantsActive = true
-    }
-
-    this.stat.setQuery({
-      datasetName: datasetStore.datasetName,
-      code: this.dtreeCode,
-      stepIndex: indexForApi,
-    })
   }
 
   resetStatFuncData() {

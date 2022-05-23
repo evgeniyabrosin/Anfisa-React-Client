@@ -1,8 +1,7 @@
-import { makeAutoObservable, reaction, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
+import datasetStore from '@store/dataset/dataset'
 import dtreeStore, { IStepData } from '@store/dtree'
-import { IDtreeSetResponse } from '@service-providers/decision-trees'
-import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision-trees.adapters'
 
 export enum ActiveStepOptions {
   StartedVariants = 'startedVariants',
@@ -19,7 +18,7 @@ class StepStore {
   activeStepIndex: number = 0
   activeStepOption: ActiveStepOptions = ActiveStepOptions.StartedVariants
 
-  _steps: IStepData[] = []
+  private _steps: IStepData[] = []
 
   get steps() {
     return this._steps
@@ -75,15 +74,6 @@ class StepStore {
 
   constructor() {
     makeAutoObservable(this)
-
-    // reaction(
-    //   () => dtreeStore.dtreeSetData,
-    //   response => {
-    //     if (response) {
-    //       this._steps = adaptDtreeSetToSteps(response)
-    //     }
-    //   },
-    // )
   }
 
   setActiveStep(index: number, option: ActiveStepOptions) {
@@ -91,30 +81,86 @@ class StepStore {
     this.activeStepOption = option
   }
 
-  makeStepActive(index: number, option: ActiveStepOptions) {
-    this.setActiveStep(index, option)
-    dtreeStore.changeStepDataActiveStep(index, option, this.stepIndexForApi)
+  changeStepDataActiveStep = (
+    index: number,
+    option: ActiveStepOptions,
+    indexForApi: string,
+  ) => {
+    this._steps.forEach(element => {
+      element.isActive = false
+      element.isReturnedVariantsActive = false
+    })
+
+    if (option === ActiveStepOptions.StartedVariants) {
+      this._steps[index].isActive = true
+    } else {
+      this._steps[index].isReturnedVariantsActive = true
+    }
+
+    dtreeStore.stat.setQuery({
+      datasetName: datasetStore.datasetName,
+      code: dtreeStore.dtreeCode,
+      stepIndex: indexForApi,
+    })
   }
 
+  makeStepActive(index: number, option: ActiveStepOptions) {
+    this.setActiveStep(index, option)
+    this.changeStepDataActiveStep(index, option, this.stepIndexForApi)
+  }
+
+  insertEmptyStep(position: CreateEmptyStepPositions, index: number) {
+    const localSteps = [...this.steps]
+
+    localSteps.forEach(element => {
+      element.isActive = false
+
+      return element
+    })
+
+    const startSpliceIndex =
+      position === CreateEmptyStepPositions.BEFORE ? index : index + 1
+
+    localSteps.splice(startSpliceIndex, 0, {
+      step: index,
+      groups: [],
+      excluded: true,
+      isActive: true,
+      isReturnedVariantsActive: false,
+      conditionPointIndex:
+        startSpliceIndex < localSteps.length - 1
+          ? localSteps[startSpliceIndex].conditionPointIndex
+          : localSteps[localSteps.length - 1].returnPointIndex,
+      returnPointIndex: null,
+    })
+
+    localSteps.forEach((item, currNo: number) => {
+      item.step = currNo + 1
+    })
+
+    this._steps = localSteps
+  }
+
+  // TODO: restore here
   createEmptyStep(stepIndex: number, position: CreateEmptyStepPositions) {
     const previousStepIndex = stepIndex - 1
     const nextStepIndex = stepIndex + 1
 
     switch (position) {
       case CreateEmptyStepPositions.FINAL:
-        dtreeStore.insertEmptyStep(position, previousStepIndex)
+        this.insertEmptyStep(position, previousStepIndex)
 
         this.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
         break
 
       case CreateEmptyStepPositions.BEFORE:
-        dtreeStore.insertEmptyStep(position, stepIndex)
+        this.insertEmptyStep(position, stepIndex)
 
         this.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
         break
 
       case CreateEmptyStepPositions.AFTER:
-        dtreeStore.insertEmptyStep(position, stepIndex)
+        this.insertEmptyStep(position, stepIndex)
 
         this.makeStepActive(nextStepIndex, ActiveStepOptions.StartedVariants)
         break

@@ -31,7 +31,7 @@ export const ModalOperation = observer(
     }
 
     const deleteStep = (stepIndex: number) => {
-      const currentStep = dtreeStore.stepData[stepIndex]
+      const currentStep = stepStore.steps[stepIndex]
 
       const stepHasAttribute = currentStep.groups.length > 0
 
@@ -47,7 +47,7 @@ export const ModalOperation = observer(
       hideModal()
     }
 
-    const currentStep = dtreeStore.stepData[index]
+    const currentStep = stepStore.steps[index]
 
     const isFirstStep = index === 0
 
