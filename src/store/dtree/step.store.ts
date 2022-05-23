@@ -26,7 +26,7 @@ class StepStore {
   }
 
   get stepIndexForApi(): string {
-    const { dtreeStepIndices, stepList } = dtreeStore
+    const { dtreeStepIndices } = dtreeStore
 
     const lastIndexFromIndexes = dtreeStepIndices[dtreeStepIndices.length - 1]
 
@@ -40,7 +40,7 @@ class StepStore {
     const isTreeEmpty = dtreeStepIndices.length === 0
     const firstStepIndex = '0'
 
-    const emptyStepIndex = stepList.findIndex(
+    const emptyStepIndex = this.steps.findIndex(
       ({ groups, isFinalStep }) => groups.length === 0 && !isFinalStep,
     )
     const treeHasEmptyStep = emptyStepIndex !== -1

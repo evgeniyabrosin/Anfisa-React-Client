@@ -61,89 +61,6 @@ class DtreeStore {
     return this.dtreeSet.data
   }
 
-  get stepListFromApi(): IStepData[] {
-    if (!this.dtreeSetData) return []
-
-    const initialStepData: IStepData[] = [
-      {
-        step: 1,
-        groups: [],
-        excluded: true,
-        isActive: false,
-        isReturnedVariantsActive: false,
-        conditionPointIndex: 0,
-        returnPointIndex: null,
-      },
-    ]
-
-    const stepCodes = getDataFromCode(this.dtreeCode)
-
-    const localStepData: IStepData[] = []
-
-    const atomsEntries = Object.entries(
-      (this.dtreeSetData?.['cond-atoms'] as Record<string, TCondition[]>) ?? {},
-    )
-
-    atomsEntries.forEach(([key, atom], index) => {
-      const conditionPointIndex = parseInt(key, 10)
-
-      localStepData.push({
-        step: index + 1,
-        groups: atom.filter((elem: any[]) => elem.length > 0),
-        excluded: !stepCodes[index].result,
-        isActive: false,
-        isReturnedVariantsActive: false,
-        conditionPointIndex,
-        returnPointIndex: conditionPointIndex + 1,
-        comment: stepCodes[index].comment,
-        negate: stepCodes[index].isNegate,
-        all: stepCodes[index].isAll,
-        condition: stepCodes[index].condition,
-      })
-    })
-
-    localStepData.forEach((step: IStepData, index: number) => {
-      if (step.groups.length > 1) {
-        step.groups.forEach((group: any[], currNo: number) => {
-          currNo !== 0 &&
-            group.splice(-1, 0, stepCodes[index].types[currNo - 1])
-        })
-      }
-    })
-
-    //
-    const newStepData =
-      localStepData.length === 0 ? initialStepData : localStepData
-
-    const points: unknown[] | undefined = this.dtree?.points
-
-    const finalStep: IStepData = {
-      step: newStepData.length,
-      groups: [],
-      excluded: !stepCodes[stepCodes.length - 1]?.result,
-      isActive: false,
-      isReturnedVariantsActive: false,
-      conditionPointIndex: null,
-      returnPointIndex: points ? points.length - 1 : null,
-      isFinalStep: true,
-    }
-
-    newStepData.push(finalStep)
-
-    return newStepData
-
-    // runInAction(() => {
-    //   this.stepData = [...newStepData]
-    //   this.dtreeStepIndices = Object.keys(this.dtree['cond-atoms'])
-    // })
-  }
-
-  changedStepList: IStepData[] | null = null
-
-  get stepList(): IStepData[] {
-    return this.changedStepList ?? this.stepListFromApi
-  }
-
   dtree: any
   isCountsReceived = false
   get dtreeCode(): string {
@@ -318,7 +235,6 @@ class DtreeStore {
     this.setIsCountsReceived(false)
 
     this.dtreeSet.setQuery(body)
-    this.changedStepList = null
 
     // const result = await decisionTreesProvider.getDtreeSet(body)
 
@@ -381,12 +297,13 @@ class DtreeStore {
 
   // 2. UI functions to display adding / deleting / editing steps
 
+  // TODO: move to stepStore
   get filteredStepData(): IStepData[] {
     const searchValue = this.algorithmFilterValue.toLowerCase()
 
-    if (!searchValue) return this.stepList
+    if (!searchValue) return stepStore.steps
 
-    const filteredStepData = this.stepList.filter(({ groups }) => {
+    const filteredStepData = stepStore.steps.filter(({ groups }) => {
       return groups.some(condition => {
         const name = condition[1].toLowerCase()
         if (name.includes(searchValue)) return true
@@ -412,8 +329,9 @@ class DtreeStore {
     return this.stepData.length === 2 && isFirstStepEmpty
   }
 
+  // TODO: mpve to stepStore
   insertEmptyStep(position: CreateEmptyStepPositions, index: number) {
-    const localStepList = [...this.stepListFromApi]
+    const localStepList = [...stepStore.steps]
 
     localStepList.forEach(element => {
       element.isActive = false
@@ -444,7 +362,7 @@ class DtreeStore {
     // runInAction(() => {
     //   this.stepData = localStepList
     // })
-    this.changedStepList = localStepList
+    // this.changedStepList = localStepList
 
     this.resetLocalDtreeCode()
   }
@@ -623,15 +541,15 @@ class DtreeStore {
     option: ActiveStepOptions,
     indexForApi: string,
   ) => {
-    this.stepList.forEach(element => {
+    stepStore.steps.forEach(element => {
       element.isActive = false
       element.isReturnedVariantsActive = false
     })
 
     if (option === ActiveStepOptions.StartedVariants) {
-      this.stepList[index].isActive = true
+      stepStore.steps[index].isActive = true
     } else {
-      this.stepList[index].isReturnedVariantsActive = true
+      stepStore.steps[index].isReturnedVariantsActive = true
     }
 
     this.stat.setQuery({
