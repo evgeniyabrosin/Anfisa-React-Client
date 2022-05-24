@@ -119,10 +119,6 @@ class DtreeStore {
   readonly dtreeSet = new DtreeSetAsyncStore()
   readonly dtreeCounts = new DtreeCountsAsyncStore()
 
-  get dtreeCountsRqId(): string {
-    return this.dtreeCounts.data?.['rq-id'] ?? ''
-  }
-
   get pointCounts() {
     const counts = this.isXl
       ? this.dtreeCounts.data?.['point-counts']
@@ -137,6 +133,15 @@ class DtreeStore {
       response => {
         if (response) {
           stepStore.setSteps(adaptDtreeSetToSteps(response))
+        }
+        if (response?.kind === 'xl') {
+          this.dtreeCounts.setQuery({
+            ds: datasetStore.datasetName,
+            tm: '1',
+            code: response.code,
+            points: [...new Array(response['point-counts'].length).keys()],
+            rq_id: response['rq-id'],
+          })
         }
       },
     )
@@ -229,29 +234,6 @@ class DtreeStore {
     this.setIsCountsReceived(false)
 
     this.dtreeSet.setQuery(body)
-
-    // const result = await decisionTreesProvider.getDtreeSet(body)
-
-    // const newCode = result.code
-
-    // runInAction(() => {
-    //   if (
-    //     !this.startDtreeCode ||
-    //     this.currentDtreeName !== this.previousDtreeName
-    //   ) {
-    //     this.startDtreeCode = newCode
-    //     this.setPrevDtreeName(this.currentDtreeName)
-    //   }
-
-    //   this.dtree = result
-    //   this.dtreeCode = newCode
-    //   this.dtreeList = result['dtree-list']
-    //   this.evalStatus = result['eval-status']
-    // })
-
-    // const isLoadingNewTree = !body.code
-
-    // this.drawDecesionTreeAsync(isLoadingNewTree)
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
