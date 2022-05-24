@@ -3,42 +3,42 @@ Feature: Main table, Table customization
   
 	Scenario: No "Gene" and "Variants" columns
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
-		When  user clicks "Customize table"
+		When  user clicks "Customize table" button
 		Then "Gene" And "Variant" columns should not be present
 ​
 	Scenario: Compact view
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
 		And chooses "Compact view"
-		And clicks "Apply"
+		And clicks "Apply" button
 		Then Compact View should be shown.
 ​
 	Scenario: Cozy view
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
 		And chooses "Cozy view"
-		And clicks "Apply"
+		And clicks "Apply" button
 		Then Cozy View should be shown.
 ​
 	Scenario: Clear all columns
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
-		And clicks "Clear all"
-		And clicks Apply
+		And clicks "Clear all" button
+		And clicks Apply button
 		Then All chosen columns should be deleted, only "Gene" And "Variant" columns should be displayed.
 ​
 	Scenario: Select all columns
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
-		And clicks "Select all"
-		And clicks Apply
+		And clicks "Select all" button
+		And clicks Apply button
 		Then All the chosen columns should be displayed on the screen.
 ​
 	Scenario: Turn off one column
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
 		And turns off one of the columns
-		And clicks Apply
+		And clicks Apply button
 		Then chosen column should be turned off
 ​
 	Scenario: Turn on one column
@@ -46,13 +46,13 @@ Feature: Main table, Table customization
 		And one of columns is turned off
 		When  user clicks "Customize table"
 		And turn on the column
-		And clicks Apply
+		And clicks Apply button
 		Then chosen column should be turned on
 ​
 	Scenario: Move column
 		Given Main Table for the "PGP3140_wgs_panel_hl" dataset was opened
 		When  user clicks "Customize table"
 		And moves the "Filter" column to the first place
-		And clicks Apply
+		And clicks Apply button
 		Then The "Filter" column should be in the third place
 		And "Gene" And "Varian" columns should be in the first And second places.

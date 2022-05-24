@@ -51,9 +51,8 @@ Feature: Main table, Export
 		Given "Main Table" was opened for the "PGP3140_wgs_panel_hl" dataset
 		And there are no applied filters
 		When user applies the "⏚BGM_Compound_Het" preset
-		And clicks "Export report"
-		And clicks "Excel"
-		Then Dataset should not be exported
+		And Tries to click "Export report"
+        Then  User should be unable to click "Export report" button when there is 0 variant
 ​
 	Scenario: Excel export without filters
 		Given "Main Table" was opened for a dataset with a number of variants less than 300
@@ -94,13 +93,6 @@ Feature: Main table, Export
 		And clicks "CSV"
 		Then Dataset should be exported.
 ​
-	Scenario: Excel export - No data
-		Given "Main Table" was opened for the "PGP3140_wgs_panel_hl" dataset
-		And there are no applied filters
-		When user applies the "⏚BGM_Compound_Het" preset
-		And clicks "Export report"
-		And clicks "Excel"
-		Then Dataset should not be exported
 ​
 	Scenario: CSV export without filters
 		Given "Main Table" was opened for a dataset with a number of variants less than 300
