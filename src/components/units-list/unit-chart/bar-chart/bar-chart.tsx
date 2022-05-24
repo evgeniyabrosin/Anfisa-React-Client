@@ -1,9 +1,10 @@
+import styles from './bar-chart.module.css'
+
 import { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import { SvgChart } from '@components/svg-chart/svg-chart'
 import { TBarChartData } from '../unit-chart.interface'
-import { BarChartSvg } from './bar-chart.styles'
 import { drawBarChart } from './bar-chart.utils'
 
 interface IBarChartProps {
@@ -22,7 +23,7 @@ export const BarChart = ({
   return (
     <div>
       <SvgChart
-        component={BarChartSvg}
+        className={styles.barChart}
         width={width}
         height={height}
         data={data}
