@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Divider } from '@ui/divider'
-import { IDtreeSetResponse } from '@service-providers/decision-trees'
 
 interface IQueryBuilderResultsNumbersProps {
   className?: string
@@ -12,8 +11,13 @@ interface IQueryBuilderResultsNumbersProps {
 
 export const QueryBuilderResultsNumbers = observer(
   ({ className }: IQueryBuilderResultsNumbersProps) => {
-    const dtree: IDtreeSetResponse | undefined = dtreeStore.dtree
-    const { stepData, isCountsReceived, totalFilteredCounts, isXl } = dtreeStore
+    const {
+      stepData,
+      isCountsReceived,
+      totalFilteredCounts,
+      isXl,
+      dtreeSetData: dtree,
+    } = dtreeStore
 
     if (!dtree) {
       return null

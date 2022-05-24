@@ -3,7 +3,7 @@
 import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
-import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
+import { TFilteringStatCounts } from '@service-providers/common'
 import {
   DtreeSetPointKinds,
   IDtreeSetPoint,
@@ -55,7 +55,6 @@ class DtreeStore {
     return this.dtreeSet.data
   }
 
-  dtree: any
   isCountsReceived = false
   get dtreeCode(): string {
     return this.dtreeSetData?.code ?? ''
@@ -174,12 +173,12 @@ class DtreeStore {
    * and transcribed variants for WS
    */
   get totalFilteredCounts(): IDtreeFilteredCounts | undefined {
-    if (!this.dtree || !this.isCountsReceived) {
+    if (!this.dtreeSetData || !this.isCountsReceived) {
       return undefined
     }
     const isXl = this.isXl
-    const points: IDtreeSetPoint[] = this.dtree.points
-    const totalCounts: TItemsCount = this.dtree['total-counts']
+    const points: IDtreeSetPoint[] = this.dtreeSetData.points
+    const totalCounts = this.dtreeSetData['total-counts']
     const counts = this.pointCounts
 
     let accepted = 0
@@ -197,7 +196,7 @@ class DtreeStore {
       }
     }
 
-    const rejected = (totalCounts[isXl ? 0 : 1] as number) - accepted
+    const rejected = Number(totalCounts[isXl ? 0 : 1]) - accepted
 
     return {
       accepted,
@@ -217,7 +216,7 @@ class DtreeStore {
 
     const stepIndex = indexes.length === 0 ? 0 : currentIndex
 
-    const pointsIndexes = Object.keys(this.dtree?.points)
+    const pointsIndexes = Object.keys(this.dtreeSetData?.points ?? [])
     const lastIndex = +pointsIndexes[pointsIndexes.length - 1]
 
     const stepIndexForApi = Number.isNaN(stepIndex) ? lastIndex : stepIndex
