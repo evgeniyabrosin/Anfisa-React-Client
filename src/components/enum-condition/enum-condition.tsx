@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { ActionType } from '@declarations'
@@ -38,6 +39,8 @@ interface IEnumCondition {
   ) => void
 }
 
+const initialCount = 12
+
 export const EnumCondition = observer(
   ({
     isRefiner,
@@ -60,7 +63,7 @@ export const EnumCondition = observer(
     )
     const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
-    const [variantsPerPage, setVariantsPerPage] = useState<number>(12)
+    const [variantsPerPage, setVariantsPerPage] = useState<number>(initialCount)
 
     const isBlockAddBtn = !selectedVariants.length || !isFilterTouched
 
@@ -79,8 +82,9 @@ export const EnumCondition = observer(
           const { height } = entries[0].contentRect
           const heightOfElement = 32
 
-          if (height / heightOfElement !== variantsPerPage) {
-            setVariantsPerPage(height / 32)
+          const newCount = height / heightOfElement
+          if (newCount !== variantsPerPage && newCount > initialCount) {
+            setVariantsPerPage(newCount)
           }
         })
         observer.observe(element)
@@ -151,15 +155,19 @@ export const EnumCondition = observer(
 
     return (
       <>
-        <AttributeHeader
-          chosenAttributes={selectedVariants.length}
-          allAttributes={enumVariants.length}
-          attrStatus={filterStore.selectedAttributeStatus!}
-        />
+        {isRefiner && (
+          <>
+            <AttributeHeader
+              chosenAttributes={selectedVariants.length}
+              allAttributes={enumVariants.length}
+              attrStatus={filterStore.selectedAttributeStatus!}
+            />
 
-        <DividerHorizontal />
+            <DividerHorizontal />
+          </>
+        )}
 
-        {enumVariants.length > 12 && (
+        {enumVariants.length > initialCount && (
           <QueryBuilderSearch
             value={searchValue}
             onChange={handleSearchChange}
@@ -168,7 +176,12 @@ export const EnumCondition = observer(
           />
         )}
 
-        <div className="flex justify-between items-center w-full mb-1 text-14">
+        <div
+          className={cn(
+            'flex justify-between items-center w-full mb-4 text-14',
+            !isRefiner && 'mt-6',
+          )}
+        >
           <div className="text-14 text-grey-blue">
             {selectedVariants.length || 0} {t('dtree.selected')}
           </div>
