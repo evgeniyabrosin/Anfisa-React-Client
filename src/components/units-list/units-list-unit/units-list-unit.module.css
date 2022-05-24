@@ -1,0 +1,52 @@
+.unit {
+  padding: 0 0 theme("spacing.2") theme("spacing.2");
+}
+
+.unit-title {
+  display: flex;
+  align-items: center;
+
+  &__add-button {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin-right: theme("spacing[1.5]");
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: theme("colors.white");
+    background: theme("colors.blue.bright");
+    font-size: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      background: theme("colors.blue.dark");
+    }
+  }
+
+  &__title {
+    flex: 1 0 auto;
+    color: theme("colors.black");
+    cursor: pointer;
+
+    @apply typography-s;
+
+    &:hover {
+      color: theme("colors.blue.dark");
+    }
+
+    &_dark {
+      color: theme("colors.white");
+
+      &:hover {
+        color: theme("colors.white");
+      }
+    }
+  }
+
+  &__power {
+    margin: 0 theme("spacing.2") 0 theme("spacing[0.5]");
+  }
+}

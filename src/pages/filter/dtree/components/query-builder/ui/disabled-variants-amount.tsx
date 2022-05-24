@@ -1,3 +1,4 @@
+import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -6,23 +7,30 @@ import filterStore from '@store/filter'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 
-interface IProps {
+interface IDisabledVariantsAmountProps {
   variants: any[]
   disabled: boolean
   isErrorVisible?: boolean
   handleCheckGroupItem?: (event: any, variant: string) => void
   inheritanceMode?: boolean
+  classname?: Argument
 }
 
 export const DisabledVariantsAmount = observer(
-  ({ variants, disabled, isErrorVisible, handleCheckGroupItem }: IProps) => (
-    <div className="my-5 text-14">
+  ({
+    variants,
+    disabled,
+    isErrorVisible,
+    handleCheckGroupItem,
+    classname,
+  }: IDisabledVariantsAmountProps) => (
+    <div className={cn('text-14', classname)}>
       {variants?.length > 0 && !isErrorVisible ? (
         variants.map((variant: any) => (
           <Checkbox
             key={variant}
             id={variant[0]}
-            className="mb-2"
+            className="mb-4 h-4"
             disabled={disabled}
             checked={
               disabled ? true : dtreeStore.selectedFilters.includes(variant[0])

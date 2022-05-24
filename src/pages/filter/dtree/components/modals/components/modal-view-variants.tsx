@@ -131,6 +131,8 @@ export const ModalViewVariants = observer(() => {
 
   useEffect(() => {
     if (jobStatusData) {
+      if (!samples) return
+
       const orderNumber = isSample
         ? samples[variantIndex]?.no ?? 0
         : records[variantIndex]?.no ?? 0
@@ -239,7 +241,7 @@ export const ModalViewVariants = observer(() => {
                   </thead>
 
                   <tbody>
-                    {toJS(variantList).map(
+                    {toJS(variantList)?.map(
                       (
                         variant: { lb: string; no: Key | null | undefined },
                         index: number,
@@ -286,7 +288,7 @@ export const ModalViewVariants = observer(() => {
                     data-testid={ReturnedVariantsDataCy.returnedVariantsHeader}
                     className="flex justify-center text-16 font-semi-bold text-blue-bright"
                     dangerouslySetInnerHTML={{
-                      __html: variantList[variantIndex]?.lb ?? '',
+                      __html: variantList ? variantList[variantIndex]?.lb : '',
                     }}
                   />
 

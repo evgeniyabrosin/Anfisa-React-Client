@@ -6,15 +6,15 @@ import { deleteAttribute } from '@utils/changeAttribute/deleteAttribute'
 import activeStepStore, { ActiveStepOptions } from '../../active-step.store'
 
 interface IInactiveFieldProps {
-  stepIndex: number
+  stepNo: number
   groupIndex: number
 }
 
 export const InactiveFieldLabel = observer(
-  ({ stepIndex, groupIndex }: IInactiveFieldProps) => {
+  ({ stepNo, groupIndex }: IInactiveFieldProps) => {
     const handleDeleteAttribute = () => {
       activeStepStore.makeStepActive(
-        stepIndex,
+        stepNo - 1,
         ActiveStepOptions.StartedVariants,
       )
 

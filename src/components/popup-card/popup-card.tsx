@@ -51,6 +51,7 @@ export const PopupCard = ({
         `${isBlueBg ? 'bg-blue-light' : 'bg-white'}`,
         className,
       )}
+      ref={ref}
     >
       <div className="px-4 pt-4">
         <div className="flex justify-between mb-4 items-center">

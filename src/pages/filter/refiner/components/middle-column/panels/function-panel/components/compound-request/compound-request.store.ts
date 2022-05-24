@@ -174,19 +174,11 @@ class CompoundRequestStore {
   // change reuqest condition number
   public handleRequestConditionNumber(
     requestBlockIndex: number,
-    value: string,
+    value: number,
   ): void {
-    if (+value < 0) return
+    if (value < 0) return
 
-    const newRequestCondition = cloneDeep(this.requestCondition)
-
-    newRequestCondition.map((item, index) => {
-      if (index === requestBlockIndex) {
-        item[0] = +value
-      }
-    })
-
-    this.setRequestCondition(newRequestCondition)
+    this.requestCondition[requestBlockIndex][0] = value
   }
 
   // choose an active request block

@@ -50,15 +50,16 @@ export const NextStep = observer(
     }
 
     const currentStep = dtreeStore.filteredStepData[index]
+    const stepNo = dtreeStore.filteredStepData[index].step
 
-    const setStepActive = (stepIndex: number, event: any) => {
+    const setStepActive = (event: any) => {
       const classList = Array.from(event.target.classList)
 
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
         activeStepStore.makeStepActive(
-          stepIndex,
+          stepNo - 1,
           ActiveStepOptions.StartedVariants,
         )
       }
@@ -79,6 +80,7 @@ export const NextStep = observer(
             <NextStepRoute
               isExpanded={isExpanded}
               index={index}
+              stepNo={stepNo}
               isIncluded={!dtreeStore.filteredStepData[index].excluded}
             />
           </TreeView>
@@ -88,7 +90,7 @@ export const NextStep = observer(
               'border-b border-l border-grey-light font-medium px-5 relative',
               currentStep.isActive && ' bg-blue-tertiary',
             )}
-            onClick={event => setStepActive(index, event)}
+            onClick={event => setStepActive(event)}
           >
             <NextStepHeader
               isExpanded={isExpanded}
@@ -97,7 +99,7 @@ export const NextStep = observer(
               isExcluded={dtreeStore.filteredStepData[index].excluded}
             />
 
-            {isExpanded && <NextStepContent index={index} />}
+            {isExpanded && <NextStepContent index={index} stepNo={stepNo} />}
           </ResultsView>
         </div>
       </div>

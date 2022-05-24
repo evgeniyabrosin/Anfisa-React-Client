@@ -1,0 +1,19 @@
+.arrow {
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+  width: 6px;
+  height: 6px;
+  transform-origin: 35% 65%;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease-in-out;
+  cursor: pointer;
+
+  &_open {
+    transform: rotate(135deg);
+  }
+
+  &_sm {
+    width: 4px;
+    height: 4px;
+  }
+}

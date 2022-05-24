@@ -10,7 +10,8 @@ export default function useClientHeight(ref: RefObject<HTMLElement>) {
     if (ref.current) {
       setOffsetTop(ref.current?.offsetTop)
     }
-  }, [ref])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref.current])
 
   return height - offsetTop
 }

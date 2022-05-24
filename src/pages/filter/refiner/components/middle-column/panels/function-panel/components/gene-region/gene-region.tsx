@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
-import { Input } from '@ui//input'
 import { AllNotMods } from '@pages/filter/dtree/components/query-builder/ui/all-not-mods'
 import { DisabledVariantsAmount } from '@pages/filter/dtree/components/query-builder/ui/disabled-variants-amount'
+import { GeneRegionInput } from '@pages/filter/refiner/components/middle-column/panels/function-panel/components/gene-region/components/gene-region-input/gene-region-input'
 import { ConditionJoinMode } from '@service-providers/common'
 import { IGeneRegionArgs } from '@service-providers/common/common.interface'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
@@ -83,49 +83,36 @@ export const GeneRegion = observer(() => {
   }, [])
 
   return (
-    <React.Fragment>
-      <div className="mt-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-14 leading-16px text-grey-blue font-bold">
-            Locus
-          </span>
+    <>
+      <span className="text-14 leading-16px text-grey-blue font-medium mb-1">
+        Locus
+      </span>
 
-          <AllNotMods
-            isNotModeChecked={geneRegionStore.currentMode === ModeTypes.Not}
-            isNotModeDisabled={
-              simpleVariants ? simpleVariants.length === 0 : true
-            }
-            toggleNotMode={toggleNotMode}
-          />
-        </div>
+      <GeneRegionInput
+        value={locusValue}
+        handleChange={handleSetLocusValue}
+        error={error}
+      />
 
-        <div className="relative flex">
-          <Input
-            value={locusValue}
-            onChange={e => {
-              handleSetLocusValue(e.target.value)
-            }}
-          />
+      <AllNotMods
+        isNotModeChecked={geneRegionStore.currentMode === ModeTypes.Not}
+        isNotModeDisabled={simpleVariants ? !simpleVariants.length : true}
+        toggleNotMode={toggleNotMode}
+        classname="flex justify-end items-center mt-[21px] mb-[-41px]"
+      />
 
-          {error && (
-            <div className="absolute -bottom-4 flex items-center mt-1 h-3 text-10 text-red-secondary">
-              {error}
-            </div>
-          )}
-        </div>
-
-        <DisabledVariantsAmount
-          variants={simpleVariants}
-          disabled={true}
-          isErrorVisible={!!error}
-        />
-      </div>
+      <DisabledVariantsAmount
+        variants={simpleVariants}
+        disabled={true}
+        isErrorVisible={!!error}
+        classname="mt-[21px] flex-1"
+      />
 
       <PanelButtons
         onSubmit={handleSumbitCondtions}
         resetFields={handleResetFields}
         disabled={!!error || !isFilterTouched}
       />
-    </React.Fragment>
+    </>
   )
 })

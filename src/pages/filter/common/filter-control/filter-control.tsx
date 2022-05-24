@@ -17,7 +17,7 @@ import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-m
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlRefiner } from '@pages/filter/refiner/components/filter-control-refiner'
 import { moveActionHistory } from '@utils/moveActionHistory'
-import { FilterControlDtree } from '../../dtree/components/filter-control-dtree'
+import { FilterControlDtree } from '../../dtree/components/filter-control-dtree/filter-control-dtree'
 import modalsVisibilityStore from '../../dtree/components/modals/modals-visibility-store'
 import {
   FilterControlOptions,
@@ -25,7 +25,7 @@ import {
 } from './filter-control.const'
 
 export const FilterControl = observer((): ReactElement => {
-  const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0
+  const isFirstActionHistoryIndex = !dtreeStore.actionHistoryIndex
 
   const isLastActionHistoryIndex =
     dtreeStore.actionHistoryIndex + 1 === toJS(dtreeStore.actionHistory).length

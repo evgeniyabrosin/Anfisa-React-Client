@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -9,10 +10,16 @@ interface IPanelButtons {
   onSubmit: () => void
   resetFields: () => void
   disabled?: boolean
+  classname?: Argument
 }
 
 export const PanelButtons = observer(
-  ({ onSubmit, resetFields, disabled }: IPanelButtons): ReactElement => {
+  ({
+    onSubmit,
+    resetFields,
+    disabled,
+    classname,
+  }: IPanelButtons): ReactElement => {
     const handleClear = () => {
       filterStore.resetStatFuncData()
       filterStore.setTouched(true)
@@ -22,7 +29,12 @@ export const PanelButtons = observer(
     const isRedactorMode = filterStore.isRedactorMode
 
     return (
-      <div className="flex items-center justify-end mt-5">
+      <div
+        className={cn(
+          'flex items-center justify-end mt-4 pb-[40px]',
+          classname,
+        )}
+      >
         <Button
           text={t('general.clear')}
           variant={'secondary'}
@@ -32,11 +44,10 @@ export const PanelButtons = observer(
 
         <div className="flex justify-end">
           <Button
-            text={
-              isRedactorMode ? t('dtree.saveChanges') : t('dtree.addAttribute')
-            }
+            text={t(isRedactorMode ? 'dtree.saveChanges' : 'dtree.apply')}
             onClick={onSubmit}
             disabled={disabled}
+            className={!isRedactorMode && 'px-8'}
           />
         </div>
       </div>

@@ -1,0 +1,28 @@
+.container {
+  position: relative;
+  display: flex;
+}
+
+.input[type="text"] {
+  border: 1px solid theme("colors.grey.blue");
+  width: 100%;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.error {
+  position: absolute;
+  font-size: 10px;
+  align-items: center;
+  display: flex;
+  bottom: -1rem;
+  margin-top: 0.25rem;
+  height: 0.75rem;
+  color: theme("colors.red.secondary");
+}

@@ -9,16 +9,16 @@ import { Card } from '@ui/card'
 interface IProps {
   close: () => void
   index: number
-  currNo: number
+  groupNo: number
 }
 
 export const DropDownJoin = observer(
-  ({ close, index, currNo }: IProps): ReactElement => {
+  ({ close, index, groupNo }: IProps): ReactElement => {
     const ref = useRef(null)
 
     useOutsideClick(ref, close)
 
-    const currentGroup = dtreeStore.stepData[index].groups[currNo]
+    const currentGroup = dtreeStore.stepData[index].groups[groupNo]
 
     const handleJoin = (type: string) => {
       currentGroup[currentGroup.length - 2] = type

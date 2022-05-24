@@ -13,6 +13,7 @@ import { NextStepContentItem } from './next-step-content-item'
 
 interface INextStepContentProps {
   index: number
+  stepNo: number
 }
 
 const Content = styled.div`
@@ -28,7 +29,7 @@ const ContentEditor = styled.div`
 `
 
 export const NextStepContent = observer(
-  ({ index }: INextStepContentProps): ReactElement => {
+  ({ index, stepNo }: INextStepContentProps): ReactElement => {
     const groups = dtreeStore.filteredStepData[index].groups
 
     const [expanded, setExpanded] = useState<Record<number, boolean>>({})
@@ -37,6 +38,7 @@ export const NextStepContent = observer(
     }
 
     const currentStepData = dtreeStore.filteredStepData[index]
+
     const isExcluded = currentStepData.excluded
     const result = String(!isExcluded)
 
@@ -102,7 +104,10 @@ export const NextStepContent = observer(
     const wordList = getWords(condition)
 
     const openModal = () => {
-      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+      activeStepStore.makeStepActive(
+        stepNo - 1,
+        ActiveStepOptions.StartedVariants,
+      )
 
       modalsVisibilityStore.openModalAttribute()
     }
@@ -113,14 +118,15 @@ export const NextStepContent = observer(
           <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
             {/* TODO: add variable "isEmptyStep" instead of "groups && groups.length > 0" */}
             {groups && groups.length > 0 ? (
-              groups.map((group: any, currNo: number) => (
+              groups.map((group: any, groupNo: number) => (
                 <NextStepContentItem
-                  key={JSON.stringify(group) + currNo}
+                  key={JSON.stringify(group) + groupNo}
                   group={group}
+                  stepNo={stepNo}
                   index={index}
-                  currNo={currNo}
-                  setExpandOnClick={expandGroup(currNo)}
-                  expanded={expanded[currNo] || false}
+                  groupNo={groupNo}
+                  setExpandOnClick={expandGroup(groupNo)}
+                  expanded={expanded[groupNo] || false}
                 />
               ))
             ) : (
