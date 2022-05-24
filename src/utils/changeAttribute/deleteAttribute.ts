@@ -17,8 +17,7 @@ export const deleteAttribute = (groupIndexToChange?: number): void => {
 
   const [indexForApi] = location
 
-  const hasOneAttribute =
-    dtreeStore.stepData[activeStepIndex].groups.length === 1
+  const hasOneAttribute = stepStore.steps[activeStepIndex].groups.length === 1
 
   const action = hasOneAttribute ? ActionTypes.POINT : ActionTypes.ATOM
 

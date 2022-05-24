@@ -19,8 +19,9 @@ export const changeEnumAttribute = (currentMode?: ModeTypes) => {
   const { activeStepIndex } = stepStore
   const { location } = modalsControlStore
 
+  // TODO: add type
   const attribute: any[] =
-    dtreeStore.stepData[activeStepIndex].groups[groupIndexToChange]
+    stepStore.steps[activeStepIndex].groups[groupIndexToChange]
 
   const filteredAttribute: any[] = []
 

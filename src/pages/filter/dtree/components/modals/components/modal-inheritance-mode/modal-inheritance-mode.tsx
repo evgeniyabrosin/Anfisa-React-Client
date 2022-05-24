@@ -22,9 +22,9 @@ export const ModalInheritanceMode = observer((): ReactElement => {
   const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
 
   const currentGroup =
-    dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
+    stepStore.steps[currentStepIndex].groups[currentGroupIndex]
 
-  const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
+  const currentGroupToModify = stepStore.steps[currentStepIndex].groups
 
   const selectedGroupsAmount = currentGroup ? dtreeStore.selectedFilters : []
 

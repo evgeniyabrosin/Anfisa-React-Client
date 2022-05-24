@@ -93,7 +93,7 @@ class ModalEnumStore {
   }
 
   public checkIfSelectedFiltersExist(currentGroup: TEnumCondition) {
-    dtreeStore.stepData[stepStore.activeStepIndex].groups[
+    stepStore.steps[stepStore.activeStepIndex].groups[
       modalsVisibilityStore.groupIndexToChange
     ][modalsControlStore.currentGroupLength - 1].forEach((item: string) =>
       dtreeStore.addSelectedFilter(item),

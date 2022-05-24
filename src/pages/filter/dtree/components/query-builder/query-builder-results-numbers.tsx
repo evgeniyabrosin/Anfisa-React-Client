@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { Divider } from '@ui/divider'
 
 interface IQueryBuilderResultsNumbersProps {
@@ -11,13 +12,8 @@ interface IQueryBuilderResultsNumbersProps {
 
 export const QueryBuilderResultsNumbers = observer(
   ({ className }: IQueryBuilderResultsNumbersProps) => {
-    const {
-      stepData,
-      isCountsReceived,
-      totalFilteredCounts,
-      isXl,
-      dtreeSetData: dtree,
-    } = dtreeStore
+    const { totalFilteredCounts, isXl, dtreeSetData: dtree } = dtreeStore
+    const { steps } = stepStore
 
     if (!dtree) {
       return null
@@ -36,7 +32,7 @@ export const QueryBuilderResultsNumbers = observer(
     return (
       <div className={cn('text-sm font-medium flex align-center', className)}>
         <span className="whitespace-nowrap">{total}</span>
-        {stepData.length > 0 && isCountsReceived && totalFilteredCounts && (
+        {steps.length > 0 && totalFilteredCounts && (
           <>
             <Divider orientation="vertical" color="light" spacing="dense" />
             <span className="whitespace-nowrap">

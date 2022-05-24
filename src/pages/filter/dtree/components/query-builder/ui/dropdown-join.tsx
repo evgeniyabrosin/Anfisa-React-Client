@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { useOutsideClick } from '@core/hooks/use-outside-click'
 import { t } from '@i18n'
-import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { Card } from '@ui/card'
 
 interface IProps {
@@ -18,7 +18,7 @@ export const DropDownJoin = observer(
 
     useOutsideClick(ref, close)
 
-    const currentGroup = dtreeStore.stepData[index].groups[currNo]
+    const currentGroup = stepStore.steps[index].groups[currNo]
 
     const handleJoin = (type: string) => {
       currentGroup[currentGroup.length - 2] = type

@@ -92,7 +92,7 @@ export const NextStepRoute = observer(
         ? dtreeStore.pointCounts[returnPointIndex]
         : null
 
-    const isFinalStep = index === dtreeStore.stepData.length - 1
+    const isFinalStep = index === stepStore.steps.length - 1
     const isDifferenceActive = currentStep.isReturnedVariantsActive
     const shouldTooltipAppear = Boolean(returnCounts?.[0])
 

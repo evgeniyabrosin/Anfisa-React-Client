@@ -3,25 +3,27 @@ import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { Button } from '@ui/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { QueryBuilderResultsNumbers } from './query-builder-results-numbers'
 
 export const QueryBuilderResults = observer((): ReactElement => {
-  const { stepData, isTreeEmpty } = dtreeStore
+  const { isTreeEmpty } = dtreeStore
+  const { steps } = stepStore
 
-  const stepIndex = stepData.findIndex(
+  const stepIndex = steps.findIndex(
     element => element.isActive || element.isReturnedVariantsActive,
   )
 
-  const currentStep = stepData[stepIndex]
+  const currentStep = steps[stepIndex]
 
   const hasReturnedVariants = currentStep?.returnPointIndex != null
   const hasStartVariants = currentStep?.conditionPointIndex != null
   const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
   const openTableModal = (isReturnedVariants = true) => {
-    const hasEmptyStep = stepData.some(element => {
+    const hasEmptyStep = steps.some(element => {
       if (!element.isFinalStep) {
         return element.groups.length === 0
       }

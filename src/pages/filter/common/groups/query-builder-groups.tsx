@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useFilterQueryBuilder } from '@core/hooks/use-filter-query-builder'
 import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import filterStore from '@store/filter'
 import { DeferRender } from '@components/defer-render'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -22,11 +23,12 @@ export const QueryBuilderGroups = observer((): ReactElement => {
 
   const chunkSize = 2
 
-  const activeStepIndex = dtreeStore.stepData.findIndex(
+  // TODO: try to get active step index from stepStore.activeStepIndex
+  const activeStepIndex = stepStore.steps.findIndex(
     step => step.isActive || step.isReturnedVariantsActive,
   )
 
-  const activeStep = dtreeStore.stepData[activeStepIndex]
+  const activeStep = stepStore.steps[activeStepIndex]
 
   const returnedVariantsPrompt = activeStep?.excluded
     ? ` (${t('dtree.excludedVariants')})`

@@ -4,10 +4,7 @@ import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { TFilteringStatCounts } from '@service-providers/common'
-import {
-  DtreeSetPointKinds,
-  IDtreeSetPoint,
-} from '@service-providers/decision-trees'
+import { DtreeSetPointKinds } from '@service-providers/decision-trees'
 import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision-trees.adapters'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
@@ -55,7 +52,6 @@ class DtreeStore {
     return this.dtreeSet.data
   }
 
-  isCountsReceived = false
   get dtreeCode(): string {
     return this.dtreeSetData?.code ?? ''
   }
@@ -102,9 +98,6 @@ class DtreeStore {
   filterModalValue = ''
   algorithmFilterValue = ''
   filteredCounts = 0
-
-  stepData: IStepData[] = []
-  stepAmout = 0
 
   isModalSaveDatasetVisible = false
   isModalViewVariantsVisible = false
@@ -157,11 +150,9 @@ class DtreeStore {
   }
 
   get acceptedVariants(): number {
-    const counts = this.pointCounts
-
-    return this.stepData.reduce((acc, { excluded, returnPointIndex }) => {
+    return stepStore.steps.reduce((acc, { excluded, returnPointIndex }) => {
       if (!excluded && returnPointIndex !== null) {
-        return acc + (counts[returnPointIndex]?.[0] ?? 0)
+        return acc + (this.pointCounts[returnPointIndex]?.[0] ?? 0)
       }
 
       return acc
@@ -173,11 +164,11 @@ class DtreeStore {
    * and transcribed variants for WS
    */
   get totalFilteredCounts(): IDtreeFilteredCounts | undefined {
-    if (!this.dtreeSetData || !this.isCountsReceived) {
+    if (!this.dtreeSetData) {
       return undefined
     }
     const isXl = this.isXl
-    const points: IDtreeSetPoint[] = this.dtreeSetData.points
+    const { points } = this.dtreeSetData
     const totalCounts = this.dtreeSetData['total-counts']
     const counts = this.pointCounts
 
@@ -230,8 +221,6 @@ class DtreeStore {
   ) {
     if (shouldSaveInHistory) addToActionHistory(body)
 
-    this.setIsCountsReceived(false)
-
     this.dtreeSet.setQuery(body)
   }
 
@@ -273,8 +262,8 @@ class DtreeStore {
   // 2. UI functions to display adding / deleting / editing steps
 
   get isTreeEmpty(): boolean {
-    const isFirstStepEmpty = this.stepData[0]?.groups.length === 0
-    return this.stepData.length === 2 && isFirstStepEmpty
+    const isFirstStepEmpty = stepStore.steps[0]?.groups.length === 0
+    return stepStore.steps.length === 2 && isFirstStepEmpty
   }
 
   addSelectedGroup(group: any) {
@@ -429,8 +418,9 @@ class DtreeStore {
     this.algorithmFilterValue = ''
   }
 
+  // TODO: check it
   toggleIsExcluded(index: number) {
-    this.stepData[index].excluded = !this.stepData[index].excluded
+    stepStore.steps[index].excluded = !stepStore.steps[index].excluded
     this.resetLocalDtreeCode()
   }
 
@@ -478,12 +468,6 @@ class DtreeStore {
   clearStatRequestId() {
     runInAction(() => {
       this.statRequestId = ''
-    })
-  }
-
-  setIsCountsReceived(isReceived: boolean) {
-    runInAction(() => {
-      this.isCountsReceived = isReceived
     })
   }
 

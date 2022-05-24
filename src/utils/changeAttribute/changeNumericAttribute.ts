@@ -15,8 +15,9 @@ export const changeNumericAttribute = (numericData: any[]) => {
   const { location } = modalsControlStore
   const { activeStepIndex } = stepStore
 
+  // TODO: add type
   const attribute: any[] =
-    dtreeStore.stepData[activeStepIndex].groups[groupIndexToChange]
+    stepStore.steps[activeStepIndex].groups[groupIndexToChange]
 
   const filteredAttribute: any[] = []
 

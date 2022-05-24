@@ -2,6 +2,7 @@ import { toJS } from 'mobx'
 
 import { ChangeStepActionType } from '@declarations'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import {
   ActionTypes,
   InstrModifyingActionNames,
@@ -15,7 +16,8 @@ export const changeStep = (
 ): void => {
   const code = dtreeStore.dtreeCode ?? 'return False'
 
-  const locadStepData = toJS(dtreeStore.stepData)
+  // TODO: rename variables
+  const locadStepData = toJS(stepStore.steps)
 
   locadStepData.length = index + 1
 
