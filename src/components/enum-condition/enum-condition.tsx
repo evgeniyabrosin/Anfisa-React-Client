@@ -39,7 +39,7 @@ interface IEnumCondition {
   ) => void
 }
 
-const initialCount = 12
+const initialCount = 8
 
 export const EnumCondition = observer(
   ({
@@ -172,7 +172,7 @@ export const EnumCondition = observer(
             value={searchValue}
             onChange={handleSearchChange}
             isSubgroupItemSearch
-            className="mb-4"
+            className={cn(isRefiner ? 'mb-4' : 'mt-4')}
           />
         )}
 
