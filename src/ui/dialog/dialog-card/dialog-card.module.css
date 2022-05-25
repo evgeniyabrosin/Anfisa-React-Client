@@ -1,4 +1,5 @@
 .dialog-card {
+  position: relative;
   padding: theme("spacing.4");
   display: flex;
   flex-direction: column;

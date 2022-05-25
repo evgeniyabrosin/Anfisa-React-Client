@@ -1,13 +1,16 @@
 import React, { ReactElement } from 'react'
 import styled, { css } from 'styled-components'
 
+type TLoaderSize = 'xl' | 'l' | 'm' | 's' | 'xs'
+
 export interface ILoaderProps {
-  size: 'xl' | 'l' | 'm' | 's' | 'xs'
-  color: 'default' | 'white'
+  className?: string
+  size?: TLoaderSize
+  color?: 'default' | 'white'
 }
 
 const loaderSizes: Record<
-  ILoaderProps['size'],
+  TLoaderSize,
   Record<'fontSize' | 'width' | 'height' | 'margin', number>
 > = {
   xl: {
@@ -42,7 +45,7 @@ const loaderSizes: Record<
   },
 }
 
-const Root = styled.div<{ size: ILoaderProps['size'] }>`
+const Root = styled.div<{ size: TLoaderSize }>`
   width: 100%;
 
   .loader,
@@ -59,6 +62,7 @@ const Root = styled.div<{ size: ILoaderProps['size'] }>`
     -webkit-animation: load7 1.8s infinite ease-in-out;
     animation: load7 1.8s infinite ease-in-out;
   }
+
   .loader {
     ${({ size }) =>
       css`
@@ -73,20 +77,24 @@ const Root = styled.div<{ size: ILoaderProps['size'] }>`
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
   }
+
   .loader:before,
   .loader:after {
     content: '';
     position: absolute;
     top: 0;
   }
+
   .loader:before {
     left: -3.5em;
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
   }
+
   .loader:after {
     left: 3.5em;
   }
+
   @-webkit-keyframes load7 {
     0%,
     80%,
@@ -110,11 +118,12 @@ const Root = styled.div<{ size: ILoaderProps['size'] }>`
 `
 
 export const Loader = ({
+  className,
   size = 'l',
   color = 'default',
-}: React.PropsWithChildren<Partial<ILoaderProps>>): ReactElement => {
+}: ILoaderProps): ReactElement => {
   return (
-    <Root size={size}>
+    <Root size={size} className={className}>
       <div
         className={`loader ${
           color === 'default' ? 'text-blue-bright' : 'text-white'
