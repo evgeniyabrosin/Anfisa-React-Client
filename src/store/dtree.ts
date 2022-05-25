@@ -363,12 +363,6 @@ class DtreeStore {
     })
   }
 
-  // setPointCounts(pointCounts: PointCount[]) {
-  //   runInAction(() => {
-  //     this.pointCounts = pointCounts
-  //   })
-  // }
-
   expandFilterContent() {
     this.isFilterContentExpanded = true
     this.filterChangeIndicator++
