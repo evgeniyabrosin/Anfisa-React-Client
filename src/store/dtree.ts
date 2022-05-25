@@ -14,7 +14,7 @@ import datasetStore from './dataset/dataset'
 import { DtreeCountsAsyncStore } from './dtree/dtree-counts.async.store'
 import { DtreeSetAsyncStore } from './dtree/dtree-set.async.store'
 import { DtreeStatStore } from './dtree/dtree-stat.store'
-import stepStore from './dtree/step.store'
+import stepStore, { ActiveStepOptions } from './dtree/step.store'
 
 export type IStepData = {
   step: number
@@ -125,6 +125,14 @@ class DtreeStore {
       response => {
         if (response) {
           stepStore.setSteps(adaptDtreeSetToSteps(response))
+
+          // make step active after load dtree_set
+          const { activeStepIndex, steps } = stepStore
+          const shouldUseLastIndex =
+            response['dtree-name'] || activeStepIndex === 0
+          const index = shouldUseLastIndex ? steps.length - 1 : activeStepIndex
+
+          stepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
         }
         if (response?.kind === 'xl') {
           this.dtreeCounts.setQuery({
