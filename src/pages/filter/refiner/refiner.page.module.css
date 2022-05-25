@@ -1,0 +1,21 @@
+.refiner-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+
+  &__header {
+    flex: 0 0 auto
+  }
+
+  &__controls {
+    flex: 0 0 auto;
+  }
+
+  &__refiner {
+    flex: 1 0 0;
+  }
+}

@@ -10,6 +10,7 @@ import { NextStepContentItem } from './next-step-content-item'
 
 interface INextStepContentProps {
   index: number
+  stepNo: number
 }
 
 const Content = styled.div`
@@ -25,17 +26,18 @@ const ContentEditor = styled.div`
 `
 
 export const NextStepContent = observer(
-  ({ index }: INextStepContentProps): ReactElement => {
-    const currentStep = stepStore.filteredSteps[index]
-
-    const { excluded, condition, groups, comment } = currentStep
-
+  ({ index, stepNo }: INextStepContentProps): ReactElement => {
     const [expanded, setExpanded] = useState<Record<number, boolean>>({})
     const expandGroup = (id: number) => () => {
       setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
     }
 
+    const currentStepData = stepStore.filteredSteps[index]
+
+    const { comment, excluded, groups } = currentStepData
     const result = String(!excluded)
+
+    const condition = currentStepData.condition ?? null
 
     const getWords = (text: string | null) => {
       if (!text) return []
@@ -97,7 +99,7 @@ export const NextStepContent = observer(
     const wordList = getWords(condition ?? null)
 
     const openModal = () => {
-      stepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+      stepStore.makeStepActive(stepNo - 1, ActiveStepOptions.StartedVariants)
 
       modalsVisibilityStore.openModalAttribute()
     }
@@ -108,14 +110,15 @@ export const NextStepContent = observer(
           <div className="flex flex-col w-2/3 h-auto justify-between step-content-area">
             {/* TODO: add variable "isEmptyStep" instead of "groups && groups.length > 0" */}
             {groups && groups.length > 0 ? (
-              groups.map((group: any, currNo: number) => (
+              groups.map((group: any, groupNo: number) => (
                 <NextStepContentItem
-                  key={JSON.stringify(group) + currNo}
+                  key={JSON.stringify(group) + groupNo}
                   group={group}
+                  stepNo={stepNo}
                   index={index}
-                  currNo={currNo}
-                  setExpandOnClick={expandGroup(currNo)}
-                  expanded={expanded[currNo] || false}
+                  groupNo={groupNo}
+                  setExpandOnClick={expandGroup(groupNo)}
+                  expanded={expanded[groupNo] || false}
                 />
               ))
             ) : (
@@ -128,7 +131,7 @@ export const NextStepContent = observer(
           {groups && groups.length > 0 && (
             <ContentEditor className="w-1/3 h-full ml-2">
               <div
-                className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono"
+                className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono overflow-auto"
                 data-testid={DecisionTreesResultsDataCy.contentEditor}
               >
                 {comment && <div className="text-white mb-2">{comment}</div>}

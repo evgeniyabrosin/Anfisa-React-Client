@@ -75,11 +75,17 @@ const ExcludeAmount = styled.div<{ isIncluded: boolean }>`
 interface INextStepRouteProps {
   isExpanded: boolean
   index: number
+  stepNo: number
   isIncluded: boolean
 }
 
 export const NextStepRoute = observer(
-  ({ isExpanded, index, isIncluded }: INextStepRouteProps): ReactElement => {
+  ({
+    isExpanded,
+    index,
+    stepNo,
+    isIncluded,
+  }: INextStepRouteProps): ReactElement => {
     const isXl = dtreeStore.isXl
     const currentStep = stepStore.filteredSteps[index]
     const { conditionPointIndex, returnPointIndex } = currentStep
@@ -142,7 +148,7 @@ export const NextStepRoute = observer(
                       isIncluded={isIncluded}
                       onClick={() =>
                         stepStore.makeStepActive(
-                          index,
+                          stepNo - 1,
                           ActiveStepOptions.ReturnedVariants,
                         )
                       }

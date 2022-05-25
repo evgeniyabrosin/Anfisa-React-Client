@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { InheritanceModeEnum } from '@core/enum/inheritance-mode-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import dtreeStore from '@store/dtree'
@@ -175,7 +176,13 @@ class ModalCustomInheritanceModeStore {
     dtreeStore.addSelectedFilter(modalsControlStore.variants[0][0])
     const params = { scenario: dtreeStore.scenario }
 
-    addAttributeToStep(action, 'func', [null], params, this.currentMode)
+    addAttributeToStep(
+      action,
+      FilterKindEnum.Func,
+      null,
+      params,
+      this.currentMode,
+    )
     dtreeStore.resetSelectedFilters()
     modalsVisibilityStore.closeModalCustomInheritanceMode()
     this.resetData()

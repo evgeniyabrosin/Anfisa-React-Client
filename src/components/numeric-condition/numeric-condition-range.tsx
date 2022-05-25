@@ -2,9 +2,9 @@ import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { adjustHistogramData } from '@core/histograms'
 import { t } from '@i18n'
-import { InputNumber } from '@ui/input-number'
+import { Checkbox } from '@ui/checkbox/checkbox'
+import { InputNumber } from '@ui/input-number/input-number'
 import { RangeSliderSide } from '@ui/range-slider'
-import { Switch } from '@ui/switch'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import { NumericPropertyStatusSubKinds } from '@service-providers/common/common.interface'
 import { INumericConditionProps } from './numeric-condition.interface'
@@ -86,12 +86,6 @@ export const NumericConditionRange = ({
   return (
     <>
       <div className={className}>
-        <div className="my-2">
-          <label className="inline-flex items-center text-sm">
-            <Switch isChecked={isLimitedRange} onChange={setLimitedRange} />
-            <span className="ml-2">{t('numericCondition.limitedRange')}</span>
-          </label>
-        </div>
         <div className="relative flex items-center">
           <div className="relative grow flex items-center py-6">
             <div className="absolute top-1 left-0 w-full text-xs text-grey-blue text-left">
@@ -164,6 +158,14 @@ export const NumericConditionRange = ({
             </div>
           )}
         </div>
+        <Checkbox
+          id="numeric-range"
+          checked={isLimitedRange}
+          onChange={() => setLimitedRange(prev => !prev)}
+          className="text-sm"
+        >
+          {t('numericCondition.limitedRange')}
+        </Checkbox>
         {isZeroSkipped && (
           <div>
             <label className="inline-flex items-center text-sm">

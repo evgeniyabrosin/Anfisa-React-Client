@@ -29,7 +29,7 @@ export const ModalJoin = observer(
 
       modalsVisibilityStore.closeModalJoin()
       modalsVisibilityStore.closeModalEnum()
-      modalsVisibilityStore.closeModalNumbers()
+      modalsVisibilityStore.closeModalNumeric()
       modalsVisibilityStore.closeModalInheritanceMode()
       modalsVisibilityStore.closeModalCustomInheritanceMode()
     }

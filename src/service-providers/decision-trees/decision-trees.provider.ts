@@ -5,6 +5,7 @@ import { ServiceProviderBase } from '../common'
 import { filteringProvider } from '../filtering-regime'
 import { adaptDtreeStatResponse } from './decision-trees.adapters'
 import {
+  IDeleteDecisionTreeParams,
   IDtreeCountsArguments,
   IDtreeCountsResponse,
   IDtreeSetArguments,
@@ -12,9 +13,10 @@ import {
   IDtreeStatArguments,
   IDtreeStatResponse,
   IGetFullDreeCountsOptions,
+  IGetFullDtreeStatParams,
+  IUpdateDecisionTreeParams,
   TDtreeStat,
   TGetFullDtreeStatOptions,
-  TGetFullDtreeStatParams,
 } from './decision-trees.interface'
 
 class DecisionTreesProvider extends ServiceProviderBase {
@@ -80,7 +82,7 @@ class DecisionTreesProvider extends ServiceProviderBase {
   }
 
   public getFullDtreeStat(
-    params: TGetFullDtreeStatParams,
+    params: IGetFullDtreeStatParams,
     options: TGetFullDtreeStatOptions = {},
   ): Promise<TDtreeStat> {
     return filteringProvider.getFullStatUnitsBase(
@@ -115,6 +117,34 @@ class DecisionTreesProvider extends ServiceProviderBase {
     )
 
     return response.data
+  }
+
+  public updateDtree(
+    params: IUpdateDecisionTreeParams,
+    options?: Partial<AxiosRequestConfig>,
+  ): Promise<IDtreeSetResponse> {
+    return this.getDtreeSet(
+      {
+        ds: params.ds,
+        code: params.code,
+        instr: params.instr,
+      },
+      options,
+    )
+  }
+
+  public deleteDtree(
+    params: IDeleteDecisionTreeParams,
+    options?: Partial<AxiosRequestConfig>,
+  ): Promise<IDtreeSetResponse> {
+    return this.getDtreeSet(
+      {
+        ds: params.ds,
+        code: params.code,
+        instr: params.instr,
+      },
+      options,
+    )
   }
 }
 

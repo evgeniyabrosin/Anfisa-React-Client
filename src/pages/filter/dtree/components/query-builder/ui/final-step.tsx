@@ -23,6 +23,7 @@ interface IFinalStepProps {
 export const FinalStep = observer(
   ({ index }: IFinalStepProps): ReactElement => {
     const currentStep = stepStore.filteredSteps[index]
+    const stepNo = stepStore.filteredSteps[index].step
 
     const setStepActive = (stepIndex: number, event: any) => {
       const classList = Array.from(event.target.classList)
@@ -30,7 +31,7 @@ export const FinalStep = observer(
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        stepStore.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
+        stepStore.makeStepActive(stepNo - 1, ActiveStepOptions.StartedVariants)
       }
     }
 
@@ -54,6 +55,7 @@ export const FinalStep = observer(
             <NextStepRoute
               isExpanded={true}
               index={index}
+              stepNo={stepNo}
               isIncluded={!currentStep.excluded}
             />
           </TreeView>

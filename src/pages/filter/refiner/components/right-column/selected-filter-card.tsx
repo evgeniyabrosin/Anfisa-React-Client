@@ -57,7 +57,9 @@ export const SelectedFilterCard = observer(
           })}
           onClick={() => filterStore.selectCondition(index)}
         >
-          <div className="flex py-4 justify-between">
+          {index > 0 && <div className="bg-grey-light h-px w-full" />}
+
+          <div className="flex py-2.5 items-center justify-between">
             <div className="flex" onClick={toggleFilterContentVisibility}>
               <Icon
                 name="Arrow"
@@ -80,8 +82,9 @@ export const SelectedFilterCard = observer(
               ModalElement={ConditionModalOptionsPopup}
             />
           </div>
-
-          <div className="bg-grey-light h-px w-full" />
+          {isFilterContentVisible && (
+            <div className="bg-grey-light h-px w-full" />
+          )}
         </div>
 
         {isFilterContentVisible && filterType === FilterKindEnum.Numeric && (

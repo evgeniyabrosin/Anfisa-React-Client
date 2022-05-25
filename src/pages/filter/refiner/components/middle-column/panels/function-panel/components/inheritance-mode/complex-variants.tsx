@@ -23,12 +23,20 @@ export const ComplexVariants = observer(
     variants,
     handleChangeVariants,
   }: IComplexVariantsProps) => {
+    const { currentMode, setCurrentMode } = inheritanceModeStore
+    const selectedGroup = !!variants.length
+
     return (
-      <React.Fragment>
-        <div className="flex items-center justify-between">
-          <p className="text-14 leading-14px text-grey-blue">
-            {variantValues.length} Selected
-          </p>
+      <>
+        <div className="flex items-center justify-between mt-0.5">
+          <div className="text-14 leading-16px font-bold text-grey-blue flex">
+            {t('filter.inheritanceMode')}
+            {selectedGroup && (
+              <p className="ml-2 text-14 leading-14px text-grey-blue font-normal">
+                ({variantValues.length} Selected)
+              </p>
+            )}
+          </div>
 
           <span
             className="text-12 leading-14px text-blue-bright cursor-pointer ml-auto mr-2"
@@ -45,10 +53,10 @@ export const ComplexVariants = observer(
           </span>
         </div>
 
-        <div className="flex justify-between">
-          <div className="text-14 leading-4 mt-4">
-            {variants.map(([variantName, variantValue]) => {
-              return (
+        {selectedGroup && (
+          <div className="flex flex-1 justify-between my-3">
+            <div className="text-14 leading-4">
+              {variants.map(([variantName, variantValue]) => (
                 <Checkbox
                   key={variantName}
                   id={variantName + variantValue}
@@ -56,43 +64,35 @@ export const ComplexVariants = observer(
                   onChange={e => {
                     handleChangeVariants(e, variantName)
                   }}
-                  className="mb-4"
+                  className="mb-4 last:mb-0"
                 >
                   <span>{variantName}</span>
 
                   <span className="text-grey-blue ml-1">{`(${variantValue})`}</span>
                 </Checkbox>
-              )
-            })}
-          </div>
+              ))}
+            </div>
 
-          <div className="mt-2">
-            <AllNotMods
-              isAllModeDisabled={variantValues.length < 2}
-              isNotModeDisabled={variantValues.length === 0}
-              isAllModeChecked={
-                inheritanceModeStore.currentMode === ModeTypes.All
-              }
-              isNotModeChecked={
-                inheritanceModeStore.currentMode === ModeTypes.Not
-              }
-              toggleAllMode={() =>
-                inheritanceModeStore.setCurrentMode(ModeTypes.All)
-              }
-              toggleNotMode={() =>
-                inheritanceModeStore.setCurrentMode(ModeTypes.Not)
-              }
-              groupSubKind={SubKinds.InheritanceZ}
-            />
+            <div>
+              <AllNotMods
+                isAllModeDisabled={variantValues.length < 2}
+                isNotModeDisabled={!variantValues.length}
+                isAllModeChecked={currentMode === ModeTypes.All}
+                isNotModeChecked={currentMode === ModeTypes.Not}
+                toggleAllMode={() => setCurrentMode(ModeTypes.All)}
+                toggleNotMode={() => setCurrentMode(ModeTypes.Not)}
+                groupSubKind={SubKinds.InheritanceZ}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
-        {variants.length === 0 && (
-          <div className="flex justify-center w-full mt-2 text-14 text-grey-blue">
+        {!selectedGroup && (
+          <div className="flex flex-1 items-center justify-center w-full mt-2 text-14 text-grey-blue">
             {t('dtree.noFilters')}
           </div>
         )}
-      </React.Fragment>
+      </>
     )
   },
 )

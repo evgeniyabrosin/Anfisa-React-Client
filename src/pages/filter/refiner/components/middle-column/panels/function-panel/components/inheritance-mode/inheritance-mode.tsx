@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
+import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
 import { ConditionJoinMode } from '@service-providers/common'
 import { IInheritanceModeArgs } from '@service-providers/common/common.interface'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
@@ -95,7 +96,7 @@ export const InheritanceMode = observer(() => {
         handleChangeProblemGroups={handleChangeProblemGroups}
       />
 
-      <div className="h-px w-full bg-grey-light my-3" />
+      <DividerHorizontal />
 
       <ComplexVariants
         variantValues={variantValues}

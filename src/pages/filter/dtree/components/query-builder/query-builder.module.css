@@ -1,0 +1,14 @@
+.query-builder {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+
+  &__units {
+    flex: 0 0 33.33%;
+  }
+
+  &__tree {
+    flex: 1 0 0;
+  }
+}

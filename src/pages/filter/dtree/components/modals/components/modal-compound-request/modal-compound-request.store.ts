@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
@@ -132,21 +133,13 @@ class ModalCompoundRequestStore {
 
   public changeRequestConditionNumber(
     requestBlockIndex: number,
-    value: string,
+    value: number,
   ): void {
-    if (+value < 0) return
+    if (value < 0) return
 
-    const newRequestCondition: any[] = cloneDeep(this.requestCondition)
+    this.requestCondition[requestBlockIndex][0] = value
 
-    newRequestCondition.map((item: any[], index: number) => {
-      if (index === requestBlockIndex) {
-        item[0] = +value
-      }
-    })
-
-    this.setRequestCondition(newRequestCondition)
-
-    this.sendRequest(newRequestCondition)
+    this.sendRequest(this.requestCondition)
   }
 
   // helper fucntion
@@ -227,7 +220,13 @@ class ModalCompoundRequestStore {
 
     params.request = this.requestCondition
 
-    addAttributeToStep(action, 'func', null, params, this.currentMode)
+    addAttributeToStep(
+      action,
+      FilterKindEnum.Func,
+      null,
+      params,
+      this.currentMode,
+    )
 
     dtreeStore.resetSelectedFilters()
 

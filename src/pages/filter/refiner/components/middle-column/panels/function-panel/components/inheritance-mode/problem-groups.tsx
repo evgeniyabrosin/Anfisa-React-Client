@@ -18,36 +18,34 @@ export const ProblemGroups = observer(
     problemGroups,
     problemGroupValues,
     handleChangeProblemGroups,
-  }: IProblemGroupsProps) => {
-    return (
-      <React.Fragment>
-        <div className="flex items-center justify-between">
-          <span className="text-14 leading-16px font-bold text-grey-blue mt-4">
-            Problem group
-          </span>
+  }: IProblemGroupsProps) => (
+    <>
+      <div className="flex items-center justify-between my-0.5">
+        <span className="text-14 leading-16px font-bold text-grey-blue">
+          Problem group
+        </span>
 
-          <span
-            className="text-12 text-blue-bright leading-14px cursor-pointer"
-            onClick={inheritanceModeStore.resetAllFields}
+        <span
+          className="text-12 text-blue-bright leading-14px cursor-pointer"
+          onClick={inheritanceModeStore.resetAllFields}
+        >
+          Reset
+        </span>
+      </div>
+
+      <div className="grid mt-3 mb-2 xl:grid-cols-2 grid-cols-3 gap-4">
+        {problemGroups.map(problemGroup => (
+          <Checkbox
+            id={problemGroup}
+            key={problemGroup}
+            checked={problemGroupValues.includes(problemGroup)}
+            onChange={e => handleChangeProblemGroups(e, problemGroup)}
+            className="text-14 leading-4 w-fit"
           >
-            Reset
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between mt-3">
-          {problemGroups.map(problemGroup => (
-            <Checkbox
-              id={problemGroup}
-              key={problemGroup}
-              checked={problemGroupValues.includes(problemGroup)}
-              onChange={e => handleChangeProblemGroups(e, problemGroup)}
-              className="text-14 leading-4"
-            >
-              {problemGroup}
-            </Checkbox>
-          ))}
-        </div>
-      </React.Fragment>
-    )
-  },
+            {problemGroup}
+          </Checkbox>
+        ))}
+      </div>
+    </>
+  ),
 )

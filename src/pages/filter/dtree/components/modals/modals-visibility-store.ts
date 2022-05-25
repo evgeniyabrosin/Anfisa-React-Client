@@ -1,13 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-import { t } from '@i18n'
-import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
-import {
-  ActionTypes,
-  DtreeModifyingActions,
-} from '@service-providers/decision-trees'
-import { showToast } from '@utils/notifications/showToast'
 
 class ModalsVisibilityStore {
   groupNameToChange = ''
@@ -25,44 +18,12 @@ class ModalsVisibilityStore {
   isModalGeneRegionVisible = false
 
   isModalEnumVisible = false
-  isModalNumbersVisible = false
+  isModalNumericVisible = false
 
   isModalTextEditorVisible = false
-  isModalConfirmationVisible = false
 
   constructor() {
     makeAutoObservable(this)
-  }
-
-  public deleteTree(): void {
-    const notification: string = `${t('dtree.dtree')} "${
-      dtreeStore.currentDtreeName
-    }" ${t('dtree.hasBeenDeleted')}`
-
-    dtreeStore.fetchDtreeSetAsync({
-      ds: datasetStore.datasetName,
-      code: dtreeStore.dtreeCode,
-      instr: [
-        ActionTypes.DTREE,
-        DtreeModifyingActions.DELETE,
-        dtreeStore.currentDtreeName,
-      ],
-    })
-
-    showToast(notification, 'success')
-
-    dtreeStore.setActionName()
-
-    dtreeStore.resetCurrentDtreeName()
-  }
-
-  public openModalConfirmation(dtreeOperation: string): void {
-    this.isModalConfirmationVisible = true
-    this.dtreeOperation = dtreeOperation
-  }
-
-  public closeModalConfirmation(): void {
-    this.isModalConfirmationVisible = false
   }
 
   // 1. Modals for creation brand new tree
@@ -75,7 +36,7 @@ class ModalsVisibilityStore {
     this.isModalAttributeVisible = false
   }
 
-  public openModalJoin() {
+  public openModalJoin = () => {
     this.isModalJoinVisible = true
   }
 
@@ -85,20 +46,20 @@ class ModalsVisibilityStore {
 
   // 2. Modal for numeric attr
 
-  public openModalNumbers(
+  public openModalNumeric(
     groupName: string,
     groupIndex: number | undefined,
     source: string = '',
   ) {
     this.modalSource = source
 
-    this.isModalNumbersVisible = true
+    this.isModalNumericVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalNumbers() {
-    this.isModalNumbersVisible = false
+  public closeModalNumeric = (): void => {
+    this.isModalNumericVisible = false
   }
 
   // 3. Modal for enum attr
@@ -115,7 +76,7 @@ class ModalsVisibilityStore {
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalEnum() {
+  public closeModalEnum = () => {
     this.isModalEnumVisible = false
     dtreeStore.resetSelectedFilters()
   }

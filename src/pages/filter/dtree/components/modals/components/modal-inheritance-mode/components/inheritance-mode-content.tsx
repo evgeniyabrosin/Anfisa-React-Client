@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment } from 'react'
+import { ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { ModeTypes } from '@core/enum/mode-types-enum'
@@ -12,7 +12,7 @@ import { DisabledVariantsAmount } from '@pages/filter/dtree/components/query-bui
 import { ModsDivider } from '@pages/filter/dtree/components/query-builder/ui/mods-divider'
 import modalInheritanceModeStore from '../modal-inheritance-mode.store'
 
-interface IProps {
+interface IInheritanceModeContentProps {
   problemGroups: string[]
   setProblemGroups: (e: boolean, group: string) => void
   selectedProblemGroups: string[]
@@ -26,19 +26,19 @@ export const InheritanceModeContent = observer(
     setProblemGroups,
     selectedProblemGroups,
     handleReset,
-  }: IProps) => {
+  }: IInheritanceModeContentProps) => {
     const { variants } = modalInheritanceModeStore
 
     const handleCheckGroupItem = (checked: boolean, name: string) => {
       if (checked) {
         dtreeStore.addSelectedFilter(name)
-      } else {
-        dtreeStore.removeSelectedFilter(name)
+        return
       }
+      dtreeStore.removeSelectedFilter(name)
     }
 
     return (
-      <Fragment>
+      <>
         <div className="flex items-center justify-between w-full mt-4 text-14">
           <div>{t('dtree.problemGroup')}</div>
 
@@ -117,7 +117,7 @@ export const InheritanceModeContent = observer(
           disabled={false}
           handleCheckGroupItem={handleCheckGroupItem}
         />
-      </Fragment>
+      </>
     )
   },
 )

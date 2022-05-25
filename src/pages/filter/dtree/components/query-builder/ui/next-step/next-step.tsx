@@ -47,14 +47,15 @@ export const NextStep = observer(
     }
 
     const currentStep = stepStore.filteredSteps[index]
+    const stepNo = currentStep.step
 
-    const setStepActive = (stepIndex: number, event: any) => {
+    const setStepActive = (event: any) => {
       const classList = Array.from(event.target.classList)
 
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        stepStore.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
+        stepStore.makeStepActive(stepNo - 1, ActiveStepOptions.StartedVariants)
       }
     }
 
@@ -73,6 +74,7 @@ export const NextStep = observer(
             <NextStepRoute
               isExpanded={isExpanded}
               index={index}
+              stepNo={stepNo}
               isIncluded={!currentStep.excluded}
             />
           </TreeView>
@@ -82,7 +84,7 @@ export const NextStep = observer(
               'border-b border-l border-grey-light font-medium px-5 relative',
               currentStep.isActive && ' bg-blue-tertiary',
             )}
-            onClick={event => setStepActive(index, event)}
+            onClick={event => setStepActive(event)}
           >
             <NextStepHeader
               isExpanded={isExpanded}
@@ -91,7 +93,7 @@ export const NextStep = observer(
               isExcluded={currentStep.excluded}
             />
 
-            {isExpanded && <NextStepContent index={index} />}
+            {isExpanded && <NextStepContent index={index} stepNo={stepNo} />}
           </ResultsView>
         </div>
       </div>

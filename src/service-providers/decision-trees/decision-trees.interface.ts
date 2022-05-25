@@ -195,10 +195,22 @@ export interface IDtreeCmp {
 
 export type TDtreeStat = TFilteringStat
 
-export type TGetFullDtreeStatParams = {
+export interface IGetFullDtreeStatParams {
   ds: string
   no: string
   code: string
 }
 
 export type TGetFullDtreeStatOptions = TGetFullStatUnitsOptions<TDtreeStat>
+
+export interface IUpdateDecisionTreeParams {
+  ds: string
+  code: string
+  instr: TDtreeModifyingActions
+}
+
+export interface IDeleteDecisionTreeParams {
+  ds: string
+  code: string
+  instr: TDtreeModifyingActions
+}

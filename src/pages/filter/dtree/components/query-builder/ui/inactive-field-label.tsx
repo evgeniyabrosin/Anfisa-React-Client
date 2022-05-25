@@ -8,14 +8,14 @@ import stepStore, {
 } from '../../../../../../store/dtree/step.store'
 
 interface IInactiveFieldProps {
-  stepIndex: number
+  stepNo: number
   groupIndex: number
 }
 
 export const InactiveFieldLabel = observer(
-  ({ stepIndex, groupIndex }: IInactiveFieldProps) => {
+  ({ stepNo, groupIndex }: IInactiveFieldProps) => {
     const handleDeleteAttribute = () => {
-      stepStore.makeStepActive(stepIndex, ActiveStepOptions.StartedVariants)
+      stepStore.makeStepActive(stepNo - 1, ActiveStepOptions.StartedVariants)
 
       deleteAttribute(groupIndex)
     }

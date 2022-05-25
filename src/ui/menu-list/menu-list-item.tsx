@@ -10,7 +10,7 @@ interface IMenuListItemProps {
   isSelected?: boolean
   label: ReactNode
   actions?: ReactNode
-  onClick: (event: React.MouseEvent<HTMLElement>) => void
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void
 }
 
 const stopPropagation = (event: React.MouseEvent) => event.stopPropagation()

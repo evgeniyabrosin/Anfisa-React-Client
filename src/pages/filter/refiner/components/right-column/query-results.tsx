@@ -1,48 +1,40 @@
-import { ReactElement, useRef } from 'react'
+import { ReactElement } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
-import useClientHeight from '@core/hooks/use-client-height'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
 import { SelectedFilterCard } from './selected-filter-card'
 
-export const QueryResults = observer((): ReactElement => {
-  const { conditions, selectedConditionIndex } = filterStore
+interface IQueryResultsProps {
+  className?: string
+}
 
-  const emptyDivkRef = useRef<any>()
-  const nonEmptyDivRef = useRef<any>()
+export const QueryResults = observer(
+  ({ className }: IQueryResultsProps): ReactElement => {
+    const { conditions, selectedConditionIndex } = filterStore
 
-  const emptyBlockHeight = useClientHeight(emptyDivkRef)
-  const nonEmptyBlockHeight = useClientHeight(nonEmptyDivRef)
+    if (conditions.length === 0) {
+      return (
+        <div className={cn('flex items-center justify-center', className)}>
+          <p className="leading-16px text-grey-blue">
+            {t('general.noResultsFound')}
+          </p>
+        </div>
+      )
+    }
 
-  if (conditions.length === 0) {
     return (
-      <div
-        ref={emptyDivkRef}
-        style={{ height: emptyBlockHeight }}
-        className="flex items-center justify-center border-b border-grey-disabled"
-      >
-        <p className="leading-16px text-grey-blue">
-          {t('general.noResultsFound')}
-        </p>
+      <div className={cn('overflow-y-auto', className)}>
+        {conditions.map((condition, index) => (
+          <div key={`${condition[1]}_${index}`} className="flex flex-col">
+            <SelectedFilterCard
+              isActive={index === selectedConditionIndex}
+              index={index}
+            />
+          </div>
+        ))}
       </div>
     )
-  }
-
-  return (
-    <div
-      ref={nonEmptyDivRef}
-      className="overflow-y-scroll"
-      style={{ height: nonEmptyBlockHeight }}
-    >
-      {conditions.map((condition, index) => (
-        <div key={`${condition[1]}_${index}`} className="flex flex-col">
-          <SelectedFilterCard
-            isActive={index === selectedConditionIndex}
-            index={index}
-          />
-        </div>
-      ))}
-    </div>
-  )
-})
+  },
+)

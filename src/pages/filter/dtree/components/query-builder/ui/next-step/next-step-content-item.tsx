@@ -7,11 +7,7 @@ import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
 import stepStore from '@store/dtree/step.store'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
-import {
-  EnumPropertyStatusSubKinds,
-  TCondition,
-  TNumericConditionBounds,
-} from '@service-providers/common'
+import { TCondition, TNumericConditionBounds } from '@service-providers/common'
 import { DropDownJoin } from '../dropdown-join'
 import { ContentItemHeader } from './content-item-header'
 import { ContentItemValues } from './content-item-values'
@@ -24,7 +20,8 @@ const JoinType = styled.div`
 interface INextStepContentItemProps {
   group: any
   index: number
-  currNo: number
+  stepNo: number
+  groupNo: number
   expanded: boolean
   setExpandOnClick: () => void
 }
@@ -33,7 +30,8 @@ export const NextStepContentItem = observer(
   ({
     group,
     index,
-    currNo,
+    stepNo,
+    groupNo,
     expanded,
     setExpandOnClick,
   }: INextStepContentItemProps): ReactElement => {
@@ -41,16 +39,14 @@ export const NextStepContentItem = observer(
     const stepType: FilterKindEnum = group[0]
     const groupName: string = group[1]
     const currentStep = stepStore.filteredSteps[index]
-
-    const currentGroup: TCondition = currentStep.groups[currNo]
-    const groupSubKind: EnumPropertyStatusSubKinds = group['sub-kind']
+    const currentGroup: TCondition = currentStep.groups[groupNo]
     const conditionValue: string[] | TNumericConditionBounds = group.find(
       Array.isArray,
     )
 
     return (
       <div className="flex flex-col h-auto">
-        {currNo > 0 && (
+        {groupNo > 0 && (
           <div
             className={cn(
               'flex w-full h-2/5 py-2 text-14 font-normal items-center relative step-content-area',
@@ -68,7 +64,7 @@ export const NextStepContentItem = observer(
               <DropDownJoin
                 close={() => setIsVisible(false)}
                 index={index}
-                currNo={currNo}
+                groupNo={groupNo}
               />
             )}
           </div>
@@ -79,9 +75,8 @@ export const NextStepContentItem = observer(
             currentStep={currentStep}
             stepType={stepType}
             groupName={groupName}
-            groupSubKind={groupSubKind}
-            index={index}
-            currNo={currNo}
+            stepNo={stepNo}
+            groupNo={groupNo}
           />
 
           <ContentItemValues
