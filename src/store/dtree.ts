@@ -57,6 +57,7 @@ class DtreeStore {
   }
   startDtreeCode = ''
   localDtreeCode = ''
+  // TODO: get dtree name from this.dtreeSetData
   currentDtreeName = ''
   previousDtreeName = ''
   createNewDtreeName = ''
@@ -302,10 +303,6 @@ class DtreeStore {
   }
 
   // 3.2 Functions for editing loaded tree
-
-  setNextDtreeCode(code: string) {
-    // this.dtreeCode = code
-  }
 
   setStartDtreeCode() {
     this.startDtreeCode = this.dtreeCode
