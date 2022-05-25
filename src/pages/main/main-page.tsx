@@ -1,5 +1,4 @@
 import { ReactElement, useEffect } from 'react'
-import { withErrorBoundary } from 'react-error-boundary'
 
 import { useParams } from '@core/hooks/use-params'
 import datasetStore from '@store/dataset/dataset'
@@ -10,11 +9,10 @@ import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
 import zoneStore from '@store/ws/zone'
 import { Header } from '@components/header'
-import { ErrorPage } from '@pages/error/error'
 import { SelectedDataset } from './components/selected-dataset/selected-dataset'
 import { Datasets } from './components/sidebar/datasets'
 
-const MainPage = (): ReactElement => {
+export const MainPage = (): ReactElement => {
   const params = useParams()
 
   useEffect(() => {
@@ -48,7 +46,3 @@ const MainPage = (): ReactElement => {
     </div>
   )
 }
-
-export default withErrorBoundary(MainPage, {
-  fallback: <ErrorPage />,
-})

@@ -1,5 +1,4 @@
 import { Fragment, ReactElement } from 'react'
-import { withErrorBoundary } from 'react-error-boundary'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -9,7 +8,6 @@ import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 import { Header } from '@components/header'
-import { ErrorPage } from '@pages/error/error'
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,7 +40,7 @@ const Info = styled.span`
   margin: 16px 0px 20px;
 `
 
-const NotFoundPage = (): ReactElement => {
+export const NotFoundPage = (): ReactElement => {
   return (
     <Fragment>
       <Header />
@@ -61,7 +59,3 @@ const NotFoundPage = (): ReactElement => {
     </Fragment>
   )
 }
-
-export default withErrorBoundary(NotFoundPage, {
-  fallback: <ErrorPage />,
-})

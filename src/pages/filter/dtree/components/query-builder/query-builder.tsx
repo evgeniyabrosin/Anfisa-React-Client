@@ -1,22 +1,23 @@
-import { ReactElement, useRef } from 'react'
+import styles from './query-builder.module.css'
 
-import useClientHeight from '@core/hooks/use-client-height'
+import { ReactElement } from 'react'
+import cn from 'classnames'
+
 import { DtreeUnitsList } from '@pages/filter/dtree/components/dtree-units-list'
 import { QueryBuilderTree } from './query-builder-tree'
 
-export const QueryBuilder = (): ReactElement => {
-  const nonEmptyDivRef = useRef<any>()
-  const nonEmptyBlockHeight = useClientHeight(nonEmptyDivRef)
+interface IQueryBuilderProps {
+  className?: string
+}
 
+export const QueryBuilder = ({
+  className,
+}: IQueryBuilderProps): ReactElement => {
   return (
-    <div
-      ref={nonEmptyDivRef}
-      className="flex overflow-y-hidden"
-      style={{ maxHeight: nonEmptyBlockHeight }}
-    >
-      <DtreeUnitsList isModal={false} className="w-1/3" />
+    <div className={cn(styles.queryBuilder, className)}>
+      <DtreeUnitsList isModal={false} className={styles.queryBuilder__units} />
 
-      <QueryBuilderTree />
+      <QueryBuilderTree className={styles.queryBuilder__tree} />
     </div>
   )
 }

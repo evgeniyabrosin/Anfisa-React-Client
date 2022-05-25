@@ -139,7 +139,7 @@ export const NextStepContent = observer(
           {groups && groups.length > 0 && (
             <ContentEditor className="w-1/3 h-full ml-2">
               <div
-                className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono"
+                className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono overflow-auto"
                 data-testid={DecisionTreesResultsDataCy.contentEditor}
               >
                 {dtreeStore.filteredStepData[index].comment && (

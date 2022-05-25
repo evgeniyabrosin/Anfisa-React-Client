@@ -1,17 +1,15 @@
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { withErrorBoundary } from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 
 import { useParams } from '@core/hooks/use-params'
-import { ErrorPage } from '@pages/error/error'
-import NotFoundPage from '@pages/not-found/not-found.page'
+import { NotFoundPage } from '@pages/not-found'
 import { FileMissing } from './ui/file-missing'
 
 export const hg38Folder = 'GRCh38'
 
 const igv = require('igv')
 
-const IgvPage = observer((): ReactElement => {
+export const IgvPage = observer((): ReactElement => {
   const [isEachFilesMissing, setIsEachFilesMissing] = useState(false)
 
   const ref = useRef<HTMLDivElement>(null)
@@ -68,8 +66,4 @@ const IgvPage = observer((): ReactElement => {
   }, [])
 
   return isEachFilesMissing ? <FileMissing /> : <div ref={ref} />
-})
-
-export default withErrorBoundary(IgvPage, {
-  fallback: <ErrorPage />,
 })

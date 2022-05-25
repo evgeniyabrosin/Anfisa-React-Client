@@ -1,4 +1,5 @@
 import { ReactElement } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
@@ -7,60 +8,68 @@ import { Button } from '@ui/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
 import { QueryBuilderResultsNumbers } from './query-builder-results-numbers'
 
-export const QueryBuilderResults = observer((): ReactElement => {
-  const { stepData, isTreeEmpty } = dtreeStore
+interface IQueryBuilderResultsProps {
+  className?: string
+}
 
-  const stepIndex = stepData.findIndex(
-    element => element.isActive || element.isReturnedVariantsActive,
-  )
+export const QueryBuilderResults = observer(
+  ({ className }: IQueryBuilderResultsProps): ReactElement => {
+    const { stepData, isTreeEmpty } = dtreeStore
 
-  const currentStep = stepData[stepIndex]
+    const stepIndex = stepData.findIndex(
+      element => element.isActive || element.isReturnedVariantsActive,
+    )
 
-  const hasReturnedVariants = currentStep?.returnPointIndex != null
-  const hasStartVariants = currentStep?.conditionPointIndex != null
-  const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
+    const currentStep = stepData[stepIndex]
 
-  const openTableModal = (isReturnedVariants = true) => {
-    const hasEmptyStep = stepData.some(element => {
-      if (!element.isFinalStep) {
-        return element.groups.length === 0
-      }
-      return false
-    })
+    const hasReturnedVariants = currentStep?.returnPointIndex != null
+    const hasStartVariants = currentStep?.conditionPointIndex != null
+    const shouldShowReturnedVariants = hasReturnedVariants && !isTreeEmpty
 
-    const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
-    const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
-    const fixedNextStepIndex = hasEmptyStep ? nextStepIndex - 1 : nextStepIndex
+    const openTableModal = (isReturnedVariants = true) => {
+      const hasEmptyStep = stepData.some(element => {
+        if (!element.isFinalStep) {
+          return element.groups.length === 0
+        }
+        return false
+      })
 
-    dtreeStore.openModalViewVariants(fixedNextStepIndex)
-  }
+      const indexForApi = dtreeStore.getStepIndexForApi(stepIndex)
+      const nextStepIndex = isReturnedVariants ? indexForApi + 1 : indexForApi
+      const fixedNextStepIndex = hasEmptyStep
+        ? nextStepIndex - 1
+        : nextStepIndex
 
-  return (
-    <div className="flex items-center p-4 border-b border-grey-light justify-between">
-      <div>
-        <div className="font-bold text-2xl w-full">{t('dtree.results')}</div>
-        <QueryBuilderResultsNumbers className="mt-1" />
+      dtreeStore.openModalViewVariants(fixedNextStepIndex)
+    }
+
+    return (
+      <div className={cn('flex items-center p-4 justify-between', className)}>
+        <div>
+          <div className="font-bold text-2xl w-full">{t('dtree.results')}</div>
+          <QueryBuilderResultsNumbers className="mt-1" />
+        </div>
+        <div className="flex">
+          {shouldShowReturnedVariants && (
+            <Button
+              dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
+              onClick={() => openTableModal(true)}
+              text={t('dtree.viewReturnedVariants')}
+              variant="secondary"
+              className="ml-auto  min-h-32"
+            />
+          )}
+
+          {hasStartVariants && (
+            <Button
+              onClick={() => openTableModal(false)}
+              text={t('dtree.viewVariants')}
+              variant="secondary"
+              className="ml-5 min-h-32"
+            />
+          )}
+        </div>
       </div>
-      <div className="flex">
-        {shouldShowReturnedVariants && (
-          <Button
-            dataTestId={DecisionTreesResultsDataCy.viewReturnedVariants}
-            onClick={() => openTableModal(true)}
-            text={t('dtree.viewReturnedVariants')}
-            variant="secondary"
-            className="ml-auto  min-h-32"
-          />
-        )}
-
-        {hasStartVariants && (
-          <Button
-            onClick={() => openTableModal(false)}
-            text={t('dtree.viewVariants')}
-            variant="secondary"
-            className="ml-5 min-h-32"
-          />
-        )}
-      </div>
-    </div>
-  )
-})
+    )
+  },
+)

@@ -1,31 +1,31 @@
-import { ReactElement, useEffect, useRef } from 'react'
+import styles from './filter-refiner.module.css'
 
-import useClientHeight from '@core/hooks/use-client-height'
+import { ReactElement, useEffect } from 'react'
+import cn from 'classnames'
+
 import mainTableStore from '@store/ws/main-table.store'
 import { FilterRefinerUnits } from './filter-refiner-units'
 import { SelectedGroup } from './middle-column/selected-group'
 import { QuerySelected } from './right-column/query-selected'
 
-export const FilterRefiner = (): ReactElement => {
+interface IFilterRefinerProps {
+  className?: string
+}
+
+export const FilterRefiner = ({
+  className,
+}: IFilterRefinerProps): ReactElement => {
   useEffect(() => {
     mainTableStore.memorizeFilterConditions()
   }, [])
 
-  const nonEmptyDivRef = useRef<any>()
-
-  const nonEmptyBlockHeight = useClientHeight(nonEmptyDivRef)
-
   return (
-    <div
-      ref={nonEmptyDivRef}
-      className="flex overflow-y-hidden"
-      style={{ height: nonEmptyBlockHeight }}
-    >
-      <FilterRefinerUnits />
+    <div className={cn(styles.filterRefiner, className)}>
+      <FilterRefinerUnits className={styles.filterRefiner__units} />
 
-      <SelectedGroup />
+      <SelectedGroup className={styles.filterRefiner__currentAttribute} />
 
-      <QuerySelected />
+      <QuerySelected className={styles.filterRefiner__results} />
     </div>
   )
 }
