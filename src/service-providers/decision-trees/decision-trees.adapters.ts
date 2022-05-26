@@ -2,7 +2,11 @@ import { IStepData } from '@store/dtree'
 import { adaptFilteringStatsCounts } from '@service-providers/common'
 import { IDtreeSetResponse } from '@service-providers/decision-trees'
 import { getDataFromCode } from '@utils/getDataFromCode'
-import { IDtreeStatResponse, TDtreeStat } from './decision-trees.interface'
+import {
+  IDtreeSet,
+  IDtreeStatResponse,
+  TDtreeStat,
+} from './decision-trees.interface'
 
 export const adaptDtreeStatResponse = (
   response: IDtreeStatResponse,
@@ -14,9 +18,9 @@ export const adaptDtreeStatResponse = (
   }
 }
 
-export const adaptDtreeSetToSteps = (
+export const adaptDtreeSetResponse = (
   response: IDtreeSetResponse,
-): IStepData[] => {
+): IDtreeSet => {
   const initialStep: IStepData = {
     step: 1,
     groups: [],
@@ -75,5 +79,5 @@ export const adaptDtreeSetToSteps = (
 
   newSteps.push(finalStep)
 
-  return newSteps
+  return { ...response, steps: newSteps }
 }

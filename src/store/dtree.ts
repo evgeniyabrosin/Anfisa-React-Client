@@ -7,7 +7,6 @@ import { t } from '@i18n'
 import filterDtreesStore from '@store/filter-dtrees'
 import { TFilteringStatCounts } from '@service-providers/common'
 import { DtreeSetPointKinds } from '@service-providers/decision-trees'
-import { adaptDtreeSetToSteps } from '@service-providers/decision-trees/decision-trees.adapters'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { addToActionHistory } from '@utils/addToActionHistory'
@@ -130,7 +129,7 @@ class DtreeStore {
       () => this.dtreeSetData,
       response => {
         if (response) {
-          stepStore.setSteps(adaptDtreeSetToSteps(response))
+          stepStore.setSteps(response.steps)
 
           // make step active after load dtree_set
           const { activeStepIndex, steps } = stepStore

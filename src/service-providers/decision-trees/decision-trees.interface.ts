@@ -1,3 +1,4 @@
+import { IStepData } from '@store/dtree'
 import {
   DatasetKinds,
   ISolutionEntryDescription,
@@ -126,6 +127,10 @@ export interface IDtreeSetResponse {
   hash: string
   'dtree-list': ISolutionEntryDescription[]
   'rq-id': string
+}
+
+export interface IDtreeSet extends IDtreeSetResponse {
+  steps: IStepData[]
 }
 
 // dtree_counts
