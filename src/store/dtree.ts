@@ -133,9 +133,18 @@ class DtreeStore {
 
           // make step active after load dtree_set
           const { activeStepIndex, steps } = stepStore
-          const shouldUseLastIndex =
-            response['dtree-name'] || activeStepIndex === 0
-          const index = shouldUseLastIndex ? steps.length - 1 : activeStepIndex
+          const finalStepIndex = steps.length - 1
+
+          // use finalStepIndex if
+          // 1) load new tree
+          // 2) first load empty tree
+          // 3) the final step is active and we deleted different step
+          const shouldUseFinalIndex =
+            response['dtree-name'] ||
+            activeStepIndex === 0 ||
+            activeStepIndex > finalStepIndex
+
+          const index = shouldUseFinalIndex ? finalStepIndex : activeStepIndex
 
           stepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
         }
