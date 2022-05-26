@@ -65,9 +65,9 @@ export const Button: FC<IButtonProps> = ({
   )
 
   const textStyle = cn(
-    styles[`buttonText_${textSize}`],
-    prepend && styles.buttonText_left,
-    (icon || append) && styles.buttonText_right,
+    styles[`button_text_${textSize}`],
+    prepend && styles.button_text_left,
+    (icon || append) && styles.button_text_right,
   )
 
   const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {

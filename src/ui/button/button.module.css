@@ -135,24 +135,24 @@
       border-color: theme("colors.blue.lighter");
     }
   }
-}
 
-.button-text {
-  &_sm {
-    font-size: 14px;
-    line-height: 20px;
-  }
+  &_text {
+    &_sm {
+      font-size: 14px;
+      line-height: 20px;
+    }
 
-  &_xs {
-    font-size: 12px;
-    line-height: 16px;
-  }
+    &_xs {
+      font-size: 12px;
+      line-height: 16px;
+    }
 
-  &_left {
-    margin-left: 4px;
-  }
+    &_left {
+      margin-left: 4px;
+    }
 
-  &_right {
-    margin-right: 4px;
+    &_right {
+      margin-right: 4px;
+    }
   }
 }
