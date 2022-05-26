@@ -11,7 +11,7 @@ import columnsStore from '@store/ws/columns'
 import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button'
+import { ArrowButton } from '@ui/arrow-button'
 import { Icon } from '@ui/icon'
 import {
   HgModes,
@@ -42,25 +42,19 @@ export const VariantHeader = observer(
     const { locusMode } = datasetStore
     const currentLocus = locusMode === HgModes.HG19 ? hg19locus : hg38locus
 
-    const filteredNo = toJS(mainTableStore.filteredNo)
-
-    const canGetPrevVariant = (): boolean => {
-      return !(filteredNo[filteredNo.indexOf(variantStore.index) - 1] >= 0)
-    }
-
-    const canGetNextVariant = (): boolean => {
-      return !(filteredNo[filteredNo.indexOf(variantStore.index) + 1] >= 0)
-    }
+    const currentIndex = mainTableStore.filteredNo.indexOf(variantStore.index)
+    const isNoPrevVariant = currentIndex <= 0
+    const isNoNextVariant = currentIndex + 1 >= mainTableStore.filteredNo.length
 
     const { setVariantIndex } = useVariantIndex()
 
     const handlePrevVariant = () => {
-      if (!variantStore.drawerVisible || canGetPrevVariant()) return
+      if (!variantStore.drawerVisible || isNoPrevVariant) return
       variantStore.prevVariant()
     }
 
     const handleNextVariant = () => {
-      if (!variantStore.drawerVisible || canGetNextVariant()) return
+      if (!variantStore.drawerVisible || isNoNextVariant) return
       variantStore.nextVariant()
     }
 
@@ -89,19 +83,18 @@ export const VariantHeader = observer(
         <div className="flex justify-between">
           <div className="flex items-center">
             <div className="flex items-center">
-              <Button
-                size="sm"
-                icon={<Icon name="Arrow" className="transform rotate-90" />}
-                className="bg-blue-lighter"
-                disabled={canGetPrevVariant()}
+              <ArrowButton
+                size="md"
+                className="mr-2"
+                direction="up"
+                disabled={isNoPrevVariant}
                 onClick={handlePrevVariant}
               />
-
-              <Button
-                size="sm"
-                icon={<Icon name="Arrow" className="transform -rotate-90" />}
-                className="bg-blue-lighter mx-2"
-                disabled={canGetNextVariant()}
+              <ArrowButton
+                size="md"
+                className="mr-3"
+                direction="down"
+                disabled={isNoNextVariant}
                 onClick={handleNextVariant}
               />
             </div>

@@ -1,6 +1,13 @@
 import styles from './drawer-note.module.css'
 
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  MouseEvent,
+  Ref,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import classNames from 'classnames'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -17,22 +24,30 @@ import { PopupCard } from '@components/popup-card/popup-card'
 import { getParsedValue } from '@utils/drawer/getParsedValue'
 import { validateNotes } from '@utils/validation/validateNotes'
 
-const DrawerNoteButton = observer(({ refEl, onClick }: any) => {
-  return (
-    <Button
-      refEl={refEl}
-      text={variantStore.noteText ? undefined : '+ Add'}
-      className={classNames({
-        'bg-blue-bright': !!variantStore.noteText,
-      })}
-      size="xs"
-      icon={variantStore.noteText ? <Icon name="File" /> : undefined}
-      variant="secondary-dark"
-      onClick={onClick}
-      dataTestId={VariantDrawerDataCy.addNote}
-    />
-  )
-})
+interface IDrawerNoteButtonProps {
+  refEl: Ref<HTMLButtonElement>
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+}
+
+const DrawerNoteButton = observer(
+  ({ refEl, onClick }: IDrawerNoteButtonProps) => {
+    return (
+      <Button
+        refEl={refEl}
+        text={variantStore.noteText ? undefined : '+ Add'}
+        className={classNames({
+          'bg-blue-bright': !!variantStore.noteText,
+        })}
+        size="xs"
+        textSize="xs"
+        icon={variantStore.noteText ? <Icon name="File" /> : undefined}
+        variant="secondary-dark"
+        onClick={onClick}
+        dataTestId={VariantDrawerDataCy.addNote}
+      />
+    )
+  },
+)
 
 const DrawerNoteModal = observer(({ close }: any) => {
   const genInfo = get(variantStore, 'variant[0].rows[0].cells[0][0]', '')

@@ -1,5 +1,13 @@
 import Add from './add'
 import Arrow from './arrow'
+import ArrowDownS from './arrow-down-s'
+import ArrowDownXs from './arrow-down-xs'
+import ArrowLeftS from './arrow-left-s'
+import ArrowLeftXs from './arrow-left-xs'
+import ArrowRightS from './arrow-right-s'
+import ArrowRightXs from './arrow-right-xs'
+import ArrowUpS from './arrow-up-s'
+import ArrowUpXs from './arrow-up-xs'
 import ArrowsOut from './arrows-out'
 import Circle from './circle'
 import Close from './close'
@@ -34,6 +42,14 @@ import Undo from './undo'
 export const icons = {
   Add,
   Arrow,
+  ArrowDownXs,
+  ArrowLeftXs,
+  ArrowRightXs,
+  ArrowUpXs,
+  ArrowDownS,
+  ArrowLeftS,
+  ArrowRightS,
+  ArrowUpS,
   ArrowsOut,
   Circle,
   Close,

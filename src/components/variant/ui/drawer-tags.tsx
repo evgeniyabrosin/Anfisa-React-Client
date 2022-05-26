@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { MouseEvent, Ref, useEffect, useRef } from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
@@ -13,18 +13,24 @@ import { PopperButton } from '@components/popper-button'
 import drawerTagsStore from '../drawer-tags.store'
 import { TagsContainer } from './tags-container'
 
-const DrawerTagButton = observer(({ refEl, onClick }: any) => {
+interface IDrawerTagButtonProps {
+  refEl: Ref<HTMLButtonElement>
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+}
+
+const DrawerTagButton = ({ refEl, onClick }: IDrawerTagButtonProps) => {
   return (
     <Button
       refEl={refEl}
       text="+ Add"
       size="xs"
+      textSize="xs"
       variant="secondary-dark"
       onClick={onClick}
       dataTestId={VariantDrawerDataCy.addTag}
     />
   )
-})
+}
 
 const DrawerTagModal = observer(({ close }: any) => {
   const ref = useRef(null)
