@@ -42,7 +42,7 @@ class InheritanceModeStore {
     this._variantValues = []
   }
 
-  public setCurrentMode(modeType?: ModeTypes): void {
+  public setCurrentMode = (modeType?: ModeTypes) => {
     if (!modeType || this.currentMode === modeType) {
       this._currentMode = undefined
 

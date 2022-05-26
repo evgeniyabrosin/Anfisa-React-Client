@@ -1,11 +1,14 @@
 import * as d3 from 'd3'
 
 import { getBounds, getYScaleAndAxis } from '@core/charts'
+import { theme } from '@theme'
 import { SvgChartRenderParams } from '@components/svg-chart/svg-chart'
 import { TVariant } from '@service-providers/common'
 import { TBarChartData } from '../unit-chart.interface'
 import { getVariantCountsText } from '../utils'
-import { barColor, tickColor } from './bar-chart.styles'
+
+const tickColor = theme('colors.grey.blue')
+const barColor = theme('colors.blue.bright')
 
 const margin = {
   top: 10,

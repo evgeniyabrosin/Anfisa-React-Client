@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
-import { InputNumber } from '@ui/input-number'
+import { InputNumber } from '@ui/input-number/input-number'
 import { Select } from '@ui/select'
 import modalsControlStore, {
   selectOptions,

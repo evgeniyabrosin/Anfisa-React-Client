@@ -1,0 +1,19 @@
+.filter-refiner {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+
+  &__units {
+    flex: 0 0 33.333%;
+  }
+
+  &__current-attribute {
+    flex: 0 0 33.333%;
+    border-right: 1px solid theme("colors.grey.disabled");
+  }
+
+  &__results {
+    flex: 0 0 33.333%;
+  }
+}

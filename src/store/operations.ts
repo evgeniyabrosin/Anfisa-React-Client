@@ -128,8 +128,6 @@ class OperationsStore {
       }
     }
 
-    mainTableStore.setIsLoadingTabReport(true)
-
     const response = await operationsProvider.createWorkspace(params)
 
     const jobStatusResponse = await this.getJobStatusAsync(response.task_id)
@@ -139,8 +137,6 @@ class OperationsStore {
     }
 
     this.setIsCreationOver()
-
-    mainTableStore.setIsLoadingTabReport(false)
 
     return { ok: true }
   }

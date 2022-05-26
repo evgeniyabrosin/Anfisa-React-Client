@@ -12,8 +12,6 @@ import { FnLabel } from '@components/fn-label'
 import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/components/active-step.store'
-import modalFiltersStore from '@pages/filter/dtree/components/modals/components/modal-enum/modal-enum.store'
-import { EnumPropertyStatusSubKinds } from '@service-providers/common'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'
 import { InactiveFieldLabel } from '../inactive-field-label'
 
@@ -30,9 +28,8 @@ interface IContentItemHeaderProps {
   currentStep: IStepData
   stepType: FilterKindEnum
   groupName: string
-  groupSubKind: EnumPropertyStatusSubKinds
-  index: number
-  currNo: number
+  stepNo: number
+  groupNo: number
 }
 
 export const ContentItemHeader = observer(
@@ -40,9 +37,8 @@ export const ContentItemHeader = observer(
     currentStep,
     stepType,
     groupName,
-    groupSubKind,
-    index,
-    currNo,
+    stepNo,
+    groupNo,
   }: IContentItemHeaderProps): ReactElement => {
     const isNegateStep: boolean = currentStep.negate || false
     const isStepInvalid: boolean =
@@ -51,33 +47,35 @@ export const ContentItemHeader = observer(
       !stepType
 
     const handleModals = () => {
-      activeStepStore.makeStepActive(index, ActiveStepOptions.StartedVariants)
+      activeStepStore.makeStepActive(
+        stepNo - 1,
+        ActiveStepOptions.StartedVariants,
+      )
 
       stepType === FilterKindEnum.Enum &&
-        modalsVisibilityStore.openModalEnum(groupName, currNo) &&
-        modalFiltersStore.setCurrentGroupSubKind(groupSubKind)
+        modalsVisibilityStore.openModalEnum(groupName, groupNo)
 
       stepType === FilterKindEnum.Numeric &&
-        modalsVisibilityStore.openModalNumbers(groupName, currNo)
+        modalsVisibilityStore.openModalNumeric(groupName, groupNo)
 
       if (stepType === FilterKindEnum.Func) {
         groupName === FuncStepTypesEnum.InheritanceMode &&
-          modalsVisibilityStore.openModalInheritanceMode(groupName, currNo)
+          modalsVisibilityStore.openModalInheritanceMode(groupName, groupNo)
 
         groupName === FuncStepTypesEnum.CustomInheritanceMode &&
           modalsVisibilityStore.openModalCustomInheritanceMode(
             groupName,
-            currNo,
+            groupNo,
           )
 
         groupName === FuncStepTypesEnum.CompoundHet &&
-          modalsVisibilityStore.openModalCompoundHet(groupName, currNo)
+          modalsVisibilityStore.openModalCompoundHet(groupName, groupNo)
 
         groupName === FuncStepTypesEnum.CompoundRequest &&
-          modalsVisibilityStore.openModalCompoundRequest(groupName, currNo)
+          modalsVisibilityStore.openModalCompoundRequest(groupName, groupNo)
 
         groupName === FuncStepTypesEnum.GeneRegion &&
-          modalsVisibilityStore.openModalGeneRegion(groupName, currNo)
+          modalsVisibilityStore.openModalGeneRegion(groupName, groupNo)
       }
     }
 
@@ -107,7 +105,7 @@ export const ContentItemHeader = observer(
               />
             )}
             {isStepInvalid ? (
-              <InactiveFieldLabel stepIndex={index} groupIndex={currNo} />
+              <InactiveFieldLabel stepNo={stepNo} groupIndex={groupNo} />
             ) : (
               groupName
             )}

@@ -8,7 +8,7 @@ import { IModalBaseProps, Modal } from '@ui/modal'
 import { Placement } from '@popperjs/core'
 
 export interface IPopoverBaseProps
-  extends Omit<IModalBaseProps, 'transitionDuration'> {
+  extends Omit<IModalBaseProps, 'transitionDuration' | 'isBackdropInvisible'> {
   anchorEl?: HTMLElement | null
 }
 

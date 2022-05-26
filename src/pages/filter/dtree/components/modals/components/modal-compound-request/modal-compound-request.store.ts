@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx'
 
 import { ActionType } from '@declarations'
 import { ApproxNameTypes } from '@core/enum/approxNameTypes'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
@@ -219,7 +220,13 @@ class ModalCompoundRequestStore {
 
     params.request = this.requestCondition
 
-    addAttributeToStep(action, 'func', null, params, this.currentMode)
+    addAttributeToStep(
+      action,
+      FilterKindEnum.Func,
+      null,
+      params,
+      this.currentMode,
+    )
 
     dtreeStore.resetSelectedFilters()
 
