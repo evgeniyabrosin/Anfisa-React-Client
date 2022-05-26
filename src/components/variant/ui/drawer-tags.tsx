@@ -53,6 +53,7 @@ const DrawerTagModal = observer(({ close }: any) => {
   // }
 
   const handleSaveTags = () => {
+    variantStore.setIsTagsModified(true)
     drawerTagsStore.handleSaveTagsAsync()
     close()
   }

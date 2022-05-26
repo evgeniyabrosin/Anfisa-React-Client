@@ -29,7 +29,7 @@ export const VariantHeader = observer(
   ({ setLayout }: IVariantHeaderProps): ReactElement => {
     const history = useHistory()
     const location = useLocation()
-    const { wsListData } = mainTableStore
+    const { tabReport } = mainTableStore
     const variant = toJS(variantStore.variant)
     const rows: IAttributeDescriptors[] = get(variant, '[0].rows', [])
 
@@ -64,12 +64,13 @@ export const VariantHeader = observer(
     ])
 
     const handleCloseDrawer = () => {
-      // TODO: add this requests to "Apply" btn in modals for change tags and notes in another task
-      wsListData.invalidate()
-
-      mainTableStore.fetchWsTagsAsync()
+      if (variantStore.isTagsModified) {
+        tabReport.invalidatePage(mainTableStore.openedVariantPageNo)
+        mainTableStore.fetchWsTagsAsync()
+      }
 
       columnsStore.closeDrawer()
+      variantStore.setIsTagsModified(false)
 
       // if url has 'variant' should be navigated to prev route
       const previousLocation = location.search.split('&variant')[0]

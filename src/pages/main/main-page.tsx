@@ -5,7 +5,6 @@ import datasetStore from '@store/dataset/dataset'
 import dirinfoStore from '@store/dirinfo'
 import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
-import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
 import zoneStore from '@store/ws/zone'
 import { Header } from '@components/header'
@@ -32,7 +31,6 @@ export const MainPage = (): ReactElement => {
     zoneStore.resetAllSelectedItems()
     variantStore.resetIsActiveVariant()
     variantStore.resetData()
-    mainTableStore.resetData()
   }, [])
 
   return (

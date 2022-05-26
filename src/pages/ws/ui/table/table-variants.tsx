@@ -42,7 +42,12 @@ const Styles = styled.div`
 `
 
 export const TableVariants = observer((): ReactElement => {
-  if (mainTableStore.isLoadingTabReport) return <Loader />
+  if (
+    !mainTableStore.tabReportPagesData.length ||
+    mainTableStore.isTableRecizing
+  ) {
+    return <Loader />
+  }
 
   const { columnDataListForRender } = columnsStore
 
@@ -50,7 +55,7 @@ export const TableVariants = observer((): ReactElement => {
     <Styles className="flex-1 overflow-auto">
       <Table
         columns={columnDataListForRender}
-        data={mainTableStore.tabReport}
+        data={mainTableStore.tabReportPagesData}
       />
     </Styles>
   )
