@@ -5,6 +5,7 @@ import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 import { ActionFilterEnum } from '@core/enum/action-filter.enum'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { t } from '@i18n'
+import { ActionsHistoryStore } from '@store/actions-history'
 import filterDtreesStore from '@store/filter-dtrees'
 import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
 import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
@@ -17,16 +18,15 @@ import {
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
-import { addToActionHistory } from '@utils/addToActionHistory'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { showToast } from '@utils/notifications'
 import activeStepStore, {
   ActiveStepOptions,
-} from '../pages/filter/dtree/components/active-step.store'
-import datasetStore from './dataset/dataset'
-import { DtreeStatStore } from './dtree/dtree-stat.store'
-import { DtreeModifiedState } from './filter-dtrees/filter-dtrees.store'
+} from '../../pages/filter/dtree/components/active-step.store'
+import datasetStore from '../dataset/dataset'
+import { DtreeModifiedState } from '../filter-dtrees/filter-dtrees.store'
+import { DtreeStatStore } from './dtree-stat.store'
 
 export type IStepData = {
   step: number
@@ -56,7 +56,7 @@ interface IDtreeFilteredCounts {
   rejected: number
 }
 
-class DtreeStore {
+export class DtreeStore {
   dtreeList: any
   dtree: any
   isCountsReceived = false
@@ -111,8 +111,9 @@ class DtreeStore {
 
   requestData: IRequestData[] = []
 
-  actionHistory: IDtreeSetArguments[] = []
-  actionHistoryIndex = -1
+  actionHistory = new ActionsHistoryStore<IDtreeSetArguments>(data =>
+    this.fetchDtreeSetAsync(data, false),
+  )
 
   constructor() {
     makeAutoObservable(this)
@@ -262,8 +263,11 @@ class DtreeStore {
     body: IDtreeSetArguments,
     shouldSaveInHistory = true,
   ) {
-    if (shouldSaveInHistory) addToActionHistory(body)
     this.setIsCountsReceived(false)
+
+    if (shouldSaveInHistory) {
+      this.actionHistory.addHistory(body)
+    }
 
     // TODO[control]: need to be fixed when async store for dree_set is ready
     if (!body.dtree) {
@@ -315,18 +319,6 @@ class DtreeStore {
     })
 
     return result
-  }
-
-  setActionHistory(updatedActionHistory: IDtreeSetArguments[]) {
-    runInAction(() => {
-      this.actionHistory = [...updatedActionHistory]
-    })
-  }
-
-  setActionHistoryIndex(updatedIndex: number) {
-    runInAction(() => {
-      this.actionHistoryIndex = updatedIndex
-    })
   }
 
   private loadDtree(dtreeName: string): void {
@@ -695,5 +687,3 @@ class DtreeStore {
     this.actionName = actionName
   }
 }
-
-export default new DtreeStore()

@@ -1,6 +1,6 @@
 import styles from './dtree.page.module.css'
 
-import React, { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -14,9 +14,11 @@ import { Header } from '@components/header'
 import { VariantsCount } from '@components/variants-count'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControl } from '../common/filter-control/filter-control'
+import { FilterControlOptionsNames } from '../common/filter-control/filter-control.const'
+import { SolutionControlDtree } from './components/control-panel/solution-control-dtree'
+import { TextEditorButton } from './components/control-panel/text-editor-button'
 import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
-import { SolutionControlDtree } from './components/solution-control-dtree/solution-control-dtree'
 
 export const DtreePage = observer((): ReactElement => {
   const { isXL } = datasetStore
@@ -43,6 +45,8 @@ export const DtreePage = observer((): ReactElement => {
       dtreeStore.resetAlgorithmFilterValue()
       dtreeStore.resetPrevDtreeName()
       dtreeStore.resetData()
+      // TODO: need to fix after dtree_set is refactored
+      dtreeStore.actionHistory.resetHistory()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dsName, history])
@@ -97,8 +101,14 @@ export const DtreePage = observer((): ReactElement => {
         </Header>
 
         <FilterControl
-          className={styles.dtreePage__controls}
+          pageName={FilterControlOptionsNames[GlbPagesNames.Dtree]}
           SolutionControl={SolutionControlDtree}
+          isBackwardAllowed={dtreeStore.actionHistory.isBackwardAllowed}
+          isForwardAllowed={dtreeStore.actionHistory.isForwardAllowed}
+          goForward={dtreeStore.actionHistory.goForward}
+          goBackward={dtreeStore.actionHistory.goBackward}
+          className={styles.dtreePage__controls}
+          TextEditorButton={TextEditorButton}
         />
 
         <QueryBuilder className={styles.dtreePage__queryBuilder} />
