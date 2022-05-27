@@ -2,8 +2,8 @@ import { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import zoneStore from '@store/ws/zone'
+import { Divider } from '@ui/divider'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
-import { ControlPanelDivider } from './control-panel-divider'
 import { EditFilter } from './control-panel-edit-filter'
 import { ControlPanelPreset } from './control-panel-preset'
 import { CustomizeTable } from './customize-table-modal/customize-table'
@@ -20,15 +20,15 @@ export const ControlPanel = (): ReactElement => (
       <div className="flex items-center">
         <ControlPanelPreset />
 
-        <ControlPanelDivider />
+        <Divider orientation="vertical" className="h-[75%]" />
 
         <EditFilter />
 
-        <ControlPanelDivider />
+        <Divider orientation="vertical" className="h-[75%]" />
 
         <CustomizeTable />
 
-        <ControlPanelDivider />
+        <Divider orientation="vertical" className="h-[75%]" />
 
         <div className="flex bg-blue-darkHover rounded-sm px-3 min-h-32">
           <ZoneItem
@@ -63,6 +63,8 @@ export const ControlPanel = (): ReactElement => (
             isLast
           />
         </div>
+
+        <Divider orientation="vertical" className="h-[75%]" />
 
         <DatasetCreationButton />
       </div>

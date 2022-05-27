@@ -3,8 +3,8 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import { Divider } from '@ui/divider'
 import { PopperButton } from '@components/popper-button'
-import { ControlPanelDivider } from '../control-panel-divider'
 import { HeaderTableButton } from './components/header-table-button'
 import { ZoneTags } from './components/zone-tags'
 
@@ -88,7 +88,7 @@ export const ZoneItem = observer(
           />
         )}
 
-        {!isLast && <ControlPanelDivider className="bg-blue-lighter h-2/3" />}
+        {!isLast && <Divider orientation="vertical" className="h-[63%]" />}
       </div>
     )
   },

@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { makeAutoObservable, reaction, runInAction, toJS } from 'mobx'
 
 import { t } from '@i18n'
+import { ActionsHistoryStore } from '@store/actions-history'
 import datasetStore from '@store/dataset/dataset'
 import filterPresetsStore from '@store/filter-presets'
 import { GlbPagesNames } from '@glb/glb-names'
@@ -34,6 +35,9 @@ export class FilterStore {
   private _presetModifiedState: PresetModifiedState =
     PresetModifiedState.NotPreset
   public isFilterTouched = false
+  public actionHistory = new ActionsHistoryStore<TCondition[]>(
+    conditions => (this._conditions = conditions),
+  )
 
   constructor() {
     makeAutoObservable(this)
@@ -44,8 +48,11 @@ export class FilterStore {
         this.clearConditions()
         if (datasetName) {
           this.initialStat.setQuery({ datasetName })
+
+          this.actionHistory.addHistory(this._conditions)
         } else {
           this.initialStat.reset()
+          this.actionHistory.resetHistory()
         }
       },
     )
@@ -129,14 +136,31 @@ export class FilterStore {
     return this._presetModifiedState === PresetModifiedState.Modified
   }
 
+  private get filterQuery(): TFilterStatQuery {
+    return {
+      datasetName: this.datasetName,
+      conditions: toJS(this.conditions),
+    }
+  }
+
   public addCondition(condition: TCondition): number {
     this._conditions.push(condition)
+
+    this.actionHistory.addHistory(this._conditions)
 
     return this._conditions.length - 1
   }
 
+  public setConditions(conditions: ReadonlyArray<TCondition>): void {
+    this._selectedConditionIndex = -1
+    this._attributeNameToAdd = ''
+    this._conditions = cloneDeep(conditions) as TCondition[]
+  }
+
   public removeCondition(index: number): void {
     this._conditions.splice(index, 1)
+
+    this.actionHistory.addHistory(this._conditions)
 
     if (this._selectedConditionIndex === index) {
       this._selectedConditionIndex = -1
@@ -145,6 +169,8 @@ export class FilterStore {
 
   public replaceCondition(index: number, condition: TCondition): number {
     this._conditions[index] = condition
+
+    this.actionHistory.addHistory(this._conditions)
 
     return index
   }
@@ -209,31 +235,6 @@ export class FilterStore {
     this.isFilterTouched = value
   }
 
-  public joinPresetConditions(presetName: string) {
-    const conditions = toJS(this.conditions)
-
-    this.updateConditions(
-      () =>
-        filteringRegimeProvider
-          .joinFilterPreset({
-            ds: this.datasetName,
-            conditions,
-            presetName,
-          })
-          .then(response => {
-            this.setConditions(response.conditions)
-          }),
-      t('filter.errors.joinPreset', { presetName }),
-    )
-  }
-
-  private get filterQuery(): TFilterStatQuery {
-    return {
-      datasetName: this.datasetName,
-      conditions: toJS(this.conditions),
-    }
-  }
-
   private setPresetModifiedState(state?: PresetModifiedState): void {
     if (state === undefined) {
       if (this._presetModifiedState === PresetModifiedState.NotModified) {
@@ -246,10 +247,22 @@ export class FilterStore {
     }
   }
 
-  private setConditions(conditions: ReadonlyArray<TCondition>): void {
-    this._selectedConditionIndex = -1
-    this._attributeNameToAdd = ''
-    this._conditions = cloneDeep(conditions) as TCondition[]
+  public joinPresetConditions(presetName: string) {
+    const conditions = toJS(this.conditions)
+    this.updateConditions(
+      () =>
+        filteringRegimeProvider
+          .joinFilterPreset({
+            ds: this.datasetName,
+            conditions,
+            presetName,
+          })
+          .then(response => {
+            this.setConditions(response.conditions)
+            this.actionHistory.addHistory(response.conditions)
+          }),
+      t('filter.errors.joinPreset', { presetName }),
+    )
   }
 
   private updateConditions(
@@ -282,6 +295,7 @@ export class FilterStore {
             this.setPresetModifiedState(PresetModifiedState.NotPreset)
             this.setConditions(response.conditions)
             this.setPresetModifiedState(PresetModifiedState.NotModified)
+            this.actionHistory.addHistory(response.conditions)
           }),
       t('filter.errors.loadPreset', { presetName }),
     )
