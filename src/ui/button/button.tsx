@@ -1,12 +1,11 @@
 import styles from './button.module.css'
 
-import { FC, MouseEvent, ReactElement } from 'react'
+import { FC, MouseEvent, ReactNode } from 'react'
 import cn, { Argument } from 'classnames'
-import { camelCase } from 'lodash'
 import { CSSProperties } from 'styled-components'
 
 export interface IButtonProps {
-  text?: string | JSX.Element
+  text?: ReactNode
   textSize?: 'xs' | 'sm'
   size?: 'xs' | 'sm' | 'md'
   disabled?: boolean
@@ -21,9 +20,9 @@ export interface IButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   onMouseUp?: (event: MouseEvent<HTMLButtonElement>) => void
   onMouseDown?: (event: MouseEvent<HTMLButtonElement>) => void
-  append?: ReactElement
-  prepend?: ReactElement
-  icon?: ReactElement
+  append?: ReactNode
+  prepend?: ReactNode
+  icon?: ReactNode
   refEl?: any
   dataTestId?: string
   style?: CSSProperties
@@ -31,7 +30,7 @@ export interface IButtonProps {
 
 export const Button: FC<IButtonProps> = ({
   text,
-  textSize = 'sm',
+  textSize,
   size = 'sm',
   disabled = false,
   variant = 'primary',
@@ -48,26 +47,19 @@ export const Button: FC<IButtonProps> = ({
 }) => {
   const isOnlyIcon = icon && !append && !prepend && !text
 
-  const buttonSize = isOnlyIcon
-    ? styles[`button_icon_only_${size}`]
-    : variant === 'secondary-dark' ||
-      variant === 'diestruction' ||
-      variant === 'secondary'
-    ? styles[`button_secondarySize_${size}`]
-    : styles[`button_${size}`]
-
   const buttonStyles = cn(
-    className,
     styles.button,
-    isOnlyIcon && styles.button_icon_only,
-    buttonSize,
-    styles[`button_${camelCase(variant)}`],
+    styles[`button_${size}`],
+    styles[`button_${variant}`],
+    isOnlyIcon && styles.button_iconOnly,
+    className,
   )
 
   const textStyle = cn(
-    styles[`button_text_${textSize}`],
-    prepend && styles.button_text_left,
-    (icon || append) && styles.button_text_right,
+    styles.button__text,
+    styles[`button__test_${textSize ?? size}`],
+    prepend && styles.button__text_left,
+    (icon || append) && styles.button__text_right,
   )
 
   const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
