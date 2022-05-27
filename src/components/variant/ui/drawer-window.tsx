@@ -40,7 +40,6 @@ export const DrawerWindow = observer(
     setLayout: Dispatch<SetStateAction<IGridLayout[]>>
   }) => {
     const ref = useRef<HTMLDivElement>(null)
-    const refColumn = useRef<HTMLElement>(null)
 
     const [filterSelection, setFilterSelection] = useState(
       DrawerClass.normClass,
@@ -90,7 +89,7 @@ export const DrawerWindow = observer(
               0,
             )
 
-            const openedH = clientHeight * 0.021 + 1.3
+            const openedH = clientHeight * 0.0208 + 1.3
 
             setLayout((prev: IGridLayout[]) => {
               const clonedLayout: any[] = clone(prev)
@@ -166,7 +165,7 @@ export const DrawerWindow = observer(
           className="cursor-grab"
         >
           <div
-            className={cn('content-child relative w-fit')}
+            className={cn('py-3 pr-3 content-child')}
             id={`drawer-${aspect.name}`}
             style={{
               height: get(layout, aspect.name, 0).h,
@@ -184,7 +183,6 @@ export const DrawerWindow = observer(
                 name={aspect.name}
                 shouldAddShadow={shouldAddShadow}
                 filterSelection={filterSelection}
-                refCol={refColumn}
               />
             )}
           </div>
