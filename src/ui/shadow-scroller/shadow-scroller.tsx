@@ -8,7 +8,7 @@ import { useScrollShadows } from '@ui/shadow-scroller/shadow-scroller.hook'
 
 interface IScrollerProp {
   direction?: ScrollDirection
-  showShadows?: boolean
+  hideShadows?: boolean
   grabScroll?: boolean
   className?: Argument
 }
@@ -16,6 +16,7 @@ interface IScrollerProp {
 export const ShadowScroller: FC<IScrollerProp> = ({
   direction = 'both',
   grabScroll = true,
+  hideShadows = false,
   className,
   children,
 }) => {
@@ -24,7 +25,7 @@ export const ShadowScroller: FC<IScrollerProp> = ({
 
   const onMouseDown = useGrabScroll(ref, direction)
 
-  useScrollShadows(ref, shadowsRef, direction)
+  useScrollShadows(ref, shadowsRef, direction, hideShadows)
 
   return (
     <div className={cn(styles.container, className)}>

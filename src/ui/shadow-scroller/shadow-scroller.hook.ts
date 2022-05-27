@@ -13,6 +13,7 @@ export const useScrollShadows = (
   ref: RefObject<HTMLDivElement>,
   shadowsRef: RefObject<HTMLDivElement>,
   direction: ScrollDirection,
+  hideShadows: boolean,
 ) => {
   useEffect(() => {
     const scrollable = ref.current
@@ -33,10 +34,30 @@ export const useScrollShadows = (
     const bottomTrigger = createTrigger(area, Placement.bottom)
     const leftTrigger = createTrigger(area, Placement.left)
 
-    const topShadow = createShadow(shadows, Placement.top, direction)
-    const rightShadow = createShadow(shadows, Placement.right, direction)
-    const bottomShadow = createShadow(shadows, Placement.bottom, direction)
-    const leftShadow = createShadow(shadows, Placement.left, direction)
+    const topShadow = createShadow(
+      shadows,
+      Placement.top,
+      direction,
+      hideShadows,
+    )
+    const rightShadow = createShadow(
+      shadows,
+      Placement.right,
+      direction,
+      hideShadows,
+    )
+    const bottomShadow = createShadow(
+      shadows,
+      Placement.bottom,
+      direction,
+      hideShadows,
+    )
+    const leftShadow = createShadow(
+      shadows,
+      Placement.left,
+      direction,
+      hideShadows,
+    )
 
     const resizeObserver = new ResizeObserver(entries => {
       const {
@@ -54,25 +75,33 @@ export const useScrollShadows = (
           switch (entry.target) {
             case topTrigger:
               topShadow.style.display =
-                entry.isIntersecting || hide(Placement.top, direction)
+                entry.isIntersecting ||
+                hide(Placement.top, direction) ||
+                hideShadows
                   ? DisplayValue.none
                   : DisplayValue.block
               break
             case rightTrigger:
               rightShadow.style.display =
-                entry.isIntersecting || hide(Placement.right, direction)
+                entry.isIntersecting ||
+                hide(Placement.right, direction) ||
+                hideShadows
                   ? DisplayValue.none
                   : DisplayValue.block
               break
             case bottomTrigger:
               bottomShadow.style.display =
-                entry.isIntersecting || hide(Placement.bottom, direction)
+                entry.isIntersecting ||
+                hide(Placement.bottom, direction) ||
+                hideShadows
                   ? DisplayValue.none
                   : DisplayValue.block
               break
             case leftTrigger:
               leftShadow.style.display =
-                entry.isIntersecting || hide(Placement.left, direction)
+                entry.isIntersecting ||
+                hide(Placement.left, direction) ||
+                hideShadows
                   ? DisplayValue.none
                   : DisplayValue.block
               break
@@ -103,5 +132,5 @@ export const useScrollShadows = (
       resizeObserver.disconnect()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [direction, hideShadows])
 }

@@ -37,15 +37,17 @@ export const createShadow = (
   container: HTMLDivElement,
   placement: Placement,
   direction: ScrollDirection,
+  hideShadow: boolean,
 ) => {
   const size = '20px'
   const shadow = document.createElement('div')
 
   Object.assign(shadow.style, {
     position: 'absolute',
-    display: hide(placement, direction)
-      ? DisplayValue.none
-      : DisplayValue.initial,
+    display:
+      hide(placement, direction) || hideShadow
+        ? DisplayValue.none
+        : DisplayValue.initial,
     zIndex: 2,
     top: placement === Placement.bottom ? undefined : 0,
     right: placement === Placement.left ? undefined : 0,
