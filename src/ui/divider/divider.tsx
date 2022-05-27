@@ -16,24 +16,22 @@ export const Divider = ({
   orientation,
   color = 'dark',
   spacing = 'normal',
-}: IDividerProps): ReactElement => {
-  const spacingMargin = spacing === 'normal' ? 4 : 2
-
-  return (
-    <div
-      className={cn(
-        'rounded-full overflow-hidden shrink-0 grow-0',
-        color === 'dark' ? 'bg-blue-lighter' : 'bg-grey-disabled',
-        orientation === 'vertical'
-          ? `w-0.5 h-full mx-${spacingMargin}`
-          : `h-0.5 w-full my-${spacingMargin}`,
-        className,
-      )}
-    >
-      {'\u00a0'}
-    </div>
-  )
-}
+}: IDividerProps): ReactElement => (
+  <div
+    className={cn(
+      'rounded-full overflow-hidden shrink-0 grow-0',
+      color === 'dark' ? 'bg-blue-lighter' : 'bg-grey-disabled',
+      orientation === 'vertical' ? 'w-0.5 h-full' : 'h-0.5 w-full',
+      { 'mx-4': spacing === 'normal' && orientation === 'vertical' },
+      { 'mx-2': spacing === 'dense' && orientation === 'vertical' },
+      { 'my-4': spacing === 'normal' && orientation === 'horizontal' },
+      { 'my-2': spacing === 'dense' && orientation === 'horizontal' },
+      className,
+    )}
+  >
+    {'\u00a0'}
+  </div>
+)
 
 interface ICircleDividerProp {
   size?: string
