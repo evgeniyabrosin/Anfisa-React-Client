@@ -165,7 +165,7 @@ export const DrawerWindow = observer(
           className="cursor-grab"
         >
           <div
-            className={cn('py-3 pr-3 content-child')}
+            className={cn('py-3 pr-3   content-child')}
             id={`drawer-${aspect.name}`}
             style={{
               height: get(layout, aspect.name, 0).h,
