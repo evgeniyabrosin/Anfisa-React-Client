@@ -1,81 +1,79 @@
 .button {
+  @apply typography-s;
+
   border-radius: 100vh;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
   color: theme("colors.white");
   background-color: theme("colors.blue.bright");
+  border: 2px solid theme("colors.blue.bright");
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
 
-  &_secondary-size {
-    &_xs {
-      padding: 2px 18px;
-    }
-
-    &_md {
-      padding: 4px 30px;
-    }
-
-    &_sm {
-      padding: 4px 22px;
-    }
-  }
-
-  &_icon_only {
-    border-radius: 4px;
-
-    &_sm {
-      padding: 8px 10px;
-    }
-
-    &_md {
-      padding: 12px 14px;
-    }
-
-    &_xs {
-      padding: 7px 8px;
-    }
-  }
-
-  &_sm {
-    padding: 6px 24px;
-  }
-
-  &_md {
-    padding: 6px 32px;
-  }
-
-  &_xs {
-    padding: 4px 20px;
-  }
-
   &:hover {
     background-color: theme("colors.blue.hover");
+    border-color: theme("colors.blue.hover");
   }
 
-  &:focus {
+  &:active {
     background-color: theme("colors.blue.active");
+    border-color: theme("colors.blue.active");
   }
 
   &:disabled {
     color: theme("colors.grey.blue");
     background-color: theme("colors.red.disabled");
+    border-color: theme("colors.red.disabled");
   }
 
-  &_secondary {
+  &_xs {
+    padding: 2px 18px;
+  }
+
+  &_sm {
+    padding: 4px 22px;
+  }
+
+  &_md {
+    padding: 4px 30px;
+  }
+
+  &_primary-dark {
+    &:disabled {
+      background-color: theme("colors.blue.lighter");
+      border-color: theme("colors.blue.lighter");
+    }
+  }
+
+  &_icon-only {
+    border-width: 0;
+    border-radius: 4px;
+  }
+
+  &_icon-only&_sm {
+    padding: 8px 10px;
+  }
+
+  &_icon-only&_md {
+    padding: 12px 14px;
+  }
+
+  &_icon-only&_xs {
+    padding: 7px 8px;
+  }
+
+  &_secondary,
+  &_secondary-dark {
     background-color: inherit;
     color: theme("colors.blue.dark");
-    border: 2px solid theme("colors.blue.bright");
+    border-color: theme("colors.blue.bright");
 
     &:hover {
       background-color: inherit;
       border-color: theme("colors.blue.hover");
     }
 
-    &:focus {
+    &:active {
       background-color: inherit;
       border-color: theme("colors.blue.active");
     }
@@ -87,17 +85,49 @@
     }
   }
 
+  &_secondary-dark {
+    color: theme("colors.white");
+
+    &:disabled {
+      color: theme("colors.grey.blue");
+      background-color: inherit;
+      border-color: theme("colors.blue.lighter");
+    }
+  }
+
+  &_tertiary {
+    color: theme("colors.black");
+    background-color: theme("colors.white");
+    border-color: theme("colors.grey.disabled");
+
+    &:hover {
+      background-color: inherit;
+      border-color: theme("colors.grey.light");
+    }
+
+    &:active {
+      background-color: theme("colors.grey.lighter");
+      border-color: theme("colors.grey.light");
+    }
+
+    &:disabled {
+      background-color: inherit;
+      border-color: theme("colors.grey.disabled");
+      color: theme("colors.grey.blue");
+    }
+  }
+
   &_diestruction {
     background-color: inherit;
     color: theme("colors.blue.dark");
-    border: 2px solid theme("colors.red.light");
+    border-color: theme("colors.red.light");
 
     &:hover {
       background-color: inherit;
       border-color: theme("colors.red.hover");
     }
 
-    &:focus {
+    &:active {
       background-color: inherit;
       border-color: theme("colors.red.active");
     }
@@ -108,51 +138,19 @@
     }
   }
 
-  &_primary-dark {
-    &:disabled {
-      background-color: theme("colors.blue.lighter");
-    }
-  }
-
-  &_secondary-dark {
-    background-color: inherit;
-    color: theme("colors.white");
-    border: 2px solid theme("colors.blue.bright");
-
-    &:hover {
-      background-color: inherit;
-      border-color: theme("colors.blue.hover");
-    }
-
-    &:focus {
-      background-color: inherit;
-      border-color: theme("colors.blue.active");
-    }
-
-    &:disabled {
-      color: theme("colors.grey.blue");
-      background-color: inherit;
-      border-color: theme("colors.blue.lighter");
-    }
-  }
-
-  &_text {
-    &_sm {
-      font-size: 14px;
-      line-height: 20px;
-    }
+  &__text {
+    @apply typography-s;
 
     &_xs {
-      font-size: 12px;
-      line-height: 16px;
+      @apply typography-xs;
     }
 
     &_left {
-      margin-left: 4px;
+      margin-left: theme("spacing.1");
     }
 
     &_right {
-      margin-right: 4px;
+      margin-right: theme("spacing.1");
     }
   }
 }
