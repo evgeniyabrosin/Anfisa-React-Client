@@ -4,28 +4,27 @@ import cn, { Argument } from 'classnames'
 
 import { useToggle } from '@core/hooks/use-toggle'
 
-// TODO: types
-interface Props {
-  ButtonElement: any
+interface IPopperButtonProps {
+  ButtonElement: React.ElementType
+  ModalElement: React.ElementType
   ButtonProps?: any
-  ModalElement: any
   ModalProps?: any
   ButtonElementClassName?: Argument
   title?: string
-  data?: any
+  data?: string[]
   type?: string
 }
 
 export const PopperButton = ({
   ButtonElement,
-  ButtonProps,
   ModalElement,
+  ButtonProps,
   ModalProps,
   ButtonElementClassName,
   title,
   data,
   type,
-}: Props): ReactElement => {
+}: IPopperButtonProps): ReactElement => {
   const [isOpen, open, close] = useToggle(false)
   const [referenceElement, setReferenceElement] = useState(null)
   const [popperElement, setPopperElement] = useState<any>(null)

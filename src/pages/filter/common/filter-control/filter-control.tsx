@@ -12,35 +12,37 @@ import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
-import { DropDown } from '@ui/dropdown'
+import { Divider } from '@ui/divider'
 import { Icon } from '@ui/icon'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
+import { UndoRedoButtons } from '@components/undo-redo-buttons'
 import { GlbPagesNames } from '@glb/glb-names'
+import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
 import { moveActionHistory } from '@utils/moveActionHistory'
-import { FilterControlDtree } from '../../dtree/components/filter-control-dtree/filter-control-dtree'
 import modalsVisibilityStore from '../../dtree/components/modals/modals-visibility-store'
-import { FilterControlRefiner } from '../../refiner/components/filter-control-refiner/filter-control-refiner'
 import {
   FilterControlOptions,
   FilterControlOptionsNames,
 } from './filter-control.const'
+import { SolutionDropDown } from './solution-dropdown'
 
 interface IFilterControlProps {
+  SolutionControl: React.ElementType
   className?: string
 }
 
 export const FilterControl = observer(
-  ({ className }: IFilterControlProps): ReactElement => {
+  ({ SolutionControl, className }: IFilterControlProps): ReactElement => {
     const isFirstActionHistoryIndex = dtreeStore.actionHistoryIndex === 0
 
     const isLastActionHistoryIndex =
       dtreeStore.actionHistoryIndex + 1 ===
       toJS(dtreeStore.actionHistory).length
 
-    const isUndoLocked = isFirstActionHistoryIndex
-    const isRedoLocked = isLastActionHistoryIndex
-    const history = useHistory()
+    const isUndoDisabled = isFirstActionHistoryIndex
+    const isRedoDisabled = isLastActionHistoryIndex
 
+    const history = useHistory()
     const params = useParams()
     const dsName = params.get('ds') || ''
     const page: FilterControlOptions =
@@ -62,60 +64,53 @@ export const FilterControl = observer(
           className,
         )}
       >
-        <div className="flex items-center w-full mt-5">
-          {page === GlbPagesNames.Refiner ? (
-            <FilterControlRefiner />
-          ) : (
-            <FilterControlDtree />
-          )}
-        </div>
-
-        <div className="flex justify-between w-full mt-3">
+        <div className="flex items-center justify-between w-full mt-3">
           <div className="flex items-center">
-            <span className="text-grey-blue text-14 font-bold mr-2">
-              {t('filter.method')}
-            </span>
+            <SolutionDropDown pageName={pageName} goToPage={goToPage} />
 
-            <DropDown
-              options={FilterControlOptions}
-              value={pageName}
-              onSelect={args => {
-                goToPage(args.value as FilterControlOptions)
-              }}
-            />
+            <Divider orientation="vertical" className="h-[75%]" />
 
-            {page === GlbPagesNames.Dtree && (
-              <Button
-                text="Text editor"
-                className="ml-2"
-                variant={'secondary-dark'}
-                onClick={() => modalsVisibilityStore.openModalTextEditor()}
-                dataTestId={DecisionTreesMenuDataCy.textEditor}
-              />
-            )}
-            {/* Temporarily removed in Refiner page */}
+            <SolutionControl />
+
+            <Divider orientation="vertical" className="h-[75%]" />
+
+            <DatasetCreationButton />
+
             {page === GlbPagesNames.Dtree && (
               <>
+                <Divider orientation="vertical" className="h-[75%]" />
+
                 <Button
-                  text="Undo"
-                  className="ml-2"
-                  variant={'secondary-dark'}
-                  disabled={isUndoLocked}
-                  onClick={() => moveActionHistory(-1)}
-                />
-                <Button
-                  text="Redo"
-                  className="ml-2"
-                  variant={'secondary-dark'}
-                  disabled={isRedoLocked}
-                  onClick={() => moveActionHistory(1)}
+                  text={t('dtree.textEditor')}
+                  size="md"
+                  variant="secondary-dark"
+                  onClick={() => modalsVisibilityStore.openModalTextEditor()}
+                  dataTestId={DecisionTreesMenuDataCy.textEditor}
                 />
               </>
             )}
           </div>
-          <Link className="flex flex-wrap" to={Routes.Root}>
-            <Icon name="Close" className="text-white cursor-pointer" />
-          </Link>
+
+          <div className="flex items-center">
+            {/* TODO: implement undo/redo for FR+WS */}
+
+            {page === GlbPagesNames.Dtree ? (
+              <UndoRedoButtons
+                onUndo={() => moveActionHistory(-1)}
+                onRedo={() => moveActionHistory(1)}
+                isUndoDisabled={isUndoDisabled}
+                isRedoDisabled={isRedoDisabled}
+              />
+            ) : (
+              <Link className="flex flex-wrap ml-2" to={Routes.Root}>
+                <Icon
+                  size={15}
+                  name="Close"
+                  className="text-white cursor-pointer"
+                />
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     )

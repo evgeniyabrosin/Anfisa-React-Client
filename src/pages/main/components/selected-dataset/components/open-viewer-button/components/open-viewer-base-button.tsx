@@ -27,6 +27,7 @@ export const OpenViewerBaseButton = ({
     append={
       <Icon
         name="Arrow"
+        size={14}
         className={cn(
           'transform transition-transform',
           isOpen ? 'rotate-90' : '-rotate-90',

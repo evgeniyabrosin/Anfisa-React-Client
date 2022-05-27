@@ -16,6 +16,7 @@ import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControl } from '../common/filter-control/filter-control'
 import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
+import { SolutionControlDtree } from './components/solution-control-dtree/solution-control-dtree'
 
 export const DtreePage = observer((): ReactElement => {
   const { isXL } = datasetStore
@@ -95,7 +96,11 @@ export const DtreePage = observer((): ReactElement => {
           />
         </Header>
 
-        <FilterControl className={styles.dtreePage__controls} />
+        <FilterControl
+          className={styles.dtreePage__controls}
+          SolutionControl={SolutionControlDtree}
+        />
+
         <QueryBuilder className={styles.dtreePage__queryBuilder} />
       </div>
     </>

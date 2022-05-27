@@ -521,7 +521,7 @@ class DtreeStore {
 
   // 3.4 Common UI/UX modals
 
-  openModalSaveDataset() {
+  openModalSaveDataset = () => {
     this.isModalSaveDatasetVisible = true
   }
 
