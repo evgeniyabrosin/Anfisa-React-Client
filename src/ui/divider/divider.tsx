@@ -22,7 +22,7 @@ export const Divider = ({
   return (
     <div
       className={cn(
-        'rounded-full overflow-hidden shrink-0 grow-0',
+        'cursor-default rounded-full overflow-hidden shrink-0 grow-0',
         color === 'dark' ? 'bg-blue-lighter' : 'bg-grey-disabled',
         orientation === 'vertical'
           ? `w-0.5 h-full mx-${spacingMargin}`

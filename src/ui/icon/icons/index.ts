@@ -28,6 +28,7 @@ import FullScreen from './full-screen'
 import Import from './import'
 import Info from './info'
 import Lines from './lines'
+import List from './list'
 import Loupe from './loupe'
 import Options from './options'
 import Rect from './rect'
@@ -70,6 +71,7 @@ export const icons = {
   Import,
   Info,
   Lines,
+  List,
   Loupe,
   Options,
   Rect,

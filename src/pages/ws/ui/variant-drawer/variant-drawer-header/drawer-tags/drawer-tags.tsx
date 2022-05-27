@@ -22,6 +22,7 @@ const DrawerTagButton = ({ refEl, onClick }: IDrawerTagButtonProps) => {
   return (
     <Button
       refEl={refEl}
+      className="whitespace-nowrap"
       text="+ Add"
       size="xs"
       textSize="xs"
@@ -53,6 +54,7 @@ const DrawerTagModal = observer(({ close }: any) => {
   // }
 
   const handleSaveTags = () => {
+    variantStore.setIsTagsModified(true)
     drawerTagsStore.handleSaveTagsAsync()
     close()
   }
@@ -140,8 +142,8 @@ const DrawerTagModal = observer(({ close }: any) => {
 
 export const DrawerTags = observer(() => {
   return (
-    <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
-      <span className="text-14 text-white px-3">{t('variant.tags')}</span>
+    <div className="flex items-center">
+      <span className="text-14 text-white pr-3">{t('variant.tags')}</span>
 
       <div className="mr-3">
         <PopperButton

@@ -1,7 +1,12 @@
+import { Ref, RefObject, useImperativeHandle, useRef } from 'react'
 import { Layout } from 'react-grid-layout'
 
-import { TRecCntResponse } from '@service-providers/dataset-level/dataset-level.interface'
-import { TVariantAspectsGridLayout } from './variant-aspects-layout.interface'
+import { TAspectDescriptor } from '@service-providers/dataset-level/dataset-level.interface'
+import {
+  TVariantAspectsGridHandles,
+  TVariantAspectsGridLayout,
+  TVariantAspectsLayoutGridChangeHandler,
+} from './variant-aspects-layout.interface'
 
 export const GRID_LAYOUT_COLS = 3
 export const GRID_LAYOUT_ROW_HEIGHT = 40
@@ -14,7 +19,7 @@ export const GRID_LAYOUT_CONTAINER_PADDING: [number, number] = [16, 16]
 
 export const adaptLayoutForAspects = (
   layout: TVariantAspectsGridLayout,
-  aspects: TRecCntResponse[],
+  aspects: TAspectDescriptor[],
 ): [Layout[], string[]] => {
   let adaptedLayout = layout
 
@@ -49,19 +54,24 @@ export const adaptLayoutForAspects = (
 type TMaximizeWindowParams = {
   name: string
   windowEl: HTMLElement
-  contentEl: HTMLElement
-  layout: Layout[]
+  layout: TVariantAspectsGridLayout
 }
 
 export const maximizeWindow = ({
   name,
   windowEl,
-  contentEl,
   layout,
-}: TMaximizeWindowParams): Layout[] => {
+}: TMaximizeWindowParams): TVariantAspectsGridLayout => {
   const itemIndex = layout.findIndex(item => item.i === name)
 
   if (itemIndex < 0) {
+    return layout
+  }
+  const contentEl: HTMLDivElement | null = windowEl.querySelector(
+    '[data-window-content]',
+  )
+
+  if (!contentEl) {
     return layout
   }
 
@@ -91,15 +101,40 @@ export const maximizeWindow = ({
   return newLayout
 }
 
+export const maximizeAllWindows = (
+  rootEl: HTMLDivElement | null,
+  layout: TVariantAspectsGridLayout,
+): TVariantAspectsGridLayout => {
+  if (!rootEl) {
+    return layout
+  }
+
+  let newLayout = layout
+
+  rootEl.querySelectorAll<HTMLDivElement>('[data-window]').forEach(windowEl => {
+    const name = windowEl.dataset.window
+
+    if (name) {
+      newLayout = maximizeWindow({
+        name,
+        windowEl,
+        layout: newLayout,
+      })
+    }
+  })
+
+  return newLayout
+}
+
 type TMinimizeWindowParams = {
   name: string
-  layout: Layout[]
+  layout: TVariantAspectsGridLayout
 }
 
 export const minimizeWindow = ({
   name,
   layout,
-}: TMinimizeWindowParams): Layout[] => {
+}: TMinimizeWindowParams): TVariantAspectsGridLayout => {
   const itemIndex = layout.findIndex(item => item.i === name)
 
   if (itemIndex < 0) {
@@ -114,4 +149,41 @@ export const minimizeWindow = ({
   }
 
   return newLayout
+}
+
+type TUseGridHandlesOptions = {
+  rootRef: RefObject<HTMLDivElement>
+  layout: TVariantAspectsGridLayout
+  onChangeLayout?: TVariantAspectsLayoutGridChangeHandler
+}
+
+export const useGridHandles = (
+  handlesRef: Ref<TVariantAspectsGridHandles> | undefined,
+  { rootRef, layout, onChangeLayout }: TUseGridHandlesOptions,
+) => {
+  const handlesDeps: [
+    TVariantAspectsGridLayout,
+    TVariantAspectsLayoutGridChangeHandler | undefined,
+  ] = [layout, onChangeLayout]
+  const handlesDepsRef = useRef(handlesDeps)
+  handlesDepsRef.current = handlesDeps
+
+  useImperativeHandle(
+    handlesRef,
+    () => {
+      return {
+        maximizeAll: () => {
+          const [currentLayout, onChange] = handlesDepsRef.current
+
+          onChange?.(maximizeAllWindows(rootRef.current, currentLayout))
+        },
+        minimizeAll: () => {
+          const [, onChange] = handlesDepsRef.current
+
+          onChange?.([])
+        },
+      }
+    },
+    [rootRef],
+  )
 }

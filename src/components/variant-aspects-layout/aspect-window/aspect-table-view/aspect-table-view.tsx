@@ -34,7 +34,7 @@ export const AspectTableView = ({
           {t('variant.noDataToShow')}
         </div>
       ) : (
-        <table className="min-w-full" onMouseDownCapture={onMouseDownHandler}>
+        <table className="min-w-full">
           <tbody>
             {rows?.map((row, index) => {
               if (!row) return <tr key={index} />
@@ -56,7 +56,10 @@ export const AspectTableView = ({
                         shouldAddShadow && blueBg,
                       )}
                     >
-                      <span className="cursor-auto">
+                      <span
+                        className="cursor-auto"
+                        onMouseDownCapture={onMouseDownHandler}
+                      >
                         {shouldShowCount
                           ? `${row.title} [${count}]`
                           : row.title}
@@ -69,7 +72,7 @@ export const AspectTableView = ({
                       key={cIndex}
                       className={cn(
                         'py-3 pr-3 font-normal',
-                        cell[0].includes('</a>')
+                        cell[0]?.includes('</a>')
                           ? 'text-blue-bright'
                           : !cell[1]?.includes(AspectCellRenderClass.NoTrHit) &&
                               'text-grey-blue',
@@ -77,6 +80,7 @@ export const AspectTableView = ({
                     >
                       <span
                         className="cursor-auto"
+                        onMouseDownCapture={onMouseDownHandler}
                         dangerouslySetInnerHTML={{ __html: cell[0] }}
                       />
                     </td>

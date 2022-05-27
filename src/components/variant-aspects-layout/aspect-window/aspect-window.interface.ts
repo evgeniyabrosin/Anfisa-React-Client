@@ -6,7 +6,6 @@ export type TWindowToggleHandleParams = {
   name: string
   state: boolean
   windowEl: HTMLDivElement | undefined | null
-  contentEl: HTMLDivElement | undefined | null
 }
 
 export interface IAspectWindowProps<

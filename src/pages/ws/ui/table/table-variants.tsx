@@ -47,15 +47,20 @@ interface ITableVariantsProps {
 
 export const TableVariants = observer(
   ({ className }: ITableVariantsProps): ReactElement => {
-    const { isLoadingTabReport, tabReport } = mainTableStore
+    const isLoaderShown =
+      !mainTableStore.tabReportPagesData.length ||
+      mainTableStore.isTableResizing
     const { columnDataListForRender } = columnsStore
 
     return (
       <Styles className={className}>
-        {isLoadingTabReport ? (
+        {isLoaderShown ? (
           <Loader />
         ) : (
-          <Table columns={columnDataListForRender} data={tabReport} />
+          <Table
+            columns={columnDataListForRender}
+            data={mainTableStore.tabReportPagesData}
+          />
         )}
       </Styles>
     )

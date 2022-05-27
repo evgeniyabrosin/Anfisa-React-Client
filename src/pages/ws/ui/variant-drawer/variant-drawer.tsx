@@ -1,18 +1,17 @@
 import styles from './variant-drawer.module.css'
 
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect, useRef } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import columnsStore from '@store/ws/columns'
 import variantStore from '@store/ws/variant'
 import {
-  IVariantAspectsLayoutBaseProps,
-  TVariantAspectsLayoutProps,
-  VariantAspectsLayout,
-  VariantAspectsLayoutType,
+  TVariantAspectsGridHandles,
+  VariantAspectsLayoutGrid,
 } from '@components/variant-aspects-layout'
-import { variantLayoutStore } from '@pages/ws/ui/variant-drawer/variant-drawer.store'
+import { variantDrawerStore } from '@pages/ws/ui/variant-drawer/variant-drawer.store'
+import { VariantDrawerLayoutMode } from './variant-drawer.interface'
 import { VariantDrawerHeader } from './variant-drawer-header'
 
 interface IVariantDrawerProps {
@@ -22,13 +21,8 @@ interface IVariantDrawerProps {
 export const VariantDrawer = observer(
   ({ className }: IVariantDrawerProps): ReactElement => {
     const { aspects } = variantStore
-    const {
-      type,
-      gridLayout,
-      galleryActiveAspect,
-      setGridLayout,
-      setGalleryActiveAspect,
-    } = variantLayoutStore
+    const { layoutMode, gridLayout, gridWindowsOpenState, setGridLayout } =
+      variantDrawerStore
 
     useEffect(() => {
       return () => {
@@ -36,31 +30,30 @@ export const VariantDrawer = observer(
       }
     }, [])
 
-    const layoutBaseProps: Omit<IVariantAspectsLayoutBaseProps, 'type'> = {
-      aspects,
-      className: styles.drawer__layout,
-    }
-    let layoutProps: TVariantAspectsLayoutProps
-    if (type === VariantAspectsLayoutType.Grid) {
-      layoutProps = {
-        type,
-        onLayoutChange: setGridLayout,
-        layout: gridLayout,
-        ...layoutBaseProps,
-      }
-    } else {
-      layoutProps = {
-        type,
-        activeAspect: galleryActiveAspect,
-        onChangeActiveAspect: setGalleryActiveAspect,
-        ...layoutBaseProps,
-      }
-    }
+    const gridHandles = useRef<TVariantAspectsGridHandles>(null)
 
     return (
       <div className={cn(styles.drawer, className)}>
-        <VariantDrawerHeader className={styles.drawer__header} />
-        <VariantAspectsLayout {...layoutProps} />
+        <VariantDrawerHeader
+          className={styles.drawer__header}
+          windowsOpenState={gridWindowsOpenState}
+          onWindowsToggle={state => {
+            if (state) {
+              gridHandles.current?.maximizeAll()
+            } else {
+              gridHandles.current?.minimizeAll()
+            }
+          }}
+        />
+        {layoutMode == VariantDrawerLayoutMode.Grid && (
+          <VariantAspectsLayoutGrid
+            aspects={aspects}
+            onChangeLayout={setGridLayout}
+            layout={gridLayout}
+            className={styles.drawer__layout}
+            handles={gridHandles}
+          />
+        )}
       </div>
     )
   },

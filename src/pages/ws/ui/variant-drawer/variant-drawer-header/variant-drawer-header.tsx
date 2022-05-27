@@ -1,47 +1,39 @@
 import { ReactElement } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import cn from 'classnames'
-import get from 'lodash/get'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 import { useKeydown } from '@core/hooks/use-keydown'
 import { useVariantIndex } from '@core/hooks/use-variant-index'
-import datasetStore from '@store/dataset/dataset'
 import columnsStore from '@store/ws/columns'
 import mainTableStore from '@store/ws/main-table.store'
 import variantStore from '@store/ws/variant'
 import { Routes } from '@router/routes.enum'
 import { ArrowButton } from '@ui/arrow-button'
+import { Divider } from '@ui/divider'
 import { Icon } from '@ui/icon'
-import {
-  HgModes,
-  IAttributeDescriptors,
-} from '@service-providers/dataset-level/dataset-level.interface'
-import { findElementInRow } from '@utils/mian-table/find-element-in-row'
+import { DrawerLayoutControl } from '@pages/ws/ui/variant-drawer/variant-drawer-header/drawer-layout-control'
+import { variantDrawerStore } from '../variant-drawer.store'
 import { DrawerNote } from './drawer-note/drawer-note'
 import { DrawerTags } from './drawer-tags'
 
 interface IVariantDrawerHeaderProps {
   className?: string
+  windowsOpenState: boolean
+  onWindowsToggle: (state: boolean) => void
 }
 
 export const VariantDrawerHeader = observer(
-  ({ className }: IVariantDrawerHeaderProps): ReactElement => {
+  ({
+    className,
+    windowsOpenState,
+    onWindowsToggle,
+  }: IVariantDrawerHeaderProps): ReactElement => {
     const history = useHistory()
     const location = useLocation()
-    const { wsListData } = mainTableStore
-    const variant = toJS(variantStore.variant)
-    const rows: IAttributeDescriptors[] = get(variant, '[0].rows', [])
-
-    const variantWithoutGenesName = 'None'
-    const genes = findElementInRow(rows, 'genes') || variantWithoutGenesName
-
-    const hg19locus = findElementInRow(rows, 'hg19')
-    const hg38locus = findElementInRow(rows, 'hg38')
-
-    const { locusMode } = datasetStore
-    const currentLocus = locusMode === HgModes.HG19 ? hg19locus : hg38locus
+    const { tabReport } = mainTableStore
+    const { locus, genes } = variantStore
+    const { gridPresets, applyGridPreset, saveGridPreset } = variantDrawerStore
 
     const currentIndex = mainTableStore.filteredNo.indexOf(variantStore.index)
     const isNoPrevVariant = currentIndex <= 0
@@ -65,12 +57,13 @@ export const VariantDrawerHeader = observer(
     ])
 
     const handleCloseDrawer = () => {
-      // TODO: add this requests to "Apply" btn in modals for change tags and notes in another task
-      wsListData.invalidate()
-
-      mainTableStore.fetchWsTagsAsync()
+      if (variantStore.isTagsModified) {
+        tabReport.invalidatePage(mainTableStore.openedVariantPageNo)
+        mainTableStore.fetchWsTagsAsync()
+      }
 
       columnsStore.closeDrawer()
+      variantStore.setIsTagsModified(false)
 
       // if url has 'variant' should be navigated to prev route
       const previousLocation = location.search.split('&variant')[0]
@@ -80,10 +73,10 @@ export const VariantDrawerHeader = observer(
     }
 
     return (
-      <div className={cn('px-4 pb-4 pt-1 bg-blue-dark', className)}>
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <div className="flex items-center">
+      <div className={cn('px-4 bg-blue-dark', className)}>
+        <div className="flex justify-between items-start">
+          <div className="flex items-center flex-wrap">
+            <div className="flex items-center my-2">
               <ArrowButton
                 size="md"
                 className="mr-2"
@@ -99,72 +92,31 @@ export const VariantDrawerHeader = observer(
                 onClick={handleNextVariant}
               />
             </div>
-            <div className="text-blue-bright font-bold leading-18px">
-              {`[${genes}] `}
-              <span dangerouslySetInnerHTML={{ __html: currentLocus }} />
+            <div className="flex items-center my-2">
+              <div className="text-blue-bright font-bold leading-18px ">
+                {`[${genes}] `}
+                <span dangerouslySetInnerHTML={{ __html: locus }} />
+              </div>
+              <Divider orientation="vertical" />
             </div>
-            <DrawerTags />
-
-            <DrawerNote />
+            <div className="flex items-center my-2">
+              <DrawerTags />
+              <Divider orientation="vertical" />
+              <DrawerNote />
+            </div>
           </div>
 
-          <div className="flex items-center">
-            {/*<div className="flex text-grey-blue">*/}
-            {/*  <Icon*/}
-            {/*    name="Expand"*/}
-            {/*    size={24}*/}
-            {/*    className="cursor-pointer hover:text-blue-bright"*/}
-            {/*    onClick={() => {*/}
-            {/*      const parents = document.querySelectorAll('#parent')*/}
-
-            {/*      setLayout((prev: any[]) => {*/}
-            {/*        const newLayout = prev.map((item: any, index: number) => ({*/}
-            {/*          ...item,*/}
-            {/*          h:*/}
-            {/*            get(*/}
-            {/*              parents[index].children[1].firstChild,*/}
-            {/*              'clientHeight',*/}
-            {/*              0,*/}
-            {/*            ) **/}
-            {/*            0.0208 +*/}
-            {/*            1.3,*/}
-            {/*          y: index,*/}
-            {/*        }))*/}
-
-            {/*        window.sessionStorage.setItem(*/}
-            {/*          'gridLayout',*/}
-            {/*          JSON.stringify(newLayout),*/}
-            {/*        )*/}
-
-            {/*        return newLayout*/}
-            {/*      })*/}
-            {/*    }}*/}
-            {/*  />*/}
-
-            {/*  <Icon*/}
-            {/*    name="Collapse"*/}
-            {/*    size={24}*/}
-            {/*    className="cursor-pointer hover:text-blue-bright ml-1 mr-5"*/}
-            {/*    onClick={() => {*/}
-            {/*      setLayout((prev: any[]) => {*/}
-            {/*        const newLayout = prev.map((item: any) => ({*/}
-            {/*          ...item,*/}
-            {/*          h: 1,*/}
-            {/*        }))*/}
-
-            {/*        window.sessionStorage.setItem(*/}
-            {/*          'gridLayout',*/}
-            {/*          JSON.stringify(newLayout),*/}
-            {/*        )*/}
-
-            {/*        return newLayout*/}
-            {/*      })*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*</div>*/}
-
-            <button className="text-white hover:text-blue-bright w-4 h-4 flex items-center justify-center">
-              <Icon name="Close" onClick={handleCloseDrawer} size={10} />
+          <div className="flex items-center my-2">
+            <DrawerLayoutControl
+              gridPresets={gridPresets}
+              onSaveGridPreset={saveGridPreset}
+              onChangeGridPreset={applyGridPreset}
+              windowsOpenState={windowsOpenState}
+              onWindowsToggle={onWindowsToggle}
+            />
+            <Divider orientation="vertical" spacing="dense" />
+            <button className="w-4 h-4 flex items-center justify-center  text-white hover:text-blue-bright">
+              <Icon name="Close" onClick={handleCloseDrawer} size={16} />
             </button>
           </div>
         </div>

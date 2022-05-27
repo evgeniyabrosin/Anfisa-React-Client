@@ -11,5 +11,6 @@
   &__layout {
     flex: 1 0 0;
     overflow: auto;
+    background: theme("colors.blue.lighter");
   }
 }

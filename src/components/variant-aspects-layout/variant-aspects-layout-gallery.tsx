@@ -1,9 +1,6 @@
 import { ReactElement } from 'react'
 
-import { IVariantAspectsLayoutGalleryProps } from './variant-aspects-layout.interface'
-
-export const VariantAspectsLayoutGallery = (
-  props: IVariantAspectsLayoutGalleryProps,
-): ReactElement => {
+// TODO: should be implemented with FOROME-1052
+export const VariantAspectsLayoutGallery = (): ReactElement => {
   return <div>Gallery</div>
 }

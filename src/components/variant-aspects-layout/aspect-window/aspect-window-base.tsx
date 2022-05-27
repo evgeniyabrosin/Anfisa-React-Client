@@ -1,6 +1,13 @@
 import styles from './aspect-window.module.css'
 
-import { ReactElement, ReactNode, Ref, useRef } from 'react'
+import {
+  forwardRef,
+  HTMLAttributes,
+  ReactElement,
+  ReactNode,
+  Ref,
+  useRef,
+} from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import cn from 'classnames'
 
@@ -19,6 +26,17 @@ interface IContentRenderFnParams {
 type TContentRenderFn = ({
   shouldAddShadow,
 }: IContentRenderFnParams) => ReactNode
+
+const WindowContent = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(
+  (props, ref): ReactElement => (
+    <div data-window-content="" ref={ref} {...props} />
+  ),
+)
+
+WindowContent.displayName = ' WindowContent'
 
 export interface IAspectWindowBaseProps extends IAspectWindowProps {
   rootRef: Ref<HTMLDivElement>
@@ -64,7 +82,12 @@ export const AspectWindowBase = ({
   }
 
   return (
-    <div ref={ref} className={cn(styles.aspectWindow, className)} {...divProps}>
+    <div
+      ref={ref}
+      className={cn(styles.aspectWindow, className)}
+      data-window={aspect.name}
+      {...divProps}
+    >
       <div className={cn(styles.aspectWindow__title, styles.windowTitle)}>
         <div className={styles.windowTitle__label} data-drag-handle={true}>
           {title || aspect.title}
@@ -82,7 +105,6 @@ export const AspectWindowBase = ({
               onToggle({
                 name: aspect.name,
                 windowEl: windowRef.current,
-                contentEl: contentRef.current,
                 state: !isOpen,
               })
             }
@@ -96,6 +118,7 @@ export const AspectWindowBase = ({
         onScroll={handleScroll}
         className={styles.aspectWindow__content}
         innerRef={contentRef}
+        component={WindowContent}
       >
         {content}
       </ScrollContainer>
