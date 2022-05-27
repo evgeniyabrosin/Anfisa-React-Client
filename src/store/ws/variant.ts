@@ -6,6 +6,8 @@ import mainTableStore from '@store/ws/main-table.store'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import {
   IReccntArguments,
+  ITableAspectDescriptor,
+  TAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
@@ -37,6 +39,52 @@ export class VariantStore {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public get aspects(): TAspectDescriptor[] {
+    return toJS(this.variant)
+  }
+
+  public get igvUrl(): string | undefined {
+    const igvUrls = datasetStore.dsInfoData?.igvUrls
+
+    if (!igvUrls) {
+      return
+    }
+
+    let names: string[] = []
+
+    const qualityAspect = this.variant.find(
+      aspect => aspect.name === 'view_qsamples',
+    ) as ITableAspectDescriptor | undefined
+
+    if (qualityAspect) {
+      names = qualityAspect.rows[0]?.cells
+        .map(cell => cell[0].split(': ')[1])
+        .filter(Boolean)
+    }
+
+    const generalAspect = this.variant.find(
+      aspect => aspect.name === 'view_gen',
+    ) as ITableAspectDescriptor | undefined
+
+    if (!generalAspect) {
+      return undefined
+    }
+
+    const locus = generalAspect.rows
+      .find(row => row.name === 'hg38')
+      ?.cells[0]?.[0]?.split(' ')[0]
+
+    if (!locus) {
+      return undefined
+    }
+
+    return new URLSearchParams({
+      locus,
+      names: names.join(','),
+      igvUrls: JSON.stringify(igvUrls),
+    }).toString()
   }
 
   setNoteText(value: string) {

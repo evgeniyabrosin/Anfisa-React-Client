@@ -10,7 +10,7 @@ import { Checkbox } from '@ui/checkbox/checkbox'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import drawerTagsStore from '../drawer-tags.store'
+import drawerTagsStore from './drawer-tags.store'
 import { TagsContainer } from './tags-container'
 
 interface IDrawerTagButtonProps {

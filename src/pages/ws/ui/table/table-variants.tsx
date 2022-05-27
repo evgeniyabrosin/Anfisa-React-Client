@@ -9,13 +9,13 @@ import { Loader } from '@components/loader'
 import { Table } from './table'
 
 const Styles = styled.div`
+  min-width: 380px;
   overflow-x: auto;
   overflow-y: hidden;
 
   .table {
     border-spacing: 0;
     border-collapse: collapse;
-    min-width: 100%;
 
     .thead {
       .th {
@@ -41,17 +41,23 @@ const Styles = styled.div`
   }
 `
 
-export const TableVariants = observer((): ReactElement => {
-  if (mainTableStore.isLoadingTabReport) return <Loader />
+interface ITableVariantsProps {
+  className?: string
+}
 
-  const { columnDataListForRender } = columnsStore
+export const TableVariants = observer(
+  ({ className }: ITableVariantsProps): ReactElement => {
+    const { isLoadingTabReport, tabReport } = mainTableStore
+    const { columnDataListForRender } = columnsStore
 
-  return (
-    <Styles className="flex-1 overflow-auto">
-      <Table
-        columns={columnDataListForRender}
-        data={mainTableStore.tabReport}
-      />
-    </Styles>
-  )
-})
+    return (
+      <Styles className={className}>
+        {isLoadingTabReport ? (
+          <Loader />
+        ) : (
+          <Table columns={columnDataListForRender} data={tabReport} />
+        )}
+      </Styles>
+    )
+  },
+)

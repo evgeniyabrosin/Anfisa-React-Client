@@ -1,5 +1,6 @@
-import { Dispatch, ReactElement, SetStateAction } from 'react'
+import { ReactElement } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import cn from 'classnames'
 import get from 'lodash/get'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -21,12 +22,12 @@ import { findElementInRow } from '@utils/mian-table/find-element-in-row'
 import { DrawerNote } from './drawer-note/drawer-note'
 import { DrawerTags } from './drawer-tags'
 
-interface IVariantHeaderProps {
-  setLayout: Dispatch<SetStateAction<any>>
+interface IVariantDrawerHeaderProps {
+  className?: string
 }
 
-export const VariantHeader = observer(
-  ({ setLayout }: IVariantHeaderProps): ReactElement => {
+export const VariantDrawerHeader = observer(
+  ({ className }: IVariantDrawerHeaderProps): ReactElement => {
     const history = useHistory()
     const location = useLocation()
     const { wsListData } = mainTableStore
@@ -79,7 +80,7 @@ export const VariantHeader = observer(
     }
 
     return (
-      <div className="px-4 pb-4 pt-1 bg-blue-dark">
+      <div className={cn('px-4 pb-4 pt-1 bg-blue-dark', className)}>
         <div className="flex justify-between">
           <div className="flex items-center">
             <div className="flex items-center">
@@ -108,65 +109,63 @@ export const VariantHeader = observer(
           </div>
 
           <div className="flex items-center">
-            <div className="flex text-grey-blue">
-              <Icon
-                name="Expand"
-                size={24}
-                className="cursor-pointer hover:text-blue-bright"
-                onClick={() => {
-                  const parents = document.querySelectorAll('#parent')
+            {/*<div className="flex text-grey-blue">*/}
+            {/*  <Icon*/}
+            {/*    name="Expand"*/}
+            {/*    size={24}*/}
+            {/*    className="cursor-pointer hover:text-blue-bright"*/}
+            {/*    onClick={() => {*/}
+            {/*      const parents = document.querySelectorAll('#parent')*/}
 
-                  setLayout((prev: any[]) => {
-                    const newLayout = prev.map((item: any, index: number) => ({
-                      ...item,
-                      h:
-                        get(
-                          parents[index].children[1].firstChild,
-                          'clientHeight',
-                          0,
-                        ) *
-                          0.0208 +
-                        1.3,
-                      y: index,
-                    }))
+            {/*      setLayout((prev: any[]) => {*/}
+            {/*        const newLayout = prev.map((item: any, index: number) => ({*/}
+            {/*          ...item,*/}
+            {/*          h:*/}
+            {/*            get(*/}
+            {/*              parents[index].children[1].firstChild,*/}
+            {/*              'clientHeight',*/}
+            {/*              0,*/}
+            {/*            ) **/}
+            {/*            0.0208 +*/}
+            {/*            1.3,*/}
+            {/*          y: index,*/}
+            {/*        }))*/}
 
-                    window.sessionStorage.setItem(
-                      'gridLayout',
-                      JSON.stringify(newLayout),
-                    )
+            {/*        window.sessionStorage.setItem(*/}
+            {/*          'gridLayout',*/}
+            {/*          JSON.stringify(newLayout),*/}
+            {/*        )*/}
 
-                    return newLayout
-                  })
-                }}
-              />
+            {/*        return newLayout*/}
+            {/*      })*/}
+            {/*    }}*/}
+            {/*  />*/}
 
-              <Icon
-                name="Collapse"
-                size={24}
-                className="cursor-pointer hover:text-blue-bright ml-1 mr-5"
-                onClick={() => {
-                  setLayout((prev: any[]) => {
-                    const newLayout = prev.map((item: any) => ({
-                      ...item,
-                      h: 1,
-                    }))
+            {/*  <Icon*/}
+            {/*    name="Collapse"*/}
+            {/*    size={24}*/}
+            {/*    className="cursor-pointer hover:text-blue-bright ml-1 mr-5"*/}
+            {/*    onClick={() => {*/}
+            {/*      setLayout((prev: any[]) => {*/}
+            {/*        const newLayout = prev.map((item: any) => ({*/}
+            {/*          ...item,*/}
+            {/*          h: 1,*/}
+            {/*        }))*/}
 
-                    window.sessionStorage.setItem(
-                      'gridLayout',
-                      JSON.stringify(newLayout),
-                    )
+            {/*        window.sessionStorage.setItem(*/}
+            {/*          'gridLayout',*/}
+            {/*          JSON.stringify(newLayout),*/}
+            {/*        )*/}
 
-                    return newLayout
-                  })
-                }}
-              />
-            </div>
+            {/*        return newLayout*/}
+            {/*      })*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</div>*/}
 
-            <Icon
-              name="Close"
-              className="cursor-pointer text-white hover:text-blue-bright"
-              onClick={handleCloseDrawer}
-            />
+            <button className="text-white hover:text-blue-bright w-4 h-4 flex items-center justify-center">
+              <Icon name="Close" onClick={handleCloseDrawer} size={10} />
+            </button>
           </div>
         </div>
       </div>
