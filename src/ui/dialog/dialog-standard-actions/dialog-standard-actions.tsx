@@ -29,13 +29,21 @@ export const DialogStandardActions = ({
         onClick={onClose}
       />
       <Button
+        className="relative"
         disabled={isApplyDisabled || isLoading}
         text={
-          isLoading ? (
-            <Loader size="xs" color="white" />
-          ) : (
-            applyText || t('general.apply')
-          )
+          <>
+            {isLoading && (
+              <Loader
+                size="xs"
+                color="white"
+                className="absolute inset-0 flex items-center justify-center"
+              />
+            )}
+            <span className={isLoading ? 'invisible' : ''}>
+              {applyText || t('general.apply')}
+            </span>
+          </>
         }
         onClick={onApply}
       />

@@ -1,0 +1,22 @@
+.tree {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+
+  &__results {
+    flex: 0 0 auto;
+    border-bottom: 1px solid theme("colors.grey.light")
+  }
+
+  &__header {
+    flex: 0 0 50px;
+    border-bottom: 1px solid theme("colors.grey.light");
+  }
+
+  &__view {
+    flex: 1 0 0;
+    overflow: auto;
+  }
+}

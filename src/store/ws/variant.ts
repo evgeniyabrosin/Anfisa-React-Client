@@ -34,9 +34,14 @@ export class VariantStore {
   isActiveVariant = false
 
   isModalNotesVisible = false
+  isTagsModified = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setIsTagsModified(value: boolean) {
+    this.isTagsModified = value
   }
 
   setNoteText(value: string) {

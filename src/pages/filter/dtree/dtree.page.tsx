@@ -1,5 +1,6 @@
+import styles from './dtree.page.module.css'
+
 import React, { ReactElement, useEffect } from 'react'
-import { withErrorBoundary } from 'react-error-boundary'
 import { useHistory } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -12,12 +13,11 @@ import filterStore from '@store/filter'
 import { Header } from '@components/header'
 import { VariantsCount } from '@components/variants-count'
 import { GlbPagesNames } from '@glb/glb-names'
-import { ErrorPage } from '../../error/error'
 import { FilterControl } from '../common/filter-control/filter-control'
 import { ModalsContainer } from './components/modals/modals-container'
 import { QueryBuilder } from './components/query-builder/query-builder'
 
-const FilterPage = observer((): ReactElement => {
+export const DtreePage = observer((): ReactElement => {
   const { isXL } = datasetStore
 
   const history = useHistory()
@@ -84,8 +84,8 @@ const FilterPage = observer((): ReactElement => {
     <>
       <ModalsContainer />
 
-      <div className="overflow-hidden">
-        <Header>
+      <div className={styles.dtreePage}>
+        <Header className={styles.dtreePage__header}>
           <VariantsCount
             variantCounts={getFiltersValue('all')}
             transcriptsCounts={getFiltersValue('transcripts')}
@@ -95,13 +95,9 @@ const FilterPage = observer((): ReactElement => {
           />
         </Header>
 
-        <FilterControl />
-        <QueryBuilder />
+        <FilterControl className={styles.dtreePage__controls} />
+        <QueryBuilder className={styles.dtreePage__queryBuilder} />
       </div>
     </>
   )
-})
-
-export default withErrorBoundary(FilterPage, {
-  fallback: <ErrorPage />,
 })

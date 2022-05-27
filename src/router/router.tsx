@@ -5,12 +5,21 @@ import { QueryParamProvider } from 'use-query-params'
 
 import { GlobalStyle } from '@theme'
 import { Routes } from '@router/routes.enum'
-import FilterPage from '@pages/filter/dtree/page'
-import RefinerPage from '@pages/filter/refiner/page'
-import IgvPage from '@pages/igv/igv.page'
-import MainPage from '@pages/main/page'
-import notFoundPage from '@pages/not-found/not-found.page'
-import WSPage from '@pages/ws/page'
+import { DtreePage } from '@pages/filter/dtree'
+import { RefinerPage } from '@pages/filter/refiner'
+import { IgvPage } from '@pages/igv'
+import { MainPage } from '@pages/main'
+import { NotFoundPage } from '@pages/not-found'
+import { WSPage } from '@pages/ws'
+import { wrapWithErrorBoundary } from './router.utils'
+
+const pages = wrapWithErrorBoundary({
+  [Routes.Root]: MainPage,
+  [Routes.WS]: WSPage,
+  [Routes.Dtree]: DtreePage,
+  [Routes.Refiner]: RefinerPage,
+  [Routes.IGV]: IgvPage,
+})
 
 export const RouterBase = (): ReactElement => {
   let baseName = '/'
@@ -27,12 +36,10 @@ export const RouterBase = (): ReactElement => {
         <ToastContainer />
 
         <Switch>
-          <Route path={Routes.Root} exact component={MainPage} />
-          <Route path={Routes.WS} exact component={WSPage} />
-          <Route path={Routes.Dtree} exact component={FilterPage} />
-          <Route path={Routes.Refiner} exact component={RefinerPage} />
-          <Route path={Routes.IGV} exact component={IgvPage} />
-          <Route component={notFoundPage} />
+          {Object.entries(pages).map(([path, component]) => (
+            <Route key={path} path={path} exact component={component} />
+          ))}
+          <Route component={NotFoundPage} />
         </Switch>
       </QueryParamProvider>
     </Router>

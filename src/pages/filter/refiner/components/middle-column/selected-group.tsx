@@ -9,36 +9,43 @@ import { EnumPanel } from './panels/enum-panel'
 import { FunctionPanel } from './panels/function-panel/function-panel'
 import { NumericPanel } from './panels/numeric-panel'
 
-export const SelectedGroup = observer((): ReactElement => {
-  const { selectedAttributeStatus } = filterStore
+interface ISelectedGroupProps {
+  className?: string
+}
 
-  if (!selectedAttributeStatus) {
-    return <EmptySelectedGroup />
-  }
+export const SelectedGroup = observer(
+  ({ className }: ISelectedGroupProps): ReactElement => {
+    const { selectedAttributeStatus } = filterStore
 
-  const { isRedactorMode, selectedConditionIndex } = filterStore
-  const panelKey = `${selectedAttributeStatus.name}_${selectedConditionIndex}`
+    if (!selectedAttributeStatus) {
+      return <EmptySelectedGroup className={className} />
+    }
 
-  return (
-    <div
-      className={cn(
-        'flex flex-col border-r border-grey-disabled pt-4 px-4 w-1/3 overflow-y-auto h-full',
-        {
-          'bg-blue-tertiary': isRedactorMode,
-        },
-      )}
-    >
-      {selectedAttributeStatus.kind === AttributeKinds.ENUM && (
-        <EnumPanel key={panelKey} />
-      )}
+    const { isRedactorMode, selectedConditionIndex } = filterStore
+    const panelKey = `${selectedAttributeStatus.name}_${selectedConditionIndex}`
 
-      {selectedAttributeStatus.kind === AttributeKinds.FUNC && (
-        <FunctionPanel key={panelKey} />
-      )}
+    return (
+      <div
+        className={cn(
+          'flex flex-col p-4 overflow-y-auto',
+          {
+            'bg-blue-tertiary': isRedactorMode,
+          },
+          className,
+        )}
+      >
+        {selectedAttributeStatus.kind === AttributeKinds.ENUM && (
+          <EnumPanel key={panelKey} />
+        )}
 
-      {selectedAttributeStatus.kind === AttributeKinds.NUMERIC && (
-        <NumericPanel key={panelKey} />
-      )}
-    </div>
-  )
-})
+        {selectedAttributeStatus.kind === AttributeKinds.FUNC && (
+          <FunctionPanel key={panelKey} />
+        )}
+
+        {selectedAttributeStatus.kind === AttributeKinds.NUMERIC && (
+          <NumericPanel key={panelKey} />
+        )}
+      </div>
+    )
+  },
+)
