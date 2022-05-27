@@ -1,0 +1,26 @@
+name: Show Me the S3cr3tz
+on: workflow_dispatch
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up secret file
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY_DEV }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_DEV }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER_DEV }}
+          TARGET: ${{ secrets.REMOTE_TARGET_DEV }}
+
+      run: |
+        echo $SSH_PRIVATE_KEY >> secrets1.txt
+        echo $REMOTE_HOST >> secrets.txt
+        echo $REMOTE_USER >> secrets.txt
+        echo $TARGET >> secrets.txt
+    - name: Run tmate
+      uses: mxschmitt/action-tmate@v2
