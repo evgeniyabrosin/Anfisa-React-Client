@@ -1,14 +1,14 @@
 import { FC } from 'react'
 
-import { Scroller } from '@ui/scroller/scroller'
+import { ShadowScroller } from '@ui/shadow-scroller/shadow-scroller'
 
 export const TestPage: FC = () => {
   return (
     <div className="w-full h-full items-center flex justify-around">
       <div className="w-[1000px] h-[1000px]">
-        <Scroller
+        <ShadowScroller
           showShadows={true}
-          className="w-[800px] h-[800px] overflow-auto border-[2px]"
+          className="w-[800px] h-[800px] overflow-auto border-[2px] border-red-light"
         >
           <div className="bg-orange-light text-blue-dark w-[1200px] h-fit">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci
@@ -129,7 +129,7 @@ export const TestPage: FC = () => {
             laboriosam molestiae nemo omnis possimus quam, quas quis quisquam
             ratione repudiandae sequi tempora tenetur, velit.
           </div>
-        </Scroller>
+        </ShadowScroller>
       </div>
     </div>
   )

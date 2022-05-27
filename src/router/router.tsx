@@ -5,7 +5,7 @@ import { QueryParamProvider } from 'use-query-params'
 
 import { GlobalStyle } from '@theme'
 import { Routes } from '@router/routes.enum'
-import { TestPage } from '@ui/scroller/page'
+import { TestPage } from '@ui/shadow-scroller/page'
 import { DtreePage } from '@pages/filter/dtree'
 import { RefinerPage } from '@pages/filter/refiner'
 import { IgvPage } from '@pages/igv'

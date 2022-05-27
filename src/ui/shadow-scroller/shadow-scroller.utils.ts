@@ -1,8 +1,10 @@
+import { ScrollDirection } from '@core/hooks/use-grab-scroll'
+
 export enum Placement {
   top = 'top',
+  right = 'right',
   bottom = 'bottom',
   left = 'left',
-  right = 'right',
 }
 
 export enum DisplayValue {
@@ -15,16 +17,35 @@ export const getBackground = (placement: Placement) => {
   return `linear-gradient(to ${placement}, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.3))`
 }
 
+export const hide = (placement: Placement, direction: ScrollDirection) => {
+  if (direction === 'both') return false
+
+  if (
+    (placement === Placement.left || placement === Placement.right) &&
+    direction === 'vertical'
+  ) {
+    return true
+  }
+
+  return (
+    (placement === Placement.top || placement === Placement.bottom) &&
+    direction === 'horizontal'
+  )
+}
+
 export const createShadow = (
   container: HTMLDivElement,
   placement: Placement,
+  direction: ScrollDirection,
 ) => {
   const size = '20px'
   const shadow = document.createElement('div')
 
   Object.assign(shadow.style, {
     position: 'absolute',
-    display: DisplayValue.initial,
+    display: hide(placement, direction)
+      ? DisplayValue.none
+      : DisplayValue.initial,
     zIndex: 2,
     top: placement === Placement.bottom ? undefined : 0,
     right: placement === Placement.left ? undefined : 0,

@@ -3,7 +3,6 @@ import {
   Dispatch,
   MouseEvent,
   SetStateAction,
-  useEffect,
   useRef,
   useState,
 } from 'react'
@@ -19,12 +18,6 @@ import datasetStore from '@store/dataset/dataset'
 import variantStore from '@store/ws/variant'
 import { Checkbox } from '@ui/checkbox/checkbox'
 import { Icon } from '@ui/icon'
-import {
-  createShadow,
-  createTrigger,
-  DisplayValue,
-  Placement,
-} from '@ui/scroll-shadower/scroll-shadowier.utils'
 import {
   ICommonAspectDescriptor,
   IPreAspectDescriptor,
@@ -52,61 +45,6 @@ export const DrawerWindow = observer(
     const [filterSelection, setFilterSelection] = useState(
       DrawerClass.normClass,
     )
-
-    useEffect(() => {
-      const element = ref.current
-
-      if (!element) return
-
-      const rightShadow = createShadow(element, Placement.right)
-      const leftShadow = createShadow(element, Placement.left)
-
-      leftShadow.style.position = 'fixed'
-      rightShadow.style.position = 'fixed'
-
-      leftShadow.style.top = '40px'
-      leftShadow.style.bottom = '25px'
-      rightShadow.style.top = '40px'
-      rightShadow.style.bottom = '25px'
-
-      if (refColumn.current) {
-        leftShadow.style.left = refColumn.current.clientWidth + 'px'
-      }
-      const rightTrigger = createTrigger(element, Placement.right)
-      const leftTrigger = createTrigger(element, Placement.left)
-
-      const intersectionObserver = new IntersectionObserver(
-        entries => {
-          for (const entry of entries) {
-            switch (entry.target) {
-              case rightTrigger:
-                rightShadow.style.display = entry.isIntersecting
-                  ? DisplayValue.none
-                  : DisplayValue.block
-                break
-              case leftTrigger:
-                leftShadow.style.display = entry.isIntersecting
-                  ? DisplayValue.none
-                  : DisplayValue.block
-                break
-            }
-          }
-        },
-        {
-          threshold: [0],
-        },
-      )
-
-      intersectionObserver.observe(rightTrigger)
-      intersectionObserver.observe(leftTrigger)
-
-      return () => {
-        ;[rightTrigger, rightShadow, leftShadow, leftTrigger].forEach(target =>
-          target.remove(),
-        )
-        intersectionObserver.disconnect()
-      }
-    }, [])
 
     const { shouldAddShadow, handleScroll, handleStartScroll } =
       useScrollShadow(ref.current)
