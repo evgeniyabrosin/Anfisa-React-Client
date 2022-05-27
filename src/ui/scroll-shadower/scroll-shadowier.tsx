@@ -9,7 +9,7 @@ import {
 } from '@ui/scroll-shadower/scroll-shadowier.utils'
 
 interface Prop {
-  classname: Argument
+  classname?: Argument
 }
 
 export const ScrollShadowier: FC<Prop> = ({ classname, children }) => {
@@ -108,10 +108,7 @@ export const ScrollShadowier: FC<Prop> = ({ classname, children }) => {
         position: 'relative',
       }}
     >
-      <div
-        ref={shadowsRef}
-        style={{ position: 'absolute', left: 0, top: 0 }}
-      ></div>
+      <div ref={shadowsRef} style={{ position: 'absolute', left: 0, top: 0 }} />
       <div
         ref={scrollableRef}
         style={{
