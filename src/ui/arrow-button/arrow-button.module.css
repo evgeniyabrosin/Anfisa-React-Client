@@ -1,0 +1,38 @@
+.arrow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: theme("colors.white");
+  background: theme("colors.blue.lighter");
+  border-radius: theme("borderRadius.DEFAULT");
+  cursor: pointer;
+
+  &_md {
+    width: 24px;
+    height: 24px;
+  }
+
+  &_sm {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: theme("colors.blue.hover");
+  }
+
+  &[disabled] {
+    cursor: default;
+    background: theme("colors.blue.secondary");
+  }
+
+  &__icon {
+    &_up {
+      transform: rotate(90deg);
+    }
+
+    &_down {
+      transform: rotate(-90deg);
+    }
+  }
+}

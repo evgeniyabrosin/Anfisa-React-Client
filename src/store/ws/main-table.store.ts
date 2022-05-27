@@ -9,26 +9,17 @@ import {
   TCondition,
   TItemsCount,
 } from '@service-providers/common/common.interface'
-import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import { ITabReport } from '@service-providers/dataset-level/dataset-level.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
+import { TabReportPaginatedAsyncStore } from './tab-report-paginated.async.store'
 import { IWsListQuery, WsListAsyncStore } from './ws-list.async.store'
 
-const INCREASE_INDEX = 50
-
 export class MainTable {
-  readonly wsList = new WsListAsyncStore()
-  tabReport: ITabReport[] = []
+  public wsList = new WsListAsyncStore()
+  public tabReport = new TabReportPaginatedAsyncStore(this.wsList)
 
-  selectedVariantNumber?: number
-  variantsAmount = 0
-  indexTabReport = 0
-  indexFilteredNo = 0
-
-  isLoadingTabReport = false
-  isFetchingMore = false
-  isFilterDisabled = false
-  reportsLoaded = false
+  public isTableRecizing = false
+  public openedVariantPageNo = 0
 
   memorizedConditions:
     | {
@@ -53,18 +44,17 @@ export class MainTable {
         }
       },
     )
-
-    reaction(
-      () => this.wsRecords,
-      () => {
-        this.indexFilteredNo = 0
-        this.fetchFilteredTabReportAsync()
-      },
-    )
   }
 
-  public get wsListData() {
-    return this.wsList
+  public get tabReportPagesData(): ITabReport[] {
+    const pagesData: ITabReport[] = []
+    this.tabReport.pages.forEach(page =>
+      page.data?.forEach(item => {
+        pagesData.push(toJS(item))
+      }),
+    )
+
+    return pagesData
   }
 
   private get wsListQuery(): IWsListQuery {
@@ -95,108 +85,12 @@ export class MainTable {
       : this.wsList.data?.totalCounts
   }
 
-  setSelectedVariantNumber(index: number | undefined) {
-    this.selectedVariantNumber = index
-  }
-
-  setIsLoadingTabReport(value: boolean) {
-    this.isLoadingTabReport = value
-  }
-
-  async fetchTabReportAsync() {
-    if (
-      this.indexTabReport !== 0 &&
-      this.indexTabReport < this.variantsAmount
-    ) {
-      this.isFetchingMore = true
-    }
-
-    if (this.variantsAmount > this.indexTabReport) {
-      const arrayLength =
-        this.variantsAmount < INCREASE_INDEX
-          ? this.variantsAmount
-          : INCREASE_INDEX
-
-      const seq = Array.from(
-        { length: arrayLength },
-        (_, i) => i + this.indexTabReport,
-      )
-
-      await this._fetchTabReportAsync(datasetStore.datasetName, seq)
-
-      runInAction(() => {
-        this.indexTabReport += INCREASE_INDEX
-      })
-    }
-  }
-
   get fixedStatAmount() {
     const variantCounts = this.statAmount?.[0] ?? null
     const dnaVariantsCounts = this.statAmount?.[1] ?? null
     const transcriptsCounts = this.statAmount?.[2] ?? null
 
     return { variantCounts, dnaVariantsCounts, transcriptsCounts }
-  }
-
-  async _fetchTabReportAsync(dsName: string, seq: number[]) {
-    if (seq.length === 0) {
-      this.setIsLoadingTabReport(false)
-      this.isFetchingMore = false
-
-      return
-    }
-
-    const tabReport = await datasetProvider.getTabReport({
-      ds: dsName,
-      schema: 'xbr',
-      seq,
-    })
-
-    runInAction(() => {
-      this.tabReport = [...this.tabReport, ...tabReport]
-      this.reportsLoaded = this.tabReport.length === this.filteredNo.length
-      this.isFetchingMore = false
-    })
-
-    this.setIsLoadingTabReport(false)
-  }
-
-  async fetchFilteredTabReportAsync() {
-    let seq: number[] = []
-
-    if (
-      this.selectedVariantNumber !== undefined &&
-      this.selectedVariantNumber > 0
-    ) {
-      const lastVariant = this.filteredNo[this.filteredNo.length - 1]
-
-      const currentSet = Math.ceil(this.selectedVariantNumber / INCREASE_INDEX)
-      const lastVariantInSet = currentSet * INCREASE_INDEX
-
-      seq =
-        lastVariantInSet >= lastVariant
-          ? this.filteredNo
-          : this.filteredNo.slice(0, lastVariantInSet)
-    } else {
-      seq = this.filteredNo.slice(
-        this.indexFilteredNo,
-        this.indexFilteredNo + INCREASE_INDEX,
-      )
-    }
-
-    if (this.indexFilteredNo === 0) {
-      this.setIsLoadingTabReport(true)
-      this.tabReport = []
-    } else {
-      this.isFetchingMore = true
-    }
-
-    await this._fetchTabReportAsync(datasetStore.datasetName, seq)
-
-    this.indexFilteredNo += INCREASE_INDEX
-    this.isFetchingMore = false
-    // eslint-disable-next-line unicorn/no-useless-undefined
-    this.setSelectedVariantNumber(undefined)
   }
 
   // update zone tags if smth was added in drawer
@@ -215,16 +109,27 @@ export class MainTable {
     })
   }
 
+  setIsTableRecizing(value: boolean) {
+    this.isTableRecizing = value
+  }
+
+  setOpenedVariantPageNo(variantIndex: number) {
+    const totalPagesAmount = this.tabReport.pagesCount
+    const totalVariantsLoaded = this.tabReportPagesData.length
+
+    const variantPerPage = totalVariantsLoaded / totalPagesAmount
+    const difference = variantIndex - variantPerPage
+
+    this.openedVariantPageNo =
+      difference < 1 ? 0 : Math.ceil(difference / variantPerPage)
+  }
+
   memorizeFilterConditions() {
     this.memorizedConditions = {
       conditions: toJS(filterStore.conditions),
       activePreset: filterPresetsStore.activePreset,
       zone: toJS(zoneStore.zone),
     }
-  }
-
-  resetData() {
-    this.variantsAmount = 0
   }
 }
 

@@ -28,9 +28,9 @@
 
   &__label {
     margin: theme("spacing[1.5]") 0;
+    overflow: hidden;
 
     &_nowrap {
-      overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }

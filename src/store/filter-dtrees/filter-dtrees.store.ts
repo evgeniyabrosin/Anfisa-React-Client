@@ -58,7 +58,7 @@ export class FilterDtreesStore {
     return this.availableDtrees.find(dtree => dtree.name === dtreeName)
   }
 
-  public setActiveDtree(dtree: string): void {
+  public setActiveDtree = (dtree: string): void => {
     this.activeDtree = dtree
   }
 
@@ -66,7 +66,7 @@ export class FilterDtreesStore {
     this.setActiveDtree('')
   }
 
-  public createDtree(dtreeName: string): void {
+  public createDtree = (dtreeName: string): void => {
     if (!validatePresetName(dtreeName)) {
       showToast(t('filter.notValidName'), 'error')
 
@@ -91,7 +91,7 @@ export class FilterDtreesStore {
       })
   }
 
-  public modifyDtree(dtreeName: string): void {
+  public modifyDtree = (dtreeName: string): void => {
     dtreeProvider
       .updateDtree({
         ds: datasetStore.datasetName,
@@ -117,7 +117,7 @@ export class FilterDtreesStore {
 
   // TODO[control]: when dtree_set async store is ready, add invalidation after tree is deleted
 
-  deleteDtree(dtreeName: string): void {
+  deleteDtree = (dtreeName: string): void => {
     if (this.activeDtree === dtreeName) {
       this.resetActiveDtree()
     }

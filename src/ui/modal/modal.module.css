@@ -1,4 +1,5 @@
 .modal {
   position: fixed;
   z-index: 1500;
+  inset: 0;
 }

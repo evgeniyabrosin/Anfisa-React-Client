@@ -1,0 +1,19 @@
+.query-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+
+  &__results {
+    flex: 0 0 auto;
+  }
+
+  &__count {
+    flex: 0 0 auto;
+  }
+
+  &__conditions {
+    flex: 1 0 0;
+    overflow: auto;
+  }
+}

@@ -28,10 +28,11 @@ export const CustomizeTableButton = ({
     text={t('ds.customizeTable')}
     variant="secondary-dark"
     size="sm"
-    prepend={<Icon name="Settings" className="text-blue-bright" />}
+    prepend={<Icon name="Settings" size={14} className="text-blue-bright" />}
     append={
       <Icon
         name="Arrow"
+        size={14}
         className={cn(
           'transform transition-transform',
           isOpen ? 'rotate-90' : '-rotate-90',

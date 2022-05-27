@@ -3,13 +3,17 @@ import * as d3 from 'd3'
 import { getBounds, getYScaleAndAxis } from '@core/charts'
 import { formatNumber } from '@core/format-number'
 import { t } from '@i18n'
+import { theme } from '@theme'
 import { SvgChartRenderParams } from '@components/svg-chart'
 import { HistogramTypes } from '@service-providers/common'
 import {
   THistogramChartData,
   THistogramChartDataItem,
 } from '../unit-chart.interface'
-import { barColor, logBarColor, tickColor } from './histogram-chart.styles'
+
+const tickColor = theme('colors.grey.blue')
+const barColor = theme('colors.blue.bright')
+const logBarColor = theme('colors.purple.bright')
 
 const margin = {
   top: 10,

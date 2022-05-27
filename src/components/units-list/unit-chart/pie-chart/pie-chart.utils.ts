@@ -1,3 +1,5 @@
+import styles from './pie-chart.module.css'
+
 import * as d3 from 'd3'
 import { PieArcDatum } from 'd3'
 
@@ -54,10 +56,12 @@ export const drawPieChart = ({
     index,
     data: variant,
   }: PieArcDatum<TVariant>): string => {
-    return `<span style='position: absolute; margin-top: 5px; width: 5px; height: 5px; border-radius: 3px; background: ${getPieChartItemColor(
+    return `<span class='${
+      styles.tooltipPoint
+    }' style='background: ${getPieChartItemColor(
       index,
     )}'></span><span class='ml-3'>${
-      data[index][0]
+      slicedData[index][0]
     }</span>${getVariantCountsText(variant)}`
   }
 
@@ -66,7 +70,7 @@ export const drawPieChart = ({
     .data(pie(slicedData))
     .join('path')
     .attr('d', arcPath)
-    .attr('fill', (_, index) => getPieChartItemColor(index))
+    .attr('fill', datum => getPieChartItemColor(datum.index))
     .on('mouseover', (event, item) => {
       tooltip.show(event.target, renderTooltip(item))
     })

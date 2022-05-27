@@ -1,9 +1,10 @@
+import styles from './histogram-chart.module.css'
+
 import { ReactElement } from 'react'
 
 import { SvgChart } from '@components/svg-chart/svg-chart'
 import { HistogramTypes } from '@service-providers/common'
 import { THistogramChartData } from '../unit-chart.interface'
-import { HistogramChartSvg } from './histogram-chart.styles'
 import { drawHistogram } from './histogram-chart.utils'
 
 interface IHistogramChartProps {
@@ -21,7 +22,7 @@ export const HistogramChart = ({
 }: IHistogramChartProps): ReactElement => {
   return (
     <SvgChart
-      component={HistogramChartSvg}
+      className={styles.histogramChart}
       width={width}
       height={height}
       data={data}

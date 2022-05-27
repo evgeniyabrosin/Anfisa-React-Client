@@ -1,20 +1,24 @@
+import styles from './query-builder-tree.module.css'
+
 import { ReactElement } from 'react'
-import { observer } from 'mobx-react-lite'
+import cn from 'classnames'
 
 import { QueryBuilderResults } from './query-builder-results'
 import { QueryBuilderTreeHeader } from './query-builder-tree-header'
 import { QueryBuilderTreeView } from './query-builder-tree-view'
 
-export const QueryBuilderTree = observer((): ReactElement => {
+interface IQueryBuilderTreeProps {
+  className?: string
+}
+
+export const QueryBuilderTree = ({
+  className,
+}: IQueryBuilderTreeProps): ReactElement => {
   return (
-    <div className="flex flex-col w-2/3">
-      <QueryBuilderResults />
-
-      <div className="flex flex-col h-screen overflow-y-scroll">
-        <QueryBuilderTreeHeader />
-
-        <QueryBuilderTreeView />
-      </div>
+    <div className={cn(styles.tree, className)}>
+      <QueryBuilderResults className={styles.tree__results} />
+      <QueryBuilderTreeHeader className={styles.tree__header} />
+      <QueryBuilderTreeView className={styles.tree__view} />
     </div>
   )
-})
+}

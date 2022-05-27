@@ -1,0 +1,33 @@
+.histogram-chart {
+  :global {
+    .tick {
+      color: theme("colors.grey.blue");
+
+      @apply typography-xxs;
+
+      font-size: 9px;
+
+      &.hide {
+        display: none
+      }
+    }
+
+    .y-axis {
+      .domain {
+        display: none;
+      }
+
+      .tick {
+        line {
+          color: theme("colors.blue.lighter");
+        }
+      }
+    }
+
+    .x-axis {
+      .domain {
+        display: none;
+      }
+    }
+  }
+}

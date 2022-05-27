@@ -1,5 +1,4 @@
 import { Fragment, ReactElement, useEffect } from 'react'
-import { withErrorBoundary } from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { NumberParam, useQueryParams } from 'use-query-params'
 
@@ -16,14 +15,13 @@ import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
 import { VariantDrawer } from '@components/variant/drawer'
 import { VariantsCount } from '@components/variants-count'
-import { ErrorPage } from '@pages/error/error'
 import { ModalSaveDataset } from '@pages/filter/dtree/components/modals/components/modal-save-dataset'
 import { TCondition } from '@service-providers/common/common.interface'
 import { ModalNotes } from './ui//table/modal-notes'
 import { ControlPanel } from './ui/control-panel/control-panel'
 import { TableVariants } from './ui/table/table-variants'
 
-const WSPage = observer((): ReactElement => {
+export const WSPage = observer((): ReactElement => {
   const params = useParams()
   const stringifyedConditions = params.get('conditions')
   const { conditions } = filterStore
@@ -93,8 +91,4 @@ const WSPage = observer((): ReactElement => {
       </div>
     </Fragment>
   )
-})
-
-export default withErrorBoundary(WSPage, {
-  fallback: <ErrorPage />,
 })

@@ -311,6 +311,7 @@ export const en = {
     errors: {
       loadDtree: 'Failed to load dtree "{dtreeName}"',
     },
+    textEditor: 'Text editor',
   },
   error: {
     getBack: 'Back to home',

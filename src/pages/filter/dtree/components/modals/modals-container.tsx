@@ -11,7 +11,7 @@ import { ModalCustomInheritanceMode } from './components/modal-custom-inheritanc
 import { ModalEnum } from './components/modal-enum/modal-enum'
 import { ModalGeneRegion } from './components/modal-gene-region/modal-gene-region'
 import { ModalInheritanceMode } from './components/modal-inheritance-mode/modal-inheritance-mode'
-import { ModalNumeric } from './components/modal-numbers'
+import { ModalNumeric } from './components/modal-numeric'
 import { ModalSaveDataset } from './components/modal-save-dataset'
 import { ModalSelectAttribute } from './components/modal-select-attribute'
 import { ModalTextEditor } from './components/modal-text-editor'
