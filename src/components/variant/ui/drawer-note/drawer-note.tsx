@@ -27,10 +27,11 @@ import { validateNotes } from '@utils/validation/validateNotes'
 interface IDrawerNoteButtonProps {
   refEl: Ref<HTMLButtonElement>
   onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseUp: (event: MouseEvent<HTMLButtonElement>) => void
 }
 
 const DrawerNoteButton = observer(
-  ({ refEl, onClick }: IDrawerNoteButtonProps) => {
+  ({ refEl, onClick, onMouseUp }: IDrawerNoteButtonProps) => {
     return (
       <Button
         refEl={refEl}
@@ -44,6 +45,7 @@ const DrawerNoteButton = observer(
         variant="secondary-dark"
         onClick={onClick}
         dataTestId={VariantDrawerDataCy.addNote}
+        onMouseUp={onMouseUp}
       />
     )
   },
