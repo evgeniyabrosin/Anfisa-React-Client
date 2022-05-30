@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import cn from 'classnames'
+import cn, { Argument } from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import filterStore from '@store/filter'
@@ -10,7 +10,7 @@ import { FunctionPanel } from './panels/function-panel/function-panel'
 import { NumericPanel } from './panels/numeric-panel'
 
 interface ISelectedGroupProps {
-  className?: string
+  className?: Argument
 }
 
 export const SelectedGroup = observer(
@@ -28,9 +28,7 @@ export const SelectedGroup = observer(
       <div
         className={cn(
           'flex flex-col p-4 overflow-y-auto',
-          {
-            'bg-blue-tertiary': isRedactorMode,
-          },
+          isRedactorMode && 'bg-blue-tertiary',
           className,
         )}
       >

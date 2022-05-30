@@ -80,7 +80,7 @@ export const EnumCondition = observer(
 
         const observer = new ResizeObserver(entries => {
           const { height } = entries[0].contentRect
-          const heightOfElement = 32
+          const heightOfElement = 37
 
           const newCount = height / heightOfElement
           if (newCount !== variantsPerPage && newCount > initialCount) {
