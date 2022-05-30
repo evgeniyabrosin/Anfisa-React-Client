@@ -182,6 +182,9 @@ export const en = {
     center: 'Center',
     distance: 'Distance',
   },
+  enumCondition: {
+    showZeroVariants: 'Show zero variants',
+  },
   unitsList: {
     functionalUnits: 'Functional Units',
   },

@@ -37,6 +37,8 @@ export const ModalEnum = observer((): ReactElement => {
         currentStepGroups={groups}
         saveEnum={dtreeAttributeStore.saveEnum}
         addEnum={dtreeAttributeStore.addEnum}
+        isShowZeroes={dtreeAttributeStore.isShowZeroVariants}
+        toggleShowZeroes={dtreeAttributeStore.setIsShowZeroVariants}
       />
     </ModalBase>
   )
