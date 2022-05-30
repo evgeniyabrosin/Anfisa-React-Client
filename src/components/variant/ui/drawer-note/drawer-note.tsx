@@ -123,6 +123,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
       onClose={close}
       applyText={t('variant.saveNote')}
       onApply={handleSaveNoteAsync}
+      shouldCloseOnOutsideClick
     >
       <div className={styles['modal-wrapper']}>
         <div>
