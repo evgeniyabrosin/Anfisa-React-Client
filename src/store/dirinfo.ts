@@ -82,7 +82,7 @@ class DirInfoStore {
   }
 
   get dsDistKeys() {
-    let keys = Object.keys(get(this.dirInfoData, 'ds-dict', {}))
+    let keys = Object.keys(get(this.dirInfoData, 'dsDict', {}))
 
     if (this.filterValue) {
       keys = keys.filter(key =>
@@ -102,22 +102,19 @@ class DirInfoStore {
 
     if (this.sortType === SortDatasets.CreatedAt) {
       keys.sort((a, b) => {
-        if (
-          !this.dirInfoData?.['ds-dict'][a] ||
-          !this.dirInfoData?.['ds-dict'][b]
-        ) {
+        if (!this.dirInfoData?.dsDict[a] || !this.dirInfoData?.dsDict[b]) {
           return 1
         }
 
         if (
-          !this.dirInfoData?.['ds-dict'][a]['create-time'] ||
-          !this.dirInfoData?.['ds-dict'][b]['create-time']
+          !this.dirInfoData?.dsDict[a].createTime ||
+          !this.dirInfoData?.dsDict[b].createTime
         ) {
           return 1
         }
 
-        const aDate = new Date(this.dirInfoData?.['ds-dict'][a]['create-time'])
-        const bDate = new Date(this.dirInfoData?.['ds-dict'][b]['create-time'])
+        const aDate = new Date(this.dirInfoData?.dsDict[a].createTime)
+        const bDate = new Date(this.dirInfoData?.dsDict[b].createTime)
 
         return this.sortDirections.CreatedAt === SortDirection.ASC
           ? +aDate - +bDate
