@@ -1,5 +1,4 @@
-import { ReactElement, useEffect, useRef, useState } from 'react'
-import cn from 'classnames'
+import { ReactElement, useEffect, useState } from 'react'
 import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 
@@ -10,17 +9,16 @@ import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
+import { Dialog } from '@ui/dialog'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import Editor from '@monaco-editor/react'
 import { IDtreeCheck } from '@service-providers/decision-trees/decision-trees.interface'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
 import modalsVisibilityStore from '../modals-visibility-store'
-import { HeaderModal } from './ui/header-modal'
-import { ModalBase } from './ui/modal-base'
 
 const TEXT_EDITOR_THEME = 'textEditorTheme'
 
-type TEditorTheme = 'light' | 'dark'
+export type TEditorTheme = 'light' | 'dark'
 
 const fetchDtreeCheckAsync = async function (dsName: string, code: string) {
   const response = await fetch(getApiUrl('dtree_check'), {
@@ -66,8 +64,6 @@ export const ModalTextEditor = observer((): ReactElement => {
   const [theme, setTheme] = useState<TEditorTheme>(
     LocalStoreManager.read<TEditorTheme>(TEXT_EDITOR_THEME) || 'light',
   )
-
-  const ref = useRef(null)
 
   const [error, setError] = useState(emptyError)
 
@@ -153,17 +149,46 @@ export const ModalTextEditor = observer((): ReactElement => {
     })
   }
 
-  return (
-    <ModalBase refer={ref} minHeight="80%" width="65%" theme={theme}>
-      <HeaderModal
-        groupName={t('dtree.editCurrentDecisionTreeCode')}
-        handleClose={() => modalsVisibilityStore.closeModalTextEditor()}
-        theme={theme}
-        isTextEditor
-        handleChangeTheme={handleChangeTheme}
-        data-testid={DecisionTreeModalDataCy.modalHeader}
+  const Controls = (): ReactElement => (
+    <>
+      <Button
+        text="Drop changes"
+        size="md"
+        onClick={handleDrop}
+        variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
       />
 
+      <Button
+        text="Done"
+        size="md"
+        disabled={!checked || hasError(error)}
+        onClick={handleDone}
+        variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
+      />
+
+      <Button
+        text="Save"
+        size="md"
+        disabled={!checked || hasError(error)}
+        onClick={handleSave}
+        variant={theme === 'light' ? 'primary' : 'primary-dark'}
+      />
+    </>
+  )
+
+  return (
+    <Dialog
+      isOpen={modalsVisibilityStore.isModalTextEditorVisible}
+      onClose={() => modalsVisibilityStore.closeModalTextEditor()}
+      title={t('dtree.editCurrentDecisionTreeCode')}
+      isApplyDisabled={!checked || hasError(error)}
+      width="xl"
+      data-testid={DecisionTreeModalDataCy.modalHeader}
+      handleChangeTheme={handleChangeTheme}
+      theme={theme}
+      style={{ top: '50%' }}
+      actions={<Controls />}
+    >
       <div className="flex items-center mt-1">
         {hasError(error) && (
           <div className="text-red-secondary bg-yellow-bright">
@@ -174,7 +199,7 @@ export const ModalTextEditor = observer((): ReactElement => {
         )}
       </div>
 
-      <div className="flex-1 mt-3">
+      <div className="flex-1 mt-3 overflow-hidden">
         <Editor
           height="65vh"
           defaultLanguage="python"
@@ -189,35 +214,9 @@ export const ModalTextEditor = observer((): ReactElement => {
           onChange={(e: any) => {
             handleDtreeCheckAsync(e)
           }}
-          className="shadow-dark"
+          className="border border-grey-blue"
         />
       </div>
-
-      <div className="flex justify-end w-full">
-        <Button
-          text="Drop changes"
-          size="md"
-          onClick={handleDrop}
-          variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
-        />
-
-        <Button
-          text="Done"
-          size="md"
-          disabled={!checked || hasError(error)}
-          onClick={handleDone}
-          variant={theme === 'light' ? 'secondary' : 'secondary-dark'}
-          className={cn('mx-2')}
-        />
-
-        <Button
-          text="Save"
-          size="md"
-          disabled={!checked || hasError(error)}
-          onClick={handleSave}
-          variant={theme === 'light' ? 'primary' : 'primary-dark'}
-        />
-      </div>
-    </ModalBase>
+    </Dialog>
   )
 })

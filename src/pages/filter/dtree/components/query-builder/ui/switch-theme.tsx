@@ -3,7 +3,7 @@ import { Switch } from '@ui/switch'
 
 interface IProps {
   handleChangeTheme: () => void
-  theme: string
+  theme?: string
 }
 
 export const SwitchTheme = ({ handleChangeTheme, theme }: IProps) => (

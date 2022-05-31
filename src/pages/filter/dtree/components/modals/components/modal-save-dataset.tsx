@@ -15,7 +15,7 @@ import operations from '@store/operations'
 import mainTableStore from '@store/ws/main-table.store'
 import zoneStore from '@store/ws/zone'
 import { Routes } from '@router/routes.enum'
-import { Button } from '@ui/button'
+import { Dialog } from '@ui/dialog'
 // TODO: convert attention icon to project icon format
 import { Attention } from '@ui/icon/icons/attention'
 import { Input } from '@ui/input'
@@ -26,8 +26,6 @@ import {
   noFirstNumberPattern,
   noSymbolPattern,
 } from '@utils/validation/validationPatterns'
-import { HeaderModal } from './ui/header-modal'
-import { ModalBase } from './ui/modal-base'
 
 export const ModalSaveDataset = observer(() => {
   const ref = useRef<any>(null)
@@ -152,12 +150,15 @@ export const ModalSaveDataset = observer(() => {
   }
 
   return (
-    <ModalBase refer={ref} minHeight={200} width="520px">
-      <HeaderModal
-        groupName={t('dsCreation.addDatasetTitle')}
-        handleClose={handleClose}
-      />
-
+    <Dialog
+      isOpen={dtreeStore.isModalSaveDatasetVisible}
+      onClose={handleClose}
+      title={t('dsCreation.addDatasetTitle')}
+      applyText={t('dsCreation.addDataset')}
+      isApplyDisabled={!value.trim() || error.length > 0}
+      onApply={saveDatasetAsync}
+      width="s"
+    >
       <div className="flex flex-col mt-4" ref={ref}>
         <div className="">
           <span className="text-14">{t('dsCreation.label')}</span>
@@ -194,26 +195,7 @@ export const ModalSaveDataset = observer(() => {
             </span>
           )}
         </span>
-
-        <div className="flex ml-auto mt-6">
-          <Button
-            text={t('general.cancel')}
-            variant="secondary"
-            className="border-grey-light hover:bg-grey-light"
-            onClick={handleClose}
-            dataTestId={DecisionTreesMenuDataCy.cancelAddNewDataset}
-          />
-
-          <Button
-            text={t('dsCreation.addDataset')}
-            className="ml-4"
-            disabled={!value.trim() || error.length > 0}
-            variant="secondary"
-            onClick={saveDatasetAsync}
-            dataTestId={DecisionTreesMenuDataCy.addNewDataset}
-          />
-        </div>
       </div>
-    </ModalBase>
+    </Dialog>
   )
 })

@@ -22,6 +22,10 @@
     width: 640px;
   }
 
+  &_xl {
+    width: 740px;
+  }
+
   &_entering,
   &_entered {
     opacity: 1;

@@ -5,8 +5,6 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  color: theme("colors.black");
-  background: theme("colors.white");
   border-radius: theme("borderRadius.xl");
   box-shadow: theme("boxShadow.card");
 
@@ -14,7 +12,9 @@
     @apply typography-m;
 
     font-weight: bold;
+    display: flex;
     flex: 0 0 auto;
+    align: center;
     padding: 0 theme("spacing.6") theme("spacing.5") 0;
   }
 
@@ -48,5 +48,17 @@
     cursor: pointer;
     background: none;
     border: 0;
+  }
+}
+
+.theme {
+  &_dark {
+    background: theme("colors.black");
+    color: theme("colors.white");
+  }
+
+  &_light {
+    background: theme("colors.white");
+    color: theme("colors.black");
   }
 }

@@ -1,16 +1,19 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
+import { TEditorTheme } from '@pages/filter/dtree/components/modals/components/modal-text-editor'
 
 export interface IDialogStandardActionsProps {
   cancelText?: string
   applyText?: string
   onClose?: () => void
   onApply?: () => void
+  handleChangeTheme?: () => void
   isApplyDisabled?: boolean
   isLoading?: boolean
+  theme?: TEditorTheme
 }
 
 export const DialogStandardActions = ({
