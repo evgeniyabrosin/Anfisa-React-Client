@@ -1,7 +1,7 @@
 Feature: Decision Tree Panel, Decision Trees list
   As the Anfisa user I want to see the Decision Trees list on the "Decision Tree Panel" page
   
-Scenario Outline: Decision Tree panel can be opened for a dataset
+Scenario Outline: 01 Decision Tree panel can be opened for a dataset
 	Given Anfisa site was open
 	When user clicks "<Dataset name>" dataset on the left panel
 	And clicks "Open in viewer" button
@@ -13,27 +13,64 @@ Examples:
 	| PGP3140_wgs_pane l_hl   |
 	| xl_PGP3140_wgs_NIST-4_2 |
 		
- Scenario Outline: Create new dataset 
+ Scenario Outline: 02 Create new dataset 
    Given Decision Tree Panel was opened
    When user clicks "Add attribute" on the first step
    And clicks on <filter>
    And clicks on <attribute>
-   And clicks "Create New" near the "Decision Trees"
+   And clicks "Select Decision Tree" drop down menu
+   And Clicks "Create New Decision Tree"
    And writes <Decision tree name> 
-   And clicks "Apply"
+   And clicks "Create"
    Then New Decision tree should be created.
 
 Examples: 
     | <filter> | <attribute>  | <Decision tree name> |
     | Callers  | BGM_AUTO_DOM | anfisa               |
 
- 
+ Scenario Outline: 03 Add new step before to the Decision tree
+	Given Anfisa main page is loaded
+	When User clicks "Select Decision Tree"
+	And the panel of Decision trees is opened
+	And User clicks one of the <Decision tree name>  
+	And clicks "Apply Filter"
+	And Chosen decision tree is loaded
+	And user clicks setting button near the first step (three dots)
+	And Setting panel is opened
+	And user clicks "Add step Before" 
+	Then New step should be added before the first step to the decision tree.
 
-Scenario Outline: Decision Tree can be loaded for the dataset
+Examples:
+	| <Decision tree name> |
+	| ⏚BGM Red Button      |
+	| ⏚BGM Research        |
+
+
+
+	 Scenario Outline: 04 Add new step after to the Decision tree
+	Given Anfisa main page is loaded
+	When User clicks "Select Decision Tree"
+	And the panel of Decision trees is opened
+	And User clicks one of the <Decision tree name>  
+	And clicks "Apply Filter"
+	And Chosen decision tree is loaded
+	And user clicks setting button near the first step (three dots)
+	And Setting panel is opened
+	And user clicks  "Add step after"
+	Then New step should be added after the first step to the decision tree.
+
+Examples:
+	| <Decision tree name> |
+	| ⏚BGM Red Button      |
+	| ⏚BGM Research        |
+
+
+Scenario Outline: 05 Decision Tree can be loaded for the dataset
 	Given "Decision Tree Panel" was open for an XL dataset
-	When User clicks the "Select" dropdown in the "Decision trees" section
+	When User clicks "Select Decision Tree"
 	And the list of Decision trees is displayed
 	And User clicks the <Decision tree name> decision tree
+	And Clicks "Apply Filter"
 	Then chosen decision tree should be loaded
 		
 Examples:
@@ -41,28 +78,14 @@ Examples:
 	| ⏚Hearing Loss, v.5    |
 	| ⏚Damaging_Predictions |
 
-Scenario Outline: Add new step to the Decision tree
-	Given Anfisa main page is loaded
-	When User clicks "select" down the "Decision trees"
-	And the panel of Decision trees is opened
-	And User clicks one of the <Decision tree name>  
-	And chosen decision tree is loaded
-	And user clicks setting button near the first step (three dots)
-	And Setting panel is opened
-	And user clicks "Add step Before" or "Add step after"
-	Then New step should be added before and after to the decision tree.
 
-Examples:
-	| <Decision tree name> |
-	| ⏚BGM Red Button      |
-	| ⏚BGM Research        |
-
-Scenario Outline: Negate step
+Scenario Outline: 06 Negate step
 	
-	Given Anfisa main page is loaded
-	When User clicks "select" down the "Decision trees"
+	Given Anfisa main page was loaded
+	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the <Decision tree name>  
+	And Clicks "Apply Filter"
 	And chosen decision tree is loaded
 	And user clicks setting button near the first step (three dots)
 	And Setting panel is opened
@@ -74,16 +97,16 @@ Examples:
 	| ⏚BGM Red Button      |
 	| ⏚BGM Research        |
 
-Scenario Outline: Modify Decision tree
-	Given Anfisa main page is loaded
-	When User clicks "select" down the "Decision trees"
+Scenario Outline: 07 Modify Decision tree without changes
+	Given Anfisa main page was loaded
+	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
-	And User clicks one of the <Decision tree name>  
+	And User clicks one of the <Decision tree name> 
+	And Clicks "Apply Filter"
 	And chosen decision tree is loaded
-	And clicks "Actions" near decision tree panel
-	And action panel is opened
-	And user clicks "Modify"
-	Then decision three should not be Modified (when there are no changes in the tree)
+	And  Clicks "Select Decision Tree"
+	And User clicks three dots near the custom decision tree
+	Then "Modify" button should be unable to click when there is no any changes done.
 
 
 Examples:
@@ -91,28 +114,52 @@ Examples:
 	| ⏚BGM Red Button      |
 	| ⏚BGM Research        |
 
-Scenario Outline: Delete custom decision Tree
-	Given Anfisa main page is loaded
-	When User clicks "select" down the "Decision trees"
+
+Scenario Outline: 08 Modify Decision tree with changes
+	Given Anfisa main page was loaded
+	When User clicks "Select Decision Tree"
+	And the panel of Decision trees is opened
+	And User clicks one of the <Decision tree name> 
+	And Clicks "Apply Filter"
+	And chosen decision tree is loaded
+    And Makes some changes to the custom decision tree
+	And Clicks "Select Decision Tree"
+	And User clicks three dots near the custom decision tree
+	And user clicks "Modify"
+	Then decision three should be Modified 
+
+
+Examples:
+	| <Decision tree name> |
+	| ⏚BGM Red Button      |
+	| ⏚BGM Research        |
+
+
+
+Scenario: 09 Delete custom decision Tree
+	Given Anfisa main page was loaded
+	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the custom decision trees
+	And Clicks "Apply Filter"
 	And chosen custom decision tree is loaded
-	And user clicks "Actions" near "Decision trees"
-	And Action panel is opened
+	And Clicks "Select Decision Tree"
+	And User clicks three dots near the custom decision tree
 	And user clicks "Delete"
 	Then created decision tree should be deleted.
 
 
-Scenario Outline: Delete default decision Tree
-	Given Anfisa main page is loaded
-	When User clicks "select" down the "Decision trees"
+Scenario Outline: 10 Delete default decision Tree
+	Given Anfisa main page was loaded
+	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
-	And User clicks one of the <default decision tree>
+	And User clicks one of the <default decision tree>.
+	And Clicks "Apply Filter"
 	And chosen  decision tree is loaded
-	And user clicks "Actions" near "Decision trees"
-	And Action panel is opened
+	And Clicks "Select Decision Tree"
+	And User clicks three dots near the custom decision tree
 	And user clicks "Delete"
-	Then created decision tree should be not deleted.
+	Then Default decision tree should be not deleted.
 
 
 Examples:
