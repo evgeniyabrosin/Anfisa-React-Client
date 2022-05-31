@@ -43,7 +43,7 @@ const Styles = styled.div`
 
 export const TableVariants = observer((): ReactElement => {
   if (
-    !mainTableStore.tabReportPagesData.length ||
+    mainTableStore.tabReport.firstPage?.isFetching ||
     mainTableStore.isTableRecizing
   ) {
     return <Loader />

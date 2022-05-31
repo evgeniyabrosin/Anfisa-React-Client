@@ -48,6 +48,7 @@ export class MainTable {
 
   public get tabReportPagesData(): ITabReport[] {
     const pagesData: ITabReport[] = []
+
     this.tabReport.pages.forEach(page =>
       page.data?.forEach(item => {
         pagesData.push(toJS(item))
