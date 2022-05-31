@@ -47,16 +47,18 @@ export const DrawerLayoutControl = ({
 
   return (
     <div className={cn(styles.layoutControl, className)}>
-      {windowsOpenState && onSaveGridPreset && (
-        <Button
-          text={t('variant.savePreset')}
-          className="whitespace-nowrap mr-4"
-          size="xs"
-          textSize="xs"
-          variant="secondary-dark"
-          onClick={openSavePresetDialog}
-        />
-      )}
+      {layoutMode === VariantDrawerLayoutMode.Grid &&
+        windowsOpenState &&
+        onSaveGridPreset && (
+          <Button
+            text={t('variant.savePreset')}
+            className="whitespace-nowrap mr-4"
+            size="xs"
+            textSize="xs"
+            variant="secondary-dark"
+            onClick={openSavePresetDialog}
+          />
+        )}
       <button
         className={styles.layoutControl__button}
         onClick={() => onWindowsToggle(!windowsOpenState)}

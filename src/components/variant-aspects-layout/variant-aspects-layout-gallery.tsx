@@ -28,12 +28,14 @@ export const VariantAspectsLayoutGallery = ({
   return (
     <div className={cn(styles.galleryLayout, className)}>
       <div className={styles.galleryLayout__current}>
-        <AspectWindow
-          className={styles.aspectWindow}
-          isOpen
-          aspect={currentAspect}
-          igvUrl={igvUrl}
-        />
+        {currentAspect && (
+          <AspectWindow
+            className={styles.aspectWindow}
+            isOpen
+            aspect={currentAspect}
+            igvUrl={igvUrl}
+          />
+        )}
       </div>
       <div className={cn(styles.galleryLayout__buttons, styles.buttonsGrid)}>
         {aspects.map((aspect, index) =>
