@@ -11,6 +11,7 @@ import ArrowUpXs from './arrow-up-xs'
 import ArrowsOut from './arrows-out'
 import Circle from './circle'
 import Close from './close'
+import CloseMD from './close-md'
 import ClosePadded from './close-padded'
 import Cloud from './cloud'
 import Collapse from './collapse'
@@ -53,6 +54,7 @@ export const icons = {
   ArrowsOut,
   Circle,
   Close,
+  CloseMD,
   Collapse,
   ClosePadded,
   Cloud,
