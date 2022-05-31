@@ -92,6 +92,7 @@ Scenario: 09 Close Create Dataset dialog during creation
 	Then creation process should not be canceled
 	
 Scenario Outline: 10 Save Dataset with more than 2000 Variants
+	Given "Decision Tree Panel" was open for the "xl_PGP3140_wgs_NIST-4_2" dataset
 	When the user clicks "Add attribute" on the first step
 	And clicks the "Add Attribute" button
 	And clicks <Attribute Name>
