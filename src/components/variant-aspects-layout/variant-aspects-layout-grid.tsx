@@ -68,6 +68,8 @@ export const VariantAspectsLayoutGrid = ({
           <AspectWindow
             key={aspect.name}
             aspect={aspect}
+            isMovable
+            isResizable
             isOpen={openedWindows.includes(aspect.name)}
             igvUrl={igvUrl}
             onToggle={handleWindowToggle}

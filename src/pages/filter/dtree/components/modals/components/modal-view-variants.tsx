@@ -273,7 +273,8 @@ export const ModalViewVariants = observer(() => {
                   className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
                 >
                   <VariantAspectsLayoutGrid
-                    aspects={variantStore.variant}
+                    igvUrl={variantStore.igvUrl}
+                    aspects={variantStore.aspects}
                     layout={aspectsLayout}
                     onChangeLayout={setAspectsLayout}
                     handles={layoutHandlesRef}

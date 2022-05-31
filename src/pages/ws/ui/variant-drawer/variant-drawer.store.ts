@@ -68,7 +68,7 @@ class VariantDrawerStore {
     )
   }
 
-  public setLayoutType(type: VariantDrawerLayoutMode): void {
+  public readonly setLayoutMode = (type: VariantDrawerLayoutMode): void => {
     this.layoutMode = type
   }
 

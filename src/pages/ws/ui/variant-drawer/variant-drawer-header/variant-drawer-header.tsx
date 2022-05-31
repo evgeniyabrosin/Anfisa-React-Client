@@ -33,7 +33,13 @@ export const VariantDrawerHeader = observer(
     const location = useLocation()
     const { tabReport } = mainTableStore
     const { locus, genes } = variantStore
-    const { gridPresets, applyGridPreset, saveGridPreset } = variantDrawerStore
+    const {
+      layoutMode,
+      setLayoutMode,
+      gridPresets,
+      applyGridPreset,
+      saveGridPreset,
+    } = variantDrawerStore
 
     const currentIndex = mainTableStore.filteredNo.indexOf(variantStore.index)
     const isNoPrevVariant = currentIndex <= 0
@@ -108,6 +114,8 @@ export const VariantDrawerHeader = observer(
 
           <div className="flex items-center my-2">
             <DrawerLayoutControl
+              layoutMode={layoutMode}
+              onChangeLayoutMode={setLayoutMode}
               gridPresets={gridPresets}
               onSaveGridPreset={saveGridPreset}
               onChangeGridPreset={applyGridPreset}

@@ -35,9 +35,7 @@
     }
   }
 
-  &:hover {
-    &__arrow {
-      color: theme("colors.blue.bright");
-    }
+  &:hover &__arrow {
+    color: theme("colors.blue.bright");
   }
 }
