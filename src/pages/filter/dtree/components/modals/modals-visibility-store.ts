@@ -20,8 +20,6 @@ class ModalsVisibilityStore {
   isModalEnumVisible = false
   isModalNumericVisible = false
 
-  isModalTextEditorVisible = false
-
   constructor() {
     makeAutoObservable(this)
   }
@@ -167,16 +165,6 @@ class ModalsVisibilityStore {
 
   public closeModalGeneRegion() {
     this.isModalGeneRegionVisible = false
-  }
-
-  // 5. Modal for editing dtree code (new / loaded)
-
-  public openModalTextEditor = () => {
-    this.isModalTextEditorVisible = true
-  }
-
-  public closeModalTextEditor() {
-    this.isModalTextEditorVisible = false
   }
 }
 

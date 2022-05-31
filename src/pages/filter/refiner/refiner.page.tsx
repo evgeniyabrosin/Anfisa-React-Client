@@ -19,7 +19,6 @@ import { VariantsCount } from '@components/variants-count'
 import { GlbPagesNames } from '@glb/glb-names'
 import { ErrorPage } from '@pages/error/error.page'
 import { FilterControl } from '@pages/filter/common/filter-control/filter-control'
-import { ModalSaveDataset } from '@pages/filter/dtree/components/modals/components/modal-save-dataset'
 import { ModalViewVariants } from '@pages/filter/dtree/components/modals/components/modal-view-variants'
 import { FilterRefiner } from '@pages/filter/refiner/components/filter-refiner'
 import { FilterControlOptionsNames } from '../common/filter-control/filter-control.const'
@@ -43,7 +42,6 @@ export const RefinerPage = withErrorBoundary(
     return (
       <div className={styles.refinerPage}>
         {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
-        {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
         <Header className={styles.refinerPage__header}>
           <VariantsCount

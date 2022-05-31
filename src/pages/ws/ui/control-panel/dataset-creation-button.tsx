@@ -1,17 +1,26 @@
 import { ReactElement } from 'react'
-import { observer } from 'mobx-react-lite'
 
+import { useModal } from '@core/hooks/use-modal'
 import { t } from '@i18n'
-import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
+import { ModalCreateDataset } from '@pages/filter/dtree/components/modals/components/modal-create-dataset'
 
-export const DatasetCreationButton = observer(
-  (): ReactElement => (
-    <Button
-      text={t('dsCreation.createDeriveDS')}
-      onClick={dtreeStore.openModalSaveDataset}
-      dataTestId={DecisionTreesMenuDataCy.saveDataset}
-    />
-  ),
-)
+export const DatasetCreationButton = (): ReactElement => {
+  const [creationDialog, openCreationDialog, closeCreationDialog] = useModal()
+  const { isOpen } = creationDialog
+
+  return (
+    <>
+      <Button
+        text={t('dsCreation.createDeriveDS')}
+        onClick={openCreationDialog}
+        dataTestId={DecisionTreesMenuDataCy.saveDataset}
+      />
+
+      {isOpen && (
+        <ModalCreateDataset closeModal={closeCreationDialog} isOpen={isOpen} />
+      )}
+    </>
+  )
+}
