@@ -1,5 +1,5 @@
 FROM evgenyabrosin/node:16 as build-deps
-RUN cd /opt && git clone https://github.com/ForomePlatform/Anfisa-React-Client.git && cd ./Anfisa-React-Client && git checkout develop
+RUN cd /opt && git clone https://github.com/ForomePlatform/Anfisa-React-Client.git && cd ./Anfisa-React-Client && git checkout test-v0.5.56
 WORKDIR /opt/Anfisa-React-Client/
 RUN ["yarn", "install"]
 RUN ["yarn", "build"]
