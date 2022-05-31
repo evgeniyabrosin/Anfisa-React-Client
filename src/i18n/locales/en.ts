@@ -98,6 +98,14 @@ export const en = {
     table: 'Main Table',
     dtree: 'Decision Tree Panel',
     refiner: 'Filter Refiner',
+    modals: {
+      importDataset: 'Import Dataset',
+      exportDataset: 'Export Dataset',
+      applyTextImport: 'Import',
+      applyTextExport: 'Export',
+      withDocumentation: 'with documentation',
+      withSupport: 'with support',
+    },
   },
   ds: {
     preset: 'Preset',
