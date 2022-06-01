@@ -153,6 +153,7 @@ export const EnumCondition = observer(
       setMode(undefined)
     }
 
+    const showFinder = enumVariants.length > initialCount
     return (
       <>
         {isRefiner && (
@@ -167,7 +168,7 @@ export const EnumCondition = observer(
           </>
         )}
 
-        {enumVariants.length > initialCount && (
+        {showFinder && (
           <QueryBuilderSearch
             value={searchValue}
             onChange={handleSearchChange}
@@ -194,6 +195,9 @@ export const EnumCondition = observer(
 
         <div
           className="flex flex-1 mb-4 justify-between flex-row-reverse"
+          style={{
+            maxHeight: `calc(100% - ${showFinder ? 220 : 174}px)`,
+          }}
           ref={ref}
         >
           <div>
