@@ -30,7 +30,7 @@ export const ZoneModalList = observer(
 
     return (
       <div
-        className="pt-4 overflow-y-auto"
+        className="pt-4 overflow-y-auto flex flex-col"
         style={{ height: 'auto', maxHeight: 240 }}
       >
         {items.map((itemName, index) => {

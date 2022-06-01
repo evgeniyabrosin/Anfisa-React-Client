@@ -55,7 +55,7 @@ export const ComplexVariants = observer(
 
         {selectedGroup && (
           <div className="flex flex-1 justify-between my-3">
-            <div className="text-14 leading-4">
+            <div className="text-14 leading-4 flex flex-col">
               {variants.map(([variantName, variantValue]) => (
                 <Checkbox
                   key={variantName}
