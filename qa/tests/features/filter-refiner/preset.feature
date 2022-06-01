@@ -64,7 +64,7 @@
 		| preset_preset               |
 		| preset_preset_preset_preset |
 
-	Scenario Outline: 04 Create a preset without attributes
+	Scenario: 04 Create a preset without attributes
 		Given the "Filter Refiner" for the "xl_PGP3140_wgs_NIST-4_2" was open
 		When user doesn't add attribute
 		And clicks "Select Filter Preset" dropdown
