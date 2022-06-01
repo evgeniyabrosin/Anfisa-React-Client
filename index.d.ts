@@ -45,11 +45,6 @@ export interface FilterList {
   'sol-version': number
 }
 
-export interface ReccntDisplayItem {
-  isOpen: boolean
-  h: number
-}
-
 export type ChangeStepActionType =
   | 'DUPLICATE'
   | 'DELETE'

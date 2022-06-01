@@ -18,7 +18,7 @@ export class MainTable {
   public wsList = new WsListAsyncStore()
   public tabReport = new TabReportPaginatedAsyncStore(this.wsList)
 
-  public isTableRecizing = false
+  public isTableResizing = false
   public openedVariantPageNo = 0
 
   memorizedConditions:
@@ -111,7 +111,7 @@ export class MainTable {
   }
 
   setIsTableRecizing(value: boolean) {
-    this.isTableRecizing = value
+    this.isTableResizing = value
   }
 
   setOpenedVariantPageNo(variantIndex: number) {

@@ -4,24 +4,23 @@ import Tooltip from 'rc-tooltip'
 
 import { t } from '@i18n'
 import {
-  ICommonAspectDescriptor,
+  AspectCellRenderClass,
   ITableAspectDescriptor,
 } from '@service-providers/dataset-level/dataset-level.interface'
-import { DrawerClass } from '../drawer.utils'
 
-interface IDrawerTableProps
-  extends ICommonAspectDescriptor,
-    ITableAspectDescriptor {
-  shouldAddShadow: boolean
-  filterSelection: string
+interface IAspectTableViewProps {
+  className?: string
+  aspect: ITableAspectDescriptor
+  shouldAddShadow?: boolean
 }
 
-export const DrawerTable = ({
-  colhead,
-  rows,
+export const AspectTableView = ({
+  className,
+  aspect,
   shouldAddShadow,
-  filterSelection,
-}: IDrawerTableProps): ReactElement => {
+}: IAspectTableViewProps): ReactElement => {
+  const { colhead, rows } = aspect
+
   const onMouseDownHandler = (event: MouseEvent) => {
     event.stopPropagation()
   }
@@ -29,9 +28,9 @@ export const DrawerTable = ({
   const count = colhead?.[0]?.[1]
 
   return (
-    <div>
+    <div className={className}>
       {rows?.length === 0 ? (
-        <div className="flex justify-center text-center w-full relative bottom-3">
+        <div className="text-center w-full p-2">
           {t('variant.noDataToShow')}
         </div>
       ) : (
@@ -40,7 +39,7 @@ export const DrawerTable = ({
             {rows?.map((row, index) => {
               if (!row) return <tr key={index} />
 
-              const blueBg = ' p-3 bg-blue-darkHover'
+              const blueBg = 'p-3 bg-blue-darkHover'
 
               const shouldShowCount = count && index === 0
 
@@ -49,12 +48,12 @@ export const DrawerTable = ({
                   <Tooltip
                     overlay={row.tooltip}
                     placement="bottomLeft"
-                    trigger={row.tooltip ? ['hover'] : []}
+                    trigger={row.tooltip ? 'hover' : ''}
                   >
                     <td
                       className={cn(
                         'p-3 text-blue-bright whitespace-nowrap sticky left-0',
-                        `${shouldAddShadow ? blueBg : ''}`,
+                        shouldAddShadow && blueBg,
                       )}
                     >
                       <span
@@ -68,26 +67,24 @@ export const DrawerTable = ({
                     </td>
                   </Tooltip>
 
-                  {row.cells
-                    .filter(cell => cell[1]?.includes(filterSelection))
-                    .map((cell, cIndex) => (
-                      <td
-                        key={cIndex}
-                        className={cn(
-                          'py-3 pr-3 font-normal',
-                          cell[0].includes('</a>')
-                            ? 'text-blue-bright'
-                            : !cell[1]?.includes(DrawerClass.noTrHitClass) &&
-                                'text-grey-blue',
-                        )}
-                      >
-                        <span
-                          className="cursor-auto"
-                          onMouseDownCapture={onMouseDownHandler}
-                          dangerouslySetInnerHTML={{ __html: cell[0] }}
-                        />
-                      </td>
-                    ))}
+                  {row.cells.map((cell, cIndex) => (
+                    <td
+                      key={cIndex}
+                      className={cn(
+                        'py-3 pr-3 font-normal',
+                        cell[0]?.includes('</a>')
+                          ? 'text-blue-bright'
+                          : !cell[1]?.includes(AspectCellRenderClass.NoTrHit) &&
+                              'text-grey-blue',
+                      )}
+                    >
+                      <span
+                        className="cursor-auto"
+                        onMouseDownCapture={onMouseDownHandler}
+                        dangerouslySetInnerHTML={{ __html: cell[0] }}
+                      />
+                    </td>
+                  ))}
                 </tr>
               )
             })}
