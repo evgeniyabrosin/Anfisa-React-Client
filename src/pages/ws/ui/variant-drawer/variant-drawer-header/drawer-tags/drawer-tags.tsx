@@ -10,7 +10,7 @@ import { Checkbox } from '@ui/checkbox/checkbox'
 import { Input } from '@ui/input'
 import { VariantDrawerDataCy } from '@components/data-testid/variant-drawer.cy'
 import { PopperButton } from '@components/popper-button'
-import drawerTagsStore from '../drawer-tags.store'
+import drawerTagsStore from './drawer-tags.store'
 import { TagsContainer } from './tags-container'
 
 interface IDrawerTagButtonProps {
@@ -22,6 +22,7 @@ const DrawerTagButton = ({ refEl, onClick }: IDrawerTagButtonProps) => {
   return (
     <Button
       refEl={refEl}
+      className="whitespace-nowrap"
       text="+ Add"
       size="xs"
       textSize="xs"
@@ -141,8 +142,8 @@ const DrawerTagModal = observer(({ close }: any) => {
 
 export const DrawerTags = observer(() => {
   return (
-    <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
-      <span className="text-14 text-white px-3">{t('variant.tags')}</span>
+    <div className="flex items-center">
+      <span className="text-14 text-white pr-3">{t('variant.tags')}</span>
 
       <div className="mr-3">
         <PopperButton

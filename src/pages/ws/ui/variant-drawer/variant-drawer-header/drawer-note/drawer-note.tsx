@@ -36,9 +36,10 @@ const DrawerNoteButton = observer(
       <Button
         refEl={refEl}
         text={variantStore.noteText ? undefined : '+ Add'}
-        className={classNames({
-          'bg-blue-bright': !!variantStore.noteText,
-        })}
+        className={classNames(
+          'whitespace-nowrap',
+          !!variantStore.noteText && 'bg-blue-bright',
+        )}
         size="xs"
         textSize="xs"
         icon={variantStore.noteText ? <Icon name="File" /> : undefined}
@@ -150,8 +151,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
 export const DrawerNote = observer(() => {
   return (
-    <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
-      <span className="text-14 text-white px-3">{t('variant.notes')}</span>
+    <div className="flex items-center">
+      <span className="text-14 text-white pr-3">{t('variant.notes')}</span>
 
       <PopperButton
         ButtonElement={DrawerNoteButton}

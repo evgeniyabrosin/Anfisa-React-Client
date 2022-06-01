@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, reaction, toJS } from 'mobx'
 
 import { t } from '@i18n'
@@ -49,7 +50,7 @@ export class FilterDtreesStore {
   }
 
   public get availableDtrees(): ISolutionEntryDescription[] {
-    return toJS(this.dtrees.data) ?? []
+    return orderBy(toJS(this.dtrees.data), ['name']) ?? []
   }
 
   public get activeDtreeInfo(): ISolutionEntryDescription | undefined {

@@ -10,7 +10,7 @@ export const datasetNameByKey =
 
     if (!dirInfoData) return null
 
-    const item: IDirInfoDatasetDescriptor = dirInfoData['ds-dict'][key]
+    const item: IDirInfoDatasetDescriptor = dirInfoData.dsDict[key]
 
     if (!level && (!item || item.ancestors.length > 0)) return null
 

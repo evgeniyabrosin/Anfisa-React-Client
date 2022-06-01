@@ -21,6 +21,7 @@ export const en = {
     presetCreated: 'Preset has been created',
     showLess: 'Show less',
     delete: 'Delete',
+    save: 'Save',
     total: 'Total',
     closeWindow: 'Close window',
     creaitionIsInProcess: 'Dataset creation has not been finished yet',
@@ -172,6 +173,8 @@ export const en = {
     saveNote: 'Save note',
     noDataToShow: 'No data to show',
     textAboutSomething: 'Text about something',
+    savePreset: 'Save Preset',
+    savePredefinedPresetError: '{presetName} is a predefined preset',
   },
   numericCondition: {
     limitedRange: 'Limited range',
@@ -181,6 +184,9 @@ export const en = {
     includeZero: 'Include 0 ({ count } variants)',
     center: 'Center',
     distance: 'Distance',
+  },
+  enumCondition: {
+    showZeroVariants: 'Show zero variants',
   },
   unitsList: {
     functionalUnits: 'Functional Units',

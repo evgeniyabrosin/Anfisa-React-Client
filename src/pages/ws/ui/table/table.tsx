@@ -166,7 +166,7 @@ export const Table = observer(
     useEffect(() => {
       readScrollPosition()
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mainTableStore.isTableRecizing])
+    }, [mainTableStore.isTableResizing])
 
     const renderNoResults = useCallback(() => {
       const isFiltersSelected =

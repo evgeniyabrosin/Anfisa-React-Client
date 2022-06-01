@@ -197,10 +197,10 @@ export type TDocumentDescriptor = [
 export interface IBaseDatasetDescriptor {
   name: string
   kind: 'ws' | 'xl'
-  'create-time': TDateISOString
-  'upd-time': null | TDateISOString
+  createTime: TDateISOString
+  updTime: null | TDateISOString
   note: null | string
-  'date-note': null | TDateISOString
+  dateNote: null | TDateISOString
   total: number
   doc: TDocumentDescriptor
   ancestors: [

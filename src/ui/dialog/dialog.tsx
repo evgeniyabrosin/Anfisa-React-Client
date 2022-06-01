@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { DialogCard, IDialogCardProps } from '@ui/dialog/dialog-card'
 import { IModalBaseProps, Modal } from '../modal'
 
-export type TDialogWidth = 's' | 'm' | 'l'
+export type TDialogWidth = 'xs' | 's' | 'm' | 'l'
 
 export interface IDialogProps
   extends Omit<IModalBaseProps, 'transitionDuration'>,
