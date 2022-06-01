@@ -65,12 +65,12 @@ export const Button = ({
       padding = 'py-1 ' + (text ? 'px-4' : 'px-1')
       break
     case 'md':
-      padding = 'px-2 ' + (isPrimary || isPrimaryDark ? 'py-2' : 'py-1.5')
+      padding = 'px-2 ' + (isPrimary || isPrimaryDark ? 'py-[9px]' : 'py-[7px]')
       break
   }
 
   const cnButton = cn(
-    `flex items-center justify-between ${isSetRounded ? '' : 'rounded-full'}`,
+    `flex items-center justify-center ${isSetRounded ? '' : 'rounded-full'}`,
     padding,
     {
       //default primary

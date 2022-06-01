@@ -185,6 +185,9 @@ export const en = {
     center: 'Center',
     distance: 'Distance',
   },
+  enumCondition: {
+    showZeroVariants: 'Show zero variants',
+  },
   unitsList: {
     functionalUnits: 'Functional Units',
   },
@@ -314,6 +317,7 @@ export const en = {
     errors: {
       loadDtree: 'Failed to load dtree "{dtreeName}"',
     },
+    textEditor: 'Text editor',
   },
   error: {
     getBack: 'Back to home',

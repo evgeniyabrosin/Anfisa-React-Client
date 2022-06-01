@@ -48,7 +48,7 @@ interface ITableVariantsProps {
 export const TableVariants = observer(
   ({ className }: ITableVariantsProps): ReactElement => {
     const isLoaderShown =
-      !mainTableStore.tabReportPagesData.length ||
+      mainTableStore.tabReport.firstPage?.isFetching ||
       mainTableStore.isTableResizing
     const { columnDataListForRender } = columnsStore
 

@@ -6,6 +6,8 @@ import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
+import { Divider } from '@ui/divider'
+import { Switch } from '@ui/switch'
 import { Pagintaion } from '@components/pagintaion'
 import { DtreeAttributeButtons } from '@pages/filter/common/attributes/dtree-attribute-buttons'
 import { RefinerAttributeButtons } from '@pages/filter/common/attributes/refiner-attribute-buttons'
@@ -27,6 +29,7 @@ interface IEnumCondition {
   currentStepGroups?: string[] | undefined
   isRefiner?: boolean
   isFilterTouched?: boolean
+  isShowZeroes?: boolean
   saveEnum: (
     selectedVariants: string[],
     mode: ModeTypes | undefined,
@@ -37,9 +40,10 @@ interface IEnumCondition {
     mode: ModeTypes | undefined,
     selectedVariants: string[],
   ) => void
+  toggleShowZeroes: (value: boolean) => void
 }
 
-const initialCount = 12
+const initialCount = 8
 
 export const EnumCondition = observer(
   ({
@@ -52,8 +56,10 @@ export const EnumCondition = observer(
     isFilterTouched,
     initialCondition,
     currentStepGroups,
+    isShowZeroes,
     saveEnum,
     addEnum,
+    toggleShowZeroes,
   }: IEnumCondition): ReactElement => {
     const ref = useRef<HTMLDivElement>(null)
 
@@ -172,7 +178,7 @@ export const EnumCondition = observer(
             value={searchValue}
             onChange={handleSearchChange}
             isSubgroupItemSearch
-            className="mb-4"
+            className={cn(isRefiner ? 'mb-4' : 'mt-4')}
           />
         )}
 
@@ -182,9 +188,22 @@ export const EnumCondition = observer(
             !isRefiner && 'mt-6',
           )}
         >
-          <div className="text-14 text-grey-blue">
+          <div className="text-14 text-grey-blue grow">
             {selectedVariants.length || 0} {t('dtree.selected')}
           </div>
+
+          <div className="flex items-center">
+            <Switch
+              className="mr-1"
+              isChecked={!!isShowZeroes}
+              onChange={toggleShowZeroes}
+            />
+            <span className="text-grey-blue">
+              {t('enumCondition.showZeroVariants')}
+            </span>
+          </div>
+
+          <Divider orientation="vertical" color="light" />
 
           <EnumMods
             selectAllVariants={selectAllVariants}

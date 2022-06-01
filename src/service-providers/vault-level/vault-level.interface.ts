@@ -17,8 +17,8 @@ export interface IDocumentation {
 
 export interface IDirInfo {
   version: string
-  'ds-list': string[]
-  'ds-dict': Record<string, IDirInfoDatasetDescriptor>
+  dsList: string[]
+  dsDict: Record<string, IDirInfoDatasetDescriptor>
   documentation: IDocumentation[]
 }
 

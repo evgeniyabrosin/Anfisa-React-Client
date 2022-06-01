@@ -1,6 +1,7 @@
 import { toJS } from 'mobx'
 
-import dtreeStore, { IStepData } from '@store/dtree'
+import dtreeStore from '@store/dtree'
+import { IStepData } from '@store/dtree/dtree.store'
 import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import { TCondition } from '@service-providers/common'
 import { PointCount } from '@service-providers/decision-trees'

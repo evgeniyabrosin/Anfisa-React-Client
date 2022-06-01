@@ -171,7 +171,7 @@ class ModalsVisibilityStore {
 
   // 5. Modal for editing dtree code (new / loaded)
 
-  public openModalTextEditor() {
+  public openModalTextEditor = () => {
     this.isModalTextEditorVisible = true
   }
 

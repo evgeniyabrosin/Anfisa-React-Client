@@ -82,7 +82,7 @@ export const DatasetsListItem: FC<IDatasetsListItemProps> = observer(
             isActiveParent={isActiveParent}
           />
 
-          <DatasetTime time={item['create-time']} isActive={isActive} />
+          <DatasetTime time={item.createTime} isActive={isActive} />
         </div>
 
         {isOpenFolder &&

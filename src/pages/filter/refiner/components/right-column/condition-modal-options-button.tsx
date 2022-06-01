@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 
-interface IProps {
+interface IConditionModalOptionsButtonProps {
   refEl: HTMLElement
   onClick?: () => void
 }
@@ -11,7 +11,7 @@ interface IProps {
 export const ConditionModalOptionsButton = ({
   refEl,
   ...rest
-}: IProps): ReactElement => {
+}: IConditionModalOptionsButtonProps): ReactElement => {
   return (
     <Button
       refEl={refEl}
