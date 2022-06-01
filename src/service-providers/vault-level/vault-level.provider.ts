@@ -19,7 +19,7 @@ class VaultProvider extends ServiceProviderBase {
 
   public getDirInfo() {
     return this.get<IDirInfo>('dirinfo').then(res =>
-      adaptDataToCamelizedType<IDirInfo>(res.data),
+      adaptDataToCamelizedType<IDirInfo>(res.data, ['ds-dict']),
     )
   }
 
