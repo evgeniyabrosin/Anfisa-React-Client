@@ -44,7 +44,7 @@ class ModalsControlStore {
     }
 
     return toJS(
-      dtreeStore.stepData[activeStepStore.activeStepIndex].groups[
+      dtreeStore.stepData[activeStepStore.activeStepIndex]?.groups[
         modalsVisibilityStore.groupIndexToChange
       ],
     )
@@ -54,8 +54,8 @@ class ModalsControlStore {
     return this.currentGroupToChange?.length ?? 0
   }
 
-  public get currentStepGroups(): string[] {
-    return toJS(dtreeStore.stepData[activeStepStore.activeStepIndex].groups)
+  public get currentStepGroups(): string[] | undefined {
+    return toJS(dtreeStore.stepData[activeStepStore.activeStepIndex]?.groups)
   }
 
   public get statList(): TPropertyStatus[] {

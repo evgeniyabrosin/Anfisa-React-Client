@@ -1,22 +1,23 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { Dialog } from '@ui/dialog'
 import { NumericCondition } from '@components/numeric-condition'
 import { EditModalButtons } from '@pages/filter/dtree/components/modals/components/ui/edit-modal-buttons'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeNumericAttribute } from '@utils/changeAttribute/changeNumericAttribute'
 import { dtreeAttributeStore } from '../../../attributes/dtree-attributes.store'
-import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
-import { HeaderModal } from '../ui/header-modal'
-import { ModalBase } from '../ui/modal-base'
 import { SelectModalButtons } from '../ui/select-modal-buttons'
 
 export const ModalNumeric = observer((): ReactElement | null => {
-  const groups = modalsControlStore.currentStepGroups
-
-  const { attributeStatus, initialCondition, initialNumericValue } =
-    dtreeAttributeStore
+  const {
+    attributeStatus,
+    initialCondition,
+    initialNumericValue,
+    attributeName,
+    currentStepGroups,
+  } = dtreeAttributeStore
 
   if (!attributeStatus || attributeStatus.kind !== 'numeric') {
     return null
@@ -28,11 +29,13 @@ export const ModalNumeric = observer((): ReactElement | null => {
   }
 
   return (
-    <ModalBase minHeight={200}>
-      <HeaderModal
-        groupName={attributeStatus.title ?? attributeStatus.name}
-        handleClose={modalsVisibilityStore.closeModalNumeric}
-      />
+    <Dialog
+      isOpen={modalsVisibilityStore.isModalNumericVisible}
+      onClose={modalsVisibilityStore.closeModalNumeric}
+      title={attributeName}
+      width="m"
+      actions={''}
+    >
       <NumericCondition
         className="pt-3"
         attrData={attributeStatus}
@@ -55,7 +58,7 @@ export const ModalNumeric = observer((): ReactElement | null => {
             />
           ) : (
             <SelectModalButtons
-              currentGroup={groups}
+              currentGroup={currentStepGroups}
               handleClose={modalsVisibilityStore.closeModalNumeric}
               handleModals={handleModals}
               handleModalJoin={modalsVisibilityStore.openModalJoin}
@@ -68,6 +71,6 @@ export const ModalNumeric = observer((): ReactElement | null => {
           )
         }}
       />
-    </ModalBase>
+    </Dialog>
   )
 })

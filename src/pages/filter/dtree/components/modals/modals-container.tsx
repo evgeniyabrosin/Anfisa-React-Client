@@ -24,7 +24,7 @@ export const ModalsContainer = observer(
 
       {modalsVisibilityStore.isModalEnumVisible && <ModalEnum />}
 
-      {modalsVisibilityStore.isModalNumericVisible && <ModalNumeric />}
+      <ModalNumeric />
 
       {modalsVisibilityStore.isModalInheritanceModeVisible && (
         <ModalInheritanceMode />

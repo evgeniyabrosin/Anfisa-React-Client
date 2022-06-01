@@ -25,7 +25,6 @@ import {
 import { StrictnessSelect } from './strictness-select'
 
 export const NumericConditionRange = ({
-  className,
   attrData,
   initialValue,
   controls,
@@ -85,7 +84,7 @@ export const NumericConditionRange = ({
 
   return (
     <>
-      <div className={className}>
+      <div className="overflow-hidden">
         <div className="relative flex items-center">
           <div className="relative grow flex items-center py-6">
             <div className="absolute top-1 left-0 w-full text-xs text-grey-blue text-left">

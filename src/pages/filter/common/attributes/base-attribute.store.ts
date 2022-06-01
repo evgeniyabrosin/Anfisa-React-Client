@@ -1,7 +1,11 @@
+import { toJS } from 'mobx'
+
 import { ActionType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
+import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
+import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility-store'
 import {
   AttributeKinds,
@@ -62,6 +66,10 @@ export class BaseAttributeStore {
     }
 
     return undefined
+  }
+
+  public get currentStepGroups(): string[] | undefined {
+    return toJS(dtreeStore.stepData[activeStepStore.activeStepIndex]?.groups)
   }
 
   public get enumVariants(): TVariant[] {

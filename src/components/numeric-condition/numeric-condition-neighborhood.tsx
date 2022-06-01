@@ -20,7 +20,6 @@ import { INumericConditionProps } from './numeric-condition.interface'
 import { NumericConditionDistanceChart } from './numeric-condition-distance-chart'
 
 export const NumericConditionNeighborhood = ({
-  className,
   initialValue,
   attrData,
   controls,
@@ -44,7 +43,7 @@ export const NumericConditionNeighborhood = ({
 
   return (
     <>
-      <div className={className}>
+      <div className="overflow-hidden">
         <div className="relative flex items-center mb-3">
           <div className="relative grow flex items-center py-6">
             <div className="absolute top-1 left-0 text-xs text-grey-blue text-left">
