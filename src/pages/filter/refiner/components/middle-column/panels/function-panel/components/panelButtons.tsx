@@ -29,12 +29,7 @@ export const PanelButtons = observer(
     const isRedactorMode = filterStore.isRedactorMode
 
     return (
-      <div
-        className={cn(
-          'flex items-center justify-end mt-4 pb-[40px]',
-          classname,
-        )}
-      >
+      <div className={cn('flex items-center justify-end mt-4 pb-6', classname)}>
         <Button
           text={t('general.clear')}
           variant={'secondary'}
