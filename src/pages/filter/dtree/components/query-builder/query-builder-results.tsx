@@ -6,6 +6,7 @@ import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { DecisionTreesResultsDataCy } from '@components/data-testid/decision-tree-results.cy'
+import modalsVisibilityStore from '../modals/modals-visibility-store'
 import { QueryBuilderResultsNumbers } from './query-builder-results-numbers'
 
 interface IQueryBuilderResultsProps {
@@ -40,7 +41,7 @@ export const QueryBuilderResults = observer(
         ? nextStepIndex - 1
         : nextStepIndex
 
-      dtreeStore.openModalViewVariants(fixedNextStepIndex)
+      modalsVisibilityStore.openModalViewVariants(fixedNextStepIndex)
     }
 
     return (

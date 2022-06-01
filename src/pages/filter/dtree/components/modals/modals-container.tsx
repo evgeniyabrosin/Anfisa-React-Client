@@ -1,7 +1,6 @@
 import { Fragment, ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import dtreeStore from '@store/dtree'
 import { ExportModal } from '@pages/main/components/modals/export-modal'
 import { ImportModal } from '@pages/main/components/modals/import-modal'
 import handleDatasetStore from '../../../../main/components/handle-dataset/handle-dataset.store'
@@ -43,7 +42,9 @@ export const ModalsContainer = observer(
 
       {modalsVisibilityStore.isModalGeneRegionVisible && <ModalGeneRegion />}
 
-      {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
+      {modalsVisibilityStore.isModalViewVariantsVisible && (
+        <ModalViewVariants />
+      )}
 
       {handleDatasetStore.isExportModalShown && <ExportModal />}
       {handleDatasetStore.isImportModalShown && <ImportModal />}

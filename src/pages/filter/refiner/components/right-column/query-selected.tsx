@@ -9,11 +9,11 @@ import { formatNumber } from '@core/format-number'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
-import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
+import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility-store'
 import { FilterRefinerStatCounts } from '@pages/filter/refiner/components/right-column/filter-refiner-stat-counts'
 import { showToast } from '@utils/notifications/showToast'
 import { QueryResults } from './query-results'
@@ -77,7 +77,7 @@ export const QuerySelected = observer(
           {datasetStore.isXL ? (
             <Button
               className="ml-auto"
-              onClick={() => dtreeStore.openModalViewVariants()}
+              onClick={() => modalsVisibilityStore.openModalViewVariants()}
               text={t('dtree.viewVariants')}
             />
           ) : (

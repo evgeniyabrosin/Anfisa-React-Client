@@ -105,9 +105,6 @@ export class DtreeStore {
   stepData: IStepData[] = []
   stepAmout = 0
 
-  isModalViewVariantsVisible = false
-  tableModalIndexNumber: null | number = null
-
   requestData: IRequestData[] = []
 
   actionHistory = new ActionsHistoryStore<IDtreeSetArguments>(data =>
@@ -508,19 +505,6 @@ export class DtreeStore {
 
   resetLocalDtreeCode() {
     this.localDtreeCode = ''
-  }
-
-  // 3.4 Common UI/UX modals
-
-  openModalViewVariants(index?: number) {
-    this.isModalViewVariantsVisible = true
-
-    if (index) this.tableModalIndexNumber = index
-  }
-
-  closeModalViewVariants = () => {
-    this.isModalViewVariantsVisible = false
-    this.tableModalIndexNumber = null
   }
 
   // 4. Other UI control functions

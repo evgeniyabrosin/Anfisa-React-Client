@@ -20,6 +20,9 @@ class ModalsVisibilityStore {
   isModalEnumVisible = false
   isModalNumericVisible = false
 
+  isModalViewVariantsVisible = false
+  tableModalIndexNumber: null | number = null
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -165,6 +168,19 @@ class ModalsVisibilityStore {
 
   public closeModalGeneRegion() {
     this.isModalGeneRegionVisible = false
+  }
+
+  // 5 Common UI/UX modals
+
+  openModalViewVariants(index?: number) {
+    this.isModalViewVariantsVisible = true
+
+    if (index) this.tableModalIndexNumber = index
+  }
+
+  closeModalViewVariants = () => {
+    this.isModalViewVariantsVisible = false
+    this.tableModalIndexNumber = null
   }
 }
 

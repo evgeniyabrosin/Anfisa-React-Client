@@ -8,7 +8,6 @@ import { observer } from 'mobx-react-lite'
 import { useDatasetName } from '@core/hooks/use-dataset-name'
 import datasetStore from '@store/dataset/dataset'
 import dirInfoStore from '@store/dirinfo'
-import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import mainTableStore from '@store/ws/main-table.store'
 import { ExportPanelModal } from '@components/export-panel-modal'
@@ -22,6 +21,7 @@ import { FilterControl } from '@pages/filter/common/filter-control/filter-contro
 import { ModalViewVariants } from '@pages/filter/dtree/components/modals/components/modal-view-variants'
 import { FilterRefiner } from '@pages/filter/refiner/components/filter-refiner'
 import { FilterControlOptionsNames } from '../common/filter-control/filter-control.const'
+import modalsVisibilityStore from '../dtree/components/modals/modals-visibility-store'
 import { SolutionControlRefiner } from './components/solution-control-refiner'
 
 export const RefinerPage = withErrorBoundary(
@@ -41,7 +41,9 @@ export const RefinerPage = withErrorBoundary(
 
     return (
       <div className={styles.refinerPage}>
-        {dtreeStore.isModalViewVariantsVisible && <ModalViewVariants />}
+        {modalsVisibilityStore.isModalViewVariantsVisible && (
+          <ModalViewVariants />
+        )}
 
         <Header className={styles.refinerPage__header}>
           <VariantsCount

@@ -20,6 +20,7 @@ import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
 import { fetchJobStatusAsync } from '@utils/TableModal/fetchJobStatusAsync'
 import { ReturnedVariantsDataCy } from '../../../../../../components/data-testid/returned-variants'
+import modalsVisibilityStore from '../modals-visibility-store'
 
 const ModalView = styled.div`
   display: flex;
@@ -70,7 +71,7 @@ export const ModalViewVariants = observer(() => {
     resizeHandler()
   }, [resizeHandler])
 
-  const stepIndex = dtreeStore.tableModalIndexNumber ?? 0
+  const stepIndex = modalsVisibilityStore.tableModalIndexNumber ?? 0
 
   useEffect(() => {
     dtreeStore.setShouldLoadTableModal(true)
@@ -145,7 +146,7 @@ export const ModalViewVariants = observer(() => {
 
   const closeModal = (event: any) => {
     if (event.currentTarget === event.target) {
-      dtreeStore.closeModalViewVariants()
+      modalsVisibilityStore.closeModalViewVariants()
     }
   }
 
@@ -304,7 +305,7 @@ export const ModalViewVariants = observer(() => {
 
                     <Icon
                       name="Close"
-                      onClick={dtreeStore.closeModalViewVariants}
+                      onClick={modalsVisibilityStore.closeModalViewVariants}
                       size={16}
                       className="cursor-pointer text-white"
                     />
