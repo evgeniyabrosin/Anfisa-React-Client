@@ -27,23 +27,26 @@ import { validateNotes } from '@utils/validation/validateNotes'
 interface IDrawerNoteButtonProps {
   refEl: Ref<HTMLButtonElement>
   onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onMouseUp: (event: MouseEvent<HTMLButtonElement>) => void
 }
 
 const DrawerNoteButton = observer(
-  ({ refEl, onClick }: IDrawerNoteButtonProps) => {
+  ({ refEl, onClick, onMouseUp }: IDrawerNoteButtonProps) => {
     return (
       <Button
         refEl={refEl}
         text={variantStore.noteText ? undefined : '+ Add'}
-        className={classNames({
-          'bg-blue-bright': !!variantStore.noteText,
-        })}
+        className={classNames(
+          'whitespace-nowrap',
+          !!variantStore.noteText && 'bg-blue-bright',
+        )}
         size="xs"
         textSize="xs"
         icon={variantStore.noteText ? <Icon name="File" /> : undefined}
         variant="secondary-dark"
         onClick={onClick}
         dataTestId={VariantDrawerDataCy.addNote}
+        onMouseUp={onMouseUp}
       />
     )
   },
@@ -123,6 +126,7 @@ const DrawerNoteModal = observer(({ close }: any) => {
       onClose={close}
       applyText={t('variant.saveNote')}
       onApply={handleSaveNoteAsync}
+      shouldCloseOnOutsideClick
     >
       <div className={styles['modal-wrapper']}>
         <div>
@@ -147,8 +151,8 @@ const DrawerNoteModal = observer(({ close }: any) => {
 
 export const DrawerNote = observer(() => {
   return (
-    <div className="flex border-l-2 border-blue-lighter ml-3 items-center">
-      <span className="text-14 text-white px-3">{t('variant.notes')}</span>
+    <div className="flex items-center">
+      <span className="text-14 text-white pr-3">{t('variant.notes')}</span>
 
       <PopperButton
         ButtonElement={DrawerNoteButton}

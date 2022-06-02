@@ -35,6 +35,8 @@ export const EnumDialog = observer((): ReactElement => {
         currentStepGroups={currentStepGroups}
         saveEnum={dtreeAttributeStore.saveEnum}
         addEnum={dtreeAttributeStore.addEnum}
+        isShowZeroes={dtreeAttributeStore.isShowZeroVariants}
+        toggleShowZeroes={dtreeAttributeStore.setIsShowZeroVariants}
       />
     </Dialog>
   )

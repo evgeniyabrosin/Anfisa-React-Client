@@ -1,0 +1,16 @@
+.drawer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+
+  &__header {
+    flex: 0 0 auto
+  }
+
+  &__layout {
+    flex: 1 0 0;
+    overflow: auto;
+    background: theme("colors.blue.lighter");
+  }
+}

@@ -1,12 +1,9 @@
-import React, { Key, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { Key, useEffect, useRef, useState } from 'react'
 import cn from 'classnames'
-import { get } from 'lodash'
-import debounce from 'lodash/debounce'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { IGridLayout } from '@declarations'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
@@ -14,7 +11,11 @@ import filterStore from '@store/filter'
 import variantStore from '@store/ws/variant'
 import { Icon } from '@ui/icon'
 import { Radio } from '@ui/radio'
-import { VariantBody } from '@components/variant/ui/body'
+import {
+  TVariantAspectsGridHandles,
+  TVariantAspectsGridLayout,
+  VariantAspectsLayoutGrid,
+} from '@components/variant-aspects-layout'
 import { GlbPagesNames } from '@glb/glb-names'
 import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
@@ -42,34 +43,18 @@ const ModalContent = styled.div`
 type VariantsSize = 'SMALL' | 'MIDDLE' | 'LARGE'
 
 export const ModalViewVariants = observer(() => {
-  const [layout, setLayout] = useState(variantStore.modalDrawerVariantsLayout)
   const [variantList, setVariantList] = useState<any>([])
   const [variantIndex, setVariantIndex] = useState(0)
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
-  const [tableWidth, setTableWidth] = useState(window.innerWidth - 420)
+
+  const [aspectsLayout, setAspectsLayout] = useState<TVariantAspectsGridLayout>(
+    [],
+  )
+  const layoutHandlesRef = useRef<TVariantAspectsGridHandles>(null)
+
   const ref = useRef(null)
   const variantContainerRef = useRef<HTMLDivElement>(null)
-
-  const resizeHandler = debounce(() => {
-    const width = variantContainerRef.current?.getBoundingClientRect().width
-    if (width) {
-      setTableWidth(width)
-    }
-  }, 50)
-
-  useEffect(() => {
-    variantStore.fetchVarinatInfoForModalAsync(datasetStore.datasetName, 0)
-
-    addEventListener('resize', resizeHandler)
-
-    return () => window.removeEventListener('resize', resizeHandler)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useLayoutEffect(() => {
-    resizeHandler()
-  }, [resizeHandler])
 
   const stepIndex = modalsVisibilityStore.tableModalIndexNumber ?? 0
 
@@ -159,42 +144,14 @@ export const ModalViewVariants = observer(() => {
     setVariantList(newVariantList)
   }
 
+  const isCollapsed = !aspectsLayout.some(item => item.h > 1)
   const onCollapse = () => {
     if (isCollapsed) {
-      const parents = document.querySelectorAll('#parent')
-
-      setLayout((prev: any[]) => {
-        const newLayout = prev.map((item: any, index: number) => ({
-          ...item,
-          h:
-            get(parents[index].children[1].firstChild, 'clientHeight', 0) *
-              0.0208 +
-            1.3,
-          y: index,
-        }))
-
-        window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
-
-        return newLayout
-      })
-      return
+      layoutHandlesRef.current?.maximizeAll()
+    } else {
+      layoutHandlesRef.current?.minimizeAll()
     }
-
-    setLayout((prev: any[]) => {
-      const newLayout = prev.map((item: any) => ({
-        ...item,
-        h: 1,
-      }))
-
-      window.sessionStorage.setItem('gridLayout', JSON.stringify(newLayout))
-
-      return newLayout
-    })
   }
-
-  const isCollapsed = JSON.parse(
-    window.sessionStorage.getItem('gridLayout') || '[]',
-  ).every((el: IGridLayout) => el.h === 1)
 
   return (
     <ModalView className="bg-grey-blue rounded-lg" onClick={closeModal}>
@@ -316,10 +273,11 @@ export const ModalViewVariants = observer(() => {
                   ref={variantContainerRef}
                   className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
                 >
-                  <VariantBody
-                    drawerWidth={tableWidth}
-                    setLayout={setLayout}
-                    layout={layout}
+                  <VariantAspectsLayoutGrid
+                    aspects={variantStore.variant}
+                    layout={aspectsLayout}
+                    onChangeLayout={setAspectsLayout}
+                    handles={layoutHandlesRef}
                   />
                 </div>
               </div>

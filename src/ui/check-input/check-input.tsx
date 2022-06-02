@@ -4,7 +4,7 @@ import { ChangeEvent, FC } from 'react'
 import cn, { Argument } from 'classnames'
 
 export interface ICheckInputProps {
-  id: string | number
+  id?: string | number
   type: 'checkbox' | 'radio'
   checked: boolean
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void
@@ -24,10 +24,10 @@ export const CheckInput: FC<ICheckInputProps> = ({
   datatestId,
 }) => {
   return type === 'radio' ? (
-    <label htmlFor={id.toString()} className={cn(className)}>
+    <label htmlFor={id?.toString()} className={cn(className)}>
       <input
         type="radio"
-        id={id.toString()}
+        id={id?.toString()}
         checked={checked}
         disabled={disabled}
         onChange={onChange}
@@ -36,25 +36,20 @@ export const CheckInput: FC<ICheckInputProps> = ({
       {children}
     </label>
   ) : (
-    <div className={cn('flex items-center', className)}>
+    <label className={cn('inline-flex items-center', className)}>
       <input
-        id={`${'checkbox'} + ${id}`}
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className={(cn('hidden'), styles.checkbox)}
+        className={styles.checkbox}
         disabled={disabled}
       />
 
-      <label className={styles.checkmark} htmlFor={`${'checkbox'} + ${id}`} />
+      <span className={styles.checkmark} />
 
-      <label
-        className={styles.label}
-        htmlFor={`${'checkbox'} + ${id}`}
-        data-testid={datatestId}
-      >
+      <span className={styles.label} data-testid={datatestId}>
         {children}
-      </label>
-    </div>
+      </span>
+    </label>
   )
 }

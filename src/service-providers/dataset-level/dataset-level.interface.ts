@@ -88,16 +88,16 @@ export enum CommonAspectDescriptorKinds {
   tech = 'tech',
 }
 
-export enum CommonAspectDescriptorTypes {
-  table = 'table',
-  pre = 'pre',
+export enum AspectDescriptorTypes {
+  Table = 'table',
+  Pre = 'pre',
 }
 
-export interface ICommonAspectDescriptor {
+export interface ICommonAspectDescriptor<T extends AspectDescriptorTypes> {
+  type: T
   name: string
   title: string
   kind: CommonAspectDescriptorKinds
-  type: CommonAspectDescriptorTypes
 }
 
 export interface IAttributeDescriptors {
@@ -108,7 +108,8 @@ export interface IAttributeDescriptors {
   render: string | undefined
 }
 
-export interface ITableAspectDescriptor extends ICommonAspectDescriptor {
+export interface ITableAspectDescriptor
+  extends ICommonAspectDescriptor<AspectDescriptorTypes.Table> {
   columns: number
   colhead: null | [title: string, count: number][]
   colgroup?: null | string[]
@@ -117,12 +118,20 @@ export interface ITableAspectDescriptor extends ICommonAspectDescriptor {
   parmodes: Record<string, unknown>[] | undefined
 }
 
-export interface IPreAspectDescriptor extends ICommonAspectDescriptor {
+export interface IPreAspectDescriptor
+  extends ICommonAspectDescriptor<AspectDescriptorTypes.Pre> {
   content: string
 }
 
-export type TRecCntResponse = ICommonAspectDescriptor &
-  (ITableAspectDescriptor | IPreAspectDescriptor)
+export type TAspectDescriptor = ITableAspectDescriptor | IPreAspectDescriptor
+
+export type TRecCntResponse = TAspectDescriptor
+
+export enum AspectCellRenderClass {
+  Norm = 'norm',
+  Hit = 'hit',
+  NoTrHit = 'no-tr-hit',
+}
 
 // recdata
 

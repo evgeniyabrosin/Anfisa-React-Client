@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, reaction, toJS } from 'mobx'
 
 import { t } from '@i18n'
@@ -37,7 +38,7 @@ export class FilterPresetsStore {
   }
 
   public get availablePresets(): ISolutionEntryDescription[] {
-    return toJS(this.presets.data) ?? []
+    return orderBy(toJS(this.presets.data), ['name']) ?? []
   }
 
   public get activePreset(): string {

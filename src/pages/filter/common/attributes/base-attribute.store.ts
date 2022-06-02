@@ -1,4 +1,4 @@
-import { toJS } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 
 import { ActionType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
@@ -26,10 +26,13 @@ interface IBaseAttributeStoreParams {
 export class BaseAttributeStore {
   private readonly getAttributeStatus: () => TPropertyStatus | undefined
   private readonly getInitialCondition: () => TCondition | undefined
+  public isShowZeroVariants = false
 
   constructor(params: IBaseAttributeStoreParams) {
     this.getAttributeStatus = params.getAttributeStatus
     this.getInitialCondition = params.getInitialCondition
+
+    makeAutoObservable(this)
   }
 
   public get attributeStatus(): TPropertyStatus | undefined {
@@ -85,7 +88,7 @@ export class BaseAttributeStore {
 
     for (const variant of statusVariants) {
       const conditionIndex = conditionVariants?.indexOf(variant[0]) ?? -1
-      if (variant[1] > 0 || conditionIndex > -1) {
+      if (variant[1] > 0 || this.isShowZeroVariants || conditionIndex > -1) {
         variants.push(variant)
       }
       if (conditionIndex > -1) {
@@ -164,5 +167,9 @@ export class BaseAttributeStore {
     ])
 
     filterStore.setTouched(false)
+  }
+
+  public setIsShowZeroVariants = (value: boolean) => {
+    this.isShowZeroVariants = value
   }
 }

@@ -5,6 +5,8 @@ import { ActionType } from '@declarations'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import { t } from '@i18n'
 import filterStore from '@store/filter'
+import { Divider } from '@ui/divider'
+import { Switch } from '@ui/switch'
 import { Pagintaion } from '@components/pagintaion'
 import { DtreeAttributeButtons } from '@pages/filter/common/attributes/dtree-attribute-buttons'
 import { RefinerAttributeButtons } from '@pages/filter/common/attributes/refiner-attribute-buttons'
@@ -26,6 +28,7 @@ interface IEnumCondition {
   currentStepGroups?: string[] | undefined
   isRefiner?: boolean
   isFilterTouched?: boolean
+  isShowZeroes?: boolean
   saveEnum: (
     selectedVariants: string[],
     mode: ModeTypes | undefined,
@@ -36,6 +39,7 @@ interface IEnumCondition {
     mode: ModeTypes | undefined,
     selectedVariants: string[],
   ) => void
+  toggleShowZeroes: (value: boolean) => void
 }
 
 const initialCount = 8
@@ -51,8 +55,10 @@ export const EnumCondition = observer(
     isFilterTouched,
     initialCondition,
     currentStepGroups,
+    isShowZeroes,
     saveEnum,
     addEnum,
+    toggleShowZeroes,
   }: IEnumCondition): ReactElement => {
     const ref = useRef<HTMLDivElement>(null)
 
@@ -79,7 +85,7 @@ export const EnumCondition = observer(
 
         const observer = new ResizeObserver(entries => {
           const { height } = entries[0].contentRect
-          const heightOfElement = 32
+          const heightOfElement = 37
 
           const newCount = height / heightOfElement
           if (newCount !== variantsPerPage && newCount > initialCount) {
@@ -152,6 +158,7 @@ export const EnumCondition = observer(
       setMode(undefined)
     }
 
+    const showFinder = enumVariants.length > initialCount
     return (
       <>
         {isRefiner && (
@@ -166,7 +173,7 @@ export const EnumCondition = observer(
           </>
         )}
 
-        {enumVariants.length > initialCount && (
+        {showFinder && (
           <QueryBuilderSearch
             value={searchValue}
             onChange={handleSearchChange}
@@ -180,6 +187,19 @@ export const EnumCondition = observer(
             {selectedVariants.length || 0} {t('dtree.selected')}
           </div>
 
+          <div className="flex items-center">
+            <Switch
+              className="mr-1"
+              isChecked={!!isShowZeroes}
+              onChange={toggleShowZeroes}
+            />
+            <span className="text-grey-blue">
+              {t('enumCondition.showZeroVariants')}
+            </span>
+          </div>
+
+          <Divider orientation="vertical" color="light" />
+
           <EnumMods
             selectAllVariants={selectAllVariants}
             clearAllVariants={clearAllVariants}
@@ -188,6 +208,9 @@ export const EnumCondition = observer(
 
         <div
           className="flex flex-1 mb-4 justify-between flex-row-reverse"
+          style={{
+            maxHeight: `calc(100% - ${showFinder ? 220 : 174}px)`,
+          }}
           ref={ref}
         >
           <div>

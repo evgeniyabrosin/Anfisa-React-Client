@@ -1,4 +1,7 @@
-import { ServiceProviderBase } from '@service-providers/common'
+import {
+  adaptDataToCamelizedType,
+  ServiceProviderBase,
+} from '@service-providers/common'
 import { TRecCntResponse } from './../dataset-level/dataset-level.interface'
 import {
   IAdmDropDsArguments,
@@ -15,7 +18,9 @@ class VaultProvider extends ServiceProviderBase {
   }
 
   public getDirInfo() {
-    return this.get<IDirInfo>('dirinfo').then(res => res.data)
+    return this.get<IDirInfo>('dirinfo').then(res =>
+      adaptDataToCamelizedType<IDirInfo>(res.data),
+    )
   }
 
   public getSingleCnt(params: ISingleCntArgument) {
