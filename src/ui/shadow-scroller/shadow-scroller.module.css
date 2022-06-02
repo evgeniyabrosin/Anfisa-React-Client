@@ -1,0 +1,44 @@
+.container {
+  position: relative;
+  cursor: grab;
+
+  &__shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &__value {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+
+    &_vertical {
+      width: 100%;
+    }
+
+    &_horizontal {
+      height: 100%;
+    }
+  }
+
+  &__scroller {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+
+    &_vertical {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    &_horizontal {
+      overflow-y: hidden;
+      overflow-x: auto;
+    }
+  }
+}
