@@ -62,11 +62,7 @@ class ActiveStep {
     const isReturnedVariants =
       this.activeStepOption === ActiveStepOptions.ReturnedVariants
 
-    const indexForApi = isReturnedVariants
-      ? String(+indexFromIndexes + 1)
-      : indexFromIndexes
-
-    return indexForApi
+    return isReturnedVariants ? String(+indexFromIndexes + 1) : indexFromIndexes
   }
 
   makeStepActive(index: number, option: ActiveStepOptions) {
