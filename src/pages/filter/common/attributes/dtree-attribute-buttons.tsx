@@ -39,7 +39,6 @@ export const DtreeAttributeButtons = observer(
           <SelectModalButtons
             handleClose={modalsVisibilityStore.closeModalEnum}
             handleModals={handleOpenModalAttribute}
-            handleModalJoin={modalsVisibilityStore.openModalJoin}
             disabled={selectedVariants.length === 0}
             currentGroup={currentStepGroups}
             handleAddAttribute={handleAddAttribute}

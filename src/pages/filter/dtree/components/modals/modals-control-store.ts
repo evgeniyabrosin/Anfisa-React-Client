@@ -101,10 +101,6 @@ class ModalsControlStore {
 
     return approxValues
   }
-
-  public openModalJoin(): void {
-    modalsVisibilityStore.openModalJoin()
-  }
 }
 
 export default new ModalsControlStore()

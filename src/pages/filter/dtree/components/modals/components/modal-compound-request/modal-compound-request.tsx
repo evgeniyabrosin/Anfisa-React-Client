@@ -109,7 +109,6 @@ export const ModalCompoundRequest = observer((): ReactElement => {
         <SelectModalButtons
           handleClose={() => modalCompoundRequestStore.closeModal()}
           handleModals={() => modalCompoundRequestStore.openModalAttribute()}
-          handleModalJoin={() => modalsControlStore.openModalJoin()}
           disabled={!variants}
           currentGroup={currentGroupToModify ?? currentStepGroups}
           handleAddAttribute={handleAddAttribute}

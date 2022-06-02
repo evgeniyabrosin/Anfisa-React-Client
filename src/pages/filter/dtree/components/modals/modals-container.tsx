@@ -22,7 +22,7 @@ export const ModalsContainer = observer(
         <ModalSelectAttribute />
       )}
 
-      {modalsVisibilityStore.isModalEnumVisible && <ModalEnum />}
+      <ModalEnum />
 
       <ModalNumeric />
 

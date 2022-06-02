@@ -1,16 +1,12 @@
 import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import { Dialog } from '@ui/dialog'
 import { EnumCondition } from '@components/enum-condition/enum-condition'
 import { dtreeAttributeStore } from '../../../attributes/dtree-attributes.store'
-import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
-import { HeaderModal } from '../ui/header-modal'
-import { ModalBase } from '../ui/modal-base'
 
 export const ModalEnum = observer((): ReactElement => {
-  const groups = modalsControlStore.currentStepGroups
-
   const {
     attributeName,
     enumVariants,
@@ -18,15 +14,17 @@ export const ModalEnum = observer((): ReactElement => {
     initialEnumVariants,
     initialEnumMode,
     initialCondition,
+    currentStepGroups,
   } = dtreeAttributeStore
 
   return (
-    <ModalBase minHeight={200}>
-      <HeaderModal
-        groupName={attributeName}
-        handleClose={modalsVisibilityStore.closeModalEnum}
-      />
-
+    <Dialog
+      isOpen={modalsVisibilityStore.isModalEnumVisible}
+      onClose={modalsVisibilityStore.closeModalEnum}
+      title={attributeName}
+      width="m"
+      actions={''}
+    >
       <EnumCondition
         attributeName={attributeName}
         enumVariants={enumVariants}
@@ -34,10 +32,10 @@ export const ModalEnum = observer((): ReactElement => {
         initialEnumVariants={initialEnumVariants}
         initialEnumMode={initialEnumMode}
         initialCondition={initialCondition}
-        currentStepGroups={groups}
+        currentStepGroups={currentStepGroups}
         saveEnum={dtreeAttributeStore.saveEnum}
         addEnum={dtreeAttributeStore.addEnum}
       />
-    </ModalBase>
+    </Dialog>
   )
 })

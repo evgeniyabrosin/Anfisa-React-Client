@@ -61,7 +61,6 @@ export const ModalNumeric = observer((): ReactElement | null => {
               currentGroup={currentStepGroups}
               handleClose={modalsVisibilityStore.closeModalNumeric}
               handleModals={handleModals}
-              handleModalJoin={modalsVisibilityStore.openModalJoin}
               disabled={disabled}
               handleAddAttribute={action => {
                 addAttributeToStep(action, 'numeric', value)

@@ -89,7 +89,6 @@ export const ModalCustomInheritanceMode = observer((): ReactElement => {
           handleModals={() =>
             modalCustomInheritanceModeStore.openModalAttribute()
           }
-          handleModalJoin={() => modalsControlStore.openModalJoin()}
           handleAddAttribute={handleAddAttribute}
           disabled={!variants}
           currentGroup={currentGroupToModify ?? currentStepGroups}

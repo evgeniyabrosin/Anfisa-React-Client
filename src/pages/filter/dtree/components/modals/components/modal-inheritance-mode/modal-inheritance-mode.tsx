@@ -120,7 +120,6 @@ export const ModalInheritanceMode = observer((): ReactElement => {
         <SelectModalButtons
           handleClose={() => modalInheritanceModeStore.closeModal()}
           handleModals={() => modalInheritanceModeStore.openModalAttribute()}
-          handleModalJoin={() => modalsControlStore.openModalJoin()}
           handleAddAttribute={addAttribute}
           disabled={dtreeStore.selectedFilters.length === 0}
           currentGroup={currentGroupToModify ?? currentStepGroups}

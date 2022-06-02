@@ -9,7 +9,6 @@ class ModalsVisibilityStore {
   modalSource = ''
 
   isModalAttributeVisible = false
-  isModalJoinVisible = false
 
   isModalInheritanceModeVisible = false
   isModalCustomInheritanceModeVisible = false
@@ -35,14 +34,6 @@ class ModalsVisibilityStore {
 
   public closeModalAttribute() {
     this.isModalAttributeVisible = false
-  }
-
-  public openModalJoin = () => {
-    this.isModalJoinVisible = true
-  }
-
-  public closeModalJoin() {
-    this.isModalJoinVisible = false
   }
 
   // 2. Modal for numeric attr
