@@ -2,10 +2,9 @@ import { observer } from 'mobx-react-lite'
 
 import { PopperButton } from '@components/popper-button'
 import { HandleDatasetButton } from '@pages/main/components/handle-dataset/handle-dataset-button'
-import { ExportModal } from '../modals/export-modal'
-import { HandleDatasetModal } from '../modals/handle-dataset-modal'
-import { ImportModal } from '../modals/import-modal'
-import handleDatasetStore from './handle-dataset.store'
+import { ExportDialog } from '../dialogs/export-dialog'
+import { HandleDatasetModal } from '../dialogs/handle-dataset-modal'
+import { ImportDialog } from '../dialogs/import-dialog'
 
 export const HandleDataset = observer(() => {
   return (
@@ -14,8 +13,9 @@ export const HandleDataset = observer(() => {
         ModalElement={HandleDatasetModal}
         ButtonElement={HandleDatasetButton}
       />
-      {handleDatasetStore.isImportModalShown && <ImportModal />}
-      {handleDatasetStore.isExportModalShown && <ExportModal />}
+      <ImportDialog />
+
+      <ExportDialog />
     </div>
   )
 })

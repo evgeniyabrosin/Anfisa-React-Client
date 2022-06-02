@@ -2,7 +2,7 @@ import { useModal } from '@core/hooks/use-modal'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
-import { ModalTextEditor } from '../modals/components/modal-text-editor'
+import { TextEditorDialog } from '../modals/components/text-editor-dialog'
 
 export const TextEditorButton = () => {
   const [textEditorDialog, openTextEditorDialog, closeTextEditorDialog] =
@@ -19,9 +19,7 @@ export const TextEditorButton = () => {
         dataTestId={DecisionTreesMenuDataCy.textEditor}
       />
 
-      {isOpen && (
-        <ModalTextEditor closeModal={closeTextEditorDialog} isOpen={isOpen} />
-      )}
+      <TextEditorDialog onClose={closeTextEditorDialog} isOpen={isOpen} />
     </>
   )
 }

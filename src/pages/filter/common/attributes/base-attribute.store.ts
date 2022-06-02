@@ -132,7 +132,7 @@ export class BaseAttributeStore {
       filterStore.setTouched(false)
     } else {
       changeEnumAttribute(mode, selectedVariants)
-      modalsVisibilityStore.closeModalEnum()
+      modalsVisibilityStore.closeEnumDialog()
     }
   }
 
@@ -149,7 +149,7 @@ export class BaseAttributeStore {
       mode,
     )
 
-    modalsVisibilityStore.closeModalEnum()
+    modalsVisibilityStore.closeEnumDialog()
   }
 
   public saveNumeric = (value: TNumericConditionBounds) => {

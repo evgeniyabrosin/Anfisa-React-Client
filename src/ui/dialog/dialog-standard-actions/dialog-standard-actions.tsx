@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Loader } from '@components/loader'
-import { TEditorTheme } from '@pages/filter/dtree/components/modals/components/modal-text-editor'
+import { TEditorTheme } from '@pages/filter/dtree/components/modals/components/text-editor-dialog'
 
 export interface IDialogStandardActionsProps {
   cancelText?: string

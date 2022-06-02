@@ -8,7 +8,7 @@ import filterStore from '@store/filter'
 import { getPageRoute } from '@router/router.const'
 import { Divider } from '@ui/divider'
 import { UndoRedoButtons } from '@components/undo-redo-buttons'
-import { DatasetCreationButton } from '@pages/ws/ui/control-panel/dataset-creation-button'
+import { CreateDatasetButton } from '@pages/ws/ui/control-panel/create-dataset-button'
 import { FilterControlOptions } from './filter-control.const'
 import { IFilterControlProps } from './filter-control.interface'
 import { SolutionDropDown } from './solution-dropdown'
@@ -53,7 +53,7 @@ export const FilterControl = observer(
 
             <Divider orientation="vertical" className="h-[75%]" />
 
-            <DatasetCreationButton />
+            <CreateDatasetButton />
 
             {TextEditorButton && (
               <>

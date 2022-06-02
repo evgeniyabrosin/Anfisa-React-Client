@@ -6,8 +6,8 @@ import { Divider } from '@ui/divider'
 import { MainTableDataCy } from '@components/data-testid/main-table.cy'
 import { EditFilter } from './control-panel-edit-filter'
 import { ControlPanelPreset } from './control-panel-preset'
+import { CreateDatasetButton } from './create-dataset-button'
 import { CustomizeTable } from './customize-table-modal/customize-table'
-import { DatasetCreationButton } from './dataset-creation-button'
 import { GenesListModal } from './zone-modals/genes-list-modal'
 import { GenesModal } from './zone-modals/genes-modal'
 import { SamplesModal } from './zone-modals/samples-modal'
@@ -66,7 +66,7 @@ export const ControlPanel = (): ReactElement => (
 
         <Divider orientation="vertical" className="h-[75%]" />
 
-        <DatasetCreationButton />
+        <CreateDatasetButton />
       </div>
 
       {/* TODO: need a functional <UndoRedoButtons /> */}

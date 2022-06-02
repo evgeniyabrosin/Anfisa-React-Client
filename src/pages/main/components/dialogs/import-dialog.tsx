@@ -7,7 +7,7 @@ import { Input } from '@ui/input'
 import { Upload } from '@components/upload/upload'
 import handleDatasetStore from '../handle-dataset/handle-dataset.store'
 
-export const ImportModal = observer(() => {
+export const ImportDialog = observer(() => {
   useEffect(() => () => handleDatasetStore.resetImportData(), [])
 
   return (

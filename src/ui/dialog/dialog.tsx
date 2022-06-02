@@ -1,21 +1,11 @@
 import styles from './dialog.module.css'
 
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import cn from 'classnames'
 
-import { DialogCard, IDialogCardProps } from '@ui/dialog/dialog-card'
-import { IModalBaseProps, Modal } from '../modal'
-
-export type TDialogWidth = 'xs' | 's' | 'm' | 'l' | 'xl'
-
-export interface IDialogProps
-  extends Omit<IModalBaseProps, 'transitionDuration'>,
-    IDialogCardProps {
-  width?: TDialogWidth
-  modalClassName?: string
-  transitionDuration?: number
-  className?: string
-}
+import { DialogCard } from '@ui/dialog/dialog-card'
+import { Modal } from '../modal'
+import { IDialogProps } from './dialog.interface'
 
 export const Dialog = ({
   className,

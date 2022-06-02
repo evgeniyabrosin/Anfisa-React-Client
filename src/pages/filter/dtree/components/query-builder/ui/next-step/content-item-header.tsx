@@ -53,10 +53,10 @@ export const ContentItemHeader = observer(
       )
 
       stepType === FilterKindEnum.Enum &&
-        modalsVisibilityStore.openModalEnum(groupName, groupNo)
+        modalsVisibilityStore.openEnumDialog(groupName, groupNo)
 
       stepType === FilterKindEnum.Numeric &&
-        modalsVisibilityStore.openModalNumeric(groupName, groupNo)
+        modalsVisibilityStore.openNumericDialog(groupName, groupNo)
 
       if (stepType === FilterKindEnum.Func) {
         groupName === FuncStepTypesEnum.InheritanceMode &&

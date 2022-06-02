@@ -29,8 +29,8 @@ export const StepJoinPopover = observer(
     const handleJoin = (typeOfJoin: ActionType) => {
       handleAddAttribute(typeOfJoin)
       closePopover()
-      modalsVisibilityStore.closeModalEnum()
-      modalsVisibilityStore.closeModalNumeric()
+      modalsVisibilityStore.closeEnumDialog()
+      modalsVisibilityStore.closeNumericDialog()
       modalsVisibilityStore.closeModalInheritanceMode()
       modalsVisibilityStore.closeModalCustomInheritanceMode()
     }

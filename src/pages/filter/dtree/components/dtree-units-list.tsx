@@ -63,9 +63,9 @@ export const DtreeUnitsList = observer(
       modalsVisibilityStore.closeModalAttribute()
 
       if (kind === AttributeKinds.ENUM) {
-        modalsVisibilityStore.openModalEnum(name, undefined, source)
+        modalsVisibilityStore.openEnumDialog(name, undefined, source)
       } else if (kind === AttributeKinds.NUMERIC) {
-        modalsVisibilityStore.openModalNumeric(name, undefined, source)
+        modalsVisibilityStore.openNumericDialog(name, undefined, source)
       } else if (kind === AttributeKinds.FUNC) {
         switch (name as FuncStepTypesEnum) {
           case FuncStepTypesEnum.InheritanceMode:

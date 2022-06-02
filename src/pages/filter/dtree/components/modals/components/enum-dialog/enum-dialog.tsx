@@ -6,7 +6,7 @@ import { EnumCondition } from '@components/enum-condition/enum-condition'
 import { dtreeAttributeStore } from '../../../attributes/dtree-attributes.store'
 import modalsVisibilityStore from '../../modals-visibility-store'
 
-export const ModalEnum = observer((): ReactElement => {
+export const EnumDialog = observer((): ReactElement => {
   const {
     attributeName,
     enumVariants,
@@ -19,8 +19,8 @@ export const ModalEnum = observer((): ReactElement => {
 
   return (
     <Dialog
-      isOpen={modalsVisibilityStore.isModalEnumVisible}
-      onClose={modalsVisibilityStore.closeModalEnum}
+      isOpen={modalsVisibilityStore.isEnumDialogVisible}
+      onClose={modalsVisibilityStore.closeEnumDialog}
       title={attributeName}
       width="m"
       actions={''}

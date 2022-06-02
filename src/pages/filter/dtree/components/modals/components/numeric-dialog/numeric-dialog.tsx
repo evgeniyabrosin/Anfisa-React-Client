@@ -10,7 +10,7 @@ import { dtreeAttributeStore } from '../../../attributes/dtree-attributes.store'
 import modalsVisibilityStore from '../../modals-visibility-store'
 import { SelectModalButtons } from '../ui/select-modal-buttons'
 
-export const ModalNumeric = observer((): ReactElement | null => {
+export const NumericDialog = observer((): ReactElement | null => {
   const {
     attributeStatus,
     initialCondition,
@@ -24,14 +24,14 @@ export const ModalNumeric = observer((): ReactElement | null => {
   }
 
   const handleModals = () => {
-    modalsVisibilityStore.closeModalNumeric()
+    modalsVisibilityStore.closeNumericDialog()
     modalsVisibilityStore.openModalAttribute()
   }
 
   return (
     <Dialog
-      isOpen={modalsVisibilityStore.isModalNumericVisible}
-      onClose={modalsVisibilityStore.closeModalNumeric}
+      isOpen={modalsVisibilityStore.isNumericDialogVisible}
+      onClose={modalsVisibilityStore.closeNumericDialog}
       title={attributeName}
       width="m"
       actions={''}
@@ -49,22 +49,22 @@ export const ModalNumeric = observer((): ReactElement | null => {
 
           return initialCondition ? (
             <EditModalButtons
-              handleClose={modalsVisibilityStore.closeModalNumeric}
+              handleClose={modalsVisibilityStore.closeNumericDialog}
               handleSaveChanges={() => {
                 changeNumericAttribute(value)
-                modalsVisibilityStore.closeModalNumeric()
+                modalsVisibilityStore.closeNumericDialog()
               }}
               disabled={disabled}
             />
           ) : (
             <SelectModalButtons
               currentGroup={currentStepGroups}
-              handleClose={modalsVisibilityStore.closeModalNumeric}
+              handleClose={modalsVisibilityStore.closeNumericDialog}
               handleModals={handleModals}
               disabled={disabled}
               handleAddAttribute={action => {
                 addAttributeToStep(action, 'numeric', value)
-                modalsVisibilityStore.closeModalNumeric()
+                modalsVisibilityStore.closeNumericDialog()
               }}
             />
           )

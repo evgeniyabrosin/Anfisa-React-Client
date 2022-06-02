@@ -16,6 +16,7 @@ import mainTableStore from '@store/ws/main-table.store'
 import zoneStore from '@store/ws/zone'
 import { Routes } from '@router/routes.enum'
 import { Dialog } from '@ui/dialog'
+import { IBaseDialogProps } from '@ui/dialog/dialog.interface'
 // TODO: convert attention icon to project icon format
 import { Attention } from '@ui/icon/icons/attention'
 import { Input } from '@ui/input'
@@ -26,10 +27,9 @@ import {
   noFirstNumberPattern,
   noSymbolPattern,
 } from '@utils/validation/validationPatterns'
-import { ICommonModalProps } from '../modals.interface'
 
-export const ModalCreateDataset = observer(
-  ({ closeModal, isOpen }: ICommonModalProps) => {
+export const CreateDatasetDialog = observer(
+  ({ onClose, isOpen }: IBaseDialogProps) => {
     const history = useHistory()
     const [value, setValue] = useState<string>('')
     const [error, setError] = useState<string>('')
@@ -92,14 +92,14 @@ export const ModalCreateDataset = observer(
 
     const handleClose = () => {
       if (!value || !isDone) {
-        closeModal()
+        onClose()
         operations.resetSavingStatus()
 
         return
       }
 
       if (operations.isCreationOver) {
-        closeModal()
+        onClose()
 
         if (pathName === PatnNameEnum.Ws) {
           datasetStore.setDatasetName(startDatasetName)
@@ -115,7 +115,7 @@ export const ModalCreateDataset = observer(
     const handleOpenDataset = () => {
       isDone && history.push(`${Routes.WS}?ds=${value}`)
 
-      closeModal()
+      onClose()
 
       if (pathName === PatnNameEnum.Ws) {
         datasetStore.setDatasetName(value)

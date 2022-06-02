@@ -4,9 +4,9 @@ import { useModal } from '@core/hooks/use-modal'
 import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { DecisionTreesMenuDataCy } from '@components/data-testid/decision-tree-menu.cy'
-import { ModalCreateDataset } from '@pages/filter/dtree/components/modals/components/modal-create-dataset'
+import { CreateDatasetDialog } from '@pages/filter/dtree/components/modals/components/create-dataset-dialog'
 
-export const DatasetCreationButton = (): ReactElement => {
+export const CreateDatasetButton = (): ReactElement => {
   const [creationDialog, openCreationDialog, closeCreationDialog] = useModal()
   const { isOpen } = creationDialog
 
@@ -18,9 +18,7 @@ export const DatasetCreationButton = (): ReactElement => {
         dataTestId={DecisionTreesMenuDataCy.saveDataset}
       />
 
-      {isOpen && (
-        <ModalCreateDataset closeModal={closeCreationDialog} isOpen={isOpen} />
-      )}
+      <CreateDatasetDialog onClose={closeCreationDialog} isOpen={isOpen} />
     </>
   )
 }

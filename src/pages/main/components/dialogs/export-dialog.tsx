@@ -6,7 +6,7 @@ import { Checkbox } from '@ui/checkbox/checkbox'
 import { Dialog } from '@ui/dialog'
 import handleDatasetStore from '../handle-dataset/handle-dataset.store'
 
-export const ExportModal = observer(() => {
+export const ExportDialog = observer(() => {
   useEffect(() => () => handleDatasetStore.resetExportData(), [])
 
   return (

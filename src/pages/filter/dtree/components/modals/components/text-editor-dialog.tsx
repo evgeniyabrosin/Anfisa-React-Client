@@ -10,11 +10,11 @@ import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
 import { Button } from '@ui/button'
 import { Dialog } from '@ui/dialog'
+import { IBaseDialogProps } from '@ui/dialog/dialog.interface'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
 import Editor from '@monaco-editor/react'
 import { IDtreeCheck } from '@service-providers/decision-trees/decision-trees.interface'
 import { getMessageFromError } from '@utils/http/getMessageFromError'
-import { ICommonModalProps } from '../modals.interface'
 
 const TEXT_EDITOR_THEME = 'textEditorTheme'
 
@@ -45,8 +45,8 @@ const hasError = function (error: typeof emptyError) {
   return error.error?.length > 0
 }
 
-export const ModalTextEditor = observer(
-  ({ isOpen, closeModal }: ICommonModalProps): ReactElement => {
+export const TextEditorDialog = observer(
+  ({ isOpen, onClose }: IBaseDialogProps): ReactElement => {
     const params = useParams()
     const [checked, setChecked] = useState(true)
 
@@ -126,7 +126,7 @@ export const ModalTextEditor = observer(
         dtreeStore.setLocalDtreeCode(code)
       }
 
-      closeModal()
+      onClose()
     }
 
     const handleSave = () => {
@@ -137,7 +137,7 @@ export const ModalTextEditor = observer(
         code,
       })
 
-      closeModal()
+      onClose()
     }
 
     const handleChangeTheme = () => {
@@ -180,7 +180,7 @@ export const ModalTextEditor = observer(
     return (
       <Dialog
         isOpen={isOpen}
-        onClose={closeModal}
+        onClose={onClose}
         title={t('dtree.editCurrentDecisionTreeCode')}
         isApplyDisabled={!checked || hasError(error)}
         width="xl"

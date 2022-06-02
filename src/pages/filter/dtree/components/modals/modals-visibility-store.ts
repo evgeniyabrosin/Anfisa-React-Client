@@ -16,8 +16,8 @@ class ModalsVisibilityStore {
   isModalCompoundRequestVisible = false
   isModalGeneRegionVisible = false
 
-  isModalEnumVisible = false
-  isModalNumericVisible = false
+  isEnumDialogVisible = false
+  isNumericDialogVisible = false
 
   isModalViewVariantsVisible = false
   tableModalIndexNumber: null | number = null
@@ -38,38 +38,38 @@ class ModalsVisibilityStore {
 
   // 2. Modal for numeric attr
 
-  public openModalNumeric(
+  public openNumericDialog(
     groupName: string,
     groupIndex: number | undefined,
     source: string = '',
   ) {
     this.modalSource = source
 
-    this.isModalNumericVisible = true
+    this.isNumericDialogVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalNumeric = (): void => {
-    this.isModalNumericVisible = false
+  public closeNumericDialog = (): void => {
+    this.isNumericDialogVisible = false
   }
 
   // 3. Modal for enum attr
 
-  public openModalEnum(
+  public openEnumDialog(
     groupName: string,
     groupIndex: number | undefined,
     source: string = '',
   ) {
     this.modalSource = source
 
-    this.isModalEnumVisible = true
+    this.isEnumDialogVisible = true
     this.groupNameToChange = groupName
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalEnum = () => {
-    this.isModalEnumVisible = false
+  public closeEnumDialog = () => {
+    this.isEnumDialogVisible = false
     dtreeStore.resetSelectedFilters()
   }
 
