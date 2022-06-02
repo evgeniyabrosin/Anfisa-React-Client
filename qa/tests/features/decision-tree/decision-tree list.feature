@@ -29,7 +29,7 @@ Examples:
     | Callers  | BGM_AUTO_DOM | anfisa               |
 
  Scenario Outline: 03 Add new step before to the Decision tree
-	Given Anfisa main page is loaded
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the <Decision tree name>  
@@ -48,7 +48,7 @@ Examples:
 
 
 	 Scenario Outline: 04 Add new step after to the Decision tree
-	Given Anfisa main page is loaded
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the <Decision tree name>  
@@ -81,7 +81,7 @@ Examples:
 
 Scenario Outline: 06 Negate step
 	
-	Given Anfisa main page was loaded
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the <Decision tree name>  
@@ -97,47 +97,40 @@ Examples:
 	| ⏚BGM Red Button      |
 	| ⏚BGM Research        |
 
-Scenario Outline: 07 Modify Decision tree without changes
-	Given Anfisa main page was loaded
+Scenario: 07 Modify Decision tree without changes
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
-	And User clicks one of the <Decision tree name> 
+	And User clicks one of the custom <Decision tree name> 
 	And Clicks "Apply Filter"
 	And chosen decision tree is loaded
 	And  Clicks "Select Decision Tree"
-	And User clicks three dots near the custom decision tree
+	And User clicks three dots near the same custom decision tree
 	Then "Modify" button should be unable to click when there is no any changes done.
 
 
-Examples:
-	| <Decision tree name> |
-	| ⏚BGM Red Button      |
-	| ⏚BGM Research        |
 
 
-Scenario Outline: 08 Modify Decision tree with changes
-	Given Anfisa main page was loaded
+Scenario: 08 Modify Decision tree with changes
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
-	And User clicks one of the <Decision tree name> 
+	And User clicks one of the custom <Decision tree name> 
 	And Clicks "Apply Filter"
 	And chosen decision tree is loaded
-    And Makes some changes to the custom decision tree
+    And Makes some changes to the decision tree
 	And Clicks "Select Decision Tree"
-	And User clicks three dots near the custom decision tree
+	And User clicks three dots near the same custom decision tree
 	And user clicks "Modify"
 	Then decision three should be Modified 
 
 
-Examples:
-	| <Decision tree name> |
-	| ⏚BGM Red Button      |
-	| ⏚BGM Research        |
+
 
 
 
 Scenario: 09 Delete custom decision Tree
-	Given Anfisa main page was loaded
+	Given Decision tree panel was loaded 
 	When User clicks "Select Decision Tree"
 	And the panel of Decision trees is opened
 	And User clicks one of the custom decision trees
@@ -149,21 +142,4 @@ Scenario: 09 Delete custom decision Tree
 	Then created decision tree should be deleted.
 
 
-Scenario Outline: 10 Delete default decision Tree
-	Given Anfisa main page was loaded
-	When User clicks "Select Decision Tree"
-	And the panel of Decision trees is opened
-	And User clicks one of the <default decision tree>.
-	And Clicks "Apply Filter"
-	And chosen  decision tree is loaded
-	And Clicks "Select Decision Tree"
-	And User clicks three dots near the custom decision tree
-	And user clicks "Delete"
-	Then Default decision tree should be not deleted.
-
-
-Examples:
-	| <default decision tree> |
-	| ⏚BGM Red Button         |
-	| ⏚BGM Research           |
 	
