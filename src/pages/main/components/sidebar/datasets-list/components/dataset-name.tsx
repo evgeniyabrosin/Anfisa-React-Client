@@ -24,8 +24,6 @@ export const DatasetName: FC<IDsNameProps> = ({
 }) => {
   const datasetRef = useRef<any>(null)
 
-  console.log(kind)
-
   const isXL = kind?.toLocaleLowerCase() === 'xl'
 
   const name = isXL && /^xl_.*/i.test(dsName) ? dsName.substring(3) : dsName
