@@ -107,7 +107,7 @@ export class FilterStore {
       const activeFilter = this._conditions[this._selectedConditionIndex]
 
       if (activeFilter) {
-        return this.initialStat.getAttributeStatusByName(activeFilter[1])
+        return this.stat.getAttributeStatusByName(activeFilter[1])
       }
     } else if (this.attributeNameToAdd) {
       return this.stat.getAttributeStatusByName(this.attributeNameToAdd)
