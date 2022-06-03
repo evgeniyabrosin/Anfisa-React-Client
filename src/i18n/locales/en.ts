@@ -91,7 +91,7 @@ export const en = {
     searchForADataset: 'Search for dataset',
     name: 'Name',
     createdAt: 'Created at',
-    openInViewer: 'Open in viewer',
+    openInViewer: 'Open',
     info: 'Info',
     general: 'General',
     base: 'Derived from {name}',

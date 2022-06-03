@@ -98,6 +98,7 @@ export const FinalStep = observer(
               {t('dtree.initialStep')}
             </div>
             <Button
+              size="sm"
               text={t('dtree.addStep')}
               className="absolute -bottom-9 z-1000 left-0"
               onClick={() =>
