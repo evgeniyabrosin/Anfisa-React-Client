@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, reaction, toJS } from 'mobx'
 
 import { t } from '@i18n'
@@ -7,6 +6,7 @@ import {
   TCondition,
 } from '@service-providers/common'
 import { filteringProvider } from '@service-providers/filtering-regime'
+import { filterPresetsData } from '@utils/filter-presets'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import datasetStore from '../dataset/dataset'
@@ -38,7 +38,7 @@ export class FilterPresetsStore {
   }
 
   public get availablePresets(): ISolutionEntryDescription[] {
-    return orderBy(toJS(this.presets.data), ['name']) ?? []
+    return filterPresetsData(toJS(this.presets.data) || [])
   }
 
   public get activePreset(): string {

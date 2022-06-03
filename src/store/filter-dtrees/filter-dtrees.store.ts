@@ -1,4 +1,3 @@
-import orderBy from 'lodash/orderBy'
 import { makeAutoObservable, reaction, toJS } from 'mobx'
 
 import { t } from '@i18n'
@@ -11,6 +10,7 @@ import {
   dtreeProvider,
 } from '@service-providers/decision-trees'
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
+import { filterPresetsData } from '@utils/filter-presets'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import { AvailableDtreesAsyncStore } from './available-dtrees.async.store'
@@ -50,7 +50,7 @@ export class FilterDtreesStore {
   }
 
   public get availableDtrees(): ISolutionEntryDescription[] {
-    return orderBy(toJS(this.dtrees.data), ['name']) ?? []
+    return filterPresetsData(toJS(this.dtrees.data) || [])
   }
 
   public get activeDtreeInfo(): ISolutionEntryDescription | undefined {
