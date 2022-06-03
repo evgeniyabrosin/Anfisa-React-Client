@@ -1,9 +1,6 @@
 // dirinfo
 
-import {
-  IBaseDatasetDescriptor,
-  IRecordDescriptor,
-} from 'service-providers/common/common.interface'
+import { IBaseDatasetDescriptor } from 'service-providers/common/common.interface'
 
 export interface IDirInfoDatasetDescriptor extends IBaseDatasetDescriptor {
   secondary?: string[]
@@ -34,19 +31,9 @@ export interface IJobStatusArgument {
   task: string
 }
 
-export interface IJobStatusSamples {
-  samples: IRecordDescriptor[]
-}
-
-export interface IJobStatusRecords {
-  records: IRecordDescriptor[]
-}
-
-export type TTaskResult = IJobStatusSamples | IJobStatusRecords
-
-export type TJobStatus =
+export type TJobStatus<Result> =
   | null
-  | [falseOrResult: false | TTaskResult, taskStatus: string]
+  | [falseOrResult: false | Result, taskStatus: string]
 
 // adm_update
 
@@ -56,6 +43,7 @@ export type TAdmUpdateResponse = 'Updated'
 interface IAdmDsQuery {
   ds: string
 }
+
 export interface IAdmReloadDsArguments extends IAdmDsQuery {}
 
 // adm_drop_ds

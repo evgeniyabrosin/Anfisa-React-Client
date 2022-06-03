@@ -340,4 +340,10 @@ export const en = {
     somethingIsWrong: 'Something is wrong',
     info: 'The page you are looking for was moved, removed, renamed or might never existed',
   },
+  viewVariants: {
+    fullList: 'Full list',
+    samples25: 'Samples-25',
+    gene: 'Gene',
+    variant: 'Variant',
+  },
 }

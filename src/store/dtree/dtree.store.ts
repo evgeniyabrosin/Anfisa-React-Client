@@ -9,6 +9,7 @@ import { ActionsHistoryStore } from '@store/actions-history'
 import filterDtreesStore from '@store/filter-dtrees'
 import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-step.store'
 import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
+import { IDsListArguments } from '@service-providers/dataset-level'
 import {
   DtreeSetPointKinds,
   IDtreeSetArguments,
@@ -288,6 +289,7 @@ export class DtreeStore {
       }
 
       this.dtree = result
+
       this.dtreeCode = newCode
       this.dtreeList = result['dtree-list']
       this.evalStatus = result['eval-status']
@@ -529,28 +531,25 @@ export class DtreeStore {
 
   closeModalViewVariants = () => {
     this.isModalViewVariantsVisible = false
-    this.tableModalIndexNumber = null
+    // this.tableModalIndexNumber = null
+  }
+
+  get variantsModalQuery(): IDsListArguments | undefined {
+    const ds = datasetStore.datasetName
+    const no = this.tableModalIndexNumber
+
+    if (!ds || no === null) {
+      return undefined
+    }
+
+    return {
+      ds,
+      no,
+      code: this.dtreeCode,
+    }
   }
 
   // 4. Other UI control functions
-
-  setJobStatus(jobStatus: any) {
-    runInAction(() => {
-      this.savingStatus = JSON.parse(JSON.stringify(jobStatus))
-    })
-  }
-
-  clearJobStatus() {
-    runInAction(() => {
-      this.savingStatus = []
-    })
-  }
-
-  setShouldLoadTableModal(shouldLoad: boolean) {
-    runInAction(() => {
-      this.shouldLoadTableModal = shouldLoad
-    })
-  }
 
   setQueryBuilderRenderKey(key: number) {
     runInAction(() => {

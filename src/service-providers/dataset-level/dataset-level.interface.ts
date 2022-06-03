@@ -1,7 +1,8 @@
 import {
   IBaseDatasetDescriptor,
+  IRecordDescriptor,
   TCondition,
-} from 'service-providers/common/common.interface'
+} from 'service-providers/common'
 
 // dsinfo
 
@@ -9,6 +10,7 @@ export interface IDsInfoArguments {
   ds: string
   note?: string
 }
+
 export interface IDsInfoClass {
   title: string
   values: string[]
@@ -34,6 +36,7 @@ export interface Versions {
   reference: string
   vep_version: string
 }
+
 export interface IDsInfoMeta {
   case?: string
   cohorts?: any[]
@@ -43,6 +46,7 @@ export interface IDsInfoMeta {
   record_type?: string
   samples?: unknown
   versions?: Versions
+
   [key: string]: unknown
 }
 
@@ -67,9 +71,10 @@ export interface IDsListArguments {
   conditions?: ReadonlyArray<TCondition>
   dtree?: string
   code?: string
-  no?: string
+  no?: number
   smpcnt?: string
 }
+
 export interface IDsList {
   task_id: string
 }
@@ -78,7 +83,7 @@ export interface IDsList {
 
 export interface IReccntArguments {
   ds: string
-  rec: string
+  rec: number
   details?: string
   samples?: number[]
 }
@@ -139,6 +144,7 @@ export interface IRecdataArguments {
   ds: string
   rec: number
 }
+
 export type TRecdata = any
 
 // tab_report
@@ -148,6 +154,7 @@ export interface ITabReportArguments {
   seq: number[]
   schema: string
 }
+
 export interface ITabReport {
   _no: number
   ClinVar: string[]
@@ -174,6 +181,7 @@ export interface ITabReport {
   gnomAD: string[]
   Samples: ISample[]
 }
+
 export interface ISample {
   genotype: string
   g_quality: number
@@ -211,4 +219,14 @@ export interface ISolutionsArguments {
 
 export interface ISolutions {
   [nameOfSolution: string]: string[]
+}
+
+export interface IGetDsListCompleteResult {
+  samples: IRecordDescriptor[]
+  records?: IRecordDescriptor[]
+}
+
+export type TGetDsListCompleteOptions = {
+  abortSignal?: AbortSignal
+  onStatusChange?: (status: string) => void
 }

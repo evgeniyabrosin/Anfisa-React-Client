@@ -239,6 +239,7 @@ export abstract class BaseAsyncDataStore<Data, Query> {
       this._error = null
 
       if (!keepData) {
+        this._lastUpdate = 0
         this._data = undefined
       }
     })

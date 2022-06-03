@@ -1,0 +1,69 @@
+.variants-list {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+
+  &__modes {
+    flex: 0 0 auto;
+    padding: 0 theme("spacing.4");
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid theme("colors.grey.blue");
+  }
+
+  &__table {
+    @apply typography-s;
+
+    flex: 1 0 0;
+    overflow: auto;
+    position: relative;
+  }
+}
+
+.variants-table {
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+
+  &__head {
+    position: sticky;
+    top: 0;
+    background: theme("colors.white");
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid theme("colors.grey.blue");
+    }
+  }
+
+  &__row {
+    cursor: pointer;
+
+    &_active {
+      background: theme("colors.blue.bright");
+      color: theme("colors.white");
+    }
+  }
+
+  &__cell {
+    text-align: left;
+    padding: 0 theme("spacing.4");
+    border-bottom: 1px solid theme("colors.grey.blue");
+    height: 80px;
+
+    &_head {
+      height: auto;
+      padding: theme("spacing.3") theme("spacing.4");
+      font-weight: theme("fontWeight.bold");
+      border: 0;
+    }
+  }
+}

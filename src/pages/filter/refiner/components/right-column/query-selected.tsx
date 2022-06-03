@@ -9,7 +9,6 @@ import { formatNumber } from '@core/format-number'
 import { useParams } from '@core/hooks/use-params'
 import { t } from '@i18n'
 import datasetStore from '@store/dataset/dataset'
-import dtreeStore from '@store/dtree'
 import filterStore from '@store/filter'
 import { Routes } from '@router/routes.enum'
 import { Button } from '@ui/button'
@@ -20,10 +19,11 @@ import { QueryResults } from './query-results'
 
 interface IQuerySelectedProps {
   className?: string
+  onViewVariants: () => void
 }
 
 export const QuerySelected = observer(
-  ({ className }: IQuerySelectedProps): ReactElement => {
+  ({ className, onViewVariants }: IQuerySelectedProps): ReactElement => {
     const history = useHistory()
     const params = useParams()
 
@@ -77,7 +77,7 @@ export const QuerySelected = observer(
           {datasetStore.isXL ? (
             <Button
               className="ml-auto"
-              onClick={() => dtreeStore.openModalViewVariants()}
+              onClick={onViewVariants}
               text={t('dtree.viewVariants')}
             />
           ) : (

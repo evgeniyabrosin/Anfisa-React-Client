@@ -1,0 +1,39 @@
+.variant-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+
+  &__header {
+    @apply typography-m;
+
+    flex: 0 0 auto;
+    padding: 0 theme("spacing.4");
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: theme("colors.blue.dark");
+    color: theme("colors.blue.bright");
+  }
+
+  &__title {
+    flex: 1 0 auto;
+  }
+
+  &__close {
+    color: theme("colors.white");
+    cursor: pointer;
+
+    &:hover {
+      color: theme("colors.blue.bright");
+    }
+  }
+
+  &__aspects {
+    position: relative;
+    flex: 1 0 0;
+    overflow: hidden;
+  }
+}

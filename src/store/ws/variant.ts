@@ -172,7 +172,7 @@ export class VariantStore {
     // create reccntBody with URLSearchParams
     const reccntArguments: IReccntArguments = {
       ds: this.dsName,
-      rec: String(this.index),
+      rec: this.index,
     }
 
     if (!isVariantWithoutGene) {
@@ -232,7 +232,7 @@ export class VariantStore {
   ) {
     const variant = await datasetProvider.getRecCnt({
       ds: datasetName,
-      rec: String(orderNumber),
+      rec: orderNumber,
     })
 
     runInAction(() => {

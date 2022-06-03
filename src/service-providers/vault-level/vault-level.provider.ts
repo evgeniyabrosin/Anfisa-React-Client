@@ -1,8 +1,10 @@
+import { AxiosRequestConfig } from 'axios'
+
 import {
   adaptDataToCamelizedType,
   ServiceProviderBase,
 } from '@service-providers/common'
-import { TRecCntResponse } from './../dataset-level/dataset-level.interface'
+import { TRecCntResponse } from './../dataset-level'
 import {
   IAdmDropDsArguments,
   IAdmReloadDsArguments,
@@ -29,8 +31,11 @@ class VaultProvider extends ServiceProviderBase {
     )
   }
 
-  public getJobStatus(params: IJobStatusArgument) {
-    return this.post<TJobStatus>('job_status', params).then(res => res.data)
+  public getJobStatus<Result>(
+    params: IJobStatusArgument,
+    options: Partial<AxiosRequestConfig> = {},
+  ): Promise<TJobStatus<Result>> {
+    return this.post('job_status', params, options).then(res => res.data)
   }
 
   public updateAdm() {
