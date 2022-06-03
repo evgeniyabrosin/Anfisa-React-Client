@@ -35,6 +35,7 @@ export interface IDsStat {
   'total-counts': TItemsCount
   'filtered-counts': TItemsCount
   'stat-list': TPropertyStatus[]
+  functions: IFuncPropertyStatus[]
   'cur-filter'?: null | string
   conditions: TCondition[]
   'cond-seq': IDsStatCondSeq[]

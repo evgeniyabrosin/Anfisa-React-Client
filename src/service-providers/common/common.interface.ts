@@ -188,6 +188,11 @@ export type TPropertyStatus =
   | IEnumPropertyStatus
   | IFuncPropertyStatus
 
+export type TNonFuncPropertyStatus = Exclude<
+  TPropertyStatus,
+  IFuncPropertyStatus
+>
+
 export type TDocumentDescriptor = [
   documentName: string,
   pathToDocument: string[][],
@@ -253,7 +258,8 @@ export type TFilteringStatCounts = {
 }
 
 export type TFilteringStat = {
-  list: TPropertyStatus[]
+  units: TPropertyStatus[]
+  functionalUnits: IFuncPropertyStatus[]
   filteredCounts: TFilteringStatCounts
   totalCounts: TFilteringStatCounts
 }

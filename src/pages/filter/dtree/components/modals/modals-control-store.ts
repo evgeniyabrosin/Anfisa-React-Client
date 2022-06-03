@@ -59,7 +59,7 @@ class ModalsControlStore {
   }
 
   public get statList(): TPropertyStatus[] {
-    return dtreeStore.stat.list || []
+    return dtreeStore.stat.units || []
   }
 
   get attributeStatusToChange(): TPropertyStatus | undefined {
