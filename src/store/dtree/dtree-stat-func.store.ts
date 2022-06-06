@@ -1,7 +1,7 @@
 import datasetStore from '@store/dataset/dataset'
 import dtreeStore from '@store/dtree'
+import stepStore from '@store/dtree/step.store'
 import { BaseStatFuncStore } from '@store/stat-func'
-import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import {
   filteringProvider,
   IStatFunc,
@@ -21,7 +21,7 @@ export class DtreeStatFuncStore extends BaseStatFuncStore<
       .getStatFunc({
         ds: datasetStore.datasetName,
         code: dtreeStore.dtreeCode,
-        no: activeStepStore.stepIndexForApi,
+        no: stepStore.stepIndexForApi,
         rq_id: String(Date.now()),
         unit: query.unit,
         param: query.param,
