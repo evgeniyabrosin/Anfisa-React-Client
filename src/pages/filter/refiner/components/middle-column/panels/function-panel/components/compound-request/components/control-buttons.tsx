@@ -37,10 +37,7 @@ export const ControlButtons = observer(
           filterStore.setTouched(true)
         }}
         text="Remove"
-        variant="secondary"
-        className={cn(
-          'border-red-secondary hover:text-white hover:bg-red-secondary',
-        )}
+        variant="diestruction"
         disabled={compoundRequestStore.requestCondition.length === 1}
       />
     </div>

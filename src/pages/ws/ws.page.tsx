@@ -1,4 +1,5 @@
 import { Fragment, ReactElement, useEffect } from 'react'
+import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import { NumberParam, useQueryParams } from 'use-query-params'
 
@@ -13,13 +14,13 @@ import { ExportPanelModal } from '@components/export-panel-modal'
 import { ExportReportButton } from '@components/export-report-button'
 import { Header } from '@components/header'
 import { PopperButton } from '@components/popper-button'
-import { VariantDrawer } from '@components/variant/drawer'
 import { VariantsCount } from '@components/variants-count'
 import { ModalSaveDataset } from '@pages/filter/dtree/components/modals/components/modal-save-dataset'
 import { TCondition } from '@service-providers/common/common.interface'
 import { ModalNotes } from './ui//table/modal-notes'
 import { ControlPanel } from './ui/control-panel/control-panel'
 import { TableVariants } from './ui/table/table-variants'
+import { VariantDrawer } from './ui/variant-drawer'
 
 export const WSPage = observer((): ReactElement => {
   const params = useParams()
@@ -61,6 +62,8 @@ export const WSPage = observer((): ReactElement => {
   const { variantCounts, dnaVariantsCounts, transcriptsCounts } =
     mainTableStore.fixedStatAmount
 
+  const isDrawerVisible = variantStore.drawerVisible
+
   return (
     <Fragment>
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
@@ -84,9 +87,8 @@ export const WSPage = observer((): ReactElement => {
         <ControlPanel />
 
         <div className="flex-grow flex overflow-hidden">
-          <TableVariants />
-
-          <VariantDrawer />
+          <TableVariants className={cn(!isDrawerVisible && 'w-full')} />
+          {isDrawerVisible && <VariantDrawer className="flex-1" />}
         </div>
       </div>
     </Fragment>

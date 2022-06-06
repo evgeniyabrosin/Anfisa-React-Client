@@ -69,8 +69,9 @@ export const PopupCard = ({
       <div className="flex justify-between pb-4 px-4 mt-4">
         <div>{additionalBottomButton && additionalBottomButton}</div>
 
-        <div className="flex">
+        <div className="flex justify-between">
           <Button
+            size="sm"
             text={cancelText || t('general.cancel')}
             variant="secondary"
             onClick={onClose}
@@ -78,6 +79,8 @@ export const PopupCard = ({
 
           <Button
             disabled={isApplyDisabled || isLoading}
+            variant="secondary"
+            size="sm"
             text={
               isLoading ? (
                 <Loader size="xs" color="white" />

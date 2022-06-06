@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 
 import { t } from '@i18n'
+import { theme } from '@theme'
 import operationsStore from '@store/operations'
 import mainTableStore from '@store/ws/main-table.store'
 import { Button } from '@ui/button'
@@ -10,20 +11,20 @@ import { Icon } from '@ui/icon'
 import { MainTableDataCy } from './data-testid/main-table.cy'
 import { Loader } from './loader'
 
-interface Props {
+interface IExportReportButtonProps {
   isOpen?: boolean
   refEl: any
   onClick?: () => void
 }
 
 export const ExportReportButton = observer(
-  ({ isOpen, refEl, ...rest }: Props): ReactElement => {
+  ({ isOpen, refEl, ...rest }: IExportReportButtonProps): ReactElement => {
     const { variantCounts } = mainTableStore.fixedStatAmount
-    const areVariantsZero = variantCounts === 0
+    const disabled = !variantCounts
 
     return (
       <Button
-        disabled={areVariantsZero}
+        disabled={disabled}
         text={
           operationsStore.isExportingReport ? (
             <Loader size="xs" color="white" />
@@ -33,14 +34,14 @@ export const ExportReportButton = observer(
         }
         dataTestId={MainTableDataCy.exportReport}
         refEl={refEl}
-        size="sm"
+        size="xs"
+        variant="primary-dark"
         prepend={<Icon name="Export" />}
         onClick={rest.onClick}
         style={{
-          width: '157px',
           pointerEvents: operationsStore.isExportingReport ? 'none' : 'inherit',
+          backgroundColor: !disabled && theme('colors.blue.secondary'),
         }}
-        className="bg-blue-secondary hover:bg-blue-lighter active:bg-blue-lighter"
         textSize="sm"
         append={
           <Icon

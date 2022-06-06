@@ -8,6 +8,7 @@ import {
   AttributeKinds,
   TFilteringStat,
   TFilteringStatCounts,
+  TNonFuncPropertyStatus,
   TPropertyStatus,
 } from '@service-providers/common'
 import { TFunctionalUnit, TUnitGroups } from './stat-units.interface'
@@ -21,18 +22,31 @@ export abstract class BaseStatUnitsStore<
     super(options)
 
     makeObservable(this, {
-      list: computed,
+      units: computed,
+      functionalUnits: computed,
       totalCounts: computed,
       filteredCounts: computed,
     })
   }
 
   getAttributeStatusByName(name: string): TPropertyStatus | undefined {
-    return this.list?.find(prop => prop.name === name)
+    const findCallback = (prop: TPropertyStatus) => prop.name === name
+
+    return (
+      this.functionalUnits?.find(findCallback) ?? this.units?.find(findCallback)
+    )
   }
 
-  get list(): TPropertyStatus[] | undefined {
-    return toJS(this.data?.list)
+  get units(): TNonFuncPropertyStatus[] | undefined {
+    // TODO: we can remove this filter in future, after the backend removes
+    //       functional units from this part of response
+    return toJS(
+      this.data?.units.filter(unit => unit.kind !== AttributeKinds.FUNC),
+    ) as TNonFuncPropertyStatus[] | undefined
+  }
+
+  get functionalUnits(): TFunctionalUnit[] {
+    return toJS(this.data?.functionalUnits) ?? []
   }
 
   get totalCounts(): TFilteringStatCounts | undefined {
@@ -44,26 +58,10 @@ export abstract class BaseStatUnitsStore<
   }
 
   get unitGroups(): TUnitGroups {
-    if (!this.list || !this.filteredCounts) {
+    if (!this.units || !this.filteredCounts) {
       return []
     }
 
-    return getUnitGroups(this.list, this.filteredCounts)
-  }
-
-  get functionalUnits(): TFunctionalUnit[] {
-    if (!this.list) {
-      return []
-    }
-
-    const units: TFunctionalUnit[] = []
-
-    for (const attr of this.list) {
-      if (attr.kind === AttributeKinds.FUNC) {
-        units.push(attr)
-      }
-    }
-
-    return units
+    return getUnitGroups(this.units, this.filteredCounts)
   }
 }

@@ -42,8 +42,8 @@ module.exports = {
     secondary: '#dc3737',
     light: '#ff3137',
     lighter: '#ffe6e7',
-    hover: '#e70010',
-    active: '#cf4041',
+    hover: '#e20309',
+    active: '#cb463f',
     disabled: '#e2e7ec',
   },
   orange: {

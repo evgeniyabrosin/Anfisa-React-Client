@@ -1,0 +1,82 @@
+.aspect-window {
+  @apply typography-s;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  background: theme("colors.blue.dark");
+  overflow: hidden;
+  border-radius: theme("borderRadius.DEFAULT");
+
+  &__title {
+    flex: 0 0 auto;
+  }
+
+  &__content {
+    flex: 1 0 0;
+    cursor: grab;
+    color: theme("colors.grey.blue");
+
+    &_resizable {
+      margin-bottom: theme("spacing.3");
+    }
+  }
+
+  :global {
+    & .react-resizable-handle::after {
+      @apply border-white;
+    }
+  }
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 40px;
+  color: theme("colors.white");
+
+  &_movable:hover {
+    background: theme("colors.blue.bright");
+  }
+
+  &__label {
+    flex: 1 0 0;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: theme("fontWeight.bold");
+    text-transform: uppercase;
+    padding: theme("spacing.3");
+  }
+
+  &_movable &__label {
+    cursor: grab;
+  }
+
+  &__adornment {
+    flex: 0 0 auto;
+  }
+
+  &__expand-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    margin-right: theme("spacing.1");
+
+    svg {
+      transition: transform 0.15s ease-in-out;
+    }
+
+    &_open {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

@@ -31,7 +31,7 @@ export const FinalStep = observer(
       const shouldMakeActive = classList.includes('step-content-area')
 
       if (shouldMakeActive) {
-        stepStore.makeStepActive(stepNo - 1, ActiveStepOptions.StartedVariants)
+        stepStore.makeStepActive(stepNo, ActiveStepOptions.StartedVariants)
       }
     }
 
@@ -67,7 +67,7 @@ export const FinalStep = observer(
             )}
             onClick={event => setStepActive(index, event)}
           >
-            <div className="flex w-full items-center  step-content-area">
+            <div className="flex w-full items-center step-content-area">
               <Step className="mb-2 mt-2">{t('dtree.finalStep')}</Step>
 
               <div className="flex ml-4">
@@ -95,6 +95,7 @@ export const FinalStep = observer(
               {t('dtree.initialStep')}
             </div>
             <Button
+              size="sm"
               text={t('dtree.addStep')}
               className="absolute -bottom-9 z-1000 left-0"
               onClick={() =>

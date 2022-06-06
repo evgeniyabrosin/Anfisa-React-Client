@@ -21,12 +21,13 @@ export const OpenViewerBaseButton = ({
     text={t('home.openInViewer')}
     dataTestId={DatasetInfoDataCy.openInViewer}
     refEl={refEl}
-    size="md"
+    size="sm"
     onClick={rest.onClick}
     {...rest}
     append={
       <Icon
         name="Arrow"
+        size={14}
         className={cn(
           'transform transition-transform',
           isOpen ? 'rotate-90' : '-rotate-90',

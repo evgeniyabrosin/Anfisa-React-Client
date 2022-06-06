@@ -1,6 +1,7 @@
 import { IStepData } from '@store/dtree'
 import {
   DatasetKinds,
+  IFuncPropertyStatus,
   ISolutionEntryDescription,
   TCondition,
   TFilteringStat,
@@ -168,6 +169,7 @@ export interface IDtreeStatResponse {
   'total-counts': TItemsCount
   'filtered-counts': TItemsCount
   'stat-list': TPropertyStatus[]
+  functions: IFuncPropertyStatus[]
   'rq-id': string
 }
 

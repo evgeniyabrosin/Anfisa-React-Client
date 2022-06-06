@@ -1,0 +1,6 @@
+.preset-menu {
+  @apply popup-card;
+
+  overflow: hidden;
+  min-width: 82px;
+}

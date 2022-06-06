@@ -1,29 +1,24 @@
 import { get } from 'lodash'
 import { makeAutoObservable, runInAction, toJS } from 'mobx'
 
-import { IGridLayout, ReccntDisplayItem } from '@declarations'
 import mainTableStore from '@store/ws/main-table.store'
 import datasetProvider from '@service-providers/dataset-level/dataset.provider'
 import {
+  HgModes,
   IReccntArguments,
+  ITableAspectDescriptor,
+  TAspectDescriptor,
   TRecCntResponse,
 } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
 import wsDatasetProvider from '@service-providers/ws-dataset-support/ws-dataset-support.provider'
+import { findElementInRow } from '@utils/mian-table/find-element-in-row'
 import datasetStore from '../dataset/dataset'
-
-const DRAWER_DEFAULT_WIDTH = 6
-const DRAWER_DEFAULT_HEIGHT = 1
-const DRAWER_DEFAULT_X = 0
 
 export class VariantStore {
   drawerVisible = false
   variant: TRecCntResponse[] = []
-  recordsDisplayConfig: any = {}
-  wsDrawerVariantsLayout: IGridLayout[] = []
-  modalDrawerVariantsLayout: IGridLayout[] = []
   index = 0
-  choosedIndex = 0
   dsName = ''
   generalTags: string[] = []
   optionalTags: string[] = []
@@ -34,9 +29,79 @@ export class VariantStore {
   isActiveVariant = false
 
   isModalNotesVisible = false
+  isTagsModified = false
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  public get aspects(): TAspectDescriptor[] {
+    return toJS(this.variant)
+  }
+
+  public get generalAspect(): ITableAspectDescriptor | undefined {
+    return this.variant.find(aspect => aspect.name === 'view_gen') as
+      | ITableAspectDescriptor
+      | undefined
+  }
+
+  public get locus(): string {
+    const { locusMode } = datasetStore
+    const rows = this.generalAspect?.rows ?? []
+
+    const hg19locus = findElementInRow(rows, 'hg19')
+    const hg38locus = findElementInRow(rows, 'hg38')
+
+    return locusMode === HgModes.HG19 ? hg19locus : hg38locus
+  }
+
+  public get genes(): string {
+    const variantWithoutGenesName = 'None'
+    const rows = this.generalAspect?.rows ?? []
+
+    return findElementInRow(rows, 'genes') || variantWithoutGenesName
+  }
+
+  public get igvUrl(): string | undefined {
+    const igvUrls = datasetStore.dsInfoData?.igvUrls
+
+    if (!igvUrls) {
+      return
+    }
+
+    let names: string[] = []
+
+    const qualityAspect = this.variant.find(
+      aspect => aspect.name === 'view_qsamples',
+    ) as ITableAspectDescriptor | undefined
+
+    if (qualityAspect) {
+      names = qualityAspect.rows[0]?.cells
+        .map(cell => cell[0].split(': ')[1])
+        .filter(Boolean)
+    }
+
+    if (!this.generalAspect) {
+      return undefined
+    }
+
+    const locus = this.generalAspect.rows
+      .find(row => row.name === 'hg38')
+      ?.cells[0]?.[0]?.split(' ')[0]
+
+    if (!locus) {
+      return undefined
+    }
+
+    return new URLSearchParams({
+      locus,
+      names: names.join(','),
+      igvUrls: JSON.stringify(igvUrls),
+    }).toString()
+  }
+
+  setIsTagsModified(value: boolean) {
+    this.isTagsModified = value
   }
 
   setNoteText(value: string) {
@@ -74,39 +139,6 @@ export class VariantStore {
 
   setDrawerVisible(visible: boolean) {
     this.drawerVisible = visible
-  }
-
-  initRecordsDisplayConfig() {
-    const conf: { [key: string]: ReccntDisplayItem } = {}
-    const isFirstInit = Object.keys(this.recordsDisplayConfig).length === 0
-
-    if (!isFirstInit) return
-
-    this.variant.map(record => {
-      conf[record.name] = { isOpen: false, h: 1 }
-    })
-
-    this.recordsDisplayConfig = conf
-  }
-
-  handleAllRecordsOpen(status: boolean) {
-    for (const key in this.recordsDisplayConfig) {
-      if (
-        Object.prototype.hasOwnProperty.call(this.recordsDisplayConfig, key)
-      ) {
-        this.recordsDisplayConfig[key].isOpen = status
-      }
-    }
-  }
-
-  updateRecordsDisplayConfig(name: string, height: number) {
-    this.recordsDisplayConfig[name].h = height
-  }
-
-  checkRecodsDisplaying() {
-    Object.values(this.recordsDisplayConfig).map((record: any) => {
-      record.h > 1 ? (record.isOpen = true) : (record.isOpen = false)
-    })
   }
 
   setIndex(index: number) {
@@ -172,11 +204,6 @@ export class VariantStore {
       this.checkedTags = checkedTags
       this.tagsWithNotes = get(tagsData, 'rec-tags')
       this.noteText = tagsData['rec-tags']['_note'] as string
-      this.initRecordsDisplayConfig()
-
-      if (this.wsDrawerVariantsLayout.length === 0) {
-        this.createDrawerVariantsLayout(variant)
-      }
     })
   }
 
@@ -196,7 +223,6 @@ export class VariantStore {
     runInAction(() => {
       this.checkedTags = checkedTags
       this.tagsWithNotes = wsTags['rec-tags']
-      this.initRecordsDisplayConfig()
     })
   }
 
@@ -211,42 +237,7 @@ export class VariantStore {
 
     runInAction(() => {
       this.variant = variant
-
-      if (this.modalDrawerVariantsLayout.length === 0) {
-        this.initRecordsDisplayConfig()
-
-        this.createDrawerVariantsLayout(variant, 'modal')
-      }
     })
-  }
-
-  createDrawerVariantsLayout(data: any[], source?: string) {
-    if (source === 'modal') {
-      data.map((item, index) =>
-        this.modalDrawerVariantsLayout.push({
-          y: index,
-          x: DRAWER_DEFAULT_X,
-          w: DRAWER_DEFAULT_WIDTH,
-          h: DRAWER_DEFAULT_HEIGHT,
-          i: item.name,
-        }),
-      )
-    } else {
-      data.map((item, index) =>
-        this.wsDrawerVariantsLayout.push({
-          y: index,
-          x: DRAWER_DEFAULT_X,
-          w: DRAWER_DEFAULT_WIDTH,
-          h: DRAWER_DEFAULT_HEIGHT,
-          i: item.name,
-        }),
-      )
-
-      window.sessionStorage.setItem(
-        'gridLayout',
-        JSON.stringify(this.wsDrawerVariantsLayout),
-      )
-    }
   }
 
   updateTagsWithNotes(tagWithNote: any[], operation = 'add') {
@@ -281,9 +272,6 @@ export class VariantStore {
 
   resetData() {
     this.dsName = ''
-    this.wsDrawerVariantsLayout = []
-    this.modalDrawerVariantsLayout = []
-    this.recordsDisplayConfig = ''
   }
 }
 

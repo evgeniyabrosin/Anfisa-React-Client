@@ -188,6 +188,11 @@ export type TPropertyStatus =
   | IEnumPropertyStatus
   | IFuncPropertyStatus
 
+export type TNonFuncPropertyStatus = Exclude<
+  TPropertyStatus,
+  IFuncPropertyStatus
+>
+
 export type TDocumentDescriptor = [
   documentName: string,
   pathToDocument: string[][],
@@ -197,10 +202,10 @@ export type TDocumentDescriptor = [
 export interface IBaseDatasetDescriptor {
   name: string
   kind: 'ws' | 'xl'
-  'create-time': TDateISOString
-  'upd-time': null | TDateISOString
+  createTime: TDateISOString
+  updTime: null | TDateISOString
   note: null | string
-  'date-note': null | TDateISOString
+  dateNote: null | TDateISOString
   total: number
   doc: TDocumentDescriptor
   ancestors: [
@@ -253,7 +258,8 @@ export type TFilteringStatCounts = {
 }
 
 export type TFilteringStat = {
-  list: TPropertyStatus[]
+  units: TPropertyStatus[]
+  functionalUnits: IFuncPropertyStatus[]
   filteredCounts: TFilteringStatCounts
   totalCounts: TFilteringStatCounts
 }

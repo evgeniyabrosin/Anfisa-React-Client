@@ -18,25 +18,26 @@ export const SelectedDataset = observer((): ReactElement => {
   }
 
   return (
-    <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
-      <Card className="col-span-1 xl:col-span-3">
-        <div className="flex items-start justify-between flex-wrap">
-          <CardTitle
-            text={dirinfoStore.selectedDirinfoName}
-            dataTestId={DatasetCard.datasetHeader}
-            className="mb-3 mr-3 break-words"
-            style={{ maxWidth: 'calc(100% - 140px)' }}
-          />
+    <div className="flex-grow justify-center">
+      <div className="flex items-center flex-wrap mt-4 ml-4">
+        <CardTitle
+          text={dirinfoStore.selectedDirinfoName}
+          dataTestId={DatasetCard.datasetHeader}
+          className="mr-3 break-words"
+          style={{ maxWidth: 'calc(100% - 140px)' }}
+        />
 
-          <OpenViewerButton />
-        </div>
+        <OpenViewerButton />
+      </div>
+      <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
+        <Card className="col-span-1 xl:col-span-3">
+          <DatasetGeneral />
 
-        <DatasetGeneral />
+          <DeleteDatasetButton className="mt-5" />
+        </Card>
 
-        <DeleteDatasetButton className="mt-5" />
-      </Card>
-
-      <DatasetsFieldsList />
+        <DatasetsFieldsList />
+      </div>
     </div>
   )
 })

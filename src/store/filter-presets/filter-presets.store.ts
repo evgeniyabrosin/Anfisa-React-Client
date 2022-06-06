@@ -6,6 +6,7 @@ import {
   TCondition,
 } from '@service-providers/common'
 import { filteringProvider } from '@service-providers/filtering-regime'
+import { filterPresetsData } from '@utils/filter-presets'
 import { showToast } from '@utils/notifications/showToast'
 import { validatePresetName } from '@utils/validation/validatePresetName'
 import datasetStore from '../dataset/dataset'
@@ -37,7 +38,7 @@ export class FilterPresetsStore {
   }
 
   public get availablePresets(): ISolutionEntryDescription[] {
-    return toJS(this.presets.data) ?? []
+    return filterPresetsData(toJS(this.presets.data) || [])
   }
 
   public get activePreset(): string {

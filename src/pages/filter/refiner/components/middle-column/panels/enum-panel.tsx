@@ -26,6 +26,8 @@ export const EnumPanel = observer((): ReactElement => {
       initialEnumMode={initialEnumMode}
       isFilterTouched={isFilterTouched}
       saveEnum={refinerAttributeStore.saveEnum}
+      isShowZeroes={refinerAttributeStore.isShowZeroVariants}
+      toggleShowZeroes={refinerAttributeStore.setIsShowZeroVariants}
     />
   )
 })

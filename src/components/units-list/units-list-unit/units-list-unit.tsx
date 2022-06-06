@@ -1,15 +1,16 @@
 import styles from './units-list-unit.module.css'
 
-import { ReactElement, useState } from 'react'
-import cn from 'classnames'
+import { ReactElement, useCallback, useState } from 'react'
+import cn, { Argument } from 'classnames'
 
 import { TUnit } from '@store/stat-units'
 import { PredictionPowerIndicator } from '@components/prediction-power-indicator'
 import { AttributeKinds } from '@service-providers/common'
 import { UnitChart } from '../unit-chart'
+import { UnitsListUnitName } from './components/units-list-unit-name'
 
 interface IUnitsListUnitProps {
-  className?: string
+  className?: Argument
   isDark: boolean
   withChart: boolean
   unit: TUnit
@@ -23,7 +24,7 @@ export const UnitsListUnit = ({
   unit,
   onSelect,
 }: IUnitsListUnitProps): ReactElement => {
-  const { kind, name } = unit
+  const { kind, name, tooltip } = unit
   const [isChartVisible, setChartVisible] = useState(false)
 
   const hasChart =
@@ -34,6 +35,11 @@ export const UnitsListUnit = ({
       (kind === AttributeKinds.NUMERIC &&
         unit.histogram &&
         unit.histogram.length > 0))
+
+  const onClickUnitName = useCallback(
+    () => setChartVisible(!!hasChart && !isChartVisible),
+    [hasChart, isChartVisible],
+  )
 
   return (
     <div className={cn(styles.unit, className)}>
@@ -48,16 +54,15 @@ export const UnitsListUnit = ({
             comment={unit.power.comment}
           />
         )}
-
-        <span
+        <UnitsListUnitName
+          tooltip={tooltip}
+          name={name}
+          onClick={onClickUnitName}
           className={cn(
             styles.unitTitle__title,
             isDark && styles.unitTitle__title_dark,
           )}
-          onClick={() => setChartVisible(!!hasChart && !isChartVisible)}
-        >
-          {name}
-        </span>
+        />
       </div>
       {hasChart && isChartVisible && <UnitChart className="mt-2" unit={unit} />}
     </div>

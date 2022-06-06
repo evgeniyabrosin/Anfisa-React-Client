@@ -1,0 +1,41 @@
+.layout-control {
+  display: flex;
+  align-items: center;
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: theme("colors.grey.blue");
+
+    &:hover {
+      color: theme("colors.blue.bright");
+    }
+
+    &_active {
+      color: theme("colors.blue.bright");
+    }
+  }
+}
+
+.grid-preset-button {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+
+  &__arrow {
+    margin-left: theme("spacing.1");
+    color: theme("colors.grey.blue");
+    transition: transform 0.15s ease-in-out;
+
+    &_open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:hover &__arrow {
+    color: theme("colors.blue.bright");
+  }
+}
