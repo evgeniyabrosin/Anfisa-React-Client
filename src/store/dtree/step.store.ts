@@ -1,7 +1,8 @@
 import { makeAutoObservable } from 'mobx'
 
 import datasetStore from '@store/dataset/dataset'
-import dtreeStore, { IStepData } from '@store/dtree'
+import dtreeStore from '@store/dtree'
+import { IStepData } from './dtree.store'
 
 export enum ActiveStepOptions {
   StartedVariants = 'startedVariants',

@@ -1,4 +1,4 @@
-import { IStepData } from '@store/dtree'
+import { IStepData } from '@store/dtree/dtree.store'
 import {
   DatasetKinds,
   IFuncPropertyStatus,

@@ -1,4 +1,4 @@
-import { IStepData } from '@store/dtree'
+import { IStepData } from '@store/dtree/dtree.store'
 import { adaptFilteringStatsCounts } from '@service-providers/common'
 import { IDtreeSetResponse } from '@service-providers/decision-trees'
 import { getDataFromCode } from '@utils/getDataFromCode'

@@ -44,7 +44,7 @@ class ModalsControlStore {
     }
 
     const group = toJS(
-      dtreeStore.stepData[stepStore.activeStepIndex].groups[
+      stepStore.steps[stepStore.activeStepIndex].groups[
         modalsVisibilityStore.groupIndexToChange
       ],
     )
