@@ -36,7 +36,7 @@ export const NumericPanel = observer((): ReactElement | null => {
               typeof attributeStatus.max !== 'number') ||
             !isFilterTouched
           return (
-            <div className="flex-1 flex items-end justify-end mt-1 pb-[40px]">
+            <div className="flex-1 flex items-end justify-end mt-1 pb-6">
               <Button
                 variant={'secondary'}
                 text={t('general.clear')}

@@ -43,11 +43,23 @@ class ModalsControlStore {
       return undefined
     }
 
-    return toJS(
+    const group = toJS(
       dtreeStore.stepData[activeStepStore.activeStepIndex].groups[
         modalsVisibilityStore.groupIndexToChange
       ],
     )
+
+    /**
+     * TODO: see getStepDataAsync.ts:57
+     *       The join type added on the 3rd index of group
+     *       for second and next groups in step.
+     *       It's terrible! And should be fixed
+     */
+    if (group[3] === 'or' || group[3] === 'and') {
+      group.splice(3, 1)
+    }
+
+    return group
   }
 
   public get currentGroupLength(): number {
@@ -59,7 +71,7 @@ class ModalsControlStore {
   }
 
   public get statList(): TPropertyStatus[] {
-    return dtreeStore.stat.list || []
+    return dtreeStore.stat.units || []
   }
 
   get attributeStatusToChange(): TPropertyStatus | undefined {

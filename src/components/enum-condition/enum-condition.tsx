@@ -86,7 +86,7 @@ export const EnumCondition = observer(
 
         const observer = new ResizeObserver(entries => {
           const { height } = entries[0].contentRect
-          const heightOfElement = 32
+          const heightOfElement = 37
 
           const newCount = height / heightOfElement
           if (newCount !== variantsPerPage && newCount > initialCount) {
@@ -159,6 +159,7 @@ export const EnumCondition = observer(
       setMode(undefined)
     }
 
+    const showFinder = enumVariants.length > initialCount
     return (
       <>
         {isRefiner && (
@@ -173,7 +174,7 @@ export const EnumCondition = observer(
           </>
         )}
 
-        {enumVariants.length > initialCount && (
+        {showFinder && (
           <QueryBuilderSearch
             value={searchValue}
             onChange={handleSearchChange}
@@ -213,6 +214,9 @@ export const EnumCondition = observer(
 
         <div
           className="flex flex-1 mb-4 justify-between flex-row-reverse"
+          style={{
+            maxHeight: `calc(100% - ${showFinder ? 220 : 174}px)`,
+          }}
           ref={ref}
         >
           <div>
@@ -227,7 +231,7 @@ export const EnumCondition = observer(
             />
           </div>
 
-          <div className="h-full">
+          <div className="h-full flex flex-col">
             {variantsPage.length > 0 ? (
               variantsPage.map(variant => (
                 <SelectedGroupItem

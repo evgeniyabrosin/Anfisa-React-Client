@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, ReactElement, useState } from 'react'
+import { MouseEvent, ReactElement, useState } from 'react'
 import { usePopper } from 'react-popper'
 import cn, { Argument } from 'classnames'
 
@@ -32,7 +32,7 @@ export const PopperButton = ({
   const { styles, attributes } = usePopper(referenceElement, popperElement)
 
   return (
-    <Fragment>
+    <>
       {data && data.length === 0 && type && (
         <ButtonElement
           {...ButtonProps}
@@ -68,6 +68,6 @@ export const PopperButton = ({
           <ModalElement {...ModalProps} close={close} title={title} />
         </div>
       )}
-    </Fragment>
+    </>
   )
 }

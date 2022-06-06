@@ -19,7 +19,8 @@ export const HandleDatasetButton = ({
       refEl={refEl}
       onClick={onClick}
       className="rounded"
-      prepend={<Icon name="Ellipsis" />}
+      size="md"
+      icon={<Icon name="Ellipsis" />}
       onMouseUp={onMouseUp}
       style={{
         width: '36px',

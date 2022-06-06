@@ -38,6 +38,8 @@ export const ModalSaveDataset = observer(() => {
   const pathName = history.location.pathname
   const { wsList } = mainTableStore
   const isDone = operations.savingStatus[1] === 'Done'
+  const isSaving =
+    operations.savingStatus[1] !== 'Done' && !!operations.savingStatus[1]
 
   useEffect(() => {
     const { variantCounts } = mainTableStore.fixedStatAmount
@@ -166,6 +168,7 @@ export const ModalSaveDataset = observer(() => {
             value={value}
             onChange={e => handleChange(e.target.value)}
             className="mt-1"
+            disabled={isSaving}
             data-testid={DecisionTreesMenuDataCy.datasetNameInput}
           />
 
@@ -207,7 +210,7 @@ export const ModalSaveDataset = observer(() => {
           <Button
             text={t('dsCreation.addDataset')}
             className="ml-4"
-            disabled={!value.trim() || error.length > 0}
+            disabled={!value.trim() || error.length > 0 || isSaving}
             variant="secondary"
             onClick={saveDatasetAsync}
             dataTestId={DecisionTreesMenuDataCy.addNewDataset}

@@ -6,7 +6,6 @@ export class ServiceProviderBase {
       process.env.NODE_ENV === 'development'
         ? '/app/'
         : `${process.env.REACT_APP_URL_BACKEND}/`,
-    // : `${window._env_.REACT_APP_URL_BACKEND}/`,
     transformRequest: (data: unknown, headers?: AxiosRequestHeaders) => {
       if (
         headers?.['Content-Type'] === 'application/x-www-form-urlencoded' &&

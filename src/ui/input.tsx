@@ -3,6 +3,7 @@ import cn, { Argument } from 'classnames'
 
 interface IInputProps {
   placeholder?: string
+  disabled?: boolean
   value: string
   className?: Argument
   style?: CSSProperties
@@ -12,7 +13,7 @@ interface IInputProps {
 }
 
 export const Input = ({ ...rest }: IInputProps): ReactElement => {
-  const { className, style, label, isModal, ...tempRest } = rest
+  const { className, style, label, isModal, disabled, ...tempRest } = rest
 
   const classNameString: string = cn(className)
 
@@ -25,6 +26,7 @@ export const Input = ({ ...rest }: IInputProps): ReactElement => {
       {label && <span className="text-sm">{label}</span>}
       <input
         type="text"
+        disabled={disabled}
         className={cn(
           'text-sm rounded-full border w-full leading-tight px-3',
           {

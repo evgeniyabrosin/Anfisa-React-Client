@@ -129,7 +129,7 @@ export class FilteringRegimeProvider extends ServiceProviderBase {
     const { response, unitsRequest } = await baseRequest()
 
     let result = response
-    let incompleteProps = getIncompleteProps(response.list)
+    let incompleteProps = getIncompleteProps(response.units)
 
     while (incompleteProps.length > 0) {
       if (abortSignal && abortSignal.aborted) {
@@ -153,14 +153,14 @@ export class FilteringRegimeProvider extends ServiceProviderBase {
 
       result = {
         ...result,
-        list: result.list.map(prop => {
+        units: result.units.map(prop => {
           const { name } = prop
 
           return units.find(item => item.name === name) ?? prop
         }),
       }
 
-      incompleteProps = getIncompleteProps(result.list)
+      incompleteProps = getIncompleteProps(result.units)
     }
 
     return result

@@ -24,7 +24,7 @@ export const DisabledVariantsAmount = observer(
     handleCheckGroupItem,
     classname,
   }: IDisabledVariantsAmountProps) => (
-    <div className={cn('text-14', classname)}>
+    <div className={cn('text-14 flex flex-col', classname)}>
       {variants?.length > 0 && !isErrorVisible ? (
         variants.map((variant: any) => (
           <Checkbox

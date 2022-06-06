@@ -19,7 +19,7 @@ export const RefinerAttributeButtons = observer(
     initialEnumVariants,
   }: IRefinerAttributeButtonsProps): ReactElement => {
     return (
-      <div className="flex items-center justify-end mt-2 pb-[40px]">
+      <div className="flex items-center justify-end mt-2 pb-6">
         <Button
           variant="secondary"
           text={t('general.clear')}

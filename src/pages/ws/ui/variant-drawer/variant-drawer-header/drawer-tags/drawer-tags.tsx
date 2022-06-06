@@ -74,7 +74,10 @@ const DrawerTagModal = observer(({ close }: any) => {
         </span>
       </span>
 
-      <div className="mt-4 h-auto overflow-auto" style={{ maxHeight: 300 }}>
+      <div
+        className="mt-4 h-auto overflow-auto flex flex-col"
+        style={{ maxHeight: 300 }}
+      >
         {tags.map((tagName, index) => {
           const checked = localCheckedTags.includes(tagName)
 
