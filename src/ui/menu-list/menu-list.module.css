@@ -21,6 +21,15 @@
     background: theme("colors.blue.active");
   }
 
+  &_disabled {
+    opacity: 0.5;
+
+    &:hover {
+      background: theme("colors.white") !important;
+      color: theme("colors.black") !important;
+    }
+  }
+
   &:hover {
     background: theme("colors.blue.bright");
     color: theme("colors.white");

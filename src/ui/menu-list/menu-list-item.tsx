@@ -6,6 +6,7 @@ import cn from 'classnames'
 interface IMenuListItemProps {
   className?: string
   isDense?: boolean
+  disabled?: boolean
   wrap?: 'normal' | 'nowrap'
   isSelected?: boolean
   label: ReactNode
@@ -23,6 +24,7 @@ export const MenuListItem = ({
   label,
   actions,
   onClick,
+  disabled,
 }: IMenuListItemProps): ReactElement => {
   return (
     <div
@@ -32,9 +34,10 @@ export const MenuListItem = ({
         styles.menuListItem,
         isDense && styles.menuListItem_dense,
         isSelected && styles.menuListItem_selected,
+        disabled && styles.menuListItem_disabled,
         className,
       )}
-      onClick={onClick}
+      onClick={!disabled ? onClick : undefined}
     >
       <span
         className={cn(

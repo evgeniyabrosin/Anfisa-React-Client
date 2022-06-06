@@ -38,7 +38,6 @@ export const SolutionControl = ({
     solutionName: '',
   })
   const [createDialog, openCreateDialog, closeCreateDialog] = useModal()
-
   const isSelectedSolutionNonStandard = useMemo(
     () =>
       !!selectedProp &&
@@ -88,6 +87,7 @@ export const SolutionControl = ({
         onApply={onApply}
         onModify={onModify}
         onDelete={solutionName => openDeleteDialog({ solutionName })}
+        isModifyDisabled={selected === selectedProp}
       />
       <SolutionDeleteDialog
         {...deleteDialog}
