@@ -3,15 +3,13 @@ import GridLayout, { WidthProvider } from 'react-grid-layout'
 import cn from 'classnames'
 
 import { AspectWindow, TWindowToggleHandleParams } from './aspect-window'
+import { IVariantAspectsLayoutGridProps } from './variant-aspects-layout.interface'
 import {
+  adaptLayoutForAspects,
   GRID_LAYOUT_COLS,
   GRID_LAYOUT_CONTAINER_PADDING,
   GRID_LAYOUT_MARGIN,
   GRID_LAYOUT_ROW_HEIGHT,
-} from './variant-aspects-layout.constants'
-import { IVariantAspectsLayoutGridProps } from './variant-aspects-layout.interface'
-import {
-  adaptLayoutForAspects,
   maximizeWindow,
   minimizeWindow,
   useGridHandles,
@@ -70,6 +68,8 @@ export const VariantAspectsLayoutGrid = ({
           <AspectWindow
             key={aspect.name}
             aspect={aspect}
+            isMovable
+            isResizable
             isOpen={openedWindows.includes(aspect.name)}
             igvUrl={igvUrl}
             onToggle={handleWindowToggle}

@@ -8,12 +8,17 @@ import { t } from '@i18n'
 import { Button } from '@ui/button'
 import { Divider } from '@ui/divider'
 import { Icon } from '@ui/icon'
-import { IVariantDrawerGridPreset } from '../../variant-drawer.interface'
+import {
+  IVariantDrawerGridPreset,
+  VariantDrawerLayoutMode,
+} from '../../variant-drawer.interface'
 import { PresetMenu } from './preset-menu'
 import { SavePresetDialog } from './save-preset-dialog'
 
 interface IDrawerLayoutControlProps {
   className?: string
+  layoutMode: VariantDrawerLayoutMode
+  onChangeLayoutMode: (mode: VariantDrawerLayoutMode) => void
   gridPresets: IVariantDrawerGridPreset[]
   onSaveGridPreset?: (presetName: string) => void
   onChangeGridPreset: (presetName: string) => void
@@ -24,6 +29,8 @@ interface IDrawerLayoutControlProps {
 export const DrawerLayoutControl = ({
   className,
   gridPresets,
+  layoutMode,
+  onChangeLayoutMode,
   onSaveGridPreset,
   onChangeGridPreset,
   windowsOpenState,
@@ -40,16 +47,18 @@ export const DrawerLayoutControl = ({
 
   return (
     <div className={cn(styles.layoutControl, className)}>
-      {windowsOpenState && onSaveGridPreset && (
-        <Button
-          text={t('variant.savePreset')}
-          className="whitespace-nowrap mr-4"
-          size="xs"
-          textSize="xs"
-          variant="secondary-dark"
-          onClick={openSavePresetDialog}
-        />
-      )}
+      {layoutMode === VariantDrawerLayoutMode.Grid &&
+        windowsOpenState &&
+        onSaveGridPreset && (
+          <Button
+            text={t('variant.savePreset')}
+            className="whitespace-nowrap mr-4"
+            size="xs"
+            textSize="xs"
+            variant="secondary-dark"
+            onClick={openSavePresetDialog}
+          />
+        )}
       <button
         className={styles.layoutControl__button}
         onClick={() => onWindowsToggle(!windowsOpenState)}
@@ -58,11 +67,27 @@ export const DrawerLayoutControl = ({
       </button>
       <Divider orientation="vertical" spacing="dense" />
       <button
-        className={cn(styles.layoutControl__button, styles.gridPresetButton)}
+        className={cn(
+          styles.layoutControl__button,
+          layoutMode === VariantDrawerLayoutMode.Grid &&
+            styles.layoutControl__button_active,
+          styles.gridPresetButton,
+        )}
         onClick={event => setPresetMenuAnchorEl(event.currentTarget)}
       >
         <Icon name="List" />
         <Icon name="ArrowDownXs" className={styles.gridPresetButton__arrow} />
+      </button>
+      <button
+        className={cn(
+          styles.layoutControl__button,
+          layoutMode === VariantDrawerLayoutMode.Gallery &&
+            styles.layoutControl__button_active,
+          'ml-2',
+        )}
+        onClick={() => onChangeLayoutMode(VariantDrawerLayoutMode.Gallery)}
+      >
+        <Icon name="Gallery" size={20} />
       </button>
       <PresetMenu
         isOpen={!!presetMenuAnchorEl}
@@ -70,6 +95,7 @@ export const DrawerLayoutControl = ({
         anchorEl={presetMenuAnchorEl}
         presets={gridPresets}
         onSelect={presetName => {
+          onChangeLayoutMode(VariantDrawerLayoutMode.Grid)
           onChangeGridPreset(presetName)
           closePresetMenu()
         }}

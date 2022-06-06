@@ -54,6 +54,8 @@ export const AspectWindowBase = ({
   titleAdornment,
   content: contentRender,
   isOpen,
+  isMovable,
+  isResizable,
   children,
   onToggle,
   ...divProps
@@ -88,7 +90,13 @@ export const AspectWindowBase = ({
       data-window={aspect.name}
       {...divProps}
     >
-      <div className={cn(styles.aspectWindow__title, styles.windowTitle)}>
+      <div
+        className={cn(
+          styles.aspectWindow__title,
+          styles.windowTitle,
+          isMovable && styles.windowTitle_movable,
+        )}
+      >
         <div className={styles.windowTitle__label} data-drag-handle={true}>
           {title || aspect.title}
         </div>
@@ -116,7 +124,10 @@ export const AspectWindowBase = ({
       <ScrollContainer
         hideScrollbars={false}
         onScroll={handleScroll}
-        className={styles.aspectWindow__content}
+        className={cn(
+          styles.aspectWindow__content,
+          isResizable && styles.aspectWindow__content_resizable,
+        )}
         innerRef={contentRef}
         component={WindowContent}
       >

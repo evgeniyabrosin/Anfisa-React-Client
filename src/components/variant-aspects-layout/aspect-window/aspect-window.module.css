@@ -16,8 +16,11 @@
   &__content {
     flex: 1 0 0;
     cursor: grab;
-    margin-bottom: theme("spacing.3");
     color: theme("colors.grey.blue");
+
+    &_resizable {
+      margin-bottom: theme("spacing.3");
+    }
   }
 
   :global {
@@ -34,7 +37,7 @@
   height: 40px;
   color: theme("colors.white");
 
-  &:hover {
+  &_movable:hover {
     background: theme("colors.blue.bright");
   }
 
@@ -47,6 +50,9 @@
     font-weight: theme("fontWeight.bold");
     text-transform: uppercase;
     padding: theme("spacing.3");
+  }
+
+  &_movable &__label {
     cursor: grab;
   }
 

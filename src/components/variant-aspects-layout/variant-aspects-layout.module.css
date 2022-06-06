@@ -1,0 +1,71 @@
+.gallery-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: theme("spacing.4");
+
+  &__current {
+    position: relative;
+    flex: 1 0 0;
+    overflow: hidden;
+    display: flex;
+  }
+
+  &__buttons {
+    flex: 0 0 auto;
+  }
+}
+
+.aspect-window {
+  position: absolute;
+  inset: 0;
+}
+
+.buttons-grid {
+  overflow: hidden;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: stretch;
+  cursor: pointer;
+  margin-left: calc(-1 * theme("spacing.3"));
+
+  &__cell {
+    flex: 1 0 25%;
+    min-width: 210px;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    overflow: hidden;
+    padding: theme("spacing.3") 0 0 theme("spacing.3");
+  }
+}
+
+.aspect-button {
+  @apply typography-s;
+
+  overflow: hidden;
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  padding: theme("spacing.2") theme("spacing.3");
+  color: theme("colors.white");
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: theme("fontWeight.bold");
+  background: theme("colors.blue.dark");
+  border-radius: theme("borderRadius.DEFAULT");
+  cursor: pointer;
+
+  &:hover {
+    color: theme("colors.blue.bright");
+  }
+
+  &__title {
+    flex: 1 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -8,6 +8,7 @@ import columnsStore from '@store/ws/columns'
 import variantStore from '@store/ws/variant'
 import {
   TVariantAspectsGridHandles,
+  VariantAspectsLayoutGallery,
   VariantAspectsLayoutGrid,
 } from '@components/variant-aspects-layout'
 import { variantDrawerStore } from '@pages/ws/ui/variant-drawer/variant-drawer.store'
@@ -20,9 +21,15 @@ interface IVariantDrawerProps {
 
 export const VariantDrawer = observer(
   ({ className }: IVariantDrawerProps): ReactElement => {
-    const { aspects } = variantStore
-    const { layoutMode, gridLayout, gridWindowsOpenState, setGridLayout } =
-      variantDrawerStore
+    const { aspects, igvUrl } = variantStore
+    const {
+      layoutMode,
+      gridLayout,
+      gridWindowsOpenState,
+      setGridLayout,
+      galleryActiveAspect,
+      setGalleryActiveAspect,
+    } = variantDrawerStore
 
     useEffect(() => {
       return () => {
@@ -47,11 +54,21 @@ export const VariantDrawer = observer(
         />
         {layoutMode == VariantDrawerLayoutMode.Grid && (
           <VariantAspectsLayoutGrid
+            className={styles.drawer__layout}
             aspects={aspects}
             onChangeLayout={setGridLayout}
             layout={gridLayout}
-            className={styles.drawer__layout}
             handles={gridHandles}
+            igvUrl={igvUrl}
+          />
+        )}
+        {layoutMode === VariantDrawerLayoutMode.Gallery && (
+          <VariantAspectsLayoutGallery
+            className={styles.drawer__layout}
+            aspects={aspects}
+            activeAspect={galleryActiveAspect}
+            onChangeActiveAspect={setGalleryActiveAspect}
+            igvUrl={igvUrl}
           />
         )}
       </div>

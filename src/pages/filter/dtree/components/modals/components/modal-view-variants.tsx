@@ -11,11 +11,7 @@ import filterStore from '@store/filter'
 import variantStore from '@store/ws/variant'
 import { Icon } from '@ui/icon'
 import { Radio } from '@ui/radio'
-import {
-  TVariantAspectsGridHandles,
-  TVariantAspectsGridLayout,
-  VariantAspectsLayoutGrid,
-} from '@components/variant-aspects-layout'
+import { VariantAspectsLayoutGallery } from '@components/variant-aspects-layout'
 import { GlbPagesNames } from '@glb/glb-names'
 import { TCondition } from '@service-providers/common/common.interface'
 import { fetchDsListAsync } from '@utils/TableModal/fetchDsListAsync'
@@ -47,10 +43,7 @@ export const ModalViewVariants = observer(() => {
   const [isSampleMode, setIsSampleMode] = useState(false)
   const [variantSize, setVariantSize] = useState<VariantsSize>()
 
-  const [aspectsLayout, setAspectsLayout] = useState<TVariantAspectsGridLayout>(
-    [],
-  )
-  const layoutHandlesRef = useRef<TVariantAspectsGridHandles>(null)
+  const [activeAspect, setActiveAspect] = useState('')
 
   const ref = useRef(null)
   const variantContainerRef = useRef<HTMLDivElement>(null)
@@ -141,15 +134,6 @@ export const ModalViewVariants = observer(() => {
     const newVariantList = !isSampleMode ? samples : records
 
     setVariantList(newVariantList)
-  }
-
-  const isCollapsed = !aspectsLayout.some(item => item.h > 1)
-  const onCollapse = () => {
-    if (isCollapsed) {
-      layoutHandlesRef.current?.maximizeAll()
-    } else {
-      layoutHandlesRef.current?.minimizeAll()
-    }
   }
 
   return (
@@ -251,15 +235,6 @@ export const ModalViewVariants = observer(() => {
 
                   <div className="flex justify-center items-center">
                     <Icon
-                      name={isCollapsed ? 'Expand' : 'Collapse'}
-                      onClick={onCollapse}
-                      size={16}
-                      className="cursor-pointer text-white"
-                    />
-
-                    <div className="bg-blue-lighter mx-3 rounded-sm w-0.5 h-[20px]" />
-
-                    <Icon
                       name="Close"
                       onClick={dtreeStore.closeModalViewVariants}
                       size={16}
@@ -272,11 +247,12 @@ export const ModalViewVariants = observer(() => {
                   ref={variantContainerRef}
                   className="flex flex-col bg-blue-lighter w-full h-full overflow-auto"
                 >
-                  <VariantAspectsLayoutGrid
-                    aspects={variantStore.variant}
-                    layout={aspectsLayout}
-                    onChangeLayout={setAspectsLayout}
-                    handles={layoutHandlesRef}
+                  <VariantAspectsLayoutGallery
+                    className="flex-1"
+                    igvUrl={variantStore.igvUrl}
+                    aspects={variantStore.aspects}
+                    activeAspect={activeAspect}
+                    onChangeActiveAspect={setActiveAspect}
                   />
                 </div>
               </div>

@@ -26,6 +26,7 @@ import File from './file'
 import Filter from './filter'
 import Folder from './folder'
 import FullScreen from './full-screen'
+import Gallery from './gallery'
 import Import from './import'
 import Info from './info'
 import Lines from './lines'
@@ -70,6 +71,7 @@ export const icons = {
   Filter,
   Folder,
   FullScreen,
+  Gallery,
   Import,
   Info,
   Lines,

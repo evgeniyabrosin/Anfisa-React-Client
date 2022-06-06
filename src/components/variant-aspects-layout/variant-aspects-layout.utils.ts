@@ -3,15 +3,19 @@ import { Layout } from 'react-grid-layout'
 
 import { TAspectDescriptor } from '@service-providers/dataset-level/dataset-level.interface'
 import {
-  GRID_LAYOUT_COLS,
-  GRID_LAYOUT_ROW_HEIGHT,
-  GRID_LAYOUT_SPACING,
-} from './variant-aspects-layout.constants'
-import {
   TVariantAspectsGridHandles,
   TVariantAspectsGridLayout,
   TVariantAspectsLayoutGridChangeHandler,
 } from './variant-aspects-layout.interface'
+
+export const GRID_LAYOUT_COLS = 3
+export const GRID_LAYOUT_ROW_HEIGHT = 40
+export const GRID_LAYOUT_SPACING = 8
+export const GRID_LAYOUT_MARGIN: [number, number] = [
+  GRID_LAYOUT_SPACING,
+  GRID_LAYOUT_SPACING,
+]
+export const GRID_LAYOUT_CONTAINER_PADDING: [number, number] = [16, 16]
 
 export const adaptLayoutForAspects = (
   layout: TVariantAspectsGridLayout,
