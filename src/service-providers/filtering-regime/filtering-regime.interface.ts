@@ -66,7 +66,7 @@ export interface IStatunits {
 
 // statfunc
 
-export interface IStatfuncArguments {
+export interface IStatFuncArguments {
   ds: string
   rq_id: string
   filter?: string
@@ -78,7 +78,12 @@ export interface IStatfuncArguments {
   param: string
 }
 
-export type IStatfunc = IFuncPropertyStatus
+export interface IStatFuncQuery {
+  unit: string
+  param: string
+}
+
+export type IStatFunc = IFuncPropertyStatus
 
 export type TDsStat = TFilteringStat
 

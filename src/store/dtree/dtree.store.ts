@@ -16,7 +16,7 @@ import {
   PointCount,
 } from '@service-providers/decision-trees'
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
-import { IStatfuncArguments } from '@service-providers/filtering-regime'
+import { IStatFuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
@@ -299,7 +299,7 @@ export class DtreeStore {
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
-    const body: IStatfuncArguments = {
+    const body: IStatFuncArguments = {
       ds: datasetStore.datasetName,
       no: activeStepStore.stepIndexForApi,
       code: this.dtreeCode,

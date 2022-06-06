@@ -1,131 +1,90 @@
-import { ReactElement, useEffect, useState } from 'react'
-import { reaction } from 'mobx'
+import { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { ActionType } from '@declarations'
-import { ModeTypes } from '@core/enum/mode-types-enum'
-import dtreeStore from '@store/dtree'
-import activeStepStore from '@pages/filter/dtree/components/active-step.store'
-import { InheritanceModeContent } from '@pages/filter/dtree/components/modals/components/modal-inheritance-mode/components/inheritance-mode-content'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
+import { InheritanceModeCondition } from '@components/inheritance-mode-condition/inheritance-mode-condition'
+import { AttributeKinds } from '@service-providers/common'
+import { addAttributeToStep } from '@utils/addAttributeToStep'
+import { saveAttribute } from '@utils/changeAttribute/saveAttribute'
+import { dtreeFunctionsStore } from '../../../attributes/dtree-functions.store'
+import { dtreeStatFuncStore } from '../../../attributes/dtree-stat-func.store'
 import modalsControlStore from '../../modals-control-store'
 import modalsVisibilityStore from '../../modals-visibility-store'
 import { EditModalButtons } from '../ui/edit-modal-buttons'
 import { HeaderModal } from '../ui/header-modal'
 import { ModalBase } from '../ui/modal-base'
 import { SelectModalButtons } from '../ui/select-modal-buttons'
-import modalInheritanceModeStore from './modal-inheritance-mode.store'
 
 export const ModalInheritanceMode = observer((): ReactElement => {
-  const { groupName, problemGroups, currentStepGroups } = modalsControlStore
+  const {
+    attributeName,
+    problemGroups,
+    initialVariants,
+    initialProblemGroups,
+    initialMode,
+    initialCondition,
+    attributeSubKind,
+  } = dtreeFunctionsStore
 
-  const currentStepIndex = activeStepStore.activeStepIndex
-  const currentGroupIndex = modalsVisibilityStore.groupIndexToChange
+  const { currentStepGroups } = modalsControlStore
 
-  const currentGroup =
-    dtreeStore.stepData[currentStepIndex].groups[currentGroupIndex]
-
-  const currentGroupToModify = dtreeStore.stepData[currentStepIndex].groups
-
-  const selectedGroupsAmount = currentGroup ? dtreeStore.selectedFilters : []
-
-  const [selectedProblemGroups, setSelectedProblemGroups] = useState<string[]>(
-    modalInheritanceModeStore.getSelectedProblemGroups(currentGroup),
-  )
-
-  useEffect(() => {
-    if (currentGroup) {
-      modalInheritanceModeStore.checkExistedSelectedFilters(currentGroup)
-    }
-  }, [currentGroup])
-
-  useEffect(() => {
-    const dispose = reaction(
-      () => dtreeStore.selectedFilters,
-      () => {
-        if (dtreeStore.selectedFilters.length < 2) {
-          modalInheritanceModeStore.currentMode === ModeTypes.All &&
-            modalInheritanceModeStore.resetCurrentMode()
-        }
-
-        if (dtreeStore.selectedFilters.length < 1) {
-          modalInheritanceModeStore.resetCurrentMode()
-        }
-      },
-    )
-
-    return () => dispose()
-  }, [])
-
-  useEffect(() => {
-    const params = `{"problem_group":["${selectedProblemGroups
-      .toString()
-      .split(',')
-      .join('","')}"]}`
-
-    modalInheritanceModeStore.fetchStatFunc(groupName, params)
-
-    return () => {
-      dtreeStore.resetSelectedFilters()
-      dtreeStore.resetStatFuncData()
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const setProblemGroups = (checked: boolean, value: string) => {
-    modalInheritanceModeStore.setProblemGroups({
-      checked,
-      value,
-      groupName,
-      setSelectedProblemGroups,
-    })
-  }
-
-  const addAttribute = (action: ActionType) => {
-    modalInheritanceModeStore.addAttribute(action, selectedProblemGroups)
+  const handleModals = () => {
+    modalsVisibilityStore.closeModalInheritanceMode()
+    modalsVisibilityStore.openModalAttribute()
   }
 
   return (
     <ModalBase minHeight={340}>
       <HeaderModal
-        groupName={modalsVisibilityStore.groupNameToChange}
-        handleClose={() => modalInheritanceModeStore.closeModal()}
+        groupName={attributeName}
+        handleClose={modalsVisibilityStore.closeModalInheritanceMode}
       />
 
-      <InheritanceModeContent
+      <InheritanceModeCondition
         problemGroups={problemGroups}
-        setProblemGroups={setProblemGroups}
-        selectedProblemGroups={selectedProblemGroups}
-        handleReset={() =>
-          modalInheritanceModeStore.resetProblemGroups(
-            groupName,
-            setSelectedProblemGroups,
+        initialVariants={initialVariants}
+        initialProblemGroups={initialProblemGroups}
+        initialMode={initialMode}
+        attributeSubKind={attributeSubKind}
+        statFuncStore={dtreeStatFuncStore}
+        controls={({ values, hasErrors, param, mode }) => {
+          return initialCondition ? (
+            <EditModalButtons
+              handleClose={modalsVisibilityStore.closeModalInheritanceMode}
+              handleSaveChanges={() => {
+                saveAttribute({
+                  filterKind: FilterKindEnum.Func,
+                  filterName: FuncStepTypesEnum.InheritanceMode,
+                  values,
+                  mode,
+                  param,
+                })
+                modalsVisibilityStore.closeModalInheritanceMode()
+              }}
+              disabled={hasErrors}
+            />
+          ) : (
+            <SelectModalButtons
+              currentGroup={currentStepGroups}
+              handleClose={modalsVisibilityStore.closeModalInheritanceMode}
+              handleModals={handleModals}
+              handleModalJoin={modalsVisibilityStore.openModalJoin}
+              disabled={hasErrors}
+              handleAddAttribute={action => {
+                addAttributeToStep(
+                  action,
+                  AttributeKinds.FUNC,
+                  values,
+                  param,
+                  mode,
+                )
+                modalsVisibilityStore.closeModalInheritanceMode()
+              }}
+            />
           )
-        }
-        currentGroup={currentGroup}
+        }}
       />
-
-      {currentGroup ? (
-        <EditModalButtons
-          handleClose={() => modalInheritanceModeStore.closeModal()}
-          handleSaveChanges={() =>
-            modalInheritanceModeStore.saveChanges(selectedProblemGroups)
-          }
-          disabled={
-            selectedGroupsAmount.length === 0 ||
-            selectedProblemGroups.length === 0
-          }
-        />
-      ) : (
-        <SelectModalButtons
-          handleClose={() => modalInheritanceModeStore.closeModal()}
-          handleModals={() => modalInheritanceModeStore.openModalAttribute()}
-          handleModalJoin={() => modalsControlStore.openModalJoin()}
-          handleAddAttribute={addAttribute}
-          disabled={dtreeStore.selectedFilters.length === 0}
-          currentGroup={currentGroupToModify ?? currentStepGroups}
-        />
-      )}
     </ModalBase>
   )
 })

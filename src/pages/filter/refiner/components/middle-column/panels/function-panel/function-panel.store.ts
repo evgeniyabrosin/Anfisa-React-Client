@@ -22,18 +22,6 @@ class FunctionPanelStore {
     return variants || []
   }
 
-  public get filteredComplexVariants(): [string, number][] {
-    return this.complexVariants.filter(([, variantValue]) => variantValue > 0)
-  }
-
-  public get filterName(): string {
-    return filterStore.selectedAttributeStatus?.name ?? ''
-  }
-
-  public get filterGroup(): string {
-    return filterStore.selectedAttributeStatus?.vgroup ?? ''
-  }
-
   public get problemGroups(): string[] {
     return (
       (

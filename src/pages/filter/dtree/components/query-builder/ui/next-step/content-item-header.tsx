@@ -97,11 +97,11 @@ export const ContentItemHeader = observer(
             </NotModeWrapper>
           )}
 
-          <div className="flex items-center text-14 mr-2">
+          <div className="flex items-center text-14">
             {stepType === FilterKindEnum.Func && (
               <FnLabel
                 isActive={currentStep && currentStep.isActive}
-                className="shadow-dark"
+                className="shadow-dark mr-1"
               />
             )}
             {isStepInvalid ? (

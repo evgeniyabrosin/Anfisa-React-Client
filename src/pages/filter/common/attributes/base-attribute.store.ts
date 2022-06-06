@@ -3,8 +3,8 @@ import { makeAutoObservable } from 'mobx'
 import { ActionType } from '@declarations'
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
-import filterStore from '@store/filter'
 import modalsVisibilityStore from '@pages/filter/dtree/components/modals/modals-visibility-store'
+import { savePanelAttribute } from '@pages/filter/refiner/components/middle-column/panels/utils/save-pannel-attribute'
 import {
   AttributeKinds,
   TCondition,
@@ -14,9 +14,8 @@ import {
 } from '@service-providers/common'
 import { addAttributeToStep } from '@utils/addAttributeToStep'
 import { changeEnumAttribute } from '@utils/changeAttribute/changeEnumAttribute'
-import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
-interface IBaseAttributeStoreParams {
+export interface IBaseAttributeStoreParams {
   getAttributeStatus: () => TPropertyStatus | undefined
   getInitialCondition: () => TCondition | undefined
 }
@@ -118,15 +117,14 @@ export class BaseAttributeStore {
       return
     }
 
+    // TODO: will be fixed after enum condition is fixed
     if (isRefiner) {
-      filterStore.saveCurrentCondition([
-        FilterKindEnum.Enum,
-        this.attributeName,
-        getConditionJoinMode(mode),
+      savePanelAttribute({
+        filterKind: FilterKindEnum.Enum,
+        attributeName: this.attributeName,
+        mode,
         selectedVariants,
-      ])
-
-      filterStore.setTouched(false)
+      })
     } else {
       changeEnumAttribute(mode, selectedVariants)
       modalsVisibilityStore.closeModalEnum()
@@ -147,20 +145,6 @@ export class BaseAttributeStore {
     )
 
     modalsVisibilityStore.closeModalEnum()
-  }
-
-  public saveNumeric = (value: TNumericConditionBounds) => {
-    if (!this.attributeName) {
-      return
-    }
-
-    filterStore.saveCurrentCondition([
-      FilterKindEnum.Numeric,
-      this.attributeName,
-      value,
-    ])
-
-    filterStore.setTouched(false)
   }
 
   public setIsShowZeroVariants = (value: boolean) => {

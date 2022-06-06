@@ -15,7 +15,7 @@ export const addAttributeToStep = (
   action: ActionType,
   attributeType: AttributeType,
   filters: string[] | TNumericConditionBounds | null = null,
-  params: TFuncArgs | null = null,
+  param: TFuncArgs | null = null,
   currentMode?: ModeTypes,
   // eslint-disable-next-line max-params
 ): void => {
@@ -32,7 +32,7 @@ export const addAttributeToStep = (
     attribute.splice(2, 0, conditionsJoinMode)
   }
 
-  if (params) attribute.push(params)
+  if (param) attribute.push(param)
 
   const { stepIndexForApi } = activeStepStore
 

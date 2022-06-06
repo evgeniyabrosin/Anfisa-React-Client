@@ -10,6 +10,8 @@ import {
 import { getConditionJoinMode } from '@utils/getConditionJoinMode'
 import modalsVisibilityStore from '../../pages/filter/dtree/components/modals/modals-visibility-store'
 
+// TODO: remove when all func attrs is unified
+
 export const changeFunctionalStep = (
   params: any,
   currentMode?: ModeTypes,

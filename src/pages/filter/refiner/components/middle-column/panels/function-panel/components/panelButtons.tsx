@@ -13,6 +13,7 @@ interface IPanelButtons {
   classname?: Argument
 }
 
+// TODO: unify this component for all other panels
 export const PanelButtons = observer(
   ({
     onSubmit,
