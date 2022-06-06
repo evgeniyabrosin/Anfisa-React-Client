@@ -19,7 +19,7 @@ export const AspectWindowGeneral = ({
             <Button
               className="mx-8 whitespace-nowrap"
               text={t('igv.openIgv')}
-              size="sm"
+              size="xs"
             />
           </Link>
         )

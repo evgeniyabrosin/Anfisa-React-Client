@@ -2,9 +2,7 @@ import { makeAutoObservable } from 'mobx'
 
 import { t } from '@i18n'
 import variantStore from '@store/ws/variant'
-import { ITableAspectDescriptor } from '@service-providers/dataset-level/dataset-level.interface'
 import { TTagsDescriptor } from '@service-providers/ws-dataset-support/ws-dataset-support.interface'
-import { findElementInRow } from '@utils/mian-table/find-element-in-row'
 import { showToast } from '@utils/notifications/showToast'
 import { noFirstSymbolsPattern } from '@utils/validation/validationPatterns'
 
@@ -15,19 +13,6 @@ class DrawerTagsStore {
 
   get tags(): string[] {
     return [...variantStore.generalTags, ...variantStore.optionalTags]
-  }
-
-  get genes(): string {
-    const firstVariant = variantStore.variant[0] as ITableAspectDescriptor
-    const { rows } = firstVariant
-
-    return findElementInRow(rows, 'genes')
-  }
-  get hg19locus(): string {
-    const firstVariant = variantStore.variant[0] as ITableAspectDescriptor
-    const { rows } = firstVariant
-
-    return findElementInRow(rows, 'hg19')
   }
 
   constructor() {

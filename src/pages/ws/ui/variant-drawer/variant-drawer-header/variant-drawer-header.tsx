@@ -32,7 +32,9 @@ export const VariantDrawerHeader = observer(
     const history = useHistory()
     const location = useLocation()
     const { tabReport } = mainTableStore
-    const { locus, genes } = variantStore
+    const {
+      record: { locus, genes },
+    } = variantStore
     const {
       layoutMode,
       setLayoutMode,
@@ -79,54 +81,57 @@ export const VariantDrawerHeader = observer(
     }
 
     return (
-      <div className={cn('px-4 bg-blue-dark', className)}>
-        <div className="flex justify-between items-start">
-          <div className="flex items-center flex-wrap">
-            <div className="flex items-center my-2">
-              <ArrowButton
-                size="md"
-                className="mr-2"
-                direction="up"
-                disabled={isNoPrevVariant}
-                onClick={handlePrevVariant}
-              />
-              <ArrowButton
-                size="md"
-                className="mr-3"
-                direction="down"
-                disabled={isNoNextVariant}
-                onClick={handleNextVariant}
-              />
-            </div>
-            <div className="flex items-center my-2">
-              <div className="text-blue-bright font-bold leading-18px ">
-                {`[${genes}] `}
-                <span dangerouslySetInnerHTML={{ __html: locus }} />
-              </div>
-              <Divider orientation="vertical" />
-            </div>
-            <div className="flex items-center my-2">
-              <DrawerTags />
-              <Divider orientation="vertical" />
-              <DrawerNote />
-            </div>
-          </div>
-
+      <div
+        className={cn(
+          'px-4 bg-blue-dark flex justify-between items-start',
+          className,
+        )}
+      >
+        <div className="flex items-center flex-wrap">
           <div className="flex items-center my-2">
-            <DrawerLayoutControl
-              layoutMode={layoutMode}
-              onChangeLayoutMode={setLayoutMode}
-              gridPresets={gridPresets}
-              onSaveGridPreset={saveGridPreset}
-              onChangeGridPreset={applyGridPreset}
-              windowsOpenState={windowsOpenState}
-              onWindowsToggle={onWindowsToggle}
+            <ArrowButton
+              size="md"
+              className="mr-2"
+              direction="up"
+              disabled={isNoPrevVariant}
+              onClick={handlePrevVariant}
             />
-            <Divider orientation="vertical" spacing="dense" />
-            <button className="w-4 h-4 flex items-center justify-center  text-white hover:text-blue-bright">
-              <Icon name="Close" onClick={handleCloseDrawer} size={16} />
-            </button>
+            <ArrowButton
+              size="md"
+              className="mr-3"
+              direction="down"
+              disabled={isNoNextVariant}
+              onClick={handleNextVariant}
+            />
           </div>
+          <div className="flex items-center my-2">
+            <div className="text-blue-bright font-bold leading-18px ">
+              {`[${genes}] `}
+              <span dangerouslySetInnerHTML={{ __html: locus }} />
+            </div>
+            <Divider orientation="vertical" />
+          </div>
+          <div className="flex items-center my-2">
+            <DrawerTags />
+            <Divider orientation="vertical" />
+            <DrawerNote />
+          </div>
+        </div>
+
+        <div className="flex items-center my-2">
+          <DrawerLayoutControl
+            layoutMode={layoutMode}
+            onChangeLayoutMode={setLayoutMode}
+            gridPresets={gridPresets}
+            onSaveGridPreset={saveGridPreset}
+            onChangeGridPreset={applyGridPreset}
+            windowsOpenState={windowsOpenState}
+            onWindowsToggle={onWindowsToggle}
+          />
+          <Divider orientation="vertical" spacing="dense" />
+          <button className="w-4 h-4 flex items-center justify-center  text-white hover:text-blue-bright">
+            <Icon name="Close" onClick={handleCloseDrawer} size={16} />
+          </button>
         </div>
       </div>
     )

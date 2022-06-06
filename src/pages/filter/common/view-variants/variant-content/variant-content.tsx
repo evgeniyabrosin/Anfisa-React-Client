@@ -14,6 +14,7 @@ interface IVariantContentProps {
   onClose: () => void
   isLoading?: boolean
   aspects: TAspectDescriptor[]
+  igvUrl?: string
 }
 
 export const VariantContent = ({
@@ -22,6 +23,7 @@ export const VariantContent = ({
   onClose,
   isLoading,
   aspects,
+  igvUrl,
 }: IVariantContentProps): ReactElement => {
   const [activeAspect, setActiveAspect] = useState('')
 
@@ -41,6 +43,7 @@ export const VariantContent = ({
           activeAspect={activeAspect}
           onChangeActiveAspect={setActiveAspect}
           aspects={aspects}
+          igvUrl={igvUrl}
         />
       )}
     </div>

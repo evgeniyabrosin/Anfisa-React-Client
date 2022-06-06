@@ -40,8 +40,10 @@ const DrawerTagModal = observer(({ close }: any) => {
     !variantStore.isModalNotesVisible && close()
   })
 
-  const { genes, hg19locus, tags, localCheckedTags, customTag, errorMessage } =
-    drawerTagsStore
+  const {
+    record: { genes, hg19locus },
+  } = variantStore
+  const { tags, localCheckedTags, customTag, errorMessage } = drawerTagsStore
 
   useEffect(() => {
     drawerTagsStore.setLocalCheckedTagList(toJS(variantStore.checkedTags))

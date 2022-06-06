@@ -39,6 +39,7 @@ export const ViewVariantsWindow = observer(
               }
               onClose={onClose}
               aspects={record.aspects}
+              igvUrl={record.igvUrl}
               isLoading={record.isLoading}
             />
           </>
