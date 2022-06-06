@@ -13,7 +13,7 @@ export const CreateDatasetButton = (): ReactElement => {
   return (
     <>
       <Button
-        text={t('dsCreation.createDeriveDS')}
+        text={t('dsCreation.createDerivedDS')}
         onClick={openCreationDialog}
         dataTestId={DecisionTreesMenuDataCy.saveDataset}
       />

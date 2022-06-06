@@ -91,15 +91,19 @@ export const CreateDatasetDialog = observer(
     }
 
     const handleClose = () => {
-      if (!value || !isDone) {
+      if (!value && !operations.isCreationOver) {
         onClose()
         operations.resetSavingStatus()
+
+        setValue('')
 
         return
       }
 
       if (operations.isCreationOver) {
         onClose()
+
+        setValue('')
 
         if (pathName === PatnNameEnum.Ws) {
           datasetStore.setDatasetName(startDatasetName)
@@ -158,6 +162,7 @@ export const CreateDatasetDialog = observer(
         applyText={t('dsCreation.addDataset')}
         isApplyDisabled={!value.trim() || error.length > 0}
         onApply={saveDatasetAsync}
+        isLoading={!operations.isCreationOver}
         width="s"
       >
         <div className="flex flex-col">
@@ -165,6 +170,7 @@ export const CreateDatasetDialog = observer(
             <span className="text-14">{t('dsCreation.label')}</span>
 
             <Input
+              disabled={!operations.isCreationOver}
               value={value}
               onChange={e => handleChange(e.target.value)}
               className="mt-1"

@@ -148,7 +148,7 @@ export const en = {
     },
   },
   dsCreation: {
-    createDeriveDS: 'Create Derive DS',
+    createDerivedDS: 'Create Derived DS',
     datasetCreation: 'Dataset Creation',
     addDatasetTitle: 'Add new dataset',
     label: 'Dataset Name:',
