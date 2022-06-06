@@ -7,11 +7,13 @@ import { t } from '@i18n'
 import { ActionsHistoryStore } from '@store/actions-history'
 import filterDtreesStore from '@store/filter-dtrees'
 import { TFilteringStatCounts } from '@service-providers/common'
-import { DtreeSetPointKinds } from '@service-providers/decision-trees'
-import { IStatfuncArguments } from '@service-providers/filtering-regime'
+import {
+  DtreeSetPointKinds,
+  IDtreeSetArguments,
+} from '@service-providers/decision-trees'
+import { IStatFuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { showToast } from '@utils/notifications'
-import { IDtreeSetArguments } from '../../service-providers/decision-trees/decision-trees.interface'
 import datasetStore from '../dataset/dataset'
 import { DtreeModifiedState } from '../filter-dtrees/filter-dtrees.store'
 import { DtreeCountsAsyncStore } from './dtree-counts.async.store'
@@ -259,7 +261,7 @@ export class DtreeStore {
   }
 
   async fetchStatFuncAsync(subGroupName: string, param: string) {
-    const body: IStatfuncArguments = {
+    const body: IStatFuncArguments = {
       ds: datasetStore.datasetName,
       no: stepStore.stepIndexForApi,
       code: this.dtreeCode,

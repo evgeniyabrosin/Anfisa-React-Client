@@ -1,114 +1,64 @@
-import React, { ChangeEvent, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { FuncStepTypesEnum } from '@core/enum/func-step-types-enum'
-import { ModeTypes } from '@core/enum/mode-types-enum'
+import { FilterKindEnum } from '@core/enum/filter-kind.enum'
+import { t } from '@i18n'
 import filterStore from '@store/filter'
-import { DividerHorizontal } from '@pages/filter/refiner/components/middle-column/components/divider-horizontal'
-import { ConditionJoinMode } from '@service-providers/common'
-import { IInheritanceModeArgs } from '@service-providers/common/common.interface'
-import { getCurrentModeType } from '@utils/getCurrentModeType'
-import functionPanelStore from '../../function-panel.store'
-import { PanelButtons } from '../panelButtons'
-import { ComplexVariants } from './complex-variants'
-import inheritanceModeStore from './inheritance-mode.store'
-import { ProblemGroups } from './problem-groups'
+import { Button } from '@ui/button'
+import { InheritanceModeCondition } from '@components/inheritance-mode-condition/inheritance-mode-condition'
+import { refinerFunctionsStore } from '@pages/filter/refiner/components/attributes/refiner-functions.store'
+import { refinerStatFuncStore } from '@pages/filter/refiner/components/attributes/refiner-stat-func.store'
+import { savePanelAttribute } from '../../../utils/save-pannel-attribute'
 
 export const InheritanceMode = observer(() => {
-  const { selectedCondition, isRedactorMode, isFilterTouched } = filterStore
+  const {
+    attributeName,
+    problemGroups,
+    initialVariants,
+    initialProblemGroups,
+    initialMode,
+    initialCondition,
+    attributeSubKind,
+  } = refinerFunctionsStore
 
-  const { problemGroups, filteredComplexVariants, complexVariants } =
-    functionPanelStore
-
-  const { problemGroupValues, variantValues } = inheritanceModeStore
-
-  const handleChangeProblemGroups = (
-    e: ChangeEvent<HTMLInputElement>,
-    problemGroup: string,
-  ) => {
-    inheritanceModeStore.updateProblemGroupValues(e, problemGroup)
-    filterStore.setTouched(true)
-  }
-
-  const handleChangeVariants = (
-    e: ChangeEvent<HTMLInputElement>,
-    variantName: string,
-  ) => {
-    inheritanceModeStore.updateVariantValues(e, variantName)
-    filterStore.setTouched(true)
-  }
-  // update data
-  useEffect(() => {
-    functionPanelStore.fetchStatFunc(
-      FuncStepTypesEnum.InheritanceMode,
-      JSON.stringify({
-        problem_group: problemGroupValues || [],
-      }),
-    )
-  }, [problemGroupValues])
-
-  // listener for curr mode reseting
-  useEffect(() => {
-    if (variantValues.length < 2) {
-      inheritanceModeStore.currentMode === ModeTypes.All &&
-        inheritanceModeStore.resetCurrentMode()
-    }
-
-    if (variantValues.length < 1) {
-      inheritanceModeStore.resetCurrentMode()
-    }
-  }, [variantValues])
-
-  // set/reset data
-  useEffect(() => {
-    if (selectedCondition && isRedactorMode) {
-      const selectedFilterProblemGroups =
-        selectedCondition[4] as IInheritanceModeArgs
-
-      const conditionJoinType = selectedCondition[2] as ConditionJoinMode
-
-      inheritanceModeStore.setCurrentMode(getCurrentModeType(conditionJoinType))
-      inheritanceModeStore.setProblemGroupValues(
-        selectedFilterProblemGroups['problem_group'] || [problemGroups[0]],
-      )
-      inheritanceModeStore.setVariantValues(selectedCondition[3] as string[])
-    }
-
-    if (!isRedactorMode) {
-      inheritanceModeStore.setProblemGroupValues([])
-      inheritanceModeStore.setVariantValues([])
-      inheritanceModeStore.resetCurrentMode()
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRedactorMode, selectedCondition])
-
-  // to avoid displaying this data on the another func attr
-  useEffect(() => {
-    return () => filterStore.resetStatFuncData()
-  }, [])
+  const { isFilterTouched } = filterStore
 
   return (
-    <>
-      <ProblemGroups
-        problemGroups={problemGroups}
-        problemGroupValues={problemGroupValues}
-        handleChangeProblemGroups={handleChangeProblemGroups}
-      />
-
-      <DividerHorizontal />
-
-      <ComplexVariants
-        variantValues={variantValues}
-        variants={selectedCondition ? complexVariants : filteredComplexVariants}
-        handleChangeVariants={handleChangeVariants}
-      />
-
-      <PanelButtons
-        onSubmit={inheritanceModeStore.handleSumbitCondtions}
-        resetFields={inheritanceModeStore.resetAllFields}
-        disabled={!variantValues.length || !isFilterTouched}
-      />
-    </>
+    <InheritanceModeCondition
+      problemGroups={problemGroups}
+      initialVariants={initialVariants}
+      initialProblemGroups={initialProblemGroups}
+      initialMode={initialMode}
+      attributeSubKind={attributeSubKind}
+      statFuncStore={refinerStatFuncStore}
+      controls={({ values, mode, hasErrors, param, clearValue }) => {
+        return (
+          <div className="flex-1 flex items-end justify-end mt-1 pb-[40px]">
+            <Button
+              variant={'secondary'}
+              text={t('general.clear')}
+              onClick={clearValue}
+              className="px-5 mr-2"
+            />
+            <Button
+              text={
+                initialCondition
+                  ? t('dtree.saveChanges')
+                  : t('dtree.addAttribute')
+              }
+              onClick={() =>
+                savePanelAttribute({
+                  filterKind: FilterKindEnum.Func,
+                  attributeName,
+                  mode,
+                  selectedVariants: values,
+                  param,
+                })
+              }
+              disabled={hasErrors || !isFilterTouched}
+            />
+          </div>
+        )
+      }}
+    />
   )
 })

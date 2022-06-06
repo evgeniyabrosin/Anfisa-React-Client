@@ -2,12 +2,13 @@ import { AxiosRequestConfig } from 'axios'
 
 import { adaptDsStatResponse } from '@service-providers/filtering-regime/filtering-regime.adapters'
 import { ServiceProviderBase, TFilteringStat } from '../common'
+import { adaptDataToCamelizedType } from './../common/common.adapters'
 import {
   DsStatArgumentsOptions,
   IDsStat,
   IDsStatArguments,
-  IStatfunc,
-  IStatfuncArguments,
+  IStatFunc,
+  IStatFuncArguments,
   IStatunits,
   IStatunitsArguments,
   TDeleteFilterPresetParams,
@@ -85,11 +86,12 @@ export class FilteringRegimeProvider extends ServiceProviderBase {
   }
 
   public async getStatFunc(
-    params: IStatfuncArguments,
-    options: Partial<AxiosRequestConfig> = {},
-  ) {
-    const response = await this.post<IStatfunc>('/statfunc', params, options)
-    return response.data
+    params: IStatFuncArguments,
+    options: Partial<AxiosRequestConfig<string>> = {},
+  ): Promise<IStatFunc> {
+    const response = await this.post<IStatFunc>('/statfunc', params, options)
+
+    return adaptDataToCamelizedType(response.data)
   }
 
   public getFullDsStat(

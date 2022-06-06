@@ -39,7 +39,7 @@ export const FilterControl = observer(
     return (
       <div
         className={cn(
-          'flex flex-wrap justify-end bg-blue-dark pr-6 pb-4 pl-6',
+          'flex flex-wrap justify-end bg-blue-dark px-4 pb-4',
           className,
         )}
       >

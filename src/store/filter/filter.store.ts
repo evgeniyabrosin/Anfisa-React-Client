@@ -8,7 +8,7 @@ import filterPresetsStore from '@store/filter-presets'
 import { GlbPagesNames } from '@glb/glb-names'
 import { FilterControlOptions } from '@pages/filter/common/filter-control/filter-control.const'
 import { TCondition, TPropertyStatus } from '@service-providers/common'
-import { IStatfuncArguments } from '@service-providers/filtering-regime'
+import { IStatFuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { showToast } from '@utils/notifications'
 import { FilterStatStore, TFilterStatQuery } from './filter-stat.store'
@@ -183,9 +183,9 @@ export class FilterStore {
     this.selectCondition(savedIndex)
   }
 
-  // TODO: why it's here?
+  // TODO: remove after all func filters is unified
   async fetchStatFuncAsync(unit: string, param: any) {
-    const body: IStatfuncArguments = {
+    const body: IStatFuncArguments = {
       ds: datasetStore.datasetName,
       conditions: this.conditions,
       rq_id: String(Date.now()),
