@@ -16,8 +16,8 @@ export const ConditionModalOptionsButton = ({
     <Button
       refEl={refEl}
       onClick={rest.onClick}
-      className="bg-transparent hover:bg-transparent  active:bg-transparent"
-      append={
+      variant="text"
+      icon={
         <Icon
           name="Options"
           className="cursor-pointer text-blue-bright"

@@ -37,6 +37,10 @@
   }
 
   &__button {
-    margin: 0 0 0 theme("spacing.3");
+    margin-left: theme("spacing.2");
+
+    &:first-child {
+      margin-left: 0
+    }
   }
 }

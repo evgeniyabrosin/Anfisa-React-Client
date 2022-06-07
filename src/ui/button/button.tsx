@@ -8,8 +8,10 @@ export interface IButtonProps {
   text?: ReactNode
   textSize?: 'xs' | 'sm'
   size?: 'xs' | 'sm' | 'md'
+  padding?: 'normal' | 'dense'
   disabled?: boolean
   variant?:
+    | 'text'
     | 'primary'
     | 'secondary'
     | 'secondary-dark'
@@ -32,6 +34,7 @@ export const Button: FC<IButtonProps> = ({
   text,
   textSize,
   size = 'sm',
+  padding = 'normal',
   disabled = false,
   variant = 'primary',
   onClick,
@@ -51,6 +54,7 @@ export const Button: FC<IButtonProps> = ({
     styles.button,
     styles[`button_${size}`],
     styles[`button_${variant}`],
+    styles[`button_${padding}`],
     isOnlyIcon && styles.button_iconOnly,
     className,
   )

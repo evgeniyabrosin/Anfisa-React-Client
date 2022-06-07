@@ -35,6 +35,7 @@ export const ExportReportButton = observer(
         dataTestId={MainTableDataCy.exportReport}
         refEl={refEl}
         size="xs"
+        padding="dense"
         variant="primary-dark"
         prepend={<Icon name="Export" />}
         onClick={rest.onClick}
