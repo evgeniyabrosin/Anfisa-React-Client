@@ -18,10 +18,15 @@ const ModalContent = styled.div<{
   maxHeight: number | string
   width: number | string
 }>`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: ${props => props.width};
   height: auto;
   min-height: ${props => props.minHeight};
   max-height: ${props => props.maxHeight};
+  overflow: hidden;
 `
 
 interface IProps {
