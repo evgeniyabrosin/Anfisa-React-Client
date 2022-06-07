@@ -69,6 +69,7 @@ export const EnumCondition = observer(
     )
     const [searchValue, setSearchValue] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [variantsPerPage, setVariantsPerPage] = useState<number>(initialCount)
 
     const isBlockAddBtn = !selectedVariants.length || !isFilterTouched
@@ -78,7 +79,7 @@ export const EnumCondition = observer(
       setCurrentPage(0)
     }, [attributeName])
 
-    useEffect(
+    /*useEffect(
       () => {
         const element = ref.current as Element
 
@@ -100,7 +101,7 @@ export const EnumCondition = observer(
         }
       }, // eslint-disable-next-line react-hooks/exhaustive-deps
       [ref.current],
-    )
+    )*/
 
     const preparedSearchValue = searchValue.toLocaleLowerCase()
 

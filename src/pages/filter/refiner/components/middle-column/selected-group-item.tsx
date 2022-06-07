@@ -28,7 +28,7 @@ export const SelectedGroupItem = ({
       id={variantName + variantValue}
       checked={isSelected}
       onChange={handleCheck}
-      className={cn('mb-4 text-14 flex items-center w-fit', className)}
+      className={cn('mb-4 text-14 flex items-center w-fit h-fit', className)}
     >
       <span>{variantName}</span>
 
