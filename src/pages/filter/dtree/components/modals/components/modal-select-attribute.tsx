@@ -30,7 +30,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
   }, [])
 
   return (
-    <ModalBase refer={modalBaseRef} minHeight={340}>
+    <ModalBase refer={modalBaseRef} minHeight="580px">
       <HeaderModal
         groupName={t('dtree.selectAttribute')}
         handleClose={handleClose}
@@ -42,7 +42,7 @@ export const ModalSelectAttribute = observer((): ReactElement => {
       ) : (
         <DtreeUnitsList
           isModal
-          className="overflow-hidden -mx-4"
+          className="overflow-hidden -mx-4 flex-stretch-fill"
           listContainerId="attributes-container"
         />
       )}

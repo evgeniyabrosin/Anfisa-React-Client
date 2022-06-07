@@ -19,7 +19,7 @@ export const HeaderModal = ({
   isTextEditor,
   handleChangeTheme,
 }: IHeaderModalProps) => (
-  <div className="flex w-full justify-between items-center font-medium">
+  <div className="flex w-full justify-between items-center font-medium flex-grow-0 flex-shrink-0">
     <div
       className={cn(theme === 'light' ? 'text-black' : 'text-white', 'flex')}
       data-testid={DecisionTreeModalDataCy.modalHeader}
