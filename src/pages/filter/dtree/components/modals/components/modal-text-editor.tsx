@@ -55,7 +55,9 @@ export const ModalTextEditor = observer((): ReactElement => {
 
   useEffect(() => {
     if (dtreeStore.localDtreeCode) {
+      dtreeStore.setNextDtreeCode(dtreeStore.localDtreeCode)
       setCode(dtreeStore.localDtreeCode)
+      dtreeStore.resetLocalDtreeCode()
     } else {
       dtreeStore.setStartDtreeCode()
     }
