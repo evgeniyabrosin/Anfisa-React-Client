@@ -24,8 +24,8 @@
 .checkmark {
   position: relative;
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 16px !important;
+  height: 16px !important;
   border: 1px solid theme("colors.grey.blue");
   border-radius: 0.125rem;
   transition: all 0.2s;
@@ -47,4 +47,5 @@
 .label {
   margin-left: 8px;
   cursor: pointer;
+  max-width: calc(100% - 24px);
 }
