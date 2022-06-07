@@ -27,14 +27,14 @@ export const TagsModal = observer(({ close, title }: ITagsModalProps) => {
   const handleApplyAsync = async () => {
     zoneStore.createSelectedZoneFilter('isTags')
 
-    if (zoneStore.isModeNOT) {
-      zoneStore.addZone(['_tags', zoneStore.selectedTags, false])
-    } else {
-      zoneStore.addZone(['_tags', zoneStore.selectedTags])
-    }
+    const tags = zoneStore.isModeWithNotes
+      ? [...zoneStore.selectedTags, '_note']
+      : zoneStore.selectedTags
 
-    if (zoneStore.isModeWithNotes) {
-      zoneStore.addZone(['_tags', [...zoneStore.selectedTags, '_note']])
+    if (zoneStore.isModeNOT) {
+      zoneStore.addZone(['_tags', tags, false])
+    } else {
+      zoneStore.addZone(['_tags', tags])
     }
 
     close()
