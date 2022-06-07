@@ -531,7 +531,6 @@ export class DtreeStore {
 
   closeModalViewVariants = () => {
     this.isModalViewVariantsVisible = false
-    // this.tableModalIndexNumber = null
   }
 
   get variantsModalQuery(): IDsListArguments | undefined {
