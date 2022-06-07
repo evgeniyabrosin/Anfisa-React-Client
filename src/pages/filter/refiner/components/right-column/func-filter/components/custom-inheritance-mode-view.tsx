@@ -16,7 +16,6 @@ export const CustomInheritanceModeView = ({
   filterExpression,
 }: ICustomInheritanceModeViewProps): ReactElement => {
   const { problemGroups } = functionPanelStore
-  const scenarioArray = Object.entries(filterExpression['scenario'])
 
   return (
     <div
@@ -37,7 +36,7 @@ export const CustomInheritanceModeView = ({
             <span>{group}</span>
 
             <span className="ml-1 text-grey-blue">
-              {getScenarioValue(group, scenarioArray)}
+              {getScenarioValue(group, filterExpression.scenario)}
             </span>
           </div>
         ))}

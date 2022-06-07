@@ -109,7 +109,7 @@ class ModalsVisibilityStore {
     this.groupIndexToChange = groupIndex ?? -1
   }
 
-  public closeModalCustomInheritanceMode() {
+  public closeModalCustomInheritanceMode = () => {
     this.isModalCustomInheritanceModeVisible = false
   }
 

@@ -1,10 +1,12 @@
+import { IScenario } from '@service-providers/common'
+
 export const getScenarioValue = (
   scenarioName: string,
-  scenarioArray: [string, string | string[]][],
+  scenarioArray: IScenario,
 ): string => {
   let scenarioValue = ''
 
-  scenarioArray.forEach(([scenarioNumber, scenarioNames]) => {
+  Object.entries(scenarioArray).forEach(([scenarioNumber, scenarioNames]) => {
     if (scenarioNames.includes(scenarioName)) {
       scenarioValue = scenarioNumber
     }

@@ -5,7 +5,6 @@ import { ModeTypes } from '@core/enum/mode-types-enum'
 import filterStore from '@store/filter'
 import { CustomInheritanceModeContent } from '@pages/filter/dtree/components/query-builder/ui/custom-inheritance-mode-content'
 import { ConditionJoinMode } from '@service-providers/common'
-import { ICustomInheritanceModeArgs } from '@service-providers/common/common.interface'
 import { getStringScenario } from '@utils/function-panel/getStringScenario'
 import { getCurrentModeType } from '@utils/getCurrentModeType'
 import functionPanelStore from '../../function-panel.store'
@@ -36,17 +35,12 @@ export const CustomInheritanceMode = observer(() => {
   // set/reset data
   useEffect(() => {
     if (selectedCondition && isRedactorMode) {
-      const selectedFilterScenario =
-        selectedCondition[4] as ICustomInheritanceModeArgs
-      const selectedFilterScenarioArray = Object.entries(
-        selectedFilterScenario['scenario'],
-      )
       const conditionJoinType = selectedCondition[2] as ConditionJoinMode
 
       customInheritanceModeStore.setCurrentMode(
         getCurrentModeType(conditionJoinType),
       )
-      customInheritanceModeStore.setScenario(selectedFilterScenarioArray)
+      // customInheritanceModeStore.setScenario(selectedFilterScenarioArray)
     }
 
     if (!isRedactorMode) {

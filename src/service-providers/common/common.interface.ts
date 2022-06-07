@@ -39,12 +39,15 @@ export type TSelectValues = {
   [key: string]: string[]
 }
 
+export interface IScenario {
+  [key: string]: string[]
+}
+
 export interface IInheritanceModeArgs {
   problem_group: string[]
 }
-
 export interface ICustomInheritanceModeArgs {
-  scenario: [string, string[] | string]
+  scenario: IScenario
 }
 
 export interface ICompoundHetArgs {

@@ -72,7 +72,7 @@ class ModalGeneRegionStore {
     addAttributeToStep(
       action,
       FilterKindEnum.Func,
-      null,
+      [],
       params,
       this.currentMode,
     )

@@ -12,10 +12,10 @@ export const InheritanceModeVariants = ({
   isFetching,
   handleSetVariants,
 }: IInheritanceModeVariantsProps): ReactElement => (
-  <div className={'text-14'}>
+  <div className="flex flex-col text-14">
     <>
       {isFetching ? (
-        <Loader size="m" />
+        <Loader size="s" className="my-4" />
       ) : filteredVariants?.length > 0 ? (
         filteredVariants.map(([variantName, variantValue]) => (
           <Checkbox

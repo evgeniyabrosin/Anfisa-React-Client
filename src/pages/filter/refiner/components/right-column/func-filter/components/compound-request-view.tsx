@@ -58,7 +58,7 @@ export const CompoundRequestView = ({
                 <span>{group}</span>
 
                 <span className="ml-1 text-grey-blue">
-                  {getScenarioValue(group, Object.entries(reqCondition))}
+                  {getScenarioValue(group, reqCondition)}
                 </span>
               </div>
             ))}

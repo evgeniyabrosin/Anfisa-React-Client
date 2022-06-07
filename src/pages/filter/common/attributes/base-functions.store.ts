@@ -4,8 +4,10 @@ import { DefaultProblemGroup } from '@core/enum/default-problem-group-enum'
 import { ModeTypes } from '@core/enum/mode-types-enum'
 import datasetStore from '@store/dataset/dataset'
 import {
+  ICustomInheritanceModeArgs,
   IFuncPropertyStatus,
   IInheritanceModeArgs,
+  IScenario,
   TFuncCondition,
   TPropertyStatus,
 } from '@service-providers/common'
@@ -42,11 +44,17 @@ export class BaseFunctionsStore {
 
   public get problemGroups(): string[] {
     const status = this.attributeStatus as IFuncPropertyStatus
+
     return status?.family || []
   }
 
   public get initialVariants(): string[] | undefined {
     return this.initialCondition?.[3]
+  }
+
+  public get initialScenario(): IScenario {
+    const condition = this.initialCondition?.[4] as ICustomInheritanceModeArgs
+    return condition?.scenario
   }
 
   public get initialProblemGroups(): string[] | undefined {

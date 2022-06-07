@@ -14,7 +14,7 @@ import datasetStore from '../store/dataset/dataset'
 export const addAttributeToStep = (
   action: ActionType,
   attributeType: AttributeType,
-  filters: string[] | TNumericConditionBounds | null = null,
+  filters: string[] | TNumericConditionBounds,
   param: TFuncArgs | null = null,
   currentMode?: ModeTypes,
   // eslint-disable-next-line max-params
@@ -24,7 +24,7 @@ export const addAttributeToStep = (
   const shouldTakeAttributeFromStore = attributeType !== FilterKindEnum.Numeric
 
   const subGroupName = dtreeStore.selectedGroups[1]
-  const attribute = [attributeType, subGroupName, filters]
+  const attribute = [attributeType, subGroupName, filters.length && filters]
 
   if (shouldTakeAttributeFromStore) {
     const conditionsJoinMode = getConditionJoinMode(currentMode)
