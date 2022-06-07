@@ -18,7 +18,7 @@ export const SelectedDataset = observer((): ReactElement => {
   }
 
   return (
-    <div className="flex-grow justify-center">
+    <div className="flex-grow justify-center flex flex-col">
       <div className="flex items-center flex-wrap mt-4 ml-4">
         <CardTitle
           text={dirinfoStore.selectedDirinfoName}
@@ -29,10 +29,7 @@ export const SelectedDataset = observer((): ReactElement => {
 
         <OpenViewerButton />
       </div>
-      <div
-        className="flex-grow grid gap-4 grid-cols-3 p-4 overflow-auto"
-        style={{ height: 'calc(100% - 48px)' }}
-      >
+      <div className="flex-grow grid gap-4 grid-cols-3 p-4 overflow-auto flex-grow">
         <Card className="col-span-1 xl:col-span-3">
           <DatasetGeneral />
 
