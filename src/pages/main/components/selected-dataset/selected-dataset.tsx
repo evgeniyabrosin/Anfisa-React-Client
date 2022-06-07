@@ -29,7 +29,10 @@ export const SelectedDataset = observer((): ReactElement => {
 
         <OpenViewerButton />
       </div>
-      <div className="flex-grow grid gap-4 grid-cols-3 p-4 h-full overflow-auto">
+      <div
+        className="flex-grow grid gap-4 grid-cols-3 p-4 overflow-auto"
+        style={{ height: 'calc(100% - 48px)' }}
+      >
         <Card className="col-span-1 xl:col-span-3">
           <DatasetGeneral />
 
