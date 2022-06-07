@@ -12,6 +12,7 @@ import { IStatFuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
 import { showToast } from '@utils/notifications'
 import { FilterStatStore, TFilterStatQuery } from './filter-stat.store'
+import { FilterStatUnitStore } from './filter-stat-unit.store'
 
 enum PresetModifiedState {
   NotPreset = 'NotPreset',
@@ -22,6 +23,7 @@ enum PresetModifiedState {
 export class FilterStore {
   readonly initialStat = new FilterStatStore()
   readonly filteredStat = new FilterStatStore()
+  readonly filterStatUnit = new FilterStatUnitStore()
 
   // TODO: it's not good choice to save current page as store field
   method!: GlbPagesNames | FilterControlOptions
@@ -71,6 +73,15 @@ export class FilterStore {
     )
 
     reaction(
+      () => this.selectedAttributeQuery,
+      query => {
+        if (query) {
+          this.filterStatUnit.setQuery(query)
+        }
+      },
+    )
+
+    reaction(
       () => filterPresetsStore.activePreset,
       presetName => {
         if (presetName) {
@@ -103,12 +114,10 @@ export class FilterStore {
   }
 
   public get selectedAttributeStatus(): TPropertyStatus | undefined {
-    if (this.isRedactorMode) {
-      const activeFilter = this._conditions[this._selectedConditionIndex]
+    const activeFilter = this._conditions[this._selectedConditionIndex]
 
-      if (activeFilter) {
-        return this.stat.getAttributeStatusByName(activeFilter[1])
-      }
+    if (activeFilter) {
+      return this.filterStatUnit.data?.units[0]
     } else if (this.attributeNameToAdd) {
       return this.stat.getAttributeStatusByName(this.attributeNameToAdd)
     }
@@ -141,6 +150,23 @@ export class FilterStore {
       datasetName: this.datasetName,
       conditions: toJS(this.conditions),
     }
+  }
+
+  private get selectedAttributeQuery() {
+    if (this.attributeNameToAdd) {
+      return toJS({
+        datasetName: this.datasetName,
+        conditions: this._conditions,
+        units: [this.attributeNameToAdd],
+      })
+    } else if (this._selectedConditionIndex >= 0) {
+      return toJS({
+        datasetName: this.datasetName,
+        conditions: this._conditions.slice(0, this._selectedConditionIndex),
+        units: [this._conditions[this._selectedConditionIndex][1]],
+      })
+    }
+    return undefined
   }
 
   public addCondition(condition: TCondition): number {
