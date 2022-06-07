@@ -223,7 +223,7 @@ class ModalCompoundRequestStore {
     addAttributeToStep(
       action,
       FilterKindEnum.Func,
-      null,
+      ['True'],
       params,
       this.currentMode,
     )

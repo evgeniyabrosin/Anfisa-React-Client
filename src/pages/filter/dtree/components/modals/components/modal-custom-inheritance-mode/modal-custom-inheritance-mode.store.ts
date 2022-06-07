@@ -179,7 +179,7 @@ class ModalCustomInheritanceModeStore {
     addAttributeToStep(
       action,
       FilterKindEnum.Func,
-      null,
+      ['True'],
       params,
       this.currentMode,
     )
