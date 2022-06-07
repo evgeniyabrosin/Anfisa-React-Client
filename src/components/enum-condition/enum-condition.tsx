@@ -232,7 +232,10 @@ export const EnumCondition = observer(
             />
           </div>
 
-          <div className="h-full flex flex-col">
+          <div
+            className="h-full flex flex-col"
+            style={{ maxHeight: '340px', overflowY: 'auto' }}
+          >
             {variantsPage.length > 0 ? (
               variantsPage.map(variant => (
                 <SelectedGroupItem
