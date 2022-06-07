@@ -5,7 +5,7 @@ Scenario Outline:01 Add a valid locus - Secondary dataset
 	Given the Filter Refiner for the <Dataset Name> was open
 	When the user clicks Edit Filters
 	And clicks "+" button near Functional Units
-	And clicks the "GeneRegion" attribute
+	And clicks the "GeneRegion" functional attribute
 	And enters <Valid Locus> value in the input field
 	And clicks the "Add" button
 	Then the filter by Locus should be added
@@ -22,7 +22,7 @@ Examples:
 Scenario Outline:02 Add a valid locus - Primary dataset
 	Given the Filter Refiner for the "xl_PGP3140_wgs_NIST-4_2" was open
 	When the user clicks Edit Filters
-	And clicks the "GeneRegion" attribute
+	And clicks the "GeneRegion" functional attribute
 	And enters <ValidN Locus> value in the input field
 	And clicks the "Add" button
 	Then the filter by Locus should be added
@@ -38,7 +38,7 @@ Examples:
 Scenario Outline:03 Add an Invalid locus
 	Given the Filter Refiner for the "PGP3140_wgs_panel_hl" was open
 	When the user clicks "+" button near Functional Units
-	And  clicks the "GeneRegion" attribute
+	And  clicks the "GeneRegion" functional attribute
 	And enters <Invalid Locus> value in the input field
 	And clicks the "Add" button
 	Then the "Add" button should be disabled
@@ -57,7 +57,7 @@ Scenario Outline:04 Add an Empty locus
 	Given the Filter Refiner for the "PGP3140_wgs_panel_hl" was open
 	When the user clicks Edit Filters
 	And clicks "+" button near Functional Units
-	And clicks the "GeneRegion" attribute
+	And clicks the "GeneRegion" functional attribute
 	And nothing enters to the "Locus" field
 	And clicks the "Add" button
 	Then the "Add" button should be disabled
@@ -67,7 +67,7 @@ Scenario Outline:04 Add an Empty locus
 Scenario Outline:05 Clear button
 	Given the Filter Refiner for the "PGP3140_wgs_panel_hl" was open
 	When the user  clicks "+" button near Functional Units
-	And  clicks the "GeneRegion" attribute
+	And  clicks the "GeneRegion" functional attribute
 	And inputs "<Valid Locus>"
 	And clicks the "Add"
 	And the filter is applied
