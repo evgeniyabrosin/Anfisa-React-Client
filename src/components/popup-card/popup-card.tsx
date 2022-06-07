@@ -73,13 +73,12 @@ export const PopupCard = ({
           <Button
             size="sm"
             text={cancelText || t('general.cancel')}
-            variant="secondary"
             onClick={onClose}
+            variant="secondary"
           />
 
           <Button
             disabled={isApplyDisabled || isLoading}
-            variant="secondary"
             size="sm"
             text={
               isLoading ? (

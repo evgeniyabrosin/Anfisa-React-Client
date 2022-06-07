@@ -35,12 +35,14 @@ export const ExportReportButton = observer(
         dataTestId={MainTableDataCy.exportReport}
         refEl={refEl}
         size="xs"
+        padding="dense"
         variant="primary-dark"
         prepend={<Icon name="Export" />}
         onClick={rest.onClick}
         style={{
           pointerEvents: operationsStore.isExportingReport ? 'none' : 'inherit',
           backgroundColor: !disabled && theme('colors.blue.secondary'),
+          borderColor: !disabled && theme('colors.blue.secondary'),
         }}
         textSize="sm"
         append={

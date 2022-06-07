@@ -51,6 +51,7 @@ export const SolutionDropDown = observer(
             )}
           />
         }
+        {...rest}
       />
     )
 

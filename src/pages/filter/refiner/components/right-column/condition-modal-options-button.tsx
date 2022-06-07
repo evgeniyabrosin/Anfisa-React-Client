@@ -1,10 +1,10 @@
-import { ReactElement } from 'react'
+import { ReactElement, RefObject } from 'react'
 
 import { Button } from '@ui/button'
 import { Icon } from '@ui/icon'
 
 interface IConditionModalOptionsButtonProps {
-  refEl: HTMLElement
+  refEl: RefObject<HTMLButtonElement>
   onClick?: () => void
 }
 
@@ -16,8 +16,8 @@ export const ConditionModalOptionsButton = ({
     <Button
       refEl={refEl}
       onClick={rest.onClick}
-      className="bg-transparent hover:bg-transparent  active:bg-transparent"
-      append={
+      variant="text"
+      icon={
         <Icon
           name="Options"
           className="cursor-pointer text-blue-bright"
