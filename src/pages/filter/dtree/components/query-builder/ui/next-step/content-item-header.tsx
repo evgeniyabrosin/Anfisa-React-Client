@@ -40,7 +40,7 @@ export const ContentItemHeader = observer(
     stepNo,
     groupNo,
   }: IContentItemHeaderProps): ReactElement => {
-    const isNegateStep: boolean = currentStep.negate || false
+    const isNegateStep: boolean = currentStep.isNegate || false
     const isStepInvalid: boolean =
       typeof groupName !== 'string' ||
       stepType === FilterKindEnum.Error ||

@@ -77,7 +77,7 @@ export const ContentItemValues = observer(
           </AllModeWrapper>
         )}
 
-        <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1">
+        <div className="flex flex-col text-14 font-normal h-full flex-wrap mt-1 pl-1">
           {stepType === FilterKindEnum.Numeric &&
             getNumericExpression(conditionValue, groupName)}
 

@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
@@ -62,7 +62,7 @@ export const NextStepHeader = observer(
     const isEmptyFirstStep = isEmptyStep && isFirstStep
 
     return (
-      <Fragment>
+      <>
         <div
           style={{ minHeight: 43 }}
           className="flex w-full justify-between items-center mt-1 step-content-area"
@@ -136,7 +136,7 @@ export const NextStepHeader = observer(
           </div>
         </div>
         {isExpanded && <StepDivider />}
-      </Fragment>
+      </>
     )
   },
 )
