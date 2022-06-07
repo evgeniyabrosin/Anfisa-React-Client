@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { FilterModsEnum } from '@core/enum/filter-mods-enum'
@@ -20,7 +20,7 @@ export const ZoneModalMods = observer((): ReactElement => {
   }
 
   return (
-    <Fragment>
+    <>
       <div className="flex my-2">
         <Checkbox
           id={'zone-not-mode'}
@@ -50,6 +50,6 @@ export const ZoneModalMods = observer((): ReactElement => {
           {t('ds.variantsWithNotesOnly')}
         </Checkbox>
       </div>
-    </Fragment>
+    </>
   )
 })

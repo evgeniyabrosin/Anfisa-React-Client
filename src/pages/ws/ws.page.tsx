@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
 import { NumberParam, useQueryParams } from 'use-query-params'
@@ -65,7 +65,7 @@ export const WSPage = observer((): ReactElement => {
   const isDrawerVisible = variantStore.drawerVisible
 
   return (
-    <Fragment>
+    <>
       {dtreeStore.isModalSaveDatasetVisible && <ModalSaveDataset />}
 
       {variantStore.isModalNotesVisible && <ModalNotes />}
@@ -91,6 +91,6 @@ export const WSPage = observer((): ReactElement => {
           {isDrawerVisible && <VariantDrawer className="flex-1" />}
         </div>
       </div>
-    </Fragment>
+    </>
   )
 })
