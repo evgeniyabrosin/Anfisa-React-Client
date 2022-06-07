@@ -26,7 +26,6 @@ const ModalContent = styled.div<{
   height: auto;
   min-height: ${props => props.minHeight};
   max-height: ${props => props.maxHeight};
-  overflow: hidden;
 `
 
 interface IProps {
