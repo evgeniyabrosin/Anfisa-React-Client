@@ -11,6 +11,7 @@ import { CreateEmptyStepPositions } from '@pages/filter/dtree/components/active-
 import { TFilteringStatCounts, TItemsCount } from '@service-providers/common'
 import {
   DtreeSetPointKinds,
+  ICodeFrags,
   IDtreeSetArguments,
   IDtreeSetPoint,
   PointCount,
@@ -18,7 +19,6 @@ import {
 import decisionTreesProvider from '@service-providers/decision-trees/decision-trees.provider'
 import { IStatfuncArguments } from '@service-providers/filtering-regime'
 import filteringRegimeProvider from '@service-providers/filtering-regime/filtering-regime.provider'
-import { getDataFromCode } from '@utils/getDataFromCode'
 import { getStepDataAsync } from '@utils/getStepDataAsync'
 import { showToast } from '@utils/notifications'
 import activeStepStore, {
@@ -26,20 +26,22 @@ import activeStepStore, {
 } from '../../pages/filter/dtree/components/active-step.store'
 import datasetStore from '../dataset/dataset'
 import { DtreeModifiedState } from '../filter-dtrees/filter-dtrees.store'
+import { createCodeFrags } from './../../utils/createCodeFrags'
+import { getDataFromFrags } from './../../utils/getDataFromFrags'
 import { DtreeStatStore } from './dtree-stat.store'
 
 export type IStepData = {
   step: number
   groups: any[]
-  negate?: boolean
-  all?: boolean
   excluded: boolean
+  isNegate?: boolean
   isActive: boolean
   isReturnedVariantsActive: boolean
   conditionPointIndex: number | null
   returnPointIndex: number | null
   comment?: string
   condition?: string
+  result?: string
   isFinalStep?: boolean
 }
 
@@ -61,6 +63,7 @@ export class DtreeStore {
   dtree: any
   isCountsReceived = false
   dtreeCode = ''
+  codeFrags: ICodeFrags[] = []
   startDtreeCode = ''
   localDtreeCode = ''
   previousDtreeName = ''
@@ -206,14 +209,14 @@ export class DtreeStore {
     const newStepData =
       computedStepData.length === 0 ? initialStepData : computedStepData
 
-    const stepCodes = getDataFromCode(this.dtreeCode)
+    const stepFrags = getDataFromFrags(this.codeFrags)
 
     const points: unknown[] | undefined = this.dtree?.points
 
     const finalStep: IStepData = {
       step: newStepData.length,
       groups: [],
-      excluded: !stepCodes[stepCodes.length - 1]?.result,
+      excluded: !stepFrags[stepFrags.length - 1]?.result,
       isActive: false,
       isReturnedVariantsActive: false,
       conditionPointIndex: null,
@@ -289,6 +292,7 @@ export class DtreeStore {
 
       this.dtree = result
       this.dtreeCode = newCode
+      this.codeFrags = createCodeFrags(result.points)
       this.dtreeList = result['dtree-list']
       this.evalStatus = result['eval-status']
     })

@@ -9,8 +9,8 @@ import activeStepStore, {
   ActiveStepOptions,
 } from '@pages/filter/dtree/components/active-step.store'
 import modalsVisibilityStore from '../../../modals/modals-visibility-store'
+import { ContentCode } from './content-code/content-code'
 import { NextStepContentItem } from './next-step-content-item'
-
 interface INextStepContentProps {
   index: number
   stepNo: number
@@ -20,11 +20,6 @@ const Content = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: auto;
-`
-
-const ContentEditor = styled.div`
-  display: flex;
   height: auto;
 `
 
@@ -39,69 +34,8 @@ export const NextStepContent = observer(
 
     const currentStepData = dtreeStore.filteredStepData[index]
 
-    const isExcluded = currentStepData.excluded
-    const result = String(!isExcluded)
-
-    const condition = currentStepData.condition ?? null
-
-    const getWords = (text: string | null) => {
-      if (!text) return []
-
-      const removeNotExpandedAttributes = text
-        .split(/{|}/)
-        .map((item, index) => {
-          if (index % 2 === 0) return item
-
-          if (expanded[Math.floor(index / 2)]) return `{${item}}`
-
-          const elements = item
-            .split(/([^("|,)]*"[^"]+"[^("|,)]*)|([^,]+)/)
-            .filter(Boolean)
-            .filter(el => el !== ',')
-
-          if (elements.length <= 3) return `{${elements.join(',')}}`
-
-          return `{${elements.slice(0, 3).join(',')}, ...}`
-        })
-        .join('')
-
-      const textList = removeNotExpandedAttributes.split(/{|}/)
-      const changedTextList = textList.map((element, index) => {
-        if (element.includes('"') && index % 2 === 1) {
-          return `{${element}}`
-        }
-
-        return element.split(' ')
-      })
-
-      const flatedTextList = changedTextList.flat()
-
-      const words = flatedTextList
-        .filter(Boolean)
-        .map((word, wordIndex: number) => {
-          const changedWord = word.trim()
-
-          switch (changedWord) {
-            case 'if':
-            case 'and':
-            case 'or':
-            case 'not':
-              return (
-                <span
-                  key={wordIndex}
-                  className="text-white"
-                >{` ${word} `}</span>
-              )
-
-            default:
-              return <span key={wordIndex}>{`${word} `}</span>
-          }
-        })
-
-      return words
-    }
-
-    const wordList = getWords(condition)
+    const codeCondition = currentStepData.condition || ''
+    const codeResult = currentStepData.result || ''
 
     const openModal = () => {
       activeStepStore.makeStepActive(
@@ -137,24 +71,10 @@ export const NextStepContent = observer(
           </div>
 
           {groups && groups.length > 0 && (
-            <ContentEditor className="w-1/3 h-full ml-2">
-              <div
-                className="bg-blue-secondary w-full h-auto rounded-md text-12 p-2 font-normal font-mono overflow-auto"
-                data-testid={DecisionTreesResultsDataCy.contentEditor}
-              >
-                {dtreeStore.filteredStepData[index].comment && (
-                  <div className="text-white mb-2">
-                    {dtreeStore.filteredStepData[index].comment}
-                  </div>
-                )}
-
-                <div className="flex">
-                  <div className="text-orange-secondary mr-2">{wordList}</div>
-                </div>
-
-                <div className="text-grey-light pl-2">return {result}</div>
-              </div>
-            </ContentEditor>
+            <ContentCode
+              codeCondition={codeCondition}
+              codeResult={codeResult}
+            />
           )}
         </Content>
 

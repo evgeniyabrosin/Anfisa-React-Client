@@ -6,7 +6,7 @@ import activeStepStore from '@pages/filter/dtree/components/active-step.store'
 import { TCondition } from '@service-providers/common'
 import { PointCount } from '@service-providers/decision-trees'
 import { fetchDtreeCountsAsync } from './fetchDtreeCounts'
-import { getDataFromCode } from './getDataFromCode'
+import { getDataFromFrags } from './getDataFromFrags'
 
 export const getStepDataAsync = async (
   isLoadingNewTree: boolean,
@@ -25,7 +25,7 @@ export const getStepDataAsync = async (
     dtreeStore.setPointCounts(toJS(pointCountsFromDtreeSet))
   }
 
-  const stepCodes = getDataFromCode(dtreeStore.dtreeCode)
+  const stepFrags = getDataFromFrags(dtreeStore.codeFrags)
 
   const localStepData: IStepData[] = []
   const { activeStepIndex } = activeStepStore
@@ -39,24 +39,14 @@ export const getStepDataAsync = async (
     localStepData.push({
       step: index + 1,
       groups: atom.filter((elem: any[]) => elem.length > 0),
-      excluded: !stepCodes[index].result,
+      excluded: !stepFrags[index].decision,
       isActive: isLoadingNewTree ? false : index === activeStepIndex,
       isReturnedVariantsActive: false,
       conditionPointIndex,
       returnPointIndex: conditionPointIndex + 1,
-      comment: stepCodes[index].comment,
-      negate: stepCodes[index].isNegate,
-      all: stepCodes[index].isAll,
-      condition: stepCodes[index].condition,
+      condition: stepFrags[index].condition,
+      result: stepFrags[index].result,
     })
-  })
-
-  localStepData.forEach((step: IStepData, index: number) => {
-    if (step.groups.length > 1) {
-      step.groups.forEach((group: any[], currNo: number) => {
-        currNo !== 0 && group.splice(-1, 0, stepCodes[index].types[currNo - 1])
-      })
-    }
   })
 
   return localStepData

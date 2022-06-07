@@ -209,3 +209,9 @@ export interface IDeleteDecisionTreeParams {
   code: string
   instr: TDtreeModifyingActions
 }
+
+export interface ICodeFrags {
+  condition: string
+  result: string | undefined
+  decision: boolean | null
+}

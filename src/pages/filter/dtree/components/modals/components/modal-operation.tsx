@@ -54,7 +54,7 @@ export const ModalOperation = observer(
     const isFirstStep = index === 0
 
     const hasMoreThanOneAttribute = currentStep.groups?.length > 1
-    const isNegateStep = currentStep.negate
+    const isNegateStep = currentStep.isNegate
     const isSplitPossible = hasMoreThanOneAttribute && !isNegateStep
 
     return (

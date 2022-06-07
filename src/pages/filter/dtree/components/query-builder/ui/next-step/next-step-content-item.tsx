@@ -1,10 +1,8 @@
 import { ReactElement, useState } from 'react'
 import cn from 'classnames'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 
 import { FilterKindEnum } from '@core/enum/filter-kind.enum'
-import { t } from '@i18n'
 import dtreeStore from '@store/dtree'
 import { IStepData } from '@store/dtree/dtree.store'
 import { DecisionTreeModalDataCy } from '@components/data-testid/decision-tree-modal.cy'
@@ -12,11 +10,6 @@ import { TCondition, TNumericConditionBounds } from '@service-providers/common'
 import { DropDownJoin } from '../dropdown-join'
 import { ContentItemHeader } from './content-item-header'
 import { ContentItemValues } from './content-item-values'
-
-const JoinType = styled.div`
-  width: 34px;
-  height: 28px;
-`
 
 interface INextStepContentItemProps {
   group: any
@@ -55,12 +48,6 @@ export const NextStepContentItem = observer(
             )}
             data-testId={DecisionTreeModalDataCy.joinByLabel}
           >
-            <div className="mr-1">{t('dtree.joinBy')}</div>
-            <JoinType className="flex items-center justify-center bg-orange-light text-orange-bright">
-              {group.includes('or') && 'OR'}
-              {group.includes('and') && 'AND'}
-            </JoinType>
-
             {isVisible && (
               <DropDownJoin
                 close={() => setIsVisible(false)}
