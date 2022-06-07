@@ -55,8 +55,9 @@ class ModalsControlStore {
      *       for second and next groups in step.
      *       It's terrible! And should be fixed
      */
-    if (group[3] === 'or' || group[3] === 'and') {
-      group.splice(3, 1)
+    const mayBeJoin = group[group.length - 2]
+    if (mayBeJoin === 'or' || mayBeJoin === 'and') {
+      group.splice(group.length - 2, 1)
     }
 
     return group
